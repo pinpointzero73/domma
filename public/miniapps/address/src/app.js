@@ -1244,7 +1244,7 @@ class AddressApp {
           title: 'Tags',
           render: (value) => value.length > 0
             ? value.map(tag => `<span class="badge badge-secondary">${_.escape(tag)}</span>`).join(' ')
-            : '<span class="text-muted">—</span>'
+            : '<span class="text-muted">-</span>'
         },
         {
           key: 'createdAt',

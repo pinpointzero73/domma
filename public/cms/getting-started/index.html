@@ -33,7 +33,7 @@
 
             <h3 class="text-lg font-semibold mb-2">Prerequisites</h3>
             <ul class="mb-4">
-                <li><span data-icon="check-circle"></span> Node.js 18 or higher — <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></li>
+                <li><span data-icon="check-circle"></span> Node.js 18 or higher - <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></li>
                 <li><span data-icon="check-circle"></span> npm 7 or higher (bundled with Node.js)</li>
                 <li><span data-icon="check-circle"></span> A terminal / command prompt</li>
             </ul>
@@ -72,13 +72,13 @@ npx domma-cms company-site</code></pre>
             <h3 class="text-lg font-semibold mb-3">What the wizard configures</h3>
 
             <h4 class="font-semibold mb-2">Admin Account</h4>
-            <p class="mb-3">You will be prompted to enter an email address and password for the initial administrator account. Passwords are hashed using <strong>bcrypt</strong> (12 rounds) before storage — your plaintext password is never persisted.</p>
+            <p class="mb-3">You will be prompted to enter an email address and password for the initial administrator account. Passwords are hashed using <strong>bcrypt</strong> (12 rounds) before storage - your plaintext password is never persisted.</p>
 
             <h4 class="font-semibold mb-2">Site Identity</h4>
             <p class="mb-3">Set your site's title and tagline. These are saved to <code>config/site.json</code> and are available throughout your templates as <code>{{site.title}}</code> and <code>{{site.tagline}}</code>.</p>
 
             <h4 class="font-semibold mb-2">Theme Selection</h4>
-            <p class="mb-3">Choose from 24 built-in Domma themes — 12 families, each with a dark and light variant:</p>
+            <p class="mb-3">Choose from 24 built-in Domma themes - 12 families, each with a dark and light variant:</p>
             <div class="grid grid-cols-4 gap-2 mb-4">
                 <code class="badge">charcoal-dark</code>
                 <code class="badge">charcoal-light</code>
@@ -137,7 +137,7 @@ npx domma-cms company-site</code></pre>
 ├── server/             # Fastify server internals (edit with care)
 ├── .env                # Environment variables (gitignored)
 ├── package.json
-└── server.js           # Entry point — run this to start the server</code></pre>
+└── server.js           # Entry point - run this to start the server</code></pre>
 
             <h3 class="text-lg font-semibold mb-3">Key directories explained</h3>
 
@@ -230,7 +230,7 @@ npx domma-cms company-site</code></pre>
                         <td><strong>MongoDB</strong></td>
                         <td>6+</td>
                         <td><span class="badge badge-secondary">Optional</span></td>
-                        <td>Pro mode only — not required for file-based operation</td>
+                        <td>Pro mode only - not required for file-based operation</td>
                     </tr>
                 </tbody>
             </table>
@@ -246,7 +246,7 @@ npx domma-cms company-site</code></pre>
             <h2 class="text-xl font-semibold"><span data-icon="file-text"></span> File-Only Mode <span class="badge badge-success ml-2">Default</span></h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Out of the box, Domma CMS operates in <strong>File-Only Mode</strong> — no database required. All content, collections, and form submissions are stored as flat files on disk.</p>
+            <p class="mb-4">Out of the box, Domma CMS operates in <strong>File-Only Mode</strong> - no database required. All content, collections, and form submissions are stored as flat files on disk.</p>
 
             <h3 class="text-lg font-semibold mb-3">What is stored where?</h3>
 
@@ -330,7 +330,7 @@ npx domma-cms company-site</code></pre>
                 <tbody>
                     <tr>
                         <td><strong>Views</strong></td>
-                        <td>Define reusable MongoDB aggregation pipelines via the admin panel — no code required</td>
+                        <td>Define reusable MongoDB aggregation pipelines via the admin panel - no code required</td>
                     </tr>
                     <tr>
                         <td><strong>Actions</strong></td>
@@ -384,7 +384,7 @@ npx domma-cms company-site</code></pre>
                     </tr>
                     <tr>
                         <td><code>npm start</code></td>
-                        <td>Start the production server. No file watching or hot reload — optimised for stability.</td>
+                        <td>Start the production server. No file watching or hot reload - optimised for stability.</td>
                     </tr>
                     <tr>
                         <td><code>npm run setup</code></td>
@@ -426,10 +426,10 @@ PORT=4096                    # Port the server listens on (default: 4096)
 NODE_ENV=production          # 'development' enables verbose logging and hot reload
 
 # ─── Security ─────────────────────────────────────────────────────────────────
-JWT_SECRET=&lt;auto-generated&gt;  # Secret key for signing JWTs — do not change after launch
+JWT_SECRET=&lt;auto-generated&gt;  # Secret key for signing JWTs - do not change after launch
 
 # ─── Pro Mode (optional) ──────────────────────────────────────────────────────
-MONGO_URI=                   # MongoDB connection string — leave blank for File-Only Mode</code></pre>
+MONGO_URI=                   # MongoDB connection string - leave blank for File-Only Mode</code></pre>
 
             <h3 class="text-lg font-semibold mb-3">Variable reference</h3>
 

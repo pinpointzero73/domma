@@ -1,5 +1,5 @@
 /**
- * Address Lookup Admin — Analytics
+ * Address Lookup Admin - Analytics
  */
 
 import AdminAuth from '../../shared/admin-auth.js';

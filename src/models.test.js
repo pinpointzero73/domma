@@ -97,13 +97,13 @@ describe('Domma.models - Models Module Tests', () => {
   it('Models - Date fields follow utils.isEqual, not domma-reactive\'s comparator', () => {
     // Domma's utils.isEqual reports ANY two Date instances as equal: it walks
     // own enumerable keys, and a Date has none. Replacing a Date with a
-    // completely different Date is therefore not seen as a change — neither by
+    // completely different Date is therefore not seen as a change - neither by
     // onChange nor by the observable backing the field, because the observables
     // are created with {equals: utils.isEqual}.
     //
     // This is v0.30.1 behaviour, PINNED DELIBERATELY. It is a known latent bug:
     // domma-reactive's own isEqual compares Dates by getTime() and would fire
-    // here. Do not "fix" this test to match the package — doing so changes
+    // here. Do not "fix" this test to match the package - doing so changes
     // Domma's change-detection semantics for every Date-valued field in every
     // model, and that is a decision to take on purpose, not in passing.
     const onChangeSpy = vi.fn();
@@ -242,8 +242,8 @@ describe('Domma.models - Models Module Tests', () => {
   it('Models - tracked() proxy tracks reads and routes writes through validation', () => {
     // Ported from the retired src/reactive.test.js. Read tracking is exercised
     // indirectly by component-factory.test.js, but nothing outside that retired
-    // file asserted that a write through the proxy goes via set() — and so
-    // still validates, notifies and persists — rather than poking the
+    // file asserted that a write through the proxy goes via set() - and so
+    // still validates, notifies and persists - rather than poking the
     // observable directly.
     const model = Domma.models.create({count: {type: 'number', min: 0}}, {count: 1});
     const state = model.tracked();
@@ -310,7 +310,7 @@ describe('Domma.models - Models Module Tests', () => {
   });
 
   // M.observable is re-exported from domma-reactive untouched, so it is read
-  // through `.value`. M.computed is a facade — get/peek/dispose — and had no
+  // through `.value`. M.computed is a facade - get/peek/dispose - and had no
   // `.value` at all, which made the two halves of the same idea disagree about
   // how you read them, and made a computed unreadable from a template
   // expression, where a method cannot be called.
@@ -387,7 +387,7 @@ describe('Domma.models - Models Module Tests', () => {
   // ── Surfaced from domma-reactive 0.5.x ──────────────────────────────────────
   //
   // Two things arrived in the package that M did not pass on. `.extend()` works
-  // on M.observable already, because that is re-exported untouched — but the
+  // on M.observable already, because that is re-exported untouched - but the
   // registry behind it was unreachable, so a consumer could use the three
   // built-in extenders and never add a fourth. And M.computed is a facade with
   // no setter, so a writable computed constructed through it could be read and
@@ -400,7 +400,7 @@ describe('Domma.models - Models Module Tests', () => {
     const seen = [];
     count.subscribe((v) => seen.push(v));
 
-    count.value = 1;                     // equal — normally silent
+    count.value = 1;                     // equal - normally silent
     expect(seen).toEqual([1]);
   });
 

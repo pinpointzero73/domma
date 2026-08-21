@@ -1,6 +1,6 @@
 /**
  * Domma Flags Bundle
- * Nation flags as inline SVG — an opt-in module, separate from the core bundle.
+ * Nation flags as inline SVG - an opt-in module, separate from the core bundle.
  *
  * Load after domma.min.js:
  * <script src="domma.min.js"></script>

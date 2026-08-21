@@ -4,7 +4,7 @@
  * Finds `class="…"` tokens in HTML that resolve to no CSS rule anywhere.
  *
  * Why this exists: a class name that Domma does not define is invisible. The
- * markup looks right, nothing throws, no test fails — the element simply
+ * markup looks right, nothing throws, no test fails - the element simply
  * renders unstyled. Three separate bugs shipped this way:
  *
  *   · `.form-control` was used on the Reactivity showcase and in the kickstart
@@ -15,7 +15,7 @@
  *   · `.table-responsive` was used in 14 places and defined nowhere, so wide
  *     tables overflowed instead of scrolling.
  *
- * The kickstart templates alone carried 143 dead class usages across 14 files —
+ * The kickstart templates alone carried 143 dead class usages across 14 files -
  * every scaffolded project rendered unstyled on first load.
  *
  * The repository carries a known backlog, so this runs as a RATCHET rather than
@@ -76,7 +76,7 @@ function definedClasses(css) {
 }
 
 /**
- * Class tokens used by a document, skipping template placeholders — a
+ * Class tokens used by a document, skipping template placeholders - a
  * `{{theme}}` substitution is resolved at scaffold time, not by CSS.
  */
 function usedClasses(html) {
@@ -87,7 +87,7 @@ function usedClasses(html) {
     // and `'on'` as undefined classes.
     for (const match of html.matchAll(/(?:^|[\s"'])class="([^"]*)"/g)) {
         // A class attribute built by a JS template literal is computed at
-        // runtime — `class="badge ${ok ? 'a' : 'b'}"` — so its tokens cannot be
+        // runtime - `class="badge ${ok ? 'a' : 'b'}"` - so its tokens cannot be
         // checked statically. Skip the whole attribute rather than tokenising
         // the expression into nonsense.
         if (match[1].includes('${')) continue;
@@ -150,12 +150,12 @@ function main() {
 
     if (update) {
         writeFileSync(BASELINE, JSON.stringify(current, null, 2) + '\n');
-        console.log(`baseline updated — ${usages} usage(s) across ${failures.length} file(s)`);
+        console.log(`baseline updated - ${usages} usage(s) across ${failures.length} file(s)`);
         return 0;
     }
 
     if (!failures.length) {
-        console.log(`✓ no dead classes — ${htmlFiles.length} HTML files, ${globalDefined.size} classes defined`);
+        console.log(`✓ no dead classes - ${htmlFiles.length} HTML files, ${globalDefined.size} classes defined`);
         return 0;
     }
 
@@ -165,7 +165,7 @@ function main() {
 
         if (!worse.length) {
             const fixed = Object.keys(baseline).filter(f => !current[f]).length;
-            console.log(`✓ no new dead classes — ${usages} known, unchanged` +
+            console.log(`✓ no new dead classes - ${usages} known, unchanged` +
                 (fixed ? ` (${fixed} file(s) now clean; run --update-baseline)` : ''));
             return 0;
         }
@@ -176,8 +176,8 @@ function main() {
             console.error(`  ${file}  (${was} → ${missing.length})`);
             console.error(`      ${missing.join(', ')}\n`);
         }
-        console.error('These render as unstyled markup. Domma uses Tailwind-style utilities —');
-        console.error('flex, justify-center, items-center, mr-2, form-input, btn-outline —');
+        console.error('These render as unstyled markup. Domma uses Tailwind-style utilities -');
+        console.error('flex, justify-center, items-center, mr-2, form-input, btn-outline -');
         console.error('not their Bootstrap spellings.');
         return 1;
     }
@@ -188,8 +188,8 @@ function main() {
         console.error(`      ${missing.join(', ')}\n`);
     }
     console.error('These render as unstyled markup. Check the class against Domma\'s CSS:');
-    console.error('Domma uses Tailwind-style utilities — flex, justify-center, items-center,');
-    console.error('mr-2, form-input, form-select, btn-outline — not their Bootstrap spellings.');
+    console.error('Domma uses Tailwind-style utilities - flex, justify-center, items-center,');
+    console.error('mr-2, form-input, form-select, btn-outline - not their Bootstrap spellings.');
     return 1;
 }
 

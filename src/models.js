@@ -29,7 +29,7 @@ import {
  * an observable as its comparator would lose the receiver and throw on any
  * nested object or array. Every equality decision in this module goes through
  * this wrapper so the model's change-detection semantics stay exactly those of
- * utils.isEqual — deliberately NOT domma-reactive's own isEqual, which differs
+ * utils.isEqual - deliberately NOT domma-reactive's own isEqual, which differs
  * for NaN, Dates, class instances, Map/Set/RegExp and typed arrays.
  *
  * @param {*} a
@@ -84,7 +84,7 @@ class Model {
      *
      * Reads performed inside a computed or effect are tracked, so the caller is
      * re-run when that field changes. Reading the whole object tracks every
-     * field currently present — the conservative choice, since the reader could
+     * field currently present - the conservative choice, since the reader could
      * touch any of them.
      *
      * @param {string} [field]
@@ -124,7 +124,7 @@ class Model {
     /**
      * Plain-object view of every field, read WITHOUT tracking.
      *
-     * Used by toJSON(), persistence and validation — render-time and
+     * Used by toJSON(), persistence and validation - render-time and
      * serialisation reads must not register dependencies.
      *
      * @returns {Object}
@@ -164,7 +164,7 @@ class Model {
                 },
 
                 // Reading .value rather than consulting the Map keeps `'x' in state`
-                // a tracked read, as it was under trackingProxy — an `in` check
+                // a tracked read, as it was under trackingProxy - an `in` check
                 // inside a computed stays reactive to that field changing.
                 has(_, key) {
                     if (typeof key !== 'string') return false;
@@ -217,13 +217,13 @@ class Model {
         const changed = !isEqual(oldValue, value);
 
         // The observable applies the same comparator, so this triggers its Dep
-        // only on a real change — queueing dependent computations for the next
+        // only on a real change - queueing dependent computations for the next
         // microtask flush.
         obs.value = value;
 
         // Notify if changed
         if (changed) {
-            // Synchronous listeners — onChange/onFieldChange semantics and DOM
+            // Synchronous listeners - onChange/onFieldChange semantics and DOM
             // bindings are unchanged.
             this._notifyChange(field, value, oldValue);
             this._updateBindings(field, value);
@@ -308,8 +308,8 @@ class Model {
     /**
      * Subscribe to changes.
      *
-     *   onChange(cb)          — every field; cb receives {field, newValue, oldValue, model}
-     *   onChange(field, cb)   — one field only; cb receives the same change object
+     *   onChange(cb)          - every field; cb receives {field, newValue, oldValue, model}
+     *   onChange(field, cb)   - one field only; cb receives the same change object
      *
      * For positional arguments (newValue, oldValue, model), use onFieldChange().
      *
@@ -597,8 +597,8 @@ class Binding {
  *
  * Domma's own components take "a selector, an element, or a collection"
  * everywhere, and an entry point that only accepted one of the three would be
- * the odd one out. domma-reactive itself is stricter on purpose — it is a
- * standalone package with no `$` to lean on — so the normalising happens here.
+ * the odd one out. domma-reactive itself is stricter on purpose - it is a
+ * standalone package with no `$` to lean on - so the normalising happens here.
  *
  * @param {string|Element|Object} root
  * @returns {Element|null}
@@ -623,7 +623,7 @@ function resolveRoot(root) {
  * arrive separately, because a Model holds data and not behaviour.
  *
  * The layering itself lives in binding-source.js, shared with the component
- * factory — see there for the two silent failure modes it exists to prevent.
+ * factory - see there for the two silent failure modes it exists to prevent.
  *
  * @param {Object} data      A Model, a binding context, or a plain object.
  * @param {Object} [methods] Event handlers, looked up only when data has no
@@ -780,7 +780,7 @@ export const models = {
     // ============================================
 
     /**
-     * A single reactive value. The primitive beneath Models — use `create()`
+     * A single reactive value. The primitive beneath Models - use `create()`
      * when you want a schema, validation and persistence; use this when you
      * want one tracked value and nothing else.
      *
@@ -808,7 +808,7 @@ export const models = {
      *   items.push('a');   // effects reading items.value re-run
      *
      * `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`
-     * and `copyWithin` notify unconditionally — an in-place mutation leaves the
+     * and `copyWithin` notify unconditionally - an in-place mutation leaves the
      * array deep-equal to any copy of it, so the equality gate cannot see it.
      * `remove(item)` and `removeAll()` follow the same rule. Wholesale
      * assignment to `.value` is gated, exactly as `observable()` is.
@@ -827,10 +827,10 @@ export const models = {
      *
      *   const model = M.create(blueprint, {price: 10, qty: 3});
      *   const total = M.computed(() => model.get('price') * model.get('qty'));
-     *   total.get();                 // 30 — evaluated now
-     *   total.get();                 // 30 — cached, body not re-run
+     *   total.get();                 // 30 - evaluated now
+     *   total.get();                 // 30 - cached, body not re-run
      *   model.set('qty', 4);
-     *   total.get();                 // 40 — re-evaluated on demand
+     *   total.get();                 // 40 - re-evaluated on demand
      *
      * The body must be synchronous: tracking stops at the first `await`.
      *
@@ -865,7 +865,7 @@ export const models = {
              * Current value, recomputing only if a dependency changed.
              *
              * The same read as `get()`, spelled as a property, and the only one
-             * a template expression can use — an expression cannot call a
+             * a template expression can use - an expression cannot call a
              * method, so `{{total.get()}}` will not parse. It also stops
              * `M.observable` and `M.computed` disagreeing about how you read
              * them: an observable has always been `.value`.
@@ -1007,7 +1007,7 @@ export const models = {
      *       methods: { save() { H.post('/api/save', model.toJSON()); } }
      *   });
      *
-     * Pass a Model and every binding reads and writes through it — `data-model`
+     * Pass a Model and every binding reads and writes through it - `data-model`
      * lands in the model, with validation and change notification, and any
      * other binding on that field updates. A plain object works too, but only
      * the parts of it that are observable will be reactive.
@@ -1053,8 +1053,8 @@ export const models = {
     /**
      * Add a binding kind, usable as `data-<name>` wherever bindings are.
      *
-     * Not a side door: every built-in — text, attr, raw, if, event, bind,
-     * model — is registered through this same function, so a custom binding can
+     * Not a side door: every built-in - text, attr, raw, if, event, bind,
+     * model - is registered through this same function, so a custom binding can
      * do anything a built-in can.
      *
      *   M.registerBinding('uppercase', {
@@ -1077,7 +1077,7 @@ export const models = {
      * @param {string} name    The binding kind, which becomes `binding.kind`.
      * @param {Object} handler `{attribute|attributePrefix, expression, tracks,
      *                         region, capturesBody, primes, update, attach,
-     *                         detach}` — see docs/Bindings.md.
+     *                         detach}` - see docs/Bindings.md.
      */
     registerBinding(name, handler) {
         return addBindingKind(name, handler);
@@ -1096,7 +1096,7 @@ export const models = {
      * Add an extender, callable as `M.observable(x).extend({name: value})`.
      *
      * `rateLimit`, `throttle` and `notify` are registered through this same
-     * function, so an extender you add is not a second-class citizen — the
+     * function, so an extender you add is not a second-class citizen - the
      * built-ins have no privileged path.
      *
      *   M.registerExtender('trace', (control, label) => {
@@ -1111,7 +1111,7 @@ export const models = {
      * The control surface an extender is handed has exactly two powers:
      * `setEquals(fn)` replaces the change gate, and `intercept(wrap)` wraps the
      * announcement. Neither can touch the stored value, which is what keeps the
-     * guarantee that a write always lands immediately — even under a rate
+     * guarantee that a write always lands immediately - even under a rate
      * limit, where only the notification waits.
      *
      * @param {string}   name
@@ -1135,8 +1135,8 @@ export const models = {
     /**
      * Add a function callable from a binding expression.
      *
-     * Expressions cannot call methods on your data — `{{total.get()}}` will not
-     * parse — because arbitrary calls are how an expression language turns into
+     * Expressions cannot call methods on your data - `{{total.get()}}` will not
+     * parse - because arbitrary calls are how an expression language turns into
      * an execution surface. A registered helper is the supported way to shape a
      * value in the markup:
      *

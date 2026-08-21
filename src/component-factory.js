@@ -69,7 +69,7 @@ function _toPropName(attrName) {
  * @returns {*}
  */
 function _coercePropValue(value, typeDef = {}) {
-    // Attribute absent — return declared default or null
+    // Attribute absent - return declared default or null
     if (value === null || value === undefined) {
         if (typeDef.default !== undefined) {
             return typeof typeDef.default === 'function'
@@ -180,10 +180,10 @@ export function createComponent(tagName, definition) {
 
         connectedCallback() {
             if (this._initialised) {
-                // Re-connected after being moved in the DOM — re-fire onMount.
+                // Re-connected after being moved in the DOM - re-fire onMount.
                 // NOTE: reactive wiring is not rebuilt here. disconnectedCallback
                 // disposes the effects and destroys the model, so a relocated
-                // element is inert — pre-existing behaviour, see docs/Reactivity.md.
+                // element is inert - pre-existing behaviour, see docs/Reactivity.md.
                 this._teardown = false;
                 onMount?.call(this._ctx());
                 return;
@@ -263,7 +263,7 @@ export function createComponent(tagName, definition) {
             // Build a minimal schema from the initial data keys
             const schema = {};
             for (const key of Object.keys(initialData)) {
-                schema[key] = {};  // No type enforcement — component data is untyped
+                schema[key] = {};  // No type enforcement - component data is untyped
             }
 
             this._model = models.create(schema, initialData);
@@ -311,7 +311,7 @@ export function createComponent(tagName, definition) {
 
         /**
          * Full re-render into the content root then re-index bindings.
-         * Only used for props changes — reactive data changes update surgically.
+         * Only used for props changes - reactive data changes update surgically.
          */
         _rerenderFull() {
             if (!this._bindings) return;
@@ -324,8 +324,8 @@ export function createComponent(tagName, definition) {
         /**
          * Create one tracked effect per field the template actually binds.
          *
-         * Each effect reads its own field — through the model's tracking proxy
-         * or through a computed — and so re-runs only when that specific value
+         * Each effect reads its own field - through the model's tracking proxy
+         * or through a computed - and so re-runs only when that specific value
          * changes. A model field no template mentions costs nothing; a computed
          * that does not read the field that changed is never re-evaluated.
          *
@@ -336,7 +336,7 @@ export function createComponent(tagName, definition) {
             if (!this._bindings) return;
 
             for (const binding of this._bindings.bindings) {
-                // A binding whose dependencies are all props never re-runs —
+                // A binding whose dependencies are all props never re-runs -
                 // an attribute change re-renders in full instead.
                 const reactiveDeps = [...binding.deps].filter(dep =>
                     this._computeds.has(dep) ||
@@ -347,7 +347,7 @@ export function createComponent(tagName, definition) {
                 let primed = false;
 
                 const eff = createEffect(() => {
-                    // Tracked reads — this is what subscribes the effect
+                    // Tracked reads - this is what subscribes the effect
                     for (const dep of reactiveDeps) this._readBound(dep);
 
                     // First run exists only to collect dependencies; the
@@ -357,7 +357,7 @@ export function createComponent(tagName, definition) {
                         return;
                     }
 
-                    // The DOM write itself must not register dependencies —
+                    // The DOM write itself must not register dependencies -
                     // _mergeData() reads every computed.
                     untracked(() => {
                         this._bindings.update(binding.id, this._mergeData());
@@ -375,8 +375,8 @@ export function createComponent(tagName, definition) {
          * Notify onUpdated for ANY data change, bound or not.
          *
          * The per-binding effects above only ever fire for fields the template
-         * mentions, so a component that renders imperatively — the documented
-         * pattern for lists — compiles to zero bindings and would never be
+         * mentions, so a component that renders imperatively - the documented
+         * pattern for lists - compiles to zero bindings and would never be
          * told its data changed. onUpdated is a lifecycle hook, not a paint
          * callback, so it needs a subscription of its own.
          *
@@ -395,22 +395,22 @@ export function createComponent(tagName, definition) {
          *
          * WRITES FROM onUpdated MUST CONVERGE
          * The hook is the natural place to paint imperatively, and writing back
-         * to the model from it is legitimate — but only if the value settles.
+         * to the model from it is legitimate - but only if the value settles.
          * utils.isEqual on the observable is what stops the cycle: write the
          * same value twice and the second write does not propagate. A value
          * that differs every pass (Date.now(), a counter) re-triggers this
          * watcher indefinitely, and because the chain is pure microtasks it
-         * never yields to the macrotask queue — the tab locks with no error and
+         * never yields to the macrotask queue - the tab locks with no error and
          * no frame, rather than throwing.
          *
-         * KNOWN LIMITATION — fields absent from data()
+         * KNOWN LIMITATION - fields absent from data()
          * Model creates observables lazily, so a key never returned by data()
          * has no observable when this effect collects its dependencies, and
          * writing it does not re-run the watcher: onUpdated will not fire for
          * it until some declared field changes (which re-runs the watcher and
          * picks the new field up). A component with no data() at all gets a
          * watcher with no dependencies, so its onUpdated never fires. Declare a
-         * data(), and declare every field in it — the documented pattern, and
+         * data(), and declare every field in it - the documented pattern, and
          * what all the bundled examples do. Closing the gap properly needs a
          * structural dependency inside Model itself, not a workaround here.
          */
@@ -430,7 +430,7 @@ export function createComponent(tagName, definition) {
                     return;
                 }
 
-                // untracked() guards nothing here — _scheduleUpdate performs
+                // untracked() guards nothing here - _scheduleUpdate performs
                 // no reactive reads and the hook runs in a later microtask,
                 // outside any tracking context. Kept for symmetry with
                 // _wireBindings, where the wrapper IS load-bearing because
@@ -461,7 +461,7 @@ export function createComponent(tagName, definition) {
         /**
          * Coalesce the onUpdated hook so it fires once per flush, however many
          * bindings updated. The DOM writes themselves are already surgical and
-         * happen immediately in each effect — only the notification is batched.
+         * happen immediately in each effect - only the notification is batched.
          */
         _scheduleUpdate() {
             if (this._updateQueued) return;
@@ -552,7 +552,7 @@ export function createComponent(tagName, definition) {
          * @returns {Object}
          */
         _mergeData() {
-            // toJSON() is deliberately untracked — this is a render-time read,
+            // toJSON() is deliberately untracked - this is a render-time read,
             // not a dependency, and tracking it would link every field to
             // whatever computation happens to be running.
             const data     = this._model ? this._model.toJSON() : {};
@@ -565,7 +565,7 @@ export function createComponent(tagName, definition) {
             // Methods go in FIRST, so a data field of the same name still wins.
             //
             // They belong here because `data-on-click="save"` resolves its
-            // handler against the template's data — the binding layer has no
+            // handler against the template's data - the binding layer has no
             // other view of the component. Without them every event binding in
             // a component template logged "did not resolve to a function" and
             // did nothing, while every other binding worked.
@@ -586,7 +586,7 @@ export function createComponent(tagName, definition) {
             //
             // `data-model` writes back by assigning to `context.$data[key]`,
             // and $data is this object. As a bare snapshot it swallowed the
-            // write silently — see binding-source.js for both failure modes.
+            // write silently - see binding-source.js for both failure modes.
             //
             // This snapshot cannot route a write itself (unlike a model's
             // tracked() view, which M.applyBindings uses), so onWrite tells the
@@ -610,7 +610,7 @@ export function createComponent(tagName, definition) {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 /**
- * The `components` namespace — exposed as `Domma.component` and `Domma.components`.
+ * The `components` namespace - exposed as `Domma.component` and `Domma.components`.
  */
 export const components = {
     /**

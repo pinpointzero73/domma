@@ -1,5 +1,5 @@
 /**
- * Address Lookup Admin — Credit Management
+ * Address Lookup Admin - Credit Management
  */
 
 import AdminAuth from '../../shared/admin-auth.js';

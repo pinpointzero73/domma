@@ -203,7 +203,7 @@
 <div class="hero hero-center bg-ambient-float-orbs">
     <div class="hero-content">
         <div class="hero-title">Ticker Tape Effect</div>
-        <div class="hero-subtitle">A canvas-based ticker-tape parade. Colourful rectangular strips drop, sway, rotate, and fade — full-page or container-scoped, with theme-aware palettes.</div>
+        <div class="hero-subtitle">A canvas-based ticker-tape parade. Colourful rectangular strips drop, sway, rotate, and fade - full-page or container-scoped, with theme-aware palettes.</div>
     </div>
 </div>
 
@@ -243,7 +243,7 @@
         </div>
         <div class="card-body">
             <p class="mb-4">
-                Drops thin coloured rectangles from the top of a container — or the entire viewport — as if released
+                Drops thin coloured rectangles from the top of a container - or the entire viewport - as if released
                 from a stack of windows during a ticker-tape parade. Each strip falls, sways gently from side to side,
                 rotates as it tumbles, and fades to nothing before reaching the bottom. Pass <code>null</code> for a
                 full-page overlay, or a selector for a scoped effect.
@@ -260,7 +260,7 @@ Domma.effects.tickerTape('#celebration', {
   speed: 0.7
 });
 
-// One-shot burst — strips arrive and the effect ends naturally
+// One-shot burst - strips arrive and the effect ends naturally
 Domma.effects.tickerTape('#stage', {
   burst: true,
   burstCount: 200,
@@ -333,7 +333,7 @@ ticker.destroy();
                             <td><code>fadeStart</code></td>
                             <td><code>number</code></td>
                             <td><code>0.55</code></td>
-                            <td>Fraction of the fall (0–1) at which fade begins</td>
+                            <td>Fraction of the fall (0-1) at which fade begins</td>
                         </tr>
                         <tr>
                             <td><code>burst</code></td>
@@ -364,7 +364,7 @@ ticker.destroy();
             </div>
 
             <h3 class="text-lg font-semibold mt-6 mb-3">Built-in Palettes</h3>
-            <p class="mb-3">Pass any of these names as the <code>palette</code> option — or supply your own array of colour strings.</p>
+            <p class="mb-3">Pass any of these names as the <code>palette</code> option - or supply your own array of colour strings.</p>
             <div class="palette-swatches" id="palette-preview"></div>
         </div>
     </section>
@@ -466,7 +466,7 @@ const ticker = Domma.effects.tickerTape('#tape-container', {
             <h2 class="text-xl font-semibold">Demo: One-Shot Burst</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">In burst mode, a single batch of strips is released and the effect winds down naturally — perfect for confirmation moments (form submission, achievement unlocked, sale completed).</p>
+            <p class="mb-4">In burst mode, a single batch of strips is released and the effect winds down naturally - perfect for confirmation moments (form submission, achievement unlocked, sale completed).</p>
 
             <div class="tape-container" id="tape-container-4">
                 <div class="tape-container-label">
@@ -567,7 +567,7 @@ Domma.effects.tickerTape(null, {
     }
 
     // Note: pass {safe: false} because Domma's default html() sanitiser strips
-    // both inline `style` attributes and `data-*` attributes — we'd lose the
+    // both inline `style` attributes and `data-*` attributes - we'd lose the
     // swatch colours AND the data-palette hook the click handler reads.
     const previewMarkup = Object.keys(palettes).map(n => renderPaletteCard(n, false)).join('');
     $('#palette-preview').html(previewMarkup, { safe: false });

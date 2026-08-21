@@ -6,26 +6,26 @@
  * group management, favourites, DOB/age calculation, and an inline editor overlay.
  *
  * Domma APIs exercised:
- *   S.get / S.set       — storage persistence
- *   E.toast             — notifications
- *   E.confirm           — delete confirmations
- *   E.prompt            — group name input
- *   I.scan              — icon injection into shadow root
- *   _.render            — Mustache card template rendering
- *   _.escape            — XSS-safe text output
- *   _.debounce          — search input debouncing
- *   _.filter / _.find / _.findIndex  — data querying
- *   D()                 — DOB formatting, relative timestamps
- *   D().fromNow()       — "2 days ago" relative dates
- *   D().diff()          — age calculation from DOB
- *   M.types.*           — prop type validation
+ *   S.get / S.set       - storage persistence
+ *   E.toast             - notifications
+ *   E.confirm           - delete confirmations
+ *   E.prompt            - group name input
+ *   I.scan              - icon injection into shadow root
+ *   _.render            - Mustache card template rendering
+ *   _.escape            - XSS-safe text output
+ *   _.debounce          - search input debouncing
+ *   _.filter / _.find / _.findIndex  - data querying
+ *   D()                 - DOB formatting, relative timestamps
+ *   D().fromNow()       - "2 days ago" relative dates
+ *   D().diff()          - age calculation from DOB
+ *   M.types.*           - prop type validation
  *
  * Usage:
  *   <domma-contacts></domma-contacts>
  *   <domma-contacts storage-key="my-contacts"></domma-contacts>
  *
  * All user content is escaped with _.escape() and sanitised with DOMPurify
- * before being written to the DOM — XSS is prevented at both levels.
+ * before being written to the DOM - XSS is prevented at both levels.
  */
 
 // ── Avatar colour palette ────────────────────────────────────────────────────
@@ -78,7 +78,7 @@ const GROUP_PILL_TPL = `
 
 /**
  * Sanitise HTML via DOMPurify (loaded on host page).
- * All content rendered into the DOM goes through this function —
+ * All content rendered into the DOM goes through this function -
  * it is the final line of defence after _.escape() per-value escaping.
  */
 function safeHtml(html) {
@@ -200,7 +200,7 @@ Domma.component('domma-contacts', {
             const total  = this.data.contacts.length;
             const groups = this.data.groups.length;
             const favs   = _.filter(this.data.contacts, c => !!c.favourite).length;
-            // safeHtml applied — numeric counts are trusted, labels are static strings
+            // safeHtml applied - numeric counts are trusted, labels are static strings
             stats.innerHTML = safeHtml(
                 `<span>${total} contact${total !== 1 ? 's' : ''}</span>` +
                 `<span class="stat-sep">·</span>` +
@@ -214,7 +214,7 @@ Domma.component('domma-contacts', {
             const sel = this.root.querySelector('.group-filter');
             if (!sel) return;
             const current = this.data.groupFilter;
-            // Groups are _.escape()'d — safeHtml as final pass
+            // Groups are _.escape()'d - safeHtml as final pass
             sel.innerHTML = safeHtml(
                 '<option value="">All groups</option>' +
                 this.data.groups.map(g =>
@@ -517,7 +517,7 @@ Domma.component('domma-contacts', {
                 return;
             }
 
-            // Groups panel — rename (click pill name) / delete (click ×)
+            // Groups panel - rename (click pill name) / delete (click ×)
             const groupBtn = e.target.closest('[data-group-action]');
             if (groupBtn) {
                 const { groupAction, groupName } = groupBtn.dataset;

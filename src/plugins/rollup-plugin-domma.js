@@ -1,5 +1,5 @@
 /**
- * Rollup Plugin — .domma Single-File Components
+ * Rollup Plugin - .domma Single-File Components
  *
  * Transforms .domma files (Vue SFC-style) into Domma.component() registrations.
  *

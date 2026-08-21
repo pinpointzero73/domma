@@ -7,8 +7,8 @@ There are two ways in, depending on **who owns the markup**:
 
 | | Owns the markup | Entry point |
 |---|---|---|
-| **A component** | The component does — it has a template | `Domma.component({template})` |
-| **A page** | The page does — the HTML already exists | `M.applyBindings(data, root)` |
+| **A component** | The component does - it has a template | `Domma.component({template})` |
+| **A page** | The page does - the HTML already exists | `M.applyBindings(data, root)` |
 
 They share every binding, every expression and the same list reconciler. A custom binding written for one works in the
 other.
@@ -57,7 +57,7 @@ const handle = M.applyBindings(model, '#app', {
 });
 ```
 
-Typing in the input writes to the model — with validation, change notification and persistence — and every other
+Typing in the input writes to the model - with validation, change notification and persistence - and every other
 binding on that field updates. Nothing re-renders that did not have to.
 
 ---
@@ -97,7 +97,7 @@ The name after the prefix decides what is written:
 in a component template, which says what it is doing where an author can see it.
 
 A falsy `data-bind-class` contributes no classes at all. That matters because the documented idiom is
-`data-bind-class="isActive && 'on'"`, which evaluates to `false` rather than `''` when it is off — and stringifying that
+`data-bind-class="isActive && 'on'"`, which evaluates to `false` rather than `''` when it is off - and stringifying that
 would add the literal class `false` to the element.
 
 #### Style
@@ -109,14 +109,14 @@ would add the literal class `false` to the element.
 <p data-bind-style="look"></p>                   <!-- {color, fontWeight}  -->
 ```
 
-Two spellings because a binding expression has no object literal — it cannot have one without becoming the
+Two spellings because a binding expression has no object literal - it cannot have one without becoming the
 `eval` that Domma's Content Security Policy story depends on avoiding. The single-property form is the common
 case anyway; the object form takes a map the model already holds.
 
 Property names are **kebab-cased in the attribute**, because an HTML attribute name is lowercased by the parser
 and `data-bind-style-fontWeight` would arrive as `fontweight`. In an object they may be camelCase and are
 converted. A falsy value removes the property, so `data-bind-style-color="isError && 'red'"` works the way the
-class idiom does — but `0` is kept, since `opacity: 0` is a real value. Ownership follows the same rule as
+class idiom does - but `0` is kept, since `opacity: 0` is a real value. Ownership follows the same rule as
 `class`: only the properties this binding set last time are removed, so a static `style=` attribute survives.
 
 No unit is ever added: `data-bind-style-width="w"` with `w = 40` writes `width: 40`, which the browser ignores.
@@ -134,13 +134,13 @@ Two-way. The control shows the value; a change writes it back.
 | select | `value` | `change` |
 
 The write target is a **path**. `data-model="user.name"` evaluates `user`, then assigns `name` on it. Anything that is
-not a path — a comparison, a helper call, `$data`/`$root`/`$parent`/`$index` — logs one warning and writes nothing,
+not a path - a comparison, a helper call, `$data`/`$root`/`$parent`/`$index` - logs one warning and writes nothing,
 because a binding you cannot write through is not two-way. `__proto__`, `constructor` and `prototype` are refused as
 keys in every form, including `a[k]` where `k` holds one of them at runtime.
 
 ### Writing to a nested path does not notify the model
 
-`data-model="profile.city"` reads correctly and the write lands — but if `profile` is a **Model field
+`data-model="profile.city"` reads correctly and the write lands - but if `profile` is a **Model field
 holding an object**, the write mutates that object in place, so the field's observable never fires:
 
 ```javascript
@@ -148,7 +148,7 @@ const model = M.create({profile: {}}, {profile: {city: 'London', zip: 'E1'}});
 M.applyBindings(model, '#app');            // <input data-model="profile.city">
 
 // after typing "Leeds":
-model.get('profile');   // {city: 'Leeds', zip: 'E1'}  — the write landed
+model.get('profile');   // {city: 'Leeds', zip: 'E1'}  - the write landed
 // …but onChange did not fire, and any other binding on profile.city still shows "London"
 ```
 
@@ -170,10 +170,10 @@ M.bind(model, 'profile', '#city', {
 There is **no observable-unwrapping magic**:
 
 ```javascript
-// A Model, or a model's tracked view — plain names
+// A Model, or a model's tracked view - plain names
 M.applyBindings(model, '#app');          // data-model="query"
 
-// A standalone observable — the same .value you read it through in JavaScript
+// A standalone observable - the same .value you read it through in JavaScript
 M.applyBindings({count: M.observable(0)}, '#app');   // data-model="count.value"
 ```
 
@@ -233,10 +233,10 @@ Prefer `{{#if}}` in a component template, and `data-if` on a page.
 ```
 
 The element's initial contents are the **item template**: they are lifted out of the document at activation, compiled,
-and cloned per item. Mustache works inside a `data-each` — `{{name}}` — because there it is a template rather than
+and cloned per item. Mustache works inside a `data-each` - `{{name}}` - because there it is a template rather than
 rendered output.
 
-**`key=` is not optional here.** With it, deleting the second row leaves the first row's actual DOM node in place —
+**`key=` is not optional here.** With it, deleting the second row leaves the first row's actual DOM node in place -
 focus, uncommitted input, scroll position and animation state all survive. Without it, `M.applyBindings` refuses the
 block and says so.
 
@@ -258,8 +258,8 @@ re-renders the block wholesale and warns once.
 | Attribute | Meaning |
 |---|---|
 | `data-options` | The collection |
-| `data-options-text` | The label — an expression against the item; defaults to the item |
-| `data-options-value` | The value — likewise |
+| `data-options-text` | The label - an expression against the item; defaults to the item |
+| `data-options-value` | The value - likewise |
 | `data-options-caption` | A leading option with an empty value |
 
 A `data-each` over `<option>` produces the same markup. What it does not produce is the **selection**:
@@ -267,7 +267,7 @@ rebuilding a select's options resets it, and the selection lives on the select r
 keyed list has nothing to preserve it with. This binding rebuilds and puts the selection back.
 
 The three companions are expressions evaluated in the item's own context, so `$index` and `$parent` resolve and
-a label can be computed. Note the quotes inside the quotes on the caption — every binding value is an
+a label can be computed. Note the quotes inside the quotes on the caption - every binding value is an
 expression, so a literal string has to look like one, or it is read as a variable name.
 
 **Option values need not be strings.** An `<option>`'s `value` is always a string, so when the resolved value is
@@ -285,7 +285,7 @@ carried it is remembered and applied by the rebuild that brings it.
 ```
 
 Two-way, between a value and focus. Setting `editingTitle` to `true` moves the caret into the field; the user
-tabbing in sets it `true`; blurring sets it `false`. Both directions earn their place — the first is how a model
+tabbing in sets it `true`; blurring sets it `false`. Both directions earn their place - the first is how a model
 puts focus in the field it has just revealed without reaching for a DOM node, the second is how it knows where
 the user is without a listener.
 
@@ -295,7 +295,7 @@ write-back warns.
 
 ### Virtual bindings
 
-A binding attribute needs an element to sit on, and sometimes there is none to spare — a run of `<li>`s, three
+A binding attribute needs an element to sit on, and sometimes there is none to spare - a run of `<li>`s, three
 `<td>`s in a row. Wrapping them in a `<div>` to carry the attribute changes the layout, and inside a table it is
 not even valid HTML a browser will keep. Comments have no such problem.
 
@@ -313,7 +313,7 @@ not even valid HTML a browser will keep. Comments have no such problem.
 
 | Form | Behaviour |
 |---|---|
-| `<!-- dm if: expr -->` | The run of nodes is in the document, or held aside — **the same nodes** come back, with their listeners and their focus |
+| `<!-- dm if: expr -->` | The run of nodes is in the document, or held aside - **the same nodes** come back, with their listeners and their focus |
 | `<!-- dm each: expr key=id -->` | The run is the item template, lifted and compiled as `data-each` is; `key=` is required |
 | `<!-- dm text: expr -->` | One text node between the anchors, replacing whatever was there as a placeholder |
 
@@ -322,7 +322,7 @@ nodes together, so a nested block that changes while its parent is closed still 
 reopens.
 
 These are a `M.applyBindings` feature. A component template has `{{#if}}` and `{{#each}}`, which already delimit
-a region without needing an element — and a virtual binding **inside** a `data-each` body is not read, because
+a region without needing an element - and a virtual binding **inside** a `data-each` body is not read, because
 that body is compiled as a template and the compiler knows mustache rather than comments. It warns if you try.
 
 ---
@@ -334,7 +334,7 @@ Every binding value is an expression, evaluated against the binding context.
 **Supported:** property paths (`user.name`, `rows[0].id`), literals, `+ - * / %`, `=== !== == != < <= > >=`,
 `&& || !`, ternaries, parentheses, and calls to registered helpers.
 
-**Not supported:** assignment, `new`, arrow functions, array and object literals, and — with one exception —
+**Not supported:** assignment, `new`, arrow functions, array and object literals, and - with one exception -
 calling a method on your data. `{{total.get()}}` will not parse. Arbitrary calls are how an expression language turns
 into an execution surface, and the whole point of the parser is that there is no execution surface.
 
@@ -352,7 +352,7 @@ binding's entire job is to call something.
 | `$length` | The list's length |
 
 There is **no scope chain**. A bare name inside a list resolves against the item, not the item and then outward. Reach
-outward explicitly with `$parent` or `$root` — a name that silently means different things at different depths is
+outward explicitly with `$parent` or `$root` - a name that silently means different things at different depths is
 harder to read than one that says where it came from.
 
 ### Helpers
@@ -400,8 +400,8 @@ handle.dispose();         // drop them all
 Deliberately. A `{{name}}` sitting in a text node is left exactly as it is, and if the scan finds one that looks like a
 binding it says so once, naming the element.
 
-There is nothing coherent to do with it. Either the server rendered the value — in which case the token is gone and
-there is only text that happens to say "Ada" — or the server emitted the raw token, in which case the page was broken
+There is nothing coherent to do with it. Either the server rendered the value - in which case the token is gone and
+there is only text that happens to say "Ada" - or the server emitted the raw token, in which case the page was broken
 until JavaScript ran, which is the one thing server rendering exists to avoid. Guessing which text nodes are dynamic is
 not possible, and rewriting every text node into anchored spans would destructively mutate the markup this function
 promises to leave alone.
@@ -416,7 +416,7 @@ The one exception is the contents of a `data-each`, which are a template rather 
 Every activated element is recorded and marked with `data-dm-bound`. A second pass skips anything already bound and
 warns once, naming the root. The marker is removed again on `dispose()`.
 
-The record is authoritative and the attribute is only the visible marker — a cloned node carries the attribute but is
+The record is authoritative and the attribute is only the visible marker - a cloned node carries the attribute but is
 genuinely unbound, and treating the attribute as truth would leave every clone dead. It is there so that "why is this
 not updating?" is answerable in devtools.
 
@@ -432,7 +432,7 @@ handle.dispose();
 element back where it came from, so the markup ends up as it started.
 
 An effect is a live node in the dependency graph and does not go away because its nodes did. On a page that lives for
-hours — a router view, a slideover, a modal — an undisposed handle is a leak.
+hours - a router view, a slideover, a modal - an undisposed handle is a leak.
 
 ### Reactivity comes from the data
 
@@ -443,7 +443,7 @@ untracked object, nothing is watching: call `handle.update(data)` to re-run ever
 
 ## `M.registerBinding(name, handler)`
 
-Adds a binding kind. This is not a side door — all eight built-ins are registered through this same function, so
+Adds a binding kind. This is not a side door - all eight built-ins are registered through this same function, so
 anything a built-in can do, a custom binding can do.
 
 ```javascript
@@ -468,14 +468,14 @@ M.registerBinding('uppercase', {
 
 Only `update` is required.
 
-**Discovery** — how markup asks for this binding:
+**Discovery** - how markup asks for this binding:
 
 | Field | |
 |---|---|
 | `attribute` | An exact attribute name, e.g. `data-model` |
 | `attributePrefix` | A prefix, e.g. `data-on-`; the remainder becomes `binding.arg`, so `data-on-click` gives `arg: 'click'` |
 
-**Compilation** — what is prepared before the first paint:
+**Compilation** - what is prepared before the first paint:
 
 | Field | |
 |---|---|
@@ -497,7 +497,7 @@ Only `update` is required.
 exactly once however many regions it owns.
 
 `primes` exists because a component's first paint runs the whole template through the renderer, so a `{{name}}` is
-already correct before any binding updates — but a `data-bind-text` is not, since there is no mustache token to
+already correct before any binding updates - but a `data-bind-text` is not, since there is no mustache token to
 substitute. Declaring `primes: true` is what makes an input with `data-model="query"` show the current query rather than
 an empty box until the user types.
 
@@ -524,7 +524,7 @@ They compose. A page can `applyBindings` its shell and mount components inside i
 
 | Symptom | Cause |
 |---|---|
-| `{{name}}` renders literally | `applyBindings` never interpolates mustache — use `data-bind-text="name"` |
+| `{{name}}` renders literally | `applyBindings` never interpolates mustache - use `data-bind-text="name"` |
 | Nothing updates after a write | The data is a plain object. Pass a Model, or use observables, or call `handle.update()` |
 | `data-model` types but nothing else moves | The write is landing on a snapshot. Pass the Model itself, not `model.toJSON()` |
 | "did not resolve to a function" | The handler is not on the data. Pass it in `options.methods` |
@@ -532,14 +532,14 @@ They compose. A page can `applyBindings` its shell and mount components inside i
 | `data-each` refused | `key=` is required for `applyBindings`. Add `key=id` |
 | Applying twice warns | The region is already bound. Dispose the first handle, or bind a narrower root |
 | An input shows `[object Object]` | A raw observable bound by name. Use `.value`, or pass a Model |
-| `data-model` on a nested path types fine but nothing else moves | The write mutates the object in place and the field's observable never fires — [see above](#writing-to-a-nested-path-does-not-notify-the-model) |
+| `data-model` on a nested path types fine but nothing else moves | The write mutates the object in place and the field's observable never fires - [see above](#writing-to-a-nested-path-does-not-notify-the-model) |
 
 ---
 
 ## See Also
 
-- [Reactivity](./Reactivity.md) — the tracking layer these bindings are built on
-- [Components](./Components.md) — templates, lifecycle and the `methods` block
-- [Blueprints](./Blueprints.md) — defining the schema a Model validates against
+- [Reactivity](./Reactivity.md) - the tracking layer these bindings are built on
+- [Components](./Components.md) - templates, lifecycle and the `methods` block
+- [Blueprints](./Blueprints.md) - defining the schema a Model validates against
 - [API Reference](./API.md)
 - Live examples: `public/showcase/models/bindings.html`

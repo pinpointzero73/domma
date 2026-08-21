@@ -4,7 +4,7 @@
 
 **Goal:** Add a six-theme "Admin" family (2 finishes × 3 accents) to Domma, generated from a single source of truth, registered across all theme surfaces, with a two-step Finish→Accent picker in the showcase.
 
-**Architecture:** Each theme is a self-contained CSS class (`.dm-theme-admin-<finish>-<accent>`) defining the full ~80-token contract — same shape as `charcoal-dark.css`. A Node generator emits the six files from two finish token-sets × three accent token-sets. The theme engine needs no logic change; the six names are added to every list/registry that enumerates themes. The showcase gains an Admin section with a finish/accent picker and a live Domma dashboard preview.
+**Architecture:** Each theme is a self-contained CSS class (`.dm-theme-admin-<finish>-<accent>`) defining the full ~80-token contract - same shape as `charcoal-dark.css`. A Node generator emits the six files from two finish token-sets × three accent token-sets. The theme engine needs no logic change; the six names are added to every list/registry that enumerates themes. The showcase gains an Admin section with a finish/accent picker and a live Domma dashboard preview.
 
 **Tech Stack:** Vanilla JS (ES modules), Node build scripts, Vitest, Domma's own CSS-variable theming + components.
 
@@ -15,20 +15,20 @@
 ## File Structure
 
 **New files:**
-- `scripts/generate-admin-themes.js` — generator; owns all palette values; exports `buildThemeCss(finish, accent)` (pure) + writes the six files when run as `main`.
-- `public/assets/themes/admin-smooth-steel.css` … `admin-sharp-teal.css` — 6 generated files.
+- `scripts/generate-admin-themes.js` - generator; owns all palette values; exports `buildThemeCss(finish, accent)` (pure) + writes the six files when run as `main`.
+- `public/assets/themes/admin-smooth-steel.css` … `admin-sharp-teal.css` - 6 generated files.
 
 **Modified files:**
-- `src/theme.js` — `AVAILABLE_THEMES` (+6), `listBases()` (+2).
-- `src/theme.test.js` — count 16→22, add Admin assertions.
-- `package.json` — `generate:themes` script + build-chain insertion.
-- `scripts/build-css.js` — `themeFiles` array (+6).
-- `src/theme-roller.js` — theme `<option>` list.
-- `public/layouts/js/layout.js` — variant dots + dot colours.
-- `public/download/kickstart-builder.js` — `THEMES` array.
-- `public/assets/ide/phpstorm/theme.d.ts` — typings.
-- `public/showcase/themes/index.html` — Admin cards + picker section + preview + JS.
-- `docs/DommaDocumentation.md` (theme section) — document the family.
+- `src/theme.js` - `AVAILABLE_THEMES` (+6), `listBases()` (+2).
+- `src/theme.test.js` - count 16→22, add Admin assertions.
+- `package.json` - `generate:themes` script + build-chain insertion.
+- `scripts/build-css.js` - `themeFiles` array (+6).
+- `src/theme-roller.js` - theme `<option>` list.
+- `public/layouts/js/layout.js` - variant dots + dot colours.
+- `public/download/kickstart-builder.js` - `THEMES` array.
+- `public/assets/ide/phpstorm/theme.d.ts` - typings.
+- `public/showcase/themes/index.html` - Admin cards + picker section + preview + JS.
+- `docs/DommaDocumentation.md` (theme section) - document the family.
 
 ---
 
@@ -72,7 +72,7 @@ In `src/theme.test.js`, find the `listThemes()` test asserting `expect(themes.le
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `npx vitest run src/theme.test.js -t "Admin"`
-Expected: FAIL — `admin-*` themes not in list; `set('admin-sharp-steel')` warns "Invalid theme".
+Expected: FAIL - `admin-*` themes not in list; `set('admin-sharp-steel')` warns "Invalid theme".
 
 - [ ] **Step 3: Add the names to `AVAILABLE_THEMES`**
 
@@ -89,7 +89,7 @@ to:
 ```javascript
     'wedding-light', 'wedding-dark',
     'core-light',
-    // Admin family — standalone (no light/dark), finish × accent
+    // Admin family - standalone (no light/dark), finish × accent
     'admin-smooth-steel', 'admin-smooth-indigo', 'admin-smooth-teal',
     'admin-sharp-steel', 'admin-sharp-indigo', 'admin-sharp-teal'
 ];
@@ -175,7 +175,7 @@ describe('generate-admin-themes', () => {
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `npx vitest run scripts/generate-admin-themes.test.js`
-Expected: FAIL — cannot resolve `./generate-admin-themes.js`.
+Expected: FAIL - cannot resolve `./generate-admin-themes.js`.
 
 - [ ] **Step 3: Write the generator**
 
@@ -199,7 +199,7 @@ const rootDir = join(__dirname, '..');
 const themesDir = join(rootDir, 'public/assets/themes');
 
 // ---------------------------------------------------------------------------
-// Finishes — foundational + chrome tokens. `tintStyle` controls status -light
+// Finishes - foundational + chrome tokens. `tintStyle` controls status -light
 // tints (solid pale for sharp, translucent for smooth). `accentText` is the
 // lightened accent used for on-dark active/selection text on the smooth finish.
 // ---------------------------------------------------------------------------
@@ -251,7 +251,7 @@ export const FINISHES = {
 };
 
 // ---------------------------------------------------------------------------
-// Accents — the --dm-primary family. `onDark` is a lightened variant used for
+// Accents - the --dm-primary family. `onDark` is a lightened variant used for
 // active/selection text on the smooth finish so it stays legible.
 // ---------------------------------------------------------------------------
 export const ACCENTS = {
@@ -261,7 +261,7 @@ export const ACCENTS = {
 };
 
 // ---------------------------------------------------------------------------
-// Status colours — shared across the whole family.
+// Status colours - shared across the whole family.
 // ---------------------------------------------------------------------------
 const STATUS = {
   success: { base: '#2e8b50', hover: '#287d49', active: '#226b3f', dark: '#1c5733', rgb: '46, 139, 80',  solidLight: '#e3f3e8', text: '#ffffff' },
@@ -296,7 +296,7 @@ function statusBlock(tintStyle) {
   return out.trimEnd();
 }
 
-/** Component-specific tokens — identical structure to charcoal-dark.css, all var-referencing. */
+/** Component-specific tokens - identical structure to charcoal-dark.css, all var-referencing. */
 function componentBlock() {
   return vars({
     'card-bg': 'var(--dm-surface)',
@@ -388,7 +388,7 @@ export function buildThemeCss(finishKey, accentKey) {
   const header =
 `/**
  * Domma Admin ${FINISH_LABEL[finishKey]} · ${ACCENT_LABEL[accentKey]}
- * GENERATED by scripts/generate-admin-themes.js — do not edit by hand.
+ * GENERATED by scripts/generate-admin-themes.js - do not edit by hand.
  */
 
 .dm-theme-admin-${finishKey}-${accentKey} {
@@ -642,7 +642,7 @@ In `public/download/kickstart-builder.js`, change the `THEMES` array (~line 15-1
 In `public/assets/ide/phpstorm/theme.d.ts`, after the `ThemeVariant` line (~line 7) add a dedicated Admin type and document the names:
 
 ```typescript
-/** Standalone Admin family (no light/dark) — finish-accent full names. */
+/** Standalone Admin family (no light/dark) - finish-accent full names. */
 export type AdminTheme =
     | 'admin-smooth-steel' | 'admin-smooth-indigo' | 'admin-smooth-teal'
     | 'admin-sharp-steel' | 'admin-sharp-indigo' | 'admin-sharp-teal';
@@ -735,7 +735,7 @@ In `public/showcase/themes/index.html`, immediately after the closing `</div>` o
             </div>
 ```
 
-The existing click handler (`document.querySelectorAll('.theme-card')...` ~line 1221) and the audit (which uses `Domma.theme.listThemes()`) pick these up automatically — no JS change needed for the gallery.
+The existing click handler (`document.querySelectorAll('.theme-card')...` ~line 1221) and the audit (which uses `Domma.theme.listThemes()`) pick these up automatically - no JS change needed for the gallery.
 
 - [ ] **Step 2: Verify in the running site (user-driven)**
 
@@ -890,7 +890,7 @@ In `docs/DommaDocumentation.md`, find the themes section (search for `charcoal-d
 #### Admin family (standalone)
 
 The **Admin** family is a mid-weight, corporate theme set built for dashboards. It has no
-light/dark variant — it is its own family of six themes, a 2 × 3 matrix of **finish** × **accent**:
+light/dark variant - it is its own family of six themes, a 2 × 3 matrix of **finish** × **accent**:
 
 - **Finishes:** `smooth` (uniform mid-tone surfaces) · `sharp` (dark chrome + tinted-light workspace)
 - **Accents:** `steel` (#3f7cc4) · `indigo` (#5b63a8) · `teal` (#2f8f86)
@@ -904,7 +904,7 @@ Domma.theme.getBase(); // 'admin-sharp'
 ```
 
 The six CSS files are generated by `scripts/generate-admin-themes.js` (run via
-`npm run generate:themes`) — edit token values there, never the generated files.
+`npm run generate:themes`) - edit token values there, never the generated files.
 ```
 
 - [ ] **Step 2: Run the full build and confirm it is clean**
@@ -930,10 +930,10 @@ git commit -m "docs(theme): document the Admin theme family"
 
 ## Self-Review Notes
 
-- **Spec coverage:** 6 themes (T1–T3), generator single-source (T2), build wiring + chain (T3), WCAG AA (T4), all registries — theme.js/roller/layout/kickstart/IDE (T1, T5), showcase gallery (T6), two-step picker + live preview (T7), docs (T8). All spec sections map to a task.
+- **Spec coverage:** 6 themes (T1-T3), generator single-source (T2), build wiring + chain (T3), WCAG AA (T4), all registries - theme.js/roller/layout/kickstart/IDE (T1, T5), showcase gallery (T6), two-step picker + live preview (T7), docs (T8). All spec sections map to a task.
 - **Non-goals respected:** no global cross-theme accents, no light/dark Admin, no engine logic change.
 - **Naming consistency:** full names `admin-<finish>-<accent>` and finish bases `admin-smooth`/`admin-sharp` are used identically across `buildThemeCss`, `AVAILABLE_THEMES`, `listBases`, build list, all registries, and the picker's `apply()`.
-- **Browser-dependent steps** (T6 S2, T7 S3) are explicitly user-driven — the assistant cannot drive a browser.
+- **Browser-dependent steps** (T6 S2, T7 S3) are explicitly user-driven - the assistant cannot drive a browser.
 - **Sitemap:** no new page URL is added (the showcase themes page already exists), so `sitemap.xml` needs no change.
 - **CMS / sibling repos:** out of scope per the spec.
 ```

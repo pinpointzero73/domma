@@ -1560,7 +1560,7 @@ class ListGroup extends Component {
             }
         }
 
-        // Delegated click handler — works for items added after init (e.g. via refresh())
+        // Delegated click handler - works for items added after init (e.g. via refresh())
         this._addEventListener(this.element, 'click', (e) => {
             if (!this.options.selectable) return;
             const item = e.target.closest(this.options.itemSelector);
@@ -1571,7 +1571,7 @@ class ListGroup extends Component {
             this._handleItemClick(index, e);
         });
 
-        // Delegated focus handler — keeps roving tabindex tracking correct for new items
+        // Delegated focus handler - keeps roving tabindex tracking correct for new items
         this._addEventListener(this.element, 'focusin', (e) => {
             const item = e.target.closest(this.options.itemSelector);
             if (!item || !this.element.contains(item)) return;
@@ -1670,7 +1670,7 @@ class ListGroup extends Component {
             }
 
             steps++;
-            if (steps > total) return -1; // All items disabled — no valid target
+            if (steps > total) return -1; // All items disabled - no valid target
         } while (this._items[index].classList.contains(this.options.disabledClass));
 
         return index;
@@ -1709,7 +1709,7 @@ class ListGroup extends Component {
         const isSelected = item.classList.contains(this.options.activeClass);
 
         if (!this.options.multiSelect) {
-            // Single select — deselect all others first
+            // Single select - deselect all others first
             const previouslySelected = this._items.filter(
                 (el, i) => i !== index && el.classList.contains(this.options.activeClass)
             );
@@ -1733,7 +1733,7 @@ class ListGroup extends Component {
                     this.options.onSelect(item, index, event);
                 }
             } else {
-                // Item was already selected — deselect it and fire callbacks
+                // Item was already selected - deselect it and fire callbacks
                 item.classList.remove(this.options.activeClass);
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'false');
@@ -1743,7 +1743,7 @@ class ListGroup extends Component {
                 return;
             }
         } else {
-            // Multi select — toggle this item
+            // Multi select - toggle this item
             if (isSelected) {
                 item.classList.remove(this.options.activeClass);
                 if (this.options.selectable) {
@@ -1779,9 +1779,9 @@ class ListGroup extends Component {
         });
     }
 
-    // ——————————————————————————————
+    // ------------------------------
     // Public API
-    // ——————————————————————————————
+    // ------------------------------
 
     /**
      * Select item at index
@@ -2162,7 +2162,7 @@ class Dropdown extends Component {
         document.body.appendChild(this._menu);
 
         // Keep the dropdown open while the cursor is over the menu, and re-arm the
-        // close delay when it leaves — mirrors the heading's hover handling so the
+        // close delay when it leaves - mirrors the heading's hover handling so the
         // gap between heading and menu can be crossed in either direction.
         if (opts.trigger === 'hover') {
             this._addEventListener(this._menu, 'mouseenter', () => clearTimeout(this._hoverCloseTimer));
@@ -3973,7 +3973,7 @@ class Carousel extends Component {
             });
         } else if (opts.animation === 'crossfade') {
             if (oldIndex === null || oldIndex === this._currentIndex) {
-                // Initial render / no real transition — fall back to fade-style setup
+                // Initial render / no real transition - fall back to fade-style setup
                 this._slides.forEach((slide, i) => {
                     const isActive = i === this._currentIndex;
                     slide.style.position = isActive ? 'relative' : 'absolute';
@@ -4011,7 +4011,7 @@ class Carousel extends Component {
         const oldSlide = this._slides[oldIndex];
         const newSlide = this._slides[newIndex];
 
-        // Stage incoming slide on top, invisible — outgoing stays in flow
+        // Stage incoming slide on top, invisible - outgoing stays in flow
         // (position: relative) so the container keeps its height for the
         // whole overlap, not just at the end.
         newSlide.style.position = 'absolute';
@@ -5955,8 +5955,8 @@ class Navbar extends Component {
             }
         });
 
-        // Optional hover-to-reveal (desktop). Delegated on this.element — like the
-        // click handlers above — so it survives setItems()/setActive() re-renders,
+        // Optional hover-to-reveal (desktop). Delegated on this.element - like the
+        // click handlers above - so it survives setItems()/setActive() re-renders,
         // which replace the inner DOM. Click stays a working fallback for touch and
         // keyboard users. mouseover/mouseout bubble (unlike mouseenter/mouseleave),
         // so one pair of listeners covers every present and future dropdown.
@@ -6010,7 +6010,7 @@ class Navbar extends Component {
      * low menus would run off the right/bottom edge and be unreachable. On open we
      * measure and reposition: flip horizontally past the right edge, and either
      * shift a flyout up or cap+scroll a top-level list past the bottom edge.
-     * Desktop only — below collapseAt the menu renders inline in the drawer.
+     * Desktop only - below collapseAt the menu renders inline in the drawer.
      */
     _positionMenu(dropdown) {
         if (window.innerWidth < this.options.collapseAt) return;
@@ -6033,7 +6033,7 @@ class Navbar extends Component {
                 r = menu.getBoundingClientRect();
             }
             // Vertical: a flyout can move up freely; a top-level list is anchored
-            // under the bar, so cap its height and scroll instead — but only when
+            // under the bar, so cap its height and scroll instead - but only when
             // it has no nested flyouts of its own (which scrolling would clip).
             const over = r.bottom - (window.innerHeight - M);
             if (over > 0) {
@@ -7693,7 +7693,7 @@ class Pillbox extends Component {
             }
         };
 
-        // Only bind once the structure exists — _init() bails on a non-input
+        // Only bind once the structure exists - _init() bails on a non-input
         // element, and a subscription firing into a half-built Pillbox throws.
         if (!this._container) {
             // no-op: initialisation failed, leave the model unbound
@@ -9860,7 +9860,7 @@ class Signature extends Component {
             ctx.font = `${Math.min(h * 0.55, 72)}px 'Brush Script MT', 'Segoe Script', cursive`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            // fillText renders to canvas — not HTML, safe from XSS
+            // fillText renders to canvas - not HTML, safe from XSS
             ctx.fillText(text, w / 2, h / 2);
             ctx.restore();
         }
@@ -9903,7 +9903,7 @@ class Signature extends Component {
             }
             const avgPressure = pts.reduce((sum, p) => sum + p.pressure, 0) / pts.length;
             const sw = (stroke.width * (0.4 + 0.6 * avgPressure)).toFixed(2);
-            // Stroke colour comes from _setColour — validated against developer-supplied opts.colours array
+            // Stroke colour comes from _setColour - validated against developer-supplied opts.colours array
             pathsHtml += `<path d="${d}" stroke="${stroke.colour}" stroke-width="${sw}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>\n`;
         }
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">\n${pathsHtml}</svg>`;
@@ -9990,7 +9990,7 @@ class Signature extends Component {
     }
 
     /**
-     * Full cleanup — disconnects ResizeObserver and removes all event listeners.
+     * Full cleanup - disconnects ResizeObserver and removes all event listeners.
      */
     destroy() {
         if (this._resizeObserver) {
@@ -10295,14 +10295,14 @@ export const elements = {
     },
 
     /**
-     * Create a chooser — visual option-picker (card or chip variants,
+     * Create a chooser - visual option-picker (card or chip variants,
      * single or multi-select). All DOM is built via createElement +
      * appendChild; user-supplied strings flow through textContent /
      * setAttribute, never inner-HTML assignment.
      *
      * Visual options (accent, accentStyle, glow, shadow) accept either a
-     * semantic colour name — 'primary' | 'success' | 'info' | 'warning' |
-     * 'danger' — which maps to an existing Domma CSS variable and stays
+     * semantic colour name - 'primary' | 'success' | 'info' | 'warning' |
+     * 'danger' - which maps to an existing Domma CSS variable and stays
      * theme-aware, or any literal CSS colour string (e.g. '#ec4899',
      * 'rgb(99,102,241)') which is applied as an inline CSS custom property
      * on the chooser root.
@@ -10341,7 +10341,7 @@ export const elements = {
             multiple: false,
             density: 'comfortable',
             columns: 3,
-            // Visual options — all theme-aware. Semantic colour names map
+            // Visual options - all theme-aware. Semantic colour names map
             // to existing Domma CSS vars; arbitrary hex/rgb values become
             // inline CSS variables so the picker still retints when the
             // wider theme changes.

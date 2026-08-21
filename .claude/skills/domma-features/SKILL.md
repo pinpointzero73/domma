@@ -1,6 +1,6 @@
 ---
 name: domma-features
-description: Complete inventory of every Domma feature — DOM methods, utils, dates, blueprints, models, the 23 UI components, forms, tables, effects, icons, and CSS utilities. Read this before implementing any common functionality (HTTP, storage, DOM, forms, dates, UI) manually, to check whether Domma already provides it.
+description: Complete inventory of every Domma feature - DOM methods, utils, dates, blueprints, models, the 23 UI components, forms, tables, effects, icons, and CSS utilities. Read this before implementing any common functionality (HTTP, storage, DOM, forms, dates, UI) manually, to check whether Domma already provides it.
 ---
 
 # Domma Features Reference
@@ -87,7 +87,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Badge - `badge()` component
   - NumberBadge - `numberBadge()` notification counter with positioning, dot mode, pulse
   - ListGroup - `listGroup()` selectable lists with keyboard nav, colour variants, flush mode
-  - Signature - `signature()` canvas signature pad — mouse/touch/stylus, undo/redo, PNG/SVG export, type fallback
+  - Signature - `signature()` canvas signature pad - mouse/touch/stylus, undo/redo, PNG/SVG export, type fallback
   - BackToTop - `backToTop()` with scroll behavior
   - ButtonGroup - `buttonGroup()` for radio/checkbox groups
   - Breadcrumbs - `breadcrumbs()` with separators
@@ -163,9 +163,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Methods: `render()`, `inject()`, `scan()` (auto-scan `data-icon` attributes)
 - Customizable size and color
 
-#### Flags (`Domma.flags` / `FL`) — opt-in module
+#### Flags (`Domma.flags` / `FL`) - opt-in module
 
-- **Separate bundle** (`domma-flags.min.js`), loaded after the core bundle — NOT in `domma.min.js`
+- **Separate bundle** (`domma-flags.min.js`), loaded after the core bundle - NOT in `domma.min.js`
 - Nation flags as inline SVG, keyed by ISO 3166-1 alpha-2 code (`gb`, `us`, `fr`…)
 - Lazy expansion: descriptors → SVG on first render, then memoised (~20 KB bundle)
 - Shapes: `rect`, `rounded`, `square`, `circle`; optional border
@@ -196,7 +196,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - **shake()** - Attention/error shake animation
   - Directions: `horizontal`, `vertical`, `both`
   - Features: Configurable intensity, iterations, stagger, onComplete callback
-- **tickerTape()** - Canvas-based ticker-tape parade — coloured rectangular strips drop from above, sway, rotate, and fade
+- **tickerTape()** - Canvas-based ticker-tape parade - coloured rectangular strips drop from above, sway, rotate, and fade
   - Modes: full-page overlay (`null` selector) or container-scoped
   - Palettes: `'theme'` (auto from CSS variables), `'rainbow'`, `'festive'`, `'gold'`, `'silver'`, `'pastel'`, `'mono'`, `'sunset'`, `'ocean'`, `'forest'`, `'bridal'`, or a custom array of CSS colour strings
   - Behaviour: continuous stream with configurable density, or one-shot `burst` for celebration moments
@@ -206,7 +206,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Palettes: `meadow` (default), `theme`, `pastel`, `rainbow`, `sunset`, or custom colour array
   - Behaviour: continuous stream or one-shot `burst`
   - Tunable: `density`, `speed`, `wander`, `riseSpeed`, `flapSpeed`, `minSize`/`maxSize`, `twoTone`
-- **strobe()** - Canvas strobe *lighting* — light beams from corners that sweep/rotate and brighten where they cross
+- **strobe()** - Canvas strobe *lighting* - light beams from corners that sweep/rotate and brighten where they cross
   - Presets: `club` (default), `concert`, `police`, `searchlight`, `scanner`, `mood`; individual options override the preset
   - Tunable: `origins`, `motion` (sweep/rotate), `sweepArc`, `speed`, `beamWidth`, `flicker`, `hz`, `colours`, `intensity`
   - Frequency (`hz`) warns above 5 Hz; disabled under prefers-reduced-motion
@@ -223,7 +223,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - **Opacity:** Full scale `.opacity-0` → `.opacity-100` (steps of 10, plus `.opacity-25`, `.opacity-75`)
 - **Translucency:**
   - Semantic: `.translucent-light` (0.85), `.translucent` (0.70), `.translucent-heavy` (0.50)
-  - Glass: `.translucent-glass` — semi-transparent background + `backdrop-filter: blur()`
+  - Glass: `.translucent-glass` - semi-transparent background + `backdrop-filter: blur()`
   - Hover variants: `.translucent-hover`, `.translucent-light-hover`, `.translucent-heavy-hover`
   - All include `transition: opacity` for smooth state changes
 - **Effects:**

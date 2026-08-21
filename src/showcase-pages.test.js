@@ -12,14 +12,14 @@
 // just a page that is broken for every visitor. The same blind spot let the
 // v0.30.0 modal regression and the onUpdated bug both survive a green suite.
 //
-// It was written as the prerequisite for the showcase conventions sweep — 191
+// It was written as the prerequisite for the showcase conventions sweep - 191
 // Domma-convention violations across 54 pages, recorded in
 // docs/superpowers/specs/2026-08-04-showcase-conventions-sweep-findings.md.
 // Rewriting 191 call sites without a harness is precisely how a green suite and
 // a broken site coexist.
 //
 // Its first run found THIRTEEN pages already broken, before a single line of the
-// sweep was written — including a `Domma.init()` call that threw and killed the
+// sweep was written - including a `Domma.init()` call that threw and killed the
 // whole of one page's demo, `$('#x')[0]` returning undefined on a collection
 // that documented the opposite, two components handed the wrong element type,
 // four missing icons, a page emitting six deprecation warnings about itself, and
@@ -31,17 +31,17 @@
 // jsdom executes inline scripts but will not fetch external ones unless
 // `resources: 'usable'`, which would mean real network requests. So every
 // external CLASSIC script is rewritten into an inline one, in place. That
-// matters more than it sounds: it preserves the browser's execution order —
-// domma.min.js first, page code after — and a page whose code runs before Domma
+// matters more than it sounds: it preserves the browser's execution order -
+// domma.min.js first, page code after - and a page whose code runs before Domma
 // exists is not the page under test.
 //
 // What is NOT executed, and why that is stated rather than hidden:
 //   * EXTERNAL `type="module"` scripts. jsdom has no ES module support. In
-//     practice this is layouts/js/layout.js on 83 pages — the navbar, footer and
+//     practice this is layouts/js/layout.js on 83 pages - the navbar, footer and
 //     theme chrome, not the page's own logic.
 //   * INLINE module scripts that actually import something (2 pages). An inline
 //     module with no import or export is run, wrapped in an async IIFE to keep
-//     its scope and its top-level await — otherwise those pages pass on markup
+//     its scope and its top-level await - otherwise those pages pass on markup
 //     alone while none of their logic executes.
 //     `skipped` records every genuine skip.
 //   * Anything served from a CDN. DOMPurify is substituted from the npm package,
@@ -51,8 +51,8 @@
 // -------
 // Modelled on scripts/validate-classes.js: `showcase-pages.baseline.json`
 // records findings that are known and accepted, and a page fails only when it
-// gains one that is NOT recorded. The baseline is currently empty — every page
-// is clean — so any finding at all is a failure. Keep it that way: adding an
+// gains one that is NOT recorded. The baseline is currently empty - every page
+// is clean - so any finding at all is a failure. Keep it that way: adding an
 // entry should be a conscious act with a reason, not a way to make a red run
 // green.
 //
@@ -97,7 +97,7 @@ const SUSPICIOUS = ['[object Object]', 'NaN%', 'undefinedundefined'];
  * Containers whose contents are SAMPLE CODE, not rendered output.
  *
  * A showcase about templating legitimately prints `{{name}}` on the page as
- * documentation — `reference/index.html` does exactly that. Scanning it for
+ * documentation - `reference/index.html` does exactly that. Scanning it for
  * unresolved bindings finds the thing the page exists to show.
  *
  * `textarea` is in the list for the same reason one step further on: the utils
@@ -125,7 +125,7 @@ function walk(dir, out = []) {
  *
  * These are gaps in the TEST ENVIRONMENT, not faults in the page. Without them
  * every canvas effect and every scroll-triggered effect reports a failure that
- * says nothing about Domma — and a harness that cries wolf is one people stop
+ * says nothing about Domma - and a harness that cries wolf is one people stop
  * reading. The stubs do nothing; they exist so the surrounding page code runs to
  * completion and its real faults surface.
  */
@@ -188,7 +188,7 @@ function inlineScripts(html, pageDir) {
             if (!isModule) return whole;                  // inline classic: run as-is
 
             // An inline module with no import or export is a module by habit,
-            // not by necessity — 5 of the 7 in this repository are. Running it
+            // not by necessity - 5 of the 7 in this repository are. Running it
             // is worth doing: without this the page's ENTIRE script never
             // executes, so it passes on markup alone and its logic is untested.
             //
@@ -278,7 +278,7 @@ const PAGES = existsSync(SHOWCASE) ? walk(SHOWCASE) : [];
 
 describe('Showcase pages render from the built bundle', () => {
 
-    // A missing artefact must FAIL, not skip and not pass vacuously — that is
+    // A missing artefact must FAIL, not skip and not pass vacuously - that is
     // the failure mode this file exists to prevent elsewhere.
     it('the built bundle is present', () => {
         expect(existsSync(BUNDLE), BUNDLE_MISSING).toBe(true);
@@ -325,12 +325,12 @@ describe('Showcase pages render from the built bundle', () => {
                 return;
             }
 
-            // A baseline entry for a page that is now clean is not a failure —
+            // A baseline entry for a page that is now clean is not a failure -
             // it is progress that nobody recorded. Say so rather than fail.
             const fixed = Object.keys(baseline)
                 .filter(rel => collected[rel] && collected[rel].length === 0);
             if (fixed.length) {
-                console.log(`\n  ${fixed.length} baselined page(s) are now clean — ` +
+                console.log(`\n  ${fixed.length} baselined page(s) are now clean - ` +
                     'run SHOWCASE_BASELINE=1 to record it:\n    ' + fixed.join('\n    '));
             }
             expect(true).toBe(true);

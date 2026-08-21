@@ -538,19 +538,19 @@ Image carousel with navigation.
 - `.carousel-fade` - Fade animation
 - `.carousel-sm` / `.carousel-lg` / `.carousel-full` - Size variants
 
-**Transition modes** *(JavaScript API — `animation` option)*:
+**Transition modes** *(JavaScript API - `animation` option)*:
 
 | Mode         | Behaviour                                                                          |
 |--------------|------------------------------------------------------------------------------------|
 | `slide`      | Default. Horizontal track translate, momentum-style sequencing.                    |
-| `fade`       | Clean opacity swap — outgoing hits zero before incoming appears.                   |
+| `fade`       | Clean opacity swap - outgoing hits zero before incoming appears.                   |
 | `crossfade`  | Outgoing and incoming transition opacity in parallel; brief overlap, cinematic.    |
 
 `animationEasing` accepts any CSS timing function (`'ease'`, `'linear'`, `'ease-in-out'`, `'cubic-bezier(...)'`).
 
 **Demo Gradient Palette** *(showcase-internal, defined in `domma-showcase.css`)*:
 
-Nine reusable decorative gradients available for demo panels — carousels, hero placeholders, anywhere a vivid block of colour is wanted without sourcing an image. **Not part of the public framework API** — use Domma's theme variables for production styling.
+Nine reusable decorative gradients available for demo panels - carousels, hero placeholders, anywhere a vivid block of colour is wanted without sourcing an image. **Not part of the public framework API** - use Domma's theme variables for production styling.
 
 | Class                       | Direction | Stops                                                       |
 |-----------------------------|-----------|-------------------------------------------------------------|

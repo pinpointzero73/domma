@@ -127,13 +127,13 @@ Accessed via `Domma.models` or `M`:
 - **Model Factory**: `create(blueprint, initialData, options)` returns a Model instance
 - **Model Instance**: `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `offChange()`, `reset()`
 - **Persistence**: `save()`, `load()`, `clearStorage()`, `isPersisted()`, `getPersistKey()`
-- **Observables**: `M.observable(value)`, `M.observableArray([])` — single reactive values, the primitive
+- **Observables**: `M.observable(value)`, `M.observableArray([])` - single reactive values, the primitive
   beneath Models. Also published standalone as `domma-reactive`.
-- **Reactivity**: `M.computed(fn)`, `M.effect(fn)`, `M.untracked(fn)`, `M.flush()`, `model.tracked()` — dependency
+- **Reactivity**: `M.computed(fn)`, `M.effect(fn)`, `M.untracked(fn)`, `M.flush()`, `model.tracked()` - dependency
   tracking with a batched microtask flush. See [docs/Reactivity.md](../docs/Reactivity.md)
-- **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()` — one field, one element
-- **Declarative Bindings**: `M.applyBindings(data, root, options)` activates every binding attribute under a root —
-  `data-bind-*`, `data-model`, `data-on-*`, `data-if`, `data-each="rows key=id"` — on markup that already exists.
+- **DOM Binding**: `M.bind(model, field, selector, options)`, `M.unbind()` - one field, one element
+- **Declarative Bindings**: `M.applyBindings(data, root, options)` activates every binding attribute under a root -
+  `data-bind-*`, `data-model`, `data-on-*`, `data-if`, `data-each="rows key=id"` - on markup that already exists.
   Pass a Model and bindings read and write through it. `M.registerBinding()` / `M.unregisterBinding()` add binding
   kinds; `M.registerHelper()` / `M.unregisterHelper()` add functions callable from an expression. The same bindings
   work in a `Domma.component()` template. See [docs/Bindings.md](../docs/Bindings.md)
@@ -348,7 +348,7 @@ Accessed via `Domma.elements`:
 - **Carousel**:
   `elements.carousel(selector, { autoplay, interval, pauseOnHover, loop, animation, animationDuration, animationEasing, showArrows, showIndicators, onChange })` →
   `next()`, `prev()`, `goTo()`, `play()`, `pause()`, `getIndex()`, `getSlide()`
-    - `animation`: `'slide'` (default — horizontal track translate), `'fade'` (clean opacity swap), or `'crossfade'` (overlapping opacity in both directions)
+    - `animation`: `'slide'` (default - horizontal track translate), `'fade'` (clean opacity swap), or `'crossfade'` (overlapping opacity in both directions)
     - `animationEasing`: any CSS timing function (`'ease'`, `'linear'`, `'ease-in-out'`, `'cubic-bezier(...)'`)
 - **hero**: CSS-only component with Tailwind-inspired utilities for modern hero sections
     - **Base**: `.hero`, `.hero-content`, `.hero-title`, `.hero-subtitle`, `.hero-actions`,
@@ -466,8 +466,8 @@ Accessed via `Domma.elements`:
     - Colour variants: `list-group-item-primary/secondary/success/danger/warning/info`
     - Keyboard: Arrow keys, Home/End, Enter/Space; roving tabindex pattern
 - **Signature**: `elements.signature(selector, options)` → `toBase64(format?)`, `isEmpty()`, `clear(silent?)`, `undo()`, `redo()`, `disable()`, `enable()`, `destroy()`
-    - Pointer Events API — mouse, touch, and stylus (pressure-sensitive line width)
-    - Smooth Bézier curves; strokes stored as normalised (0–1) co-ordinates
+    - Pointer Events API - mouse, touch, and stylus (pressure-sensitive line width)
+    - Smooth Bézier curves; strokes stored as normalised (0-1) co-ordinates
     - ResizeObserver reflows strokes on container resize
     - Export: `'png'` (canvas data URL) or `'svg'` (rebuilt from stored strokes)
     - `typeFallback: true` shows a Draw / Type toggle; type mode renders cursive text to canvas
@@ -579,7 +579,7 @@ Accessed via `Domma.effects`:
 - **twinkle**: `effects.twinkle(selector | null, { count, minSize, maxSize, twinkleSpeed, colour, zIndex, shape, respectMotionPreference })` - Canvas-based twinkling stars; pass `null` for full-page overlay or a selector for container-scoped mode
 - **tickerTape**: `effects.tickerTape(selector | null, { palette, density, speed, sway, rotationSpeed, minWidth, maxWidth, minHeight, maxHeight, fadeStart, burst, burstCount, zIndex, respectMotionPreference })` - Canvas-based ticker-tape parade; coloured rectangles drop, sway, rotate, and fade. Pass `null` for full-page overlay. Built-in palettes: `theme`, `rainbow`, `festive`, `gold`, `silver`, `pastel`, `mono`, `sunset`, `ocean`, `forest`, `bridal`, or supply a custom colour array.
 - **butterflies**: `effects.butterflies(selector | null, { palette, density, speed, wander, riseSpeed, flapSpeed, minSize, maxSize, twoTone, burst, burstCount, zIndex, respectMotionPreference })` - Canvas-based butterflies that wander and rise with procedurally flapping wings. Pass `null` for a full-page overlay. Palettes: `meadow` (default), `theme`, `pastel`, `rainbow`, `sunset`, or a custom colour array.
-- **strobe**: `effects.strobe(selector | null, { preset, origins, motion, sweepArc, speed, beamWidth, flicker, hz, colours, intensity, duration, zIndex, respectMotionPreference })` - Canvas strobe *lighting*: beams from corners sweep/rotate and brighten where they cross (additive blending). Presets: `club` (default), `concert`, `police`, `searchlight`, `scanner`, `mood` — individual options override the preset. Disabled under prefers-reduced-motion; flicker `hz` warns above 5.
+- **strobe**: `effects.strobe(selector | null, { preset, origins, motion, sweepArc, speed, beamWidth, flicker, hz, colours, intensity, duration, zIndex, respectMotionPreference })` - Canvas strobe *lighting*: beams from corners sweep/rotate and brighten where they cross (additive blending). Presets: `club` (default), `concert`, `police`, `searchlight`, `scanner`, `mood` - individual options override the preset. Disabled under prefers-reduced-motion; flicker `hz` warns above 5.
 
 **Scribe Modes:**
 - `mode: 'typewriter'` - Character-by-character rendering (default)

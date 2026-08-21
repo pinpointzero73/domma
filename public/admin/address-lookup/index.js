@@ -1,5 +1,5 @@
 /**
- * Address Lookup Admin — Overview Dashboard
+ * Address Lookup Admin - Overview Dashboard
  */
 
 import AdminAuth from '../shared/admin-auth.js';

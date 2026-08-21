@@ -455,7 +455,7 @@ export function pulse(selector, options = {}) {
  *
  * 'ms' MUST be tested before 's', because 'ms' also ends with 's'. Checking
  * 's' first makes the 'ms' branch unreachable and multiplies every
- * millisecond value by 1000 — a '300ms' wait became five minutes.
+ * millisecond value by 1000 - a '300ms' wait became five minutes.
  *
  * @param {string|number} value
  * @returns {number} milliseconds
@@ -2158,7 +2158,7 @@ export function twinkle(selector, options = {}) {
 }
 
 /**
- * Ticker tape effect — colourful rectangular strips drop from the top of a
+ * Ticker tape effect - colourful rectangular strips drop from the top of a
  * container (or the viewport), spinning, swaying, and fading as they fall.
  * Reminiscent of a ticker-tape parade. Pass `null` (or omit the selector)
  * for a full-page fixed overlay, or provide a selector to scope strips
@@ -2177,7 +2177,7 @@ export function twinkle(selector, options = {}) {
  * @param {number} [options.maxWidth] - Maximum strip width in pixels
  * @param {number} [options.minHeight] - Minimum strip height in pixels
  * @param {number} [options.maxHeight] - Maximum strip height in pixels
- * @param {number} [options.fadeStart] - Fraction of fall (0–1) before fade begins
+ * @param {number} [options.fadeStart] - Fraction of fall (0-1) before fade begins
  * @param {boolean} [options.burst] - If true, drops a single batch and stops respawning
  * @param {number} [options.burstCount] - Strips emitted in burst mode
  * @param {number} [options.zIndex]
@@ -2424,7 +2424,7 @@ export function tickerTape(selector, options = {}) {
       // Top up to maintain density (continuous mode only)
       if (!opts.burst) {
         const target = opts.density;
-        // Stochastic spawn — gives a natural rather than uniform stream
+        // Stochastic spawn - gives a natural rather than uniform stream
         while (particles.length < target && Math.random() < 0.6) {
           particles.push(createParticle(canvas.width, canvas.height, true));
         }
@@ -2497,7 +2497,7 @@ export function tickerTape(selector, options = {}) {
 }
 
 /**
- * Butterflies effect — procedurally drawn butterflies wander and rise with
+ * Butterflies effect - procedurally drawn butterflies wander and rise with
  * flapping wings. Pass `null` (or omit the selector) for a full-page fixed
  * overlay, or a selector to scope them inside a container.
  *
@@ -2600,7 +2600,7 @@ export function butterflies(selector, options = {}) {
     };
   }
 
-  // DEFAULT flight core — constants intended to be tuned later.
+  // DEFAULT flight core - constants intended to be tuned later.
   function updateButterfly(b, w, h) {
     b.wanderTimer -= 1;
     if (b.wanderTimer <= 0) {
@@ -2840,7 +2840,7 @@ function hexToRgba(hex, alpha) {
 }
 
 /**
- * Strobe lighting effect — light beams emanate from the chosen corners, sweep
+ * Strobe lighting effect - light beams emanate from the chosen corners, sweep
  * (or rotate), and brighten where they cross (additive blending). Pass `null`
  * for a full-page overlay, or a selector for a container-scoped rig.
  *
@@ -2859,7 +2859,7 @@ function hexToRgba(hex, alpha) {
  * @param {boolean} [options.flicker] - Blink beams on/off (the strobe character)
  * @param {number} [options.hz] - Flicker rate in flashes/sec (warns above 5)
  * @param {string[]} [options.colours] - Beam colours, assigned per beam in order
- * @param {number} [options.intensity] - Beam brightness 0–1
+ * @param {number} [options.intensity] - Beam brightness 0-1
  * @param {number|null} [options.duration=null] - Auto-stop after N ms
  * @param {number} [options.zIndex=9999]
  * @param {boolean} [options.respectMotionPreference=true]
@@ -2896,7 +2896,7 @@ export function strobe(selector, options = {}) {
   }
 
   if (opts.flicker && opts.hz > 5) {
-    console.warn(`[Domma.effects.strobe] flicker hz=${opts.hz} exceeds 5Hz — rapid flashing can trigger photosensitive seizures.`);
+    console.warn(`[Domma.effects.strobe] flicker hz=${opts.hz} exceeds 5Hz - rapid flashing can trigger photosensitive seizures.`);
   }
 
   const isFullPage = !selector || selector === 'body' || selector === document.body;
@@ -3061,7 +3061,7 @@ export function strobe(selector, options = {}) {
       const w = canvas.width;
       const h = canvas.height;
       // Fade the previous frame slightly (rather than clearing it) so beams
-      // leave a soft trail as they move — smooth motion, and it keeps the
+      // leave a soft trail as they move - smooth motion, and it keeps the
       // overlay transparent over the page (destination-out lowers alpha only).
       ctx.globalCompositeOperation = 'destination-out';
       ctx.fillStyle = 'rgba(0, 0, 0, 0.14)';
@@ -3189,7 +3189,7 @@ export function resolvePalette(spec) {
   return EFFECT_PALETTES.rainbow;
 }
 
-// Back-compat alias — tickerTape still calls resolveTickerPalette internally.
+// Back-compat alias - tickerTape still calls resolveTickerPalette internally.
 const resolveTickerPalette = resolvePalette;
 
 // Export as default for module usage

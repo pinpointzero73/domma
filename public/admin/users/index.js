@@ -420,7 +420,7 @@ $(() => {
         }
 
         const msg = deleted > 0
-            ? `Deleted ${deleted} user${deleted > 1 ? 's' : ''}${failed > 0 ? ` — ${failed} failed` : ''}`
+            ? `Deleted ${deleted} user${deleted > 1 ? 's' : ''}${failed > 0 ? ` - ${failed} failed` : ''}`
             : 'Failed to delete selected users';
 
         Domma.elements.toast(msg, { type: failed > 0 && deleted === 0 ? 'error' : failed > 0 ? 'warning' : 'success' });

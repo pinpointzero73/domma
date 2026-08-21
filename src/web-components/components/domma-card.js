@@ -175,7 +175,7 @@ export class DommaCard extends DommaElement {
         this._bodyWrapper.className = 'card-body-wrapper';
 
         if (collapsible) {
-            // Always create header wrapper when collapsible — do NOT gate on
+            // Always create header wrapper when collapsible - do NOT gate on
             // this.querySelector('[slot="header"]') here, because light-DOM children
             // may not yet be queryable during connectedCallback (timing of replaceWith).
             this._headerWrapper = document.createElement('div');

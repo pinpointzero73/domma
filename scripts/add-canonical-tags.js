@@ -2,7 +2,7 @@
  * Add Canonical Tags
  * Inserts <link rel="canonical"> after <title> in every public HTML page.
  * Skips template fragments and files that already have a canonical tag.
- * Safe to re-run — idempotent.
+ * Safe to re-run - idempotent.
  */
 
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
@@ -15,7 +15,7 @@ const publicDir = join(rootDir, 'public');
 
 const BASE_URL = 'https://dommajs.org';
 
-// ── Skip rules (same as sitemap, minus test files — canonical tags do no harm
+// ── Skip rules (same as sitemap, minus test files - canonical tags do no harm
 //   on test pages but the sitemap shouldn't list them) ────────────────────────
 
 const FRAGMENT_DIRS = [
@@ -67,7 +67,7 @@ for (const rel of files) {
     const full    = join(publicDir, rel);
     const content = readFileSync(full, 'utf8');
 
-    // Already has a canonical tag — skip
+    // Already has a canonical tag - skip
     if (/rel=["']canonical["']/i.test(content)) {
         skipped++;
         continue;
@@ -75,7 +75,7 @@ for (const rel of files) {
 
     // Must have a </title> to anchor the insertion
     if (!content.includes('</title>')) {
-        console.warn(`  ⚠ No </title> in ${rel} — skipping`);
+        console.warn(`  ⚠ No </title> in ${rel} - skipping`);
         skipped++;
         continue;
     }

@@ -7,17 +7,17 @@
 // Why this exists
 // ---------------
 // The unit suite exercises src/ modules in isolation. It cannot catch bundling
-// faults, nor rendering faults — 429 unit tests passed while four of the five
+// faults, nor rendering faults - 429 unit tests passed while four of the five
 // examples had silently stopped updating after their initial paint (see the
 // known gap below). These specs are the cheapest thing that stands in for a
 // real user: mount the component, assert it painted, assert nothing was logged
 // to the console, and assert the calculator still computes.
 //
 // The calculator case is the load-bearing one. It drives computed properties
-// end to end — through Model, through the reactive graph, through the template
-// binding engine, from minified output — which no unit test does.
+// end to end - through Model, through the reactive graph, through the template
+// binding engine, from minified output - which no unit test does.
 //
-// FIXED REGRESSION — now covered by the interaction specs below
+// FIXED REGRESSION - now covered by the interaction specs below
 // -------------------------------------------------------------
 // Interaction tests for todo, notes, contacts and markdown were once absent on
 // purpose: they could not pass. Only calculator/template.html contains {{ }}
@@ -34,21 +34,21 @@
 //     contacts   : 0 -> 0                                   (inert)
 //     markdown   : 0 -> 0                                   (inert)
 //
-// The symptom was silent — no error was thrown. The model updated correctly
+// The symptom was silent - no error was thrown. The model updated correctly
 // (adding a to-do did append to the todos array and did persist), but the DOM
 // was never told. Calling _renderList() by hand painted the item immediately,
 // so the render code was fine; only the trigger was missing.
 //
 // Introduced by 8961c64 "feat(components): compile templates to fine-grained
 // bindings", and shipped in v0.30.0, v0.30.1 and v0.31.0. It was NOT a
-// consequence of backing Model with domma-reactive observables — that commit
+// consequence of backing Model with domma-reactive observables - that commit
 // (9221536) changed exactly one line of component-factory.js, the import
 // source.
 //
 // Fixed by _wireUpdateWatcher(): one extra effect per component that reads the
 // whole model and schedules onUpdated, so the hook fires for any data change
 // rather than only for a binding repaint. The four specs below are the
-// regression guard — they fail against any bundle built before that fix.
+// regression guard - they fail against any bundle built before that fix.
 //
 // NOTE: these run against public/dist/domma.min.js, a gitignored build
 // artefact. Run `npm run build:js` after changing src/ or they test the old
@@ -66,7 +66,7 @@ const BUNDLE_MISSING = [
     `${BUNDLE} is missing.`,
     '',
     'These specs verify the BUILT bundle, not src/. Without it there is nothing',
-    'to test, and skipping would let a broken build ship unnoticed — the exact',
+    'to test, and skipping would let a broken build ship unnoticed - the exact',
     'failure this file exists to catch.',
     '',
     'Run:  npm run build:js'
@@ -120,7 +120,7 @@ async function mountExample(app) {
     // Every example page loads DOMPurify from a CDN before the bundle.
     window.DOMPurify = createDOMPurify(window);
 
-    // The components fetch their templateUrl relative to the page — serve from disk.
+    // The components fetch their templateUrl relative to the page - serve from disk.
     window.fetch = async (url) => {
         const resolved = new window.URL(String(url), window.location.href);
         const file = path.join(dir, path.basename(resolved.pathname));
@@ -157,7 +157,7 @@ const rootOf = (el) => el.shadowRoot?.querySelector('.dm-component-root');
 
 describe('Example apps render from the built bundle', () => {
 
-    // A missing build artefact must FAIL, not skip and not pass vacuously —
+    // A missing build artefact must FAIL, not skip and not pass vacuously -
     // that is the failure mode this whole file exists to prevent elsewhere.
     // This assertion sits outside the beforeAll guard below so the reader sees
     // a real failed test carrying the instructions, not a silently aborted hook.
@@ -186,7 +186,7 @@ describe('Example apps render from the built bundle', () => {
                     expect(markup.length, `<${app.tag}> rendered only ${markup.length} chars`)
                         .toBeGreaterThan(200);
 
-                    // Rendered CORRECTLY — no unresolved template syntax...
+                    // Rendered CORRECTLY - no unresolved template syntax...
                     expect(root.innerHTML.match(/\{\{[^}]*\}\}/g)).toBeNull();
 
                     // ...and no failure text masquerading as content.
@@ -236,7 +236,7 @@ describe('Example apps render from the built bundle', () => {
 
     // The four apps below paint imperatively from onUpdated() and compile to
     // zero template bindings. Each spec drives one change and asserts the DOM
-    // caught up — the exact thing that silently stopped working in v0.30.0.
+    // caught up - the exact thing that silently stopped working in v0.30.0.
     describe('imperative apps repaint after a data change', () => {
 
         beforeAll(() => {

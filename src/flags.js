@@ -3,7 +3,7 @@
  *
  * Renders nation flags as inline SVG. Flags are stored as compact descriptors
  * (stripe/cross/overlay specs or raw SVG) and expanded to SVG markup lazily on
- * first render, then memoised — nothing touches the DOM until a flag is actually
+ * first render, then memoised - nothing touches the DOM until a flag is actually
  * requested. Keyed by ISO 3166-1 alpha-2 code (e.g. 'gb', 'us', 'fr').
  *
  * Opt-in module: ships as a separate bundle (domma-flags) and is NOT part of the
@@ -93,7 +93,7 @@ function buildStripes({dir = 'h', colors = [], weights = null}) {
 }
 
 /**
- * Nordic (offset) cross — vertical bar sits towards the hoist.
+ * Nordic (offset) cross - vertical bar sits towards the hoist.
  */
 function buildCross({bg, colour, border = null, thickness = 8}) {
     const t = thickness;

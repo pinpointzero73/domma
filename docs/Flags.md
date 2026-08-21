@@ -2,7 +2,7 @@
 
 Nation flags as crisp, scalable **inline SVG**, keyed by ISO 3166-1 alpha-2 code (`gb`, `us`, `fr`…).
 
-Flags are stored as compact descriptors and expanded to SVG **lazily** on first render, then memoised — nothing
+Flags are stored as compact descriptors and expanded to SVG **lazily** on first render, then memoised - nothing
 touches the DOM until a flag is actually requested. The whole module is a lean ~20 KB.
 
 > **Opt-in module.** Flags are *not* part of the core `domma` bundle. Flags are multi-colour artwork that cannot be
@@ -66,8 +66,8 @@ FL.render('br', { shape: 'circle', size: 32, border: true });
 | Option   | Type                 | Default  | Description                                            |
 |----------|----------------------|----------|--------------------------------------------------------|
 | `size`   | `number`             | `24`     | Height in px; width follows the 3:2 aspect             |
-| `width`  | `number`             | —        | Explicit width override                                |
-| `height` | `number`             | —        | Explicit height override                               |
+| `width`  | `number`             | -        | Explicit width override                                |
+| `height` | `number`             | -        | Explicit height override                               |
 | `shape`  | `string`             | `'rect'` | `rect` \| `rounded` \| `square` \| `circle`            |
 | `border` | `boolean \| string`  | `false`  | Hairline border; pass a colour string to customise     |
 | `class`  | `string`             | `''`     | Extra CSS classes                                      |
@@ -111,7 +111,7 @@ A flag is either **raw SVG** (`svg`) or a **compact descriptor** (`stripes` / `c
 `60 × 40` canvas. Overlay primitives: `rect`, `circle`, `ellipse`, `line`, `path`, `star`, `crescent`, `group`.
 
 ```js
-// Descriptor — the EU flag
+// Descriptor - the EU flag
 FL.register('eu', {
     name: 'European Union',
     region: 'europe',
@@ -121,7 +121,7 @@ FL.register('eu', {
     ]
 });
 
-// Raw SVG — full control
+// Raw SVG - full control
 FL.register('xx', {
     name: 'Example',
     svg: '<rect width="60" height="40" fill="#000"/><circle cx="30" cy="20" r="10" fill="#fff"/>'
@@ -136,4 +136,4 @@ pixel-accurate rendering of a particular flag, override it with `FL.register(cod
 ## See also
 
 - Live demo: [`/showcase/flags/`](../public/showcase/flags/index.html)
-- [Icons](../public/showcase/icons/index.html) — the monochrome `data-icon` system
+- [Icons](../public/showcase/icons/index.html) - the monochrome `data-icon` system

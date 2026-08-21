@@ -1,5 +1,5 @@
 /**
- * Address Lookup Admin — User Management
+ * Address Lookup Admin - User Management
  */
 
 import AdminAuth from '../../shared/admin-auth.js';
@@ -7,7 +7,7 @@ import { getApiUrl, formatDate, initALSidebar } from '../shared/al-sidebar.js';
 
 const API_URL = getApiUrl();
 
-/** T.create() table instance — reused across reloads. */
+/** T.create() table instance - reused across reloads. */
 let usersTable = null;
 
 /** Currently selected user ID for the grant-credits modal. */
@@ -37,7 +37,7 @@ function setupEventListeners() {
     $('#role-filter').on('change', () => applyFilters());
     $('#sort-filter').on('change', () => applyFilters());
 
-    // Action button delegation — covers dynamically rendered table rows
+    // Action button delegation - covers dynamically rendered table rows
     $('body').on('click', '.btn-view-user', function () {
         Domma.elements.toast('User details page coming soon', { type: 'info' });
     });

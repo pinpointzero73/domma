@@ -150,7 +150,7 @@ describe('Domma.elements - UI Components', () => {
 
       // Card renders as a <domma-card> Web Component. Collapsible state is a
       // HOST ATTRIBUTE (its shadow CSS keys off :host([collapsible])), and the
-      // collapse chrome is built inside the SHADOW ROOT — not as light-DOM
+      // collapse chrome is built inside the SHADOW ROOT - not as light-DOM
       // classes. The .card-collapsible/.card-collapsed rules in elements.css
       // serve hand-written, JS-free cards; adding them to the host would make
       // those rules double-apply to the slotted light-DOM nodes.

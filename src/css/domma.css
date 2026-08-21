@@ -2177,7 +2177,7 @@ code, pre {
 
 /* ============================================
    OPACITY SCALE
-   Full graduated opacity scale (0–100)
+   Full graduated opacity scale (0-100)
    ============================================ */
 
 .opacity-0   { opacity: 0; }
@@ -2214,7 +2214,7 @@ code, pre {
     transition: opacity var(--dm-transition-normal);
 }
 
-/* Frosted glass — semi-transparent background + blur */
+/* Frosted glass - semi-transparent background + blur */
 .translucent-glass {
     background-color: rgba(255, 255, 255, var(--dm-translucent-glass-opacity));
     backdrop-filter: blur(var(--dm-translucent-glass-blur));
@@ -2222,7 +2222,7 @@ code, pre {
     transition: opacity var(--dm-transition-normal);
 }
 
-/* Hover variants — apply translucency on hover */
+/* Hover variants - apply translucency on hover */
 .translucent-hover:hover {
     opacity: var(--dm-translucent);
     transition: opacity var(--dm-transition-normal);

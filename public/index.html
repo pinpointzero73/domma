@@ -420,7 +420,7 @@
       }
 
       /* ============================================ */
-      /* Domma CMS Point-of-Sale Band — theme-aware   */
+      /* Domma CMS Point-of-Sale Band - theme-aware   */
       /* ============================================ */
       .cms-band {
           position: relative;
@@ -801,7 +801,7 @@
 <section class="cms-band bg-ambient-float-blobs" id="cms-band" aria-labelledby="cms-band-headline">
   <div class="cms-band-inner">
     <h2 class="cms-band-headline" id="cms-band-headline">Want Domma JS power in a CMS?</h2>
-    <p class="cms-band-subhead">Meet <strong>Domma CMS</strong> — the CMS that actually delivers.</p>
+    <p class="cms-band-subhead">Meet <strong>Domma CMS</strong> - the CMS that actually delivers.</p>
     <p class="cms-band-lead">Markdown-first, JSON or MongoDB, 28 themes, zero build step.</p>
 
     <div class="cms-band-stats">
@@ -1121,7 +1121,7 @@
       });
     }
 
-    // Scroll-reveal for example tiles — animates in as the section enters the viewport
+    // Scroll-reveal for example tiles - animates in as the section enters the viewport
     if (MotionControl.isEnabled()) {
       Domma.effects.reveal('.example-tile', {
         animation: 'zoom',
@@ -1134,12 +1134,12 @@
 
     // === Domma CMS POS Band: choreographed reveal ===
     // ALL effects in this band force-run regardless of motion preferences,
-    // because the CMS pitch IS the point of the section — without motion it
+    // because the CMS pitch IS the point of the section - without motion it
     // is just a flat advert. Users who want global reduced motion can still
     // toggle the rest of the page via MotionControl.
     const runCmsBandChoreography = () => {
-      // 1. Headline scribe (typewriter, looping — cycles through several pitches)
-      // Using loop: 999 instead of true — numeric loop path is more reliable in the bundle.
+      // 1. Headline scribe (typewriter, looping - cycles through several pitches)
+      // Using loop: 999 instead of true - numeric loop path is more reliable in the bundle.
       setTimeout(() => {
         $('#cms-band-headline').text('');
         Domma.effects.scribe('#cms-band-headline', {
@@ -1173,7 +1173,7 @@
         });
       }, 200);
 
-      // 2. Counter cascade — each stat reads its own from/to (one stat counts DOWN to 0)
+      // 2. Counter cascade - each stat reads its own from/to (one stat counts DOWN to 0)
       setTimeout(() => {
         const stats = document.querySelectorAll('#cms-band [data-cms-stat]');
         stats.forEach((el, i) => {
@@ -1191,7 +1191,7 @@
         });
       }, 900);
 
-      // 3. TickerTape burst — scoped to the band, theme palette
+      // 3. TickerTape burst - scoped to the band, theme palette
       setTimeout(() => {
         Domma.effects.tickerTape('#cms-band', {
           palette: 'pastel',
@@ -1202,7 +1202,7 @@
         });
       }, 1300);
 
-      // 4. Pulse on the secondary CTA — visible ongoing scale pulsation
+      // 4. Pulse on the secondary CTA - visible ongoing scale pulsation
       setTimeout(() => {
         Domma.effects.pulse('#cms-band-cta-secondary', {
           scale: 1.08,
@@ -1231,7 +1231,7 @@
       cmsChoreographyFired = true;
       console.log('[CMS band] choreography firing');
       runCmsBandChoreography();
-      // Stagger the stat tiles in (manual cascade — 4 tiles × 140ms = 560ms total)
+      // Stagger the stat tiles in (manual cascade - 4 tiles × 140ms = 560ms total)
       document.querySelectorAll('#cms-band .cms-stat').forEach((el, i) => {
         setTimeout(() => {
           el.style.opacity = '1';
@@ -1262,7 +1262,7 @@
   });
 </script>
 
-<!-- Motion control styles — slider injected into footer by MotionControl.initToggle() -->
+<!-- Motion control styles - slider injected into footer by MotionControl.initToggle() -->
 <style>
   .motion-control-bar {
     display: flex;
@@ -1377,7 +1377,7 @@
       { render: 'Build reactive applications with a single, powerful framework.', effect: 'fade' },
       { wait: '3s' },
       { undoRender: true },
-      { render: 'From DOM queries to data tables — everything you need.', effect: 'fade' },
+      { render: 'From DOM queries to data tables - everything you need.', effect: 'fade' },
       { wait: '3s' },
       { undoRender: true },
     ],

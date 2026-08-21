@@ -231,7 +231,7 @@ Domma.component('domma-todo', {
         });
         this.set({ todos: saved });
 
-        // Delegated click handler — attached to shadow root so it survives _renderList() calls
+        // Delegated click handler - attached to shadow root so it survives _renderList() calls
         this.root.addEventListener('click', (e) => {
             if (e.target.closest('.add-todo-btn')) {
                 this.addTodo();

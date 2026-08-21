@@ -122,7 +122,7 @@
                     <li class="mb-1">Supports flat <code>items</code> and nested dropdown groups via a child <code>items</code> array.</li>
                     <li class="mb-1"><strong>variant</strong> accepts <code>default</code>, <code>dark</code>, or <code>transparent</code>.</li>
                     <li class="mb-1"><strong>actions</strong> is a slot array rendered to the right of the nav links. Currently supports <code>theme-selector</code>.</li>
-                    <li class="mb-1"><strong>Mobile</strong>: collapses automatically to a hamburger menu — no additional configuration required.</li>
+                    <li class="mb-1"><strong>Mobile</strong>: collapses automatically to a hamburger menu - no additional configuration required.</li>
                 </ul>
             </div>
         </div>
@@ -151,7 +151,7 @@
                         <tr>
                             <td><code>default</code></td>
                             <td><span data-icon="check"></span></td>
-                            <td>—</td>
+                            <td>-</td>
                             <td><span data-icon="check"></span></td>
                             <td><span data-icon="check"></span></td>
                             <td>Standard content pages</td>
@@ -167,23 +167,23 @@
                         <tr>
                             <td><code>minimal</code></td>
                             <td><span data-icon="check"></span></td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
                             <td>Great for landing pages</td>
                         </tr>
                         <tr>
                             <td><code>landing</code></td>
                             <td><span data-icon="check"></span></td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
                             <td>Full-width hero, no breadcrumbs</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <p class="mb-2"><strong>Per-page override</strong> — add a <code>layout</code> key to the page's frontmatter:</p>
+            <p class="mb-2"><strong>Per-page override</strong> - add a <code>layout</code> key to the page's frontmatter:</p>
             <pre><code class="language-yaml">---
 title: My Landing Page
 layout: minimal
@@ -198,7 +198,7 @@ layout: minimal
             <h2 class="text-xl font-semibold">24 Themes (Light &amp; Dark)</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Domma CMS uses the Domma theme system with <strong>24 built-in themes</strong> — 12 families, each with a dark and light variant. Set the active theme at <strong>Admin → Settings → Appearance</strong>. The default is <code>charcoal-dark</code>.</p>
+            <p class="mb-4">Domma CMS uses the Domma theme system with <strong>24 built-in themes</strong> - 12 families, each with a dark and light variant. Set the active theme at <strong>Admin → Settings → Appearance</strong>. The default is <code>charcoal-dark</code>.</p>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -281,7 +281,7 @@ layout: minimal
             <h2 class="text-xl font-semibold">Per-Page Theme Override</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Any page can override the site-wide theme using a <code>theme</code> key in its frontmatter. Only that page is affected — all other pages continue to use the site default.</p>
+            <p class="mb-4">Any page can override the site-wide theme using a <code>theme</code> key in its frontmatter. Only that page is affected - all other pages continue to use the site default.</p>
             <pre><code class="language-yaml">---
 title: My Landing Page
 theme: ocean-dark
@@ -289,10 +289,10 @@ layout: landing
 ---</code></pre>
             <p class="mt-4">This is particularly useful for:</p>
             <ul class="list-disc pl-6 mt-2">
-                <li class="mb-1"><strong>Seasonal pages</strong> — e.g. apply <code>christmas-dark</code> to a holiday promotion page</li>
-                <li class="mb-1"><strong>Campaign pages</strong> — match a campaign's brand palette without changing the site theme</li>
-                <li class="mb-1"><strong>Varied section aesthetics</strong> — give distinct visual identity to different areas of a site</li>
-                <li class="mb-1"><strong>Landing pages</strong> — pair with <code>layout: landing</code> for fully custom entry points</li>
+                <li class="mb-1"><strong>Seasonal pages</strong> - e.g. apply <code>christmas-dark</code> to a holiday promotion page</li>
+                <li class="mb-1"><strong>Campaign pages</strong> - match a campaign's brand palette without changing the site theme</li>
+                <li class="mb-1"><strong>Varied section aesthetics</strong> - give distinct visual identity to different areas of a site</li>
+                <li class="mb-1"><strong>Landing pages</strong> - pair with <code>layout: landing</code> for fully custom entry points</li>
             </ul>
         </div>
     </section>
@@ -306,10 +306,10 @@ layout: landing
             <p class="mb-4">The bundled <strong>Theme Roller</strong> plugin adds a visual theme customisation tool, accessible from the admin toolbar. It lets you fine-tune any theme without touching CSS source files.</p>
             <h3 class="font-semibold mb-2">Capabilities</h3>
             <ul class="list-disc pl-6 mb-4">
-                <li class="mb-1"><strong>Live preview</strong> — changes are applied instantly in the browser, no reload required</li>
-                <li class="mb-1"><strong>CSS variable overrides</strong> — tweak colours, spacing, radius, and typography tokens</li>
-                <li class="mb-1"><strong>Export custom theme</strong> — download your overrides as a standalone CSS file</li>
-                <li class="mb-1"><strong>Apply site-wide or per-page</strong> — exported CSS can be placed in <code>config/custom.css</code> or scoped with a page selector</li>
+                <li class="mb-1"><strong>Live preview</strong> - changes are applied instantly in the browser, no reload required</li>
+                <li class="mb-1"><strong>CSS variable overrides</strong> - tweak colours, spacing, radius, and typography tokens</li>
+                <li class="mb-1"><strong>Export custom theme</strong> - download your overrides as a standalone CSS file</li>
+                <li class="mb-1"><strong>Apply site-wide or per-page</strong> - exported CSS can be placed in <code>config/custom.css</code> or scoped with a page selector</li>
             </ul>
             <p class="mb-2">Enable the plugin in <code>config/plugins.json</code>:</p>
             <pre><code class="language-json">{ "slug": "theme-roller", "enabled": true }</code></pre>
@@ -370,8 +370,8 @@ SMTP_FROM=noreply@yourdomain.com</code></pre>
             <div class="mt-4">
                 <h3 class="font-semibold mb-2">Recommended production defaults</h3>
                 <ul class="list-disc pl-6">
-                    <li class="mb-1">Set <code>allowRegistration: false</code> unless your site has a public user base — admin accounts are created via CLI on first run.</li>
-                    <li class="mb-1">Keep <code>accessTokenExpiry</code> short (15 – 30 minutes) and rely on the sliding <code>sessionTimeout</code> for long-lived sessions.</li>
+                    <li class="mb-1">Set <code>allowRegistration: false</code> unless your site has a public user base - admin accounts are created via CLI on first run.</li>
+                    <li class="mb-1">Keep <code>accessTokenExpiry</code> short (15 - 30 minutes) and rely on the sliding <code>sessionTimeout</code> for long-lived sessions.</li>
                     <li class="mb-1"><code>maxLoginAttempts</code> and <code>lockoutDuration</code> together mitigate credential-stuffing attacks without permanently blocking legitimate users.</li>
                 </ul>
             </div>
@@ -390,7 +390,7 @@ SMTP_FROM=noreply@yourdomain.com</code></pre>
                 <li class="mb-1">Navigate to <strong>Admin → Settings → Custom CSS</strong> and paste your rules into the editor.</li>
                 <li class="mb-1">The content is saved to <code>config/custom.css</code> and served as a static file.</li>
                 <li class="mb-1">It is loaded <strong>after</strong> the theme CSS on every public page, giving it full specificity over theme variables.</li>
-                <li class="mb-1">The admin panel is <strong>not</strong> affected — custom CSS applies only to the public-facing site.</li>
+                <li class="mb-1">The admin panel is <strong>not</strong> affected - custom CSS applies only to the public-facing site.</li>
             </ul>
             <h3 class="font-semibold mb-2">Example overrides</h3>
             <pre><code class="language-css">/* Override primary brand colour */

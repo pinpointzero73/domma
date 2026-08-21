@@ -907,10 +907,10 @@ Semantic transparency classes with built-in `transition: opacity` for smooth sta
 <div class="translucent">Standard (opacity 0.70)</div>
 <img class="translucent-heavy" src="watermark.png" alt="">
 
-<!-- Frosted glass — semi-transparent background + backdrop blur -->
+<!-- Frosted glass - semi-transparent background + backdrop blur -->
 <div class="translucent-glass">Frosted glass panel</div>
 
-<!-- Hover variants — translucency applied on :hover only -->
+<!-- Hover variants - translucency applied on :hover only -->
 <button class="translucent-hover">Fades on hover</button>
 <button class="translucent-light-hover">Subtle fade on hover</button>
 <button class="translucent-heavy-hover">Strong fade on hover</button>
@@ -1510,7 +1510,7 @@ Canvas-based ticker-tape parade. Coloured rectangular strips drop from the top o
 - `rotationSpeed` (number): Maximum rotation in degrees per frame. Default: `6`
 - `minWidth` / `maxWidth` (number): Strip width range. Defaults: `5` / `9`
 - `minHeight` / `maxHeight` (number): Strip height range. Defaults: `12` / `22`
-- `fadeStart` (number): Fraction of fall (0–1) at which fade begins. Default: `0.55`
+- `fadeStart` (number): Fraction of fall (0-1) at which fade begins. Default: `0.55`
 - `burst` (boolean): If true, drops a single batch and stops respawning. Default: `false`
 - `burstCount` (number): Strips emitted in burst mode. Default: `150`
 - `zIndex` (number): Canvas stacking order. Default: `1`
@@ -2488,7 +2488,7 @@ Creates a NumberBadge instance attached to the selected element.
 |---------------|----------|---------------|----------------------------------------------------------------|
 | `count`       | Number   | `0`           | Initial numeric count to display                               |
 | `variant`     | String   | `'primary'`   | Colour variant: `'primary'`, `'danger'`, `'success'`, `'warning'`, `'info'` |
-| `dot`         | Boolean  | `false`       | Dot mode — renders a small indicator without a number          |
+| `dot`         | Boolean  | `false`       | Dot mode - renders a small indicator without a number          |
 | `pulse`       | Boolean  | `false`       | Enable pulsing animation to draw attention                     |
 | `max`         | Number   | `99`          | Maximum count before overflow label is shown (e.g. `99+`)      |
 | `borderColor` | String   | `''`          | CSS colour value for the border around the badge               |
@@ -2506,7 +2506,7 @@ Creates a NumberBadge instance attached to the selected element.
 | `setVariant(variant)`     | `NumberBadge`  | Change the colour variant                             |
 | `setPulse(enabled)`       | `NumberBadge`  | Toggle the pulse animation                            |
 | `remove()`                | `void`         | Remove the badge element from the DOM                 |
-| `destroy()`               | `void`         | Alias for `remove()` — clean up the instance          |
+| `destroy()`               | `void`         | Alias for `remove()` - clean up the instance          |
 
 ---
 
@@ -2563,7 +2563,7 @@ Creates a ListGroup instance on the selected element.
 | `focusClass`    | String                    | `'focused'`              | CSS class applied to the currently focused item                  |
 | `selected`      | Number \| Number[] \| null | `null`                  | Initially selected item index or array of indices                |
 | `disabled`      | Boolean                   | `false`                  | Disable the entire list group on initialisation                  |
-| `onChange`      | Function                  | `null`                   | Callback fired when selection changes — receives `(selected: number[], items: HTMLElement[])` |
+| `onChange`      | Function                  | `null`                   | Callback fired when selection changes - receives `(selected: number[], items: HTMLElement[])` |
 
 **Methods:**
 
@@ -2635,7 +2635,7 @@ sig.isEmpty();  // → boolean
 sig.undo();
 sig.redo();
 sig.clear();        // Undoable clear
-sig.clear(true);    // Silent clear — no redo, no callbacks
+sig.clear(true);    // Silent clear - no redo, no callbacks
 
 // Enable / disable
 sig.disable();
@@ -2685,7 +2685,7 @@ Creates a Signature instance on the selected element.
 
 ### Chooser
 
-Visual option-picker — card or chip variants, single or multi-select, with rich per-option metadata (icon, description, tooltip, badge, recommended, disabled). Available standalone via `Domma.elements.chooser()` and as a form-input type via blueprint `type: 'chooser'`.
+Visual option-picker - card or chip variants, single or multi-select, with rich per-option metadata (icon, description, tooltip, badge, recommended, disabled). Available standalone via `Domma.elements.chooser()` and as a form-input type via blueprint `type: 'chooser'`.
 
 ```javascript
 // Standalone
@@ -2720,11 +2720,11 @@ Creates a Chooser instance on the selected host element.
 | `variant` | `'card' \| 'chip'` | `'card'` | Visual style |
 | `multiple` | `boolean` | `false` | Toggles single ↔ multi-select |
 | `density` | `'comfortable' \| 'compact'` | `'comfortable'` | Compact removes description, tightens padding |
-| `columns` | number (1–6) | `3` | Grid columns for card variant; chips wrap freely |
-| `label` | string | — | Optional label rendered above the picker |
+| `columns` | number (1-6) | `3` | Grid columns for card variant; chips wrap freely |
+| `label` | string | - | Optional label rendered above the picker |
 | `required` | boolean | `false` | Required indicator |
-| `name` | string | — | Hidden-input name for native form submission |
-| `value` | string \| string[] | — | Initial selection (string for single, array for multi) |
+| `name` | string | - | Hidden-input name for native form submission |
+| `value` | string \| string[] | - | Initial selection (string for single, array for multi) |
 | `accent` | semantic name or `'#hex'` | `'primary'` | Selected/recommended highlight colour |
 | `accentStyle` | `'border' \| 'solid' \| 'glow' \| 'overlay' \| 'underline'` | `'border'` | Visual treatment of the selected state |
 | `glow` | boolean | `false` | Soft outer glow on the selected option |
@@ -2732,7 +2732,7 @@ Creates a Chooser instance on the selected host element.
 | `shadow` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'none'` | Shadow weight applied to every option |
 | `shadowColour` | CSS colour string | `null` | Optional shadow tint |
 | `options` | `ChooserOption[]` | required | Option definitions (see below) |
-| `onChange` | function | — | Called with the new value on selection change |
+| `onChange` | function | - | Called with the new value on selection change |
 
 Semantic colour names (`primary`, `success`, `info`, `warning`, `danger`) map to existing Domma CSS variables and stay theme-aware. Any other value is treated as a literal CSS colour string.
 
@@ -2740,20 +2740,20 @@ Semantic colour names (`primary`, `success`, `info`, `warning`, `danger`) map to
 
 | Key | Type | Description |
 |---|---|---|
-| `value` | string \| number | Required — the option's value |
-| `label` | string | Required — the visible label |
-| `icon` | string | Optional — Domma icon name |
-| `description` | string | Optional — sub-text under label (card + comfortable only) |
-| `tooltip` | string | Optional — hover hint (uses `data-tooltip`) |
-| `badge` | `{ text, type }` | Optional — corner badge; type is `primary \| success \| info \| warning \| danger` |
-| `recommended` | boolean | Optional — success-coloured border ring |
-| `disabled` | boolean | Optional — non-interactive, muted |
+| `value` | string \| number | Required - the option's value |
+| `label` | string | Required - the visible label |
+| `icon` | string | Optional - Domma icon name |
+| `description` | string | Optional - sub-text under label (card + comfortable only) |
+| `tooltip` | string | Optional - hover hint (uses `data-tooltip`) |
+| `badge` | `{ text, type }` | Optional - corner badge; type is `primary \| success \| info \| warning \| danger` |
+| `recommended` | boolean | Optional - success-coloured border ring |
+| `disabled` | boolean | Optional - non-interactive, muted |
 
 **Methods:**
 
 | Method | Returns | Description |
 |---|---|---|
-| `getValue()` | string \| string[] \| null | Current selection — string for single, array for multi |
+| `getValue()` | string \| string[] \| null | Current selection - string for single, array for multi |
 | `setValue(value)` | `void` | Programmatically set the selection (does not fire `onChange`) |
 | `disable()` | `void` | Mark all options non-interactive |
 | `enable()` | `void` | Restore interactivity |
@@ -2837,7 +2837,7 @@ compatibility notes.
 
 ### `M.observable(initial, options?)`
 
-A single reactive value — the primitive beneath Models. Use `M.create()` when you want a schema,
+A single reactive value - the primitive beneath Models. Use `M.create()` when you want a schema,
 validation and persistence; use an observable when you want one tracked value and nothing else.
 
 ```javascript
@@ -2845,8 +2845,8 @@ const count = M.observable(0);
 const total = M.computed(() => count.value * 10);
 
 count.value = 3;
-total.value;          // 30 — or total.get(), the same read
-count.peek();         // 3 — read without registering a dependency
+total.value;          // 30 - or total.get(), the same read
+count.peek();         // 3 - read without registering a dependency
 count.set(4);         // imperative alias for assigning .value
 ```
 
@@ -2856,7 +2856,7 @@ count.set(4);         // imperative alias for assigning .value
 | `peek()` | Current value **without** registering a dependency. |
 | `set(next)` | Imperative alias for assigning `.value`. |
 
-**Options:** `equals` — the change gate. Defaults to `domma-reactive`'s deep equality.
+**Options:** `equals` - the change gate. Defaults to `domma-reactive`'s deep equality.
 
 ### `M.observableArray(initial?, options?)`
 
@@ -2874,7 +2874,7 @@ items.remove(s => s.startsWith('a'));   // or by test
 
 | Member | Description |
 |---|---|
-| `value` | The underlying array — tracked on read, gated on wholesale assignment. |
+| `value` | The underlying array - tracked on read, gated on wholesale assignment. |
 | `length` | Tracked item count. |
 | `peek()` | The live array, **without** registering a dependency. |
 | `set(next)` | Imperative alias for assigning `.value`. |
@@ -2883,8 +2883,8 @@ items.remove(s => s.startsWith('a'));   // or by test
 | `removeAll()` | Empty the array, in place. |
 | `indexOf(item)` | Tracked, unlike `peek().indexOf()`, which drops the dependency silently. |
 | `replace(old, new)` | Swap the first occurrence, in place. |
-| `destroy(valueOrTest)` / `destroyAll()` | **Mark** `_destroy: true` rather than remove — for servers that delete on a flag in the payload. Every render path skips a marked item. |
-| `extend(spec)` | Layer on behaviour — see `M.registerExtender()`. Returns the array. |
+| `destroy(valueOrTest)` / `destroyAll()` | **Mark** `_destroy: true` rather than remove - for servers that delete on a flag in the payload. Every render path skips a marked item. |
+| `extend(spec)` | Layer on behaviour - see `M.registerExtender()`. Returns the array. |
 
 **Options:** the same as `M.observable()`.
 
@@ -2901,10 +2901,10 @@ const order = M.create({ price: {}, qty: {} }, { price: 10, qty: 3 });
 
 const total = M.computed(() => order.get('price') * order.get('qty'));
 
-total.get();              // 30 — body runs now
-total.get();              // 30 — cached
+total.get();              // 30 - body runs now
+total.get();              // 30 - cached
 order.set('qty', 4);
-total.get();              // 40 — dependency moved, so it re-evaluates
+total.get();              // 40 - dependency moved, so it re-evaluates
 ```
 
 | Option | Type | Description |
@@ -2922,8 +2922,8 @@ total.get();              // 40 — dependency moved, so it re-evaluates
 | `peek()` | `any` | Current value **without** registering a dependency |
 | `dispose()` | `void` | Unlink from the dependency graph |
 
-Prefer `.value`. It is the only one a template expression can use — an expression cannot call a method, so
-`{{total.get()}}` will not parse — and it means `M.observable()` and `M.computed()` are read the same way.
+Prefer `.value`. It is the only one a template expression can use - an expression cannot call a method, so
+`{{total.get()}}` will not parse - and it means `M.observable()` and `M.computed()` are read the same way.
 
 **Writable computeds.** Pass `{read, write}` instead of a function to say where an assignment should land:
 
@@ -2941,7 +2941,7 @@ fahrenheit.value = 32;      // celsius.value === 0
 That is what lets `data-model="fahrenheit.value"` bind a derived value. Assigning to a computed with no `write`
 warns and names it, rather than storing into the read cache where the next recompute would drop it.
 
-Computeds compose — one reading another links them automatically, and a computed shared by several readers is
+Computeds compose - one reading another links them automatically, and a computed shared by several readers is
 evaluated once per flush.
 
 ### `M.effect(fn, options?)`
@@ -2992,7 +2992,7 @@ state.count = 5;                            // validated, notified, persisted
 
 ### `M.applyBindings(data, root, options?)`
 
-Activates every binding attribute under `root` on markup that already exists — the counterpart to the template
+Activates every binding attribute under `root` on markup that already exists - the counterpart to the template
 bindings a component gets. `M.bind()` wires one field to one element; this wires a whole region at once.
 
 ```html
@@ -3022,13 +3022,13 @@ handle.dispose();   // required on anything that outlives the markup
 
 **Returns** `{bindings, context(), update(data), dispose()}`.
 
-`{{ }}` is **not** interpolated in already-rendered DOM — `data-bind-text` is the supported spelling. Applying twice
+`{{ }}` is **not** interpolated in already-rendered DOM - `data-bind-text` is the supported spelling. Applying twice
 over a region skips what is already bound and warns once.
 
 ### `M.registerExtender(name, fn)` / `M.unregisterExtender(name)`
 
-Adds an extender, usable as `M.observable(x).extend({name: value})`. The built-ins — `rateLimit`,
-`throttle` and `notify` — are registered through this same function.
+Adds an extender, usable as `M.observable(x).extend({name: value})`. The built-ins - `rateLimit`,
+`throttle` and `notify` - are registered through this same function.
 
 ```javascript
 M.registerExtender('trace', (control, label) => {
@@ -3042,7 +3042,7 @@ const count = M.observable(0).extend({trace: 'count'});
 ```
 
 The `control` has exactly two powers: `setEquals(fn)` replaces the change gate, `intercept(wrap)`
-wraps the announcement. Neither can touch the stored value — which is what makes the guarantee hold
+wraps the announcement. Neither can touch the stored value - which is what makes the guarantee hold
 that **a write always lands immediately**, even under a rate limit, where only the notification waits.
 
 `unregisterExtender()` returns whether it removed anything; the built-ins are refused.
@@ -3086,7 +3086,7 @@ M.registerHelper('upper', (s) => String(s).toUpperCase());
 | `model.onChange(cb)` | `{field, newValue, oldValue, model}` | Every field |
 | `model.onChange(field, cb)` | `{field, newValue, oldValue, model}` | That field only |
 | `model.onFieldChange(field, cb)` | `(newValue, oldValue, model)` | That field only |
-| `M.effect(fn)` | — (reads what it needs) | Whatever the body read |
+| `M.effect(fn)` | - (reads what it needs) | Whatever the body read |
 
 > **Note:** `onChange` passes a **single object**, whereas `onFieldChange` passes **positional** arguments.
 > Destructuring `onChange` positionally as `(field, newValue)` will silently never match. `M.effect()` avoids the

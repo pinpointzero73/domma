@@ -28,7 +28,7 @@ class DommaCollection {
         this.length = this.elements.length;
 
         // Numeric index properties, so `$('#el')[0]` works the way it does in
-        // jQuery — and the way this project's own DOM showcase documents it
+        // jQuery - and the way this project's own DOM showcase documents it
         // ("$('.items')[0]  // Same as get(0)"). Without them `[0]` was
         // `undefined`, which is silent until something dereferences it: the
         // dot-notation showcase did exactly that and died on `.tagName`.

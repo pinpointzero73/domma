@@ -1,4 +1,4 @@
-# Domma CMS Point-of-Sale Band — Homepage
+# Domma CMS Point-of-Sale Band - Homepage
 
 **Date:** 2026-05-20
 **Owner:** Darryl Waterhouse
@@ -23,16 +23,16 @@ Between the **Examples** section (ends at line 701) and the **MiniApps** section
 ## Visual Design
 
 - Full-bleed `<section>`, breaking the container rhythm intentionally.
-- Background: `bg-dark bg-ambient-rotate-glow` — mirrors the splash hero, bookending the page.
+- Background: `bg-dark bg-ambient-rotate-glow` - mirrors the splash hero, bookending the page.
 - Generous vertical padding (~6rem).
 - Inner `.container` for content.
 
 ### Content stack
 
-1. **Eyebrow** — small, uppercase, tracking-wide: *"Want Domma JS power in a CMS?"*
-2. **Headline** (`h2`) — *"Meet Domma CMS."* — animated with `scribe()` typewriter on scroll-in.
-3. **Lead** — *"The CMS that actually delivers. Markdown-first, JSON or MongoDB, 28 themes, zero build step."*
-4. **Stat row** — 4 tiles, each fires `counter()` on reveal:
+1. **Eyebrow** - small, uppercase, tracking-wide: *"Want Domma JS power in a CMS?"*
+2. **Headline** (`h2`) - *"Meet Domma CMS."* - animated with `scribe()` typewriter on scroll-in.
+3. **Lead** - *"The CMS that actually delivers. Markdown-first, JSON or MongoDB, 28 themes, zero build step."*
+4. **Stat row** - 4 tiles, each fires `counter()` on reveal:
    | Number | Label |
    |--------|-------|
    | 27 | Built-in shortcodes |
@@ -40,9 +40,9 @@ Between the **Examples** section (ends at line 701) and the **MiniApps** section
    | 6 | Free plugins included |
    | 0 | Build steps |
 5. **Dual CTA**:
-   - Primary `Get Started Free →` — large, `glow-primary`, `ripple` — → `https://cms.dommajs.org/`
-   - Secondary `See Features` — outline — → `https://cms.dommajs.org/#features`
-6. **Footer tagline** — muted small: *"Built on Domma · Self-hosted · Free to try"*
+   - Primary `Get Started Free →` - large, `glow-primary`, `ripple` - → `https://cms.dommajs.org/`
+   - Secondary `See Features` - outline - → `https://cms.dommajs.org/#features`
+6. **Footer tagline** - muted small: *"Built on Domma · Self-hosted · Free to try"*
 
 ### Effects choreography
 
@@ -56,7 +56,7 @@ Fires **once** when the section enters the viewport (via `Domma.effects.reveal()
 | 900 | `tickerTape({mode:'burst'})` | one-shot burst, `'theme'` palette, low density |
 | 1200 | `.glow-primary` pulse | primary CTA briefly highlights |
 
-`respectMotionPreference: true` on every effect — users with `prefers-reduced-motion` see a static section.
+`respectMotionPreference: true` on every effect - users with `prefers-reduced-motion` see a static section.
 
 ## Responsive Behaviour
 
@@ -99,6 +99,6 @@ The section showcases six effects from the framework as it pitches the CMS, maki
 
 ## Risks
 
-- **`tickerTape` overdose** — if density is too high, it competes with the headline. Mitigation: start with `density: 0.3` and tune down if it dominates.
-- **Effect chain timing on slow devices** — choreography assumes ~60fps reveal; if reveal lags, downstream effects might fire over an unfinished slide-up. Mitigation: use `onReveal` callbacks to chain rather than fixed `setTimeout`s where possible.
-- **Mobile perf with tickerTape** — canvas effect on low-end devices. Mitigation: reduce density on mobile, or skip tickerTape entirely on viewports below `sm`.
+- **`tickerTape` overdose** - if density is too high, it competes with the headline. Mitigation: start with `density: 0.3` and tune down if it dominates.
+- **Effect chain timing on slow devices** - choreography assumes ~60fps reveal; if reveal lags, downstream effects might fire over an unfinished slide-up. Mitigation: use `onReveal` callbacks to chain rather than fixed `setTimeout`s where possible.
+- **Mobile perf with tickerTape** - canvas effect on low-end devices. Mitigation: reduce density on mobile, or skip tickerTape entirely on viewports below `sm`.

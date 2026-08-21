@@ -19,9 +19,9 @@ Branch off `main` at `ace4cf9` (v0.31.0), or off `fix/on-updated-without-binding
 ```bash
 cd /home/darryl/src/js/domma && git status --short && npx vitest run 2>&1 | tail -3
 ```
-Expected: a clean tree, and `Tests  446 passed | 3 skipped (449)` if the `onUpdated` fix is merged, or `436 passed | 3 skipped (439)` if not. **Record whichever you see** — it must not drop.
+Expected: a clean tree, and `Tests  446 passed | 3 skipped (449)` if the `onUpdated` fix is merged, or `436 passed | 3 skipped (439)` if not. **Record whichever you see** - it must not drop.
 
-### Evidence standard — non-negotiable
+### Evidence standard - non-negotiable
 
 For every behaviour a test claims to pin: apply a mutation that breaks it, run the suite, confirm the test fails, restore, and report the real failure output. This discipline has caught genuine defects repeatedly on this work, including tests that looked like coverage and were not. A test that does not kill its mutant is not coverage.
 
@@ -47,7 +47,7 @@ For every behaviour a test claims to pin: apply a mutation that breaks it, run t
 
 ---
 
-## Task 1: Navbar badge — failing test
+## Task 1: Navbar badge - failing test
 
 **Files:**
 - Test: `src/elements.test.js`
@@ -117,14 +117,14 @@ Add to `src/elements.test.js`, inside the existing navbar `describe` block:
 - [ ] **Step 2: Run to verify they fail**
 
 Run: `cd /home/darryl/src/js/domma && npx vitest run src/elements.test.js -t "Navbar badges"`
-Expected: FAIL — four tests error on reading `.textContent` of `null`; `emits no badge markup` passes vacuously (nothing renders a badge yet). That vacuous pass is expected and is why the other four exist.
+Expected: FAIL - four tests error on reading `.textContent` of `null`; `emits no badge markup` passes vacuously (nothing renders a badge yet). That vacuous pass is expected and is why the other four exist.
 
 ---
 
-## Task 2: Navbar badge — implementation
+## Task 2: Navbar badge - implementation
 
 **Files:**
-- Modify: `src/elements.js` (`_renderItems`, around lines 5845–5878)
+- Modify: `src/elements.js` (`_renderItems`, around lines 5845-5878)
 - Modify: `src/css/elements.css`
 
 - [ ] **Step 1: Add the escape helper at module scope**
@@ -241,7 +241,7 @@ links, dropdown items, and both dropdown toggles."
 
 ---
 
-## Task 3: Navbar badge — docs, showcase, IDE, and pruning
+## Task 3: Navbar badge - docs, showcase, IDE, and pruning
 
 **Files:**
 - Modify: `docs/API.md`
@@ -254,7 +254,7 @@ links, dropdown items, and both dropdown toggles."
 Find the navbar section's item-options table and add a row:
 
 ```markdown
-| `badge` | `string` | — | Short label rendered beside the item text, e.g. `"New"`. Works on top-level links, dropdown items and dropdown toggles. |
+| `badge` | `string` | - | Short label rendered beside the item text, e.g. `"New"`. Works on top-level links, dropdown items and dropdown toggles. |
 ```
 
 - [ ] **Step 2: Add a showcase example**
@@ -274,7 +274,7 @@ Making badges visible surfaces eight that have been dormant. Open `public/layout
 - Data → Blueprints, Reactivity
 - UI → Components, Flags
 
-Remove the badge from anything no longer genuinely new. **This is a judgement call — list what you removed and why in your report rather than deciding silently.**
+Remove the badge from anything no longer genuinely new. **This is a judgement call - list what you removed and why in your report rather than deciding silently.**
 
 - [ ] **Step 5: Verify nothing broke**
 
@@ -339,7 +339,7 @@ Add to `src/models.test.js`, matching the file's existing `it('Models - ...')` c
 - [ ] **Step 2: Run to verify they fail**
 
 Run: `cd /home/darryl/src/js/domma && npx vitest run src/models.test.js -t "M.observable"`
-Expected: FAIL — `Domma.models.observable is not a function`.
+Expected: FAIL - `Domma.models.observable is not a function`.
 
 - [ ] **Step 3: Extend the import**
 
@@ -362,7 +362,7 @@ In the `export const models = {` object, immediately before `computed(fn, option
 
 ```javascript
     /**
-     * A single reactive value. The primitive beneath Models — use `create()`
+     * A single reactive value. The primitive beneath Models - use `create()`
      * when you want a schema, validation and persistence; use this when you
      * want one tracked value and nothing else.
      *
@@ -387,7 +387,7 @@ In the `export const models = {` object, immediately before `computed(fn, option
      *   items.push('a');   // effects reading items.value re-run
      *
      * `push`, `pop`, `shift`, `unshift`, `splice`, `sort`, `reverse`, `fill`
-     * and `copyWithin` notify unconditionally — an in-place mutation leaves the
+     * and `copyWithin` notify unconditionally - an in-place mutation leaves the
      * array deep-equal to any copy of it, so the equality gate cannot see it.
      *
      * @param {Array}  [initial=[]]
@@ -440,7 +440,7 @@ Add a section before the existing `M.computed()` material:
 ```markdown
 ## Observables
 
-`M.observable(initial)` is a single reactive value — the primitive beneath Models.
+`M.observable(initial)` is a single reactive value - the primitive beneath Models.
 Use `M.create()` when you want a schema, validation and persistence; use an observable
 when you want one tracked value and nothing else.
 
@@ -453,14 +453,14 @@ M.effect(() => console.log('total', total.get()));
 qty.value = 4;   // effect re-runs on the next microtask
 ```
 
-`M.observableArray()` is the array form. Its in-place mutators — `push`, `pop`, `shift`,
-`unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin` — notify unconditionally,
+`M.observableArray()` is the array form. Its in-place mutators - `push`, `pop`, `shift`,
+`unshift`, `splice`, `sort`, `reverse`, `fill`, `copyWithin` - notify unconditionally,
 because an in-place mutation leaves the array deep-equal to any copy of it and the
 equality gate cannot see it.
 
 Both are also published standalone as [`domma-reactive`](https://www.npmjs.com/package/domma-reactive),
 where they are bare `observable()` / `observableArray()` imports. Reactivity remains innate
-to Domma — the package is an additional way in, not a relocation.
+to Domma - the package is an additional way in, not a relocation.
 ```
 
 - [ ] **Step 2: `docs/API.md`**
@@ -473,7 +473,7 @@ namespace reference, with the signatures from Task 4 Step 4.
 In `CLAUDE.md`, the Models bullet list under "Domma Features Reference", add:
 
 ```markdown
-- Observables: `M.observable(value)`, `M.observableArray([])` — single reactive values, the primitive
+- Observables: `M.observable(value)`, `M.observableArray([])` - single reactive values, the primitive
   beneath Models. Also published standalone as `domma-reactive`.
 ```
 
@@ -575,7 +575,7 @@ git commit -m "feat(nav): add the Reactive showcase section"
 
 - [ ] **Step 1: Read two references before writing anything**
 
-Read `public/showcase/models/reactivity.html` in full — it is the closest sibling and establishes the section markup, code-block conventions and live-demo pattern. Read `public/showcase/CLAUDE.md` for the showcase rules. **Follow those conventions rather than inventing a new page shape.**
+Read `public/showcase/models/reactivity.html` in full - it is the closest sibling and establishes the section markup, code-block conventions and live-demo pattern. Read `public/showcase/CLAUDE.md` for the showcase rules. **Follow those conventions rather than inventing a new page shape.**
 
 - [ ] **Step 2: Create the page**
 
@@ -583,30 +583,30 @@ Read `public/showcase/models/reactivity.html` in full — it is the closest sibl
 <body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
 ```
 
-That is the exact form all 26 existing showcase subpages use — **not** `data-layout="showcase:subpage"`, which is not a value the detector recognises. Layout system supplies header/footer/sidebar; call `I.scan()` after load (there is no `Domma.init()` — Domma self-initialises); use Domma throughout (`E.*`, `$`, `_`).
+That is the exact form all 26 existing showcase subpages use - **not** `data-layout="showcase:subpage"`, which is not a value the detector recognises. Layout system supplies header/footer/sidebar; call `I.scan()` after load (there is no `Domma.init()` - Domma self-initialises); use Domma throughout (`E.*`, `$`, `_`).
 
-**Theme rule:** every colour must resolve through a CSS variable. `--dm-border`, `--dm-warning-bg` and friends are redefined for the dark variant in `public/dist/domma.css`, so `var(--dm-border)` adapts and a literal like `#cbd5e1` does not. This applies inside `Domma.component()` templates too — `_injectStyles()` injects the theme variables into each Shadow DOM, so `var(--dm-border)` resolves there.
+**Theme rule:** every colour must resolve through a CSS variable. `--dm-border`, `--dm-warning-bg` and friends are redefined for the dark variant in `public/dist/domma.css`, so `var(--dm-border)` adapts and a literal like `#cbd5e1` does not. This applies inside `Domma.component()` templates too - `_injectStyles()` injects the theme variables into each Shadow DOM, so `var(--dm-border)` resolves there.
 
-Sections, each with a live runnable demo — not a static code block:
+Sections, each with a live runnable demo - not a static code block:
 
-1. **Hero** — reactivity is innate to Domma, and available on its own.
-2. **Why a separate package** — the extraction, what it buys, and the explicit statement that nothing moved out of Domma.
-3. **Install** — three tabs or cards: `npm i domma-reactive` · CDN script tag · *already in Domma, nothing to install*.
-4. **`observable()`** — a counter driving a computed.
-5. **`observableArray()`** — a list with push/remove, and a note on why mutators notify unconditionally.
-6. **`computed` / `effect`** — including a batching demo showing several writes collapsing into one re-run.
+1. **Hero** - reactivity is innate to Domma, and available on its own.
+2. **Why a separate package** - the extraction, what it buys, and the explicit statement that nothing moved out of Domma.
+3. **Install** - three tabs or cards: `npm i domma-reactive` · CDN script tag · *already in Domma, nothing to install*.
+4. **`observable()`** - a counter driving a computed.
+5. **`observableArray()`** - a list with push/remove, and a note on why mutators notify unconditionally.
+6. **`computed` / `effect`** - including a batching demo showing several writes collapsing into one re-run.
 7. **`untracked` / `flushSync`**.
-8. **Using it inside Domma** — how `M.observable` relates to `M.create()` and `model.tracked()`. State plainly that Models remain the primary idiom and observables are the primitive beneath, so nobody reads this as a deprecation.
-9. **Method reference** — a table. Use `T.create()` if it suits the existing conventions; a plain table is fine if that is what the sibling page does.
+8. **Using it inside Domma** - how `M.observable` relates to `M.create()` and `model.tracked()`. State plainly that Models remain the primary idiom and observables are the primitive beneath, so nobody reads this as a deprecation.
+9. **Method reference** - a table. Use `T.create()` if it suits the existing conventions; a plain table is fine if that is what the sibling page does.
 10. **Banner** → `../models/reactivity.html`.
 
 Every demo shows both forms:
 
 ```javascript
-// Innate — this page runs this
+// Innate - this page runs this
 const count = M.observable(0);
 
-// Standalone — same function, imported directly
+// Standalone - same function, imported directly
 import {observable} from 'domma-reactive';
 const count = observable(0);
 ```
@@ -615,7 +615,7 @@ const count = observable(0);
 
 The page must load with zero console errors. Check in the browser, or extend the `src/examples.test.js` jsdom harness pattern.
 
-**You cannot claim it works from a passing build alone** — the v0.30.0 modal regression passed every unit test. Either verify visually or write the assertion.
+**You cannot claim it works from a passing build alone** - the v0.30.0 modal regression passed every unit test. Either verify visually or write the assertion.
 
 - [ ] **Step 4: Commit**
 
@@ -636,11 +636,11 @@ git commit -m "docs(showcase): add the Domma Reactive showcase page"
 
 Same layout and conventions as Task 7. A single worked example, built in steps, each step a runnable demo:
 
-1. Two observables — `price` and `qty`.
+1. Two observables - `price` and `qty`.
 2. A computed total derived from them.
 3. An effect that paints the total into the DOM.
 4. Swap to `observableArray` for line items; show `push` and `remove` updating the total.
-5. Batching — several writes in one tick producing one repaint.
+5. Batching - several writes in one tick producing one repaint.
 
 Close with next steps: the showcase page, `docs/Reactivity.md`, and the npm package.
 
@@ -689,7 +689,7 @@ In `public/sitemap.xml`, following the existing entry format exactly:
     </url>
 ```
 
-**Check the existing entries first** — match their host, trailing-slash style and element set rather than assuming the above is right.
+**Check the existing entries first** - match their host, trailing-slash style and element set rather than assuming the above is right.
 
 - [ ] **Step 3: Verify the sitemap is well-formed**
 
@@ -713,7 +713,7 @@ git commit -m "docs(showcase): cross-link the two reactivity pages"
 
 ---
 
-## Task 10: What's New — the v0.31.0 entry
+## Task 10: What's New - the v0.31.0 entry
 
 **Files:**
 - Modify: `public/data/releases.json`
@@ -726,7 +726,7 @@ const r=require('./public/data/releases.json');
 JSON.stringify({keys:Object.keys(r), latestVersion:r.latestVersion, entryKeys:Object.keys(r.releases[0])},null,1)"
 ```
 
-Note that `year` holds the version string — that is the existing convention, however odd. Follow it.
+Note that `year` holds the version string - that is the existing convention, however odd. Follow it.
 
 - [ ] **Step 2: Prepend the v0.31.0 entry**
 
@@ -736,12 +736,12 @@ Add as the first element of the `releases` array:
     {
       "year": "v0.31.0",
       "title": "Reactive Core Extracted",
-      "description": "<p><strong>Internal restructuring. No API change.</strong> Every public method behaves exactly as it did in v0.30.1 — nothing to migrate.</p><p>Domma's dependency-tracking core is now also published standalone as <a href=\"https://www.npmjs.com/package/domma-reactive\"><strong>domma-reactive</strong></a>, providing <code>observable()</code>, <code>observableArray()</code>, <code>computed()</code>, <code>effect()</code>, <code>untracked()</code> and <code>flushSync()</code> with no dependency on Domma. Reactivity remains innate to the suite — the package is an additional way in, not a relocation.</p><p><strong>You do not need to install it.</strong> Domma takes it as an exact-pinned build-time dependency and Rollup inlines it, so <code>domma.min.js</code> remains a single self-contained file and the CDN story is unchanged.</p><p><strong>Internally:</strong> <code>Model</code> now backs each field with its own observable rather than a plain object plus a shared <code>DepMap</code>, with <code>utils.isEqual</code> passed explicitly so change detection stays byte-identical. <code>src/reactive.js</code> has been deleted.</p><p>See the new <a href=\"../showcase/reactive/index.html\">Domma Reactive showcase</a>.</p>",
+      "description": "<p><strong>Internal restructuring. No API change.</strong> Every public method behaves exactly as it did in v0.30.1 - nothing to migrate.</p><p>Domma's dependency-tracking core is now also published standalone as <a href=\"https://www.npmjs.com/package/domma-reactive\"><strong>domma-reactive</strong></a>, providing <code>observable()</code>, <code>observableArray()</code>, <code>computed()</code>, <code>effect()</code>, <code>untracked()</code> and <code>flushSync()</code> with no dependency on Domma. Reactivity remains innate to the suite - the package is an additional way in, not a relocation.</p><p><strong>You do not need to install it.</strong> Domma takes it as an exact-pinned build-time dependency and Rollup inlines it, so <code>domma.min.js</code> remains a single self-contained file and the CDN story is unchanged.</p><p><strong>Internally:</strong> <code>Model</code> now backs each field with its own observable rather than a plain object plus a shared <code>DepMap</code>, with <code>utils.isEqual</code> passed explicitly so change detection stays byte-identical. <code>src/reactive.js</code> has been deleted.</p><p>See the new <a href=\"../showcase/reactive/index.html\">Domma Reactive showcase</a>.</p>",
       "date": "2026-08-04"
     },
 ```
 
-**Do not change `latestVersion` yet** — Task 11 sets it to `v0.32.0` so the pill pulses for the release that actually contains this work.
+**Do not change `latestVersion` yet** - Task 11 sets it to `v0.32.0` so the pill pulses for the release that actually contains this work.
 
 - [ ] **Step 3: Verify it parses and renders**
 
@@ -766,7 +766,7 @@ git commit -m "docs: add the v0.31.0 changelog entry"
 
 ## Task 11: Release v0.32.0
 
-Follow the documented manual release process — **not** `npm run release:patch`, which is known to be broken in this repo.
+Follow the documented manual release process - **not** `npm run release:patch`, which is known to be broken in this repo.
 
 - [ ] **Step 1: Fetch first**
 
@@ -780,15 +780,15 @@ Local main can be stale; building a release on a stale base has clobbered a real
 ```bash
 cd /home/darryl/src/js/domma && grep -c "_wireUpdateWatcher" src/component-factory.js
 ```
-Expected: `2` or more. If `0`, the `fix/on-updated-without-bindings` branch has not been merged — merge it before releasing, or drop it from the release notes.
+Expected: `2` or more. If `0`, the `fix/on-updated-without-bindings` branch has not been merged - merge it before releasing, or drop it from the release notes.
 
 - [ ] **Step 3: Release notes**
 
 Prepend a `### v0.32.0 - Reactive Discoverability (2026-08-04)` section to `docs/RELEASE_NOTES.md`, newest first, matching the existing format. Cover:
 
-- `M.observable` / `M.observableArray` — new public API, which is why this is a minor.
+- `M.observable` / `M.observableArray` - new public API, which is why this is a minor.
 - Navbar item badges.
-- The `onUpdated` fix — components whose templates contain no `{{ }}` bindings now fire the hook. Note the convergence requirement: writes from `onUpdated` must settle to an equal value or the microtask chain runs to exhaustion.
+- The `onUpdated` fix - components whose templates contain no `{{ }}` bindings now fire the hook. Note the convergence requirement: writes from `onUpdated` must settle to an equal value or the microtask chain runs to exhaustion.
 - Known issue: `onUpdated` does not fire for fields absent from `data()`, nor for components with no `data()` at all.
 
 Commit as `docs: add v0.32.0 release notes`.
@@ -854,20 +854,20 @@ Expected: `0.32.0`, and the tag reachable.
 
 | Spec requirement | Task |
 |---|---|
-| Part 1 — navbar badge support | 1, 2, 3 |
-| Part 1 — prune the eight dormant badges | 3 (Step 4) |
-| Part 2 — `M.observable` / `M.observableArray` | 4, 5 |
-| Part 3 — the Reactive menu header | 6 |
-| Part 4 — showcase page | 7 |
-| Part 4 — tutorial | 8 |
-| Part 4 — reciprocal banner, sitemap | 9 |
-| Part 5 — v0.31.0 changelog entry, `latestVersion` | 10, 11 (Step 4) |
-| Part 6 — v0.32.0 release | 11 |
+| Part 1 - navbar badge support | 1, 2, 3 |
+| Part 1 - prune the eight dormant badges | 3 (Step 4) |
+| Part 2 - `M.observable` / `M.observableArray` | 4, 5 |
+| Part 3 - the Reactive menu header | 6 |
+| Part 4 - showcase page | 7 |
+| Part 4 - tutorial | 8 |
+| Part 4 - reciprocal banner, sitemap | 9 |
+| Part 5 - v0.31.0 changelog entry, `latestVersion` | 10, 11 (Step 4) |
+| Part 6 - v0.32.0 release | 11 |
 
 **Naming consistency:** `.navbar-item-badge` is used identically in Tasks 1, 2 and 3. `_escapeText` is defined in Task 2 Step 1 before its use in Step 2. `badgeHTML` is defined in Task 2 Step 2 before its use in Step 3. `M.observable` / `M.observableArray` are named identically in Tasks 4, 5, 7 and 8.
 
 **Known gaps, stated rather than hidden:**
-- Tasks 7 and 8 specify page *structure* and demo *content*, not literal markup — the pages must follow `public/showcase/models/reactivity.html`'s conventions, which are too long to reproduce here and would go stale if copied. Both tasks require reading that file first.
+- Tasks 7 and 8 specify page *structure* and demo *content*, not literal markup - the pages must follow `public/showcase/models/reactivity.html`'s conventions, which are too long to reproduce here and would go stale if copied. Both tasks require reading that file first.
 - Task 3 Step 4 is a judgement call about which badges are stale. The plan requires the decision to be reported, not made silently.
 - Task 9's sitemap snippet assumes a host and element set; the step requires checking the existing entries first.
 - The escaping asymmetry is deliberate: the badge is escaped, `item.text` is not. Fixing `item.text` is out of scope per the spec and would be a separate behaviour change.

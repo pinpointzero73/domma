@@ -146,7 +146,7 @@ export const configEngine = {
      * Retrieve the live component instance created for a selector.
      *
      * $.setup() keeps instances internally, so page code has no other way to
-     * reach them — calling a component's methods (modal.open(), tabs.show(),
+     * reach them - calling a component's methods (modal.open(), tabs.show(),
      * timer.start()) requires this accessor.
      *
      * @param {string} [selector] - Selector the component was configured under

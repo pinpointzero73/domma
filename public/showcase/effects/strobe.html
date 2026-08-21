@@ -227,7 +227,7 @@
 <div class="hero hero-center bg-ambient-float-orbs">
     <div class="hero-content">
         <div class="hero-title">Strobe Lighting Effect</div>
-        <div class="hero-subtitle">Light beams emanate from the corners, sweep across, and brighten where they cross — full-page or container-scoped, with named presets.</div>
+        <div class="hero-subtitle">Light beams emanate from the corners, sweep across, and brighten where they cross - full-page or container-scoped, with named presets.</div>
     </div>
 </div>
 
@@ -251,7 +251,7 @@
             <span data-icon="alert-warning" data-icon-size="24" style="flex-shrink: 0;"></span>
             <div>
                 <h4 class="font-semibold mb-1">Photosensitivity warning</h4>
-                <p class="mb-0">Rapid flashing can trigger photosensitive epileptic seizures in susceptible individuals. The demos on this page <strong>never autoplay</strong> — each one starts only when you press a button. Use the strobe effect <strong>sparingly</strong> in production, keep flicker frequencies low, and always give users a way to opt out.</p>
+                <p class="mb-0">Rapid flashing can trigger photosensitive epileptic seizures in susceptible individuals. The demos on this page <strong>never autoplay</strong> - each one starts only when you press a button. Use the strobe effect <strong>sparingly</strong> in production, keep flicker frequencies low, and always give users a way to opt out.</p>
             </div>
         </div>
     </div>
@@ -274,7 +274,7 @@
         </div>
         <div class="card-body">
             <p class="mb-4">
-                Renders a canvas of light beams that emanate from the corners of the page — or a container — and sweep
+                Renders a canvas of light beams that emanate from the corners of the page - or a container - and sweep
                 or rotate across the space. Where beams overlap, their light adds together and brightens, just like real
                 stage lighting. Pass <code>null</code> as the selector for a full-page lighting rig, or a selector to
                 scope it to a single element. Everything is driven by a named <code>preset</code>, and any individual
@@ -315,7 +315,7 @@ lights.pause(); lights.resume(); lights.stop(); lights.destroy();
                             <td><code>origins</code></td>
                             <td><code>string[]</code></td>
                             <td><em>preset</em></td>
-                            <td>Which corners beams emit from — any of <code>'tl'</code>, <code>'tr'</code>, <code>'bl'</code>, <code>'br'</code>.</td>
+                            <td>Which corners beams emit from - any of <code>'tl'</code>, <code>'tr'</code>, <code>'bl'</code>, <code>'br'</code>.</td>
                         </tr>
                         <tr>
                             <td><code>motion</code></td>
@@ -351,7 +351,7 @@ lights.pause(); lights.resume(); lights.stop(); lights.destroy();
                             <td><code>hz</code></td>
                             <td><code>number</code></td>
                             <td><em>preset</em></td>
-                            <td>Flicker rate (flashes per second). Values above <strong>5&nbsp;Hz</strong> log a console warning but are never clamped — keep it low for safety.</td>
+                            <td>Flicker rate (flashes per second). Values above <strong>5&nbsp;Hz</strong> log a console warning but are never clamped - keep it low for safety.</td>
                         </tr>
                         <tr>
                             <td><code>colours</code></td>
@@ -363,7 +363,7 @@ lights.pause(); lights.resume(); lights.stop(); lights.destroy();
                             <td><code>intensity</code></td>
                             <td><code>number</code></td>
                             <td><em>preset</em></td>
-                            <td>Overall brightness, <code>0</code>–<code>1</code>.</td>
+                            <td>Overall brightness, <code>0</code>-<code>1</code>.</td>
                         </tr>
                         <tr>
                             <td><code>duration</code></td>
@@ -500,7 +500,7 @@ Domma.effects.strobe('#strobe-container-1', {
                 <input type="color" id="colour-b" value="#38bdf8">
             </div>
 
-            <p class="text-sm mb-3" style="color: var(--dm-text-muted, #6b7280);">With flicker on, setting the Hz above 5 logs a console warning — the value is never clamped, so keep it low for safety.</p>
+            <p class="text-sm mb-3" style="color: var(--dm-text-muted, #6b7280);">With flicker on, setting the Hz above 5 logs a console warning - the value is never clamped, so keep it low for safety.</p>
 
             <div class="strobe-container mt-3" id="strobe-container-2">
                 <div class="strobe-container-label">
@@ -521,7 +521,7 @@ Domma.effects.strobe('#strobe-container-1', {
             <h2 class="text-xl font-semibold">Demo: Full-Page</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Pass <code>null</code> as the selector to light the entire viewport. This affects the <strong>whole page</strong> — it uses the preset selected in the Preset Picker above (or <code>club</code> by default), so use the Stop button to end it. It never autoplays and never stops on its own here.</p>
+            <p class="mb-4">Pass <code>null</code> as the selector to light the entire viewport. This affects the <strong>whole page</strong> - it uses the preset selected in the Preset Picker above (or <code>club</code> by default), so use the Stop button to end it. It never autoplays and never stops on its own here.</p>
 
             <div class="effect-controls">
                 <span id="status-3" class="status-badge stopped"><span class="status-dot"></span><span class="status-text">Stopped</span></span>
@@ -587,7 +587,7 @@ lights.stop();
     }
 
     // Note: pass {safe: false} because Domma's default html() sanitiser strips
-    // both inline `style` attributes and `data-*` attributes — we'd lose the
+    // both inline `style` attributes and `data-*` attributes - we'd lose the
     // swatch colours AND the data-preset hook the click handler reads.
     const pickerMarkup = Object.keys(presetColours).map(renderPresetCard).join('');
     $('#preset-picker').html(pickerMarkup, { safe: false });

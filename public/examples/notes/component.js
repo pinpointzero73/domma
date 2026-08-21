@@ -12,7 +12,7 @@
  * Requires DOMPurify to be loaded before this script.
  */
 
-// Note card template — rendered via _.render() for each note.
+// Note card template - rendered via _.render() for each note.
 // All user values are escaped with _.escape() before substitution;
 // the final HTML string is additionally sanitised with DOMPurify.
 const NOTE_CARD_TPL = `

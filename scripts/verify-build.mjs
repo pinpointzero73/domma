@@ -12,7 +12,7 @@
  *     only pulled and built would have shipped 0.4.0 with no sign of it.
  *
  *   * build-info.json carries the version the bundles were built from. If it
- *     disagrees with package.json, the build predates the checkout — usually a
+ *     disagrees with package.json, the build predates the checkout - usually a
  *     pull that landed after the build rather than before it.
  *
  *   * public/dist/ is gitignored, so on a fresh or cleaned checkout the
@@ -51,24 +51,24 @@ const ARTEFACTS = [
 for (const [file, floor] of ARTEFACTS) {
     const full = path.join(ROOT, file);
     if (!existsSync(full)) {
-        problems.push(`${file} is missing — the build did not run, or ran into an error`);
+        problems.push(`${file} is missing - the build did not run, or ran into an error`);
         continue;
     }
     const {size} = statSync(full);
     if (size < floor) {
-        problems.push(`${file} is only ${size} bytes, expected at least ${floor} — truncated build`);
+        problems.push(`${file} is only ${size} bytes, expected at least ${floor} - truncated build`);
     }
 }
 
 // ── 2. The build matches this checkout ───────────────────────────────────────
 const INFO = 'public/dist/build-info.json';
 if (!existsSync(path.join(ROOT, INFO))) {
-    problems.push(`${INFO} is missing — the build did not complete`);
+    problems.push(`${INFO} is missing - the build did not complete`);
 } else {
     const info = read(INFO);
     if (info.version !== pkg.version) {
         problems.push(
-            `${INFO} says ${info.version} but package.json says ${pkg.version} — ` +
+            `${INFO} says ${info.version} but package.json says ${pkg.version} - ` +
             'the bundles were built from a different checkout. Rebuild.'
         );
     } else {
@@ -78,7 +78,7 @@ if (!existsSync(path.join(ROOT, INFO))) {
 
 // ── 3. Exactly-pinned dependencies are the ones installed ────────────────────
 //
-// An exact pin — no ^, no ~ — is a deliberate statement that this build needs
+// An exact pin - no ^, no ~ - is a deliberate statement that this build needs
 // that version and no other. Those are the ones Rollup inlines, so a mismatch
 // ends up inside the shipped bundle rather than beside it.
 const EXACT = /^\d+\.\d+\.\d+$/;
@@ -89,7 +89,7 @@ for (const [name, spec] of Object.entries(declared)) {
 
     const manifest = path.join(ROOT, 'node_modules', name, 'package.json');
     if (!existsSync(manifest)) {
-        problems.push(`${name} is pinned at ${spec} but is not installed — run 'npm install'`);
+        problems.push(`${name} is pinned at ${spec} but is not installed - run 'npm install'`);
         continue;
     }
 

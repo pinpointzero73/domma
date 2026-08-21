@@ -185,7 +185,7 @@ export interface TickerTapeOptions {
     minHeight?: number;
     /** Maximum strip height in pixels (default 22) */
     maxHeight?: number;
-    /** Fraction of fall before fade begins, 0–1 (default 0.55) */
+    /** Fraction of fall before fade begins, 0-1 (default 0.55) */
     fadeStart?: number;
     /** Drop a single batch and stop respawning (default false) */
     burst?: boolean;
@@ -239,13 +239,13 @@ export interface StrobeOptions {
     speed?: number;
     /** Angular width of each beam cone in degrees */
     beamWidth?: number;
-    /** Blink beams on/off — the strobe character */
+    /** Blink beams on/off - the strobe character */
     flicker?: boolean;
-    /** Flicker rate in flashes per second — warns above 5 */
+    /** Flicker rate in flashes per second - warns above 5 */
     hz?: number;
     /** Beam colours (hex), assigned per beam in order */
     colours?: string[];
-    /** Beam brightness, 0–1 */
+    /** Beam brightness, 0-1 */
     intensity?: number;
     /** Auto-stop after N milliseconds (default null) */
     duration?: number | null;
@@ -274,7 +274,7 @@ export interface Effects {
     shake(selector: Selector, options?: ShakeOptions): EffectControl | null;
     /** Canvas-based twinkling stars animation */
     twinkle(selector: Selector | null, options?: TwinkleOptions): EffectControl | null;
-    /** Canvas-based ticker-tape parade — colourful rectangles fall, sway, rotate, and fade */
+    /** Canvas-based ticker-tape parade - colourful rectangles fall, sway, rotate, and fade */
     tickerTape(selector: Selector | null, options?: TickerTapeOptions): EffectControl | null;
     butterflies(selector: Selector | null, options?: ButterfliesOptions): EffectControl | null;
     strobe(selector: Selector | null, options?: StrobeOptions): EffectControl | null;

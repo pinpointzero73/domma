@@ -1,5 +1,5 @@
 /**
- * Domma Flags — Europe
+ * Domma Flags - Europe
  *
  * Compact flag descriptors expanded to SVG at render time. Canvas is 60×40 (3:2).
  * Complex emblems (coats of arms, etc.) are simplified for icon-scale clarity;

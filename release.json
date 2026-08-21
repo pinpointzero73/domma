@@ -5,8 +5,8 @@
   "changes": {
     "features": [
       {
-        "title": "Signature — 24th UI Element",
-        "description": "Canvas-based handwriting pad for capturing signatures — mouse, touch, and stylus input via the Pointer Events API; undo/redo; PNG and SVG export; type-your-name fallback; form builder integration",
+        "title": "Signature - 24th UI Element",
+        "description": "Canvas-based handwriting pad for capturing signatures - mouse, touch, and stylus input via the Pointer Events API; undo/redo; PNG and SVG export; type-your-name fallback; form builder integration",
         "impact": "high",
         "files": [
           "src/css/elements.css",
@@ -22,7 +22,7 @@
           "CLAUDE.md",
           "src/CLAUDE.md"
         ],
-        "details": "<p>A full-featured <strong>Signature</strong> element — Domma's 24th UI component — providing a canvas-based handwriting pad for capturing signatures in forms, contracts, and consent flows.</p><ul><li><strong>Pointer Events API</strong> — Unified mouse, touch, and stylus input via <code>pointerdown</code> / <code>pointermove</code> / <code>pointerup</code>; pressure-sensitive line width on stylus devices (graceful fallback for mouse/touch)</li><li><strong>Smooth Bézier curves</strong> — Midpoint quadratic Bézier algorithm between consecutive pointer points prevents jagged strokes; each segment rendered with variable lineWidth from pressure data</li><li><strong>Normalised co-ordinates</strong> — Stroke points stored as 0–1 fractions of canvas dimensions; <code>ResizeObserver</code> reflows all strokes correctly when the container is resized</li><li><strong>Undo / Redo</strong> — Full stroke-level history stack; <code>clear()</code> moves all strokes to the redo stack (undoable); <code>clear(true)</code> for a silent, non-reversible wipe</li><li><strong>Dual export</strong> — <code>sig.toBase64('png')</code> returns a canvas data URL; <code>sig.toBase64('svg')</code> rebuilds the paths from stored strokes using the same Bézier algorithm as SVG path commands (<code>M</code>, <code>Q</code>, <code>L</code>)</li><li><strong>Toolbar</strong> — Colour swatches, pen-width dot buttons, undo/redo, and clear; all configured via <code>colours</code> and <code>widths</code> options; can be hidden with <code>toolbar: false</code></li><li><strong>Type fallback</strong> — <code>typeFallback: true</code> adds a Draw / Type toggle; Type mode renders cursive-font text to the canvas via <code>fillText()</code> so <code>toBase64()</code> still returns an image; <code>isEmpty()</code> correctly returns <code>false</code> when text has been entered</li><li><strong>Form integration</strong> — Hidden <code>&lt;input type=\"hidden\"&gt;</code> auto-populated with the base64 value after each stroke; works with <code>F.create()</code> blueprints via <code>type: 'signature'</code></li><li><strong>Config Engine</strong> — <code>signature</code> added to the component map for declarative <code>$.setup()</code> initialisation</li><li><strong>Accessibility</strong> — <code>role=\"application\"</code> on the container, <code>aria-label</code> and <code>aria-pressed</code> on all toolbar buttons, <code>aria-live=\"polite\"</code> status bar announcing Signing… / Signature captured / Signature cleared; <code>tabindex=\"0\"</code> on the canvas; <code>respectMotionPreference</code> option</li><li><strong>Showcase</strong> — Dedicated page at <code>/showcase/elements/signature/</code> with 13 sections: live demo, getting started, pen options, export formats, undo/redo/clear, type fallback, disabled state, form integration, config engine, contract-signing tutorial, full API reference, accessibility, and related elements</li></ul>"
+        "details": "<p>A full-featured <strong>Signature</strong> element - Domma's 24th UI component - providing a canvas-based handwriting pad for capturing signatures in forms, contracts, and consent flows.</p><ul><li><strong>Pointer Events API</strong> - Unified mouse, touch, and stylus input via <code>pointerdown</code> / <code>pointermove</code> / <code>pointerup</code>; pressure-sensitive line width on stylus devices (graceful fallback for mouse/touch)</li><li><strong>Smooth Bézier curves</strong> - Midpoint quadratic Bézier algorithm between consecutive pointer points prevents jagged strokes; each segment rendered with variable lineWidth from pressure data</li><li><strong>Normalised co-ordinates</strong> - Stroke points stored as 0-1 fractions of canvas dimensions; <code>ResizeObserver</code> reflows all strokes correctly when the container is resized</li><li><strong>Undo / Redo</strong> - Full stroke-level history stack; <code>clear()</code> moves all strokes to the redo stack (undoable); <code>clear(true)</code> for a silent, non-reversible wipe</li><li><strong>Dual export</strong> - <code>sig.toBase64('png')</code> returns a canvas data URL; <code>sig.toBase64('svg')</code> rebuilds the paths from stored strokes using the same Bézier algorithm as SVG path commands (<code>M</code>, <code>Q</code>, <code>L</code>)</li><li><strong>Toolbar</strong> - Colour swatches, pen-width dot buttons, undo/redo, and clear; all configured via <code>colours</code> and <code>widths</code> options; can be hidden with <code>toolbar: false</code></li><li><strong>Type fallback</strong> - <code>typeFallback: true</code> adds a Draw / Type toggle; Type mode renders cursive-font text to the canvas via <code>fillText()</code> so <code>toBase64()</code> still returns an image; <code>isEmpty()</code> correctly returns <code>false</code> when text has been entered</li><li><strong>Form integration</strong> - Hidden <code>&lt;input type=\"hidden\"&gt;</code> auto-populated with the base64 value after each stroke; works with <code>F.create()</code> blueprints via <code>type: 'signature'</code></li><li><strong>Config Engine</strong> - <code>signature</code> added to the component map for declarative <code>$.setup()</code> initialisation</li><li><strong>Accessibility</strong> - <code>role=\"application\"</code> on the container, <code>aria-label</code> and <code>aria-pressed</code> on all toolbar buttons, <code>aria-live=\"polite\"</code> status bar announcing Signing… / Signature captured / Signature cleared; <code>tabindex=\"0\"</code> on the canvas; <code>respectMotionPreference</code> option</li><li><strong>Showcase</strong> - Dedicated page at <code>/showcase/elements/signature/</code> with 13 sections: live demo, getting started, pen options, export formats, undo/redo/clear, type fallback, disabled state, form integration, config engine, contract-signing tutorial, full API reference, accessibility, and related elements</li></ul>"
       }
     ],
     "enhancements": [],
@@ -38,7 +38,7 @@
   "changes": {
     "features": [
       {
-        "title": "List Group — 23rd UI Element",
+        "title": "List Group - 23rd UI Element",
         "description": "CSS-first list group component with numbered, horizontal, flush, and colour variants; JavaScript API for selectable lists with keyboard navigation and ARIA",
         "impact": "medium",
         "files": [
@@ -53,7 +53,7 @@
           "public/assets/ide/phpstorm/elements.d.ts",
           "CLAUDE.md"
         ],
-        "details": "<p>A full-featured <strong>List Group</strong> element — Domma's 23rd UI component — providing polished, consistent list styling for settings panels, navigation menus, notification feeds, and content lists.</p><ul><li><strong>Base CSS</strong> — <code>.list-group</code> container with <code>.list-group-item</code> items; active, disabled, and action (<code>.list-group-item-action</code>) states; sub-element classes for rich content: <code>.list-group-item-icon</code>, <code>.list-group-item-content</code>, <code>.list-group-item-heading</code>, <code>.list-group-item-text</code>, <code>.list-group-item-trailing</code></li><li><strong>Variants</strong> — <code>.list-group-flush</code> (strips outer border/radius for card embedding); <code>.list-group-sm</code> / <code>.list-group-lg</code> size variants; 6 colour variants with left-border accent and tinted background: <code>-primary</code>, <code>-secondary</code>, <code>-success</code>, <code>-danger</code>, <code>-warning</code>, <code>-info</code></li><li><strong>Numbered</strong> — <code>.list-group-numbered</code> on <code>&lt;ol&gt;</code> prepends auto-incrementing counters via CSS — no JavaScript required</li><li><strong>Horizontal</strong> — <code>.list-group-horizontal</code> arranges items in a row; responsive variants <code>-sm</code> (576px), <code>-md</code> (768px), <code>-lg</code> (992px), <code>-xl</code> (1200px) switch to horizontal above the given breakpoint</li><li><strong>JavaScript API</strong> — <code>E.listGroup(selector, options)</code> enables selectable lists (single or multi-select), roving tabindex keyboard navigation (Arrow keys, Home/End, Enter/Space), and ARIA (<code>role=\"listbox\"</code>, <code>aria-selected</code>, <code>aria-disabled</code>, <code>aria-multiselectable</code>); public methods: <code>select()</code>, <code>deselect()</code>, <code>toggle()</code>, <code>selectAll()</code>, <code>deselectAll()</code>, <code>getSelected()</code>, <code>enable()</code>, <code>disable()</code>, <code>refresh()</code>, <code>destroy()</code></li><li><strong>Config Engine</strong> — <code>listGroup</code> added to the <code>componentMap</code> for declarative <code>$.setup()</code> initialisation</li><li><strong>Showcase</strong> — Dedicated page at <code>/showcase/elements/list-group/</code> with demos for all variants, numbered lists, horizontal layouts, interactive JS API (selection, multi-select, keyboard), tutorial (settings panel), API reference tables, and CSS customisation guide; linked from the Elements overview and Elements dropdown navigation</li></ul>"
+        "details": "<p>A full-featured <strong>List Group</strong> element - Domma's 23rd UI component - providing polished, consistent list styling for settings panels, navigation menus, notification feeds, and content lists.</p><ul><li><strong>Base CSS</strong> - <code>.list-group</code> container with <code>.list-group-item</code> items; active, disabled, and action (<code>.list-group-item-action</code>) states; sub-element classes for rich content: <code>.list-group-item-icon</code>, <code>.list-group-item-content</code>, <code>.list-group-item-heading</code>, <code>.list-group-item-text</code>, <code>.list-group-item-trailing</code></li><li><strong>Variants</strong> - <code>.list-group-flush</code> (strips outer border/radius for card embedding); <code>.list-group-sm</code> / <code>.list-group-lg</code> size variants; 6 colour variants with left-border accent and tinted background: <code>-primary</code>, <code>-secondary</code>, <code>-success</code>, <code>-danger</code>, <code>-warning</code>, <code>-info</code></li><li><strong>Numbered</strong> - <code>.list-group-numbered</code> on <code>&lt;ol&gt;</code> prepends auto-incrementing counters via CSS - no JavaScript required</li><li><strong>Horizontal</strong> - <code>.list-group-horizontal</code> arranges items in a row; responsive variants <code>-sm</code> (576px), <code>-md</code> (768px), <code>-lg</code> (992px), <code>-xl</code> (1200px) switch to horizontal above the given breakpoint</li><li><strong>JavaScript API</strong> - <code>E.listGroup(selector, options)</code> enables selectable lists (single or multi-select), roving tabindex keyboard navigation (Arrow keys, Home/End, Enter/Space), and ARIA (<code>role=\"listbox\"</code>, <code>aria-selected</code>, <code>aria-disabled</code>, <code>aria-multiselectable</code>); public methods: <code>select()</code>, <code>deselect()</code>, <code>toggle()</code>, <code>selectAll()</code>, <code>deselectAll()</code>, <code>getSelected()</code>, <code>enable()</code>, <code>disable()</code>, <code>refresh()</code>, <code>destroy()</code></li><li><strong>Config Engine</strong> - <code>listGroup</code> added to the <code>componentMap</code> for declarative <code>$.setup()</code> initialisation</li><li><strong>Showcase</strong> - Dedicated page at <code>/showcase/elements/list-group/</code> with demos for all variants, numbered lists, horizontal layouts, interactive JS API (selection, multi-select, keyboard), tutorial (settings panel), API reference tables, and CSS customisation guide; linked from the Elements overview and Elements dropdown navigation</li></ul>"
       }
     ],
     "enhancements": [],
@@ -70,7 +70,7 @@
     "features": [],
     "enhancements": [
       {
-        "title": "Christmas Theme Overhaul — \"Frosty Morning\" & \"Christmas Eve\"",
+        "title": "Christmas Theme Overhaul - \"Frosty Morning\" & \"Christmas Eve\"",
         "description": "Full palette rewrite of both Christmas theme variants with distinctive festive backgrounds, decorative CSS effects, and updated labels",
         "impact": "low",
         "files": [
@@ -81,7 +81,7 @@
           "public/layouts/js/layout.js",
           "public/showcase/themes/index.html"
         ],
-        "details": "<p>Complete overhaul of both Christmas theme variants — moving from generic white/slate backgrounds to genuinely festive palettes.</p><ul><li><strong>christmas-light — \"Frosty Morning\"</strong> — Ice-blue tinted backgrounds (<code>#F5F8FC</code>) evoking frost on windows, deep pine-green text (<code>#1A2A1E</code>), classic Christmas Red primary (<code>#C41E3A</code>), rich Holly Green secondary (<code>#2D6B3F</code>), and frosty blue-tinted shadows</li><li><strong>christmas-dark — \"Christmas Eve\"</strong> — Deep forest green backgrounds (<code>#0A1A10</code>) replacing generic slate, warm candlelight cream text (<code>#F0ECE4</code>), brighter red primary (<code>#E85565</code>) for dark-mode readability, bright holly secondary (<code>#5CB875</code>), and warm firelight-tinted shadows</li><li><strong>Decorative CSS</strong> — Snow-dust radial-gradient dot pattern on the page root, red-gold-green gradient top-border on cards via <code>border-image</code>, candy-stripe repeating-linear-gradient on progress bars, and festive syntax highlighting (red keywords, green strings, gold functions)</li><li><strong>Labels updated</strong> — Theme Roller dropdown and variant dot tooltips now read \"Christmas Day ❄️\" and \"Christmas Eve 🎄\" (mirrors Wedding Day/Evening pattern)</li></ul>"
+        "details": "<p>Complete overhaul of both Christmas theme variants - moving from generic white/slate backgrounds to genuinely festive palettes.</p><ul><li><strong>christmas-light - \"Frosty Morning\"</strong> - Ice-blue tinted backgrounds (<code>#F5F8FC</code>) evoking frost on windows, deep pine-green text (<code>#1A2A1E</code>), classic Christmas Red primary (<code>#C41E3A</code>), rich Holly Green secondary (<code>#2D6B3F</code>), and frosty blue-tinted shadows</li><li><strong>christmas-dark - \"Christmas Eve\"</strong> - Deep forest green backgrounds (<code>#0A1A10</code>) replacing generic slate, warm candlelight cream text (<code>#F0ECE4</code>), brighter red primary (<code>#E85565</code>) for dark-mode readability, bright holly secondary (<code>#5CB875</code>), and warm firelight-tinted shadows</li><li><strong>Decorative CSS</strong> - Snow-dust radial-gradient dot pattern on the page root, red-gold-green gradient top-border on cards via <code>border-image</code>, candy-stripe repeating-linear-gradient on progress bars, and festive syntax highlighting (red keywords, green strings, gold functions)</li><li><strong>Labels updated</strong> - Theme Roller dropdown and variant dot tooltips now read \"Christmas Day ❄️\" and \"Christmas Eve 🎄\" (mirrors Wedding Day/Evening pattern)</li></ul>"
       }
     ],
     "bugFixes": [],
@@ -96,7 +96,7 @@
   "changes": {
     "features": [
       {
-        "title": "Wedding Theme — Classic Antique Gold Palette",
+        "title": "Wedding Theme - Classic Antique Gold Palette",
         "description": "Two new theme variants (wedding-light, wedding-dark) registered across all theming surfaces; theme count 24 → 26",
         "impact": "low",
         "files": [
@@ -112,7 +112,7 @@
           "public/download/kickstart-builder.js",
           "public/assets/ide/phpstorm/theme.d.ts"
         ],
-        "details": "<p>A classic <strong>Wedding</strong> theme palette — two variants (Day + Evening) built around antique gold (<code>#C5A55A</code>) and silver (<code>#A8A9AD</code>) tones, bringing the total theme count to 26.</p><ul><li><strong>wedding-light (Day)</strong> — Warm cream backgrounds (<code>#FFFDF7</code>), antique gold primary (<code>#C5A55A</code>), antique silver secondary (<code>#A8A9AD</code>), dark warm text (<code>#2C2416</code>), warm tan borders (<code>#E8DCC8</code>), and warm gold-tinted shadows for a timeless, refined feel</li><li><strong>wedding-dark (Evening)</strong> — Deep midnight navy backgrounds (<code>#12121F</code> / <code>#1A1A2E</code>), antique gold primary with lighter hover (<code>#D4B66A</code>) following dark-mode convention, warm cream text (<code>#F0E8D8</code>), indigo borders (<code>#2A2A40</code>), and subtle gold-glow shadows</li><li><strong>wedding.css</strong> — Legacy compound-selector variant (<code>.dm-theme-wedding</code> + dark override) for projects using the base/variant pattern</li></ul><p>Registered across all theming surfaces: Theme Roller dropdown (Day ☀️ / Evening 🌙 labels), layout variant dot selector (count 24 → 26), themes showcase card grid, Kickstart Builder theme picker, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). PhpStorm IDE type definitions updated to include <code>'wedding'</code> in <code>ThemeVariant</code>.</p>"
+        "details": "<p>A classic <strong>Wedding</strong> theme palette - two variants (Day + Evening) built around antique gold (<code>#C5A55A</code>) and silver (<code>#A8A9AD</code>) tones, bringing the total theme count to 26.</p><ul><li><strong>wedding-light (Day)</strong> - Warm cream backgrounds (<code>#FFFDF7</code>), antique gold primary (<code>#C5A55A</code>), antique silver secondary (<code>#A8A9AD</code>), dark warm text (<code>#2C2416</code>), warm tan borders (<code>#E8DCC8</code>), and warm gold-tinted shadows for a timeless, refined feel</li><li><strong>wedding-dark (Evening)</strong> - Deep midnight navy backgrounds (<code>#12121F</code> / <code>#1A1A2E</code>), antique gold primary with lighter hover (<code>#D4B66A</code>) following dark-mode convention, warm cream text (<code>#F0E8D8</code>), indigo borders (<code>#2A2A40</code>), and subtle gold-glow shadows</li><li><strong>wedding.css</strong> - Legacy compound-selector variant (<code>.dm-theme-wedding</code> + dark override) for projects using the base/variant pattern</li></ul><p>Registered across all theming surfaces: Theme Roller dropdown (Day ☀️ / Evening 🌙 labels), layout variant dot selector (count 24 → 26), themes showcase card grid, Kickstart Builder theme picker, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). PhpStorm IDE type definitions updated to include <code>'wedding'</code> in <code>ThemeVariant</code>.</p>"
       }
     ],
     "enhancements": [],
@@ -128,7 +128,7 @@
   "changes": {
     "features": [
       {
-        "title": "Mint Theme — Fresh Spearmint Colour Palette",
+        "title": "Mint Theme - Fresh Spearmint Colour Palette",
         "description": "Two new theme variants (mint-light, mint-dark) registered across all theming surfaces; theme count 22 → 24",
         "impact": "low",
         "files": [
@@ -142,7 +142,7 @@
           "public/showcase/themes/index.html",
           "public/download/index.html"
         ],
-        "details": "<p>A fresh <strong>Mint</strong> theme palette — two variants (light + dark) built around cool spearmint and seafoam green tones, bringing the total theme count to 24.</p><ul><li><strong>mint-light</strong> — Rich eucalyptus primary (<code>#2e9e6e</code>), seafoam secondary (<code>#5b8a7a</code>), white surfaces with a subtle mint-tinted alt background (<code>#f0faf5</code>), near-black forest text (<code>#1a2e25</code>), and soft celadon borders (<code>#c8e6d8</code>)</li><li><strong>mint-dark</strong> — Deep slate-900 backgrounds with a dark mint-tinted surface (<code>#1e3a2f</code>), bright spearmint primary (<code>#6dd5a8</code>) for contrast, mint-tinted text (<code>#d4f5e4</code>), and dark teal borders (<code>#2a4a3a</code>)</li><li><strong>mint.css</strong> — Legacy compound-selector variant (<code>.dm-theme-mint</code> + dark override) for projects using the base/variant pattern</li></ul><p>Registered across all theming surfaces: Theme Roller dropdown, layout variant dot selector (count updated to 24), themes showcase card grid, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). Download page swatch corrected to use proper <code>.theme-swatch</code> classes and updated to reflect 12 colour families.</p>"
+        "details": "<p>A fresh <strong>Mint</strong> theme palette - two variants (light + dark) built around cool spearmint and seafoam green tones, bringing the total theme count to 24.</p><ul><li><strong>mint-light</strong> - Rich eucalyptus primary (<code>#2e9e6e</code>), seafoam secondary (<code>#5b8a7a</code>), white surfaces with a subtle mint-tinted alt background (<code>#f0faf5</code>), near-black forest text (<code>#1a2e25</code>), and soft celadon borders (<code>#c8e6d8</code>)</li><li><strong>mint-dark</strong> - Deep slate-900 backgrounds with a dark mint-tinted surface (<code>#1e3a2f</code>), bright spearmint primary (<code>#6dd5a8</code>) for contrast, mint-tinted text (<code>#d4f5e4</code>), and dark teal borders (<code>#2a4a3a</code>)</li><li><strong>mint.css</strong> - Legacy compound-selector variant (<code>.dm-theme-mint</code> + dark override) for projects using the base/variant pattern</li></ul><p>Registered across all theming surfaces: Theme Roller dropdown, layout variant dot selector (count updated to 24), themes showcase card grid, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). Download page swatch corrected to use proper <code>.theme-swatch</code> classes and updated to reflect 12 colour families.</p>"
       }
     ],
     "enhancements": [],
@@ -158,20 +158,20 @@
   "changes": {
     "features": [
       {
-        "title": "Layout System — Auto-Generated Breadcrumbs",
+        "title": "Layout System - Auto-Generated Breadcrumbs",
         "description": "Frosted glass breadcrumb pill auto-generated from the URL, overlaid top-left on hero sections across showcase and public pages",
         "impact": "medium",
         "files": [
           "public/layouts/js/layout.js",
           "public/layouts/config/presets.json"
         ],
-        "details": "<p>The layout system now derives breadcrumb navigation automatically from <code>window.location.pathname</code> — no per-page markup needed.</p><ul><li><strong>renderBreadcrumbs(config, depth)</strong> — Creates a <code>&lt;nav class=\"layout-breadcrumbs-pill\"&gt;</code> wrapper prepended into the <code>.hero</code> element (or a fallback bar below the navbar on hero-less pages); uses a two-layer DOM so the Domma Breadcrumbs component's class overwrite doesn't disturb the pill styling</li><li><strong>buildBreadcrumbItems(config, depth)</strong> — Splits the pathname, maps each segment through a built-in label dictionary (<code>dom → DOM</code>, <code>http → HTTP</code>, <code>spa → SPA</code>, <code>theme-roller → Theme Roller</code>, etc.), title-cases anything not in the map, and extracts the last crumb's label from <code>&lt;title&gt;</code> (stripping Domma suffixes)</li><li><strong>Preset config</strong> — <code>breadcrumbs.enabled: true</code> for <code>showcase:subpage</code>, <code>showcase:effects</code>, <code>showcase:element</code>, and <code>public</code>; <code>false</code> for landing, index, minimal, admin, and demo presets</li><li><strong>Responsive</strong> — Pill shrinks at ≤576px</li></ul>"
+        "details": "<p>The layout system now derives breadcrumb navigation automatically from <code>window.location.pathname</code> - no per-page markup needed.</p><ul><li><strong>renderBreadcrumbs(config, depth)</strong> - Creates a <code>&lt;nav class=\"layout-breadcrumbs-pill\"&gt;</code> wrapper prepended into the <code>.hero</code> element (or a fallback bar below the navbar on hero-less pages); uses a two-layer DOM so the Domma Breadcrumbs component's class overwrite doesn't disturb the pill styling</li><li><strong>buildBreadcrumbItems(config, depth)</strong> - Splits the pathname, maps each segment through a built-in label dictionary (<code>dom → DOM</code>, <code>http → HTTP</code>, <code>spa → SPA</code>, <code>theme-roller → Theme Roller</code>, etc.), title-cases anything not in the map, and extracts the last crumb's label from <code>&lt;title&gt;</code> (stripping Domma suffixes)</li><li><strong>Preset config</strong> - <code>breadcrumbs.enabled: true</code> for <code>showcase:subpage</code>, <code>showcase:effects</code>, <code>showcase:element</code>, and <code>public</code>; <code>false</code> for landing, index, minimal, admin, and demo presets</li><li><strong>Responsive</strong> - Pill shrinks at ≤576px</li></ul>"
       }
     ],
     "enhancements": [],
     "bugFixes": [
       {
-        "title": "Forms — Checkbox Label Duplication",
+        "title": "Forms - Checkbox Label Duplication",
         "description": "Checkbox fields no longer receive a redundant standalone label element; label rendering is now skipped for checkbox inputs",
         "impact": "low",
         "files": [
@@ -180,7 +180,7 @@
         "details": "<p>The label injection logic in <code>forms.js</code> previously emitted a visible <code>&lt;label&gt;</code> element for every field type, including checkboxes. Checkboxes embed their label within their own markup, so the extra element caused doubled text. The label-rendering path now explicitly excludes <code>type === 'checkbox'</code>.</p>"
       },
       {
-        "title": "Breadcrumbs — item.text vs item.label",
+        "title": "Breadcrumbs - item.text vs item.label",
         "description": "buildBreadcrumbItems() was building items with a 'label' property; the Domma Breadcrumbs component reads 'text', causing [object Object] to render",
         "impact": "low",
         "files": [
@@ -192,7 +192,7 @@
     "breaking": [],
     "housekeeping": [
       {
-        "title": "Grayve Theme — Slate & Steel Palette (v0.19.1)",
+        "title": "Grayve Theme - Slate & Steel Palette (v0.19.1)",
         "description": "Two new theme variants (grayve-light, grayve-dark) registered across all theming surfaces; theme count 20 → 22",
         "impact": "low",
         "files": [
@@ -207,7 +207,7 @@
         "details": "<p>Added in v0.19.1. Cool slate-and-steel palette suited to neutral, data-heavy interfaces.</p>"
       },
       {
-        "title": "Breadcrumbs CSS — Moved from JS to elements.css (v0.19.1)",
+        "title": "Breadcrumbs CSS - Moved from JS to elements.css (v0.19.1)",
         "description": "Inline runtime styles for .dm-breadcrumbs-item, .dm-breadcrumbs-separator, and .dm-breadcrumbs-link moved to elements.css as static rules; separator class name corrected",
         "impact": "low",
         "files": [

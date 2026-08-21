@@ -109,7 +109,7 @@ Domma.component('domma-markdown-editor', {
             if (!preview) return;
             const content = this.data.content;
             if (!content) {
-                // Static placeholder — still run through _safe() for consistency
+                // Static placeholder - still run through _safe() for consistency
                 preview.innerHTML = this._safe('<p class="preview-placeholder">Start typing to see the preview\u2026</p>');
                 return;
             }
@@ -253,7 +253,7 @@ Domma.component('domma-markdown-editor', {
                 }
                 return;
             }
-            // Save button — use a toast for visual feedback rather than DOM mutation
+            // Save button - use a toast for visual feedback rather than DOM mutation
             if (e.target.closest('.save-btn')) {
                 this._saveContent();
                 E.toast('Content saved', { type: 'success' });

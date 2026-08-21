@@ -19,7 +19,7 @@ export interface FlagOverlay {
     [key: string]: unknown;
 }
 
-/** A flag definition — either raw SVG markup or a compact descriptor. */
+/** A flag definition - either raw SVG markup or a compact descriptor. */
 export interface FlagDefinition {
     /** Country name */
     name: string;

@@ -79,7 +79,7 @@ export interface ConfigEngine {
      */
     /**
      * Retrieve the live component instance created by setup() for a selector.
-     * Instances are NOT stored on the element — $(sel).data('component') is
+     * Instances are NOT stored on the element - $(sel).data('component') is
      * always undefined.
      * @param selector - Selector the component was configured under
      */

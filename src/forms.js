@@ -614,10 +614,10 @@ class Forma {
       }
     });
 
-    // Initialise Signature fields — runs after the form HTML is in the DOM
+    // Initialise Signature fields - runs after the form HTML is in the DOM
     this._initSignatureFields(formElement);
 
-    // Initialise Chooser fields — same lifecycle as signature
+    // Initialise Chooser fields - same lifecycle as signature
     this._initChooserFields(formElement);
   }
 
@@ -845,7 +845,7 @@ class Forma {
    * Get field value by field name
    */
   _getFieldValueByName(fieldName) {
-    // Chooser values are read directly from the control instance — they
+    // Chooser values are read directly from the control instance - they
     // don't live in a single name= input but in the chooser's internal state.
     if (this._choosers && this._choosers[fieldName]) {
       return this._choosers[fieldName].getValue();

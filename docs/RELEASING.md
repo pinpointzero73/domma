@@ -2,7 +2,7 @@
 
 Releases are driven by the **Makefile**. Run `make help` for the current list.
 
-There are no `npm run release*` scripts and no `scripts/release.sh` — they were removed because they
+There are no `npm run release*` scripts and no `scripts/release.sh` - they were removed because they
 did not work. See [Why the npm scripts went](#why-the-npm-scripts-went) if you are looking for them.
 
 ---
@@ -12,7 +12,7 @@ did not work. See [Why the npm scripts went](#why-the-npm-scripts-went) if you a
 Six steps, in this order. The order matters and is explained below.
 
 ```bash
-# 1. Bump the version (package.json + package-lock.json only — no commit, no tag)
+# 1. Bump the version (package.json + package-lock.json only - no commit, no tag)
 make bump V=0.38.0
 
 # 2. Write the release notes, by hand:
@@ -36,7 +36,7 @@ make release-npm
 make release-gh
 ```
 
-Then deploy the site — see [Making it live](#making-it-live).
+Then deploy the site - see [Making it live](#making-it-live).
 
 ### Why that order
 
@@ -46,7 +46,7 @@ which does not match this repo's history.
 **`make release-build` creates the commit the tag points at.** Every `vX.Y.Z` tag in this repo points
 at a commit whose message is exactly `Build vX.Y.Z`, and that commit carries the tracked footprint of
 a build: `package.json`, `package-lock.json` and `public/download/kickstart-manifest.json`.
-`public/dist/` is **gitignored** and deliberately not staged — it ships via npm and the release
+`public/dist/` is **gitignored** and deliberately not staged - it ships via npm and the release
 assets.
 
 **`preflight` runs after the Build commit, not before.** It checks the version you are about to
@@ -63,13 +63,13 @@ It refuses to go on if any of these is true, then runs the full suite and all th
 |---|---|
 | The working tree is dirty | You would ship something that is not committed |
 | `HEAD` is not `Build vX.Y.Z` | The tag has to point at the Build commit |
-| `HEAD` is behind `origin/main` | Releasing from a stale base is how a real tag gets clobbered — it has happened here |
+| `HEAD` is behind `origin/main` | Releasing from a stale base is how a real tag gets clobbered - it has happened here |
 | The tag already exists | The version was not bumped |
 | The version is already on npm | npm will refuse it, and will never let you reuse the number |
 | No `### vX.Y.Z` in `RELEASE_NOTES.md` | `release-gh` extracts the release body from it |
 | `releases.json` does not lead with `vX.Y.Z` | The site's What's New would be wrong |
 
-A bad publish cannot be undone — only deprecated and superseded — so all of this is worth the minute
+A bad publish cannot be undone - only deprecated and superseded - so all of this is worth the minute
 it takes.
 
 ---
@@ -90,7 +90,7 @@ release. A finished release carries seven assets:
 
 The workflow takes roughly 90 seconds, and `release-gh` calls `gh release create` immediately after
 pushing the tag, so `release-gh` gets there first. If it ever loses that race, `gh release create` will
-fail with "release already exists" — the fix is to attach the assets and notes to the existing release
+fail with "release already exists" - the fix is to attach the assets and notes to the existing release
 rather than re-running the target:
 
 ```bash
@@ -117,9 +117,9 @@ Which does, in order:
    `public/download/kickstart-manifest.json`, which is a build artefact that happens to be tracked and
    is therefore dirty after every build; it is discarded and regenerated.
 2. `git fetch origin`
-3. `git merge --ff-only origin/main` — a server that has diverged is something to look at, not to
+3. `git merge --ff-only origin/main` - a server that has diverged is something to look at, not to
    paper over with a merge commit.
-4. `npm install` — honours the lock. **This step is not optional.** Rollup *inlines* exactly-pinned
+4. `npm install` - honours the lock. **This step is not optional.** Rollup *inlines* exactly-pinned
    dependencies from `node_modules`, so a release that moves a pin will otherwise build a bundle
    containing the old package while `package-lock.json` claims the new one.
 5. `NODE_ENV=production npm run build`
@@ -132,15 +132,15 @@ Step 6 on its own, for checking a deploy you did not run yourself. It fails if:
 | Check | Catches |
 |---|---|
 | Every bundle exists and is not truncated | A build that never ran, or died part-way. `public/dist/` is gitignored, so on a fresh checkout the files are simply absent and the server 404s them |
-| `build-info.json` version matches `package.json` | Bundles built from a different checkout — usually a pull that landed *after* the build |
-| Every exactly-pinned dependency matches what is installed | The inlining problem above. An exact pin — no `^`, no `~` — is a deliberate statement that this build needs that version and no other |
+| `build-info.json` version matches `package.json` | Bundles built from a different checkout - usually a pull that landed *after* the build |
+| Every exactly-pinned dependency matches what is installed | The inlining problem above. An exact pin - no `^`, no `~` - is a deliberate statement that this build needs that version and no other |
 
 All three are otherwise silent: the build succeeds, the files look plausible, and the wrong thing is
 served.
 
 ### jsDelivr
 
-**jsDelivr lags npm by roughly 5–10 minutes** — `domma-js@latest` will serve the previous version until
+**jsDelivr lags npm by roughly 5-10 minutes** - `domma-js@latest` will serve the previous version until
 it catches up. Purge manually at <https://www.jsdelivr.com/tools/purge> if you need it sooner.
 
 ---
@@ -173,7 +173,7 @@ npm install domma-reactive@0.4.2 --save-exact
 npm run build:js        # confirm the fix is actually in the bundle before releasing
 ```
 
-That repo has its own Makefile with the same shape. It publishes via npm and tags only — no GitHub
+That repo has its own Makefile with the same shape. It publishes via npm and tags only - no GitHub
 release objects.
 
 ---
@@ -192,7 +192,7 @@ npm view domma-js version --prefer-online
 
 `npm run release:patch` was `npm version patch && bash scripts/release.sh`. Both halves misbehaved:
 
-- **`npm version patch` made its own commit**, which does not match this repo's history — the bump
+- **`npm version patch` made its own commit**, which does not match this repo's history - the bump
   belongs in the `Build vX.Y.Z` commit.
 - **`release.sh` committed `public/dist/`**, which is gitignored. The Build commit it believed it was
   making was empty and never happened, so the tag landed on whatever commit was already there.

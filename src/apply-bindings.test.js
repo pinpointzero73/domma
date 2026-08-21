@@ -1,12 +1,12 @@
 // src/apply-bindings.test.js
 //
-// Coverage for M.applyBindings / M.registerBinding / M.registerHelper — the
+// Coverage for M.applyBindings / M.registerBinding / M.registerHelper - the
 // Tier 4 exposure of domma-reactive's binding layer.
 //
 // These drive real events and assert on the DOM rather than asserting that a
-// call returned something. Both bugs this surface has already had — a
+// call returned something. Both bugs this surface has already had - a
 // `data-model` write hitting a throwaway snapshot, and `data-on-*` resolving no
-// handler — were invisible to any test that only checked the initial render.
+// handler - were invisible to any test that only checked the initial render.
 
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import Domma from './index.js';
@@ -109,7 +109,7 @@ describe('M.applyBindings', () => {
 
         model.set('showHelp', true);
         M.flush();
-        // The SAME node, not a re-render — this is what applyBindings promises
+        // The SAME node, not a re-render - this is what applyBindings promises
         // and what compile() cannot do.
         expect(root.contains(target)).toBe(true);
         expect(root.querySelector('p')).toBe(target);
@@ -152,7 +152,7 @@ describe('M.applyBindings', () => {
     });
 
     // A KNOWN LIMITATION, pinned so it is a documented constraint rather than a
-    // latent surprise — and so that fixing it fails here and forces the docs to
+    // latent surprise - and so that fixing it fails here and forces the docs to
     // move with it.
     //
     // Writing a nested path mutates the object in place. The field's observable
@@ -262,12 +262,12 @@ describe('M.applyBindings', () => {
         M.flush();
 
         expect([...list.children].map((li) => li.textContent)).toEqual(['Grace', 'Alan']);
-        // Node identity, measured — not "the text is still right".
+        // Node identity, measured - not "the text is still right".
         expect(list.children[0]).toBe(graceNode);
     });
 
-    // Inside a list a bare name resolves against the ITEM — there is no scope
-    // chain — so a row reaches the handler that owns it through $parent. This
+    // Inside a list a bare name resolves against the ITEM - there is no scope
+    // chain - so a row reaches the handler that owns it through $parent. This
     // is the pattern the docs and the showcase both teach.
     it('a row calls a root method with $parent.method($data)', () => {
         const list = make('ul', {'data-each': 'rows key=id'});
@@ -349,7 +349,7 @@ describe('M.applyBindings', () => {
         warn.mockRestore();
     });
 
-    // A data-each body is a TEMPLATE — lifted out, compiled, cloned per item —
+    // A data-each body is a TEMPLATE - lifted out, compiled, cloned per item -
     // so mustache is substituted there and must not draw the "does not
     // interpolate {{ }}" warning that applies to the rest of the page.
     //

@@ -24,7 +24,7 @@
     {
       "number": 4,
       "title": "Lodash-Compatible Utils",
-      "description": "120+ utility functions for arrays, objects, strings, and functions &mdash; all via the _ alias.",
+      "description": "120+ utility functions for arrays, objects, strings, and functions - all via the _ alias.",
       "code": "const grouped = _.groupBy(users, 'role');\nconst unique = _.uniqBy(items, 'id');\nconst result = _.flow([fn1, fn2])(data);",
       "language": "javascript"
     },

@@ -198,7 +198,7 @@ When used with Forms, `type` also determines the HTML input element:
 
 #### Chooser fields
 
-The `chooser` type renders options as visually rich tiles — the form-friendly
+The `chooser` type renders options as visually rich tiles - the form-friendly
 equivalent of native radio/checkbox controls when richer presentation is
 needed. A single component covers four combinations driven by parameters.
 
@@ -208,7 +208,7 @@ plan: {
   variant: 'card',           // 'card' | 'chip'
   multiple: false,           // false = radio, true = checkbox semantics
   density: 'comfortable',    // 'comfortable' | 'compact'
-  columns: 3,                // grid columns (cards only — chips wrap)
+  columns: 3,                // grid columns (cards only - chips wrap)
   required: true,
   label: 'Choose your plan',
   options: [
@@ -257,7 +257,7 @@ treated as a literal CSS colour and applied as an inline custom property.
 
 **Value shape:** When `multiple: false`, the field stores a string. When
 `multiple: true`, it stores an array of strings. The form pipeline handles
-both — no separate data-type declaration is needed. Required validation
+both - no separate data-type declaration is needed. Required validation
 treats an empty array as empty for multi-select.
 
 See the chooser showcase at `/showcase/elements/chooser/` for a comprehensive

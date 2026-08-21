@@ -1,5 +1,5 @@
 /**
- * Showcase "Try it" panes — editable code with live output.
+ * Showcase "Try it" panes - editable code with live output.
  *
  * A showcase should let the reader change something and watch what happens,
  * not just read a snippet. Mark any block up as:
@@ -15,18 +15,18 @@
  * only the code. Inside a pane, `log(...)` prints to the output area and every
  * Domma alias ($, _, M, D, S, H, E, I, T) is in scope.
  *
- * Runs once on load so the reader sees a result before touching anything —
+ * Runs once on load so the reader sees a result before touching anything -
  * demonstrate first, explain after.
  *
  * ── On evaluating code ───────────────────────────────────────────────────────
  * This module compiles a string with `new Function`, which is normally a red
  * flag. Here it is the entire feature: the pane is a REPL, and running what the
- * reader typed is the point — the same trust boundary as their browser console.
+ * reader typed is the point - the same trust boundary as their browser console.
  *
  * What matters is where the string comes from, so keep both of these true:
  *   1. The initial code is read only from the page's own markup (first-party
  *      HTML authored in this repo). It is never read from the URL, query
- *      string, hash, storage, postMessage, or any network response — any of
+ *      string, hash, storage, postMessage, or any network response - any of
  *      which would turn this into a self-XSS vector for a shared link.
  *   2. Panes appear only on showcase pages, never on a page handling real user
  *      data or credentials.
@@ -119,7 +119,7 @@
                 const compiled = new Function(...ALIASES, 'log', editor.value);
                 compiled(...ALIASES.map(name => window[name]), log);
                 if (!output.childElementCount) {
-                    log('(ran without printing anything — add a log(...) call)');
+                    log('(ran without printing anything - add a log(...) call)');
                 }
             } catch (err) {
                 output.classList.add('has-error');

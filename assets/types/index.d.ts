@@ -83,7 +83,7 @@ export interface DommaStatic {
     /** Icon library */
     icons: Icons;
 
-    /** Nation flags (opt-in module — present when domma-flags is loaded) */
+    /** Nation flags (opt-in module - present when domma-flags is loaded) */
     flags?: Flags;
 
     /** Alias for {@link DommaStatic.flags} (opt-in module) */

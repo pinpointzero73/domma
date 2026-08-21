@@ -216,7 +216,7 @@ describe('Domma - Manipulation', () => {
 // ── Array-like index access ───────────────────────────────────────────────────
 //
 // `$('#el')[0]` is one of the most-typed things in jQuery, and Domma's own DOM
-// showcase documents it — `$('.items')[0]  // Same as get(0)`. It was not the
+// showcase documents it - `$('.items')[0]  // Same as get(0)`. It was not the
 // same: DommaCollection exposed `.elements` and `.get(i)` but no numeric
 // properties, so `[0]` was `undefined` and the failure was silent until
 // something dereferenced it.
@@ -227,7 +227,7 @@ describe('Domma - Manipulation', () => {
 // form.
 //
 // Indices are assigned in the constructor, which is the only place
-// `this.elements` is ever set — no method mutates it in place, so they cannot
+// `this.elements` is ever set - no method mutates it in place, so they cannot
 // drift out of step.
 
 describe('Domma - Array-like index access', () => {

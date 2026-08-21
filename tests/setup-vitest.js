@@ -57,7 +57,7 @@ const FIXTURE_HTML = `
  * 'jsdom'` rather than constructing a second JSDOM instance. Two windows meant
  * two `customElements` registries and two `HTMLElement` constructors, so any
  * class defined at module-import time extended a different HTMLElement than the
- * document being rendered into — custom elements could never upgrade.
+ * document being rendered into - custom elements could never upgrade.
  */
 const setupJSDOM = () => {
   domInstance = globalThis.window;
@@ -77,7 +77,7 @@ const setupJSDOM = () => {
   // Domma's sanitiser ESCAPES THE ENTIRE STRING when DOMPurify is absent
   // (see sanitize.js). Without it, .html() and every other sanitised write
   // silently degrades, so tests would assert the fallback rather than the
-  // behaviour Domma actually ships — every documented page loads DOMPurify.
+  // behaviour Domma actually ships - every documented page loads DOMPurify.
   if (!globalThis.window.DOMPurify) {
     globalThis.window.DOMPurify = createDOMPurify(globalThis.window);
   }
@@ -135,7 +135,7 @@ global.fetch = async (url, options) => {
       json: async () => ({error: 'Not Found'})
     };
   }
-  // Server supplies a `message` — it takes precedence over `error`
+  // Server supplies a `message` - it takes precedence over `error`
   if (url === '/api/error-message') {
     return {
       ok: false,
@@ -144,7 +144,7 @@ global.fetch = async (url, options) => {
       json: async () => ({message: 'Validation failed', error: 'should be ignored'})
     };
   }
-  // Non-JSON error body — http.js falls back to status + statusText
+  // Non-JSON error body - http.js falls back to status + statusText
   if (url === '/api/error-plain') {
     return {
       ok: false,

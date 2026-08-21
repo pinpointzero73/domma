@@ -7,13 +7,13 @@
 //      selector lookups still work.
 //   2. It must NOT keep the legacy base class (.modal/.card/.badge). Those
 //      elements.css rules describe the hand-written, JS-free component and are
-//      driven by class toggles the Web Component never performs — `.modal` sets
+//      driven by class toggles the Web Component never performs - `.modal` sets
 //      opacity:0 / pointer-events:none, undone only by `.modal.active`, while
 //      the component shows itself via :host([visible]). Copying it lets outer
 //      document CSS override the shadow styling and the component renders
 //      invisible.
 //
-// These tests assert RENDERED state (computed style), not just API state —
+// These tests assert RENDERED state (computed style), not just API state -
 // isOpen() returned true the whole time the modal was invisible.
 
 import {beforeEach, describe, expect, it} from 'vitest';

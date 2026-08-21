@@ -59,7 +59,7 @@ function classifyMpa(relPath) {
     return { category: 'config', required: true, group: 'core' };
   }
 
-  // Pages — extract the page directory name
+  // Pages - extract the page directory name
   const pageMatch = relPath.match(/^frontend\/pages\/([a-z0-9-]+)\//);
   if (pageMatch) {
     const page = pageMatch[1];
@@ -94,7 +94,7 @@ function classifySpa(relPath) {
     return { category: 'config', required: true, group: 'core' };
   }
 
-  // Views — match both the .js file and its template HTML
+  // Views - match both the .js file and its template HTML
   const viewMatch = relPath.match(/^frontend\/js\/views\/(?:templates\/)?([a-z0-9-]+)\./);
   if (viewMatch && relPath !== 'frontend/js/views/index.js') {
     const view = viewMatch[1];

@@ -26,7 +26,7 @@
         <div class="card-body d-flex align-items-center gap-3">
             <span data-icon="zap" style="flex-shrink:0;font-size:1.5rem;"></span>
             <div>
-                <strong>Pro Mode Required</strong> — Views and Actions require MongoDB. Enable with
+                <strong>Pro Mode Required</strong> - Views and Actions require MongoDB. Enable with
                 <code>npm run pro</code>. See the
                 <a href="../getting-started/#pro">Getting Started: Pro section</a> for full setup instructions.
             </div>
@@ -43,29 +43,29 @@
                 powerful capabilities on top of the standard Domma CMS:</p>
             <ul class="mb-4">
                 <li class="mb-2">
-                    <strong>Views</strong> — MongoDB aggregation pipelines exposed as named data sources,
+                    <strong>Views</strong> - MongoDB aggregation pipelines exposed as named data sources,
                     embeddable in any page. Query, group, sort and project data from one or more collections and
                     display the results as a table, card grid, list or chart.
                 </li>
                 <li class="mb-2">
-                    <strong>Actions</strong> — Multi-step automated workflows triggered manually or by collection
+                    <strong>Actions</strong> - Multi-step automated workflows triggered manually or by collection
                     events. Chain HTTP requests, collection writes, emails, conditional branches and wait steps
                     in a visual editor.
                 </li>
                 <li class="mb-2">
-                    <strong>Row-Level Access</strong> — Per-collection, per-entry access rules evaluated at query
+                    <strong>Row-Level Access</strong> - Per-collection, per-entry access rules evaluated at query
                     time. Rules are expressed as MongoDB filter objects and can reference the current user's id,
                     role, department, or any profile field.
                 </li>
                 <li class="mb-2">
-                    <strong>MongoAdapter</strong> — Collections backed by MongoDB instead of flat JSON files.
-                    Unlimited scale, full query power, and live aggregation — with no changes to the admin UI or
+                    <strong>MongoAdapter</strong> - Collections backed by MongoDB instead of flat JSON files.
+                    Unlimited scale, full query power, and live aggregation - with no changes to the admin UI or
                     the public content API.
                 </li>
             </ul>
             <div class="alert alert-info">
-                <strong>Note:</strong> Everything else in Domma CMS — pages, collections, media, users, themes,
-                the full admin UI — works without Pro. Pro is purely additive; enabling it does not change
+                <strong>Note:</strong> Everything else in Domma CMS - pages, collections, media, users, themes,
+                the full admin UI - works without Pro. Pro is purely additive; enabling it does not change
                 existing behaviour.
             </div>
         </div>
@@ -96,7 +96,7 @@ MONGO_URI=mongodb://localhost:27017/domma-cms npm run pro</code></pre>
                     (<code>_views</code>, <code>_actions</code>, <code>_action_logs</code>, <code>_access_rules</code>).
                 </li>
                 <li class="mb-1">Sets <code>PRO_MODE=true</code> in your <code>.env</code> file.</li>
-                <li class="mb-1">Prints a confirmation message — restart the server to activate Pro features.</li>
+                <li class="mb-1">Prints a confirmation message - restart the server to activate Pro features.</li>
             </ol>
 
             <div class="alert alert-warning">
@@ -128,17 +128,17 @@ mongodb://username:password@host:27017/domma-cms</code></pre>
             <p class="mb-4">The connection is handled internally by <code>connectionManager.js</code>, which
                 provides:</p>
             <ul class="mb-4">
-                <li class="mb-1"><strong>Automatic reconnect</strong> — exponential back-off on connection failure,
+                <li class="mb-1"><strong>Automatic reconnect</strong> - exponential back-off on connection failure,
                     no manual intervention needed.</li>
-                <li class="mb-1"><strong>Connection pooling</strong> — the native MongoDB driver pool is used; the
+                <li class="mb-1"><strong>Connection pooling</strong> - the native MongoDB driver pool is used; the
                     default pool size is 10 and is configurable via the URI options.</li>
-                <li class="mb-1"><strong>Graceful shutdown</strong> — the connection is closed cleanly on
+                <li class="mb-1"><strong>Graceful shutdown</strong> - the connection is closed cleanly on
                     <code>SIGTERM</code> / <code>SIGINT</code>, avoiding in-flight write loss.</li>
             </ul>
 
             <div class="alert alert-info">
                 The database name at the end of the URI (<code>/domma-cms</code>) determines where all CMS data
-                and Pro collections are stored. Use a dedicated database — do not share with another application.
+                and Pro collections are stored. Use a dedicated database - do not share with another application.
             </div>
         </div>
     </section>
@@ -164,7 +164,7 @@ mongodb://username:password@host:27017/domma-cms</code></pre>
                 <li class="mb-1">Save and preview live results before publishing.</li>
             </ol>
 
-            <p class="mb-3"><strong>Example pipeline — top posts by view count:</strong></p>
+            <p class="mb-3"><strong>Example pipeline - top posts by view count:</strong></p>
             <pre class="code-block mb-4"><code class="language-json">[
   { "$match": { "published": true } },
   { "$sort": { "views": -1 } },
@@ -174,10 +174,10 @@ mongodb://username:password@host:27017/domma-cms</code></pre>
 
             <p class="mb-3"><strong>Display modes</strong></p>
             <ul class="mb-0">
-                <li class="mb-1"><strong>table</strong> — sortable, paginated data table with configurable columns.</li>
-                <li class="mb-1"><strong>cards</strong> — responsive card grid, useful for media-rich results.</li>
-                <li class="mb-1"><strong>list</strong> — compact vertical list, ideal for sidebars and widgets.</li>
-                <li class="mb-1"><strong>chart</strong> — bar, line or pie chart rendered from aggregated numeric data.</li>
+                <li class="mb-1"><strong>table</strong> - sortable, paginated data table with configurable columns.</li>
+                <li class="mb-1"><strong>cards</strong> - responsive card grid, useful for media-rich results.</li>
+                <li class="mb-1"><strong>list</strong> - compact vertical list, ideal for sidebars and widgets.</li>
+                <li class="mb-1"><strong>chart</strong> - bar, line or pie chart rendered from aggregated numeric data.</li>
             </ul>
         </div>
     </section>
@@ -193,16 +193,16 @@ mongodb://username:password@host:27017/domma-cms</code></pre>
 
             <p class="mb-3"><strong>Editor features</strong></p>
             <ul class="mb-4">
-                <li class="mb-2"><strong>Stage builder</strong> — add pipeline stages from a dropdown; each stage
+                <li class="mb-2"><strong>Stage builder</strong> - add pipeline stages from a dropdown; each stage
                     type renders a dedicated form (e.g. field selector for <code>$project</code>, sort order
                     toggles for <code>$sort</code>).</li>
-                <li class="mb-2"><strong>JSON editor</strong> — switch to raw JSON at any time for full pipeline
+                <li class="mb-2"><strong>JSON editor</strong> - switch to raw JSON at any time for full pipeline
                     control; changes sync back to the stage builder.</li>
-                <li class="mb-2"><strong>Live preview</strong> — run the pipeline against real data and inspect
+                <li class="mb-2"><strong>Live preview</strong> - run the pipeline against real data and inspect
                     results before saving.</li>
-                <li class="mb-2"><strong>Column configuration</strong> — for table display mode, choose which
+                <li class="mb-2"><strong>Column configuration</strong> - for table display mode, choose which
                     result fields to show, set header labels and control column width.</li>
-                <li class="mb-2"><strong>Permissions</strong> — restrict which user roles can query this View
+                <li class="mb-2"><strong>Permissions</strong> - restrict which user roles can query this View
                     via the API.</li>
             </ul>
 
@@ -284,10 +284,10 @@ mongodb://username:password@host:27017/domma-cms</code></pre>
             <p class="mb-3"><strong>Template interpolation</strong></p>
             <p class="mb-2">Use double-brace syntax to reference data within step configuration fields:</p>
             <ul class="mb-0">
-                <li class="mb-1"><code>&#123;&#123;input.fieldName&#125;&#125;</code> — trigger input data (e.g. form submission or collection entry)</li>
-                <li class="mb-1"><code>&#123;&#123;steps.step1.response.id&#125;&#125;</code> — output from a named earlier step</li>
-                <li class="mb-1"><code>&#123;&#123;user.email&#125;&#125;</code> — the user who triggered the Action (if authenticated)</li>
-                <li class="mb-1"><code>&#123;&#123;site.title&#125;&#125;</code> — global site configuration values</li>
+                <li class="mb-1"><code>&#123;&#123;input.fieldName&#125;&#125;</code> - trigger input data (e.g. form submission or collection entry)</li>
+                <li class="mb-1"><code>&#123;&#123;steps.step1.response.id&#125;&#125;</code> - output from a named earlier step</li>
+                <li class="mb-1"><code>&#123;&#123;user.email&#125;&#125;</code> - the user who triggered the Action (if authenticated)</li>
+                <li class="mb-1"><code>&#123;&#123;site.title&#125;&#125;</code> - global site configuration values</li>
             </ul>
         </div>
     </section>
@@ -303,18 +303,18 @@ mongodb://username:password@host:27017/domma-cms</code></pre>
 
             <p class="mb-3"><strong>Editor features</strong></p>
             <ul class="mb-4">
-                <li class="mb-2"><strong>Visual step list</strong> — steps are displayed as an ordered list;
+                <li class="mb-2"><strong>Visual step list</strong> - steps are displayed as an ordered list;
                     drag to reorder at any time without losing configuration.</li>
-                <li class="mb-2"><strong>Step forms</strong> — selecting a step type renders a context-aware
+                <li class="mb-2"><strong>Step forms</strong> - selecting a step type renders a context-aware
                     form; for example, HTTP Request shows URL, method, headers and body fields, while Email
                     shows recipient, subject and body.</li>
-                <li class="mb-2"><strong>Input mapping</strong> — for each step, map data from the trigger
+                <li class="mb-2"><strong>Input mapping</strong> - for each step, map data from the trigger
                     payload or prior step responses into the current step's variables.</li>
-                <li class="mb-2"><strong>Test runner</strong> — supply a sample input payload and execute the
+                <li class="mb-2"><strong>Test runner</strong> - supply a sample input payload and execute the
                     entire Action, seeing step-by-step output, status and response data in a collapsible panel.</li>
-                <li class="mb-2"><strong>Error handling</strong> — configure a retry count (0–5) and choose an
+                <li class="mb-2"><strong>Error handling</strong> - configure a retry count (0-5) and choose an
                     on-error branch: stop, continue to next step, or jump to a named step.</li>
-                <li class="mb-2"><strong>Execution log</strong> — view a paginated history of recent runs,
+                <li class="mb-2"><strong>Execution log</strong> - view a paginated history of recent runs,
                     each showing trigger time, total duration, per-step status, and any error messages for
                     failed steps.</li>
             </ul>
@@ -341,7 +341,7 @@ mongodb://username:password@host:27017/domma-cms</code></pre>
             <ul class="mb-4">
                 <li class="mb-1">Rules are defined per collection in the collection schema.</li>
                 <li class="mb-1">Each rule is a MongoDB filter object that may reference the current user via
-                    <code>&#123;&#123;user.*&#125;&#125;</code> placeholders — these are substituted server-side
+                    <code>&#123;&#123;user.*&#125;&#125;</code> placeholders - these are substituted server-side
                     before the query is executed.</li>
                 <li class="mb-1">The rule filter is merged with any other query filters using
                     <code>$and</code>, ensuring it cannot be bypassed by the client.</li>

@@ -32,7 +32,7 @@
             </h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Media files are uploaded through the admin panel and served statically at the project root. The storage layer is intentionally simple — files live on disk, with no external dependencies required.</p>
+            <p class="mb-4">Media files are uploaded through the admin panel and served statically at the project root. The storage layer is intentionally simple - files live on disk, with no external dependencies required.</p>
 
             <h3 class="font-semibold mb-2">Upload Methods</h3>
             <p class="mb-4">The admin panel provides two upload methods: drag-and-drop onto the upload zone, or a standard file picker dialog. Both methods support selecting multiple files at once. Progress is shown per-file during upload.</p>
@@ -87,7 +87,7 @@
 }</code></pre>
 
             <h3 class="font-semibold mb-2 mt-4">Static Serving</h3>
-            <p class="mb-2">Uploaded files are served directly by the web server at <code>/media/filename</code>. No CMS processing is involved on read — files are delivered as static assets for maximum performance.</p>
+            <p class="mb-2">Uploaded files are served directly by the web server at <code>/media/filename</code>. No CMS processing is involved on read - files are delivered as static assets for maximum performance.</p>
             <pre><code># Example uploaded file URLs
 /media/hero-banner.jpg
 /media/images/team-photo.webp
@@ -99,9 +99,9 @@
 Content-Type: multipart/form-data
 
 # Fields
-file         (required) — the file binary
-directory    (optional) — target sub-directory, e.g. "images"
-overwrite    (optional) — boolean, default false
+file         (required) - the file binary
+directory    (optional) - target sub-directory, e.g. "images"
+overwrite    (optional) - boolean, default false
 
 # Response
 {
@@ -157,10 +157,10 @@ overwrite    (optional) — boolean, default false
             <h3 class="font-semibold mb-2">Search &amp; Filter</h3>
             <p class="mb-2">The toolbar above the grid provides:</p>
             <ul class="mb-4" style="list-style: disc; padding-left: 1.5rem;">
-                <li><strong>Search</strong> — live filename search (debounced, 300 ms)</li>
-                <li><strong>Type filter</strong> — All / Images / Documents / Videos dropdown</li>
-                <li><strong>Sort</strong> — by date uploaded (newest first), name (A–Z), or file size</li>
-                <li><strong>Directory</strong> — dropdown to switch between sub-directories</li>
+                <li><strong>Search</strong> - live filename search (debounced, 300 ms)</li>
+                <li><strong>Type filter</strong> - All / Images / Documents / Videos dropdown</li>
+                <li><strong>Sort</strong> - by date uploaded (newest first), name (A-Z), or file size</li>
+                <li><strong>Directory</strong> - dropdown to switch between sub-directories</li>
             </ul>
 
             <h3 class="font-semibold mb-2">File Actions</h3>
@@ -256,7 +256,7 @@ overwrite    (optional) — boolean, default false
 }</code></pre>
 
             <h3 class="font-semibold mb-2 mt-4">Rotate</h3>
-            <p class="mb-2">Quick-select presets (90°, 180°, 270°) or a numeric input for any custom angle (0–359). Background fill colour is configurable for non-rectangular rotations.</p>
+            <p class="mb-2">Quick-select presets (90°, 180°, 270°) or a numeric input for any custom angle (0-359). Background fill colour is configurable for non-rectangular rotations.</p>
 
             <h3 class="font-semibold mb-2 mt-4">Flip</h3>
             <p class="mb-2">Two independent toggle buttons: <strong>Flip Horizontal</strong> (mirror left-right) and <strong>Flip Vertical</strong> (mirror top-bottom). Both can be active simultaneously.</p>
@@ -273,11 +273,11 @@ overwrite    (optional) — boolean, default false
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>Brightness</td><td>0.1 – 3.0</td><td>1.0</td><td><code>.modulate({ brightness })</code></td></tr>
-                    <tr><td>Contrast</td><td>-100 – 100</td><td>0</td><td><code>.linear()</code></td></tr>
-                    <tr><td>Saturation</td><td>0.0 – 3.0</td><td>1.0</td><td><code>.modulate({ saturation })</code></td></tr>
-                    <tr><td>Blur</td><td>0 – 50</td><td>0</td><td><code>.blur(sigma)</code></td></tr>
-                    <tr><td>Sharpen</td><td>0 – 10</td><td>0</td><td><code>.sharpen({ sigma })</code></td></tr>
+                    <tr><td>Brightness</td><td>0.1 - 3.0</td><td>1.0</td><td><code>.modulate({ brightness })</code></td></tr>
+                    <tr><td>Contrast</td><td>-100 - 100</td><td>0</td><td><code>.linear()</code></td></tr>
+                    <tr><td>Saturation</td><td>0.0 - 3.0</td><td>1.0</td><td><code>.modulate({ saturation })</code></td></tr>
+                    <tr><td>Blur</td><td>0 - 50</td><td>0</td><td><code>.blur(sigma)</code></td></tr>
+                    <tr><td>Sharpen</td><td>0 - 10</td><td>0</td><td><code>.sharpen({ sigma })</code></td></tr>
                     <tr><td>Grayscale</td><td>Toggle (on/off)</td><td>Off</td><td><code>.grayscale()</code></td></tr>
                 </tbody>
             </table>
@@ -285,11 +285,11 @@ overwrite    (optional) — boolean, default false
             <h3 class="font-semibold mb-2">Watermarks</h3>
             <p class="mb-2">Text watermarks are composited onto the image by Sharp using an SVG overlay. Options:</p>
             <ul class="mb-4" style="list-style: disc; padding-left: 1.5rem;">
-                <li><strong>Text</strong> — the watermark string</li>
-                <li><strong>Font size</strong> — in points (12–120)</li>
-                <li><strong>Font colour</strong> — hex colour picker</li>
-                <li><strong>Position</strong> — nine-point grid (top-left, top-centre, top-right, centre-left, centre, centre-right, bottom-left, bottom-centre, bottom-right)</li>
-                <li><strong>Opacity</strong> — 0–100%</li>
+                <li><strong>Text</strong> - the watermark string</li>
+                <li><strong>Font size</strong> - in points (12-120)</li>
+                <li><strong>Font colour</strong> - hex colour picker</li>
+                <li><strong>Position</strong> - nine-point grid (top-left, top-centre, top-right, centre-left, centre, centre-right, bottom-left, bottom-centre, bottom-right)</li>
+                <li><strong>Opacity</strong> - 0-100%</li>
             </ul>
             <pre><code># Watermark payload example
 {
@@ -305,8 +305,8 @@ overwrite    (optional) — boolean, default false
             <h3 class="font-semibold mb-2 mt-4">Borders</h3>
             <p class="mb-2">Adds a flat-colour border around the image using Sharp's <code>.extend()</code> method. Configurable options:</p>
             <ul class="mb-4" style="list-style: disc; padding-left: 1.5rem;">
-                <li><strong>Width</strong> — uniform border in pixels (1–100), or per-side (top, right, bottom, left)</li>
-                <li><strong>Colour</strong> — hex colour picker with alpha channel</li>
+                <li><strong>Width</strong> - uniform border in pixels (1-100), or per-side (top, right, bottom, left)</li>
+                <li><strong>Colour</strong> - hex colour picker with alpha channel</li>
             </ul>
 
             <h3 class="font-semibold mb-2 mt-4">Format Conversion</h3>
@@ -320,18 +320,18 @@ overwrite    (optional) — boolean, default false
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>JPEG</td><td>Yes (1–100)</td><td>Best for photographs; no transparency</td></tr>
+                    <tr><td>JPEG</td><td>Yes (1-100)</td><td>Best for photographs; no transparency</td></tr>
                     <tr><td>PNG</td><td>No (lossless)</td><td>Best for graphics with transparency</td></tr>
-                    <tr><td>WebP</td><td>Yes (1–100)</td><td>Modern format; smaller than JPEG at equal quality</td></tr>
-                    <tr><td>AVIF</td><td>Yes (1–100)</td><td>Best compression; wide browser support as of 2024</td></tr>
+                    <tr><td>WebP</td><td>Yes (1-100)</td><td>Modern format; smaller than JPEG at equal quality</td></tr>
+                    <tr><td>AVIF</td><td>Yes (1-100)</td><td>Best compression; wide browser support as of 2024</td></tr>
                 </tbody>
             </table>
 
             <h3 class="font-semibold mb-2">Save Options</h3>
             <p class="mb-2">The save bar at the bottom of the editor presents two options:</p>
             <ul class="mb-4" style="list-style: disc; padding-left: 1.5rem;">
-                <li><strong>Save as new file</strong> — writes a new file to disk with a <code>-edited</code> suffix (or a custom name entered in the filename field). The original is untouched.</li>
-                <li><strong>Overwrite original</strong> — replaces the original file in-place. A confirmation dialog is shown before proceeding.</li>
+                <li><strong>Save as new file</strong> - writes a new file to disk with a <code>-edited</code> suffix (or a custom name entered in the filename field). The original is untouched.</li>
+                <li><strong>Overwrite original</strong> - replaces the original file in-place. A confirmation dialog is shown before proceeding.</li>
             </ul>
 
             <h3 class="font-semibold mb-2">Editor API Endpoint</h3>
@@ -378,7 +378,7 @@ Content-Type: application/json
             <p class="mb-4">Media files can be embedded in page content using standard Markdown syntax, extended caption syntax, or the Domma CMS shortcode system for finer control over sizing and display.</p>
 
             <h3 class="font-semibold mb-2">Standard Markdown</h3>
-            <p class="mb-2">The simplest embed — renders as a plain <code>&lt;img&gt;</code> tag:</p>
+            <p class="mb-2">The simplest embed - renders as a plain <code>&lt;img&gt;</code> tag:</p>
             <pre><code>![Alt text](/media/image.jpg)</code></pre>
 
             <h3 class="font-semibold mb-2 mt-4">With Caption</h3>
@@ -437,9 +437,9 @@ Content-Type: application/json
             <h3 class="font-semibold mb-2">Inserting Media from the Page Editor</h3>
             <p class="mb-2">The page editor toolbar includes a <span data-icon="image"></span> <strong>Media</strong> button. Clicking it opens the Media Library in picker mode. When a file is selected, the editor inserts the appropriate syntax at the current cursor position:</p>
             <ul class="mb-4" style="list-style: disc; padding-left: 1.5rem;">
-                <li>For images: inserts Markdown image syntax — <code>![filename](/media/filename.jpg)</code></li>
-                <li>For documents: inserts a Markdown link — <code>[filename.pdf](/media/documents/filename.pdf)</code></li>
-                <li>For videos: inserts a shortcode — <code>[video src="/media/videos/clip.mp4"]</code></li>
+                <li>For images: inserts Markdown image syntax - <code>![filename](/media/filename.jpg)</code></li>
+                <li>For documents: inserts a Markdown link - <code>[filename.pdf](/media/documents/filename.pdf)</code></li>
+                <li>For videos: inserts a shortcode - <code>[video src="/media/videos/clip.mp4"]</code></li>
             </ul>
 
             <h3 class="font-semibold mb-2">URL Portability</h3>

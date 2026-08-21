@@ -22,7 +22,7 @@
             overflow-y: auto;
         }
 
-        /* Code editor-style file tab — attaches to the top of a code block */
+        /* Code editor-style file tab - attaches to the top of a code block */
         .code-file-tab {
             display: flex;
             align-items: center;
@@ -111,7 +111,7 @@
     <div class="hero-content">
         <div class="hero-title">Standalone Components</div>
         <div class="hero-subtitle">Vue-style Custom Elements with reactive data, computed properties,
-            lifecycle hooks, and surgical DOM binding — built on Web Components with Shadow DOM.</div>
+            lifecycle hooks, and surgical DOM binding - built on Web Components with Shadow DOM.</div>
     </div>
 </div>
 
@@ -132,7 +132,7 @@
             <div class="row g-3">
                 <div class="col-md-4">
                     <div class="badge badge-primary mb-2">Shadow DOM</div>
-                    <p class="text-sm mb-0">True style encapsulation — component CSS never leaks out, theme variables still flow in.</p>
+                    <p class="text-sm mb-0">True style encapsulation - component CSS never leaks out, theme variables still flow in.</p>
                 </div>
                 <div class="col-md-4">
                     <div class="badge badge-success mb-2">Surgical Updates</div>
@@ -152,7 +152,7 @@
     <div class="card mb-6" id="card-counter" data-section="counter">
         <div class="card-header">
             <div class="card-header-content">
-                <span class="font-bold">Example 1 — Counter</span>
+                <span class="font-bold">Example 1 - Counter</span>
                 <span class="badge badge-secondary ms-3">reactive · computed · lifecycle</span>
             </div>
         </div>
@@ -216,12 +216,12 @@
   onBeforeMount() { log('beforeMount'); },
   onMount() {
     log('mount');
-    // $() can't pierce Shadow DOM — wrap root.querySelector() in $()
+    // $() can't pierce Shadow DOM - wrap root.querySelector() in $()
     $(this.root.querySelector('.dm-inc')).on('click', () =&gt; this.increment());
     $(this.root.querySelector('.dm-dec')).on('click', () =&gt; this.decrement());
     $(this.root.querySelector('.dm-rst')).on('click', () =&gt; this.reset());
   },
-  onUpdated() { log('updated — count=' + this.data.count); },
+  onUpdated() { log('updated - count=' + this.data.count); },
   onUnmount() { log('unmount'); },
 
   style: `
@@ -249,7 +249,7 @@
     <div class="card mb-6" id="card-user-card" data-section="user-card">
         <div class="card-header">
             <div class="card-header-content">
-                <span class="font-bold">Example 2 — User Card with Props</span>
+                <span class="font-bold">Example 2 - User Card with Props</span>
                 <span class="badge badge-secondary ms-3">props · async · conditional</span>
             </div>
         </div>
@@ -309,7 +309,7 @@
         7:  { name: 'Bob Okafor',   role: 'Product Manager' }
       };
       const user = users[this.props.userId]
-        ?? { name: 'Unknown User', role: '—' };
+        ?? { name: 'Unknown User', role: '-' };
 
       this.set({ name: user.name, role: user.role, loading: false });
     }
@@ -359,7 +359,7 @@
     <div class="card mb-6" id="card-router" data-section="router">
         <div class="card-header">
             <div class="card-header-content">
-                <span class="font-bold">Example 3 — Router Integration</span>
+                <span class="font-bold">Example 3 - Router Integration</span>
                 <span class="badge badge-secondary ms-3">R.route · props from URL</span>
             </div>
         </div>
@@ -367,7 +367,7 @@
             <p class="text-muted mb-4">
                 Use a component as a route view. Props are derived from URL parameters.
             </p>
-            <pre class="code-block mb-4"><code>// Route definition — props come from URL params
+            <pre class="code-block mb-4"><code>// Route definition - props come from URL params
 R.route({
     path: '/users/:id',
     component: 'user-card-demo',             // Custom element tag name
@@ -377,7 +377,7 @@ R.route({
 });</code></pre>
             <p class="text-sm text-muted mb-0">
                 When this route activates, the router creates <code>&lt;user-card-demo user-id="…"&gt;</code>
-                and mounts it in the route container — no extra glue code needed.
+                and mounts it in the route container - no extra glue code needed.
             </p>
         </div>
     </div>
@@ -388,7 +388,7 @@ R.route({
     <div class="card mb-6" id="card-sfc" data-section="sfc">
         <div class="card-header">
             <div class="card-header-content">
-                <span class="font-bold">Example 4 — .domma Single-File Format</span>
+                <span class="font-bold">Example 4 - .domma Single-File Format</span>
                 <span class="badge badge-secondary ms-3">optional · build pipeline</span>
             </div>
         </div>
@@ -506,7 +506,7 @@ export default {
                             <tbody>
                                 <tr><td><code>onBeforeMount()</code></td><td>Before template is rendered</td></tr>
                                 <tr><td><code>onMount()</code></td><td>After template rendered + bindings established</td></tr>
-                                <tr><td><code>onUpdated()</code></td><td>After any data change, once per flush — including fields no binding uses</td></tr>
+                                <tr><td><code>onUpdated()</code></td><td>After any data change, once per flush - including fields no binding uses</td></tr>
                                 <tr><td><code>onBeforeUnmount()</code></td><td>Before element is removed from DOM</td></tr>
                                 <tr><td><code>onUnmount()</code></td><td>After element removed and cleaned up</td></tr>
                                 <tr><td><code>onPropsChanged(name, old, new)</code></td><td>When an observed attribute changes</td></tr>
@@ -602,15 +602,15 @@ this.set({ loading: false, name: 'Alice' });</code></pre>
         onBeforeMount() { counterLog('onBeforeMount fired', 'mount'); },
 
         onMount() {
-            counterLog('onMount — component ready', 'mount');
-            // $ can't pierce Shadow DOM — wrap root.querySelector() in $() to use Domma events
+            counterLog('onMount - component ready', 'mount');
+            // $ can't pierce Shadow DOM - wrap root.querySelector() in $() to use Domma events
             $(this.root.querySelector('.btn-inc')).on('click', () => this.increment());
             $(this.root.querySelector('.btn-dec')).on('click', () => this.decrement());
             $(this.root.querySelector('.btn-rst')).on('click', () => this.reset());
         },
 
         onUpdated() {
-            counterLog(`onUpdated — count=${this.data.count}, doubled=${this.data.count * 2}`, 'update');
+            counterLog(`onUpdated - count=${this.data.count}, doubled=${this.data.count * 2}`, 'update');
         },
 
         onUnmount() { counterLog('onUnmount fired', 'unmount'); },
@@ -690,7 +690,7 @@ this.set({ loading: false, name: 'Alice' });</code></pre>
             async fetchUser() {
                 this.set({ loading: true });
 
-                // Simulated API call — replace with H.get('/api/users/' + this.props.userId)
+                // Simulated API call - replace with H.get('/api/users/' + this.props.userId)
                 await new Promise(r => setTimeout(r, 700));
 
                 const db = {
@@ -699,7 +699,7 @@ this.set({ loading: false, name: 'Alice' });</code></pre>
                     99: { name: 'Carol Lindström', role: 'Design Lead',        department: 'UX'       }
                 };
 
-                const user = db[this.props.userId] ?? { name: 'Unknown User', role: '—', department: '—' };
+                const user = db[this.props.userId] ?? { name: 'Unknown User', role: '-', department: '-' };
                 this.set({ name: user.name, role: user.role, department: user.department, loading: false });
             }
         },

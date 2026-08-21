@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Extract Domma's reactive core into a separately published `domma-reactive` package that provides `observable()` / `observableArray()`, and rewire Domma's `Model` as an adapter over it — with zero change to Domma's public API.
+**Goal:** Extract Domma's reactive core into a separately published `domma-reactive` package that provides `observable()` / `observableArray()`, and rewire Domma's `Model` as an adapter over it - with zero change to Domma's public API.
 
 **Architecture:** The package owns the dependency graph (`Dep`, `Computation`, flush scheduler), a state primitive (observables), and its own deep-equality helper so it has no dependency back on Domma. Domma takes it as an exact-pinned `devDependency`; Rollup inlines it via the already-configured `@rollup/plugin-node-resolve`, so `domma.min.js` stays a single self-contained file.
 
@@ -16,22 +16,22 @@
 
 The code blocks below were written as design sketches, not as tested source. Execution found real
 defects in three of them. **The corrections are recorded here and applied inline in the affected
-tasks** — an implementer following this plan should use the corrected code, not the original.
+tasks** - an implementer following this plan should use the corrected code, not the original.
 
 | Task | Defect found | Resolution |
 |------|--------------|------------|
-| 2 | `seen = new WeakMap()` as a default parameter allocated on *every* call, including the primitive fast path — a measured 3–5× tax on the hottest path in the package | Public `isEqual(a, b)` wrapper delegating to an inner recursive function; map created lazily at the first structurally-compared pair |
+| 2 | `seen = new WeakMap()` as a default parameter allocated on *every* call, including the primitive fast path - a measured 3-5× tax on the hottest path in the package | Public `isEqual(a, b)` wrapper delegating to an inner recursive function; map created lazily at the first structurally-compared pair |
 | 2 | All 8 supplied tests passed with the plain-object prototype gate deleted, and with the cycle guard's `return true` flipped to `return false` | Added class-instance, `Map`/`Set`, null-prototype and value-asserting cyclic tests. 15 tests |
 | 2 | Two invalid `Date`s compared unequal (`getTime()` is `NaN` on both, compared with `===`), contradicting the NaN rationale the tests state | `Object.is(a.getTime(), b.getTime())` |
-| 3 | "There are exactly two [call sites]" — wrong | One real call in `Computation.recompute()`, plus one doc-comment mention. Verify by grep, not by count |
+| 3 | "There are exactly two [call sites]" - wrong | One real call in `Computation.recompute()`, plus one doc-comment mention. Verify by grep, not by count |
 | 3 | The moved test `does not notify when a write sets an equal value` asserts a gate that lives in Domma's `Model.set`, not in the graph. Making it pass required adding a gate to the test's own stand-in, rendering it tautological | Dropped as a 4th Model-specific test. **11 moved tests, not 12.** The behaviour was ported into Domma's `models.test.js`, where it had no coverage at all |
 | 3 | `trackingProxy` is a public export with zero tests; four `drainPending` guarantees, `dispose()` and `DepMap.clear()` could each be removed without failing a test | 16 tests added. `graph.test.js` totals 27 |
-| 4 | **The supplied setter fails the supplied test.** The early return fires before `current = next`, so a write gated as "equal" never stored — yet `accepts a custom equality function` asserts `v.value` becomes 999 | Assign unconditionally, gate only the notification. Mirrors `models.js:122-125`, which Task 9 requires this primitive to stand in for |
+| 4 | **The supplied setter fails the supplied test.** The early return fires before `current = next`, so a write gated as "equal" never stored - yet `accepts a custom equality function` asserts `v.value` becomes 999 | Assign unconditionally, gate only the notification. Mirrors `models.js:122-125`, which Task 9 requires this primitive to stand in for |
 | 4 | `set(next) { this.value = next; }` throws `TypeError` when destructured or passed as a callback | `peek()` and `set()` are closures; `this` leaves the API surface |
-| 5 | **The supplied mutators cannot notify.** `inner.peek()` returns the live array, so an in-place mutation has already updated `current`; `arr.slice()` is then deep-equal to it and the gate swallows the change. The comment "new reference → always notifies" is false — the gate is `isEqual`, not reference identity | `observableArray` owns its own `Dep` and triggers it directly. O(1) per mutation; a no-op `sort()` notifying spuriously is the accepted cost. Chosen because the mutator knows it was a `push`, and that trigger point is where M4's keyed reconciler attaches patch information |
+| 5 | **The supplied mutators cannot notify.** `inner.peek()` returns the live array, so an in-place mutation has already updated `current`; `arr.slice()` is then deep-equal to it and the gate swallows the change. The comment "new reference → always notifies" is false - the gate is `isEqual`, not reference identity | `observableArray` owns its own `Dep` and triggers it directly. O(1) per mutation; a no-op `sort()` notifying spuriously is the accepted cost. Chosen because the mutator knows it was a `push`, and that trigger point is where M4's keyed reconciler attaches patch information |
 
 **Method that found these:** for every claimed behaviour, apply a mutation that breaks it, confirm a
-test fails, restore. Three tasks running, three sets of supplied code with defects — hold the
+test fails, restore. Three tasks running, three sets of supplied code with defects - hold the
 remaining tasks to the same standard.
 
 **Revised baselines.** Task 3 added two tests to Domma's `models.test.js` pinning the no-op-write
@@ -75,8 +75,8 @@ Expected: no output from `git status`; `Tests  435 passed | 3 skipped (438)`.
 |------|--------|
 | `src/models.js` | `Model` internals move from `DepMap` + `_data` to per-field observables. Public API unchanged. |
 | `src/component-factory.js` | Import from `domma-reactive` instead of `./reactive.js`. |
-| `src/reactive.js` | **Deleted** — superseded by the package. |
-| `src/reactive.test.js` | **Deleted** — moved to the package. |
+| `src/reactive.js` | **Deleted** - superseded by the package. |
+| `src/reactive.test.js` | **Deleted** - moved to the package. |
 | `package.json` | Adds exact-pinned `domma-reactive` devDependency. |
 
 ---
@@ -279,7 +279,7 @@ describe('isEqual', () => {
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run src/equal.test.js`
-Expected: FAIL — `Failed to resolve import "./equal.js"`.
+Expected: FAIL - `Failed to resolve import "./equal.js"`.
 
 - [ ] **Step 3: Write the implementation**
 
@@ -289,7 +289,7 @@ Expected: FAIL — `Failed to resolve import "./equal.js"`.
  * Deep structural equality.
  *
  * Used as the change-detection gate for observables and the propagation
- * short-circuit for computeds, so it must be cheap and total — never throw,
+ * short-circuit for computeds, so it must be cheap and total - never throw,
  * never recurse forever.
  *
  * Handles primitives (with Object.is semantics, so NaN equals itself), Date,
@@ -299,7 +299,7 @@ Expected: FAIL — `Failed to resolve import "./equal.js"`.
  *
  * @param {*} a
  * @param {*} b
- * @param {WeakMap} [seen] Internal — guards against cyclic structures
+ * @param {WeakMap} [seen] Internal - guards against cyclic structures
  * @returns {boolean}
  */
 export function isEqual(a, b, seen = new WeakMap()) {
@@ -396,7 +396,7 @@ import { isEqual } from './equal.js';
 ```
 
 and replace the `utils.isEqual(` references with `isEqual(`. **Corrected:** there is exactly ONE
-real call — in `Computation.recompute()` — plus one doc-comment mention in that method's JSDoc. The
+real call - in `Computation.recompute()` - plus one doc-comment mention in that method's JSDoc. The
 `drainPending` doc comment already says plain `isEqual` and needs no change. Verify by grep, not by
 count.
 
@@ -440,17 +440,17 @@ function bag(initial = {}) {
 Then mechanically convert each test: `M.create({...}, {a: 1})` becomes `bag({a: 1})`,
 `model.get('a')` stays `model.get('a')`, `model.set('a', 2)` stays `model.set('a', 2)`,
 `M.computed` becomes `computed`, `M.effect` becomes `effect`, `M.untracked` becomes `untracked`,
-`M.flush` becomes `flushSync`. Drop the three tests that assert Model-specific behaviour —
+`M.flush` becomes `flushSync`. Drop the three tests that assert Model-specific behaviour -
 `tracked() proxy ... routes writes through validation`, `leaves onChange semantics synchronous`,
-and `destroying a model detaches its dependents` — those belong to Domma and stay in its suite.
+and `destroying a model detaches its dependents` - those belong to Domma and stay in its suite.
 
-**Corrected — drop a fourth.** `does not notify when a write sets an equal value` also belongs to
+**Corrected - drop a fourth.** `does not notify when a write sets an equal value` also belongs to
 Domma: the gate it asserts lives in `Model.set` (`models.js:125`), not in the graph. `Dep.trigger()`
 has no equality gate, so making this test pass requires adding one to the `bag()` stand-in, at which
 point the test asserts the stand-in rather than `graph.js`. Drop it, and keep `bag()` exactly as
 written above with no gate. **11 moved tests, not 12.**
 
-That behaviour had no coverage anywhere in Domma either — `models.test.js` proved `onChange` *fires*
+That behaviour had no coverage anywhere in Domma either - `models.test.js` proved `onChange` *fires*
 on a change but never that it stays *silent* on a no-op write, and Task 9 re-derives that gate by
 hand. Port it into `models.test.js` now rather than at Task 10. Cover a primitive **and** a
 structurally-equal object: degrading the gate to `!==` passes the primitive case and is caught only
@@ -464,9 +464,9 @@ a warning), plus `Computation.dispose()` and `DepMap.clear()`, can each be remov
 test. Pin them before publication.
 
 Two that need care: reads are tracked one level deep, and the honest assertion is
-`expect(state.user).toBe(rawNestedObject)` — a behavioural test catches a *flat*-keyspace recursive
+`expect(state.user).toBe(rawNestedObject)` - a behavioural test catches a *flat*-keyspace recursive
 proxy but not a *namespaced* one. And `MAX_VISITS` needs two tests, since "a cycle terminates and
-warns" still passes when the budget is crippled to 1 — pin the headroom side too (a legitimate
+warns" still passes when the budget is crippled to 1 - pin the headroom side too (a legitimate
 diamond revisit completes *without* warning), without hard-coding the number.
 
 - [ ] **Step 3: Run the tests**
@@ -599,14 +599,14 @@ describe('observable', () => {
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run src/observable.test.js`
-Expected: FAIL — `Failed to resolve import "./observable.js"`.
+Expected: FAIL - `Failed to resolve import "./observable.js"`.
 
 - [ ] **Step 3: Write the implementation**
 
 ```javascript
 // src/observable.js
 /**
- * Observables — the state primitive.
+ * Observables - the state primitive.
  *
  * The dependency graph in graph.js tracks *reads*, but something has to own
  * the value being read. In Domma that role is played by Model; standalone,
@@ -635,7 +635,7 @@ export function observable(initial, options = {}) {
     let current = initial;
 
     // The comparator gates the NOTIFICATION, not the write. It answers "is this
-    // worth waking the graph for?", not "is this worth remembering?" — a partial
+    // worth waking the graph for?", not "is this worth remembering?" - a partial
     // comparator (compare by id, compare by version) must not silently discard
     // data, or a read after write returns something the caller never wrote.
     // This mirrors Model._setField (models.js:122-125), which assigns
@@ -760,7 +760,7 @@ describe('observableArray', () => {
     });
 
     // CORRECTED: as originally written this asserted only that removeAll empties.
-    // No effect, no run count — half the name was untested.
+    // No effect, no run count - half the name was untested.
     it('removeAll() empties and notifies', async () => {
         const items = observableArray([1, 2, 3]);
         let runs = 0;
@@ -773,7 +773,7 @@ describe('observableArray', () => {
     });
 
     // ADDED: the only test that pins the decided design. The seven-mutation test
-    // above cannot — every one of those mutations genuinely changes the contents,
+    // above cannot - every one of those mutations genuinely changes the contents,
     // so a copy-and-compare implementation passes it identically. Only a no-op
     // mutation distinguishes "notifies unconditionally" from "notifies on change".
     it('notifies even when a mutation changes nothing', async () => {
@@ -783,7 +783,7 @@ describe('observableArray', () => {
 
         items.splice(0, 0);          // removes nothing, inserts nothing
         await tick();
-        expect(runs).toBe(2);        // notified anyway — the accepted cost
+        expect(runs).toBe(2);        // notified anyway - the accepted cost
     });
 
     it('replacing value wholesale notifies', async () => {
@@ -818,7 +818,7 @@ describe('observableArray', () => {
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run src/observable-array.test.js`
-Expected: FAIL — `observableArray is not a function`.
+Expected: FAIL - `observableArray is not a function`.
 
 - [ ] **Step 3: Append the implementation to `src/observable.js`**
 
@@ -831,7 +831,7 @@ const MUTATORS = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'
  *
  * `.value` is the underlying array and is tracked on read. The in-place
  * mutators notify after running, so `push` is a single notification rather
- * than a wholesale replacement — which the keyed reconciler in M4 turns into
+ * than a wholesale replacement - which the keyed reconciler in M4 turns into
  * a single DOM insert.
  *
  * @param {Array}  [initial=[]]
@@ -882,7 +882,7 @@ export function observableArray(initial = [], options = {}) {
     // They must: a mutation happens in place, so `current` is already the new
     // value by the time we could compare, and any copy of it is deep-equal.
     // The gate would swallow every push. (The original plan assigned
-    // `arr.slice()` and claimed "new reference → always notifies" — false, since
+    // `arr.slice()` and claimed "new reference → always notifies" - false, since
     // the gate is isEqual, not reference identity.)
     //
     // The cost is a spurious notification from a no-op sort() or splice(0, 0).
@@ -950,13 +950,13 @@ describe('public API', () => {
 - [ ] **Step 2: Run to verify it fails**
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run src/index.test.js`
-Expected: FAIL — cannot resolve `./index.js`.
+Expected: FAIL - cannot resolve `./index.js`.
 
 - [ ] **Step 3: Write `src/index.js`**
 
 ```javascript
 /**
- * domma-reactive — public API.
+ * domma-reactive - public API.
  *
  * Deliberately small. Anything not listed here is an internal detail and may
  * change without a major version bump.
@@ -980,7 +980,7 @@ export {
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run src/index.test.js`
 Expected: `Tests  2 passed (2)`. If the first test fails, reconcile the list in the test with the
-actual exports — the test is the specification of the surface.
+actual exports - the test is the specification of the surface.
 
 - [ ] **Step 5: Write `rollup.config.js`**
 
@@ -1014,7 +1014,7 @@ Expected: `dist/domma-reactive.min.js` and `dist/domma-reactive.esm.js` both pre
 - [ ] **Step 7: Run the whole suite**
 
 Run: `cd /home/darryl/src/js/domma-reactive && npx vitest run`
-Expected as executed: **74** — 15 equal + 27 graph + 15 observable + 15 array + 2 index. (The
+Expected as executed: **74** - 15 equal + 27 graph + 15 observable + 15 array + 2 index. (The
 original estimate of 31 predated the coverage the mutation testing showed was missing.) Accept
 whatever the true total is; the requirement is **0 failures**.
 
@@ -1035,7 +1035,7 @@ git commit -m "feat: public API surface and build config"
 ```bash
 npm view domma-reactive version 2>&1 | head -2
 ```
-Expected: `npm error code E404` — the name is available. **If it resolves to an existing package,
+Expected: `npm error code E404` - the name is available. **If it resolves to an existing package,
 stop.** Rename to `@dommajs/reactive` in `package.json` (spec §3 records this fallback), and update
 every import in Task 8 onwards accordingly.
 
@@ -1064,7 +1064,7 @@ Expected: `0.1.0`.
 
 Note: pushing to GitHub requires the remote to exist. Create
 `pinpointzero73/domma-reactive` first, then `git remote add origin` and push `main` plus the tag.
-Confirm with the repository owner before pushing — this is the first public appearance of the
+Confirm with the repository owner before pushing - this is the first public appearance of the
 package.
 
 ---
@@ -1085,7 +1085,7 @@ npm install --save-dev --save-exact domma-reactive@0.1.0
 ```bash
 node -p "require('./package.json').devDependencies['domma-reactive']"
 ```
-Expected: `0.1.0` — **not** `^0.1.0`. Spec §3 requires an exact pin.
+Expected: `0.1.0` - **not** `^0.1.0`. Spec §3 requires an exact pin.
 
 - [ ] **Step 3: Prove Rollup inlines it rather than leaving it external**
 
@@ -1105,7 +1105,7 @@ Temporarily add to `rollup.config.js` a build with `input: 'src/zzprobe-bundle.j
 ```bash
 grep -c "require('domma-reactive')\|from 'domma-reactive'" public/dist/zzprobe.js || echo "INLINED"
 ```
-Expected: `INLINED` — the import must not survive into the bundle. Then remove the probe file, the
+Expected: `INLINED` - the import must not survive into the bundle. Then remove the probe file, the
 temporary Rollup entry and `public/dist/zzprobe.js`.
 
 - [ ] **Step 4: Commit**
@@ -1124,7 +1124,7 @@ nothing extra."
 
 ## Task 9: Rewire `Model` onto observables
 
-The riskiest task. **Domma's existing 435 tests are the specification** — the public API must not
+The riskiest task. **Domma's existing 435 tests are the specification** - the public API must not
 move. `models.test.js` and `model-binding.test.js` in particular must pass untouched.
 
 **Files:**
@@ -1135,7 +1135,7 @@ move. `models.test.js` and `model-binding.test.js` in particular must pass untou
 ```bash
 cd /home/darryl/src/js/domma && npx vitest run 2>&1 | tail -3
 ```
-Expected: **`Tests  437 passed | 3 skipped (440)`** — Task 3 added two tests pinning the no-op-write
+Expected: **`Tests  437 passed | 3 skipped (440)`** - Task 3 added two tests pinning the no-op-write
 gate this task re-derives by hand. Record this number; it must not drop.
 
 - [ ] **Step 2: Replace the imports**
@@ -1152,7 +1152,7 @@ import {
 } from 'domma-reactive';
 ```
 
-`DepMap` and `trackingProxy` are no longer needed here — `Model` owns observables directly now.
+`DepMap` and `trackingProxy` are no longer needed here - `Model` owns observables directly now.
 
 - [ ] **Step 3: Replace the constructor's field storage**
 
@@ -1208,7 +1208,7 @@ Add these methods to `Model`:
 
     /**
      * Plain-object view of every field, read WITHOUT tracking.
-     * Used by toJSON(), persistence and validation — render-time and
+     * Used by toJSON(), persistence and validation - render-time and
      * serialisation reads must not register dependencies.
      * @private
      */
@@ -1237,7 +1237,7 @@ Add these methods to `Model`:
 
 - [ ] **Step 6: Rewrite `_setField()`**
 
-Note the ordering: validate first, then write, then notify — and the `isEqual` check is computed
+Note the ordering: validate first, then write, then notify - and the `isEqual` check is computed
 from the pre-write value so callbacks still fire exactly when they did before.
 
 ```javascript
@@ -1297,7 +1297,7 @@ from the pre-write value so callbacks still fire exactly when they did before.
     }
 ```
 
-`getOwnPropertyDescriptor` is required — without it, spreading the proxy (`{...state}`) throws.
+`getOwnPropertyDescriptor` is required - without it, spreading the proxy (`{...state}`) throws.
 
 - [ ] **Step 8: Point the remaining `_data` readers at `_snapshot()`**
 
@@ -1330,14 +1330,14 @@ Expected: `clean`.
 
 Run: `cd /home/darryl/src/js/domma && npx vitest run src/models.test.js src/model-binding.test.js src/reactive.test.js`
 Expected: all pass. If `reactive.test.js` fails on `destroying a model detaches its dependents`,
-that is a genuine behaviour question — clearing `_fields` drops the observables, so their `Dep`s go
+that is a genuine behaviour question - clearing `_fields` drops the observables, so their `Dep`s go
 with them. That is the intended semantics and the test should still pass; if it does not, stop and
 investigate rather than editing the test.
 
 - [ ] **Step 11: Run the full suite**
 
 Run: `cd /home/darryl/src/js/domma && npx vitest run 2>&1 | tail -3`
-Expected: `Tests  437 passed | 3 skipped (440)` — identical to Step 1.
+Expected: `Tests  437 passed | 3 skipped (440)` - identical to Step 1.
 
 - [ ] **Step 12: Commit**
 
@@ -1390,19 +1390,19 @@ cd /home/darryl/src/js/domma && git rm src/reactive.js src/reactive.test.js
 ```
 
 Their coverage now lives in `domma-reactive/src/graph.test.js`. **Do not assume** the Model-specific
-tests are already covered by `models.test.js` and `model-binding.test.js` — check each, and port any
+tests are already covered by `models.test.js` and `model-binding.test.js` - check each, and port any
 that is not. Task 3 found this is a real risk: `does not notify when a write sets an equal value` had
 no equivalent anywhere in Domma and was ported then.
 
 Specifically, `destroying a model detaches its dependents` is currently the **only** coverage
 anywhere for the Model-level teardown path, which Task 9 Step 9 rewrites (`_deps.clear()` becomes
 `_fields.clear()`). Port it into `models.test.js` before deleting the file, and verify the port
-catches a regression — gut `destroy()` and confirm it fails.
+catches a regression - gut `destroy()` and confirm it fails.
 
 - [ ] **Step 4: Run the full suite**
 
 Run: `cd /home/darryl/src/js/domma && npx vitest run 2>&1 | tail -3`
-Expected: **`Tests  422 passed | 3 skipped (425)`** — 437 minus the 15 reactive tests that moved to
+Expected: **`Tests  422 passed | 3 skipped (425)`** - 437 minus the 15 reactive tests that moved to
 the package. **Zero failures** is the requirement.
 
 - [ ] **Step 5: Commit**
@@ -1435,7 +1435,7 @@ Expected: no errors.
 ```bash
 cd /home/darryl/src/js/domma && grep -c "domma-reactive" public/dist/domma.min.js
 ```
-Expected: `0`. Any hit means the import survived and consumers would need to install it — that
+Expected: `0`. Any hit means the import survived and consumers would need to install it - that
 breaks the CDN story and must be fixed before proceeding.
 
 - [ ] **Step 3: Confirm the bundle still works standalone**
@@ -1479,13 +1479,13 @@ Expected: `15`.
 
 - [ ] **Step 6: Commit any fixes**
 
-If Steps 1–5 required changes, commit them with a message describing the actual defect found.
+If Steps 1-5 required changes, commit them with a message describing the actual defect found.
 
 ---
 
 ## Task 12: Release Domma
 
-Follow the documented manual release process — **not** `npm run release:patch`, which is known to be
+Follow the documented manual release process - **not** `npm run release:patch`, which is known to be
 broken in this repo.
 
 - [ ] **Step 1: Fetch first**
@@ -1538,16 +1538,16 @@ Push, `npm publish` and `gh release create` are outward-facing and effectively i
 | §4 `index.js` public surface | 6 |
 | §4 Model becomes an adapter | 9 |
 | §8 public API unchanged, 435 tests green | 9 (Step 11), 10 (Step 4) |
-| §8 five examples behave identically | 11 (Steps 4–5) |
-| §11 criterion 1 — works standalone | 6, 7 |
-| §11 criterion 2 — bundle self-contained | 8 (Step 3), 11 (Step 2) |
+| §8 five examples behave identically | 11 (Steps 4-5) |
+| §11 criterion 1 - works standalone | 6, 7 |
+| §11 criterion 2 - bundle self-contained | 8 (Step 3), 11 (Step 2) |
 
-M2–M4 (expression evaluator, binding registry, reconciliation) are deliberately absent; they are
+M2-M4 (expression evaluator, binding registry, reconciliation) are deliberately absent; they are
 separate milestones with their own plans.
 
 **Naming consistency check:** `observable()` / `observableArray()` / `.value` / `.peek()` / `.set()`
 are used identically in Tasks 4, 5, 6 and 9. `_field()` and `_snapshot()` are defined in Task 9
-Step 4 before their use in Steps 5–9. `flushSync` is the package's name throughout; Domma continues
+Step 4 before their use in Steps 5-9. `flushSync` is the package's name throughout; Domma continues
 to expose it publicly as `M.flush`.
 
 **Known gaps, stated rather than hidden:**

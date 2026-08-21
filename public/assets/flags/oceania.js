@@ -1,5 +1,5 @@
 /**
- * Domma Flags — Oceania
+ * Domma Flags - Oceania
  * Canvas 60×40 (3:2). The Union canton reuses a scaled Union Jack group.
  */
 

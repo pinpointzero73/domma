@@ -99,7 +99,7 @@ const all = $.getComponent();   // Map of selector -> instance
 ```
 
 > **Note:** instances are not stored on the element. `$('#sel').data('component')`
-> returns `undefined` — always use `$.getComponent(selector)`.
+> returns `undefined` - always use `$.getComponent(selector)`.
 
 ## Multiple Selectors
 
@@ -265,7 +265,7 @@ $.setup({
                 events: {
                     click: () => {
                         // Access configured component.
-                        // $.setup() keeps instances internally — they are NOT
+                        // $.setup() keeps instances internally - they are NOT
                         // stored on the element, so use $.getComponent().
                         $.getComponent('#modal').open();
                     }

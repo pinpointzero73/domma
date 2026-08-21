@@ -1,4 +1,4 @@
-# Admin Theme Family — Design Spec
+# Admin Theme Family - Design Spec
 
 **Date:** 2026-06-29
 **Status:** Approved for planning
@@ -7,7 +7,7 @@
 ## Summary
 
 Add a new **Admin** theme family to Domma: a mid-weight, corporate-yet-swish look built for
-admin/dashboard UIs. It is neither a "light" nor a "dark" theme in the existing sense — it ships as
+admin/dashboard UIs. It is neither a "light" nor a "dark" theme in the existing sense - it ships as
 its own standalone family with no light/dark toggle.
 
 The family is a **2 × 3 matrix**: two *finishes* × three *accents* = six themes.
@@ -41,7 +41,7 @@ Both deliverables confirmed in brainstorming:
 ## Engine Integration
 
 Each theme is one self-contained CSS file scoped to a single class, e.g.
-`.dm-theme-admin-sharp-steel { … }` — the same ~80-token contract as `charcoal-dark.css`
+`.dm-theme-admin-sharp-steel { … }` - the same ~80-token contract as `charcoal-dark.css`
 (foundational colours, text, borders, primary/secondary/status, plus component-specific tokens that
 reference the foundational vars).
 
@@ -59,7 +59,7 @@ to special-case the family. Name parsing is benign:
 All values below are **starting points**. The generator owns them; Smooth text tones MUST be
 contrast-verified (see Verification) and nudged if they miss AA.
 
-### Finish: Sharp (light composed) — `color-scheme: light`
+### Finish: Sharp (light composed) - `color-scheme: light`
 
 | Token | Value |
 |---|---|
@@ -80,7 +80,7 @@ contrast-verified (see Verification) and nudged if they miss AA.
 | `--dm-table-stripe-bg` | `#f7f9fc` |
 | `--dm-table-hover-bg` | `#eef4fb` |
 
-### Finish: Smooth (uniform mid-tone) — `color-scheme: dark`
+### Finish: Smooth (uniform mid-tone) - `color-scheme: dark`
 
 | Token | Value |
 |---|---|
@@ -114,7 +114,7 @@ mid-tone surfaces (the generator derives this).
 | Teal | `#2f8f86` | `#287d75` | `#226b64` | `#1d564f` | `rgba(47,143,134,0.14)` |
 
 > **Superseded by AA tuning (during implementation):** Steel and Teal `--dm-primary` were darkened
-> to meet WCAG AA for white button text — Steel is now `#3b76bc` and Teal `#2a8178` (Indigo
+> to meet WCAG AA for white button text - Steel is now `#3b76bc` and Teal `#2a8178` (Indigo
 > unchanged). The generator (`scripts/generate-admin-themes.js`) holds the authoritative values.
 
 Each accent also sets `--dm-primary-text: #ffffff`, `--dm-focus-ring`, `--dm-border-focus`,
@@ -130,7 +130,7 @@ from primary).
 
 ## The Generator
 
-`scripts/generate-admin-themes.js` — single source of truth for the six files.
+`scripts/generate-admin-themes.js` - single source of truth for the six files.
 
 - **Inputs:** a `FINISHES` map (`smooth`, `sharp`) of foundational tokens, and an `ACCENTS` map
   (`steel`, `indigo`, `teal`) of primary-family tokens.
@@ -139,7 +139,7 @@ from primary).
   `public/assets/themes/admin-<finish>-<accent>.css`.
 - The component-specific block (cards, inputs, buttons, tables, modals, dropdowns, tooltips, toasts,
   navbar, sidebar, tabs, accordion, badges, progress, scrollbar, code) is emitted from a shared
-  template referencing the foundational vars — identical pattern to `charcoal-dark.css`.
+  template referencing the foundational vars - identical pattern to `charcoal-dark.css`.
 - A finish-aware step lightens the accent for on-dark link/active text on the Smooth finish.
 - **Wiring:** add an npm script `generate:themes` and run it in the build chain **before**
   `build:css` (which concatenates `public/assets/themes/*` into `domma-themes.css`). The six files
@@ -150,13 +150,13 @@ from primary).
 Enhance `public/showcase/themes/index.html` with an **Admin** section, built with the layout system
 (header/sidebar/footer via `data-layout` + layout JS) and Domma components throughout:
 
-- **Step 1 — Finish:** segmented control (Smooth / Sharp).
-- **Step 2 — Accent:** three swatches (Steel / Indigo / Teal).
+- **Step 1 - Finish:** segmented control (Smooth / Sharp).
+- **Step 2 - Accent:** three swatches (Steel / Indigo / Teal).
 - Selection composes `admin-<finish>-<accent>` and calls `Theme.set(name)`, persisted to
   localStorage via the engine.
-- **Live preview pane:** a representative admin dashboard rendered with Domma — sidebar nav, topbar,
+- **Live preview pane:** a representative admin dashboard rendered with Domma - sidebar nav, topbar,
   stat cards, a `T.create` data table, buttons, a blueprint-driven form (`F.create`), badges and a
-  progress bar — so each theme is shown in context, not as swatches alone.
+  progress bar - so each theme is shown in context, not as swatches alone.
 - Icons via `data-icon` + `I.scan()`; reuse an existing icon or add one if a needed glyph is missing.
 
 ## Files & Wiring Checklist
@@ -166,21 +166,21 @@ Enhance `public/showcase/themes/index.html` with an **Admin** section, built wit
 - `public/assets/themes/admin-{smooth,sharp}-{steel,indigo,teal}.css` (6, generated)
 
 **Register the six theme names in:**
-- `src/theme.js` — `AVAILABLE_THEMES`; add `admin-smooth` / `admin-sharp` to `listBases()`
-- `scripts/build-css.js` — `themeFiles` array
-- `src/theme-roller.js` — theme list
-- `public/layouts/js/layout.js` — theme switcher list
-- `public/download/kickstart-builder.js` — scaffolder theme options
-- `public/assets/ide/phpstorm/theme.d.ts` — IDE typings
-- `package.json` — `generate:themes` script + build-chain insertion
+- `src/theme.js` - `AVAILABLE_THEMES`; add `admin-smooth` / `admin-sharp` to `listBases()`
+- `scripts/build-css.js` - `themeFiles` array
+- `src/theme-roller.js` - theme list
+- `public/layouts/js/layout.js` - theme switcher list
+- `public/download/kickstart-builder.js` - scaffolder theme options
+- `public/assets/ide/phpstorm/theme.d.ts` - IDE typings
+- `package.json` - `generate:themes` script + build-chain insertion
 
 **Docs/showcase:**
-- `public/showcase/themes/index.html` — Admin section + two-step picker + live preview
+- `public/showcase/themes/index.html` - Admin section + two-step picker + live preview
 - Theme documentation (`docs/`), and `public/sitemap.xml` only if a new page URL is added
 - In-line docs updated per project guidelines
 
 **Note on CMS / sibling repos:** `public/cms/*` references the theme list; per project memory,
-domma-cms admin cache-busting and the three sibling repos are a separate concern — out of scope here
+domma-cms admin cache-busting and the three sibling repos are a separate concern - out of scope here
 unless explicitly requested.
 
 ## Verification
@@ -191,9 +191,9 @@ unless explicitly requested.
   kickstart builder.
 - **WCAG AA (4.5:1)** verified for body text and primary-button text on each finish; Smooth tones
   nudged if any value misses. (Contrast checked with a tooling pass during implementation.)
-- Browser check is **user-driven** — the assistant cannot drive a browser, so after wiring the
+- Browser check is **user-driven** - the assistant cannot drive a browser, so after wiring the
   preview the user verifies the six looks and the picker interaction in-browser.
 
 ## Open Questions
 
-None outstanding — finish set, accent set, generator approach and picker scope are all confirmed.
+None outstanding - finish set, accent set, generator approach and picker scope are all confirmed.

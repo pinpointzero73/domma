@@ -113,7 +113,7 @@
 <div class="hero hero-center bg-ambient-float-orbs">
   <div class="hero-content">
     <div class="hero-title">Number Badge</div>
-    <div class="hero-subtitle">Notification counters and presence dots — positioned on icons, buttons, or avatars with a clean JavaScript API</div>
+    <div class="hero-subtitle">Notification counters and presence dots - positioned on icons, buttons, or avatars with a clean JavaScript API</div>
   </div>
 </div>
 
@@ -127,18 +127,18 @@
       <p class="mb-4">
         Number Badge extends Domma's badge system with positioned notification counters and presence dots.
         Use CSS-only classes for static indicators, or the JavaScript API to programmatically manage counters
-        on any element — icons, buttons, avatars, and more.
+        on any element - icons, buttons, avatars, and more.
       </p>
 
       <h3 class="category-title-style">Key Features</h3>
       <ul class="feature-list mb-4">
-        <li><strong>CSS-Only</strong> — standalone circular badges and dot indicators, no JS required</li>
-        <li><strong>JS API</strong> — attach and manage counters on any element with <code>E.numberBadge()</code></li>
-        <li><strong>Web Component</strong> — declarative <code>&lt;domma-number-badge&gt;</code> with slot support</li>
-        <li><strong>Auto-Hide</strong> — badge hides automatically when count reaches zero</li>
-        <li><strong>Dot Mode</strong> — small presence indicator with no text</li>
-        <li><strong>Pulse Animation</strong> — draw attention with a pulsing ring</li>
-        <li><strong>8 Colour Variants</strong> — matches all Domma semantic colours</li>
+        <li><strong>CSS-Only</strong> - standalone circular badges and dot indicators, no JS required</li>
+        <li><strong>JS API</strong> - attach and manage counters on any element with <code>E.numberBadge()</code></li>
+        <li><strong>Web Component</strong> - declarative <code>&lt;domma-number-badge&gt;</code> with slot support</li>
+        <li><strong>Auto-Hide</strong> - badge hides automatically when count reaches zero</li>
+        <li><strong>Dot Mode</strong> - small presence indicator with no text</li>
+        <li><strong>Pulse Animation</strong> - draw attention with a pulsing ring</li>
+        <li><strong>8 Colour Variants</strong> - matches all Domma semantic colours</li>
       </ul>
 
       <h3 class="category-title-style">At a Glance</h3>
@@ -234,7 +234,7 @@ nb.setCount(0);   // badge hides automatically
 
       <h3 class="category-title-style">Dot Indicators</h3>
       <p class="mb-3 text-gray-600">
-        Add <code>.badge-dot</code> for a small presence indicator with no text content — ideal for
+        Add <code>.badge-dot</code> for a small presence indicator with no text content - ideal for
         online/offline status on avatars.
       </p>
       <div class="demo-area mb-4">
@@ -358,7 +358,7 @@ nb.setCount(0);   // badge hides automatically
         <pre><code>const nb = E.numberBadge('#bell-btn', {
     count: 5,           // Initial count (default: 0)
     variant: 'danger',  // Colour variant (default: 'danger')
-    dot: false,         // Dot mode — no text
+    dot: false,         // Dot mode - no text
     pulse: false,       // Pulse animation
     borderColor: null   // Custom border ring colour
 });
@@ -644,17 +644,17 @@ badge.setPulse(true);</code></pre>
     <div class="card-body">
       <h3 class="category-title-style">Accessibility</h3>
       <ul class="mb-4">
-        <li><strong>aria-live built-in</strong> — The JS API adds <code>aria-live="polite"</code> and <code>role="status"</code> automatically so screen readers announce count changes.</li>
-        <li><strong>Label the target</strong> — Add descriptive <code>aria-label</code> to icon buttons: <code>aria-label="Notifications, 5 unread"</code></li>
-        <li><strong>Dot mode</strong> — Pair dot-only badges with a visible label or tooltip; the dot alone conveys nothing to screen readers.</li>
+        <li><strong>aria-live built-in</strong> - The JS API adds <code>aria-live="polite"</code> and <code>role="status"</code> automatically so screen readers announce count changes.</li>
+        <li><strong>Label the target</strong> - Add descriptive <code>aria-label</code> to icon buttons: <code>aria-label="Notifications, 5 unread"</code></li>
+        <li><strong>Dot mode</strong> - Pair dot-only badges with a visible label or tooltip; the dot alone conveys nothing to screen readers.</li>
       </ul>
 
       <h3 class="category-title-style">Design Guidelines</h3>
       <ul class="mb-4">
-        <li><strong>Trust auto-hide</strong> — The badge hides when count reaches 0; resist the urge to show "0"</li>
-        <li><strong>Danger for alerts</strong> — Red counters signal unread/urgent items; use primary/info for neutral counts</li>
-        <li><strong>Pulse sparingly</strong> — Reserve pulse for genuinely urgent alerts; overuse erodes its impact</li>
-        <li><strong>Dot for presence</strong> — Use dot mode for online/away/offline indicators, not for counts</li>
+        <li><strong>Trust auto-hide</strong> - The badge hides when count reaches 0; resist the urge to show "0"</li>
+        <li><strong>Danger for alerts</strong> - Red counters signal unread/urgent items; use primary/info for neutral counts</li>
+        <li><strong>Pulse sparingly</strong> - Reserve pulse for genuinely urgent alerts; overuse erodes its impact</li>
+        <li><strong>Dot for presence</strong> - Use dot mode for online/away/offline indicators, not for counts</li>
       </ul>
     </div>
   </section>
@@ -809,7 +809,7 @@ badge.setPulse(true);</code></pre>
   $(() => {
     I.scan();
 
-    // Overview quick demo — JS API target
+    // Overview quick demo - JS API target
     if ($('#overview-js-target').length) {
       E.numberBadge('#overview-js-target', { count: 9, variant: 'danger' });
     }

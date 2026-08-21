@@ -2,7 +2,7 @@
 import {describe, expect, it, vi, beforeEach, afterEach} from 'vitest';
 import {resolvePalette, EFFECT_PALETTES, parseWait} from './effects.js';
 
-describe('Domma.effects — resolvePalette', () => {
+describe('Domma.effects - resolvePalette', () => {
   it('returns a named preset palette as an array', () => {
     expect(Array.isArray(resolvePalette('meadow'))).toBe(true);
     expect(resolvePalette('meadow').length).toBeGreaterThan(0);
@@ -48,7 +48,7 @@ function mockMatchMedia(reduced) {
   }));
 }
 
-describe('Domma.effects — butterflies guards', () => {
+describe('Domma.effects - butterflies guards', () => {
   beforeEach(() => { document.body.innerHTML = ''; });
 
   it('returns a noop control under prefers-reduced-motion', () => {
@@ -69,7 +69,7 @@ describe('Domma.effects — butterflies guards', () => {
 import {strobe} from './effects.js';
 import {resolveStrobePreset, STROBE_PRESETS} from './effects.js';
 
-describe('Domma.effects — strobe presets', () => {
+describe('Domma.effects - strobe presets', () => {
   it('exposes the named lighting presets', () => {
     for (const n of ['club', 'concert', 'police', 'searchlight', 'scanner', 'mood']) {
       expect(STROBE_PRESETS[n]).toBeDefined();
@@ -90,7 +90,7 @@ describe('Domma.effects — strobe presets', () => {
   });
 });
 
-describe('Domma.effects — strobe guards', () => {
+describe('Domma.effects - strobe guards', () => {
   beforeEach(() => { document.body.innerHTML = ''; });
 
   it('returns a noop control under prefers-reduced-motion', () => {
@@ -108,14 +108,14 @@ describe('Domma.effects — strobe guards', () => {
 
 import effectsDefault from './effects.js';
 
-describe('Domma.effects — default export', () => {
+describe('Domma.effects - default export', () => {
   it('exposes butterflies and strobe on the default export', () => {
     expect(typeof effectsDefault.butterflies).toBe('function');
     expect(typeof effectsDefault.strobe).toBe('function');
   });
 });
 
-describe('Domma.effects — parseWait', () => {
+describe('Domma.effects - parseWait', () => {
   it('parses seconds', () => {
     expect(parseWait('2s')).toBe(2000);
     expect(parseWait('0.5s')).toBe(500);
@@ -123,7 +123,7 @@ describe('Domma.effects — parseWait', () => {
 
   it('parses milliseconds', () => {
     // Regression: 'ms' also ends with 's', so an endsWith('s') test that runs
-    // first swallows it and multiplies by 1000 — a '300ms' wait became five
+    // first swallows it and multiplies by 1000 - a '300ms' wait became five
     // minutes. Reported in the v0.25.2 notes and unfixed until v0.33.1.
     expect(parseWait('300ms')).toBe(300);
     expect(parseWait('50ms')).toBe(50);

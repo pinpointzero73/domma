@@ -1,7 +1,7 @@
 /**
  * Domma Components
  * Vue-style standalone Custom Elements with reactive data, computed properties,
- * lifecycle hooks, and surgical DOM binding — built on Web Components / Shadow DOM.
+ * lifecycle hooks, and surgical DOM binding - built on Web Components / Shadow DOM.
  */
 
 // ============================================
@@ -12,7 +12,7 @@
 export type PropType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
 
 export interface PropDefinition {
-    /** Expected type — use M.types.* constants */
+    /** Expected type - use M.types.* constants */
     type?: PropType;
     /** Whether the prop is required (logs a warning if missing) */
     required?: boolean;
@@ -21,7 +21,7 @@ export interface PropDefinition {
 }
 
 // ============================================
-// Component Context — `this` inside hooks/methods
+// Component Context - `this` inside hooks/methods
 // ============================================
 
 export interface ComponentContext<
@@ -138,7 +138,7 @@ export interface ComponentDefinition<
 }
 
 // ============================================
-// DommaElement — Base class for all Domma Web Components
+// DommaElement - Base class for all Domma Web Components
 // ============================================
 
 /**
@@ -165,7 +165,7 @@ export declare class DommaElement extends HTMLElement {
 }
 
 // ============================================
-// Template Bindings — returned by TemplateCompiler.compile()
+// Template Bindings - returned by TemplateCompiler.compile()
 // ============================================
 
 /**

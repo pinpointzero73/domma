@@ -1,14 +1,14 @@
 /**
  * Set the package version in package.json and package-lock.json.
  *
- * Both files are edited TEXTUALLY — no parse-and-reserialise. package.json is
+ * Both files are edited TEXTUALLY - no parse-and-reserialise. package.json is
  * hand-formatted, and package-lock.json is 9,500 lines that do not round-trip
  * through JSON.stringify, so reserialising either would bury the one line that
  * matters under a diff nobody can review.
  *
  *   node scripts/bump.mjs 0.38.0
  *
- * The lock carries the version TWICE — once at the root and once in the entry
+ * The lock carries the version TWICE - once at the root and once in the entry
  * for the package itself (`packages[""]`). Both must move together or `npm ci`
  * reinstalls the old number. This asserts it found exactly two, because
  * silently bumping one of them produces a lockfile that disagrees with its own
@@ -38,7 +38,7 @@ const fail = (message) => {
 };
 
 const next = process.argv[2];
-if (!next) fail('no version given — usage: node scripts/bump.mjs X.Y.Z');
+if (!next) fail('no version given - usage: node scripts/bump.mjs X.Y.Z');
 if (!SEMVER.test(next)) fail(`"${next}" is not a plain X.Y.Z version`);
 
 const pkgSource = readFileSync(PKG, 'utf8');
@@ -51,7 +51,7 @@ const weight = (v) => {
     return major * 1e6 + minor * 1e3 + patch;
 };
 if (weight(next) <= weight(current)) {
-    fail(`${next} is not higher than the current ${current} — npm will not let you reuse a version number`);
+    fail(`${next} is not higher than the current ${current} - npm will not let you reuse a version number`);
 }
 
 const quoted = current.replace(/\./g, '\\.');

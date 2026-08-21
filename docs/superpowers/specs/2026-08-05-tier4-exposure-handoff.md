@@ -1,10 +1,10 @@
-# Tier 4 exposure — handoff
+# Tier 4 exposure - handoff
 
 **Date:** 2026-08-05
-**Status:** **Done.** See §6 for what was built and how the open decisions were resolved. Sections 1–5 are kept as
+**Status:** **Done.** See §6 for what was built and how the open decisions were resolved. Sections 1-5 are kept as
 written, as the record of the gap this closed.
 
-The extraction (M1–M4) is finished and released as `domma-reactive` 0.4.0. What is missing is the
+The extraction (M1-M4) is finished and released as `domma-reactive` 0.4.0. What is missing is the
 **Domma side**: the package is bundled but almost none of it is reachable. This note records the
 state precisely so the work can start cold.
 
@@ -36,8 +36,8 @@ Checked against the built bundle, `Domma` and `Domma.models` expose:
 
 **Consequence:** the only route to the binding layer is writing a template inside
 `Domma.component()`. There is no way to bind server-rendered markup, and no way to register a custom
-binding. Acceptance criterion 8 of the design doc — *"Public `registerBinding()` can add a working
-custom binding"* — is satisfied for a `domma-reactive` consumer and **false** for a Domma user.
+binding. Acceptance criterion 8 of the design doc - *"Public `registerBinding()` can add a working
+custom binding"* - is satisfied for a `domma-reactive` consumer and **false** for a Domma user.
 
 Independently confirmed by the conventions sweep: across all 86 showcase pages there were **zero**
 live uses of `data-bind-*`, `data-model`, `data-each`, `data-if` or `applyBindings`, because outside
@@ -52,13 +52,13 @@ Inside a `Domma.component()` template, verified by driving a real component in j
 | Binding | State |
 |---|---|
 | `{{ }}` text, `{{#if}}`, `{{{raw}}}`, attribute interpolation | worked already |
-| `{{#each xs key=id}}` — keyed, preserves node identity | worked already |
+| `{{#each xs key=id}}` - keyed, preserves node identity | worked already |
 | `data-bind-*` | worked already |
 | `data-if` | worked already |
-| `data-on-*` | **fixed 2026-08-05** — see below |
-| `data-model` write-back | **fixed 2026-08-05** — see below |
+| `data-on-*` | **fixed 2026-08-05** - see below |
+| `data-model` write-back | **fixed 2026-08-05** - see below |
 
-Both fixes were in `src/component-factory.js`, in `_mergeData()` — the **adapter** where Domma hands
+Both fixes were in `src/component-factory.js`, in `_mergeData()` - the **adapter** where Domma hands
 its component data to the binding engine. Neither was a fault in `domma-reactive`.
 
 - **`data-on-*` never resolved.** `_mergeData()` returned `{...data, ...props, ...computed}`;
@@ -72,7 +72,7 @@ its component data to the binding engine. Neither was a fault in `domma-reactive
 
 **This is the lesson for the exposure work:** the binding engine expects *one object to resolve
 expressions against, that can also be written to*. Any new entry point has to satisfy that same
-contract, or it will fail the same two ways — reads fine, writes and functions silently dead.
+contract, or it will fail the same two ways - reads fine, writes and functions silently dead.
 
 ---
 
@@ -84,11 +84,11 @@ contract, or it will fail the same two ways — reads fine, writes and functions
 2. **How much to expose.** Minimum useful is `applyBindings` + `registerBinding` /
    `unregisterBinding`. Beyond that: the expression API (`registerHelper` is the useful one, for
    `{{upper(name)}}` in templates), `compile`, `renderTemplate`, and the context builders.
-   Exposing everything duplicates surface Domma already has in other shapes — `renderTemplate` vs
+   Exposing everything duplicates surface Domma already has in other shapes - `renderTemplate` vs
    `utils.render` in particular, which are **not** identical (see the divergence table in the
    package README).
 3. **`applyBindings` and Domma models.** `applyBindings(data, root)` takes a plain object or
-   observables. Handing it a Domma `Model` will not work as-is — it would need `model.tracked()`,
+   observables. Handing it a Domma `Model` will not work as-is - it would need `model.tracked()`,
    which is the write-through proxy. Decide whether Domma's wrapper does that automatically.
 4. **Whether `$(window)` should work.** Unrelated to Tier 4 but adjacent: `$(window)` is an empty
    collection, so `$(window).on(...)` silently attaches nothing. jQuery supports it. Currently
@@ -102,7 +102,7 @@ Use these; they are already wired and they caught every bug this session.
 
 ```bash
 npm test                          # 550 passed | 3 skipped
-npm run validate                  # classes, theme contrast, conventions — all clean
+npm run validate                  # classes, theme contrast, conventions - all clean
 npm run validate:showcase:strict  # all 86 showcase pages, no findings
 npm run build:js                  # REQUIRED before the harness sees src/ changes
 ```
@@ -113,7 +113,7 @@ assert on the DOM. Every fix in section 2 was found that way and would have pass
 otherwise.
 
 A worked example of the whole binding surface now exists at
-`public/showcase/models/bindings.html` — six live components, including a keyed list that *measures*
+`public/showcase/models/bindings.html` - six live components, including a keyed list that *measures*
 node identity rather than claiming it.
 
 ---
@@ -142,30 +142,30 @@ Five names on `M`, in `src/models.js`:
 | `M.registerBinding(name, handler)` / `M.unregisterBinding(name)` | Add a binding kind |
 | `M.registerHelper(name, fn)` / `M.unregisterHelper(name)` | Add a function callable from an expression |
 
-Acceptance criterion 8 of the design doc — *"Public `registerBinding()` can add a working custom binding"* — is now
+Acceptance criterion 8 of the design doc - *"Public `registerBinding()` can add a working custom binding"* - is now
 true for a Domma user, pinned by a test that registers one, drives it, and asserts on the DOM.
 
 ### How the open decisions were resolved
 
-1. **Namespace: `M`.** Models is already Domma's reactive namespace — `M.observable`, `M.computed`, `M.effect`,
+1. **Namespace: `M`.** Models is already Domma's reactive namespace - `M.observable`, `M.computed`, `M.effect`,
    `M.flush`, `M.bind` all live there. A new namespace would have split reactivity across two letters for no gain.
 2. **Scope: the two entry points, not the engine.** `applyBindings` + the two registries. Deliberately withheld:
-   `compile` and `renderTemplate` (Domma already has `_.render`, and the two **diverge** — publishing both would be a
+   `compile` and `renderTemplate` (Domma already has `_.render`, and the two **diverge** - publishing both would be a
    trap), the raw expression API, the context builders, and `Dep`/`DepMap`/`Computation`/`trackingProxy`.
-3. **Domma models: yes, automatically.** `M.applyBindings` converts a `Model` to `model.tracked()` — the read-tracked,
+3. **Domma models: yes, automatically.** `M.applyBindings` converts a `Model` to `model.tracked()` - the read-tracked,
    write-through proxy. That is exactly the "one object to resolve expressions against that can also be written to"
    contract §2 warned about, and it makes `data-model` land in the model with validation and notification intact.
 4. **`$(window)`: untouched.** Genuinely unrelated; still recorded as a deliberate gap in `validate-conventions.js`.
 
 ### The one thing §2 predicted, and it happened
 
-A Model holds data, not behaviour, so a bare tracked view resolves **no** `data-on-*` handler — the second of the two
+A Model holds data, not behaviour, so a bare tracked view resolves **no** `data-on-*` handler - the second of the two
 silent failure modes, reproduced exactly. Hence `options.methods`, layered behind the data by a merge proxy
 (`bindingSource()`), with data winning on a name collision, matching `Domma.component()`.
 
 ### Engine bug found by doing the work
 
-`applyBindings` warned *"does not interpolate `{{ }}`"* for mustache **inside a `data-each` body** — which is the one
+`applyBindings` warned *"does not interpolate `{{ }}`"* for mustache **inside a `data-each` body** - which is the one
 documented place mustache does work there. The pre-scan ran before the list body was recognised as a template. Fixed
 in `domma-reactive/src/apply-bindings.js` (`insideListTemplate`), with three tests; two fail against the old code.
 
@@ -179,24 +179,24 @@ Also fixed: the `applyBindings` headline example in the domma-reactive README bo
 
 ### Documentation
 
-- **`docs/Bindings.md`** — new, the reference: attributes, expressions, context keys, both entry points, the handler
+- **`docs/Bindings.md`** - new, the reference: attributes, expressions, context keys, both entry points, the handler
   contract, troubleshooting.
-- **`docs/Components.md`** — the Template Binding section predated the attribute bindings entirely and said
+- **`docs/Components.md`** - the Template Binding section predated the attribute bindings entirely and said
   `{{#each}}` was always a full re-render. Rewritten, with a worked example driven in jsdom to confirm every claim.
 - `docs/API.md`, `docs/DommaDocumentation.md`, `docs/Reactivity.md`, root + `src/CLAUDE.md`,
   `public/assets/ide/phpstorm/models.d.ts`.
-- `public/showcase/models/bindings.html` — a new live section binding real in-page markup, plus a custom binding and a
+- `public/showcase/models/bindings.html` - a new live section binding real in-page markup, plus a custom binding and a
   helper. Its "this page uses the component route, because that is the one Domma itself exposes" claim was true when
   written and is now false; corrected.
 
 ### Verification
 
-- 569 passed | 3 skipped (was 550) — 19 new tests in `src/apply-bindings.test.js`
+- 569 passed | 3 skipped (was 550) - 19 new tests in `src/apply-bindings.test.js`
 - `validate:showcase:strict` green across all 86 pages
 - All three validators clean
 - domma-reactive: 679 passed
-- **Mutation-checked.** Three mutations of `bindingSource()` — swallow the write, methods win over data, skip
-  `tracked()` — each killed. The `data-model`-with-methods test was added *because* mutation showed the merge proxy's
+- **Mutation-checked.** Three mutations of `bindingSource()` - swallow the write, methods win over data, skip
+  `tracked()` - each killed. The `data-model`-with-methods test was added *because* mutation showed the merge proxy's
   `set` trap was otherwise unexercised.
 - The showcase demo was driven end to end in jsdom on the real page: typing, `add`, and `$parent.drop($data)` all
   work, console clean.

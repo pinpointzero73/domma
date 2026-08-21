@@ -72,7 +72,7 @@ describe('Domma component-factory - dependency-tracked rendering', () => {
         el._model.set('other', 'b');
         await settle();
 
-        // 'other' is not read by doubled() — the old implementation re-ran
+        // 'other' is not read by doubled() - the old implementation re-ran
         // every computed on every change; this one must not.
         expect(doubledBody.mock.calls.length).toBe(callsAfterMount);
         expect(textOf(el)).toContain('b');
@@ -141,7 +141,7 @@ describe('Domma component-factory - dependency-tracked rendering', () => {
         el._model.set('n', 2);
         await settle();
 
-        // left and right both read base — it must evaluate once, not twice.
+        // left and right both read base - it must evaluate once, not twice.
         expect(baseBody).toHaveBeenCalledTimes(1);
         expect(textOf(el)).toContain('6 9');
     });
@@ -198,7 +198,7 @@ describe('Domma component-factory - dependency-tracked rendering', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// onUpdated is a component lifecycle hook — "your data changed" — not a
+// onUpdated is a component lifecycle hook - "your data changed" - not a
 // notification that a template binding repainted. It must fire for every
 // component whose model data changes, including one that renders imperatively
 // from the hook itself and therefore compiles to zero bindings.
@@ -229,7 +229,7 @@ describe('Domma component-factory - onUpdated lifecycle hook', () => {
         const onUpdated = vi.fn();
 
         const el = await mount(tag, {
-            // No {{ }} anywhere — compiles to zero bindings, exactly like the
+            // No {{ }} anywhere - compiles to zero bindings, exactly like the
             // todo/notes/contacts/markdown examples, which paint imperatively.
             template: '<ul class="list"></ul>',
             data() { return {items: []}; },
@@ -238,7 +238,7 @@ describe('Domma component-factory - onUpdated lifecycle hook', () => {
 
         expect(el._bindings.bindings).toHaveLength(0);
 
-        // The initial paint is not an update — the watcher's priming run, which
+        // The initial paint is not an update - the watcher's priming run, which
         // exists only to collect dependencies, must not notify.
         expect(onUpdated).not.toHaveBeenCalled();
 
@@ -348,7 +348,7 @@ describe('Domma component-factory - onUpdated lifecycle hook', () => {
             data() { return {a: 1, b: 2, c: 3}; }
         });
 
-        // Three bindings, three effects — and no whole-model watcher. Tracking
+        // Three bindings, three effects - and no whole-model watcher. Tracking
         // every field to call a hook that does not exist would undo the
         // fine-grained win for the commonest component shape.
         expect(el._bindings.bindings).toHaveLength(3);
@@ -361,12 +361,12 @@ describe('Domma component-factory - onUpdated lifecycle hook', () => {
 // These tests used to live in src/template-compiler.test.js. The compiler moved
 // to the domma-reactive package, but these did not go with it: they mount real
 // components and assert on shadow DOM, `_model` and the `onUpdated` hook, so
-// they exercise component-factory.js — the compiler is only the machinery
+// they exercise component-factory.js - the compiler is only the machinery
 // underneath. The package has its own tests driving `compile()` directly.
 //
 // What they protect is the integration: that the factory wires one effect per
 // binding, so a structural change re-renders its own block and leaves every
-// other node — and any user state living on it — untouched.
+// other node - and any user state living on it - untouched.
 
 describe('Domma component-factory - fine-grained updates', () => {
 
@@ -523,7 +523,7 @@ describe('Domma component-factory - fine-grained updates', () => {
 // ── data-on-* inside a component template ─────────────────────────────────────
 //
 // A component's `methods` are attached to the component context, while the data
-// a template binds against came from `_mergeData()` — model + props + computed.
+// a template binds against came from `_mergeData()` - model + props + computed.
 // Methods were in neither, so `data-on-click="save"` had nothing to resolve to
 // and logged "did not resolve to a function" on every click. Every other binding
 // worked; this one silently did nothing, which is why it went unnoticed.
@@ -591,12 +591,12 @@ describe('Domma component-factory - data-on-* reaches methods', () => {
 //
 // The data → DOM direction always worked. The DOM → data direction did not:
 // `_mergeData()` builds a fresh plain object each render, and data-model's
-// write-back assigns to `context.$data[key]` — so the value landed on a
+// write-back assigns to `context.$data[key]` - so the value landed on a
 // throwaway snapshot and the model never heard about it. The control appeared
 // to work, because the user's own keystrokes are what they see.
 //
 // The merged object is now a Proxy whose writes route through model.set(),
-// which is the same write path a lifecycle hook uses — validation and change
+// which is the same write path a lifecycle hook uses - validation and change
 // notification included.
 
 describe('Domma component-factory - data-model writes back', () => {

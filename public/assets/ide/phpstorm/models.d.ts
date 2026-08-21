@@ -56,7 +56,7 @@ export interface ObservableOptions<T = any> {
 }
 
 /**
- * A single reactive value — the primitive beneath Models.
+ * A single reactive value - the primitive beneath Models.
  */
 export interface Observable<T = any> {
     /** Read (tracked) and write. Assigning notifies only on a real change. */
@@ -73,7 +73,7 @@ export interface Observable<T = any> {
  * A reactive array whose in-place mutators notify unconditionally.
  */
 export interface ObservableArray<T = any> {
-    /** The underlying array — tracked on read, gated on wholesale assignment. */
+    /** The underlying array - tracked on read, gated on wholesale assignment. */
     value: T[];
 
     /** Tracked item count. */
@@ -104,7 +104,7 @@ export interface ObservableArray<T = any> {
     copyWithin(target: number, start: number, end?: number): T[];
 
     /**
-     * Remove items in place — every occurrence of a value, or everything a test
+     * Remove items in place - every occurrence of a value, or everything a test
      * function accepts. Notifies even when nothing matched.
      */
     remove(match: T | ((item: T, index: number) => boolean)): ObservableArray<T>;
@@ -118,7 +118,7 @@ export interface ObservableArray<T = any> {
  */
 export interface ComputedRef<T = any> {
     /**
-     * The same read as get(), spelled as a property — and the only one a template
+     * The same read as get(), spelled as a property - and the only one a template
      * expression can use, since an expression cannot call a method.
      */
     readonly value: T;
@@ -356,7 +356,7 @@ export interface Models {
     // ============================================
 
     /**
-     * A single reactive value — the primitive beneath Models. Use `create()`
+     * A single reactive value - the primitive beneath Models. Use `create()`
      * for a schema, validation and persistence; use this for one tracked value.
      */
     observable<T = any>(initial: T, options?: ObservableOptions<T>): Observable<T>;
@@ -368,7 +368,7 @@ export interface Models {
 
     /**
      * Create a lazily-evaluated derived value that tracks whatever it reads.
-     * The body must be synchronous — tracking stops at the first `await`.
+     * The body must be synchronous - tracking stops at the first `await`.
      */
     computed<T = any>(fn: () => T, options?: ComputedOptions<T>): ComputedRef<T>;
 
@@ -400,7 +400,7 @@ export interface Models {
 
     /**
      * Activate every binding attribute under a root on markup that already
-     * exists — `data-bind-*`, `data-model`, `data-on-*`, `data-if`, `data-each`.
+     * exists - `data-bind-*`, `data-model`, `data-on-*`, `data-if`, `data-each`.
      *
      * Pass a Model and bindings read and write through it. `{{ }}` is not
      * interpolated here; `data-bind-text` is the supported spelling.

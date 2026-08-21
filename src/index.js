@@ -85,7 +85,7 @@ Domma.update = (selector, changes) => configEngine.update(selector, changes);
 Domma.config = (selector) => configEngine.config(selector);
 
 // Live component instance created by $.setup() for a selector.
-// NOTE: named getComponent, not component — Domma.component() defines a
+// NOTE: named getComponent, not component - Domma.component() defines a
 // standalone Web Component and must not be shadowed.
 Domma.getComponent = (selector) => configEngine.getComponent(selector);
 
@@ -110,7 +110,7 @@ Domma.sanitize = sanitizeModule;
 Domma.components = components;
 
 /**
- * Shorthand for Domma.components.define() — register a standalone component.
+ * Shorthand for Domma.components.define() - register a standalone component.
  * Usage: Domma.component('tag-name', definition)
  *
  * @param {string} tagName

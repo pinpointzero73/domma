@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
   <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
   <style>
-      /* Theme-aware tokens, not fixed palette greys — --dm-gray-* does not
+      /* Theme-aware tokens, not fixed palette greys - --dm-gray-* does not
          change between light and dark variants, so the demo panels stayed
          light on dark themes. */
       .component-demo {
@@ -898,7 +898,7 @@ const editor = Domma.elements.editor('#editor');
     '#open-modal-btn': {
       events: {
         click: () => {
-          // $.setup() keeps instances internally — reach them with $.getComponent()
+          // $.setup() keeps instances internally - reach them with $.getComponent()
           const modal = $.getComponent('#demo-modal');
           if (modal) modal.open();
         }

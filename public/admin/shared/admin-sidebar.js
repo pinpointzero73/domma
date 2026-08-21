@@ -85,7 +85,7 @@ const AdminSidebar = {
             }
         });
 
-        // React to theme changes — swap sidebar variant class
+        // React to theme changes - swap sidebar variant class
         if (theme && theme.onChange) {
             theme.onChange(() => {
                 const el = document.getElementById('admin-sidebar');

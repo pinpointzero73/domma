@@ -24,7 +24,7 @@ function toKebabCase(str) {
  *
  * These wrappers swap the author's element for a custom element via
  * replaceWith(). Without this, the original id, classes and data-* attributes
- * are discarded — so `#my-modal` simply stops existing once it is initialised,
+ * are discarded - so `#my-modal` simply stops existing once it is initialised,
  * and every later selector lookup (including the config engine's own event
  * bindings and $.update()/$.reset()) silently fails.
  *
@@ -34,7 +34,7 @@ function toKebabCase(str) {
  * `baseClass` is the legacy class the component replaces (.modal, .card,
  * .badge) and is deliberately NOT copied. Those rules in elements.css describe
  * the hand-written, JS-free version of the component and are driven by class
- * toggles the Web Component never performs — `.modal` sets
+ * toggles the Web Component never performs - `.modal` sets
  * `opacity: 0; pointer-events: none`, undone only by `.modal.active`, while the
  * component shows itself via `:host([visible])`. Copying it onto the host lets
  * outer-document CSS override the shadow styling and renders the component
@@ -256,7 +256,7 @@ export function createTooltipWrapper(selector, options = {}) {
     elements.forEach(el => {
         if (!el) return;
 
-        // The <domma-tooltip> renders only its `content` attribute — it has no
+        // The <domma-tooltip> renders only its `content` attribute - it has no
         // data-attribute fallback. Callers commonly wire by data-tooltip alone
         // (the framework table re-render, forms.js label tooltips), passing no
         // explicit content; without this fallback those tooltips render empty.
@@ -290,7 +290,7 @@ export function createTooltipWrapper(selector, options = {}) {
         // Idempotent: if this element is ALREADY wrapped by a <domma-tooltip>,
         // refresh that wrapper instead of nesting a second one. Double-wrapping
         // breaks the tooltip, and it happens whenever two layers wire the same
-        // element — e.g. the framework table re-render and a view both calling
+        // element - e.g. the framework table re-render and a view both calling
         // E.tooltip on the same action button.
         let webComponent;
         if (el.parentNode && el.parentNode.tagName === 'DOMMA-TOOLTIP') {
@@ -994,7 +994,7 @@ export function createCardWrapper(selector, options = {}) {
             //
             // Callbacks receive the card instance, not e.detail. The component
             // emits with the base class's default detail of {}, and native
-            // events (click) put the click COUNT in detail — so forwarding
+            // events (click) put the click COUNT in detail - so forwarding
             // e.detail handed callers an empty object or the number 1.
             const eventName = key.replace(/^on/, '').toLowerCase();
             webComponent.addEventListener(eventName, () => {

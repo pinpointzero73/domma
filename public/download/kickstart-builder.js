@@ -1,10 +1,10 @@
 /**
- * Kickstart Builder — browser-side project scaffolder.
+ * Kickstart Builder - browser-side project scaffolder.
  *
  * Renders into #kickstart-builder.  Requires:
  *   - JSZip  (window.JSZip)
  *   - FileSaver.js (window.saveAs)
- *   - DOMPurify (window.DOMPurify) — already loaded on the download page
+ *   - DOMPurify (window.DOMPurify) - already loaded on the download page
  *   - Domma ($, Domma) already loaded on the page
  */
 
@@ -115,7 +115,7 @@
         <div class="card-header d-flex align-items-center gap-2">
           <span data-icon="settings" data-icon-size="20" style="color: var(--dm-primary);"></span>
           <h3 class="mb-0" style="font-size: 1.1rem;">Kickstart Builder</h3>
-          <span class="badge badge-primary ms-auto" style="font-size: 0.7rem;">Browser-side — no server needed</span>
+          <span class="badge badge-primary ms-auto" style="font-size: 0.7rem;">Browser-side - no server needed</span>
         </div>
         <div class="card-body">
           <div class="row g-4">
@@ -394,7 +394,7 @@
         const errHtml = purify(`
           <div class="alert alert-warning mt-4">
             <span data-icon="alert-triangle" data-icon-size="16"></span>
-            Kickstart Builder unavailable — run <code>npm run build</code> to generate template files.
+            Kickstart Builder unavailable - run <code>npm run build</code> to generate template files.
             <small class="d-block mt-1 text-muted">${escapeHtml(err.message)}</small>
           </div>`);
         container.innerHTML = errHtml;

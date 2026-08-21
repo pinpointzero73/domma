@@ -24,7 +24,7 @@ const AVAILABLE_THEMES = [
     'mint-light', 'mint-dark',
     'wedding-light', 'wedding-dark',
     'core-light',
-    // Admin family — standalone (no light/dark), finish × accent
+    // Admin family - standalone (no light/dark), finish × accent
     'admin-smooth-steel', 'admin-smooth-indigo', 'admin-smooth-teal',
     'admin-sharp-steel', 'admin-sharp-indigo', 'admin-sharp-teal'
 ];

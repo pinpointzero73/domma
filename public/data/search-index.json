@@ -1,7 +1,7 @@
 [
   {
     "title": "QuickStart Overview",
-    "description": "Get started with Domma quickly — MPA and SPA project templates",
+    "description": "Get started with Domma quickly - MPA and SPA project templates",
     "category": "QuickStart",
     "url": "quickstart/index.html",
     "keywords": ["start", "begin", "setup", "install", "getting started", "template"]
@@ -71,21 +71,21 @@
   },
   {
     "title": "Integrations",
-    "description": "Third-party library integrations — charts, maps, editors, and more",
+    "description": "Third-party library integrations - charts, maps, editors, and more",
     "category": "Core",
     "url": "showcase/integrations/index.html",
     "keywords": ["third-party", "plugin", "chart", "map", "integration", "external"]
   },
   {
     "title": "Blueprints",
-    "description": "Unified schema system — define data structure once, use for models, forms, and CRUD",
+    "description": "Unified schema system - define data structure once, use for models, forms, and CRUD",
     "category": "Data",
     "url": "showcase/blueprints/index.html",
     "keywords": ["schema", "validation", "types", "model", "form", "M.create", "blueprint", "M.extend"]
   },
   {
     "title": "Dates",
-    "description": "Moment.js-style date manipulation — create, format, compare, and relative times",
+    "description": "Moment.js-style date manipulation - create, format, compare, and relative times",
     "category": "Data",
     "url": "showcase/dates/index.html",
     "keywords": ["moment", "date", "time", "format", "D()", "fromNow", "add", "subtract"]
@@ -106,7 +106,7 @@
   },
   {
     "title": "Alarm",
-    "description": "Scheduled alerts with persistence — set alarms that fire at specific times",
+    "description": "Scheduled alerts with persistence - set alarms that fire at specific times",
     "category": "UI",
     "url": "showcase/elements/alarm/index.html",
     "keywords": ["alarm", "schedule", "timer", "alert", "notification", "reminder"]
@@ -134,7 +134,7 @@
   },
   {
     "title": "Loader",
-    "description": "Loading indicators — spinner, dots, pulse, and bars variants",
+    "description": "Loading indicators - spinner, dots, pulse, and bars variants",
     "category": "UI",
     "url": "showcase/elements/loader/index.html",
     "keywords": ["loading", "spinner", "progress", "dots", "pulse", "bars", "wait"]
@@ -169,14 +169,14 @@
   },
   {
     "title": "Flags",
-    "description": "Nation flags as crisp inline SVG, keyed by ISO code, in rect, rounded, square or circle shapes — opt-in module",
+    "description": "Nation flags as crisp inline SVG, keyed by ISO code, in rect, rounded, square or circle shapes - opt-in module",
     "category": "UI",
     "url": "showcase/flags/index.html",
     "keywords": ["flag", "flags", "nation", "country", "data-flag", "FL.render", "iso", "world cup"]
   },
   {
     "title": "Themes",
-    "description": "10+ built-in themes with light and dark variants — Ocean, Forest, Sunset, Charcoal",
+    "description": "10+ built-in themes with light and dark variants - Ocean, Forest, Sunset, Charcoal",
     "category": "UI",
     "url": "showcase/themes/index.html",
     "keywords": ["theme", "dark mode", "light mode", "colour scheme", "skin", "palette"]
@@ -295,7 +295,7 @@
   },
   {
     "title": "Chooser",
-    "description": "Visual option-picker — card or chip variants, single or multi-select, with rich per-option metadata, accent styles, glow and shadow",
+    "description": "Visual option-picker - card or chip variants, single or multi-select, with rich per-option metadata, accent styles, glow and shadow",
     "category": "Elements",
     "url": "showcase/elements/chooser/index.html",
     "keywords": ["chooser", "picker", "option picker", "radio", "checkbox", "card picker", "chip picker", "E.chooser", "form input", "blueprint", "accent", "glow", "shadow"]
@@ -316,7 +316,7 @@
   },
   {
     "title": "Slideover",
-    "description": "Panel overlays that slide in from screen edges — left, right, top, bottom",
+    "description": "Panel overlays that slide in from screen edges - left, right, top, bottom",
     "category": "Elements",
     "url": "showcase/elements/slideover/index.html",
     "keywords": ["panel", "drawer", "slide", "overlay", "E.slideover"]
@@ -344,14 +344,14 @@
   },
   {
     "title": "Ambient Effects",
-    "description": "Subtle CSS background animations — aurora, rotating glows, floating blobs, orbs, waves, and ripples",
+    "description": "Subtle CSS background animations - aurora, rotating glows, floating blobs, orbs, waves, and ripples",
     "category": "Effects",
     "url": "showcase/effects/ambient.html",
     "keywords": ["ambient", "aurora", "background", "glow", "rotating", "blob", "wave", "ripple", "css", "animation"]
   },
   {
     "title": "Effects Overview",
-    "description": "JavaScript animation effects — breathe, pulse, scribe, reveal, scramble, counter, ripple, shake",
+    "description": "JavaScript animation effects - breathe, pulse, scribe, reveal, scramble, counter, ripple, shake",
     "category": "Effects",
     "url": "showcase/effects/index.html",
     "keywords": ["animation", "effect", "motion", "transition", "javascript"]
@@ -365,7 +365,7 @@
   },
   {
     "title": "CSS Filters",
-    "description": "CSS filter utilities — blur, brightness, contrast, grayscale, and more",
+    "description": "CSS filter utilities - blur, brightness, contrast, grayscale, and more",
     "category": "Effects",
     "url": "showcase/effects/filters.html",
     "keywords": ["filter", "blur", "brightness", "css", "image", "grayscale"]
@@ -393,7 +393,7 @@
   },
   {
     "title": "Shadows",
-    "description": "CSS shadow utilities — sm, md, lg, xl variants and elevation classes",
+    "description": "CSS shadow utilities - sm, md, lg, xl variants and elevation classes",
     "category": "Effects",
     "url": "showcase/effects/shadows.html",
     "keywords": ["shadow", "elevation", "depth", "drop-shadow", "box-shadow"]
@@ -428,7 +428,7 @@
   },
   {
     "title": "Reveal Effect",
-    "description": "Scroll-triggered entrance animations using IntersectionObserver — fade, slide, zoom",
+    "description": "Scroll-triggered entrance animations using IntersectionObserver - fade, slide, zoom",
     "category": "Effects",
     "url": "showcase/effects/reveal.html",
     "keywords": ["scroll", "reveal", "entrance", "intersection", "reveal()", "fade", "slide-up"]
@@ -449,7 +449,7 @@
   },
   {
     "title": "Shake Effect",
-    "description": "Attention and error shake animation — horizontal, vertical, or both directions",
+    "description": "Attention and error shake animation - horizontal, vertical, or both directions",
     "category": "Effects",
     "url": "showcase/effects/shake.html",
     "keywords": ["shake", "error", "attention", "vibrate", "shake()", "animation"]
@@ -463,7 +463,7 @@
   },
   {
     "title": "Celebrations",
-    "description": "Seasonal celebration particle effects — Christmas, Halloween, Valentine's, and more",
+    "description": "Seasonal celebration particle effects - Christmas, Halloween, Valentine's, and more",
     "category": "Effects",
     "url": "examples/celebrations/index.html",
     "keywords": ["confetti", "snow", "celebration", "seasonal", "particle", "holiday"]

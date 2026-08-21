@@ -1,5 +1,5 @@
 /**
- * Domma Christmas Dark Theme — "Christmas Eve"
+ * Domma Christmas Dark Theme - "Christmas Eve"
  * Deep forest green backgrounds, pure moonlit-white text, green/red undertones in interaction
  * Bright Holly Green primary, Christmas Red secondary; firelight-ember shadows
  */
@@ -18,7 +18,7 @@
     --dm-surface-raised: #243A2C;
     --dm-surface-overlay: #243A2C;
 
-    /* Text - Pure snow white; no green tint — moonlight on fresh snow */
+    /* Text - Pure snow white; no green tint - moonlight on fresh snow */
     --dm-text: #FFFFFF;
     --dm-text-secondary: #D0D0D0;
     --dm-text-muted: #a8a8a8;
@@ -243,10 +243,10 @@
 }
 
 /* ============================================================
-   DECORATIVE CSS — "Christmas Eve" festive embellishments
+   DECORATIVE CSS - "Christmas Eve" festive embellishments
    ============================================================ */
 
-/* Snow-dust background — three festive dot layers: white snow, green pine, red Christmas lights */
+/* Snow-dust background - three festive dot layers: white snow, green pine, red Christmas lights */
 .dm-theme-christmas-dark {
     background-image:
         radial-gradient(circle, rgba(255, 255, 255, 0.13) 1px, transparent 1px),
@@ -263,7 +263,7 @@
     border-image-slice: 1;
 }
 
-/* Candy-stripe progress bars (default + plain variant only — variants keep their semantic colour) */
+/* Candy-stripe progress bars (default + plain variant only - variants keep their semantic colour) */
 .dm-theme-christmas-dark .dm-progression-progress-bar,
 .dm-theme-christmas-dark .progress > .progress-bar:not([class*="progress-bar-"]) {
     background-image: repeating-linear-gradient(
@@ -277,7 +277,7 @@
     color: #1a1a1a;
 }
 
-/* Festive syntax highlighting — brighter versions for dark backgrounds */
+/* Festive syntax highlighting - brighter versions for dark backgrounds */
 .dm-theme-christmas-dark .code-block .syntax-keyword {
     color: #5CB875;
     font-weight: 600;

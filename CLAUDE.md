@@ -52,18 +52,18 @@ npm run build
 ```
 
 Full build chain (in order):
-1. `generate:bundles` — generate preset bundle entry points
-2. `rollup -c` — compile JS bundles to `public/dist/`
-3. `build:info` — write `build-info.json`
-4. `build:metadata` — copy `bundle-metadata.json`
-5. `copy:themes` — copy theme CSS files to `public/dist/themes/`
-6. `build:css` — compile CSS source → `public/dist/*.css`
-7. `build:css-bundles` — compile preset CSS bundles
-8. `build:archives` — generate `.tar.gz` preset archives
-9. **`build:kickstart-files`** — copy templates + dist files to `public/download/kickstart-files/` and generate `kickstart-manifest.json`
-10. `build:miniapps` — build all miniapps
+1. `generate:bundles` - generate preset bundle entry points
+2. `rollup -c` - compile JS bundles to `public/dist/`
+3. `build:info` - write `build-info.json`
+4. `build:metadata` - copy `bundle-metadata.json`
+5. `copy:themes` - copy theme CSS files to `public/dist/themes/`
+6. `build:css` - compile CSS source → `public/dist/*.css`
+7. `build:css-bundles` - compile preset CSS bundles
+8. `build:archives` - generate `.tar.gz` preset archives
+9. **`build:kickstart-files`** - copy templates + dist files to `public/download/kickstart-files/` and generate `kickstart-manifest.json`
+10. `build:miniapps` - build all miniapps
 
-**Validators** (fast, no build needed — but read `public/dist/*.css`, so build CSS first):
+**Validators** (fast, no build needed - but read `public/dist/*.css`, so build CSS first):
 
 ```bash
 npm run validate              # all three
@@ -79,7 +79,7 @@ showcase carried **186 such call sites across 43 files**; it is now at **zero**,
 is empty. `--list` prints every site, which is what makes a sweep a work list rather than a
 number.
 
-Note that three of the five are NOT straight swaps — `S.set()` namespaces keys, `H.get()`
+Note that three of the five are NOT straight swaps - `S.set()` namespaces keys, `H.get()`
 resolves to parsed JSON rather than a `Response`, and `D()` returns a wrapper rather than a
 `Date`. `$(window)` does not work either, so window listeners are deliberately not flagged.
 
@@ -89,14 +89,14 @@ or a new offender appears. Fix something and lower its baseline with
 `--update-baseline`; raising one should be deliberate. `--strict` ignores the
 baseline and reports everything.
 
-They exist because both failure modes are **invisible** — no error, no failing
+They exist because both failure modes are **invisible** - no error, no failing
 test, just markup that renders wrong:
 
 - `.form-control`, `.col-md-*` and `.table-responsive` were all used while defined
   nowhere. The kickstart templates alone carried 143 dead class usages, so every
   scaffolded project rendered unstyled.
-- Eighteen rules set `background: var(--dm-gray-100)` — a variable no theme
-  redefines — with no `color`, so their text followed `--dm-text` and became
+- Eighteen rules set `background: var(--dm-gray-100)` - a variable no theme
+  redefines - with no `color`, so their text followed `--dm-text` and became
   illegible under the dark variant.
 
 **Kickstart files only** (fast, no JS/CSS rebuild needed):
@@ -110,7 +110,7 @@ npm run build:kickstart-files
 npm run showcase  # Comprehensive showcase with all features
 ```
 
-**Showcase page harness** (slow — loads 85 pages into jsdom; needs `npm run build:js` first):
+**Showcase page harness** (slow - loads 85 pages into jsdom; needs `npm run build:js` first):
 
 ```bash
 npm run validate:showcase           # ratchet against scripts/showcase-pages.baseline.json
@@ -131,7 +131,7 @@ loads; the only startup call a page needs is `Domma.icons.scan()`.
 
 Also a **ratchet**: `scripts/showcase-pages.baseline.json` records findings that are known
 and accepted, and a page fails only when it gains one that is not recorded. **It is currently
-empty** — all 85 pages are clean — so any finding is a failure. Keep it that way.
+empty** - all 85 pages are clean - so any finding is a failure. Keep it that way.
 
 **Tests:**
 Open `tests/test.html` in a browser.
@@ -324,15 +324,15 @@ public/
 │   ├── index.html
 │   ├── bundle-builder.js
 │   ├── kickstart-builder.js     # Browser-side JSZip scaffolder
-│   ├── kickstart-manifest.json  # GENERATED — do not edit manually
-│   └── kickstart-files/         # GENERATED — gitignored build artefact
+│   ├── kickstart-manifest.json  # GENERATED - do not edit manually
+│   └── kickstart-files/         # GENERATED - gitignored build artefact
 │       ├── mpa/                 # MPA template files (served statically)
 │       ├── spa/                 # SPA template files (served statically)
 │       └── dist/                # Domma dist files for kickstart zips
 ├── examples/            # Working example applications
 │   └── todo/
 ├── quickstart/          # Getting-started docs (SPA-first)
-│   ├── index.html       # Hub page — SPA listed first
+│   ├── index.html       # Hub page - SPA listed first
 │   ├── spa/             # SPA QuickStart guide
 │   └── mpa/             # MPA QuickStart guide
 ├── layouts/             # Layout system (presets, modules, config)
@@ -398,21 +398,21 @@ The Downloads page hosts a browser-side zip assembler powered by JSZip + FileSav
 
 **How it works:**
 1. `npm run build:kickstart-files` (`scripts/build-kickstart-files.js`) copies template files and dist assets to `public/download/kickstart-files/` and writes `public/download/kickstart-manifest.json`
-2. The browser loads the manifest, lets the user configure their project (mode, name, theme, pages, AI files), then fetches the selected files, applies `{{placeholder}}` substitution in-memory, and triggers a `.zip` download — no server needed
+2. The browser loads the manifest, lets the user configure their project (mode, name, theme, pages, AI files), then fetches the selected files, applies `{{placeholder}}` substitution in-memory, and triggers a `.zip` download - no server needed
 
 **Build artefacts** (both gitignored, regenerated on every build):
-- `public/download/kickstart-files/` — raw template and dist files served statically
-- `public/download/kickstart-manifest.json` — file index with category/group/required metadata
+- `public/download/kickstart-files/` - raw template and dist files served statically
+- `public/download/kickstart-manifest.json` - file index with category/group/required metadata
 
 **Key files:**
-- `scripts/build-kickstart-files.js` — build script (classifies files as `core`, `page`, `view`, `ai`, `config`, `dist`)
-- `public/download/kickstart-builder.js` — browser UI (uses DOMPurify for innerHTML, JSZip for zipping, FileSaver for download)
+- `scripts/build-kickstart-files.js` - build script (classifies files as `core`, `page`, `view`, `ai`, `config`, `dist`)
+- `public/download/kickstart-builder.js` - browser UI (uses DOMPurify for innerHTML, JSZip for zipping, FileSaver for download)
 
 **Template variable substitutions** (applied to all non-binary files at download time):
-- `{{projectName}}` — user's chosen project name
-- `{{year}}` — current year
-- `{{theme}}` — chosen theme (e.g. `charcoal-dark`)
-- `{{includeThemeSelector}}` — `"true"` or `"false"`
+- `{{projectName}}` - user's chosen project name
+- `{{year}}` - current year
+- `{{theme}}` - chosen theme (e.g. `charcoal-dark`)
+- `{{includeThemeSelector}}` - `"true"` or `"false"`
 
 ## Project Guidelines
 
@@ -490,9 +490,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Pub/Sub: `subscribe()`, `publish()`, `unsubscribe()`, `once()`
 - Model: `create()`, `get()`, `set()`, `toJSON()`, `validate()`, `onChange()`, `reset()`
 - Persistence: `save()`, `load()`, `clearStorage()`, `isPersisted()`
-- Observables: `M.observable(value)`, `M.observableArray([])` — single reactive values, the primitive
+- Observables: `M.observable(value)`, `M.observableArray([])` - single reactive values, the primitive
   beneath Models. Also published standalone as `domma-reactive`.
-- Reactivity: `M.computed()`, `M.effect()`, `M.untracked()`, `M.flush()`, `model.tracked()` — dependency tracking,
+- Reactivity: `M.computed()`, `M.effect()`, `M.untracked()`, `M.flush()`, `model.tracked()` - dependency tracking,
   batched microtask flush. See [docs/Reactivity.md](./docs/Reactivity.md)
 - DOM Binding: `M.bind()`, `M.unbind()` (one field, one element)
 - Declarative Bindings: `M.applyBindings(data, root)` activates `data-bind-*`, `data-model`, `data-on-*`, `data-if`
@@ -516,7 +516,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Badge - `badge()` component
   - NumberBadge - `numberBadge()` notification counter with positioning, dot mode, pulse
   - ListGroup - `listGroup()` selectable lists with keyboard nav, colour variants, flush mode
-  - Signature - `signature()` canvas signature pad — mouse/touch/stylus, undo/redo, PNG/SVG export, type fallback
+  - Signature - `signature()` canvas signature pad - mouse/touch/stylus, undo/redo, PNG/SVG export, type fallback
   - BackToTop - `backToTop()` with scroll behavior
   - ButtonGroup - `buttonGroup()` for radio/checkbox groups
   - Breadcrumbs - `breadcrumbs()` with separators
@@ -592,9 +592,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Methods: `render()`, `inject()`, `scan()` (auto-scan `data-icon` attributes)
 - Customizable size and color
 
-#### Flags (`Domma.flags` / `FL`) — opt-in module
+#### Flags (`Domma.flags` / `FL`) - opt-in module
 
-- **Separate bundle** (`domma-flags.min.js`), loaded after the core bundle — NOT in `domma.min.js`
+- **Separate bundle** (`domma-flags.min.js`), loaded after the core bundle - NOT in `domma.min.js`
 - Nation flags as inline SVG, keyed by ISO 3166-1 alpha-2 code (`gb`, `us`, `fr`…)
 - Lazy expansion: descriptors → SVG on first render, then memoised (~20 KB bundle)
 - Shapes: `rect`, `rounded`, `square`, `circle`; optional border
@@ -625,7 +625,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - **shake()** - Attention/error shake animation
   - Directions: `horizontal`, `vertical`, `both`
   - Features: Configurable intensity, iterations, stagger, onComplete callback
-- **tickerTape()** - Canvas-based ticker-tape parade — coloured rectangular strips drop from above, sway, rotate, and fade
+- **tickerTape()** - Canvas-based ticker-tape parade - coloured rectangular strips drop from above, sway, rotate, and fade
   - Modes: full-page overlay (`null` selector) or container-scoped
   - Palettes: `'theme'` (auto from CSS variables), `'rainbow'`, `'festive'`, `'gold'`, `'silver'`, `'pastel'`, `'mono'`, `'sunset'`, `'ocean'`, `'forest'`, `'bridal'`, or a custom array of CSS colour strings
   - Behaviour: continuous stream with configurable density, or one-shot `burst` for celebration moments
@@ -635,7 +635,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Palettes: `meadow` (default), `theme`, `pastel`, `rainbow`, `sunset`, or custom colour array
   - Behaviour: continuous stream or one-shot `burst`
   - Tunable: `density`, `speed`, `wander`, `riseSpeed`, `flapSpeed`, `minSize`/`maxSize`, `twoTone`
-- **strobe()** - Canvas strobe *lighting* — light beams from corners that sweep/rotate and brighten where they cross
+- **strobe()** - Canvas strobe *lighting* - light beams from corners that sweep/rotate and brighten where they cross
   - Presets: `club` (default), `concert`, `police`, `searchlight`, `scanner`, `mood`; individual options override the preset
   - Tunable: `origins`, `motion` (sweep/rotate), `sweepArc`, `speed`, `beamWidth`, `flicker`, `hz`, `colours`, `intensity`
   - Frequency (`hz`) warns above 5 Hz; disabled under prefers-reduced-motion
@@ -647,13 +647,13 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 - **Typography:** Font families, sizes, weights, line heights
 - **Spacing:** Margin/padding utilities (`.m-*`, `.p-*`, `.mt-*`, `.mb-*`, etc.)
-- **Display:** `.block`, `.inline-block`, `.flex`, `.grid`, `.hidden` — Tailwind-style names. There are no
+- **Display:** `.block`, `.inline-block`, `.flex`, `.grid`, `.hidden` - Tailwind-style names. There are no
   `.d-*` variants; the Bootstrap spellings resolve to nothing.
 - **Colors:** Full color palette (slate, blue, green, red, amber, sky, etc.)
 - **Opacity:** Full scale `.opacity-0` → `.opacity-100` (steps of 10, plus `.opacity-25`, `.opacity-75`)
 - **Translucency:**
   - Semantic: `.translucent-light` (0.85), `.translucent` (0.70), `.translucent-heavy` (0.50)
-  - Glass: `.translucent-glass` — semi-transparent background + `backdrop-filter: blur()`
+  - Glass: `.translucent-glass` - semi-transparent background + `backdrop-filter: blur()`
   - Hover variants: `.translucent-hover`, `.translucent-light-hover`, `.translucent-heavy-hover`
   - All include `transition: opacity` for smooth state changes
 - **Effects:**

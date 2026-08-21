@@ -3,8 +3,8 @@
  *
  * ── The contract, and the two ways it fails ──────────────────────────────────
  *
- * `domma-reactive` resolves every expression — `{{ }}`, `data-bind-*`,
- * `data-if`, `data-on-*`, `data-model` — against ONE object, and writes back
+ * `domma-reactive` resolves every expression - `{{ }}`, `data-bind-*`,
+ * `data-if`, `data-on-*`, `data-model` - against ONE object, and writes back
  * through that same object. Both halves matter, and getting either wrong fails
  * SILENTLY, in two specific ways that this module exists to prevent:
  *
@@ -18,8 +18,8 @@
  *      while every other binding on the same element works perfectly.
  *
  * Both shipped, in `component-factory.js`, and were fixed in v0.37.0. The fix
- * then existed twice — once there and once in `models.js` for `M.applyBindings`
- * — in two slightly different shapes. This is that fix, once.
+ * then existed twice - once there and once in `models.js` for `M.applyBindings`
+ * - in two slightly different shapes. This is that fix, once.
  *
  * ── Why a Proxy and not a merged object ──────────────────────────────────────
  *
@@ -41,7 +41,7 @@
  * @param {Object}   [options]
  * @param {Object}   [options.fallback] Consulted only when `primary` has no such
  *                                      key. Event handlers live here, so a data
- *                                      field of the same name always wins — a
+ *                                      field of the same name always wins - a
  *                                      template mostly renders data, and a method
  *                                      quietly shadowing a rendered value is the
  *                                      worse failure.
@@ -57,7 +57,7 @@ export function createBindingSource(primary, {fallback, onWrite} = {}) {
 
     // Nothing to layer: hand back the original. A component with no methods and
     // no model, or an applyBindings call with no handlers, then pays no proxy
-    // cost — and `tracked()` keeps its own identity, which its callers rely on.
+    // cost - and `tracked()` keeps its own identity, which its callers rely on.
     if (names.length === 0 && typeof onWrite !== 'function') return primary;
 
     return new Proxy({}, {

@@ -125,7 +125,7 @@ describe('Model binding - component sync', () => {
     it('onChange(field, cb) subscribes to a single field', () => {
         // Documented in public/showcase/models/CLAUDE.md and used by the
         // contacts example, but previously added the STRING to the callback
-        // set — so the callback never fired and the next set() threw
+        // set - so the callback never fired and the next set() threw
         // "cb is not a function".
         const model = M.create({a: {}, b: {}}, {a: 1, b: 1});
         const seen = [];

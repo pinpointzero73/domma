@@ -142,7 +142,7 @@
 <div class="hero hero-center bg-ambient-float-orbs">
     <div class="hero-content">
         <div class="hero-title">Address Lookup API</div>
-        <div class="hero-subtitle">UK postcode validation, full address lookups, and property data — all in a single REST API.</div>
+        <div class="hero-subtitle">UK postcode validation, full address lookups, and property data - all in a single REST API.</div>
     </div>
 </div>
 
@@ -187,9 +187,9 @@
 
             <h3 class="text-lg font-semibold mb-3">Data Sources</h3>
             <ul class="mb-4">
-                <li class="mb-1"><strong>ONS (Office for National Statistics)</strong> — Postcode directory with geography fields: coordinates, local authority, constituency, NHS region, urban classification, and more.</li>
-                <li class="mb-1"><strong>Land Registry (LR)</strong> — Full residential addresses and property transaction history (sold prices, dates, property type).</li>
-                <li class="mb-1"><strong>Companies House (CH)</strong> — Registered business addresses, company names, and registration numbers.</li>
+                <li class="mb-1"><strong>ONS (Office for National Statistics)</strong> - Postcode directory with geography fields: coordinates, local authority, constituency, NHS region, urban classification, and more.</li>
+                <li class="mb-1"><strong>Land Registry (LR)</strong> - Full residential addresses and property transaction history (sold prices, dates, property type).</li>
+                <li class="mb-1"><strong>Companies House (CH)</strong> - Registered business addresses, company names, and registration numbers.</li>
             </ul>
 
             <h3 class="text-lg font-semibold mb-3">Service Tiers</h3>
@@ -418,7 +418,7 @@
                 Free Tier Response
                 <span class="credit-badge credit-free ms-2">0 credits</span>
             </h4>
-            <p class="mb-2 text-sm text-muted">ONS postcode data — coordinates, geography, and classification fields.</p>
+            <p class="mb-2 text-sm text-muted">ONS postcode data - coordinates, geography, and classification fields.</p>
             <pre class="code-block language-json">{
   "success": true,
   "postcode": "SW1A 1AA",
@@ -774,7 +774,7 @@
             <h3 class="text-base font-semibold mt-5 mb-3">Creating a Key</h3>
             <div class="req-res-grid">
                 <div>
-                    <div class="code-label">POST /keys — Request</div>
+                    <div class="code-label">POST /keys - Request</div>
                     <pre class="code-block language-json">{
   "name": "Production Backend",
   "permissions": [
@@ -879,7 +879,7 @@
                     <tr>
                         <td>Bulk lookup (per postcode)</td>
                         <td><code>POST /v1/bulk-lookup</code></td>
-                        <td><span class="credit-badge credit-one">0–1</span></td>
+                        <td><span class="credit-badge credit-one">0-1</span></td>
                     </tr>
                     <tr>
                         <td>Property transaction history</td>
@@ -911,7 +911,7 @@
 
             <div class="req-res-grid mt-4">
                 <div>
-                    <div class="code-label">GET /credits — Response</div>
+                    <div class="code-label">GET /credits - Response</div>
                     <pre class="code-block language-json">{
   "success": true,
   "balance": 1450,
@@ -919,7 +919,7 @@
 }</pre>
                 </div>
                 <div>
-                    <div class="code-label">GET /credits/history — Response</div>
+                    <div class="code-label">GET /credits/history - Response</div>
                     <pre class="code-block language-json">{
   "success": true,
   "history": [
@@ -965,12 +965,12 @@
                     <tr>
                         <td>Requests per minute (per key)</td>
                         <td>60</td>
-                        <td>Yes — via <code>PATCH /keys/:id</code></td>
+                        <td>Yes - via <code>PATCH /keys/:id</code></td>
                     </tr>
                     <tr>
                         <td>Requests per day (per key)</td>
                         <td>10,000</td>
-                        <td>Yes — via <code>PATCH /keys/:id</code></td>
+                        <td>Yes - via <code>PATCH /keys/:id</code></td>
                     </tr>
                     <tr>
                         <td>Bulk lookup batch size</td>
@@ -986,7 +986,7 @@
 X-RateLimit-Remaining: 57
 X-RateLimit-Reset: 1740309660</pre>
 
-            <h3 class="text-base font-semibold mt-4 mb-3">429 — Too Many Requests</h3>
+            <h3 class="text-base font-semibold mt-4 mb-3">429 - Too Many Requests</h3>
             <pre class="code-block language-json">{
   "success": false,
   "error": {
@@ -1032,12 +1032,12 @@ X-RateLimit-Reset: 1740309660</pre>
                 </thead>
                 <tbody>
                     <tr><td><code>200</code></td><td>Request succeeded</td></tr>
-                    <tr><td><code>400</code></td><td>Bad request — invalid or missing parameters</td></tr>
-                    <tr><td><code>401</code></td><td>Unauthorised — missing or invalid credentials</td></tr>
-                    <tr><td><code>403</code></td><td>Forbidden — insufficient permissions or credits</td></tr>
-                    <tr><td><code>404</code></td><td>Not found — resource does not exist</td></tr>
-                    <tr><td><code>429</code></td><td>Too many requests — rate limit exceeded</td></tr>
-                    <tr><td><code>500</code></td><td>Internal server error — try again shortly</td></tr>
+                    <tr><td><code>400</code></td><td>Bad request - invalid or missing parameters</td></tr>
+                    <tr><td><code>401</code></td><td>Unauthorised - missing or invalid credentials</td></tr>
+                    <tr><td><code>403</code></td><td>Forbidden - insufficient permissions or credits</td></tr>
+                    <tr><td><code>404</code></td><td>Not found - resource does not exist</td></tr>
+                    <tr><td><code>429</code></td><td>Too many requests - rate limit exceeded</td></tr>
+                    <tr><td><code>500</code></td><td>Internal server error - try again shortly</td></tr>
                 </tbody>
             </table>
 
@@ -1056,7 +1056,7 @@ X-RateLimit-Reset: 1740309660</pre>
                     <tr><td class="param-name">RATE_LIMIT_EXCEEDED</td><td>Per-minute or per-day rate limit reached</td></tr>
                     <tr><td class="param-name">BATCH_TOO_LARGE</td><td>Bulk lookup request contains more than 100 postcodes</td></tr>
                     <tr><td class="param-name">VALIDATION_ERROR</td><td>One or more request body fields failed validation</td></tr>
-                    <tr><td class="param-name">INTERNAL_ERROR</td><td>Unexpected server error — retry after a short delay</td></tr>
+                    <tr><td class="param-name">INTERNAL_ERROR</td><td>Unexpected server error - retry after a short delay</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1076,13 +1076,13 @@ X-RateLimit-Reset: 1740309660</pre>
                 <span data-icon="terminal" class="me-1"></span>
                 curl
             </h3>
-            <pre class="code-block language-bash"># Free tier — postcode validation
+            <pre class="code-block language-bash"># Free tier - postcode validation
 curl -X POST https://api.domma.dev/api/address/v1/lookup \
   -H "Authorization: Bearer addr_your_key_here" \
   -H "Content-Type: application/json" \
   -d '{"postcode": "SW1A 1AA"}'
 
-# Premium tier — full addresses (uses 1 credit)
+# Premium tier - full addresses (uses 1 credit)
 curl -X POST https://api.domma.dev/api/address/v1/lookup \
   -H "Authorization: Bearer addr_your_key_here" \
   -H "Content-Type: application/json" \

@@ -74,7 +74,7 @@
         <div class="hero-title">Template Bindings</div>
         <div class="hero-subtitle">
             Say in the markup which piece of data each part of the page shows. Domma updates exactly those parts,
-            and leaves the rest of the DOM — and everything the visitor was doing in it — alone.
+            and leaves the rest of the DOM - and everything the visitor was doing in it - alone.
         </div>
     </div>
 </div>
@@ -147,12 +147,12 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>A <strong>component</strong> — it has a template</td>
+                        <td>A <strong>component</strong> - it has a template</td>
                         <td><code>Domma.component()</code></td>
                         <td><code>{{ }}</code>, <code>{{#if}}</code>, <code>{{#each}}</code>, lifecycle hooks</td>
                     </tr>
                     <tr>
-                        <td>A <strong>page</strong> — the HTML already exists</td>
+                        <td>A <strong>page</strong> - the HTML already exists</td>
                         <td><code>M.applyBindings()</code></td>
                         <td>No build step, no second source of truth for the markup</td>
                     </tr>
@@ -160,13 +160,13 @@
                 </table>
             </div>
 
-            <pre class="code-block language-javascript mb-4">// The component route — Domma generates the markup
+            <pre class="code-block language-javascript mb-4">// The component route - Domma generates the markup
 Domma.component('user-card', {
     template: `&lt;b data-bind-text="name"&gt;&lt;/b&gt;`,
     data() { return { name: 'Ada' }; }
 });
 
-// The page route — the markup is already there
+// The page route - the markup is already there
 M.applyBindings(model, '#app');</pre>
 
             <p class="mb-0">
@@ -195,7 +195,7 @@ M.applyBindings(model, '#app');</pre>
                     <tr><td><code>class="{{cls}} card"</code></td><td>An attribute, interpolated</td></tr>
                     <tr><td><code>{{#if x}}…{{/if}}</code></td><td>A re-rendered region</td></tr>
                     <tr><td><code>{{{html}}}</code></td><td>A re-rendered region, unescaped</td></tr>
-                    <tr><td><code>{{#each xs key=id}}…{{/each}}</code></td><td><strong>Reconciles</strong> — see below</td></tr>
+                    <tr><td><code>{{#each xs key=id}}…{{/each}}</code></td><td><strong>Reconciles</strong> - see below</td></tr>
                     <tr><td><code>data-bind-text="expr"</code></td><td>A property, an attribute or a class</td></tr>
                     <tr><td><code>data-model="path"</code></td><td>Two-way, control ↔ data</td></tr>
                     <tr><td><code>data-on-click="save"</code></td><td>Any DOM event</td></tr>
@@ -204,7 +204,7 @@ M.applyBindings(model, '#app');</pre>
                 </table>
             </div>
             <p class="bind-note mb-0">
-                Every value on the right is an <strong>expression</strong>, not just a property name — see
+                Every value on the right is an <strong>expression</strong>, not just a property name - see
                 <a href="#sec-expressions">Expressions</a>.
             </p>
         </div>
@@ -232,7 +232,7 @@ M.applyBindings(model, '#app');</pre>
 
             <p class="bind-note mb-0">
                 For an attribute, <code>false</code>, <code>null</code> and <code>undefined</code>
-                <strong>remove</strong> it, and <code>true</code> sets it to the empty string — so
+                <strong>remove</strong> it, and <code>true</code> sets it to the empty string - so
                 <code>data-bind-aria-hidden="collapsed"</code> does what you meant rather than rendering the string
                 <code>"false"</code>.
             </p>
@@ -256,13 +256,13 @@ M.applyBindings(model, '#app');</pre>
 &lt;p&gt;Searching for &lt;b&gt;{{query}}&lt;/b&gt; ({{query.length}} characters)&lt;/p&gt;</pre>
 
             <p class="mb-2">
-                The expression must be a <strong>settable path</strong> — a name, or a member chain ending in one —
+                The expression must be a <strong>settable path</strong> - a name, or a member chain ending in one -
                 because a binding you cannot write back through is not two-way. A comparison or a helper call is
                 refused at compile time with a warning rather than silently going one-way.
             </p>
             <p class="bind-note mb-0">
                 Checkboxes bind <code>checked</code>, multi-selects bind an array, and number inputs coerce to a
-                <code>Number</code> — with an empty box becoming <code>null</code> rather than <code>NaN</code>. The
+                <code>Number</code> - with an empty box becoming <code>null</code> rather than <code>NaN</code>. The
                 data → DOM direction writes only when the value actually differs, so a re-render while someone is
                 typing does not jump their caret to the end.
             </p>
@@ -277,7 +277,7 @@ M.applyBindings(model, '#app');</pre>
         <div class="card-body">
             <p class="mb-4">
                 <code>data-on-</code> takes any DOM event name. The value is a method on your component, either as a
-                bare reference or as a call — and your declared arguments come first, with
+                bare reference or as a call - and your declared arguments come first, with
                 <strong>the event always last</strong>, so a handler that wants only the event and one that wants
                 arguments are spelled the same way round.
             </p>
@@ -289,7 +289,7 @@ M.applyBindings(model, '#app');</pre>
 &lt;input data-on-keyup="onKey"&gt;</pre>
 
             <p class="bind-note mb-0">
-                Returning <code>false</code> calls <code>preventDefault()</code> — the same idiom Domma's
+                Returning <code>false</code> calls <code>preventDefault()</code> - the same idiom Domma's
                 <code>.on()</code> uses. Event bindings declare no dependencies: the listener is attached once and
                 reads the data when it fires, so there is nothing for an effect to re-run.
             </p>
@@ -315,7 +315,7 @@ M.applyBindings(model, '#app');</pre>
 &lt;p data-bind-hidden="items.length === 0"&gt;{{items.length}} item(s)&lt;/p&gt;</pre>
 
             <p class="bind-note mb-0">
-                Truthiness is <em>mustache</em> truthiness, so an <strong>empty array is falsy</strong> — which means
+                Truthiness is <em>mustache</em> truthiness, so an <strong>empty array is falsy</strong> - which means
                 <code>{{#if items}}</code> and <code>data-if="items"</code> can never disagree about an empty list.
             </p>
         </div>
@@ -330,7 +330,7 @@ M.applyBindings(model, '#app');</pre>
             <p class="bind-lead mb-4">
                 This is the one worth understanding. <code>{{#each items key=id}}</code> <strong>reconciles</strong>:
                 a row that is still in the list after a change keeps the very same DOM nodes it had before. Not
-                equivalent nodes — the same objects.
+                equivalent nodes - the same objects.
             </p>
 
             <p class="mb-4">
@@ -353,7 +353,7 @@ M.applyBindings(model, '#app');</pre>
 
             <p class="bind-note mb-0">
                 <code>key=</code> must name an <em>identity</em>, not a value. A key that changes when the row's
-                contents change defeats the whole mechanism — every row looks new, and you are back to rebuilding.
+                contents change defeats the whole mechanism - every row looks new, and you are back to rebuilding.
                 Without <code>key=</code> the block still works, but re-renders wholesale and says so once.
             </p>
         </div>
@@ -388,7 +388,7 @@ M.applyBindings(model, '#app');</pre>
 
             <p class="bind-note mb-0">
                 Read that handler carefully: <code>$parent.remove($data)</code>. Inside a list a bare name
-                resolves against the <em>row</em> — there is no scope walk, deliberately, because a name that
+                resolves against the <em>row</em> - there is no scope walk, deliberately, because a name that
                 silently resolved one level up would mean something different depending on data you are not
                 looking at. So <code>$parent</code> names the component and <code>$data</code> is the row handing
                 <em>itself</em> over. <code>$index</code>, <code>$length</code> and <code>$root</code> are there
@@ -415,7 +415,7 @@ M.applyBindings(model, '#app');</pre>
 &lt;span&gt;{{ price * qty }}&lt;/span&gt;</pre>
 
             <p class="mb-2">
-                It is parsed by hand — a tokeniser, a Pratt parser and a tree-walking evaluator — rather than
+                It is parsed by hand - a tokeniser, a Pratt parser and a tree-walking evaluator - rather than
                 compiled with the <code>Function</code> constructor. That is not stylistic. It means bindings work
                 under a strict Content Security Policy (<code>script-src 'self'</code>, no
                 <code>unsafe-eval</code>), which is the setting where evaluating binding strings at runtime stops
@@ -423,7 +423,7 @@ M.applyBindings(model, '#app');</pre>
             </p>
             <p class="bind-note mb-0">
                 Refused on purpose: assignment, <code>new</code>, and reads of <code>__proto__</code>,
-                <code>constructor</code> or <code>prototype</code> in any form — including
+                <code>constructor</code> or <code>prototype</code> in any form - including
                 <code>a[key]</code> where <code>key</code> only holds one of them at runtime. Method calls are
                 refused too, except in <code>data-on-*</code>, where invoking a method is the entire point and the
                 call happens on a gesture rather than during a render.
@@ -439,8 +439,8 @@ M.applyBindings(model, '#app');</pre>
         <div class="card-body">
             <p class="mb-4">
                 Everything above lives inside a component, which owns its template. <code>M.applyBindings()</code> is
-                the other direction: point it at markup that is <em>already in the document</em> — server-rendered,
-                hand-written, whatever — and it activates the binding attributes in place, leaving the markup
+                the other direction: point it at markup that is <em>already in the document</em> - server-rendered,
+                hand-written, whatever - and it activates the binding attributes in place, leaving the markup
                 otherwise as it found it.
             </p>
 
@@ -497,7 +497,7 @@ const model = M.create({
 const handle = M.applyBindings(model, '#apply-demo', {
     methods: {
         add()  { /* push a row */ },
-        drop(row) { /* remove that row — called as $parent.drop($data) */ },
+        drop(row) { /* remove that row - called as $parent.drop($data) */ },
         reset() { /* back to the start */ }
     }
 });</pre>
@@ -505,7 +505,7 @@ const handle = M.applyBindings(model, '#apply-demo', {
             <p class="bind-note mb-3">
                 A Model is the ergonomic thing to pass: reads track it and writes route back through
                 <code>set()</code>, so <code>data-model</code> lands in the model with validation and change
-                notification intact — not in a throwaway copy. A plain object works too, but only the parts of it that
+                notification intact - not in a throwaway copy. A plain object works too, but only the parts of it that
                 are observable will be reactive.
             </p>
 
@@ -529,7 +529,7 @@ const handle = M.applyBindings(model, '#apply-demo', {
                     </tr>
                     <tr>
                         <td><code>key=</code> is required on <code>data-each</code></td>
-                        <td>There is no template to fall back to re-rendering — the markup <em>is</em> the page.</td>
+                        <td>There is no template to fall back to re-rendering - the markup <em>is</em> the page.</td>
                     </tr>
                     <tr>
                         <td>Handlers arrive in <code>options.methods</code></td>
@@ -541,7 +541,7 @@ const handle = M.applyBindings(model, '#apply-demo', {
 
             <p class="mb-0">
                 <code>applyBindings</code> returns a handle. Call <code>handle.dispose()</code> on anything that
-                outlives its markup — a router view, a modal, a slideover — because an effect is a live node in the
+                outlives its markup - a router view, a modal, a slideover - because an effect is a live node in the
                 dependency graph and does not go away just because its nodes did.
             </p>
         </div>
@@ -562,7 +562,7 @@ const handle = M.applyBindings(model, '#apply-demo', {
                 <li class="mb-2">
                     <strong>There is no <code>data-bind-html</code>, deliberately.</strong> Assigning
                     <code>innerHTML</code> from data is the shortest route to a cross-site scripting hole. The
-                    template already has an explicit, greppable opt-out — <code>{{{triple-stache}}}</code> — which
+                    template already has an explicit, greppable opt-out - <code>{{{triple-stache}}}</code> - which
                     says so where a reviewer can see it.
                 </li>
                 <li class="mb-2">
@@ -580,8 +580,8 @@ const handle = M.applyBindings(model, '#apply-demo', {
     </section>
 
     <div class="alert alert-info">
-        <strong>Next:</strong> <a href="reactivity.html">Reactivity</a> for the layer underneath —
-        <code>M.observable()</code>, <code>M.computed()</code> and <code>M.effect()</code> —
+        <strong>Next:</strong> <a href="reactivity.html">Reactivity</a> for the layer underneath -
+        <code>M.observable()</code>, <code>M.computed()</code> and <code>M.effect()</code> -
         <a href="index.html">Models</a> for schemas, validation and persistence, and
         <a href="../components/index.html">Components</a> for the element lifecycle these templates live in.
     </div>
@@ -625,7 +625,7 @@ const handle = M.applyBindings(model, '#apply-demo', {
             </div>
             <p class="mb-0">
                 Searching for <b data-bind-text="query || '(nothing)'"></b>
-                — <span data-bind-text="query.length"></span> character(s)
+                - <span data-bind-text="query.length"></span> character(s)
             </p>`,
         data() { return {query: ''}; }
     });
@@ -714,7 +714,7 @@ const handle = M.applyBindings(model, '#apply-demo', {
                 const after = this._snapshot();
                 const kept = before.filter((node) => after.includes(node)).length;
                 this.set({
-                    identity: `${kept} of ${before.length} original row element(s) survived — same objects, not rebuilt`
+                    identity: `${kept} of ${before.length} original row element(s) survived - same objects, not rebuilt`
                 });
             },
             prepend() {

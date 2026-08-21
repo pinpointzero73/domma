@@ -1,5 +1,5 @@
 /**
- * Address Lookup Admin — Shared Sidebar Module
+ * Address Lookup Admin - Shared Sidebar Module
  *
  * Single source of truth for the AL admin sidebar items, API URL, and date
  * formatting. Extracted from all 5 AL sub-pages to eliminate duplication.
@@ -72,7 +72,7 @@ export function initALSidebar(activeSection) {
         item => !item.roles || item.roles.includes(userRole)
     );
 
-    // Theme-reactive variant — matches admin-sidebar.js pattern
+    // Theme-reactive variant - matches admin-sidebar.js pattern
     const theme = window.Domma?.theme;
     const getVariant = () => (theme && theme.isDark()) ? 'dark' : 'light';
 
@@ -99,7 +99,7 @@ export function initALSidebar(activeSection) {
         contentSelector: '.admin-main'
     });
 
-    // React to theme changes — swap sidebar variant class
+    // React to theme changes - swap sidebar variant class
     if (theme && theme.onChange) {
         theme.onChange(() => {
             const el = document.getElementById('admin-sidebar');

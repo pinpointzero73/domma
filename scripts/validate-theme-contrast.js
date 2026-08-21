@@ -7,18 +7,18 @@
  * Why this exists: Domma's colour variables come in two kinds, and they look
  * identical at the call site.
  *
- *   · Semantic — `--dm-surface`, `--dm-text`, `--dm-border`, `--dm-hover-bg`.
+ *   · Semantic - `--dm-surface`, `--dm-text`, `--dm-border`, `--dm-hover-bg`.
  *     Every theme block redefines these, so they flip with the theme.
- *   · Palette — `--dm-gray-100`, `--dm-slate-200`, `--dm-white`. Defined once.
+ *   · Palette - `--dm-gray-100`, `--dm-slate-200`, `--dm-white`. Defined once.
  *     They are fixed swatches and stay put whatever the theme.
  *
  * A rule that sets `background: var(--dm-gray-100)` and no `color` inherits its
  * text from `--dm-text`, which DOES flip. Under a dark theme that leaves light
- * text on a permanently light background — unreadable, with nothing to see in
+ * text on a permanently light background - unreadable, with nothing to see in
  * the markup and no test to fail.
  *
  * Eighteen rules shipped this way, including `.models-method-item`,
- * `.tables-method-item` and `.utils-method-item` — the method chips on three
+ * `.tables-method-item` and `.utils-method-item` - the method chips on three
  * showcases were illegible in dark mode.
  *
  * The fix is either a semantic variable for the background, or an explicit
@@ -43,7 +43,7 @@ const DEFAULT_TARGETS = ['src/css', 'public/showcase/css'];
 
 /**
  * Where variable definitions are read from. A variable counts as theme-aware
- * if it is defined more than once anywhere here — once for light, once for
+ * if it is defined more than once anywhere here - once for light, once for
  * dark, or once per theme block.
  */
 const DEFINITION_SOURCES = [
@@ -57,9 +57,9 @@ const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'coverage']);
 /**
  * A rule is exempt when its fixed background is deliberate:
  *
- *  · Already theme-scoped — a rule under `.dm-theme-dark` or `[data-mode="dark"]`
+ *  · Already theme-scoped - a rule under `.dm-theme-dark` or `[data-mode="dark"]`
  *    is explicitly handling that theme, so a fixed colour is the whole point.
- *  · A named swatch utility — `.bg-white`, `.bg-gray-100`. The class name
+ *  · A named swatch utility - `.bg-white`, `.bg-gray-100`. The class name
  *    declares the colour; making it follow the theme would defeat it.
  */
 function isDeliberate(selector, variable) {
@@ -89,8 +89,8 @@ function walk(dir, out = []) {
 function countDefinitions() {
     const counts = new Map();
     // Built output ONLY. Reading source and dist together double-counts every
-    // variable — src/css/domma.css and public/dist/domma.css are the same
-    // definition — which makes single-definition palette variables look
+    // variable - src/css/domma.css and public/dist/domma.css are the same
+    // definition - which makes single-definition palette variables look
     // theme-aware and blinds the whole check.
     for (const abs of DEFINITION_SOURCES.map(r => join(ROOT, r))) {
         let css;
@@ -127,7 +127,7 @@ function main() {
 
     const counts = countDefinitions();
     if (!counts.size) {
-        console.error('✗ no variable definitions found — run `npm run build:css` first');
+        console.error('✗ no variable definitions found - run `npm run build:css` first');
         return 1;
     }
 
@@ -170,12 +170,12 @@ function main() {
 
     if (update) {
         writeFileSync(BASELINE, JSON.stringify(current, null, 2) + '\n');
-        console.log(`baseline updated — ${current.length} known finding(s)`);
+        console.log(`baseline updated - ${current.length} known finding(s)`);
         return 0;
     }
 
     if (!findings.length) {
-        console.log(`✓ no theme-contrast risks — ${files.length} stylesheet(s) checked`);
+        console.log(`✓ no theme-contrast risks - ${files.length} stylesheet(s) checked`);
         return 0;
     }
 
@@ -184,7 +184,7 @@ function main() {
         const fresh = findings.filter(f => !known.has(key(f)));
         if (!fresh.length) {
             const fixed = [...known].filter(k => !current.includes(k)).length;
-            console.log(`✓ no new theme-contrast risks — ${findings.length} known` +
+            console.log(`✓ no new theme-contrast risks - ${findings.length} known` +
                 (fixed ? ` (${fixed} now resolved; run --update-baseline)` : ''));
             return 0;
         }

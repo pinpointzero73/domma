@@ -23,7 +23,7 @@
         <div class="hero-title">Contact Management</div>
         <div class="hero-subtitle">
             A complete contact management system built as a <code>&lt;domma-contacts&gt;</code> web
-            component. Drop it anywhere — storage, search, groups, favourites, and a rich editor
+            component. Drop it anywhere - storage, search, groups, favourites, and a rich editor
             overlay are all encapsulated inside the Shadow DOM.
         </div>
         <div class="hero-actions">
@@ -45,7 +45,7 @@
 
 <div class="container">
 
-    <!-- The component — replaces all the previous manual markup -->
+    <!-- The component - replaces all the previous manual markup -->
     <domma-contacts></domma-contacts>
 
     <!-- Features section -->
@@ -61,7 +61,7 @@
                     </h4>
                     <ul class="list-disc pl-5 space-y-1 text-sm">
                         <li>Registered via <code>Domma.component()</code></li>
-                        <li>Scoped CSS — zero leakage to host page</li>
+                        <li>Scoped CSS - zero leakage to host page</li>
                         <li>Theme CSS variables flow in through the shadow boundary</li>
                         <li>Portable: works with any Domma page</li>
                     </ul>
@@ -75,10 +75,10 @@
                         Storage &amp; Data
                     </h4>
                     <ul class="list-disc pl-5 space-y-1 text-sm">
-                        <li><code>S.get() / S.set()</code> — auto JSON serialisation</li>
+                        <li><code>S.get() / S.set()</code> - auto JSON serialisation</li>
                         <li>14-field contact model (name, DOB, social, groups…)</li>
                         <li>Contacts and groups persist across page refreshes</li>
-                        <li><code>D().diff()</code> — live age from date of birth</li>
+                        <li><code>D().diff()</code> - live age from date of birth</li>
                     </ul>
                 </div>
             </div>
@@ -90,8 +90,8 @@
                         Search &amp; Filtering
                     </h4>
                     <ul class="list-disc pl-5 space-y-1 text-sm">
-                        <li><code>_.debounce()</code> — 250 ms debounced search</li>
-                        <li><code>_.filter()</code> — by query, group, and favourites</li>
+                        <li><code>_.debounce()</code> - 250 ms debounced search</li>
+                        <li><code>_.filter()</code> - by query, group, and favourites</li>
                         <li>Group dropdown auto-updates from managed groups</li>
                         <li>Favourites toggle with star animation</li>
                     </ul>
@@ -105,10 +105,10 @@
                         UI Components
                     </h4>
                     <ul class="list-disc pl-5 space-y-1 text-sm">
-                        <li><code>E.toast()</code> — success, warning notifications</li>
-                        <li><code>E.confirm()</code> — delete confirmations</li>
-                        <li><code>E.prompt()</code> — group name input</li>
-                        <li><code>I.scan(this.root)</code> — icons inside shadow root</li>
+                        <li><code>E.toast()</code> - success, warning notifications</li>
+                        <li><code>E.confirm()</code> - delete confirmations</li>
+                        <li><code>E.prompt()</code> - group name input</li>
+                        <li><code>I.scan(this.root)</code> - icons inside shadow root</li>
                     </ul>
                 </div>
             </div>
@@ -123,7 +123,7 @@
                         <li>Contact cards with colour-coded initial avatars</li>
                         <li>Deterministic colour from contact ID hash</li>
                         <li><code>_.render()</code> Mustache template per card</li>
-                        <li><code>_.escape()</code> + DOMPurify — two-layer XSS defence</li>
+                        <li><code>_.escape()</code> + DOMPurify - two-layer XSS defence</li>
                     </ul>
                 </div>
             </div>
@@ -135,8 +135,8 @@
                         Dates &amp; Groups
                     </h4>
                     <ul class="list-disc pl-5 space-y-1 text-sm">
-                        <li><code>D().fromNow()</code> — relative created timestamps</li>
-                        <li><code>D().format()</code> — DOB display</li>
+                        <li><code>D().fromNow()</code> - relative created timestamps</li>
+                        <li><code>D().format()</code> - DOB display</li>
                         <li>Groups CRUD: add / rename / delete via prompts</li>
                         <li>Rename propagates to all contacts automatically</li>
                     </ul>

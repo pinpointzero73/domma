@@ -1283,7 +1283,7 @@ textarea:not([class])::placeholder {
    NUMBER BADGE
    ============================================ */
 
-/* Standalone number badge — circular for single digits, pill for multi-digit */
+/* Standalone number badge - circular for single digits, pill for multi-digit */
 .badge-number {
     display: inline-flex;
     align-items: center;
@@ -1300,7 +1300,7 @@ textarea:not([class])::placeholder {
     color: var(--dm-danger-text, var(--dm-white));
 }
 
-/* Dot indicator — small coloured presence circle */
+/* Dot indicator - small coloured presence circle */
 .badge-dot {
     display: inline-block;
     width: 0.5rem;
@@ -1315,7 +1315,7 @@ textarea:not([class])::placeholder {
     display: inline-flex;
 }
 
-/* Counter badge — overlapping corner with border ring (classic app-notification style) */
+/* Counter badge - overlapping corner with border ring (classic app-notification style) */
 .badge-counter {
     position: absolute;
     top: -6px;
@@ -1337,7 +1337,7 @@ textarea:not([class])::placeholder {
     color: var(--dm-danger-text, var(--dm-white));
 }
 
-/* Dot variant of counter — smaller, no text */
+/* Dot variant of counter - smaller, no text */
 .badge-counter.badge-dot {
     top: -2px;
     right: -2px;
@@ -1391,7 +1391,7 @@ textarea:not([class])::placeholder {
    LIST GROUP
    ============================================ */
 
-/* Container — vertical flex column with rounded corners and clipped overflow */
+/* Container - vertical flex column with rounded corners and clipped overflow */
 .list-group {
     display: flex;
     flex-direction: column;
@@ -1401,7 +1401,7 @@ textarea:not([class])::placeholder {
     background-color: var(--dm-surface);
 }
 
-/* Each item — flex row, vertically centred, with a bottom separator */
+/* Each item - flex row, vertically centred, with a bottom separator */
 .list-group-item {
     display: flex;
     align-items: center;
@@ -1419,7 +1419,7 @@ textarea:not([class])::placeholder {
     border-bottom: none;
 }
 
-/* Flush modifier — strip outer border and radius for embedding inside cards */
+/* Flush modifier - strip outer border and radius for embedding inside cards */
 .list-group-flush {
     border: none;
     border-radius: 0;
@@ -1441,7 +1441,7 @@ textarea:not([class])::placeholder {
     font-size: var(--dm-font-size-base);
 }
 
-/* Actionable items — pointer cursor and hover highlight */
+/* Actionable items - pointer cursor and hover highlight */
 .list-group-item-action {
     cursor: pointer;
     user-select: none;
@@ -1465,7 +1465,7 @@ textarea:not([class])::placeholder {
     justify-content: center;
 }
 
-/* Central text wrapper — grows to fill available space */
+/* Central text wrapper - grows to fill available space */
 .list-group-item-content {
     flex-grow: 1;
     min-width: 0;
@@ -1493,7 +1493,7 @@ textarea:not([class])::placeholder {
     text-overflow: ellipsis;
 }
 
-/* Right-side trailing area — badges, timestamps, actions */
+/* Right-side trailing area - badges, timestamps, actions */
 .list-group-item-trailing {
     flex-shrink: 0;
     margin-left: auto;
@@ -1503,7 +1503,7 @@ textarea:not([class])::placeholder {
     gap: var(--dm-space-2);
 }
 
-/* Active/selected state — accent background takes precedence over colour variants */
+/* Active/selected state - accent background takes precedence over colour variants */
 .list-group-item.active {
     background-color: var(--dm-primary);
     color: var(--dm-primary-text, var(--dm-white));
@@ -1515,7 +1515,7 @@ textarea:not([class])::placeholder {
     color: rgba(255, 255, 255, 0.75);
 }
 
-/* Disabled state — dimmed and non-interactive */
+/* Disabled state - dimmed and non-interactive */
 .list-group-item.disabled {
     opacity: 0.7;
     cursor: not-allowed;
@@ -1595,7 +1595,7 @@ textarea:not([class])::placeholder {
     border-top-color: var(--dm-border);
 }
 
-/* Numbered list — CSS counter prepended to each item */
+/* Numbered list - CSS counter prepended to each item */
 .list-group-numbered {
     list-style-type: none;
     counter-reset: list-group-counter;
@@ -1611,7 +1611,7 @@ textarea:not([class])::placeholder {
     color: var(--dm-text-muted);
 }
 
-/* Horizontal layout — items arranged in a row */
+/* Horizontal layout - items arranged in a row */
 .list-group-horizontal {
     flex-direction: row;
 }
@@ -4932,7 +4932,7 @@ code {
 }
 
 /* Status text utilities use color-mix with --dm-text so they auto-adapt to
-   light/dark modes — keeping brand identity while staying ≥4.5:1 readable. */
+   light/dark modes - keeping brand identity while staying ≥4.5:1 readable. */
 .text-success {
     color: color-mix(in oklab, var(--dm-success), var(--dm-text) 30%) !important;
 }
@@ -5338,7 +5338,7 @@ code {
 /*
  * Hover bridge: the menu is rendered as a document.body sibling positioned with a
  * small offset/margin gap from its trigger. On a hover-triggered dropdown that gap
- * is a dead-zone — the pointer leaves the trigger before reaching the menu, firing
+ * is a dead-zone - the pointer leaves the trigger before reaching the menu, firing
  * the close. These transparent pseudo-elements extend the menu's hoverable area
  * above and below it, so the trigger→menu path is one continuous hover surface.
  * Only present on hover dropdowns, so click dropdowns are unaffected.
@@ -5350,7 +5350,7 @@ code {
     left: 0;
     right: 0;
     height: 0.75rem;
-    /* transparent — a hover surface only, never painted */
+    /* transparent - a hover surface only, never painted */
 }
 
 .domma-dropdown-menu-hover::before {
@@ -7561,7 +7561,7 @@ code {
 }
 
 /* ============================================================
- * Chooser — visual option-picker (card/chip × single/multi)
+ * Chooser - visual option-picker (card/chip × single/multi)
  * ============================================================ */
 .domma-chooser {
     --picker-radius: var(--dm-radius);
@@ -7781,7 +7781,7 @@ code {
 }
 
 /* ============================================================
- * Chooser — accent colour, accent style, glow, shadow extensions
+ * Chooser - accent colour, accent style, glow, shadow extensions
  * ============================================================ */
 
 /* Default the accent variables on every chooser */
@@ -7812,7 +7812,7 @@ code {
                 0 0 18px color-mix(in srgb, var(--picker-glow-colour) 60%, transparent);
 }
 
-/* Shadow weights — applied to all options */
+/* Shadow weights - applied to all options */
 .domma-chooser[data-shadow="sm"] .picker-option {
     box-shadow: 0 1px 2px var(--picker-shadow-colour, rgba(0, 0, 0, 0.08));
 }
@@ -7900,7 +7900,7 @@ code {
 }
 
 /* ============================================================
- * Page-roller chooser slideover — structured editor styling
+ * Page-roller chooser slideover - structured editor styling
  * ============================================================ */
 .qr-chooser-slideover-body {
     padding: 1.25rem;

@@ -213,7 +213,7 @@ export interface Models {
 
     /**
      * Create a lazily-evaluated derived value that tracks whatever it reads.
-     * The body must be synchronous — tracking stops at the first `await`.
+     * The body must be synchronous - tracking stops at the first `await`.
      */
     computed<T = any>(fn: () => T, options?: ComputedOptions<T>): ComputedRef<T>;
 

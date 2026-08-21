@@ -1,5 +1,5 @@
 /**
- * Domma Christmas Light Theme — "Frosty Morning"
+ * Domma Christmas Light Theme - "Frosty Morning"
  * Ice-blue tinted backgrounds evoking frost on windows, deep pine-green text
  * Classic Christmas Red primary, rich Holly Green secondary
  */
@@ -243,10 +243,10 @@
 }
 
 /* ============================================================
-   DECORATIVE CSS — "Frosty Morning" festive embellishments
+   DECORATIVE CSS - "Frosty Morning" festive embellishments
    ============================================================ */
 
-/* Snow-dust background — subtle radial dots on the page root */
+/* Snow-dust background - subtle radial dots on the page root */
 .dm-theme-christmas-light {
     background-image:
         radial-gradient(circle, rgba(168, 213, 229, 0.35) 1px, transparent 1px),
@@ -262,7 +262,7 @@
     border-image-slice: 1;
 }
 
-/* Candy-stripe progress bars (default + plain variant only — variants keep their semantic colour) */
+/* Candy-stripe progress bars (default + plain variant only - variants keep their semantic colour) */
 .dm-theme-christmas-light .dm-progression-progress-bar,
 .dm-theme-christmas-light .progress > .progress-bar:not([class*="progress-bar-"]) {
     background-image: repeating-linear-gradient(
@@ -276,7 +276,7 @@
     color: #ffffff;
 }
 
-/* Festive syntax highlighting — green keywords, red strings, gold functions */
+/* Festive syntax highlighting - green keywords, red strings, gold functions */
 .dm-theme-christmas-light .code-block .syntax-keyword {
     color: #2D6B3F;
     font-weight: 600;

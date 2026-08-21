@@ -327,14 +327,14 @@ $(() => {
     <h2 class="text-center mb-3">Keeping the UI in Sync</h2>
     <p class="lead text-center mb-6">
       Most SPA bugs come from forgetting to update something. Domma's dependency tracking removes that class of
-      bug — you describe what a value <em>is</em>, and it stays correct.
+      bug - you describe what a value <em>is</em>, and it stays correct.
     </p>
 
     <div class="row">
       <div class="col-md-6 mb-4">
         <div class="card h-100">
           <div class="card-header">
-            <h3 class="text-lg font-semibold mb-0">Step 1 — Hold state in a model</h3>
+            <h3 class="text-lg font-semibold mb-0">Step 1 - Hold state in a model</h3>
           </div>
           <div class="card-body">
             <p>Start with a blueprint and a model. Nothing new here.</p>
@@ -351,7 +351,7 @@ const cart = M.create({
       <div class="col-md-6 mb-4">
         <div class="card h-100">
           <div class="card-header">
-            <h3 class="text-lg font-semibold mb-0">Step 2 — Derive, don't duplicate</h3>
+            <h3 class="text-lg font-semibold mb-0">Step 2 - Derive, don't duplicate</h3>
           </div>
           <div class="card-body">
             <p>
@@ -376,12 +376,12 @@ total.get();   // computed once, then cached</pre>
       <div class="col-md-6 mb-4">
         <div class="card h-100">
           <div class="card-header">
-            <h3 class="text-lg font-semibold mb-0">Step 3 — React with an effect</h3>
+            <h3 class="text-lg font-semibold mb-0">Step 3 - React with an effect</h3>
           </div>
           <div class="card-body">
             <p>
               An effect subscribes to whatever it reads. Add a field to the calculation later and the subscription
-              updates itself — there is no list of field names to keep in step.
+              updates itself - there is no list of field names to keep in step.
             </p>
             <pre class="code-block language-javascript">
 M.effect(() => {
@@ -397,7 +397,7 @@ cart.set('shipping', 0);</pre>
       <div class="col-md-6 mb-4">
         <div class="card h-100">
           <div class="card-header">
-            <h3 class="text-lg font-semibold mb-0">Step 4 — Clean up on route change</h3>
+            <h3 class="text-lg font-semibold mb-0">Step 4 - Clean up on route change</h3>
           </div>
           <div class="card-body">
             <p>
@@ -429,7 +429,7 @@ export const cartView = {
       <div class="col-md-6 mb-3">
         <div class="card border-danger h-100">
           <div class="card-body">
-            <p class="mb-2"><strong>The manual way — quietly breaks</strong></p>
+            <p class="mb-2"><strong>The manual way - quietly breaks</strong></p>
             <pre class="code-block language-javascript">
 cart.onChange(({ field }) => {
     // Miss a field name here and the
@@ -445,7 +445,7 @@ cart.onChange(({ field }) => {
       <div class="col-md-6 mb-3">
         <div class="card border-success h-100">
           <div class="card-body">
-            <p class="mb-2"><strong>Tracked — cannot go stale</strong></p>
+            <p class="mb-2"><strong>Tracked - cannot go stale</strong></p>
             <pre class="code-block language-javascript">
 M.effect(() => {
     // Subscribes to exactly what it
@@ -465,7 +465,7 @@ M.effect(() => {
       <ol class="mb-0 mt-2">
         <li>
           <strong>Keep derivations synchronous.</strong> Dependency tracking stops at the first
-          <code>await</code>, so fetch first and write the result to the model — don't read model fields after
+          <code>await</code>, so fetch first and write the result to the model - don't read model fields after
           awaiting.
         </li>
         <li>
@@ -478,8 +478,8 @@ M.effect(() => {
 
     <div class="alert alert-info">
       Updates are batched: several <code>set()</code> calls in the same tick produce one re-run on the next
-      microtask. If you need a derived value settled immediately — in a test, or when reading straight after a
-      write — call <code>M.flush()</code>.
+      microtask. If you need a derived value settled immediately - in a test, or when reading straight after a
+      write - call <code>M.flush()</code>.
       <br><br>
       <a href="../../showcase/models/reactivity.html" class="btn btn-sm btn-info mt-2">
         Try it live in the Reactivity showcase

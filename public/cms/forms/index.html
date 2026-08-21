@@ -31,14 +31,14 @@
         <div class="card-body">
             <p class="mb-4">Forms are first-class citizens in Domma CMS. Create forms in the admin panel, define fields with validation, and embed them in any page with a single shortcode. Submissions are stored and manageable in the admin, with optional email and webhook triggers.</p>
 
-            <p class="mb-4">Every form is powered by Domma's blueprint-driven <strong>Form Builder</strong> — the same engine used throughout the Domma framework. This means forms automatically benefit from client-side validation, reactive models, and consistent styling with zero additional configuration.</p>
+            <p class="mb-4">Every form is powered by Domma's blueprint-driven <strong>Form Builder</strong> - the same engine used throughout the Domma framework. This means forms automatically benefit from client-side validation, reactive models, and consistent styling with zero additional configuration.</p>
 
             <h3 class="text-lg font-semibold mb-3">How it works</h3>
             <ol class="mb-4">
-                <li><span data-icon="edit"></span> <strong>Build</strong> — Create and configure a form in the admin panel (Admin → Forms → New Form)</li>
-                <li><span data-icon="check-circle"></span> <strong>Validate</strong> — Define per-field validation rules with custom error messages</li>
-                <li><span data-icon="code"></span> <strong>Embed</strong> — Drop a shortcode on any page: <code>[form slug="contact"]</code></li>
-                <li><span data-icon="inbox"></span> <strong>Collect</strong> — Submissions are stored and viewable in the admin, with optional trigger actions</li>
+                <li><span data-icon="edit"></span> <strong>Build</strong> - Create and configure a form in the admin panel (Admin → Forms → New Form)</li>
+                <li><span data-icon="check-circle"></span> <strong>Validate</strong> - Define per-field validation rules with custom error messages</li>
+                <li><span data-icon="code"></span> <strong>Embed</strong> - Drop a shortcode on any page: <code>[form slug="contact"]</code></li>
+                <li><span data-icon="inbox"></span> <strong>Collect</strong> - Submissions are stored and viewable in the admin, with optional trigger actions</li>
             </ol>
 
             <div class="grid grid-cols-3 gap-4 mb-4">
@@ -75,7 +75,7 @@
             <h2 class="text-xl font-semibold"><span data-icon="tool"></span> Form Builder</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">The visual Form Builder lets you construct and configure forms entirely from the admin panel — no code required. Navigate to <strong>Admin → Forms → New Form</strong> to get started.</p>
+            <p class="mb-4">The visual Form Builder lets you construct and configure forms entirely from the admin panel - no code required. Navigate to <strong>Admin → Forms → New Form</strong> to get started.</p>
 
             <h3 class="text-lg font-semibold mb-3">Form settings</h3>
             <p class="mb-3">Before adding fields, configure the top-level form properties:</p>
@@ -127,7 +127,7 @@
                 <li>Click <strong>Add Field</strong> and choose a field type from the panel on the right</li>
                 <li>Fill in the field label, name (used as the key in submission data), and placeholder text</li>
                 <li>Configure validation rules and set a custom error message for each rule</li>
-                <li><strong>Drag fields</strong> up and down the list to reorder them — the order here matches the rendered form</li>
+                <li><strong>Drag fields</strong> up and down the list to reorder them - the order here matches the rendered form</li>
                 <li>In Wizard Mode, assign each field to a <strong>Step</strong> using the step selector on the field card</li>
             </ol>
 
@@ -200,7 +200,7 @@
                     </tr>
                     <tr>
                         <td><code>radio</code></td>
-                        <td>Radio button group — pick one from several options</td>
+                        <td>Radio button group - pick one from several options</td>
                         <td>Rendered as styled pill-style radio buttons</td>
                     </tr>
                     <tr>
@@ -215,12 +215,12 @@
                     </tr>
                     <tr>
                         <td><code>hidden</code></td>
-                        <td>Hidden value — not shown to the user</td>
+                        <td>Hidden value - not shown to the user</td>
                         <td>Static value or dynamically populated from a URL query parameter</td>
                     </tr>
                     <tr>
                         <td><code>rating</code></td>
-                        <td>Star rating (1–5)</td>
+                        <td>Star rating (1-5)</td>
                         <td>Rendered as interactive star icons; stored as an integer</td>
                     </tr>
                     <tr>
@@ -233,7 +233,7 @@
 
             <div class="alert alert-info mb-0">
                 <span data-icon="info"></span>
-                All field types participate fully in <strong>Conditional Logic</strong> — any field can show or hide other fields based on its current value. See the Conditional Logic Engine section below.
+                All field types participate fully in <strong>Conditional Logic</strong> - any field can show or hide other fields based on its current value. See the Conditional Logic Engine section below.
             </div>
         </div>
     </section>
@@ -387,7 +387,7 @@
 
             <div class="alert alert-info mb-0">
                 <span data-icon="info"></span>
-                Wizard Mode is fully compatible with <strong>Conditional Logic</strong> — entire steps can be shown or hidden based on values entered in earlier steps.
+                Wizard Mode is fully compatible with <strong>Conditional Logic</strong> - entire steps can be shown or hidden based on values entered in earlier steps.
             </div>
         </div>
     </section>
@@ -398,7 +398,7 @@
             <h2 class="text-xl font-semibold"><span data-icon="git-branch"></span> Conditional Logic Engine</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">The Conditional Logic Engine allows fields and wizard steps to appear or disappear in real time based on values entered elsewhere in the form. Conditions are evaluated client-side as the user types — no page reload required.</p>
+            <p class="mb-4">The Conditional Logic Engine allows fields and wizard steps to appear or disappear in real time based on values entered elsewhere in the form. Conditions are evaluated client-side as the user types - no page reload required.</p>
 
             <h3 class="text-lg font-semibold mb-3">Condition syntax</h3>
             <p class="mb-3">Each field or step accepts a <code>showIf</code> property containing a condition object or an array of condition objects:</p>
@@ -484,7 +484,7 @@
   }
 }</code></pre>
 
-            <p class="mb-0">Conditions also apply to <strong>wizard steps</strong> — set <code>showIf</code> on a step definition using the same syntax to skip entire steps when they are not relevant to the user's choices.</p>
+            <p class="mb-0">Conditions also apply to <strong>wizard steps</strong> - set <code>showIf</code> on a step definition using the same syntax to skip entire steps when they are not relevant to the user's choices.</p>
         </div>
     </section>
 
@@ -499,10 +499,10 @@
             <h3 class="text-lg font-semibold mb-3">Submissions table</h3>
             <p class="mb-3">The submissions view displays entries in a sortable, searchable table. Each column corresponds to a form field, and the table supports:</p>
             <ul class="mb-4">
-                <li><span data-icon="arrow-up-down"></span> <strong>Column sorting</strong> — click any column header to sort ascending or descending</li>
-                <li><span data-icon="search"></span> <strong>Full-text search</strong> — filter entries across all field values</li>
-                <li><span data-icon="filter"></span> <strong>Date range filter</strong> — narrow submissions to a specific time window</li>
-                <li><span data-icon="eye"></span> <strong>Row detail view</strong> — click any row to see the full submission with all field values and metadata</li>
+                <li><span data-icon="arrow-up-down"></span> <strong>Column sorting</strong> - click any column header to sort ascending or descending</li>
+                <li><span data-icon="search"></span> <strong>Full-text search</strong> - filter entries across all field values</li>
+                <li><span data-icon="filter"></span> <strong>Date range filter</strong> - narrow submissions to a specific time window</li>
+                <li><span data-icon="eye"></span> <strong>Row detail view</strong> - click any row to see the full submission with all field values and metadata</li>
             </ul>
 
             <h3 class="text-lg font-semibold mb-3">Export</h3>
@@ -525,7 +525,7 @@
                     <tr>
                         <td><strong>File-Only Mode</strong></td>
                         <td><code>data/forms/{slug}-submissions.json</code></td>
-                        <td>JSON array — one object per submission, appended on each submit</td>
+                        <td>JSON array - one object per submission, appended on each submit</td>
                     </tr>
                     <tr>
                         <td><strong>Pro Mode</strong></td>
@@ -663,7 +663,7 @@
 
             <div class="alert alert-info mb-0">
                 <span data-icon="info"></span>
-                All triggers are executed <strong>asynchronously after the response is sent to the user</strong>. A trigger failure will not cause the form submission to appear to fail — errors are logged to <code>logs/triggers.log</code> for review.
+                All triggers are executed <strong>asynchronously after the response is sent to the user</strong>. A trigger failure will not cause the form submission to appear to fail - errors are logged to <code>logs/triggers.log</code> for review.
             </div>
         </div>
     </section>
@@ -697,7 +697,7 @@
                     <tr>
                         <td><code>slug</code></td>
                         <td><span class="badge badge-success">Yes</span></td>
-                        <td>—</td>
+                        <td>-</td>
                         <td>The slug of the form to embed, as defined in the admin panel</td>
                     </tr>
                     <tr>
@@ -709,13 +709,13 @@
                     <tr>
                         <td><code>class</code></td>
                         <td>No</td>
-                        <td>—</td>
+                        <td>-</td>
                         <td>One or more additional CSS classes applied to the outer form wrapper for custom styling</td>
                     </tr>
                     <tr>
                         <td><code>prefill</code></td>
                         <td>No</td>
-                        <td>—</td>
+                        <td>-</td>
                         <td>Comma-separated list of <code>field:param</code> pairs to pre-fill from URL query parameters (e.g. <code>"email:utm_email"</code>)</td>
                     </tr>
                 </tbody>
@@ -723,7 +723,7 @@
 
             <h3 class="text-lg font-semibold mb-3">Submission behaviour</h3>
             <ul class="mb-4">
-                <li><span data-icon="refresh-cw"></span> Submissions are handled via <strong>AJAX</strong> — the page does not reload on submit</li>
+                <li><span data-icon="refresh-cw"></span> Submissions are handled via <strong>AJAX</strong> - the page does not reload on submit</li>
                 <li><span data-icon="check-circle"></span> The success message configured in the form settings is displayed inline, replacing the form</li>
                 <li><span data-icon="alert-circle"></span> Validation errors and server-side errors are shown inline beneath the relevant field or at the top of the form</li>
                 <li><span data-icon="loader"></span> A loading state is applied to the submit button during submission to prevent duplicate requests</li>

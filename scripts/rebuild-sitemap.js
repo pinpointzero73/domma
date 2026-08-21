@@ -16,7 +16,7 @@ const TODAY      = new Date().toISOString().slice(0, 10);
 
 // ── Skip rules ────────────────────────────────────────────────────────────────
 
-/** Path segments that identify template fragments — never canonical pages. */
+/** Path segments that identify template fragments - never canonical pages. */
 const FRAGMENT_DIRS = [
     'layouts/templates',
 ];

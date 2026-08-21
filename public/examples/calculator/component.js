@@ -226,7 +226,7 @@ Domma.component('domma-calculator', {
         },
         memoryClear() { this.set({ memory: 0 }); },
 
-        /** Dispatch an action by name — single handler for all [data-action] buttons. */
+        /** Dispatch an action by name - single handler for all [data-action] buttons. */
         handleAction(action) {
             switch (action) {
                 case 'clear':       this.clear(); break;
@@ -279,7 +279,7 @@ Domma.component('domma-calculator', {
             this.set({ mode: this.props.initialMode });
         }
 
-        // Single delegated click handler — attached to the shadow root so it survives re-renders
+        // Single delegated click handler - attached to the shadow root so it survives re-renders
         this.root.addEventListener('click', (e) => {
             const numBtn = e.target.closest('[data-number]');
             if (numBtn) { this.appendNumber(numBtn.dataset.number); return; }
@@ -294,7 +294,7 @@ Domma.component('domma-calculator', {
             if (angleBtn) { this.toggleAngleMode(angleBtn.dataset.angle); return; }
         });
 
-        // Keyboard support — attached to document, removed in onUnmount
+        // Keyboard support - attached to document, removed in onUnmount
         this._keyHandler = (e) => this.handleKeyboard(e);
         document.addEventListener('keydown', this._keyHandler);
 

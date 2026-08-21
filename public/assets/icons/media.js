@@ -271,7 +271,7 @@ export const media = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
-    // US-spelled aliases — retained for backwards compatibility.
+    // US-spelled aliases - retained for backwards compatibility.
     'maximize': {
         viewBox: '0 0 24 24',
         path: 'M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3',
@@ -308,7 +308,7 @@ export const media = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
-    // US-spelled aliases (share identical paths — safe for backwards compat)
+    // US-spelled aliases (share identical paths - safe for backwards compat)
     'maximize-2': {
         viewBox: '0 0 24 24',
         path: 'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7',

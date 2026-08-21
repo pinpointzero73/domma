@@ -37,7 +37,7 @@
                 <div class="card card-subtle p-4 text-center">
                     <span data-icon="users" class="d-block mb-2" style="font-size:2rem;"></span>
                     <div class="font-semibold mb-1">4 Built-in Roles</div>
-                    <div class="text-sm text-muted">Admin, Manager, Editor, Subscriber — plus custom roles</div>
+                    <div class="text-sm text-muted">Admin, Manager, Editor, Subscriber - plus custom roles</div>
                 </div>
                 <div class="card card-subtle p-4 text-center">
                     <span data-icon="shield" class="d-block mb-2" style="font-size:2rem;"></span>
@@ -56,16 +56,16 @@
         <div class="card-body">
             <p class="mb-4">The login sequence follows a standard JWT handshake with automatic silent refresh.</p>
             <ol class="mb-4" style="padding-left:1.5rem;line-height:2;">
-                <li>User visits <code>/admin</code> — redirected to login if not authenticated</li>
-                <li>Enter email and password — <code>POST /api/auth/login</code></li>
-                <li>Server validates credentials (bcrypt compare) — returns <code>{ accessToken, refreshToken }</code></li>
+                <li>User visits <code>/admin</code> - redirected to login if not authenticated</li>
+                <li>Enter email and password - <code>POST /api/auth/login</code></li>
+                <li>Server validates credentials (bcrypt compare) - returns <code>{ accessToken, refreshToken }</code></li>
                 <li>Access token stored in localStorage; refresh token stored in an httpOnly cookie</li>
                 <li>Subsequent requests include <code>Authorization: Bearer {token}</code> header</li>
                 <li>Access token expires in <strong>15 minutes</strong>; auto-refreshed using refresh token (<strong>7 days</strong>)</li>
             </ol>
             <div class="alert alert-info">
                 <span data-icon="info"></span>
-                <strong>Silent refresh</strong> — The CMS client intercepts 401 responses, attempts a token refresh, then retries the original request transparently. Users are only prompted to log in again when the refresh token itself expires.
+                <strong>Silent refresh</strong> - The CMS client intercepts 401 responses, attempts a token refresh, then retries the original request transparently. Users are only prompted to log in again when the refresh token itself expires.
             </div>
         </div>
     </section>
@@ -87,7 +87,7 @@
             </ul>
             <div class="alert alert-warning">
                 <span data-icon="alert-triangle"></span>
-                <strong>Production note</strong> — Keep <code>auth.allowRegistration</code> set to <code>false</code> unless you specifically need a self-service sign-up flow. Enabling it on a public site without email verification exposes the admin area to spam accounts.
+                <strong>Production note</strong> - Keep <code>auth.allowRegistration</code> set to <code>false</code> unless you specifically need a self-service sign-up flow. Enabling it on a public site without email verification exposes the admin area to spam accounts.
             </div>
         </div>
     </section>
@@ -101,9 +101,9 @@
             <p class="mb-4">Password resets use a time-limited, single-use token delivered by email. SMTP must be configured in site settings for this flow to work.</p>
             <ol class="mb-4" style="padding-left:1.5rem;line-height:2;">
                 <li>User clicks <strong>"Forgot password"</strong> on the login page</li>
-                <li>Enter email address — <code>POST /api/auth/forgot-password</code></li>
+                <li>Enter email address - <code>POST /api/auth/forgot-password</code></li>
                 <li>If the email exists, the server sends a reset email with a time-limited token (<strong>1 hour</strong>)</li>
-                <li>User clicks the link — token is validated — user sets a new password</li>
+                <li>User clicks the link - token is validated - user sets a new password</li>
                 <li>All existing sessions are invalidated immediately on password reset</li>
                 <li>Requires SMTP configured under <strong>Admin → Settings → Email</strong></li>
             </ol>
@@ -128,7 +128,7 @@
                         Access Token
                     </div>
                     <ul style="padding-left:1.2rem;line-height:1.8;" class="text-sm">
-                        <li>Short-lived — <strong>15 minutes</strong></li>
+                        <li>Short-lived - <strong>15 minutes</strong></li>
                         <li>Carries: <code>userId</code>, <code>email</code>, <code>role</code>, <code>iat</code>, <code>exp</code></li>
                         <li>Stored in <strong>localStorage</strong></li>
                         <li>Sent with every API request as a Bearer token</li>
@@ -140,14 +140,14 @@
                         Refresh Token
                     </div>
                     <ul style="padding-left:1.2rem;line-height:1.8;" class="text-sm">
-                        <li>Long-lived — <strong>7 days</strong></li>
+                        <li>Long-lived - <strong>7 days</strong></li>
                         <li>Stored as an <strong>httpOnly cookie</strong> (not accessible via JS)</li>
                         <li>Used only to obtain new access tokens silently</li>
                         <li>Rotated on each use</li>
                     </ul>
                 </div>
             </div>
-            <p class="mb-3">The <code>JWT_SECRET</code> is generated automatically during the <code>npm run setup</code> wizard and stored in your <code>.env</code> file. Rotate it by regenerating and restarting — all active sessions will be invalidated.</p>
+            <p class="mb-3">The <code>JWT_SECRET</code> is generated automatically during the <code>npm run setup</code> wizard and stored in your <code>.env</code> file. Rotate it by regenerating and restarting - all active sessions will be invalidated.</p>
             <p class="text-sm text-muted">Token payload example: <code>{ "userId": "abc123", "email": "admin@example.com", "role": "admin", "iat": 1700000000, "exp": 1700000900 }</code></p>
         </div>
     </section>
@@ -158,7 +158,7 @@
             <h2 class="text-xl font-semibold">Four Built-in Roles</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Built-in roles cover the most common team structures. Each role is cumulative — higher roles include all permissions of roles below them.</p>
+            <p class="mb-4">Built-in roles cover the most common team structures. Each role is cumulative - higher roles include all permissions of roles below them.</p>
             <table class="table table-striped mb-4">
                 <thead>
                     <tr>
@@ -221,13 +221,13 @@
                         <li>Select the user to update</li>
                         <li>Open the <strong>Edit User</strong> panel</li>
                         <li>Change the <strong>Role</strong> dropdown to your custom role</li>
-                        <li>Save — changes take effect on the user's next request</li>
+                        <li>Save - changes take effect on the user's next request</li>
                     </ol>
                 </div>
             </div>
             <div class="alert alert-warning">
                 <span data-icon="alert-triangle"></span>
-                Custom roles inherit <strong>no permissions by default</strong> — you must explicitly opt in to each resource + action pair. This prevents accidental over-permission when creating new roles.
+                Custom roles inherit <strong>no permissions by default</strong> - you must explicitly opt in to each resource + action pair. This prevents accidental over-permission when creating new roles.
             </div>
         </div>
     </section>
@@ -325,12 +325,12 @@
                 <div>
                     <h3 class="font-semibold mb-2">Profile Fields</h3>
                     <ul style="padding-left:1.5rem;line-height:2;" class="text-sm">
-                        <li><code>displayName</code> — public-facing name</li>
-                        <li><code>bio</code> — short biography (textarea)</li>
-                        <li><code>avatar</code> — media picker (linked to Media Library)</li>
-                        <li><code>website</code> — personal or professional URL</li>
-                        <li><code>socialLinks</code> — object of platform → URL pairs</li>
-                        <li><code>location</code> — city / country free text</li>
+                        <li><code>displayName</code> - public-facing name</li>
+                        <li><code>bio</code> - short biography (textarea)</li>
+                        <li><code>avatar</code> - media picker (linked to Media Library)</li>
+                        <li><code>website</code> - personal or professional URL</li>
+                        <li><code>socialLinks</code> - object of platform → URL pairs</li>
+                        <li><code>location</code> - city / country free text</li>
                     </ul>
                 </div>
                 <div>
@@ -385,7 +385,7 @@ Cookie: refreshToken={token}
 }</code></pre>
             <div class="alert alert-warning">
                 <span data-icon="alert-triangle"></span>
-                <strong>Security</strong> — Never expose your access token in client-side code that is publicly readable. For server-to-server integrations, consider creating a dedicated service account with the minimum required permissions.
+                <strong>Security</strong> - Never expose your access token in client-side code that is publicly readable. For server-to-server integrations, consider creating a dedicated service account with the minimum required permissions.
             </div>
         </div>
     </section>

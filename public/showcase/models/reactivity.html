@@ -124,7 +124,7 @@
         <div class="hero-title">Reactivity</div>
         <div class="hero-subtitle">
             Declare what a value is made of, once. Domma works out when it has to change, and re-runs exactly the
-            work that depends on it — and nothing else.
+            work that depends on it - and nothing else.
         </div>
     </div>
 </div>
@@ -148,7 +148,7 @@
 
             <div class="rx-diff mb-4">
                 <div class="rx-diff-pane rx-diff-before">
-                    <div class="rx-diff-head">Before — you own the wiring, and you own the bugs</div>
+                    <div class="rx-diff-head">Before - you own the wiring, and you own the bugs</div>
                     <pre class="code-block language-javascript">
 let total = price * qty;
 
@@ -167,7 +167,7 @@ qtyInput.addEventListener('input', () =&gt; {
 });</pre>
                 </div>
                 <div class="rx-diff-pane rx-diff-after">
-                    <div class="rx-diff-head">After — you declare the relationship once</div>
+                    <div class="rx-diff-head">After - you declare the relationship once</div>
                     <pre class="code-block language-javascript">
 const order = M.create(
     {price: {}, qty: {}},
@@ -187,7 +187,7 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
                 Everything worth caring about is visible in that difference. On the left, the fact that
                 <code>total</code> is <em>made of</em> price and quantity is not written down anywhere. It is
                 implied, twice, by two handlers that happen to agree with each other. Nothing in the language, the
-                framework or your editor knows that they are supposed to agree — so the day someone adds a third
+                framework or your editor knows that they are supposed to agree - so the day someone adds a third
                 input, or a discount, or a currency selector, the two handlers quietly stop agreeing and the page
                 shows a number that was true a moment ago.
             </p>
@@ -201,16 +201,16 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
                     retype it in every handler.</li>
                 <li><strong>Recalculating.</strong> By hand, in the right order, so nothing reads a value that has
                     not caught up yet.</li>
-                <li><strong>Repainting.</strong> Also by hand, and also in every handler — the classic bug where the
+                <li><strong>Repainting.</strong> Also by hand, and also in every handler - the classic bug where the
                     number is right in memory and stale on screen.</li>
             </ul>
 
             <p class="mb-4">
-                On the right, you write down the <em>relationship</em> — total is price times quantity — and stop
+                On the right, you write down the <em>relationship</em> - total is price times quantity - and stop
                 there. Domma watches which values that expression actually reads while it runs, remembers them, and
                 re-runs the expression when one of them moves. Add a third input and you change nothing but the
                 expression. Add a fourth thing that depends on the total and you add one more
-                <code>M.effect()</code>; no existing line is touched. The wiring is not <em>simpler</em> — it is
+                <code>M.effect()</code>; no existing line is touched. The wiring is not <em>simpler</em> - it is
                 gone, because nobody wrote it.
             </p>
 
@@ -222,7 +222,7 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
 
             <p class="mb-0">
                 There is a second, quieter benefit, and the demos below put a number on it. Because Domma knows
-                precisely which values each expression read, a write to something irrelevant costs nothing at all —
+                precisely which values each expression read, a write to something irrelevant costs nothing at all -
                 not a cheap re-run, not a fast comparison, but <strong>zero</strong> re-evaluations. Type into a
                 field the total does not read and the total's body does not run. You will see the counter refuse to
                 move.
@@ -238,7 +238,7 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
         <div class="card-body">
 
             <p class="mb-4">
-                This is a complete, working program — it has already run, and its output is underneath it. Change a
+                This is a complete, working program - it has already run, and its output is underneath it. Change a
                 number and press <strong>Run</strong>.
             </p>
 
@@ -268,11 +268,11 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
             </p>
 
             <ul class="mb-4">
-                <li><code>M.create()</code> — the <strong>state</strong>. Plain fields you write to.</li>
-                <li><code>M.computed()</code> — a <strong>derived value</strong>. You give it an expression; it
+                <li><code>M.create()</code> - the <strong>state</strong>. Plain fields you write to.</li>
+                <li><code>M.computed()</code> - a <strong>derived value</strong>. You give it an expression; it
                     gives you back something you read with <code>.get()</code>. It works out its own inputs by
                     noticing what it reads.</li>
-                <li><code>M.effect()</code> — <strong>work to repeat</strong>. It runs once straight away, notes
+                <li><code>M.effect()</code> - <strong>work to repeat</strong>. It runs once straight away, notes
                     what it read, and runs again whenever any of that changes. Updating the DOM is the usual job.
                 </li>
             </ul>
@@ -282,7 +282,7 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
                 moment you write; it waits until the end of the current tick, so ten writes in a row cost one
                 re-run rather than ten (that is section&nbsp;7). Inside a snippet like this we want the output to
                 appear in reading order, so we ask it to settle immediately. In an application you almost never
-                write <code>M.flush()</code> — the wait is what makes it fast.
+                write <code>M.flush()</code> - the wait is what makes it fast.
             </p>
 
             <p class="mb-0 rx-takeaway">
@@ -335,7 +335,7 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
                     </div>
                     <p class="text-sm">
                         Change <strong>Price</strong> or <strong>Quantity</strong> and the counter rises. Type a
-                        whole paragraph into <strong>Note</strong> — the model updates on every keystroke, and the
+                        whole paragraph into <strong>Note</strong> - the model updates on every keystroke, and the
                         counter does not move once. Press <strong>Read total again</strong> as often as you like:
                         repeated reads are served from cache and cost nothing.
                     </p>
@@ -361,7 +361,7 @@ M.effect(() =&gt; updateShippingBanner(total.get()));</pre>
 
             <p class="mb-4">
                 Note what is <em>not</em> here: you never told Domma that the total depends on price and quantity.
-                It found out by watching the expression run. That matters more than it first appears — a declared
+                It found out by watching the expression run. That matters more than it first appears - a declared
                 dependency list is another thing that can disagree with the code, and it always eventually does.
             </p>
 
@@ -380,18 +380,18 @@ const order = M.create(
 
 const total = M.computed(() =&gt; order.get('price') * order.get('qty'));
 
-total.get();              // 30 — body runs now
-total.get();              // 30 — cached, body does not run
+total.get();              // 30 - body runs now
+total.get();              // 30 - cached, body does not run
 
 order.set('note', 'hi');  // 'note' was never read → no re-evaluation
-total.get();              // 30 — still cached
+total.get();              // 30 - still cached
 
 order.set('qty', 4);
-total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
+total.get();              // 40 - a dependency moved, so it re-evaluates</pre>
 
             <p class="text-sm mt-3 mb-0">
                 Computeds compose. One computed reading another links the two automatically, and a computed shared
-                by several others is evaluated once per settle, not once per reader — so
+                by several others is evaluated once per settle, not once per reader - so
                 <code>subtotal → vat → total</code> costs one evaluation of <code>subtotal</code>, not two. Use
                 <code>.peek()</code> to read a value without becoming dependent on it, and <code>.dispose()</code>
                 when a long-lived computed outlives the screen that needed it.
@@ -406,9 +406,9 @@ total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
         </div>
         <div class="card-body">
 
-            <div class="try-it" data-try-it="M.observable — a single tracked value">
+            <div class="try-it" data-try-it="M.observable - a single tracked value">
                 <textarea class="try-it-editor" rows="12" spellcheck="false">
-                    // No blueprint, no field names — just one value that other things can watch.
+                    // No blueprint, no field names - just one value that other things can watch.
                     const count = M.observable(0);
 
                     const doubled = M.computed(() => count.value * 2);
@@ -418,7 +418,7 @@ total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
                     count.value = 5;
                     log('after the write:', doubled.get());
 
-                    // peek() reads without subscribing — handy inside a derivation
+                    // peek() reads without subscribing - handy inside a derivation
                     // that needs a value but must not re-run when it changes.
                     log('peek says:', count.peek());
                 </textarea>
@@ -427,7 +427,7 @@ total.get();              // 40 — a dependency moved, so it re-evaluates</pre>
             <p class="mb-4">
                 An observable is a box with one value in it. Read it with <code>.value</code> and whatever
                 derivation is running becomes a dependent; write <code>.value</code> and every dependent is told.
-                That is the whole primitive, and everything else on this page is built on it — a model is, quite
+                That is the whole primitive, and everything else on this page is built on it - a model is, quite
                 literally, one observable per field.
             </p>
 
@@ -484,13 +484,13 @@ const summary = M.computed(() =&gt; {
 
 M.effect(() =&gt; $('#status').text(summary.get()));
 
-// Later, from anywhere — no subscription, no event name, no repaint call
+// Later, from anywhere - no subscription, no event name, no repaint call
 loading.value = true;</pre>
 
             <div class="alert alert-warning mt-4 mb-0">
                 <strong>One gotcha worth knowing early.</strong> An observable only tells its dependents when the
                 new value differs from the old one, and it decides that by comparison. So changing an object or
-                array <em>in place</em> and assigning it back is invisible — the old and new values are the same
+                array <em>in place</em> and assigning it back is invisible - the old and new values are the same
                 thing. Always assign a new value: <code>list.value = [...list.value, item]</code>, not
                 <code>list.value.push(item)</code>. Section&nbsp;10 has a runnable demonstration, and the next
                 section explains why arrays get an exception.
@@ -505,7 +505,7 @@ loading.value = true;</pre>
         </div>
         <div class="card-body">
 
-            <div class="try-it" data-try-it="M.observableArray — push, remove, and watch">
+            <div class="try-it" data-try-it="M.observableArray - push, remove, and watch">
                 <textarea class="try-it-editor" rows="16" spellcheck="false">
                     const items = M.observableArray(['milk', 'eggs']);
 
@@ -529,7 +529,7 @@ loading.value = true;</pre>
             </div>
 
             <p class="mb-4">
-                A shopping list, a table's rows, a set of selected ids — most application state that is interesting
+                A shopping list, a table's rows, a set of selected ids - most application state that is interesting
                 is a list, and the ordinary way to change a list is to mutate it. <code>M.observableArray()</code>
                 exists so that the natural code works: <code>push</code>, <code>pop</code>, <code>shift</code>,
                 <code>unshift</code>, <code>splice</code>, <code>sort</code>, <code>reverse</code>,
@@ -541,8 +541,8 @@ loading.value = true;</pre>
                 Those mutators notify <strong>unconditionally</strong>, and the reason is the gotcha from the last
                 section. A comparison cannot detect an in-place change: after a <code>push</code>, the array is
                 still the same array, so comparing it against itself reports no difference no matter what happened.
-                Rather than keep a shadow copy and diff it on every mutation — O(n) per push, for a result that
-                throws away the useful detail — the array simply announces that it changed. The accepted cost is the
+                Rather than keep a shadow copy and diff it on every mutation - O(n) per push, for a result that
+                throws away the useful detail - the array simply announces that it changed. The accepted cost is the
                 occasional notification from a mutator that changed nothing, such as a <code>sort()</code> on an
                 already-sorted list. That errs towards telling you too often rather than too rarely, which is the
                 safe direction: a redundant repaint is a wasted frame, a missed one is a bug your users report.
@@ -559,7 +559,7 @@ loading.value = true;</pre>
                 One deliberate asymmetry to know about: the initial array, and any array assigned wholesale, is
                 <strong>copied</strong> rather than adopted. If it held your reference, a <code>push</code> through
                 your original variable would change what <code>.value</code> returns without ever reaching the
-                dependency graph — the data and the screen would disagree silently, with no event left to recover
+                dependency graph - the data and the screen would disagree silently, with no event left to recover
                 by. <code>M.observable()</code> can safely adopt by reference precisely because it offers no
                 in-place path. If you genuinely want the live array, take it from <code>.peek()</code>; that is the
                 intended escape hatch.
@@ -593,7 +593,7 @@ todos.removeAll();                              // badge → 0</pre>
                 <code>M.observable()</code> and <code>M.observableArray()</code> default to the reactive core's own
                 deep equality, which treats <code>NaN</code>, <code>Date</code>, class instances,
                 <code>Map</code>/<code>Set</code>/<code>RegExp</code> and typed arrays differently from Domma's
-                <code>utils.isEqual</code>. Pass <code>{equals}</code> if you need Domma's exact rules — and wrap
+                <code>utils.isEqual</code>. Pass <code>{equals}</code> if you need Domma's exact rules - and wrap
                 it, <code>{equals: (a, b) =&gt; _.isEqual(a, b)}</code>, because handing over <code>_.isEqual</code>
                 bare loses its receiver and throws.
             </div>
@@ -632,7 +632,7 @@ todos.removeAll();                              // badge → 0</pre>
                 <div class="col-7">
                     <div class="rx-log" id="rx-effect-log"></div>
                     <p class="text-sm mt-2">
-                        <strong>Session id</strong> is read by the same effect, on the same line as the others — and
+                        <strong>Session id</strong> is read by the same effect, on the same line as the others - and
                         editing it never re-runs anything, because it is read inside <code>M.untracked()</code>.
                         Press <strong>Stop effect</strong> and the log goes quiet for good.
                     </p>
@@ -640,8 +640,8 @@ todos.removeAll();                              // badge → 0</pre>
             </div>
 
             <p class="mb-4">
-                An effect is the answer to "when this changes, do that". It runs once immediately — which is how it
-                learns what it reads — and then again whenever any of those values move. It returns a stop function,
+                An effect is the answer to "when this changes, do that". It runs once immediately - which is how it
+                learns what it reads - and then again whenever any of those values move. It returns a stop function,
                 and calling it detaches the effect from everything at once. There is no event name to invent, no
                 handler to keep a reference to, and no list of fields to keep in step with the body.
             </p>
@@ -654,7 +654,7 @@ todos.removeAll();                              // badge → 0</pre>
 
             <div class="rx-diff mb-4">
                 <div class="rx-diff-pane rx-diff-before">
-                    <div class="rx-diff-head">Hand-wired — a string that has to match a field name</div>
+                    <div class="rx-diff-head">Hand-wired - a string that has to match a field name</div>
                     <pre class="code-block language-javascript">
 model.onChange(({field, newValue}) =&gt; {
     if (field === 'qty') recalculate();
@@ -665,7 +665,7 @@ model.onChange(({field, newValue}) =&gt; {
 // condition as well as the body.</pre>
                 </div>
                 <div class="rx-diff-pane rx-diff-after">
-                    <div class="rx-diff-head">Tracked — subscribes to whatever it reads, and only that</div>
+                    <div class="rx-diff-head">Tracked - subscribes to whatever it reads, and only that</div>
                     <pre class="code-block language-javascript">
 M.effect(() =&gt; recalculate(model.get('qty')));
 
@@ -676,7 +676,7 @@ M.effect(() =&gt; recalculate(model.get('qty')));
 
             <p class="mb-4">
                 <code>M.untracked()</code> is the escape hatch for the case where you need a value but must not
-                depend on it — a session id, a start timestamp, a debug flag. Read it inside
+                depend on it - a session id, a start timestamp, a debug flag. Read it inside
                 <code>M.untracked(() =&gt; …)</code> and the graph looks the other way. Without it, effects have an
                 unfortunate habit of accumulating dependencies on things they merely mention.
             </p>
@@ -743,7 +743,7 @@ stop();   // unsubscribe from everything, in one call</pre>
             <p class="mb-4">
                 A write never recomputes anything on the spot. It marks whatever depends on it as out of date and
                 books a single tidy-up for the end of the current tick. Everything that fell out of date in that
-                tick is then settled together, in dependency order, once each. The benefit is not only speed — it is
+                tick is then settled together, in dependency order, once each. The benefit is not only speed - it is
                 that nobody ever observes a half-updated screen. If you set a price and a currency on consecutive
                 lines, no render happens in between showing the new price against the old currency.
             </p>
@@ -778,7 +778,7 @@ M.flush();</pre>
             <p class="text-sm mt-3 mb-0">
                 <code>M.flush()</code> forces the settle to happen immediately. It exists for tests and for the rare
                 place that must read a derived value on the very next line after a write. Reaching for it in
-                ordinary application code usually means something is being read too eagerly — the wait is the
+                ordinary application code usually means something is being read too eagerly - the wait is the
                 optimisation.
             </p>
         </div>
@@ -814,7 +814,7 @@ M.flush();</pre>
                 <div class="col-6">
                     <div class="rx-log" id="rx-branch-log"></div>
                     <p class="text-sm mt-2">
-                        In <strong>Read X</strong> mode, editing Y produces nothing — not a filtered-out run, no run
+                        In <strong>Read X</strong> mode, editing Y produces nothing - not a filtered-out run, no run
                         at all. Switch modes and the roles swap immediately.
                     </p>
                 </div>
@@ -829,7 +829,7 @@ M.flush();</pre>
 
             <p class="mb-4">
                 This is what stops reactivity degenerating as an application grows. Real screens are full of
-                conditions — a panel that only reads the filter when it is expanded, a total that only reads the
+                conditions - a panel that only reads the filter when it is expanded, a total that only reads the
                 discount when one applies, a row that only reads the edit buffer while being edited. With a declared
                 dependency list, each of those has to declare everything either branch <em>might</em> read, so the
                 collapsed panel wakes up on every keystroke in a filter nobody can see. Here, the cost of a branch
@@ -838,7 +838,7 @@ M.flush();</pre>
 
             <p class="mb-4">
                 It also means a derivation cannot leak subscriptions over time. Whatever it read on its last run is
-                the complete set — old links are dropped rather than accumulated — so a long-lived effect whose
+                the complete set - old links are dropped rather than accumulated - so a long-lived effect whose
                 conditions shift does not slowly become subscribed to the whole application.
             </p>
 
@@ -876,7 +876,7 @@ M.effect(() =&gt; {
                 <div class="col-6">
                     <div class="rx-log" id="rx-component-log"></div>
                     <p class="text-sm mt-2">
-                        <strong>Touch unrelated field</strong> writes a real value to the component's model — and
+                        <strong>Touch unrelated field</strong> writes a real value to the component's model - and
                         costs neither a computed re-evaluation nor a render. Nothing in the definition says so.
                     </p>
                 </div>
@@ -894,7 +894,7 @@ M.effect(() =&gt; {
             <p class="mb-4">
                 The distinction worth knowing is between the two kinds of binding. A plain <code>{{label}}</code> is
                 a text binding, so a change updates that one text node surgically. A structural binding such as
-                <code>{{#if free}}</code> has to add or remove elements, so it re-renders — but only when the
+                <code>{{#if free}}</code> has to add or remove elements, so it re-renders - but only when the
                 condition actually flips, not every time something it reads is written. In practice that means the
                 expensive path is taken rarely and by itself.
             </p>
@@ -915,7 +915,7 @@ Domma.component('order-summary', {
         // Re-evaluates only when items / unitPrice / discount change
         label() {
             const gross = this.data.items * this.data.unitPrice;
-            return `${this.data.items} item(s) — £${this.data.discount ? gross * 0.9 : gross}`;
+            return `${this.data.items} item(s) - £${this.data.discount ? gross * 0.9 : gross}`;
         },
         freeDelivery() { return this.data.items * this.data.unitPrice &gt; 50; }
     }
@@ -948,7 +948,7 @@ Domma.component('order-summary', {
                 The whole benefit is that dependents are told. State with no dependents has no benefit to collect,
                 and wrapping it costs you a box to open on every read plus a graph node that will never fire. A
                 configuration object read once at start-up, a constant, a cached lookup table, a value used only
-                inside the function that produced it — leave them as plain variables. Reach for an observable at the
+                inside the function that produced it - leave them as plain variables. Reach for an observable at the
                 moment something else needs to follow the value, not before. Making everything reactive on principle
                 is the reactive equivalent of making every field private with a getter: ceremony that obscures the
                 three places where it mattered.
@@ -958,11 +958,11 @@ Domma.component('order-summary', {
 
             <p class="mb-4">
                 Change is detected by comparing the new value with the old one. If you mutate an object or array in
-                place and hand back the same reference, there is nothing to compare — the value is identical to
-                itself — and the change does not propagate. This one is not rare and it is not obvious, so run it:
+                place and hand back the same reference, there is nothing to compare - the value is identical to
+                itself - and the change does not propagate. This one is not rare and it is not obvious, so run it:
             </p>
 
-            <div class="try-it" data-try-it="The mutation trap — and the fix">
+            <div class="try-it" data-try-it="The mutation trap - and the fix">
                 <textarea class="try-it-editor" rows="18" spellcheck="false">
                     const list = M.observable(['a']);
 
@@ -971,14 +971,14 @@ Domma.component('order-summary', {
                     M.flush();
                     log('effect runs after setup:', runs);
 
-                    // WRONG — mutate in place, then assign the same reference back.
+                    // WRONG - mutate in place, then assign the same reference back.
                     const live = list.peek();
                     live.push('b');
                     list.value = live;
                     M.flush();
                     log('after an in-place push:', runs, '(nothing was told)');
 
-                    // RIGHT — assign a new array.
+                    // RIGHT - assign a new array.
                     list.value = [...list.peek(), 'c'];
                     M.flush();
                     log('after assigning a new array:', runs, '(dependents woke up)');
@@ -988,7 +988,7 @@ Domma.component('order-summary', {
             </div>
 
             <p class="mb-4">
-                Note the last line: the data was never wrong. The write always lands — only the <em>notification</em>
+                Note the last line: the data was never wrong. The write always lands - only the <em>notification</em>
                 is gated. That is what makes the bug quietly awful, because the model and the screen disagree while
                 every value you inspect looks right. The rule is short: in a computed, return
                 <code>[...items, x]</code> rather than <code>items.push(x); return items</code>. The exception is
@@ -1015,8 +1015,8 @@ Domma.component('order-summary', {
                     booking.set('when', new Date('2030-06-30'));
                     M.flush();
 
-                    log('stored year:', booking.get('when').getFullYear(), '— the write landed');
-                    log('change notifications:', fired, '— nobody was told');
+                    log('stored year:', booking.get('when').getFullYear(), '- the write landed');
+                    log('change notifications:', fired, '- nobody was told');
 
                     // Workaround: store a timestamp, format it for display.
                     const fixed = M.create({whenMs: {}}, {whenMs: Date.parse('2026-01-01')});
@@ -1032,7 +1032,7 @@ Domma.component('order-summary', {
             <p class="mb-4">
                 Store timestamps (numbers) or ISO strings in reactive fields and turn them into dates at the point
                 of display with <code>D()</code>. That is good practice for serialisation and persistence anyway.
-                Note that <code>M.observable()</code> is <em>not</em> affected — its default comparison handles
+                Note that <code>M.observable()</code> is <em>not</em> affected - its default comparison handles
                 <code>Date</code> correctly; the limitation belongs to model fields, which are deliberately gated
                 with Domma's own <code>utils.isEqual</code> to preserve long-standing behaviour.
             </p>
@@ -1045,13 +1045,13 @@ Domma.component('order-summary', {
                     need synchronously, then await.
                 </li>
                 <li><strong>Reading a whole model tracks every field.</strong> <code>model.get()</code> with no
-                    argument subscribes to all of them — the conservative choice, since the caller could touch any.
+                    argument subscribes to all of them - the conservative choice, since the caller could touch any.
                     Prefer <code>model.get('field')</code> inside derivations. <code>model.toJSON()</code> is
                     deliberately untracked, for render-time and serialisation reads.
                 </li>
                 <li><strong>Writes made from <code>onUpdated()</code> must converge.</strong> Set a value that will
-                    compare equal on the next pass. A value that differs every time — <code>Date.now()</code>, an
-                    incrementing counter — re-triggers the watcher indefinitely, and because it is a microtask chain
+                    compare equal on the next pass. A value that differs every time - <code>Date.now()</code>, an
+                    incrementing counter - re-triggers the watcher indefinitely, and because it is a microtask chain
                     it locks the page rather than throwing.
                 </li>
                 <li><strong>Declare every field in <code>data()</code>.</strong> Observables are created lazily, so
@@ -1070,7 +1070,7 @@ Domma.component('order-summary', {
             </ul>
 
             <p class="mb-0 rx-takeaway">
-                None of this argues against reactivity — it argues for using it where derivation is the actual
+                None of this argues against reactivity - it argues for using it where derivation is the actual
                 shape of the problem. The good instinct is: state that other state or the screen is a
                 <em>function of</em> belongs in the graph; everything else is just a variable.
             </p>
@@ -1106,7 +1106,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
 
             <p class="mb-4">
                 The snippet below is that example with one substitution: <code>M.observable</code> for
-                <code>observable</code>. They are not merely similar — they are the same functions, since Domma
+                <code>observable</code>. They are not merely similar - they are the same functions, since Domma
                 takes the package as an exact-pinned build-time dependency and inlines it. Run it, then mentally
                 swap the names back.
             </p>
@@ -1114,7 +1114,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
             <div class="try-it" data-try-it="The domma-reactive README example, running here">
                 <textarea class="try-it-editor" rows="13" spellcheck="false">
                     // Standalone:  import {observable, computed, effect} from 'domma-reactive';
-                    // Here:        M.observable / M.computed / M.effect — the same functions.
+                    // Here:        M.observable / M.computed / M.effect - the same functions.
 
                     const price = M.observable(10);
                     const qty   = M.observable(3);
@@ -1136,7 +1136,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
             </p>
 
             <div class="alert alert-info mb-0">
-                <strong>You do not need to install it to use Domma.</strong> Reactivity is innate — the package is
+                <strong>You do not need to install it to use Domma.</strong> Reactivity is innate - the package is
                 an additional way in, not a relocation. Rollup inlines it at build time, so
                 <code>domma.min.js</code> stays a single self-contained file and the CDN story is unchanged.
             </div>
@@ -1316,7 +1316,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
 
     $('#rx-read').on('click', function () {
         renderTotal();
-        E.toast(`Read served from cache — still ${evalCount} evaluation(s)`, {type: 'info'});
+        E.toast(`Read served from cache - still ${evalCount} evaluation(s)`, {type: 'info'});
     });
 
     // ══════════════════════════════════════════════════════════════════════
@@ -1332,7 +1332,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
         const theme = prefs.get('theme');
         const session = M.untracked(() => prefs.get('sessionId'));
 
-        logTo('#rx-effect-log', `effect ran — user=<strong>${user}</strong> theme=<strong>${theme}</strong> session=${session}`);
+        logTo('#rx-effect-log', `effect ran - user=<strong>${user}</strong> theme=<strong>${theme}</strong> session=${session}`);
     });
 
     $('#rx-user').on('input', function () {
@@ -1345,7 +1345,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
 
     $('#rx-secret').on('input', function () {
         prefs.set('sessionId', $(this).val());
-        logTo('#rx-effect-log', '<em>sessionId changed — untracked, no re-run</em>');
+        logTo('#rx-effect-log', '<em>sessionId changed - untracked, no re-run</em>');
     });
 
     $('#rx-stop').on('click', function () {
@@ -1393,7 +1393,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
         nudge++;
         form.set('a', nudge);
         M.flush();
-        E.toast(`Settled synchronously — run count is already ${runCount}`, {type: 'info'});
+        E.toast(`Settled synchronously - run count is already ${runCount}`, {type: 'info'});
     });
 
     // ══════════════════════════════════════════════════════════════════════
@@ -1404,7 +1404,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
     M.effect(() => {
         const mode = state.get('mode');
         const value = mode === 'x' ? state.get('x') : state.get('y');
-        logTo('#rx-branch-log', `re-ran — mode=<strong>${mode}</strong>, value=<strong>${value}</strong>`);
+        logTo('#rx-branch-log', `re-ran - mode=<strong>${mode}</strong>, value=<strong>${value}</strong>`);
     });
 
     $('#rx-mode').on('change', function () {
@@ -1462,7 +1462,7 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
                 labelEvals++;
                 const gross = this.data.items * this.data.unitPrice;
                 const net = this.data.discount ? gross * 0.9 : gross;
-                return `${this.data.items} item(s) — £${net.toFixed(2)}`;
+                return `${this.data.items} item(s) - £${net.toFixed(2)}`;
             },
             freeDelivery() {
                 return this.data.items * this.data.unitPrice > 50;
@@ -1483,13 +1483,13 @@ qty.value = 4;   // effect re-runs on the next microtask</pre>
             $('#rx-touch').on('click', () => {
                 this.set({note: `touched at ${D().format('HH:mm:ss')}`});
                 logTo('#rx-component-log',
-                    `<em>wrote 'note' — no computed re-run, no render (still ${labelEvals})</em>`);
+                    `<em>wrote 'note' - no computed re-run, no render (still ${labelEvals})</em>`);
             });
         },
 
         onUpdated() {
             logTo('#rx-component-log',
-                `render — label body has run <strong>${labelEvals}</strong> time(s)`);
+                `render - label body has run <strong>${labelEvals}</strong> time(s)`);
         }
     });
 

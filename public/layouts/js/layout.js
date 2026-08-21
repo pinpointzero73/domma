@@ -978,7 +978,7 @@ import {SiteSearch} from './modules/search.js';
                     // Render all actions from config
                     await renderNavbarActions(actions, $navbarActions.get(0), { levelsUp, user });
 
-                    // Initialise site search (non-blocking — fetches index in background)
+                    // Initialise site search (non-blocking - fetches index in background)
                     SiteSearch.init(levelsUp).catch(() => {});
                 }
 
@@ -1166,7 +1166,7 @@ import {SiteSearch} from './modules/search.js';
 
             // Handle different footer layouts
             if (config.layout === 'nav') {
-                // Public footer with navigation — resolve URLs to prevent path-doubling
+                // Public footer with navigation - resolve URLs to prevent path-doubling
                 const navLinks = config.content.nav.map(item => {
                     // Build attributes string if present
                     let attrs = '';
@@ -1265,7 +1265,7 @@ import {SiteSearch} from './modules/search.js';
             });
         }
 
-        // Last segment — extract label from <title>, stripping common suffixes
+        // Last segment - extract label from <title>, stripping common suffixes
         const lastSegment = segments[segments.length - 1];
         let lastText = toLabel(lastSegment);
         const titleText = document.title;

@@ -556,7 +556,7 @@ const profileForm = Domma.forms.create(blueprint, data, {
       <!-- Chooser Field Type -->
       <section class="card mb-6" data-section="Chooser Field" data-collapsible="true">
         <div class="card-header">
-          <h2 class="text-xl font-semibold">Chooser — Visual Option-Picker</h2>
+          <h2 class="text-xl font-semibold">Chooser - Visual Option-Picker</h2>
         </div>
         <div class="card-body">
           <p class="mb-4">A blueprint-driven option picker that replaces native radio/checkbox controls when the choice deserves visual weight. <code>type: 'chooser'</code> covers all four <em>variant × multiple</em> combinations from one config and integrates with the same validation, model binding, and submission pipeline as every other field type.</p>
@@ -569,7 +569,7 @@ const planBlueprint = {
         variant: 'card',           // 'card' | 'chip'
         multiple: false,           // false = radio, true = checkbox semantics
         density: 'comfortable',    // 'comfortable' | 'compact'
-        columns: 3,                // grid columns (cards only — chips wrap)
+        columns: 3,                // grid columns (cards only - chips wrap)
         required: true,
         label: 'Choose your plan',
         accent: 'primary',                       // semantic name OR '#hex'
@@ -604,7 +604,7 @@ const tagsBlueprint = {
 </pre>
 
           <div class="forms-demo">
-            <h4>Live demo — card single-select with required validation</h4>
+            <h4>Live demo - card single-select with required validation</h4>
             <div class="forms-controls">
               <button class="btn btn-primary btn-sm" id="chooser-card-generate">
                 <span data-icon="check-square" data-icon-size="16"></span>
@@ -645,15 +645,15 @@ const tagsBlueprint = {
                 <tr><td><code>variant</code></td><td><code>'card' | 'chip'</code></td><td><code>'card'</code></td><td>Visual style</td></tr>
                 <tr><td><code>multiple</code></td><td>boolean</td><td>false</td><td>Single ↔ multi-select; value becomes string vs array</td></tr>
                 <tr><td><code>density</code></td><td><code>'comfortable' | 'compact'</code></td><td><code>'comfortable'</code></td><td>Compact strips description</td></tr>
-                <tr><td><code>columns</code></td><td>1–6</td><td>3</td><td>Card variant only; chips wrap</td></tr>
+                <tr><td><code>columns</code></td><td>1-6</td><td>3</td><td>Card variant only; chips wrap</td></tr>
                 <tr><td><code>accent</code></td><td>semantic or hex</td><td><code>'primary'</code></td><td>Selected/recommended highlight</td></tr>
                 <tr><td><code>accentStyle</code></td><td>5 styles</td><td><code>'border'</code></td><td><code>border | solid | glow | overlay | underline</code></td></tr>
                 <tr><td><code>glow</code></td><td>boolean</td><td>false</td><td>Outer glow on selected</td></tr>
                 <tr><td><code>shadow</code></td><td><code>none | sm | md | lg | xl</code></td><td><code>'none'</code></td><td>Applied to every option</td></tr>
-                <tr><td><code>options[].icon</code></td><td>string</td><td>—</td><td>Domma icon name</td></tr>
-                <tr><td><code>options[].description</code></td><td>string</td><td>—</td><td>Card + comfortable only</td></tr>
-                <tr><td><code>options[].tooltip</code></td><td>string</td><td>—</td><td>Hover hint</td></tr>
-                <tr><td><code>options[].badge</code></td><td><code>{ text, type }</code></td><td>—</td><td>Corner badge — primary/success/info/warning/danger</td></tr>
+                <tr><td><code>options[].icon</code></td><td>string</td><td>-</td><td>Domma icon name</td></tr>
+                <tr><td><code>options[].description</code></td><td>string</td><td>-</td><td>Card + comfortable only</td></tr>
+                <tr><td><code>options[].tooltip</code></td><td>string</td><td>-</td><td>Hover hint</td></tr>
+                <tr><td><code>options[].badge</code></td><td><code>{ text, type }</code></td><td>-</td><td>Corner badge - primary/success/info/warning/danger</td></tr>
                 <tr><td><code>options[].recommended</code></td><td>boolean</td><td>false</td><td>Success-coloured ring</td></tr>
                 <tr><td><code>options[].disabled</code></td><td>boolean</td><td>false</td><td>Non-interactive, skipped by keyboard</td></tr>
               </tbody>

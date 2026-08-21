@@ -6,7 +6,7 @@
  * Why this exists: Domma's whole claim is that you do not need these. A
  * showcase that reaches for `document.getElementById` while demonstrating a
  * framework built to replace it teaches the opposite of what it says, and
- * nothing catches it — the page works, so no test fails and no reviewer
+ * nothing catches it - the page works, so no test fails and no reviewer
  * notices. The survey behind this found 182 such call sites across 42 of the
  * 85 showcase pages.
  *
@@ -20,7 +20,7 @@
  *
  * Anything inside `<pre>`, `<code>` or `<textarea>`. Those are displayed source,
  * and a showcase page legitimately prints vanilla JavaScript to contrast it with
- * the Domma form — the utils and DOM showcases both do. Counting them would
+ * the Domma form - the utils and DOM showcases both do. Counting them would
  * make the honest teaching material look like the violation.
  *
  * ── Three of these are NOT straight swaps ────────────────────────────────────
@@ -41,8 +41,8 @@
  * `document.querySelector` is not a straight swap either: `$()` returns a
  * collection, not an element, so the downstream `.textContent`, `.classList`
  * and `.style` have to become `.text()`, `.addClass()` and `.css()`. Usually
- * that is a simplification — a `forEach` loop collapses into one collection
- * call — but it is a rewrite, not a substitution.
+ * that is a simplification - a `forEach` loop collapses into one collection
+ * call - but it is a rewrite, not a substitution.
  *
  * ── Ratchet ─────────────────────────────────────────────────────────────────
  *
@@ -75,8 +75,8 @@ const RULES = [
     ['querySelector',
      /\bdocument\.(?:querySelectorAll|querySelector|getElementById|getElementsByClassName|getElementsByTagName)\b/g,
      '$(…)'],
-    // NOT `window.addEventListener`: `$(window)` is an EMPTY collection — window
-    // is not a Node, and the constructor has no special case for it — so `.on()`
+    // NOT `window.addEventListener`: `$(window)` is an EMPTY collection - window
+    // is not a Node, and the constructor has no special case for it - so `.on()`
     // would attach nothing and fail silently. Flagging it would be instructing
     // people to break their page. `$(document)` does work, so document listeners
     // are still counted.
@@ -171,12 +171,12 @@ function main() {
 
     if (update) {
         writeFileSync(BASELINE, JSON.stringify(current, null, 2) + '\n');
-        console.log(`baseline updated — ${total} site(s) across ${perFile.size} file(s)`);
+        console.log(`baseline updated - ${total} site(s) across ${perFile.size} file(s)`);
         return 0;
     }
 
     if (!total) {
-        console.log(`✓ no vanilla-JS call sites — ${files.length} file(s) checked`);
+        console.log(`✓ no vanilla-JS call sites - ${files.length} file(s) checked`);
         return 0;
     }
 
@@ -189,7 +189,7 @@ function main() {
         if (!worse.length) {
             const before = Object.values(baseline).reduce((a, b) => a + b, 0);
             const gained = before - total;
-            console.log(`✓ no new vanilla JS — ${total} known (${summary})` +
+            console.log(`✓ no new vanilla JS - ${total} known (${summary})` +
                 (gained > 0 ? `, ${gained} fewer than the baseline; run --update-baseline` : ''));
             return 0;
         }
@@ -203,7 +203,7 @@ function main() {
             console.error('');
         }
         console.error('Domma exists so these are unnecessary. See the conversion notes at the');
-        console.error('top of this file — localStorage, fetch and Date are NOT straight swaps.');
+        console.error('top of this file - localStorage, fetch and Date are NOT straight swaps.');
         return 1;
     }
 

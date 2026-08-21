@@ -1,5 +1,5 @@
 /**
- * Address Lookup Admin — API Keys Management
+ * Address Lookup Admin - API Keys Management
  */
 
 import AdminAuth from '../../shared/admin-auth.js';

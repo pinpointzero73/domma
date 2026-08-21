@@ -6,7 +6,7 @@
  * - All user query text is HTML-escaped via _escapeHtml() before any DOM insertion
  * - Search index data is loaded from a trusted local static JSON file, not user input
  * - The _highlight() function escapes the source string first, then wraps matched
- *   substrings of that already-escaped string in a <mark> element — safe by construction
+ *   substrings of that already-escaped string in a <mark> element - safe by construction
  * - _buildOverlay() uses only hardcoded HTML (no user input) in the static template
  * - href values come from the static search index, not from user-typed content
  * - DOMPurify is used as an additional sanitisation layer when available on the page
@@ -36,7 +36,7 @@ export const SiteSearch = (() => {
 
     /**
      * Sanitise HTML using DOMPurify if available, otherwise return as-is
-     * (content is already escaped at the source — this is belt-and-braces)
+     * (content is already escaped at the source - this is belt-and-braces)
      */
     function _sanitise(html) {
         if (typeof DOMPurify !== 'undefined' && DOMPurify.sanitize) {
@@ -52,7 +52,7 @@ export const SiteSearch = (() => {
         _levelsUp = levelsUp || 0;
         _dataPath = _levelsUp > 0 ? '../'.repeat(_levelsUp) : '';
 
-        // Fetch search index (non-blocking — loads in background)
+        // Fetch search index (non-blocking - loads in background)
         try {
             const res = await fetch(_dataPath + 'data/search-index.json');
             _entries = await res.json();
@@ -172,7 +172,7 @@ export const SiteSearch = (() => {
         if (!container) return;
 
         if (!results || results.length === 0) {
-            // Empty state — entirely static markup with a data-icon attribute (no user content)
+            // Empty state - entirely static markup with a data-icon attribute (no user content)
             const emptyDiv = document.createElement('div');
             emptyDiv.className = 'search-empty';
             emptyDiv.innerHTML = '<span data-icon="search" class="search-empty-icon" aria-hidden="true"></span>';
@@ -234,7 +234,7 @@ export const SiteSearch = (() => {
                 const contentDiv = document.createElement('div');
                 contentDiv.className = 'search-result-content';
 
-                // Title: highlighted HTML — _highlight() escapes source, then wraps in <mark>
+                // Title: highlighted HTML - _highlight() escapes source, then wraps in <mark>
                 const titleEl = document.createElement('div');
                 titleEl.className = 'search-result-title';
                 titleEl.innerHTML = _sanitise(_highlight(entry.title, query));

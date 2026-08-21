@@ -32,7 +32,7 @@ help:
 	@echo "  make validate       - Dead classes, theme contrast, Domma conventions"
 	@echo "  make check          - test + validate"
 	@echo ""
-	@echo "Release  (v$(VERSION) — run in this order):"
+	@echo "Release  (v$(VERSION) - run in this order):"
 	@echo "  make bump V=X.Y.Z   - Set the version in package.json + package-lock.json"
 	@echo "  <write release notes> docs/RELEASE_NOTES.md + public/data/releases.json,"
 	@echo "                        then commit those and the bump"
@@ -41,7 +41,7 @@ help:
 	@echo "  make release-npm    - Publish to npmjs.com"
 	@echo "  make release-gh     - Push main, tag vX.Y.Z, GitHub release + assets"
 	@echo ""
-	@echo "  The tag must point at the 'Build vX.Y.Z' commit — that is the repo's"
+	@echo "  The tag must point at the 'Build vX.Y.Z' commit - that is the repo's"
 	@echo "  convention and release-build is what creates it. Full guide:"
 	@echo "  docs/RELEASING.md"
 	@echo ""
@@ -152,12 +152,12 @@ check: test validate
 # they could not work:
 #
 #   * `npm version patch` made its own commit, which does not match this
-#     repo's history — the version bump belongs in the `Build vX.Y.Z` commit.
+#     repo's history - the version bump belongs in the `Build vX.Y.Z` commit.
 #   * release.sh committed `public/dist/`, which is GITIGNORED, so the Build
 #     commit it believed it was making was empty and never happened.
 #   * release.sh then `git pull --rebase`d, which failed outright because the
 #     build had just left `public/download/kickstart-manifest.json` unstaged.
-#   * release.sh force-deleted and re-pushed the remote tag — on a stale base
+#   * release.sh force-deleted and re-pushed the remote tag - on a stale base
 #     that silently destroys a real release tag. It has happened here.
 #
 # See docs/RELEASING.md. Full sequence:
@@ -182,7 +182,7 @@ bump:
 release-build: build-prod
 	@git add package.json package-lock.json public/download/kickstart-manifest.json
 	@git diff --cached --quiet \
-		&& { echo ""; echo "  release-build: nothing to commit — did you run 'make bump' first?"; echo ""; exit 1; } \
+		&& { echo ""; echo "  release-build: nothing to commit - did you run 'make bump' first?"; echo ""; exit 1; } \
 		|| git commit -m "Build v$(VERSION)"
 	@echo ""
 	@echo "  Committed Build v$(VERSION). Next: make preflight"
@@ -192,21 +192,21 @@ release-build: build-prod
 # republish a version number, so a bad publish is permanent.
 preflight:
 	@git diff --quiet && git diff --cached --quiet \
-		|| { echo ""; echo "  preflight: working tree is dirty — commit or stash first"; echo ""; exit 1; }
+		|| { echo ""; echo "  preflight: working tree is dirty - commit or stash first"; echo ""; exit 1; }
 	@test "$$(git log -1 --pretty=%s)" = "Build v$(VERSION)" \
 		|| { echo ""; echo "  preflight: HEAD is \"$$(git log -1 --pretty=%s)\", expected \"Build v$(VERSION)\""; \
 		     echo "  The tag must point at the Build commit. Run 'make release-build'."; echo ""; exit 1; }
 	@git fetch --quiet origin
 	@git merge-base --is-ancestor origin/main HEAD \
-		|| { echo ""; echo "  preflight: HEAD is BEHIND origin/main — fast-forward before releasing"; \
+		|| { echo ""; echo "  preflight: HEAD is BEHIND origin/main - fast-forward before releasing"; \
 		     echo "  local  $$(git rev-parse --short HEAD)"; \
 		     echo "  remote $$(git rev-parse --short origin/main)"; echo ""; \
 		     echo "  Releasing from a stale base is how a real tag gets clobbered."; echo ""; exit 1; }
 	@git rev-parse -q --verify "refs/tags/v$(VERSION)" >/dev/null \
-		&& { echo ""; echo "  preflight: tag v$(VERSION) already exists — bump the version first"; echo ""; exit 1; } \
+		&& { echo ""; echo "  preflight: tag v$(VERSION) already exists - bump the version first"; echo ""; exit 1; } \
 		|| true
 	@npm view domma-js@$(VERSION) version >/dev/null 2>&1 \
-		&& { echo ""; echo "  preflight: $(VERSION) is already published — npm will refuse it"; echo ""; exit 1; } \
+		&& { echo ""; echo "  preflight: $(VERSION) is already published - npm will refuse it"; echo ""; exit 1; } \
 		|| true
 	@grep -q "^### v$(VERSION) " docs/RELEASE_NOTES.md \
 		|| { echo ""; echo "  preflight: no '### v$(VERSION)' entry in docs/RELEASE_NOTES.md"; echo ""; exit 1; }
@@ -231,7 +231,7 @@ release-npm:
 	@echo ""
 	@echo "✅ Published domma-js@$(VERSION)"
 	@echo "   https://www.npmjs.com/package/domma-js"
-	@echo "   jsDelivr lags npm by roughly 5–10 minutes."
+	@echo "   jsDelivr lags npm by roughly 5-10 minutes."
 	@echo ""
 
 # Push, tag, and cut the GitHub release with the dist assets attached. The
@@ -247,7 +247,7 @@ release-gh:
 	@awk '/^### v$(VERSION) /{p=1} p && /^### v[0-9]/ && !/^### v$(VERSION) /{p=0} p' \
 		docs/RELEASE_NOTES.md > /tmp/domma-release-notes.md
 	@test -s /tmp/domma-release-notes.md \
-		|| { echo "  release-gh: extracted empty notes for v$(VERSION) — check docs/RELEASE_NOTES.md"; exit 1; }
+		|| { echo "  release-gh: extracted empty notes for v$(VERSION) - check docs/RELEASE_NOTES.md"; exit 1; }
 	gh release create v$(VERSION) \
 		--title "Domma v$(VERSION)" \
 		--notes-file /tmp/domma-release-notes.md \
@@ -261,7 +261,7 @@ release-gh:
 	@echo "✅ GitHub release v$(VERSION) published"
 	@echo "   https://github.com/pinpointzero73/domma/releases/tag/v$(VERSION)"
 	@echo ""
-	@echo "   The site still needs deploying — 'make enliven' on the server."
+	@echo "   The site still needs deploying - 'make enliven' on the server."
 	@echo ""
 
 # ── Deploy ───────────────────────────────────────────────────────────────────
@@ -274,7 +274,7 @@ release-gh:
 #   * `git stash` with no `pop`. Anything modified was parked in the stash list
 #     for ever. Since the build regenerates the TRACKED
 #     public/download/kickstart-manifest.json, the tree was dirty after every
-#     run and the next run stashed it — the list grows, and a genuinely
+#     run and the next run stashed it - the list grows, and a genuinely
 #     diverged checkout is hidden rather than reported.
 #   * `git pull` merges, so a diverged server gets a merge commit instead of a
 #     refusal.
@@ -297,7 +297,7 @@ enliven:
 	if [ -n "$$DIRTY" ]; then \
 		echo "  enliven: this checkout has local changes:"; echo ""; \
 		echo "$$DIRTY" | sed 's/^/    /'; echo ""; \
-		echo "  Commit, stash or discard them yourself — refusing to guess."; echo ""; \
+		echo "  Commit, stash or discard them yourself - refusing to guess."; echo ""; \
 		exit 1; \
 	fi
 	@git checkout -- public/download/kickstart-manifest.json 2>/dev/null || true
@@ -313,9 +313,9 @@ enliven:
 	NODE_ENV=production npm run build
 	@echo "→ Verifying"
 	@node scripts/verify-build.mjs
-	@echo "✅ Live — v$$(node -p "require('./package.json').version")"
+	@echo "✅ Live - v$$(node -p "require('./package.json').version")"
 	@echo ""
-	@echo "   jsDelivr lags npm by roughly 5–10 minutes."
+	@echo "   jsDelivr lags npm by roughly 5-10 minutes."
 	@echo ""
 
 # What enliven runs last. Safe to run on its own to check a deploy.

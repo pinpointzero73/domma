@@ -202,7 +202,7 @@
 <div class="hero hero-center bg-ambient-float-orbs">
     <div class="hero-content">
         <div class="hero-title">Butterflies Effect</div>
-        <div class="hero-subtitle">A canvas effect where procedurally drawn butterflies wander and rise with flapping wings — full-page or container-scoped, with theme-aware palettes.</div>
+        <div class="hero-subtitle">A canvas effect where procedurally drawn butterflies wander and rise with flapping wings - full-page or container-scoped, with theme-aware palettes.</div>
     </div>
 </div>
 
@@ -240,7 +240,7 @@
         </div>
         <div class="card-body">
             <p class="mb-4">
-                Releases procedurally drawn butterflies that drift up through a container — or the entire viewport — as
+                Releases procedurally drawn butterflies that drift up through a container - or the entire viewport - as
                 if crossing a meadow on a spring afternoon. Each one wanders along a gently bobbing path, beats its
                 wings, and slips away off the top edge. Pass <code>null</code> for a full-page overlay, or a selector
                 for a scoped effect. Colours can follow the active theme or any of the built-in palettes.
@@ -253,7 +253,7 @@ const flutter = Domma.effects.butterflies(null);
 // Container-scoped, pastel palette, denser swarm
 Domma.effects.butterflies('#hero', { palette: 'pastel', density: 24 });
 
-// One-shot release — a burst of butterflies that winds down naturally
+// One-shot release - a burst of butterflies that winds down naturally
 Domma.effects.butterflies('#card', { burst: true, burstCount: 30 });
 
 // Control methods
@@ -328,7 +328,7 @@ flutter.destroy();
                             <td><code>twoTone</code></td>
                             <td><code>boolean</code></td>
                             <td><code>true</code></td>
-                            <td>Give each butterfly two palette colours — one for the upper wings, one for the lower</td>
+                            <td>Give each butterfly two palette colours - one for the upper wings, one for the lower</td>
                         </tr>
                         <tr>
                             <td><code>burst</code></td>
@@ -359,7 +359,7 @@ flutter.destroy();
             </div>
 
             <h3 class="text-lg font-semibold mt-6 mb-3">Built-in Palettes</h3>
-            <p class="mb-3">Pass any of these names as the <code>palette</code> option — or supply your own array of colour strings.</p>
+            <p class="mb-3">Pass any of these names as the <code>palette</code> option - or supply your own array of colour strings.</p>
             <div class="palette-swatches" id="palette-preview"></div>
         </div>
     </section>
@@ -371,7 +371,7 @@ flutter.destroy();
         </div>
         <div class="card-body">
             <p class="mb-3">
-                Each butterfly spawns just off the bottom edge — or low on the left and right sides — and is given a
+                Each butterfly spawns just off the bottom edge - or low on the left and right sides - and is given a
                 random colour from the chosen palette, a wingspan between <code>minSize</code> and <code>maxSize</code>,
                 and a starting heading.
             </p>
@@ -384,8 +384,8 @@ flutter.destroy();
             </p>
             <p class="mb-3">
                 The wings are drawn fresh each frame. A running <code>flapPhase</code> is advanced by
-                <code>flapSpeed</code>, and <code>Math.sin(flapPhase)</code> drives the wing spread — wide open at the
-                top of the beat, folded at the bottom — so the flap reads as a continuous, lifelike motion rather than a
+                <code>flapSpeed</code>, and <code>Math.sin(flapPhase)</code> drives the wing spread - wide open at the
+                top of the beat, folded at the bottom - so the flap reads as a continuous, lifelike motion rather than a
                 two-frame toggle.
             </p>
             <p>
@@ -493,7 +493,7 @@ const flutter = Domma.effects.butterflies('#butterfly-container', {
             <h2 class="text-xl font-semibold">Demo: One-Shot Release</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">In burst mode, a single flutter of butterflies is released and the effect winds down naturally — perfect for confirmation moments (form submission, achievement unlocked, sale completed).</p>
+            <p class="mb-4">In burst mode, a single flutter of butterflies is released and the effect winds down naturally - perfect for confirmation moments (form submission, achievement unlocked, sale completed).</p>
 
             <div class="butterfly-container" id="butterfly-container-4">
                 <div class="butterfly-container-label">
@@ -550,10 +550,10 @@ Domma.effects.butterflies(null, {
         </div>
         <div class="card-body">
             <ul class="mb-0" style="line-height: 1.9;">
-                <li><strong>Success &amp; celebration moments</strong> — fire a one-shot <code>burst</code> on form submission, checkout completion, or an achievement unlock.</li>
-                <li><strong>Ambient hero backdrops</strong> — a low-density continuous swarm behind a landing-page headline adds life without distraction.</li>
-                <li><strong>Empty-state &amp; onboarding delight</strong> — soften a blank dashboard or welcome screen with a gentle flutter.</li>
-                <li><strong>Seasonal &amp; spring theming</strong> — pair the <code>meadow</code> or <code>pastel</code> palette with seasonal campaigns and promotions.</li>
+                <li><strong>Success &amp; celebration moments</strong> - fire a one-shot <code>burst</code> on form submission, checkout completion, or an achievement unlock.</li>
+                <li><strong>Ambient hero backdrops</strong> - a low-density continuous swarm behind a landing-page headline adds life without distraction.</li>
+                <li><strong>Empty-state &amp; onboarding delight</strong> - soften a blank dashboard or welcome screen with a gentle flutter.</li>
+                <li><strong>Seasonal &amp; spring theming</strong> - pair the <code>meadow</code> or <code>pastel</code> palette with seasonal campaigns and promotions.</li>
             </ul>
         </div>
     </section>
@@ -603,7 +603,7 @@ Domma.effects.butterflies(null, {
     }
 
     // Note: pass {safe: false} because Domma's default html() sanitiser strips
-    // both inline `style` attributes and `data-*` attributes — we'd lose the
+    // both inline `style` attributes and `data-*` attributes - we'd lose the
     // swatch colours AND the data-palette hook the click handler reads.
     const previewMarkup = Object.keys(palettes).map(n => renderPaletteCard(n, false)).join('');
     $('#palette-preview').html(previewMarkup, { safe: false });

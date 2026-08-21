@@ -2,19 +2,19 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add two new `Domma.effects` — `butterflies()` (canvas particle effect, wander-and-rise with flapping wings) and `strobe()` (flash overlay) — with full showcase, docs, IDE intelligence, and pre-specified domma-cms groundwork.
+**Goal:** Add two new `Domma.effects` - `butterflies()` (canvas particle effect, wander-and-rise with flapping wings) and `strobe()` (flash overlay) - with full showcase, docs, IDE intelligence, and pre-specified domma-cms groundwork.
 
 **Architecture:** `butterflies` clones the existing `tickerTape` canvas-particle lifecycle (full-page vs container, `requestAnimationFrame` loop, standard control object), differing only in three particle functions and defaults. `strobe` is a separate, simpler overlay-div effect driven by `setInterval`. A shared `resolvePalette` (generalised from `resolveTickerPalette`) serves both the new `meadow` palette and three palettes reserved for later sibling effects.
 
 **Tech Stack:** Vanilla ES modules, HTML Canvas 2D, vitest + jsdom for unit tests, manual browser verification for animation. British English throughout.
 
-**Project rule — commits:** Per Darryl's standing rule, **the executor stages changes (`git add`) at each checkpoint but never runs `git commit`**. "Step: Stage" replaces the usual commit step. Do not commit; do not ask to commit.
+**Project rule - commits:** Per Darryl's standing rule, **the executor stages changes (`git add`) at each checkpoint but never runs `git commit`**. "Step: Stage" replaces the usual commit step. Do not commit; do not ask to commit.
 
 **Reference source (read before starting):**
-- `src/effects.js:2193-2539` — the entire `tickerTape` implementation + `resolveTickerPalette`. Butterflies mirrors its scaffold.
-- `src/effects.js:943-957` — `noopControl()`.
-- `public/showcase/effects/ticker-tape.html` — the showcase template to clone (note especially its palette-swatch injection at `:561-577`, including the documented sanitiser-bypass option and its rationale comment — reuse that exact approach).
-- `docs/superpowers/specs/2026-06-26-butterflies-effect-design.md` — the approved spec.
+- `src/effects.js:2193-2539` - the entire `tickerTape` implementation + `resolveTickerPalette`. Butterflies mirrors its scaffold.
+- `src/effects.js:943-957` - `noopControl()`.
+- `public/showcase/effects/ticker-tape.html` - the showcase template to clone (note especially its palette-swatch injection at `:561-577`, including the documented sanitiser-bypass option and its rationale comment - reuse that exact approach).
+- `docs/superpowers/specs/2026-06-26-butterflies-effect-design.md` - the approved spec.
 
 ---
 
@@ -51,7 +51,7 @@ Create `src/effects.test.js`:
 import {describe, expect, it, vi, beforeEach, afterEach} from 'vitest';
 import {resolvePalette, EFFECT_PALETTES} from './effects.js';
 
-describe('Domma.effects — resolvePalette', () => {
+describe('Domma.effects - resolvePalette', () => {
   it('returns a named preset palette as an array', () => {
     expect(Array.isArray(resolvePalette('meadow'))).toBe(true);
     expect(resolvePalette('meadow').length).toBeGreaterThan(0);
@@ -87,7 +87,7 @@ describe('Domma.effects — resolvePalette', () => {
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `npx vitest run src/effects.test.js -t resolvePalette`
-Expected: FAIL — `resolvePalette` / `EFFECT_PALETTES` are not exported.
+Expected: FAIL - `resolvePalette` / `EFFECT_PALETTES` are not exported.
 
 - [ ] **Step 3: Implement the refactor**
 
@@ -152,11 +152,11 @@ export function resolvePalette(spec) {
   return EFFECT_PALETTES.rainbow;
 }
 
-// Back-compat alias — tickerTape still calls resolveTickerPalette internally.
+// Back-compat alias - tickerTape still calls resolveTickerPalette internally.
 const resolveTickerPalette = resolvePalette;
 ```
 
-Note: `tickerTape` at `src/effects.js:2236` calls `resolveTickerPalette(opts.palette)` — leave that call site unchanged; the alias keeps it working.
+Note: `tickerTape` at `src/effects.js:2236` calls `resolveTickerPalette(opts.palette)` - leave that call site unchanged; the alias keeps it working.
 
 - [ ] **Step 4: Run the test to verify it passes**
 
@@ -171,7 +171,7 @@ git add src/effects.js src/effects.test.js
 
 ---
 
-## Task 2: `butterflies()` — guard paths (TDD)
+## Task 2: `butterflies()` - guard paths (TDD)
 
 **Files:**
 - Modify: `src/effects.js` (add `butterflies` after `tickerTape`, before the palette block)
@@ -196,7 +196,7 @@ function mockMatchMedia(reduced) {
   }));
 }
 
-describe('Domma.effects — butterflies guards', () => {
+describe('Domma.effects - butterflies guards', () => {
   beforeEach(() => { document.body.innerHTML = ''; });
 
   it('returns a noop control under prefers-reduced-motion', () => {
@@ -218,7 +218,7 @@ describe('Domma.effects — butterflies guards', () => {
 - [ ] **Step 2: Run to verify it fails**
 
 Run: `npx vitest run src/effects.test.js -t "butterflies guards"`
-Expected: FAIL — `butterflies` is not exported.
+Expected: FAIL - `butterflies` is not exported.
 
 - [ ] **Step 3: Add the `butterflies` function**
 
@@ -226,7 +226,7 @@ In `src/effects.js`, immediately AFTER the closing brace of `tickerTape` (just b
 
 ```js
 /**
- * Butterflies effect — procedurally drawn butterflies wander and rise with
+ * Butterflies effect - procedurally drawn butterflies wander and rise with
  * flapping wings. Pass `null` (or omit the selector) for a full-page fixed
  * overlay, or a selector to scope them inside a container.
  *
@@ -329,7 +329,7 @@ export function butterflies(selector, options = {}) {
     };
   }
 
-  // DEFAULT flight core — Darryl will tweak these constants.
+  // DEFAULT flight core - Darryl will tweak these constants.
   function updateButterfly(b, w, h) {
     b.wanderTimer -= 1;
     if (b.wanderTimer <= 0) {
@@ -549,7 +549,7 @@ git add src/effects.js src/effects.test.js
 
 ---
 
-## Task 3: `strobe()` (TDD — fully testable)
+## Task 3: `strobe()` (TDD - fully testable)
 
 **Files:**
 - Modify: `src/effects.js` (add `strobe` after `butterflies`)
@@ -562,7 +562,7 @@ Append to `src/effects.test.js`:
 ```js
 import {strobe} from './effects.js';
 
-describe('Domma.effects — strobe', () => {
+describe('Domma.effects - strobe', () => {
   beforeEach(() => { document.body.innerHTML = ''; vi.useFakeTimers(); });
   afterEach(() => { vi.useRealTimers(); });
 
@@ -589,7 +589,7 @@ describe('Domma.effects — strobe', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const ctrl = strobe(null, { hz: 12 });
     expect(warn).toHaveBeenCalled();
-    expect(ctrl.isRunning()).toBe(true);   // not disabled — flexibility by design
+    expect(ctrl.isRunning()).toBe(true);   // not disabled - flexibility by design
     ctrl.destroy();
     warn.mockRestore();
   });
@@ -604,7 +604,7 @@ describe('Domma.effects — strobe', () => {
 - [ ] **Step 2: Run to verify it fails**
 
 Run: `npx vitest run src/effects.test.js -t strobe`
-Expected: FAIL — `strobe` is not exported.
+Expected: FAIL - `strobe` is not exported.
 
 - [ ] **Step 3: Implement `strobe`**
 
@@ -612,7 +612,7 @@ In `src/effects.js`, immediately after the `butterflies` function's closing brac
 
 ```js
 /**
- * Strobe effect — a full-page or container overlay whose background flashes
+ * Strobe effect - a full-page or container overlay whose background flashes
  * between colours on a timed interval. Pass `null` for a fixed full-page
  * overlay, or a selector for a container-scoped flash.
  *
@@ -651,7 +651,7 @@ export function strobe(selector, options = {}) {
   }
 
   if (opts.hz > 5) {
-    console.warn(`[Domma.effects.strobe] hz=${opts.hz} exceeds 5Hz — rapid flashing can trigger photosensitive seizures.`);
+    console.warn(`[Domma.effects.strobe] hz=${opts.hz} exceeds 5Hz - rapid flashing can trigger photosensitive seizures.`);
   }
 
   const isFullPage = !selector || selector === 'body' || selector === document.body;
@@ -767,7 +767,7 @@ Append to `src/effects.test.js`:
 ```js
 import effectsDefault from './effects.js';
 
-describe('Domma.effects — default export', () => {
+describe('Domma.effects - default export', () => {
   it('exposes butterflies and strobe on the default export', () => {
     expect(typeof effectsDefault.butterflies).toBe('function');
     expect(typeof effectsDefault.strobe).toBe('function');
@@ -778,7 +778,7 @@ describe('Domma.effects — default export', () => {
 - [ ] **Step 2: Run to verify it fails**
 
 Run: `npx vitest run src/effects.test.js -t "default export"`
-Expected: FAIL — `effectsDefault.butterflies` is undefined.
+Expected: FAIL - `effectsDefault.butterflies` is undefined.
 
 - [ ] **Step 3: Update the default export**
 
@@ -816,7 +816,7 @@ git add src/effects.js src/effects.test.js
 
 ## Task 5: Build the bundles
 
-**Files:** none edited — regenerates `public/dist/`.
+**Files:** none edited - regenerates `public/dist/`.
 
 - [ ] **Step 1: Build**
 
@@ -843,21 +843,21 @@ git add public/dist
 
 - [ ] **Step 1: Create the page**
 
-Clone `public/showcase/effects/ticker-tape.html` and adapt. The page MUST keep: `<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">`; the four dist CSS includes + `../css/domma-showcase.css`; the script order `dompurify → domma.min.js → domma-syntax.min.js → layouts/js/layout.js (module)`; the reduced-motion notice; `respectMotionPreference: false` in every demo; the palette-swatch injection done **exactly as ticker-tape does it** (`ticker-tape.html:561-577` — reuse that helper and the same `html()` option + rationale comment verbatim; the colours are static developer-authored constants); `Domma.icons.scan(document.body)` at the end; British English.
+Clone `public/showcase/effects/ticker-tape.html` and adapt. The page MUST keep: `<body class="dm-cloaked" data-layout="showcase" data-layout-variant="effects">`; the four dist CSS includes + `../css/domma-showcase.css`; the script order `dompurify → domma.min.js → domma-syntax.min.js → layouts/js/layout.js (module)`; the reduced-motion notice; `respectMotionPreference: false` in every demo; the palette-swatch injection done **exactly as ticker-tape does it** (`ticker-tape.html:561-577` - reuse that helper and the same `html()` option + rationale comment verbatim; the colours are static developer-authored constants); `Domma.icons.scan(document.body)` at the end; British English.
 
 Replace ticker-tape specifics with butterflies. Required sections, in order:
 
-1. **Hero** — title "Butterflies Effect", subtitle describing wander-and-rise flapping butterflies.
-2. **See Also** strip — link to `javascript.html`, `ticker-tape.html`, `twinkle.html`, `strobe.html`, plus existing siblings.
-3. **Reduced-motion notice** — copy verbatim from ticker-tape.
-4. **Overview card** — `Domma.effects.butterflies()` heading; intro prose; quick-start `<pre class="code-block language-javascript">` with the three examples from the JSDoc in Task 2; the Options table (all 13 options from the Task 2 table); a palette preview strip (`#palette-preview`).
-5. **How It Works** card (`<section class="card mb-6" data-section="how-it-works">`) — short prose: spawn low/sides → periodically retarget heading (biased upward) → ease toward it → flap wings via `sin(flapPhase)` → drift off the top. This raises the bar above existing effect pages.
-6. **Demo 1: Theme/Meadow palette** — `#butterfly-container-1`, start/pause/resume/restart/destroy + status badge.
-7. **Demo 2: Palette picker** — `#palette-picker` + `#butterfly-container-2`. Restrict the picker to `theme, meadow, pastel, rainbow, sunset` plus a custom example.
-8. **Demo 3: Tune the flight** — sliders `density (5–60), speed (0.2–3), wander (0.2–3), riseSpeed (0–2), flapSpeed (0.2–3)` + Apply/Destroy.
-9. **Demo 4: One-shot release** — `burst: true` "Release a flutter" button.
-10. **Demo 5: Full-page overlay** — `null` selector, with `beforeunload` cleanup.
-11. **Use Cases** card — bulleted: success/celebration moments, ambient hero backdrops, empty-state delight, seasonal/spring theming.
+1. **Hero** - title "Butterflies Effect", subtitle describing wander-and-rise flapping butterflies.
+2. **See Also** strip - link to `javascript.html`, `ticker-tape.html`, `twinkle.html`, `strobe.html`, plus existing siblings.
+3. **Reduced-motion notice** - copy verbatim from ticker-tape.
+4. **Overview card** - `Domma.effects.butterflies()` heading; intro prose; quick-start `<pre class="code-block language-javascript">` with the three examples from the JSDoc in Task 2; the Options table (all 13 options from the Task 2 table); a palette preview strip (`#palette-preview`).
+5. **How It Works** card (`<section class="card mb-6" data-section="how-it-works">`) - short prose: spawn low/sides → periodically retarget heading (biased upward) → ease toward it → flap wings via `sin(flapPhase)` → drift off the top. This raises the bar above existing effect pages.
+6. **Demo 1: Theme/Meadow palette** - `#butterfly-container-1`, start/pause/resume/restart/destroy + status badge.
+7. **Demo 2: Palette picker** - `#palette-picker` + `#butterfly-container-2`. Restrict the picker to `theme, meadow, pastel, rainbow, sunset` plus a custom example.
+8. **Demo 3: Tune the flight** - sliders `density (5-60), speed (0.2-3), wander (0.2-3), riseSpeed (0-2), flapSpeed (0.2-3)` + Apply/Destroy.
+9. **Demo 4: One-shot release** - `burst: true` "Release a flutter" button.
+10. **Demo 5: Full-page overlay** - `null` selector, with `beforeunload` cleanup.
+11. **Use Cases** card - bulleted: success/celebration moments, ambient hero backdrops, empty-state delight, seasonal/spring theming.
 
 Reuse the entire `<style>` block from ticker-tape unchanged EXCEPT rename `.tape-container*` → `.butterfly-container*` and set its background to a soft daytime gradient, e.g.:
 
@@ -906,10 +906,10 @@ ctrl3 = Domma.effects.butterflies('#butterfly-container-3', {
 });
 ```
 
-- [ ] **Step 2: Verify (manual — browser)**
+- [ ] **Step 2: Verify (manual - browser)**
 
 Open `/showcase/effects/butterflies.html` on the running server. Confirm: page loads with header/footer/sidebar (layout system), no console errors, all five demos work (start/pause/resume/restart/destroy, palette swap, sliders+Apply, burst, full-page), butterflies flap and rise, full-page overlay clears on navigation.
-**Claude cannot drive a browser — Darryl verifies and reports back.**
+**Claude cannot drive a browser - Darryl verifies and reports back.**
 
 - [ ] **Step 3: Stage**
 
@@ -926,20 +926,20 @@ git add public/showcase/effects/butterflies.html
 
 - [ ] **Step 1: Create the page**
 
-Start from `butterflies.html`'s shell (same `<head>` includes, `data-layout`, script order, reduced-motion notice, British English) but TRIM — strobe has no palette/particle dimension. Required sections:
+Start from `butterflies.html`'s shell (same `<head>` includes, `data-layout`, script order, reduced-motion notice, British English) but TRIM - strobe has no palette/particle dimension. Required sections:
 
-1. **Hero** — "Strobe Effect", subtitle noting it flashes the screen/container.
+1. **Hero** - "Strobe Effect", subtitle noting it flashes the screen/container.
 2. **See Also** strip.
 3. **Reduced-motion notice** (verbatim).
-4. **Photosensitivity warning** — a prominent `<div class="alert alert-danger">` (or the existing warning-callout markup) stating rapid flashing can trigger photosensitive seizures; the demos never autoplay and require a button press.
-5. **Overview card** — `Domma.effects.strobe()` heading; prose; quick-start code; Options table (colours, hz, duration, opacity, zIndex, respectMotionPreference).
-6. **Demo: Contained flash** — `#strobe-container` with start/pause/resume/stop buttons + status badge; default `hz: 2`.
-7. **Demo: Tune it** — controls: `hz (0.5–10 step 0.5)`, two colour `<input type="color">` pickers, optional `duration` number; Apply/Stop. If hz > 5, the console warns (mention this in copy).
-8. **Demo: Full-page** — `null` selector behind an explicit "Start Full-Page Strobe" button; `beforeunload` cleanup; a clearly visible Stop button.
+4. **Photosensitivity warning** - a prominent `<div class="alert alert-danger">` (or the existing warning-callout markup) stating rapid flashing can trigger photosensitive seizures; the demos never autoplay and require a button press.
+5. **Overview card** - `Domma.effects.strobe()` heading; prose; quick-start code; Options table (colours, hz, duration, opacity, zIndex, respectMotionPreference).
+6. **Demo: Contained flash** - `#strobe-container` with start/pause/resume/stop buttons + status badge; default `hz: 2`.
+7. **Demo: Tune it** - controls: `hz (0.5-10 step 0.5)`, two colour `<input type="color">` pickers, optional `duration` number; Apply/Stop. If hz > 5, the console warns (mention this in copy).
+8. **Demo: Full-page** - `null` selector behind an explicit "Start Full-Page Strobe" button; `beforeunload` cleanup; a clearly visible Stop button.
 
 No palette swatches needed. Keep `Domma.icons.scan(document.body)` at the end.
 
-- [ ] **Step 2: Verify (manual — browser)**
+- [ ] **Step 2: Verify (manual - browser)**
 
 Open `/showcase/effects/strobe.html`. Confirm layout system present, no console errors, contained + full-page demos start only on button press and stop cleanly, hz>5 logs the warning, reduced-motion (OS setting on) shows the notice and demos noop.
 **Darryl verifies in browser.**
@@ -997,7 +997,7 @@ After the `ticker-tape.html` card (ends ~`:191`, the `</a>` after its `card-foot
     </a>
 ```
 
-Confirm the `data-icon` names exist: run `ls public/assets/icons | grep -E '^(feather|zap)\.svg$'`. If `feather` is absent, substitute an existing nature/wing-like icon (e.g. `wind`) — check `public/assets/icons/` and pick one that exists, per the project rule "check to see if we have one already". If neither a butterfly nor feather icon exists, that is a signal to create one per the icon convention; for this plan, substituting an existing icon is acceptable.
+Confirm the `data-icon` names exist: run `ls public/assets/icons | grep -E '^(feather|zap)\.svg$'`. If `feather` is absent, substitute an existing nature/wing-like icon (e.g. `wind`) - check `public/assets/icons/` and pick one that exists, per the project rule "check to see if we have one already". If neither a butterfly nor feather icon exists, that is a signal to create one per the icon convention; for this plan, substituting an existing icon is acceptable.
 
 - [ ] **Step 2: Add bullets to the "All JS Effects" overview card**
 
@@ -1012,7 +1012,7 @@ And append to its footer `<code>` (~`:213`): ` .butterflies() .strobe()`.
 
 - [ ] **Step 3: Verify (manual)**
 
-Open `/showcase/effects/` — two new cards render with icons, links resolve.
+Open `/showcase/effects/` - two new cards render with icons, links resolve.
 
 - [ ] **Step 4: Stage**
 
@@ -1052,7 +1052,7 @@ If the page has an effects list/table elsewhere mentioning `twinkle`/`tickerTape
 
 - [ ] **Step 2: Verify (manual)**
 
-Open `/showcase/effects/javascript.html` — new use-case blocks render.
+Open `/showcase/effects/javascript.html` - new use-case blocks render.
 
 - [ ] **Step 3: Stage**
 
@@ -1157,7 +1157,7 @@ export interface ButterfliesOptions {
 export interface StrobeOptions {
     /** Colours cycled each flash (default ['#ffffff','transparent']) */
     colours?: string[];
-    /** Flashes per second — uncapped; warns above 5 (default 2) */
+    /** Flashes per second - uncapped; warns above 5 (default 2) */
     hz?: number;
     /** Auto-stop after N milliseconds (default null) */
     duration?: number | null;
@@ -1266,7 +1266,7 @@ Expected: clean build.
 
 - [ ] **Step 3: Manual browser pass (Darryl)**
 
-Load both showcase pages on the running server and exercise every demo per Tasks 6 & 7. Confirm no console errors, clean teardown, reduced-motion behaviour. **Claude cannot drive a browser — Darryl confirms.**
+Load both showcase pages on the running server and exercise every demo per Tasks 6 & 7. Confirm no console errors, clean teardown, reduced-motion behaviour. **Claude cannot drive a browser - Darryl confirms.**
 
 - [ ] **Step 4: Final stage**
 
@@ -1277,20 +1277,20 @@ git status   # review staged set; DO NOT commit (project rule)
 
 ---
 
-## Appendix A — domma-cms integration (groundwork, NOT executed here)
+## Appendix A - domma-cms integration (groundwork, NOT executed here)
 
 These changes live in the `domma-cms` repo and are recorded so integration is paste-and-test. Apply only when explicitly doing the CMS integration. Full detail in spec §8.
 
-1. **`admin/js/lib/effect-defs.js`** — add the `butterflies` entry (Celebrations category) exactly as written in spec §8.1 (kebab-case attrs: `rise-speed`, `flap-speed`, `burst-count`). Do **not** add `strobe` (developer-API-only — decided).
-2. **`server/services/markdown.js`** — add `'butterflies'` to `ALLOWED` (~`:26`); add an injection branch producing `.dm-fx-butterflies` with `data-*`, mirroring the `ticker-tape` branch (~`:1386`): self-closing → `data-mode="page"`, wrapping → container-scoped.
-3. **`public/js/effects.js`** — after the `tickerTape` block (~`:251`), add a `butterflies` block: guard `typeof E.butterflies === 'function'`, scan `.dm-fx-butterflies`, map `data-*` (kebab→camel) into `opts`, call `E.butterflies(null, opts)` for `data-mode="page"` else `E.butterflies(el, opts)`, honouring the existing `reducedMotion` gate.
-4. **`tests/markdown/effect-injection.test.js`** — assert `[butterflies /]` → `.dm-fx-butterflies` + `data-mode="page"`, and the wrapping form → scoped element with mapped attrs.
-5. **Cache-busting** — bump `?v=` up the admin import chain and sync to sibling repos per project convention.
+1. **`admin/js/lib/effect-defs.js`** - add the `butterflies` entry (Celebrations category) exactly as written in spec §8.1 (kebab-case attrs: `rise-speed`, `flap-speed`, `burst-count`). Do **not** add `strobe` (developer-API-only - decided).
+2. **`server/services/markdown.js`** - add `'butterflies'` to `ALLOWED` (~`:26`); add an injection branch producing `.dm-fx-butterflies` with `data-*`, mirroring the `ticker-tape` branch (~`:1386`): self-closing → `data-mode="page"`, wrapping → container-scoped.
+3. **`public/js/effects.js`** - after the `tickerTape` block (~`:251`), add a `butterflies` block: guard `typeof E.butterflies === 'function'`, scan `.dm-fx-butterflies`, map `data-*` (kebab→camel) into `opts`, call `E.butterflies(null, opts)` for `data-mode="page"` else `E.butterflies(el, opts)`, honouring the existing `reducedMotion` gate.
+4. **`tests/markdown/effect-injection.test.js`** - assert `[butterflies /]` → `.dm-fx-butterflies` + `data-mode="page"`, and the wrapping form → scoped element with mapped attrs.
+5. **Cache-busting** - bump `?v=` up the admin import chain and sync to sibling repos per project convention.
 
 ---
 
 ## Self-Review notes
 
-- **Spec coverage:** §3 palettes → Task 1; §4 butterflies → Tasks 2,4,6; §5 strobe → Tasks 3,4,7; §6 refactor → Task 1; §7 deliverables 1–10 → Tasks 1–12; §8 CMS readiness → Appendix A; §9 accessibility → guard tests + showcase notices; §10 testing → Tasks 2,3,13.
+- **Spec coverage:** §3 palettes → Task 1; §4 butterflies → Tasks 2,4,6; §5 strobe → Tasks 3,4,7; §6 refactor → Task 1; §7 deliverables 1-10 → Tasks 1-12; §8 CMS readiness → Appendix A; §9 accessibility → guard tests + showcase notices; §10 testing → Tasks 2,3,13.
 - **Type consistency:** option names identical across Task 2 JSDoc, Task 6 sliders, Task 11 `.d.ts`, Task 12 docs (`riseSpeed`/`flapSpeed`/`burstCount`/`twoTone`); CMS kebab-case mapping noted in Appendix A.
 - **Commits:** replaced with `git add` staging per project rule; no `git commit` anywhere.

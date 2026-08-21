@@ -111,12 +111,12 @@
                     </tr>
                     <tr>
                         <td><code>richtext</code></td>
-                        <td>Rich text editor (WYSIWYG) — outputs HTML</td>
+                        <td>Rich text editor (WYSIWYG) - outputs HTML</td>
                         <td>HTML string</td>
                     </tr>
                     <tr>
                         <td><code>number</code></td>
-                        <td>Numeric value — integer or decimal</td>
+                        <td>Numeric value - integer or decimal</td>
                         <td>Number</td>
                     </tr>
                     <tr>
@@ -146,7 +146,7 @@
                     </tr>
                     <tr>
                         <td><code>tags</code></td>
-                        <td>Free-form tag input — type and press Enter to add</td>
+                        <td>Free-form tag input - type and press Enter to add</td>
                         <td>Array of strings</td>
                     </tr>
                     <tr>
@@ -171,7 +171,7 @@
                     </tr>
                     <tr>
                         <td><code>color</code></td>
-                        <td>Colour picker — outputs hex value</td>
+                        <td>Colour picker - outputs hex value</td>
                         <td>Hex string (e.g. <code>#3b82f6</code>)</td>
                     </tr>
                     <tr>
@@ -195,11 +195,11 @@
             <ol class="mb-5" style="line-height:2;padding-left:1.5rem;">
                 <li>Navigate to <strong>Admin panel → Collections → New Collection</strong></li>
                 <li>Enter a human-readable <strong>Name</strong> (e.g. <em>Blog Posts</em>)</li>
-                <li>The <strong>Slug</strong> is auto-generated from the name (e.g. <code>posts</code>) — edit if needed</li>
+                <li>The <strong>Slug</strong> is auto-generated from the name (e.g. <code>posts</code>) - edit if needed</li>
                 <li>Choose a <strong>Storage adapter</strong>: <code>file</code> (default) or <code>mongo</code> (Pro)</li>
-                <li>Click <strong>Add Field</strong> to define each field — set its name, type, and constraints</li>
+                <li>Click <strong>Add Field</strong> to define each field - set its name, type, and constraints</li>
                 <li>Reorder fields by dragging the row handle</li>
-                <li>Click <strong>Save Collection</strong> — the schema is written to <code>data/schemas/{slug}.schema.json</code></li>
+                <li>Click <strong>Save Collection</strong> - the schema is written to <code>data/schemas/{slug}.schema.json</code></li>
             </ol>
             <h3 class="font-semibold mb-3">Import &amp; export schemas</h3>
             <p class="mb-3">Collections can be exported as JSON schema files and re-imported into any Domma CMS instance. This is useful for sharing schemas between projects or seeding a fresh installation.</p>
@@ -221,7 +221,7 @@ npx domma cms schema:import ./posts.schema.json</code></pre>
             <h2 class="text-xl font-semibold">Entry CRUD</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Every collection gets a full Create, Read, Update, Delete interface in the admin panel and a matching REST API. Both surfaces are generated automatically from the field schema — no additional configuration is needed.</p>
+            <p class="mb-4">Every collection gets a full Create, Read, Update, Delete interface in the admin panel and a matching REST API. Both surfaces are generated automatically from the field schema - no additional configuration is needed.</p>
 
             <div class="grid grid-cols-2 gap-4 mb-5">
                 <div>
@@ -281,7 +281,7 @@ E.toast('Post created', { type: 'success' });</code></pre>
                     </tr>
                     <tr>
                         <td>Storage format</td>
-                        <td>JSON file — <code>data/{slug}.json</code></td>
+                        <td>JSON file - <code>data/{slug}.json</code></td>
                         <td>MongoDB collection</td>
                     </tr>
                     <tr>
@@ -311,14 +311,14 @@ E.toast('Post created', { type: 'success' });</code></pre>
                     </tr>
                     <tr>
                         <td>Version-controllable</td>
-                        <td>Yes — commit <code>data/</code> to git</td>
+                        <td>Yes - commit <code>data/</code> to git</td>
                         <td>Via mongodump snapshots</td>
                     </tr>
                 </tbody>
             </table>
             <h3 class="font-semibold mb-3">Switching adapters</h3>
             <p class="mb-3">To switch an existing collection to MongoDB, update the <code>adapter</code> field in the schema and run the migration command. Pro mode must be active.</p>
-            <pre><code class="language-json">// In data/schemas/posts.schema.json — change:
+            <pre><code class="language-json">// In data/schemas/posts.schema.json - change:
 { "adapter": "file" }
 
 // To:
@@ -338,7 +338,7 @@ npx domma cms migrate:adapter posts --from=file --to=mongo</code></pre>
             <h2 class="text-xl font-semibold">8 Preset Collections</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">Domma CMS ships with 8 optional preset collections. These cover the most common content modelling patterns and can be seeded into a fresh installation with a single command — complete with schemas and sample data.</p>
+            <p class="mb-4">Domma CMS ships with 8 optional preset collections. These cover the most common content modelling patterns and can be seeded into a fresh installation with a single command - complete with schemas and sample data.</p>
             <pre><code class="language-bash">npm run seed</code></pre>
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <div class="card p-4">
@@ -502,7 +502,7 @@ npx domma cms migrate:adapter posts --from=file --to=mongo</code></pre>
                 <tbody>
                     <tr>
                         <td><code>slug</code></td>
-                        <td>— (required)</td>
+                        <td>- (required)</td>
                         <td>The collection slug to fetch entries from</td>
                     </tr>
                     <tr>
@@ -522,8 +522,8 @@ npx domma cms migrate:adapter posts --from=file --to=mongo</code></pre>
                     </tr>
                     <tr>
                         <td><code>filter</code></td>
-                        <td>—</td>
-                        <td>Simple equality filter: <code>field:value</code> — multiple filters separated by spaces</td>
+                        <td>-</td>
+                        <td>Simple equality filter: <code>field:value</code> - multiple filters separated by spaces</td>
                     </tr>
                     <tr>
                         <td><code>template</code></td>
@@ -545,7 +545,7 @@ npx domma cms migrate:adapter posts --from=file --to=mongo</code></pre>
             <h2 class="text-xl font-semibold">Public API Access</h2>
         </div>
         <div class="card-body">
-            <p class="mb-4">By default all collection API endpoints require a valid JWT bearer token. Collections marked <code>public: true</code> in their schema are also accessible via a separate unauthenticated public API — useful for reading content in front-end applications without exposing credentials.</p>
+            <p class="mb-4">By default all collection API endpoints require a valid JWT bearer token. Collections marked <code>public: true</code> in their schema are also accessible via a separate unauthenticated public API - useful for reading content in front-end applications without exposing credentials.</p>
 
             <div class="grid grid-cols-2 gap-5 mb-5">
                 <div>
@@ -570,7 +570,7 @@ DELETE /api/collections/{slug}/entries/{id}</code></pre>
             </div>
 
             <h3 class="font-semibold mb-3">Example: fetch public posts with Domma HTTP</h3>
-            <pre><code class="language-javascript">// Read public collection — no auth needed
+            <pre><code class="language-javascript">// Read public collection - no auth needed
 const { entries } = await H.get('/api/public/collections/posts/entries', {
     params: { limit: 5, orderBy: 'publishedAt', order: 'desc' }
 });
@@ -585,7 +585,7 @@ T.create('#posts-table', {
 });</code></pre>
 
             <h3 class="font-semibold mt-5 mb-3">Enabling public access on a collection</h3>
-            <pre><code class="language-json">// In data/schemas/posts.schema.json — add:
+            <pre><code class="language-json">// In data/schemas/posts.schema.json - add:
 {
   "name":    "Blog Posts",
   "slug":    "posts",

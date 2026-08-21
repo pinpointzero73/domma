@@ -1,7 +1,7 @@
-# Butterflies Effect — Design Spec
+# Butterflies Effect - Design Spec
 
 **Date:** 2026-06-26
-**Status:** Draft — awaiting user review
+**Status:** Draft - awaiting user review
 **Author:** Darryl Waterhouse (with Claude)
 
 ## 1. Summary
@@ -15,7 +15,7 @@ CMS wiring is mechanical.
 Butterflies wander and rise with procedurally drawn flapping wings. Strobe is a
 full-screen/contained colour flash with a reduced-motion guard.
 
-Three further effects — **fireflies**, **bubbles**, **autumn leaves** — are
+Three further effects - **fireflies**, **bubbles**, **autumn leaves** - are
 explicitly **out of scope for this spec** but are enabled by it: they reuse the
 same particle scaffold and shared palette resolver introduced here, and will each
 get their own spec → plan → implementation cycle as fast follow-ons.
@@ -23,9 +23,9 @@ get their own spec → plan → implementation cycle as fast follow-ons.
 ## 2. Goals & non-goals
 
 **Goals**
-- `butterflies(selector|null, options)` — faithful to the established canvas-effect
+- `butterflies(selector|null, options)` - faithful to the established canvas-effect
   contract (full-page vs container, control object, palette system, reduced-motion).
-- `strobe(selector|null, options)` — flash overlay with its own simpler architecture.
+- `strobe(selector|null, options)` - flash overlay with its own simpler architecture.
 - Generalise `resolveTickerPalette` → `resolvePalette` (back-compat alias retained),
   adding palettes the sibling effects will need (`meadow`, `firefly`, `aqua`, `autumn`).
 - Complete the project's "new effect" deliverable set (showcase, docs, IDE, sitemap, nav).
@@ -34,7 +34,7 @@ get their own spec → plan → implementation cycle as fast follow-ons.
 **Non-goals**
 - Building fireflies/bubbles/autumn leaves (separate cycles).
 - Performing the actual domma-cms code changes (this spec makes them trivial; it
-  does not execute them). See §8 — these are documented, ready-to-apply snippets.
+  does not execute them). See §8 - these are documented, ready-to-apply snippets.
 - Emoji/image-based rendering (rejected in brainstorming in favour of procedural wings).
 
 ## 3. Architecture
@@ -49,9 +49,9 @@ loop, and the standard control object
 ```
 src/effects.js
   ├─ butterflies(selector, options)        ← particle scaffold (tickerTape clone)
-  │     • createButterfly(w, h, fromEdge)   — spawn at bottom / lower sides
-  │     • updateButterfly(b, w, h)          — WANDER + RISE physics (default impl, tweakable)
-  │     • drawButterfly(ctx, b)             — two mirrored wing polygons; spread = sin(flapPhase)
+  │     • createButterfly(w, h, fromEdge)   - spawn at bottom / lower sides
+  │     • updateButterfly(b, w, h)          - WANDER + RISE physics (default impl, tweakable)
+  │     • drawButterfly(ctx, b)             - two mirrored wing polygons; spread = sin(flapPhase)
   ├─ strobe(selector, options)             ← NOT particles: one overlay div, interval toggle
   ├─ resolvePalette(spec)                  ← generalised from resolveTickerPalette
   └─ resolveTickerPalette = resolvePalette ← back-compat alias
@@ -80,14 +80,14 @@ The default export object gains `butterflies` and `strobe`.
 | `respectMotionPreference` | `boolean` | `true` | honour `prefers-reduced-motion` |
 
 Returns the standard control object (or `noopControl()` under reduced motion;
-`null` if a container selector matches nothing — matching `tickerTape`).
+`null` if a container selector matches nothing - matching `tickerTape`).
 
 ### Particle model (the "soul")
 
 Each butterfly carries: `x, y, vx, vy, heading, wanderTimer, flapPhase, flapSpeed,
 size, colourUpper, colourLower, alpha, alive`.
 
-`updateButterfly` (default implementation — Darryl will tweak constants):
+`updateButterfly` (default implementation - Darryl will tweak constants):
 1. Decrement `wanderTimer`; when it expires, pick a new target heading (biased
    upward by `riseSpeed`) and reset the timer (interval scaled by `wander`).
 2. Ease `heading` toward the target (turn sharpness scaled by `wander`).
@@ -104,14 +104,14 @@ wings with `colourUpper`/`colourLower`.
 
 ### Showcase demos (mirror ticker-tape's five-demo arc)
 
-1. **Theme/meadow palette** — scoped container, start/pause/resume/restart/destroy + status badge.
-2. **Palette picker** — swap palettes live (`meadow`, `pastel`, `rainbow`, `sunset`, custom).
-3. **Tune the flight** — sliders: density, speed, wander, riseSpeed, flapSpeed.
-4. **One-shot release** — `burst: true` ("release a flutter" for success moments).
-5. **Full-page overlay** — `null` selector ambient mode.
+1. **Theme/meadow palette** - scoped container, start/pause/resume/restart/destroy + status badge.
+2. **Palette picker** - swap palettes live (`meadow`, `pastel`, `rainbow`, `sunset`, custom).
+3. **Tune the flight** - sliders: density, speed, wander, riseSpeed, flapSpeed.
+4. **One-shot release** - `burst: true` ("release a flutter" for success moments).
+5. **Full-page overlay** - `null` selector ambient mode.
 
 Plus a short **"How It Works"** + **"Use Cases"** section (release-on-success,
-ambient hero, empty-state delight) — raising the bar above current effect pages,
+ambient hero, empty-state delight) - raising the bar above current effect pages,
 which lack an explicit walkthrough section.
 
 ## 5. `strobe(selector, options)`
@@ -124,7 +124,7 @@ full-page, absolute for container) whose `background` toggles on an interval.
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `colours` | `string[]` | `['#ffffff', 'transparent']` | colours cycled each flash |
-| `hz` | `number` | `2` | flashes per second — **uncapped** (caller's responsibility); `console.warn` above 5 Hz |
+| `hz` | `number` | `2` | flashes per second - **uncapped** (caller's responsibility); `console.warn` above 5 Hz |
 | `duration` | `number \| null` | `null` | auto-stop after N ms (null = until stopped) |
 | `opacity` | `number` | `1` | overlay opacity |
 | `zIndex` | `number` | `9999` | stacking order |
@@ -145,10 +145,10 @@ and a full-page demo behind an explicit "Start" button (never autoplay).
 
 `resolveTickerPalette(spec)` → renamed `resolvePalette(spec)`; the old name kept as
 an alias so nothing breaks. `TICKER_PALETTES` → `EFFECT_PALETTES`, adding:
-- `meadow` — soft greens, lilacs, sky, butter-yellow (butterflies default)
-- `firefly` — warm ambers/yellow-greens on the dark end (fireflies, later)
-- `aqua` — translucent blues/cyans (bubbles, later)
-- `autumn` — russet, amber, ochre, brown (autumn leaves, later)
+- `meadow` - soft greens, lilacs, sky, butter-yellow (butterflies default)
+- `firefly` - warm ambers/yellow-greens on the dark end (fireflies, later)
+- `aqua` - translucent blues/cyans (bubbles, later)
+- `autumn` - russet, amber, ochre, brown (autumn leaves, later)
 
 Existing palettes (`theme`, `rainbow`, `festive`, `gold`, `silver`, `pastel`,
 `mono`, `sunset`, `ocean`, `forest`, `bridal`) are unchanged.
@@ -175,10 +175,10 @@ showcase pages and the CMS consume.
 
 The CMS effects pipeline has four surfaces. This spec pre-specifies each so the
 later integration is paste-and-test, not design. **These changes live in the
-`domma-cms` repo and are NOT executed by this spec** — they are recorded here so
+`domma-cms` repo and are NOT executed by this spec** - they are recorded here so
 nothing needs designing when we get there.
 
-### 8.1 Builder registry — `admin/js/lib/effect-defs.js`
+### 8.1 Builder registry - `admin/js/lib/effect-defs.js`
 
 Add to the `Celebrations` group (next to `ticker-tape`):
 
@@ -209,26 +209,26 @@ camelCase Domma options (`rise-speed` → `riseSpeed`, `flap-speed` → `flapSpe
 `burst-count` → `burstCount`). The Domma option names in §4 are chosen so this
 mapping is purely mechanical.
 
-### 8.2 Shortcode injector — `server/services/markdown.js`
+### 8.2 Shortcode injector - `server/services/markdown.js`
 
 - Add `'butterflies'` to the `ALLOWED` shortcode list (~line 26).
 - Add injection producing `.dm-fx-butterflies` with `data-*` attributes, following
   the `ticker-tape` branch (~line 1386): self-closing `[butterflies /]` → full-page
   (`data-mode="page"`); wrapping `[butterflies]…[/butterflies]` → container-scoped.
 
-### 8.3 Published runtime — `public/js/effects.js`
+### 8.3 Published runtime - `public/js/effects.js`
 
 After the `tickerTape` block (~line 251), add a `butterflies` block: guard on
 `typeof E.butterflies === 'function'`, scan `.dm-fx-butterflies`, read `data-*`
 into `opts` (kebab→camel), call `E.butterflies(null, opts)` for `data-mode="page"`
 else `E.butterflies(el, opts)`. Honour the existing `reducedMotion` gate.
 
-### 8.4 Tests — `tests/markdown/effect-injection.test.js`
+### 8.4 Tests - `tests/markdown/effect-injection.test.js`
 
 Add assertions: `[butterflies /]` → `.dm-fx-butterflies` + `data-mode="page"`;
 wrapping form → scoped element with mapped data attributes.
 
-### 8.5 Strobe in the CMS — OPEN QUESTION
+### 8.5 Strobe in the CMS - OPEN QUESTION
 
 Strobe's photosensitivity profile makes CMS-injectability questionable. Default
 recommendation: **do not** add strobe to `effect-defs.js` (keep it
@@ -253,14 +253,14 @@ step, recorded here so it is not forgotten.
 
 - Manual: load each showcase page, exercise every demo (start/pause/resume/restart/
   destroy, palette swap, sliders, burst, full-page), confirm no console errors and
-  clean teardown on navigation. (User verifies in browser — Claude cannot drive one.)
+  clean teardown on navigation. (User verifies in browser - Claude cannot drive one.)
 - Reduced-motion: toggle OS setting, confirm noop + notice.
 - CMS (at integration time): run `tests/markdown/effect-injection.test.js`.
 
 ## 11. Open questions
 
-1. **Strobe CMS injectability** (§8.5) — recommend developer-API-only. Decide at
+1. **Strobe CMS injectability** (§8.5) - recommend developer-API-only. Decide at
    CMS time.
-2. **Default wander/rise constants** — Darryl tunes after the working default lands.
-3. **Sibling effects ordering** — fireflies / bubbles / autumn leaves sequence TBD
+2. **Default wander/rise constants** - Darryl tunes after the working default lands.
+3. **Sibling effects ordering** - fireflies / bubbles / autumn leaves sequence TBD
    in their own specs.

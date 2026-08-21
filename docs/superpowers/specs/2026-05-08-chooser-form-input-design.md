@@ -1,10 +1,10 @@
-# Chooser — visual option-picker form input
+# Chooser - visual option-picker form input
 
 **Date:** 2026-05-08
 **Status:** Approved (brainstorming)
 **Owner:** Darryl Waterhouse
 
-## 1 — Summary
+## 1 - Summary
 
 Add a new form input type, **`chooser`**, that renders a set of options as
 visually rich, click-to-select tiles instead of native `<input type="radio">`
@@ -24,15 +24,15 @@ so validation, model binding, and submission work without additional wiring.
 A standalone `E.chooser()` helper is also exposed for use outside forms.
 
 In the Domma CMS Page Editor (page-roller) the chooser is wired up as a
-draggable field-palette tile. Dropping the tile opens a **slideover GUI** —
-a structured editor with live preview — that lets non-developers configure
+draggable field-palette tile. Dropping the tile opens a **slideover GUI** -
+a structured editor with live preview - that lets non-developers configure
 every chooser option visually. The slideover saves back to the existing
 `formFields` JSON textarea, which remains the canonical configuration store.
 
-## 2 — Motivation
+## 2 - Motivation
 
 Native radio buttons and checkboxes are functionally adequate but visually
-weak for high-stakes selections — pricing plans, feature toggles, theme
+weak for high-stakes selections - pricing plans, feature toggles, theme
 choice, tag selection. Many modern product surfaces render these as cards or
 chips with descriptive copy, icons, and badges. Domma already has the
 building blocks (cards, badges, icons, tooltips, blueprints), but no single
@@ -40,9 +40,9 @@ form-friendly control that combines them. `chooser` fills that gap and gives
 authors one consistent API regardless of whether they need radio- or
 checkbox-style behaviour, card- or chip-style presentation.
 
-## 3 — Public API
+## 3 - Public API
 
-### 3.1 — Blueprint usage
+### 3.1 - Blueprint usage
 
 ```js
 F.create('#form', {
@@ -51,7 +51,7 @@ F.create('#form', {
       type: 'chooser',                 // ← the new input type (matches 'radio', 'select' convention)
       variant: 'card',                 // 'card' | 'chip'
       density: 'comfortable',          // 'comfortable' (default) | 'compact'
-      columns: 3,                      // grid columns; cards only — chips wrap
+      columns: 3,                      // grid columns; cards only - chips wrap
       required: true,
       label: 'Choose your plan',
       options: [
@@ -95,21 +95,21 @@ types (`'radio'`, `'select'`, `'checkbox-group'`, `'textarea'`, etc.). The
 data shape (single string vs string array) is inferred from `multiple`:
 when `false`, the field stores a string; when `true`, it stores an array.
 
-### 3.2 — Top-level options
+### 3.2 - Top-level options
 
 | Key       | Type                                | Default          | Notes |
 |-----------|-------------------------------------|------------------|-------|
-| `type`    | `'chooser'`                         | —                | Required to opt into this control |
+| `type`    | `'chooser'`                         | -                | Required to opt into this control |
 | `variant` | `'card' \| 'chip'`                  | `'card'`         | Visual presentation |
 | `multiple`| `boolean`                           | `false`          | Toggles single ↔ multi-select; when `true`, field value is an array |
 | `density` | `'comfortable' \| 'compact'`        | `'comfortable'`  | Compact removes description, tightens padding |
-| `columns` | `number` (1–6)                      | `3`              | Grid columns for `variant: 'card'`; ignored for chips |
+| `columns` | `number` (1-6)                      | `3`              | Grid columns for `variant: 'card'`; ignored for chips |
 | `options` | `Array<Option>`                     | `[]`             | Required, non-empty |
-| `label`   | `string`                            | —                | Standard form-field label, rendered above the picker |
+| `label`   | `string`                            | -                | Standard form-field label, rendered above the picker |
 | `required`| `boolean`                           | `false`          | Standard validation flag |
-| `default` | `string \| string[]`                | —                | Initial selection; string for single, array for multi |
+| `default` | `string \| string[]`                | -                | Initial selection; string for single, array for multi |
 
-### 3.3 — Per-option keys
+### 3.3 - Per-option keys
 
 | Key            | Type                                         | Notes |
 |----------------|----------------------------------------------|-------|
@@ -122,7 +122,7 @@ when `false`, the field stores a string; when `true`, it stores an array.
 | `recommended`  | `boolean`                                    | Optional; renders success-coloured border |
 | `disabled`     | `boolean`                                    | Optional; non-interactive, muted |
 
-### 3.4 — Validation
+### 3.4 - Validation
 
 - `required` honoured by the existing form pipeline. For `multiple: false`,
   validates that a value is selected. For `multiple: true`, validates that
@@ -133,13 +133,13 @@ when `false`, the field stores a string; when `true`, it stores an array.
 - Standard blueprint validators (`min`, `max`, custom validator functions)
   apply to the array length when `multiple: true`.
 
-### 3.5 — Standalone helper (optional)
+### 3.5 - Standalone helper (optional)
 
-`E.chooser(selector, options)` — same render path as the form input, usable
+`E.chooser(selector, options)` - same render path as the form input, usable
 outside a form. Mirrors `E.pillbox()`. Returns a control object with
 `getValue()`, `setValue(v)`, `disable()`, `enable()`, `destroy()`.
 
-## 4 — Visual design
+## 4 - Visual design
 
 The component uses a single `.domma-chooser` block with attribute selectors
 (`[data-variant]`, `[data-density]`) so all four matrix combinations share one
@@ -157,7 +157,7 @@ demonstrates the proposed visual treatment using real Domma CSS, real Domma
 icons, and live theme switching. That mockup is the visual contract for
 implementation.
 
-## 5 — File touch points
+## 5 - File touch points
 
 1. **`src/forms.js`**
    - Add `case 'chooser':` to the `_buildField()` switch (~line 357).
@@ -169,7 +169,7 @@ implementation.
 2. **`src/css/elements.css`**
    - Append a `.domma-chooser` block: layout, variant rules, density rules,
      state classes, badge slot, recommended ring, disabled state.
-   - Reuse existing `.badge` / `.badge-*` classes for per-option badges — no
+   - Reuse existing `.badge` / `.badge-*` classes for per-option badges - no
      new badge styles introduced.
 
 3. **`src/elements.js`**
@@ -212,9 +212,9 @@ implementation.
      used by `_buildChooser`).
 
 5. **`src/web-components/`** (if a corresponding `<dm-chooser>` web component
-   is desired) — out of scope for this spec; can be added later.
+   is desired) - out of scope for this spec; can be added later.
 
-6. **Showcase** (comprehensive — this page is the canonical visual reference)
+6. **Showcase** (comprehensive - this page is the canonical visual reference)
    - New directory `public/showcase/elements/chooser/` with `index.html`
      covering, at minimum:
      - **The four matrix combinations** (card × chip, single × multi), each
@@ -242,11 +242,11 @@ implementation.
    - Add `<url>` entry to `public/sitemap.xml`.
 
 7. **Documentation**
-   - `docs/API.md` — chooser entry under Forms / Input Types with full
+   - `docs/API.md` - chooser entry under Forms / Input Types with full
      option table and per-option flag table.
-   - `docs/DommaDocumentation.md` — feature section with the four matrix
+   - `docs/DommaDocumentation.md` - feature section with the four matrix
      combinations, theme-awareness note, and links to the showcase page.
-   - `docs/Blueprints.md` — chooser-specific blueprint shape, validation
+   - `docs/Blueprints.md` - chooser-specific blueprint shape, validation
      behaviour, and value-shape inference from `multiple`.
    - **Inline documentation**: every public method on the chooser path
      (`_buildChooser`, `_getChooserValue`, `E.chooser`, page-roller's
@@ -254,10 +254,10 @@ implementation.
      parameters, return shape, and side effects.
 
 8. **IDE intelligence**
-   - `public/assets/ide/phpstorm/` — add chooser to the relevant
+   - `public/assets/ide/phpstorm/` - add chooser to the relevant
      code-intelligence file so JetBrains autocomplete recognises the type.
 
-## 6 — Accessibility
+## 6 - Accessibility
 
 - Wraps options in a `<fieldset>` with a `<legend>` (visually hidden by
   default; the field's label is still rendered alongside as the visible
@@ -277,7 +277,7 @@ implementation.
 - Tooltips render via `E.tooltip()` with `aria-describedby` linkage.
 - Respects `prefers-reduced-motion` for the selected-state transition.
 
-## 7 — Testing
+## 7 - Testing
 
 - New file `src/forms.test.js` additions (or `src/chooser.test.js` if logic
   becomes substantial) covering:
@@ -292,7 +292,7 @@ implementation.
     selection updates the model.
 - Manual test plan documented in the showcase page tutorial section.
 
-## 8 — Out of scope
+## 8 - Out of scope
 
 - Per-option image instead of icon. Re-evaluate after launch if requested.
 - Per-option custom accent colour overriding the picker's primary tint.
@@ -305,16 +305,16 @@ implementation.
 - Drag-to-reorder options at runtime in the rendered chooser (the slideover
   options editor handles authoring-time reorder).
 
-## 9 — Implementation sequencing
+## 9 - Implementation sequencing
 
 Suggested sequence (detailed plan to follow in writing-plans):
 
 1. **Element CSS** in `elements.css` (the visual foundation).
-2. **Standalone `E.chooser()`** in `elements.js` with full JSDoc — the lowest
+2. **Standalone `E.chooser()`** in `elements.js` with full JSDoc - the lowest
    layer, used by every consumer below.
 3. **Forms input type** in `forms.js`: `case 'chooser'`, `_buildChooser`,
    `_getChooserValue`, validation, model binding, tests.
-4. **Showcase page** (`public/showcase/elements/chooser/`) — validates the
+4. **Showcase page** (`public/showcase/elements/chooser/`) - validates the
    visual contract end-to-end and serves as the canonical reference.
 5. **Showcase index card** + sitemap entry.
 6. **Documentation** (`API.md`, `DommaDocumentation.md`, `Blueprints.md`)
@@ -329,7 +329,7 @@ Suggested sequence (detailed plan to follow in writing-plans):
    verify accessibility (keyboard, screen reader), verify CMS slideover
    round-trips JSON correctly, run all tests.
 
-## 10 — Open questions
+## 10 - Open questions
 
 None blocking. Anything that arises during implementation should be raised
 in a code review.

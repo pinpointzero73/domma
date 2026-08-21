@@ -705,7 +705,7 @@ export interface SignatureOptions {
     minStrokeLength?: number;
     /** Honour prefers-reduced-motion (default: true) */
     respectMotionPreference?: boolean;
-    /** Fired when the signature changes — receives base64 data URL */
+    /** Fired when the signature changes - receives base64 data URL */
     onChange?: (base64: string) => void;
     /** Fired when the signature is cleared */
     onClear?: () => void;
@@ -769,17 +769,17 @@ export interface ChooserOptions {
     required?: boolean;
     name?: string;
     value?: string | string[] | null;
-    /** Selected/recommended highlight colour — semantic name or any CSS colour string */
+    /** Selected/recommended highlight colour - semantic name or any CSS colour string */
     accent?: ChooserSemanticColour | string;
     /** Visual style of the selected state */
     accentStyle?: 'border' | 'solid' | 'glow' | 'overlay' | 'underline';
     /** Soft outer glow on the selected option */
     glow?: boolean;
-    /** Glow colour override — semantic name or any CSS colour string. Defaults to the accent colour. */
+    /** Glow colour override - semantic name or any CSS colour string. Defaults to the accent colour. */
     glowColour?: ChooserSemanticColour | string | null;
     /** Shadow weight applied to every option */
     shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-    /** Optional shadow tint — any CSS colour string */
+    /** Optional shadow tint - any CSS colour string */
     shadowColour?: string | null;
     options: ChooserOption[];
     onChange?: (value: string | string[] | null) => void;
@@ -815,7 +815,7 @@ export interface Elements {
     /** Create a NumberBadge notification counter on an element */
     numberBadge(selector: string | HTMLElement, options?: NumberBadgeOptions): NumberBadgeInstance;
 
-    /** Create a ListGroup component — returns array if multiple elements match */
+    /** Create a ListGroup component - returns array if multiple elements match */
     listGroup(selector: string | HTMLElement, options?: ListGroupOptions): ListGroupInstance | ListGroupInstance[];
 
     /** Create a Dropdown component */
@@ -834,7 +834,7 @@ export interface Elements {
     signature(selector: string | HTMLElement, options?: SignatureOptions): SignatureInstance;
 
     /**
-     * Visual option-picker — card or chip variants, single or multi-select,
+     * Visual option-picker - card or chip variants, single or multi-select,
      * with rich per-option metadata (icon, description, tooltip, badge,
      * recommended, disabled).
      */

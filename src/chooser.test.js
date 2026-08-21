@@ -533,7 +533,7 @@ describe('Domma.elements.chooser', () => {
       Domma.elements.chooser('#chooser-host', {
         options: [{ value: 'a', label: 'A' }]
       });
-      // 'primary' is the default — JS sets data-accent="primary" too
+      // 'primary' is the default - JS sets data-accent="primary" too
       expect(host.querySelector('.domma-chooser').getAttribute('data-accent')).toBe('primary');
     });
 

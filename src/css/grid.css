@@ -329,7 +329,7 @@
     gap: var(--dm-space-6, 2rem);
 }
 
-/* Bootstrap 5-style g-* aliases (row gutters — both axes) */
+/* Bootstrap 5-style g-* aliases (row gutters - both axes) */
 .row.g-0 { gap: 0; }
 .row.g-1 { gap: var(--dm-space-1, 0.25rem); }
 .row.g-2 { gap: var(--dm-space-2, 0.5rem); }

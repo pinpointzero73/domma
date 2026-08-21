@@ -300,7 +300,7 @@ ${cardsHtml}
             {key: 'method', type: 'select', label: 'Method', options: ['GET', 'POST']}
         ],
         template: (config) => {
-            // Local escape for the wrapper section — title/description still
+            // Local escape for the wrapper section - title/description still
             // need escaping because they live in the static markup outside
             // the form host.
             const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
@@ -313,7 +313,7 @@ ${cardsHtml}
 
             // The form section is rendered through Forma at hydration time so
             // every field type behaves exactly as F.create() would render it
-            // at runtime — full validation, model binding, accessibility,
+            // at runtime - full validation, model binding, accessibility,
             // chooser hydration, etc. We emit a placeholder div with the
             // serialised section config; the canvas hydrator reads it,
             // builds a blueprint, and calls Forma(blueprint).renderTo(host).
@@ -1891,7 +1891,7 @@ class PageRoller {
                 `;
 
             case 'formFields':
-                // Form fields editor — three layers stacked:
+                // Form fields editor - three layers stacked:
                 //   1. Palette tiles to add new fields of any common type
                 //   2. Sortable summary list of existing fields with edit/delete
                 //   3. JSON textarea (canonical store) collapsed under a details
@@ -1902,7 +1902,7 @@ class PageRoller {
                         ${this._buildFieldPalette()}
                         ${this._buildFieldSummaryList(value)}
                         <details class="qr-fields-json-details" style="margin-top: 0.6rem;">
-                            <summary style="cursor: pointer; font-size: 0.8rem; color: var(--dm-text-muted); padding: 0.25rem 0;">Advanced — edit JSON directly</summary>
+                            <summary style="cursor: pointer; font-size: 0.8rem; color: var(--dm-text-muted); padding: 0.25rem 0;">Advanced - edit JSON directly</summary>
                             <textarea class="qr-input qr-textarea qr-json" rows="10" style="font-family: monospace; font-size: 0.85rem; margin-top: 0.4rem;">${JSON.stringify(value, null, 2)}</textarea>
                         </details>
                     </div>
@@ -2280,7 +2280,7 @@ class PageRoller {
         }
 
         // Standalone chooser hydration (for any chooser placeholders rendered
-        // outside a form section — e.g. in custom shortcodes or future section
+        // outside a form section - e.g. in custom shortcodes or future section
         // types). Form-section choosers are hydrated by Forma above.
         if (typeof Domma !== 'undefined' && Domma.elements && typeof Domma.elements.chooser === 'function') {
             this._refs.canvas.querySelectorAll('[data-chooser-field]').forEach((node) => {
@@ -3393,7 +3393,7 @@ ${columnsHtml}
     }
 
     // ============================================================
-    // Chooser slideover — structured editor for chooser form fields.
+    // Chooser slideover - structured editor for chooser form fields.
     // ============================================================
 
     /**
@@ -3451,7 +3451,7 @@ ${columnsHtml}
         // factory's `.dm-slideover-body` slot below.
         const body = this._buildChooserSlideoverBody(initial);
         const subtitle = (editIndex !== null && initial.name)
-            ? ` <span class="text-muted">— editing field: <code>${this._escapeHtml(initial.name)}</code></span>`
+            ? ` <span class="text-muted">- editing field: <code>${this._escapeHtml(initial.name)}</code></span>`
             : '';
 
         const slideover = Domma.elements.slideover({
@@ -3524,7 +3524,7 @@ ${columnsHtml}
                 }
                 renderPreview();
             };
-            // Single binding per input — `input` for free-text/number,
+            // Single binding per input - `input` for free-text/number,
             // `change` for selects/checkboxes. Avoids the double-fire that
             // happened previously when both events were bound on every input.
             const evt = (inp.tagName === 'SELECT' || inp.type === 'checkbox') ? 'change' : 'input';
@@ -3609,7 +3609,7 @@ ${columnsHtml}
 
     /**
      * Build the slideover body for the chooser editor. Returns a DOM
-     * fragment built entirely via createElement / appendChild — no inner-HTML
+     * fragment built entirely via createElement / appendChild - no inner-HTML
      * assignment. User-supplied strings flow through textContent / setAttribute.
      * Uses Domma form classes (.form-input) and themed group styling so the
      * slideover matches the rest of the framework's visual language.
@@ -3647,7 +3647,7 @@ ${columnsHtml}
         // Chooser layout section
         body.appendChild(this._buildChooserSection('Layout', [
             { type: 'select',   key: 'variant',  label: 'Variant',  value: initial.variant,
-              options: [['card', 'Card — rich tiles'], ['chip', 'Chip — compact pills']],
+              options: [['card', 'Card - rich tiles'], ['chip', 'Chip - compact pills']],
               help: 'Card variant supports description and grid columns. Chips wrap on a flex row.' },
             { type: 'checkbox', key: 'multiple', label: 'Multi-select', value: !!initial.multiple,
               help: 'Off: single-select (radio). On: multi-select (checkbox); value becomes an array.' },
@@ -3655,7 +3655,7 @@ ${columnsHtml}
               options: [['comfortable', 'Comfortable'], ['compact', 'Compact']],
               help: 'Compact strips description and tightens padding (card variant only).' },
             { type: 'number',   key: 'columns',  label: 'Columns',  value: initial.columns,  min: 1, max: 6,
-              help: 'Grid columns for card variant (1–6). Ignored for chips.' }
+              help: 'Grid columns for card variant (1-6). Ignored for chips.' }
         ]));
 
         // Visual options section
@@ -3664,7 +3664,7 @@ ${columnsHtml}
               placeholder: 'primary  /  success  /  #ec4899',
               help: 'Selected/recommended highlight colour. Semantic name (primary/success/info/warning/danger) stays theme-aware; any other CSS colour is applied directly. Use the swatch to pick a custom hex.' },
             { type: 'select',   key: 'accentStyle', label: 'Accent style', value: initial.accentStyle || 'border',
-              options: [['border', 'Border (default)'], ['solid', 'Solid — filled tile'], ['glow', 'Glow — ring'], ['overlay', 'Overlay — translucent'], ['underline', 'Underline — minimal']],
+              options: [['border', 'Border (default)'], ['solid', 'Solid - filled tile'], ['glow', 'Glow - ring'], ['overlay', 'Overlay - translucent'], ['underline', 'Underline - minimal']],
               help: 'Visual treatment of the selected state.' },
             { type: 'checkbox', key: 'glow', label: 'Glow on selected option', value: !!initial.glow,
               help: 'Adds a soft outer glow when an option is selected.' },
@@ -3943,7 +3943,7 @@ ${columnsHtml}
      */
     _buildFieldSummaryList(fields) {
         if (!Array.isArray(fields) || fields.length === 0) {
-            return `<div class="qr-fields-empty" style="padding:0.6rem; border:1px dashed var(--dm-border); border-radius:var(--dm-radius-sm); text-align:center; font-size:0.8rem; color:var(--dm-text-muted);">No fields yet — click a tile above to add one.</div>`;
+            return `<div class="qr-fields-empty" style="padding:0.6rem; border:1px dashed var(--dm-border); border-radius:var(--dm-radius-sm); text-align:center; font-size:0.8rem; color:var(--dm-text-muted);">No fields yet - click a tile above to add one.</div>`;
         }
         const escape = (s) => this._escapeHtml(String(s ?? ''));
         const rowsHtml = fields.map((f, i) => {

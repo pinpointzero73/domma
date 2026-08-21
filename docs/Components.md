@@ -92,7 +92,7 @@ Domma.component('user-card', {
     },
 
     // ── Scoped Styles ─────────────────────────────────────────────────────────
-    // CSS injected into the Shadow DOM — fully encapsulated.
+    // CSS injected into the Shadow DOM - fully encapsulated.
     // Domma theme CSS variables (--dm-primary, --dm-spacing-*, etc.) are
     // automatically inherited from the host document.
 
@@ -133,20 +133,20 @@ Inside methods, computed properties, and lifecycle hooks, `this` provides:
 ## Template Binding
 
 Templates use the same Mustache syntax as the rest of Domma (`_.render()`), plus the binding attributes described in
-**[Bindings](./Bindings.md)** — the full reference for expressions, `data-model`, custom bindings and helpers. This
+**[Bindings](./Bindings.md)** - the full reference for expressions, `data-model`, custom bindings and helpers. This
 section covers only what is specific to a component template.
 
 ### Mustache
 
 | Pattern                             | Behaviour                                             |
 |-------------------------------------|-------------------------------------------------------|
-| `{{field}}`                         | **Surgical** — only that text node updates            |
-| `{{field.nested}}`                  | **Surgical** — sub-path resolved on root change       |
-| `{{{field}}}`                       | Raw HTML, unescaped — only for markup you control     |
+| `{{field}}`                         | **Surgical** - only that text node updates            |
+| `{{field.nested}}`                  | **Surgical** - sub-path resolved on root change       |
+| `{{{field}}}`                       | Raw HTML, unescaped - only for markup you control     |
 | `{{#if field}}…{{/if}}`             | **Full re-render** of the region on condition change  |
 | `{{#unless field}}…{{/unless}}`     | **Full re-render** of the region on condition change  |
 | `{{#each items}}…{{/each}}`         | **Full re-render** of the block on array change       |
-| `{{#each items key=id}}…{{/each}}`  | **Reconciled** — surviving items keep their DOM nodes |
+| `{{#each items key=id}}…{{/each}}`  | **Reconciled** - surviving items keep their DOM nodes |
 | `class="prefix-{{field}}"`          | **Full re-render** (attribute binding)                |
 | `{{computedProp}}`                  | Treated same as a field; full re-render if structural |
 
@@ -223,8 +223,8 @@ node. Prefer `{{#if}}` in a template, where the re-render is the documented beha
 ### onUpdated
 
 `onUpdated()` is a data hook, not a paint hook. It fires once per reactive
-flush for **any** change to the component's model — including a field no
-`{{ }}` binding mentions — and it runs after the flush that applied the
+flush for **any** change to the component's model - including a field no
+`{{ }}` binding mentions - and it runs after the flush that applied the
 binding updates, so it can read what was just rendered.
 
 That makes it the place to paint content the template cannot express, which is
@@ -240,17 +240,17 @@ Domma.component('task-list', {
 
 #### Writes from onUpdated must converge
 
-Writing to the model from inside `onUpdated()` is legitimate — deriving one
-field from another, for instance — but the value **must settle**. What stops
+Writing to the model from inside `onUpdated()` is legitimate - deriving one
+field from another, for instance - but the value **must settle**. What stops
 the cycle is the equality check on each field: write the same value twice and
 the second write does not propagate, so the hook is not called again.
 
 ```javascript
 onUpdated() {
-    // ✅ converges — after the first pass, slug already equals this value
+    // ✅ converges - after the first pass, slug already equals this value
     this.set({slug: _.kebabCase(this.data.title)});
 
-    // ❌ never converges — a different value every pass, forever
+    // ❌ never converges - a different value every pass, forever
     this.set({lastTouched: Date.now()});
 }
 ```
@@ -270,7 +270,7 @@ at all has nothing to watch, so its `onUpdated` never fires.
 
 #### Not called when absent
 
-If a component declares no `onUpdated`, no watcher is created — the component
+If a component declares no `onUpdated`, no watcher is created - the component
 keeps exactly one effect per bound field and pays nothing for the hook.
 
 ## Router Integration
@@ -291,7 +291,7 @@ R.navigate('/users/42');
 ```
 
 The router creates `<user-card user-id="42">` and inserts it into the route container.
-The element's normal lifecycle fires — no extra setup needed.
+The element's normal lifecycle fires - no extra setup needed.
 
 ## `.domma` Single-File Format
 
@@ -350,7 +350,7 @@ The file's base name (without `.domma`) becomes the component tag name:
 
 ## Nesting Components
 
-Components compose naturally — use a registered tag inside another component's template:
+Components compose naturally - use a registered tag inside another component's template:
 
 ```javascript
 Domma.component('user-list', {
@@ -399,10 +399,10 @@ const registry = Domma.components.registry();  // Map<tagName, definition>
 
 ## See Also
 
-- [domma-reactive](https://www.npmjs.com/package/domma-reactive) — Binding compiler internals. The compiler moved out
+- [domma-reactive](https://www.npmjs.com/package/domma-reactive) - Binding compiler internals. The compiler moved out
   of `src/template-compiler.js` into the `domma-reactive` package; Domma imports `TemplateCompiler` from there and
   injects `utils.render` as the renderer.
-- [src/component-factory.js](../src/component-factory.js) — Factory + Custom Element builder
-- [src/plugins/rollup-plugin-domma.js](../src/plugins/rollup-plugin-domma.js) — SFC build plugin
-- [public/showcase/components/](../public/showcase/components/) — Interactive showcase
-- [docs/API.md](./API.md) — Full API reference
+- [src/component-factory.js](../src/component-factory.js) - Factory + Custom Element builder
+- [src/plugins/rollup-plugin-domma.js](../src/plugins/rollup-plugin-domma.js) - SFC build plugin
+- [public/showcase/components/](../public/showcase/components/) - Interactive showcase
+- [docs/API.md](./API.md) - Full API reference

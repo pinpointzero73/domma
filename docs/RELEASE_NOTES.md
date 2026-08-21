@@ -57,7 +57,7 @@ write yourself. Nothing that already worked has changed.
 
 *   **`data-options`** fills a `<select>` from a collection, with `data-options-text`,
     `data-options-value` and `data-options-caption`. A `data-each` over `<option>` produces the same
-    markup — what it does not produce is the **selection**, and that is the whole difficulty:
+    markup - what it does not produce is the **selection**, and that is the whole difficulty:
     rebuilding a select's options resets it, and the selection lives on the select rather than on any
     option, so a keyed list has nothing to preserve it with.
 
@@ -65,24 +65,24 @@ write yourself. Nothing that already worked has changed.
     computed. Option values need not be strings: when the resolved value is an object or a number, the
     real value is kept alongside the option and `data-model` reads back **that**, not
     `"[object Object]"`. And a value the model asked for while no option carried it is remembered and
-    applied by the rebuild that brings it — so attribute order does not matter, and neither does a
+    applied by the rebuild that brings it - so attribute order does not matter, and neither does a
     collection that arrives from an `H.get()` long afterwards.
 
 *   **`data-focus`** is two-way between a value and focus. Setting it moves the caret into the field;
-    the user tabbing in sets it `true`; blurring sets it `false`. Both directions earn their place —
+    the user tabbing in sets it `true`; blurring sets it `false`. Both directions earn their place -
     the first is how a model puts focus in the field it has just revealed without reaching for a DOM
     node, the second is how it knows where the user is without a listener. Unlike `data-model`, an
     expression it cannot write through is not fatal: focus still follows the value, and only the
     write-back warns.
 
 *   **`data-bind-style-<property>`** and **`data-bind-style`** set one CSS property or a whole object of
-    them. Two spellings because a binding expression has no object literal and will not grow one —
+    them. Two spellings because a binding expression has no object literal and will not grow one -
     parsing `{…}` safely is most of the way to the `eval` that Domma's CSP story depends on avoiding.
     Ownership follows the `class` rule: only the properties this binding set last time are removed, so
     a static `style=` attribute survives. A falsy value removes the property; `0` is kept, because
     `opacity: 0` is a real value.
 
-*   **Virtual bindings** — `<!-- dm if: x -->` … `<!-- /dm -->`, plus `each` and `text`. A binding
+*   **Virtual bindings** - `<!-- dm if: x -->` … `<!-- /dm -->`, plus `each` and `text`. A binding
     attribute needs an element to sit on, and sometimes there is none to spare: a run of `<li>`s, three
     `<td>`s in a row. Wrapping them in a `<div>` to carry the attribute changes the layout, and inside
     a table it is not even valid HTML a browser will keep. They nest, and a block held out of the
@@ -92,21 +92,21 @@ write yourself. Nothing that already worked has changed.
 ✨ **New in the reactive core**
 
 *   **`M.observable(x).extend({...})`** layers behaviour onto an observable after it exists:
-    `rateLimit` (both methods — quiet-time and fixed-rate), `throttle` as the older name for it, and
+    `rateLimit` (both methods - quiet-time and fixed-rate), `throttle` as the older name for it, and
     `notify: 'always'`. `M.registerExtender()` opens the same registry to you, exactly as
     `M.registerBinding()` does for bindings.
 
     **The write is never delayed, only the announcement.** Worth stating plainly, because the obvious
-    implementation of a throttle defers the write — and then every read between the write and the
+    implementation of a throttle defers the write - and then every read between the write and the
     notification gives you a value that is already out of date. A rate-limited observable always reads
     back what was last written to it.
 
-*   **`M.computed({read, write})`** — a computed you can write through, which is what lets
+*   **`M.computed({read, write})`** - a computed you can write through, which is what lets
     `data-model="fahrenheit.value"` bind a derived value. Assigning to one with no `write` now warns and
     names it, rather than storing into the read cache where the next recompute would silently drop it.
 
 *   **`M.observableArray()`** gains `indexOf()` (tracked, unlike `peek().indexOf()`), `replace()`, and
-    `destroy()` / `destroyAll()`, which **mark** an item rather than removing it — for servers that
+    `destroy()` / `destroyAll()`, which **mark** an item rather than removing it - for servers that
     delete on a flag in the payload, where the array must still carry the item at submit time while no
     longer showing it. Every render path skips a marked one.
 
@@ -119,14 +119,14 @@ write yourself. Nothing that already worked has changed.
 
 🔧 **Internal**
 
-*   [domma-reactive](https://www.npmjs.com/package/domma-reactive) moves to 0.5.1 — 793 tests there, up
+*   [domma-reactive](https://www.npmjs.com/package/domma-reactive) moves to 0.5.1 - 793 tests there, up
     from 679. All six bindings above arrive with the pin, since the handler registry populates itself at
     import; what needed Domma code was the other two, which were reachable in the package and not
     through `M`. 577 tests here, up from 571.
 
 ### v0.38.0 - One Adapter (2026-08-06)
 
-**No new API.** This is the seam between Domma and the binding engine, made single — plus a limitation
+**No new API.** This is the seam between Domma and the binding engine, made single - plus a limitation
 found by measuring rather than assuming, and now written down.
 
 🔧 **Internal**
@@ -137,7 +137,7 @@ found by measuring rather than assuming, and now written down.
     while typing is your own keystrokes), and an object carrying no functions resolves no `data-on-*`
     handler while every other binding on the element works.
 
-    Both shipped, and were fixed in v0.37.0 — but the fix then existed **twice**, in
+    Both shipped, and were fixed in v0.37.0 - but the fix then existed **twice**, in
     `component-factory.js` and again in `models.js`, in two slightly different shapes. It is now once,
     in `src/binding-source.js`, with the failure modes documented where the code is rather than in two
     comment blocks that drift apart.
@@ -146,13 +146,13 @@ found by measuring rather than assuming, and now written down.
     view, which reaches the model itself; a component passes a snapshot, which cannot, so it supplies
     an `onWrite` to tell the model.
 
-    Mutation-tested rather than assumed — skip `onWrite`, let the fallback win over the primary, or
+    Mutation-tested rather than assumed - skip `onWrite`, let the fallback win over the primary, or
     drop the write to the primary, and a different existing test fails for each.
 
 📋 **Documented**
 
 *   **Writing to a nested path does not notify the model.** `data-model="profile.city"`, where
-    `profile` is a Model field holding an object, reads correctly and the write lands — but it mutates
+    `profile` is a Model field holding an object, reads correctly and the write lands - but it mutates
     that object in place, so the field's observable never fires. The model is not told, and no other
     binding on that path updates.
 
@@ -165,7 +165,7 @@ found by measuring rather than assuming, and now written down.
     it. A real fix means `tracked()` returning a deep proxy, which has performance implications and is
     a separate decision.
 
-*   `domma-reactive` moves to **0.4.2** — every published artefact now carries a version banner
+*   `domma-reactive` moves to **0.4.2** - every published artefact now carries a version banner
     (`/*! domma-reactive v0.4.2 | MIT | … */`), kept through minification, so a bundle is no longer
     anonymous and a stale `dist/` cannot be published as a fresh one. The package also gained a
     CHANGELOG.
@@ -179,12 +179,12 @@ reachable.** Domma imported ten names from `domma-reactive` and re-exported near
 only route to a binding was a template inside `Domma.component()`. There was no way to bind
 server-rendered markup and no way to register a custom binding. The evidence: across all 86
 showcase pages there were **zero** live uses of `data-bind-*`, `data-model`, `data-each` or
-`data-if` outside a component — because outside a component there was no way to use them.
+`data-if` outside a component - because outside a component there was no way to use them.
 
 ✨ **New**
 
 *   **`M.applyBindings(data, root, options)`** activates every binding attribute under a root on
-    markup that already exists — server-rendered, hand-written, whatever — in place, with no
+    markup that already exists - server-rendered, hand-written, whatever - in place, with no
     build step and no second source of truth for the markup.
 
     ```html
@@ -205,8 +205,8 @@ showcase pages there were **zero** live uses of `data-bind-*`, `data-model`, `da
     handle.dispose();   // on anything that outlives its markup
     ```
 
-    Pass a **Model** and it is converted to `model.tracked()` — the read-tracked, write-through
-    view — so a `data-model` write lands in the model with validation, change notification and
+    Pass a **Model** and it is converted to `model.tracked()` - the read-tracked, write-through
+    view - so a `data-model` write lands in the model with validation, change notification and
     persistence intact, rather than in a snapshot. A Model holds data and not behaviour, so
     handlers arrive as `options.methods` and are layered behind the data; a data field of the
     same name wins, exactly as in a component. The root accepts a selector, an element or a
@@ -217,26 +217,26 @@ showcase pages there were **zero** live uses of `data-bind-*`, `data-model`, `da
     function, so anything a built-in can do, a custom binding can do.
 
 *   **`M.registerHelper(name, fn)`** adds a function an expression may call. Expressions cannot
-    call methods on your data — `{{total.get()}}` will not parse, deliberately — so a helper is
+    call methods on your data - `{{total.get()}}` will not parse, deliberately - so a helper is
     the supported way to shape a value in markup: `data-bind-text="upper(name)"`.
 
     Both come with `unregisterBinding` / `unregisterHelper`.
 
-*   **[docs/Bindings.md](./Bindings.md)** — the reference for both entry points, the attribute
+*   **[docs/Bindings.md](./Bindings.md)** - the reference for both entry points, the attribute
     list, the expression grammar, the context keys (`$data`, `$index`, `$parent`, `$root`,
     `$length`) and the full handler contract. Live demos on the
     [bindings showcase](../public/showcase/models/bindings.html), which now binds real in-page
     markup alongside its components.
 
 **Deliberately not exposed:** `compile()` and `renderTemplate()`, because Domma already has
-`_.render` and the two **diverge** — publishing both would be a trap — plus the raw expression
+`_.render` and the two **diverge** - publishing both would be a trap - plus the raw expression
 API, the context builders and the graph internals. This is the two entry points, not the engine.
 
 🐛 **Bug Fixes**
 
 *   **`data-on-*` never resolved inside a component template.** `_mergeData()` returned
     `{...data, ...props, ...computed}` and methods live on the component context, so every event
-    binding in every component logged *"did not resolve to a function"* and did nothing — while
+    binding in every component logged *"did not resolve to a function"* and did nothing - while
     every other binding on the same element worked perfectly.
 
 *   **`data-model` was one-way in a component.** Write-back assigns to `context.$data[key]`, and
@@ -250,7 +250,7 @@ API, the context builders and the graph internals. This is the two entry points,
     half that contract and fails the other half in silence.
 
 *   **`applyBindings` warned about mustache it was about to substitute.** A `{{name}}` inside a
-    `data-each` body drew *"does not interpolate `{{ }}`"* — but a list's contents are a
+    `data-each` body drew *"does not interpolate `{{ }}`"* - but a list's contents are a
     *template*, lifted out and cloned per item, and the one place in already-rendered DOM where
     mustache does work. The advice told authors to replace working markup. Fixed in
     `domma-reactive` **0.4.1**; a regression test asserts it renders *and* stays quiet, so a
@@ -263,7 +263,7 @@ API, the context builders and the graph internals. This is the two entry points,
 🔧 **Internal**
 
 *   **The showcase conventions sweep: 186 → 0.** The showcase teaches by example, and it was
-    teaching vanilla JavaScript — 186 call sites across 43 pages used `document.querySelector`,
+    teaching vanilla JavaScript - 186 call sites across 43 pages used `document.querySelector`,
     `addEventListener`, `new Date()`, `fetch()` and `localStorage` on pages whose purpose is to
     demonstrate `$`, `.on()`, `D()`, `H` and `S`.
 
@@ -271,7 +271,7 @@ API, the context builders and the graph internals. This is the two entry points,
     namespaces its keys, `H.get()` resolves to parsed JSON rather than a `Response`, and `D()`
     returns a wrapper rather than a `Date`.
 
-*   **`npm run validate:conventions`** keeps it there — a ratchet like the other two, failing
+*   **`npm run validate:conventions`** keeps it there - a ratchet like the other two, failing
     when a file gets worse or a new offender appears. `--list` prints every site, which is what
     makes a sweep a work list rather than a number. The baseline is empty.
 
@@ -290,18 +290,18 @@ API, the context builders and the graph internals. This is the two entry points,
 
 **A browser-level test harness for the showcase, and the thirteen broken pages it found on its
 first run.** There was no such coverage before: the unit suite exercises `src/` modules in
-isolation and cannot see a page that renders wrong, so the failure mode was invisible — no
+isolation and cannot see a page that renders wrong, so the failure mode was invisible - no
 error, no failing test, just a page that was broken for every visitor.
 
 ✨ **New**
 
 *   **`$('#el')[0]` works.** `DommaCollection` exposed `.elements` and `.get(i)` but no numeric
-    index properties, so the most-typed thing in jQuery returned `undefined` — silently, until
+    index properties, so the most-typed thing in jQuery returned `undefined` - silently, until
     something dereferenced it. The DOM showcase documents `$('.items')[0] // Same as get(0)`,
     and **65 call sites** across the repository use the form.
 
     ```javascript
-    $('#el')[0]                 // the element — same as .get(0)
+    $('#el')[0]                 // the element - same as .get(0)
     $('.row')[1]                // second match
     Array.from($('.row'))       // array-like: length + indices
     ```
@@ -309,18 +309,18 @@ error, no failing test, just a page that was broken for every visitor.
     Still not iterable: there is no `Symbol.iterator`, so spread and `for...of` do not work.
     jQuery 3 added one; doing the same here is a separate decision.
 
-*   **Four new icons** — `alert-triangle`, `sidebar`, `window` and `gem` — all of which were
+*   **Four new icons** - `alert-triangle`, `sidebar`, `window` and `gem` - all of which were
     already being used by showcase pages and silently rendering nothing. 520 icons in total.
 
 🐛 **Bug Fixes**
 
 *   **`Domma.init()` has never existed**, and calling it threw. On the CSS-utilities showcase it
-    sat at the top of the page's only script, so everything below it died — that page's
+    sat at the top of the page's only script, so everything below it died - that page's
     reference table, its main content, rendered *nothing*. Four separate documents instructed
     you to call it: the SPA scaffold's `CLAUDE.md`, the scaffold's memory file, the global JS
     conventions, and an unexecuted plan. All corrected.
 
-    Domma self-initialises when the bundle loads — it registers its web components, manages the
+    Domma self-initialises when the bundle loads - it registers its web components, manages the
     anti-FOUC cloak and defines the aliases. The only startup call a page needs is
     `Domma.icons.scan()`, plus `Domma.setup({...})` if you want declarative component or theme
     configuration.
@@ -331,11 +331,11 @@ error, no failing test, just a page that was broken for every visitor.
 *   **The timeline showcase called its own deprecated alias six times**, on a page headed
     "Component Deprecated". Its demos now use `progression({mode: 'timeline'})`, and the code
     samples and API table moved with them so nothing on the page disagrees with what runs. The
-    deprecation notice stays — documenting that `timeline()` still works is the page's job.
+    deprecation notice stays - documenting that `timeline()` still works is the page's job.
 
 *   **Sidebar push mode** targeted its default `.main-content`, which the sidebar showcase does
     not have, warning four times. Each demo's content element now has its own id and each
-    sidebar points at it — which demonstrates `contentSelector` properly into the bargain.
+    sidebar points at it - which demonstrates `contentSelector` properly into the bargain.
 
 *   **`theme: 'light'` is not a theme name.** The theme-roller showcase passed it to both
     `theme.init()` and `themeRoller`'s `baseTheme`, warning twice and silently falling back.
@@ -355,14 +355,14 @@ error, no failing test, just a page that was broken for every visitor.
     | `npm run validate:showcase:baseline` | accept the current state |
 
     External *classic* scripts are rewritten inline in place, which preserves the browser's
-    execution order — bundle first, page code after. `type="module"` scripts are not executed,
+    execution order - bundle first, page code after. `type="module"` scripts are not executed,
     because jsdom cannot; every skip is recorded rather than hidden, and a page consisting only
     of module script is caught by the "rendered something" assertion rather than passing
     vacuously.
 
     **The baseline is empty.** All 85 pages pass in strict mode, so any finding is a failure.
 
-*   It was built as the prerequisite for the showcase conventions sweep — 191 Domma-convention
+*   It was built as the prerequisite for the showcase conventions sweep - 191 Domma-convention
     violations across 54 pages. Rewriting that many call sites without a harness is precisely
     how a green suite and a broken site coexist.
 
@@ -371,7 +371,7 @@ error, no failing test, just a page that was broken for every visitor.
 ### v0.35.0 - A List's Rows Can Act on the List (2026-08-05)
 
 **One new Domma API: `M.computed().value`.** Everything else arrives through the pinned
-`domma-reactive` dependency, which Rollup still inlines — `domma.min.js` remains a single
+`domma-reactive` dependency, which Rollup still inlines - `domma.min.js` remains a single
 self-contained file and consumers install nothing extra.
 
 ✨ **New**
@@ -381,12 +381,12 @@ self-contained file and consumers install nothing extra.
     ```javascript
     const total = M.computed(() => order.get('price') * order.get('qty'));
 
-    total.value;   // 30 — identical to total.get()
+    total.value;   // 30 - identical to total.get()
     ```
 
     `M.observable()` has always been read through `.value`; `M.computed()` was a facade with only
     `get()`, so the two halves of the same idea disagreed about how you read them. It also made a
-    computed unreadable from a template expression, where a method cannot be called — `{{total.get()}}`
+    computed unreadable from a template expression, where a method cannot be called - `{{total.get()}}`
     does not parse and never will, because a call inside a render is a side effect.
 
 *   **`M.observableArray().remove()` takes a value or a test.**
@@ -397,14 +397,14 @@ self-contained file and consumers install nothing extra.
     ```
 
     A function used to be compared against each item by identity, never matched, and removed nothing
-    without a word — the failure mode you cannot see. The test is called with `(item, index)`. The one
+    without a word - the failure mode you cannot see. The test is called with `(item, index)`. The one
     case this gives up is an array of bare functions removing one of its own members by passing it;
     `peek()` plus `splice()` still covers that.
 
 🐛 **Bug Fixes** (`domma-reactive` 0.4.0)
 
 *   **`&&` no longer breaks a binding inside a keyed block.** A keyed block's body is captured by
-    serialising DOM back to HTML, which escapes every `&` it writes — so
+    serialising DOM back to HTML, which escapes every `&` it writes - so
     `data-bind-class="done && 'struck'"`, the documented idiom, came back out as `&amp;&amp;` and
     failed to parse. Attribute values are now entity-decoded where they are read as expressions, in a
     single pass so `&amp;lt;` cannot double-decode. Ordinary attributes are untouched, because there
@@ -412,11 +412,11 @@ self-contained file and consumers install nothing extra.
 
 *   **`data-on-*` may call a method on your data.** Inside a list `$data` is the item, and a bare name
     resolves against `$data` only, so `$parent.remove($data)` was the sole way for a row to reach the
-    list that owns it — and it did not parse.
+    list that owns it - and it did not parse.
 
     The restriction is not lifted, it is **scoped**: only the event binding may do this, and the
     evaluator still refuses to perform a method call, so `{{ }}`, `data-if` and `data-bind-*` remain
-    reads with no side effects. `this` follows JavaScript — a call keeps its receiver, a reference
+    reads with no side effects. `this` follows JavaScript - a call keeps its receiver, a reference
     does not. The method name is read through the same guard as any other property, so
     `$data.constructor()` is refused exactly as `{{ $data.constructor }}` is.
 
@@ -427,7 +427,7 @@ self-contained file and consumers install nothing extra.
 
 🔧 **Internal**
 
-*   `domma-reactive` moves from 0.3.0 to **0.4.0** — keyed list reconciliation, instance lifecycle and
+*   `domma-reactive` moves from 0.3.0 to **0.4.0** - keyed list reconciliation, instance lifecycle and
     `applyBindings()`, plus the four fixes above. 676 tests, every new guarantee mutation-tested. Its
     README is rewritten around a complete worked application, with every runnable example executed
     against the built bundle.
@@ -438,7 +438,7 @@ self-contained file and consumers install nothing extra.
 ### v0.34.0 - CSP-Safe Expressions & a Binding Registry (2026-08-05)
 
 **No Domma API changes.** Everything below arrives through the pinned `domma-reactive` dependency,
-which Rollup still inlines — `domma.min.js` remains a single self-contained file and consumers install
+which Rollup still inlines - `domma.min.js` remains a single self-contained file and consumers install
 nothing extra.
 
 ✨ **New in the reactive core** (`domma-reactive` 0.3.0)
@@ -452,7 +452,7 @@ nothing extra.
     under `script-src 'self'` without `unsafe-eval`. Domma's expressions work under a strict CSP.
 
     Refused by design: arbitrary and member calls (`x.foo()`), assignment, `new`, and property access
-    through `__proto__`, `constructor` or `prototype` — in every form, including a computed key whose
+    through `__proto__`, `constructor` or `prototype` - in every form, including a computed key whose
     value is only `'__proto__'` at runtime. A malformed expression warns and yields `undefined`; it
     never throws mid-render.
 
@@ -466,7 +466,7 @@ nothing extra.
     | `data-model` | Two-way. Requires a settable path; refuses the prototype keys in every form |
     | `data-if` | Conditional. **Removes** the element rather than hiding it |
 
-    The four existing mustache kinds — text, attribute, block and raw — are now registered through the
+    The four existing mustache kinds - text, attribute, block and raw - are now registered through the
     same public `registerBinding()` the extension API uses, so a custom binding is not a second-class
     citizen.
 
@@ -480,7 +480,7 @@ nothing extra.
 
 🐛 **Bug Fixes**
 
-*   **Seven rules painted with variables that are defined nowhere** — `--dm-bg-secondary`, `--dm-bg`,
+*   **Seven rules painted with variables that are defined nowhere** - `--dm-bg-secondary`, `--dm-bg`,
     `--dm-purple-50` and `--dm-purple-900`. An undefined variable makes the whole declaration invalid,
     so those backgrounds were simply absent. Repointed at `--dm-surface-secondary`,
     `--dm-background` and `--dm-info-bg`.
@@ -494,7 +494,7 @@ nothing extra.
     | `validate:classes` | CSS classes used in HTML that resolve to no rule |
     | `validate:theme` | Rules painting a fixed background while inheriting a themed text colour |
 
-    Both exist because their failure modes are **invisible** — no error, no failing test, just markup
+    Both exist because their failure modes are **invisible** - no error, no failing test, just markup
     that renders wrong. `.form-control`, `.col-md-*` and `.table-responsive` all shipped while defined
     nowhere; eighteen rules set a background from a variable no theme redefines, which is why the
     showcase method chips were illegible in dark mode.
@@ -509,7 +509,7 @@ nothing extra.
 🐛 **Bug Fixes**
 
 *   **A `'300ms'` wait ran for five minutes.** `parseWait()` in the scribe effect tested
-    `endsWith('s')` before `endsWith('ms')` — and because `'ms'` also ends with `'s'`, the millisecond
+    `endsWith('s')` before `endsWith('ms')` - and because `'ms'` also ends with `'s'`, the millisecond
     branch was unreachable. Every millisecond-suffixed wait was multiplied by 1000, so a sequence like
 
     ```javascript
@@ -519,7 +519,7 @@ nothing extra.
     ```
 
     appeared to stop after the first render. Seconds (`'2s'`) and raw numbers were unaffected, which is
-    why it went unnoticed — the workaround was to pass milliseconds as a number.
+    why it went unnoticed - the workaround was to pass milliseconds as a number.
 
     This was reported in the v0.25.2 notes as "fix queued for a future patch release" and has been
     present ever since.
@@ -528,7 +528,7 @@ nothing extra.
 
 *   `parseWait` was closure-local inside `scribe()` and therefore impossible to test. It is now a
     module-scope export, matching how `resolvePalette` is already handled in that file, and is pinned
-    by tests that fail if the branch ordering is restored. It is not exposed on `Domma.effects` — the
+    by tests that fail if the branch ordering is restored. It is not exposed on `Domma.effects` - the
     public surface is unchanged.
 
 *   A non-finite number now returns `0` rather than letting `NaN` reach a timer.
@@ -542,18 +542,18 @@ nothing extra.
 *   **Every scaffolded project rendered unstyled.** The kickstart templates were written in Bootstrap
     class names while Domma ships Tailwind-style utilities, so **143 class usages across 14 files
     resolved to nothing**. `d-flex`, `justify-content-center`, `align-items-center`, `flex-column`,
-    `me-*`/`ms-*`, `lead`, `display-*`, `h3`–`h6`, `btn-outline-primary`, `form-control`, `col-lg-*`
+    `me-*`/`ms-*`, `lead`, `display-*`, `h3`-`h6`, `btn-outline-primary`, `form-control`, `col-lg-*`
     and Tailwind's `lg:grid-cols-*` are all mapped to their Domma equivalents. Anyone who ran
     `npx domma init` got a project that looked broken on first load.
 
 *   **Two scaffolded components were dead, not merely unstyled.** The contact FAQ and docs pages used
-    Bootstrap's `data-bs-toggle="collapse"` markup — and Bootstrap JS is never loaded — while
+    Bootstrap's `data-bs-toggle="collapse"` markup - and Bootstrap JS is never loaded - while
     `contact.js` and `docs.js` already called `Domma.elements.accordion()` and `.tabs()` against markup
     they could not recognise. Both work now.
 
 ✨ **New**
 
-*   **`.list-none` and `.no-underline`** — standard utilities in the vocabulary Domma has adopted, and
+*   **`.list-none` and `.no-underline`** - standard utilities in the vocabulary Domma has adopted, and
     genuinely absent from it until now.
 
 *   **Try-it panes in the showcase.** Editable code with live output, on any showcase page:
@@ -573,7 +573,7 @@ nothing extra.
 📖 **Documentation**
 
 *   **The Reactivity showcase is a showcase now, not a reference.** It had six sections, every one
-    named after a mechanism and opening by explaining that mechanism — with no statement of the
+    named after a mechanism and opening by explaining that mechanism - with no statement of the
     problem it solves, no benefit, no guidance on when *not* to use it, and no mention of
     `M.observable`, `M.observableArray` or `domma-reactive` at all.
 
@@ -587,7 +587,7 @@ nothing extra.
 *   **The template compiler now lives in `domma-reactive` (0.2.0).** The extraction spec's M1 called
     for moving the graph *and* the Tier 3 compiler; only the graph moved, so M1 shipped half-done. The
     compiler takes its mustache renderer as a parameter, so the package gains the anchor and binding
-    machinery without gaining a template engine — which is the seam the expression evaluator plugs into
+    machinery without gaining a template engine - which is the seam the expression evaluator plugs into
     next. Domma still inlines the package at build time; consumers install nothing extra.
 
 ---
@@ -616,7 +616,7 @@ nothing extra.
 
     Note their `equals` option defaults to **`domma-reactive`'s** `isEqual`, not Domma's `utils.isEqual`.
     The two differ for `NaN`, `Date`, class instances, `Map`/`Set`/`RegExp` and typed arrays. To get
-    Domma's semantics, pass it wrapped: `{equals: (a, b) => _.isEqual(a, b)}` — passing `_.isEqual`
+    Domma's semantics, pass it wrapped: `{equals: (a, b) => _.isEqual(a, b)}` - passing `_.isEqual`
     bare loses its receiver and throws.
 
 🐛 **Bug Fixes**
@@ -629,7 +629,7 @@ nothing extra.
 
     The cause was that `_wireBindings()` creates one effect per compiled binding and `onUpdated` only
     fired from within those effects, so zero bindings meant zero effects. Components now also carry a
-    watcher effect that tracks the whole model. **Writes made from `onUpdated` must converge** — set a
+    watcher effect that tracks the whole model. **Writes made from `onUpdated` must converge** - set a
     value that will compare equal on the next pass. A value that differs every time (`Date.now()`, a
     counter) re-triggers the watcher indefinitely, and because it is a microtask chain it locks the page
     rather than throwing.
@@ -641,14 +641,14 @@ nothing extra.
     base `color`, so a variant whose own colour declaration fails to resolve inherits something readable.
 
 *   **Eighteen showcase rules set a background that never changed with the theme.** Chips such as
-    `.models-method-item`, `.tables-method-item` and `.utils-method-item` used `var(--dm-gray-100)` —
-    a variable no theme overrides — with no `color` at all, so their labels became unreadable under the
+    `.models-method-item`, `.tables-method-item` and `.utils-method-item` used `var(--dm-gray-100)` -
+    a variable no theme overrides - with no `color` at all, so their labels became unreadable under the
     dark variant. All now use themed variables with an explicit colour.
 
 *   **`.table-responsive` was used in 14 places and defined nowhere**, so wide tables overflowed instead
     of scrolling. Added to `elements.css`.
 
-*   **Reactivity showcase** used `.form-control`, which is not a Domma class — the correct classes are
+*   **Reactivity showcase** used `.form-control`, which is not a Domma class - the correct classes are
     `.form-input` and `.form-select`, so nine inputs rendered as unstyled native controls. It also used
     `.col-md-*`, which does not exist, and omitted `grid.css` entirely.
 
@@ -673,7 +673,7 @@ nothing extra.
 ### v0.31.0 - Reactive Core Extracted (2026-08-04)
 
 **This is an internal restructuring. There is no API change.** Every public method behaves exactly as
-it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onChange`, `onFieldChange`,
+it did in v0.30.1 - `M.create()`, `get`/`set`, validation, persistence, `onChange`, `onFieldChange`,
 `reset`, `destroy`, `toJSON`, `validate`, `model.tracked()`, `M.computed()`, `M.effect()`,
 `M.untracked()` and `M.flush()` are all untouched. Nothing to migrate.
 
@@ -692,7 +692,7 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 
 *   `Model` no longer stores fields in a plain object with a shared `DepMap`. Each field is now
     backed by its own observable. Domma's `utils.isEqual` is passed explicitly as the change gate, so
-    change-detection semantics are byte-identical to v0.30.1 — including its existing treatment of
+    change-detection semantics are byte-identical to v0.30.1 - including its existing treatment of
     Date fields (see Known Issues).
 
 *   `src/reactive.js` has been deleted; its behaviour now lives in the package. `models.js` and
@@ -714,7 +714,7 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
     DOM is never told, and no error is raised. This affects the todo, notes, contacts and markdown
     examples, which render their lists imperatively from `onUpdated`.
 
-    This is **not** new in v0.31.0 — it was introduced by the fine-grained binding work in v0.30.0 and
+    This is **not** new in v0.31.0 - it was introduced by the fine-grained binding work in v0.30.0 and
     is present in v0.30.0 and v0.30.1. It is recorded here because it was found while verifying this
     release. The cause is that `_wireBindings()` creates one effect per compiled binding and
     `onUpdated` only fires from within those effects, so zero bindings means zero effects. A fix is
@@ -731,13 +731,13 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 
 🐛 **Bug Fixes**
 
-*   **Modals, cards and badges rendered invisible after v0.30.0.** The element-identity fix in v0.30.0 copied the author element's full class list onto the Web Component that replaces it — including the legacy base class (`.modal`, `.card`, `.badge`). Those `elements.css` rules describe the hand-written, JS-free version of each component and are driven by class toggles the Web Component never performs: `.modal` sets `opacity: 0; pointer-events: none`, undone only by `.modal.active`, while `<domma-modal>` shows itself via `:host([visible])`. Because outer-document CSS overrides `:host` styling, an opened modal was fully invisible and unclickable — while `isOpen()` cheerfully reported `true`. The base class is no longer copied; `id`, `data-*` attributes and author classes still transfer as intended. **If you are on v0.30.0, upgrade.**
+*   **Modals, cards and badges rendered invisible after v0.30.0.** The element-identity fix in v0.30.0 copied the author element's full class list onto the Web Component that replaces it - including the legacy base class (`.modal`, `.card`, `.badge`). Those `elements.css` rules describe the hand-written, JS-free version of each component and are driven by class toggles the Web Component never performs: `.modal` sets `opacity: 0; pointer-events: none`, undone only by `.modal.active`, while `<domma-modal>` shows itself via `:host([visible])`. Because outer-document CSS overrides `:host` styling, an opened modal was fully invisible and unclickable - while `isOpen()` cheerfully reported `true`. The base class is no longer copied; `id`, `data-*` attributes and author classes still transfer as intended. **If you are on v0.30.0, upgrade.**
 
-*   **Card option callbacks received a useless value.** `onCollapse`, `onExpand` and `onClick` were handed `e.detail`, which is never what the caller wants: the component emits through the base class's `_emit()` with a default detail of `{}`, so callbacks received an empty object — and for native events such as `click`, `detail` is the click *count*, so they received the number `1`. The intended `|| webComponent` fallback never fired, because `{}` and `1` are both truthy. Callbacks now receive the card instance, so `onCollapse: (card) => card.expand()` behaves as documented.
+*   **Card option callbacks received a useless value.** `onCollapse`, `onExpand` and `onClick` were handed `e.detail`, which is never what the caller wants: the component emits through the base class's `_emit()` with a default detail of `{}`, so callbacks received an empty object - and for native events such as `click`, `detail` is the click *count*, so they received the number `1`. The intended `|| webComponent` fallback never fired, because `{}` and `1` are both truthy. Callbacks now receive the card instance, so `onCollapse: (card) => card.expand()` behaves as documented.
 
 🧪 **Testing**
 
-*   **The suite now loads DOMPurify.** Domma's sanitiser escapes the *entire* string when DOMPurify is absent, so `.html()` and every other sanitised write silently degraded under test — meaning the suite asserted the fallback rather than what Domma actually ships (every documented Domma page loads DOMPurify). Added as a `devDependency`; it does not enter the published bundle.
+*   **The suite now loads DOMPurify.** Domma's sanitiser escapes the *entire* string when DOMPurify is absent, so `.html()` and every other sanitised write silently degraded under test - meaning the suite asserted the fallback rather than what Domma actually ships (every documented Domma page loads DOMPurify). Added as a `devDependency`; it does not enter the published bundle.
 *   **New `wrapper-identity.test.js` asserts computed style, not just API state.** The v0.30.0 regression slipped through precisely because the existing check asserted `isOpen()`. These tests load the built `elements.css` and assert the component is genuinely visible. Verified to fail against the buggy build.
 *   Card tests now assert the Web Component contract (host attributes, shadow-root chrome) rather than the pre-migration light-DOM classes, and HTTP error tests cover the two previously-untested fallback branches. Full suite: 435 passing, 0 failing.
 
@@ -747,9 +747,9 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 
 ✨ **Enhancements**
 
-*   **Reactive dependency tracking (`M.computed`, `M.effect`).** Derivations now discover which fields they actually read, so a write re-runs exactly the work that depends on it. `M.computed(fn)` is lazily evaluated and cached until a tracked dependency changes; `M.effect(fn)` runs immediately to collect its dependencies then again whenever any of them move, returning a stop function. Dependencies are re-collected on every run, so a derivation stops listening to the branch it no longer takes. Also adds `M.untracked(fn)` for reads that should not subscribe, `M.flush()` to settle pending work synchronously, and `model.tracked()` — a read-tracked, write-through view of a model whose writes still validate, notify and persist. Updates are batched: a burst of `set()` calls in one tick produces a single re-run on the next microtask. See [Reactivity.md](./Reactivity.md).
+*   **Reactive dependency tracking (`M.computed`, `M.effect`).** Derivations now discover which fields they actually read, so a write re-runs exactly the work that depends on it. `M.computed(fn)` is lazily evaluated and cached until a tracked dependency changes; `M.effect(fn)` runs immediately to collect its dependencies then again whenever any of them move, returning a stop function. Dependencies are re-collected on every run, so a derivation stops listening to the branch it no longer takes. Also adds `M.untracked(fn)` for reads that should not subscribe, `M.flush()` to settle pending work synchronously, and `model.tracked()` - a read-tracked, write-through view of a model whose writes still validate, notify and persist. Updates are batched: a burst of `set()` calls in one tick produces a single re-run on the next microtask. See [Reactivity.md](./Reactivity.md).
 
-*   **Components re-render surgically instead of wholesale.** Component templates now compile to fine-grained bindings — text, attribute, block (`{{#if}}`/`{{#each}}`/`{{#with}}`) and raw (`{{{...}}}`) — each with its own dependencies and its own reactive effect. Flipping a `{{#if}}` re-renders only that block, so focus, scroll position and uncommitted user input elsewhere in the component survive a structural change. Computed properties are memoised, so one shared by several readers is evaluated once per flush rather than once per reader, and the previous strategy of re-evaluating *every* computed and deep-comparing all of them on *every* change is gone. Bindings inside `{{#each}}`/`{{#with}}` are deliberately refreshed by their enclosing block rather than bound independently, because those bodies evaluate against a different data object.
+*   **Components re-render surgically instead of wholesale.** Component templates now compile to fine-grained bindings - text, attribute, block (`{{#if}}`/`{{#each}}`/`{{#with}}`) and raw (`{{{...}}}`) - each with its own dependencies and its own reactive effect. Flipping a `{{#if}}` re-renders only that block, so focus, scroll position and uncommitted user input elsewhere in the component survive a structural change. Computed properties are memoised, so one shared by several readers is evaluated once per flush rather than once per reader, and the previous strategy of re-evaluating *every* computed and deep-comparing all of them on *every* change is gone. Bindings inside `{{#each}}`/`{{#with}}` are deliberately refreshed by their enclosing block rather than bound independently, because those bodies evaluate against a different data object.
 
 *   **`$.getComponent(selector)`.** `$.setup()` kept component instances in a private map with no public accessor, so page code had no supported way to call a configured component's methods. `$.getComponent('#my-modal').open()` now works; calling it with no argument returns a Map of every configured instance.
 
@@ -757,26 +757,26 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 
 🐛 **Bug Fixes**
 
-*   **Model → component sync was silently dead in Autocomplete, Pillbox and Editor.** `Model.onChange` passes a **single object** — `{field, newValue, oldValue, model}` — but four call sites destructured it positionally as `(field, newVal)`, so the guard compared an object against a string and never matched. Changing the model simply did not update the component. All four now use `onFieldChange`, which is the API designed for this and removes the field-name comparison entirely. Pillbox additionally now only binds once its structure exists — `_init()` bails on a non-input element, and a subscription firing into a half-built Pillbox threw.
+*   **Model → component sync was silently dead in Autocomplete, Pillbox and Editor.** `Model.onChange` passes a **single object** - `{field, newValue, oldValue, model}` - but four call sites destructured it positionally as `(field, newVal)`, so the guard compared an object against a string and never matched. Changing the model simply did not update the component. All four now use `onFieldChange`, which is the API designed for this and removes the field-name comparison entirely. Pillbox additionally now only binds once its structure exists - `_init()` bails on a non-input element, and a subscription firing into a half-built Pillbox threw.
 
 *   **`model.onChange('field', callback)` threw on the next `set()`.** The two-argument form is documented and used by the contacts example, but was never implemented: it added the *string* to the callback set and discarded the function, so the callback never fired and the next change threw `cb is not a function`. It is now a genuine overload, and passing a non-callable subscriber throws immediately instead of failing later at notify time.
 
-*   **Badge, Card and Modal lost their element identity on initialisation.** These wrappers replace the author's element with a custom element via `replaceWith()`, but did not carry over its `id`, classes or `data-*` attributes. `#my-modal` therefore stopped existing the moment it was initialised, breaking every subsequent selector lookup — including the config engine's own event bindings and `$.update()` / `$.reset()`. Attributes are now preserved, without clobbering anything the options already configured.
+*   **Badge, Card and Modal lost their element identity on initialisation.** These wrappers replace the author's element with a custom element via `replaceWith()`, but did not carry over its `id`, classes or `data-*` attributes. `#my-modal` therefore stopped existing the moment it was initialised, breaking every subsequent selector lookup - including the config engine's own event bindings and `$.update()` / `$.reset()`. Attributes are now preserved, without clobbering anything the options already configured.
 
 *   **Config showcase did not honour the active theme.** `showcase/config/all-components.html` styled its demo panels with fixed palette values (`--dm-gray-100`, `--dm-gray-800`, `background: white`) which do not change between light and dark variants, leaving the panels light on dark themes. Now uses `--dm-surface-raised`, `--dm-surface-overlay`, `--dm-text` and `--dm-border`.
 
-*   **Web Component test coverage was impossible.** `tests/setup-vitest.js` constructed its own JSDOM instance alongside the one Vitest already provides, leaving two `customElements` registries and two `HTMLElement` constructors — so custom elements could never upgrade under test. Fixing this repaired 7 pre-existing Modal, Card and backToTop failures; the element-identity fix above cleared a further 8.
+*   **Web Component test coverage was impossible.** `tests/setup-vitest.js` constructed its own JSDOM instance alongside the one Vitest already provides, leaving two `customElements` registries and two `HTMLElement` constructors - so custom elements could never upgrade under test. Fixing this repaired 7 pre-existing Modal, Card and backToTop failures; the element-identity fix above cleared a further 8.
 
 📚 **Documentation**
 
 *   New [Reactivity guide](./Reactivity.md), a Reactivity section in [API.md](./API.md) and [DommaDocumentation.md](./DommaDocumentation.md), a walkthrough in the SPA QuickStart, and an interactive [Reactivity showcase](../public/showcase/models/reactivity.html).
-*   The config showcase guide previously taught `$('#sel').data('component')`, which never worked — it now documents `$.getComponent()`.
+*   The config showcase guide previously taught `$('#sel').data('component')`, which never worked - it now documents `$.getComponent()`.
 
 ⚠️ **Upgrade Notes**
 
-*   No API removals or signature changes. `onChange`, `onFieldChange`, `M.bind()`, validation and persistence all behave exactly as before — only tracked computations are batched onto the microtask.
+*   No API removals or signature changes. `onChange`, `onFieldChange`, `M.bind()`, validation and persistence all behave exactly as before - only tracked computations are batched onto the microtask.
 *   **Badge, Card and Modal now keep their `id` and classes after initialisation.** This is the intended behaviour, but if any CSS or script relied on those attributes disappearing, it will now match where it previously did not.
-*   Computeds and effects must be **synchronous** — dependency collection stops at the first `await` — and must **return new values rather than mutating existing ones**, since propagation is gated on deep equality.
+*   Computeds and effects must be **synchronous** - dependency collection stops at the first `await` - and must **return new values rather than mutating existing ones**, since propagation is gated on deep equality.
 
 ---
 
@@ -784,7 +784,7 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 
 🐛 **Bug Fixes**
 
-*   **Tooltips no longer disappear when two layers wire the same element.** `createTooltipWrapper` (the `E.tooltip` / `Domma.elements.tooltip` factory) physically wraps each target in a `<domma-tooltip>` element, but was **not idempotent** — calling it twice on the same element nested a second `<domma-tooltip>`, which breaks the tooltip. This regressed admin action-button tooltips after 0.29.1: `Table.render()` now re-wires tooltips on every re-render (so they survive pagination), but the admin views ALSO wire the same buttons after `T.create`, so every button got double-wrapped and showed nothing. `createTooltipWrapper` is now idempotent — it refreshes an existing wrapper instead of nesting a new one — and it **falls back to the element's `data-tooltip` / `title` for content** when no explicit `content` is given (the `<domma-tooltip>` component reads only its `content` attribute, so framework/`forms.js` tooltips wired by `data-tooltip` alone were rendering empty). Verified before/after: a double-wired action button drops from 2 nested `<domma-tooltip>` wrappers to 1, with correct content.
+*   **Tooltips no longer disappear when two layers wire the same element.** `createTooltipWrapper` (the `E.tooltip` / `Domma.elements.tooltip` factory) physically wraps each target in a `<domma-tooltip>` element, but was **not idempotent** - calling it twice on the same element nested a second `<domma-tooltip>`, which breaks the tooltip. This regressed admin action-button tooltips after 0.29.1: `Table.render()` now re-wires tooltips on every re-render (so they survive pagination), but the admin views ALSO wire the same buttons after `T.create`, so every button got double-wrapped and showed nothing. `createTooltipWrapper` is now idempotent - it refreshes an existing wrapper instead of nesting a new one - and it **falls back to the element's `data-tooltip` / `title` for content** when no explicit `content` is given (the `<domma-tooltip>` component reads only its `content` attribute, so framework/`forms.js` tooltips wired by `data-tooltip` alone were rendering empty). Verified before/after: a double-wired action button drops from 2 nested `<domma-tooltip>` wrappers to 1, with correct content.
 
 ---
 
@@ -792,7 +792,7 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 
 🐛 **Bug Fixes**
 
-*   **`Table` icons & tooltips now survive re-renders:** `TableInstance.render()` rebuilds the entire table subtree (`innerHTML`) on every state change — search, sort, pagination, page-size, filter and column toggle all route through it. Consumer cell markup produced by `col.render()` (`data-icon` spans and `data-tooltip` triggers) was only processed after the *initial* render, so action-button icons and tooltip popovers vanished the moment a user paginated, searched or sorted. `render()` now re-scans icons and re-wires tooltips on the rebuilt subtree via a new `_reinitRenderedContent()` step (mirrors `Form._initTooltips`), so table content stays live across every re-render. The icon half completes the long-dormant `_restoreIconsBeforeRebuild()` path, which converted rendered SVGs back to `data-icon` spans but never re-scanned them.
+*   **`Table` icons & tooltips now survive re-renders:** `TableInstance.render()` rebuilds the entire table subtree (`innerHTML`) on every state change - search, sort, pagination, page-size, filter and column toggle all route through it. Consumer cell markup produced by `col.render()` (`data-icon` spans and `data-tooltip` triggers) was only processed after the *initial* render, so action-button icons and tooltip popovers vanished the moment a user paginated, searched or sorted. `render()` now re-scans icons and re-wires tooltips on the rebuilt subtree via a new `_reinitRenderedContent()` step (mirrors `Form._initTooltips`), so table content stays live across every re-render. The icon half completes the long-dormant `_restoreIconsBeforeRebuild()` path, which converted rendered SVGs back to `data-icon` spans but never re-scanned them.
 
 ---
 
@@ -801,11 +801,11 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 ✨ **Enhancements**
 
 *   **`.card-accent` CSS Classes:** The left-border accent pattern is now a set of five first-class card variant classes instead of an inline style workaround:
-    *   `.card-accent` — primary colour left border (`--dm-primary`)
-    *   `.card-accent-success` — success green (`--dm-success`)
-    *   `.card-accent-danger` — danger red (`--dm-danger`)
-    *   `.card-accent-warning` — warning amber (`--dm-warning`)
-    *   `.card-accent-info` — info sky (`--dm-info`)
+    *   `.card-accent` - primary colour left border (`--dm-primary`)
+    *   `.card-accent-success` - success green (`--dm-success`)
+    *   `.card-accent-danger` - danger red (`--dm-danger`)
+    *   `.card-accent-warning` - warning amber (`--dm-warning`)
+    *   `.card-accent-info` - info sky (`--dm-info`)
 *   **`--dm-card-accent` Theme Variable:** Added to all 26 theme files as a primary-colour alias, enabling per-theme accent customisation and supporting the JS `color: 'accent'` API option.
 *   **Showcase:** Dedicated *Card Accent* section added to the Elements showcase; inline `border-left` style on the elements index replaced with the new class.
 
@@ -823,10 +823,10 @@ it did in v0.30.1 — `M.create()`, `get`/`set`, validation, persistence, `onCha
 
 ✨ **New Themes**
 
-*   **Unicorn Light** (`unicorn-light`) — Amethyst purple primary (`#9b59b6`), hot pink secondary (`#e91e90`), white surfaces with faint lavender tint, dark aubergine text (`#2d1b3d`), light purple borders (`#e1bee7`).
-*   **Unicorn Dark** (`unicorn-dark`) — Deep purple-black backgrounds (`#1a0e24` / `#241432`), lighter purple primary (`#ce93d8`) and lighter pink secondary (`#f48fb1`) for dark-mode contrast, muted purple borders (`#4a2660`).
-*   **Dreamy Light** (`dreamy-light`) — Warm brown primary (`#8d6e63`), dusty rose-brown secondary (`#a1887f`), warm cream surfaces (`#fffdf9` / `#f5f0eb`), dark chocolate text (`#3e2723`), light biscuit borders (`#d7ccc8`).
-*   **Dreamy Dark** (`dreamy-dark`) — Dark espresso backgrounds (`#1c1410` / `#2a1f1a`), lighter taupe primary (`#bcaaa4`) for contrast, warm off-white text (`#efebe9`), dark brown borders (`#4e342e`).
+*   **Unicorn Light** (`unicorn-light`) - Amethyst purple primary (`#9b59b6`), hot pink secondary (`#e91e90`), white surfaces with faint lavender tint, dark aubergine text (`#2d1b3d`), light purple borders (`#e1bee7`).
+*   **Unicorn Dark** (`unicorn-dark`) - Deep purple-black backgrounds (`#1a0e24` / `#241432`), lighter purple primary (`#ce93d8`) and lighter pink secondary (`#f48fb1`) for dark-mode contrast, muted purple borders (`#4a2660`).
+*   **Dreamy Light** (`dreamy-light`) - Warm brown primary (`#8d6e63`), dusty rose-brown secondary (`#a1887f`), warm cream surfaces (`#fffdf9` / `#f5f0eb`), dark chocolate text (`#3e2723`), light biscuit borders (`#d7ccc8`).
+*   **Dreamy Dark** (`dreamy-dark`) - Dark espresso backgrounds (`#1c1410` / `#2a1f1a`), lighter taupe primary (`#bcaaa4`) for contrast, warm off-white text (`#efebe9`), dark brown borders (`#4e342e`).
 
 🚀 **Enhancements**
 

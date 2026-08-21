@@ -41,7 +41,7 @@
 <div class="hero hero-center bg-ambient-float-orbs">
   <div class="hero-content">
     <div class="hero-title">Signature</div>
-    <div class="hero-subtitle">Capture handwritten signatures with mouse, touch, or stylus — with undo/redo, colour and width controls, SVG/PNG export, and type-your-name fallback</div>
+    <div class="hero-subtitle">Capture handwritten signatures with mouse, touch, or stylus - with undo/redo, colour and width controls, SVG/PNG export, and type-your-name fallback</div>
   </div>
 </div>
 
@@ -63,14 +63,14 @@
       </p>
       <h3 class="category-title-style">Key Features</h3>
       <ul class="feature-list mb-4">
-        <li><strong>Pointer Events</strong> — mouse, touch, and stylus all work the same way; pressure-sensitive line width on stylus</li>
-        <li><strong>Smooth curves</strong> — midpoint quadratic Bézier algorithm prevents jagged strokes</li>
-        <li><strong>Undo / Redo</strong> — full stroke-level history; <code>clear()</code> is also undoable</li>
-        <li><strong>Dual export</strong> — PNG data URL or SVG (rebuilt from stored strokes)</li>
-        <li><strong>Responsive</strong> — <code>ResizeObserver</code> reflows strokes when the container changes width</li>
-        <li><strong>Type fallback</strong> — cursive-font text entry alternative for keyboard users</li>
-        <li><strong>Form integration</strong> — hidden input auto-populated; works with <code>F.create()</code> blueprints</li>
-        <li><strong>Config Engine</strong> — declarative init via <code>$.setup()</code></li>
+        <li><strong>Pointer Events</strong> - mouse, touch, and stylus all work the same way; pressure-sensitive line width on stylus</li>
+        <li><strong>Smooth curves</strong> - midpoint quadratic Bézier algorithm prevents jagged strokes</li>
+        <li><strong>Undo / Redo</strong> - full stroke-level history; <code>clear()</code> is also undoable</li>
+        <li><strong>Dual export</strong> - PNG data URL or SVG (rebuilt from stored strokes)</li>
+        <li><strong>Responsive</strong> - <code>ResizeObserver</code> reflows strokes when the container changes width</li>
+        <li><strong>Type fallback</strong> - cursive-font text entry alternative for keyboard users</li>
+        <li><strong>Form integration</strong> - hidden input auto-populated; works with <code>F.create()</code> blueprints</li>
+        <li><strong>Config Engine</strong> - declarative init via <code>$.setup()</code></li>
       </ul>
 
       <h3 class="category-title-style">Live Demo</h3>
@@ -231,8 +231,8 @@ document.querySelector('#preview').src = png;</code></pre>
 
 sig.undo();      // Remove last stroke (moves to redo stack)
 sig.redo();      // Restore last undone stroke
-sig.clear();     // Clear all strokes (undoable — undo restores them all)
-sig.clear(true); // Silent clear — cannot be undone, no callbacks fired</code></pre>
+sig.clear();     // Clear all strokes (undoable - undo restores them all)
+sig.clear(true); // Silent clear - cannot be undone, no callbacks fired</code></pre>
       </div>
     </div>
   </section>
@@ -398,7 +398,7 @@ F.create('#contract-form', {
        ============================ -->
   <section class="card mb-6" data-section="Tutorial">
     <div class="card-header">
-      <h2 class="text-xl font-semibold m-0">Tutorial — Contract Signing Form</h2>
+      <h2 class="text-xl font-semibold m-0">Tutorial - Contract Signing Form</h2>
     </div>
     <div class="card-body">
       <p class="mb-4">
@@ -535,9 +535,9 @@ $('#contract-form').on('submit', async (e) =&gt; {
 sig.toBase64('png')     // Export as PNG data URL
 sig.toBase64('svg')     // Export as SVG data URL (rebuilt from stored strokes)
 
-sig.isEmpty()           // → boolean — true if no strokes drawn
+sig.isEmpty()           // → boolean - true if no strokes drawn
 sig.clear()             // Clear all strokes (undoable)
-sig.clear(true)         // Silent clear — no redo history, no callbacks
+sig.clear(true)         // Silent clear - no redo history, no callbacks
 sig.undo()              // Remove last stroke → move to redo stack
 sig.redo()              // Restore last undone stroke
 sig.disable()           // Lock the pad
@@ -611,7 +611,7 @@ sig.destroy()           // Remove all events and disconnect ResizeObserver</code
         <a href="../pillbox/" class="card card-hover">
           <div class="card-body">
             <h3 class="card-title">Pillbox</h3>
-            <p class="card-text">Multi-select tag input — another specialist form component</p>
+            <p class="card-text">Multi-select tag input - another specialist form component</p>
           </div>
         </a>
         <a href="../modal/" class="card card-hover">
@@ -644,7 +644,7 @@ sig.destroy()           // Remove all events and disconnect ResizeObserver</code
 
     $('#overview-export-btn').on('click', () => {
       if (overviewSig.isEmpty()) {
-        E.toast('Pad is empty — draw something first.', { type: 'warning' });
+        E.toast('Pad is empty - draw something first.', { type: 'warning' });
         return;
       }
       const b64 = overviewSig.toBase64('png');

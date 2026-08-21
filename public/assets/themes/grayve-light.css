@@ -1,6 +1,6 @@
 /**
  * Domma Grayve Light Theme
- * Slate/cyan monochrome palette — complementary light variant
+ * Slate/cyan monochrome palette - complementary light variant
  * Light mode variant
  */
 
@@ -234,7 +234,7 @@
 
 /* Syntax highlighting tokens for grayve-light */
 .dm-theme-grayve-light .code-block .syntax-keyword {
-    color: #5a2dcc; /* Deep Purple — darkened for ≥4.5:1 on #f5f5f5 */
+    color: #5a2dcc; /* Deep Purple - darkened for ≥4.5:1 on #f5f5f5 */
     font-weight: 500;
 }
 
@@ -244,5 +244,5 @@
 }
 
 .dm-theme-grayve-light .code-block .syntax-function {
-    color: #006873; /* Cyan — darkened for ≥4.5:1 on #f5f5f5 */
+    color: #006873; /* Cyan - darkened for ≥4.5:1 on #f5f5f5 */
 }
