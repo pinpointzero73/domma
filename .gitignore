@@ -25,3 +25,6 @@ release.json
 id_rsa*
 .env.*
 !.env.example
+
+# Local working notes - never committed
+*.local.md
