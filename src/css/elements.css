@@ -3417,12 +3417,28 @@ code {
     display: block;
 }
 
+/* Slide content sits IN FLOW by default, so a text-only slide has height.
+   It used to be unconditionally absolute - a caption overlay for a background
+   image - which meant a slide with no <img> had nothing in flow at all: the
+   slide collapsed to 0px, and with it the whole carousel. A text-only
+   carousel simply did not appear. */
 .carousel-slide-content {
+    position: relative;
+    /* Clears the arrows (40px + 1rem inset) on both sides and the indicator
+       dots below. On an image slide the controls sit over the picture; on a
+       text slide they would sit over the words. */
+    padding: var(--dm-space-6) clamp(1rem, 6vw, 3.75rem) calc(var(--dm-space-6) + 1.25rem);
+    color: inherit;
+}
+
+/* A slide that DOES carry an image gets the overlay caption it was designed
+   for. Stated as the enhancement rather than the default, so a browser without
+   :has() renders the caption under the image instead of hiding the slide. */
+.carousel-slide:has(> img) .carousel-slide-content {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: var(--dm-space-6);
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
     color: var(--dm-white);
 }

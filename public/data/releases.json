@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.39.2",
+      "title": "Carousels With Words In",
+      "description": "<p><strong>A carousel whose slides are text rather than pictures did not appear at all.</strong> One CSS rule; no API changes.</p><p><code>.carousel-slide-content</code> was unconditionally <code>position: absolute</code> - it is the caption overlay for a slide's background image. That works when the slide carries an <code>&lt;img&gt;</code>. When it does not, the caption was the slide's only child, so nothing was left in flow: the slide computed to 0px tall, the track and the carousel with it, and the component rendered as a gap. Arrows, indicators and transitions were all working the whole time, on an element with no height.</p><p>Slide content now sits in flow by default, and the overlay is stated as the enhancement for <code>.carousel-slide:has(&gt; img)</code>. In-flow content is also padded clear of the arrows and indicator dots.</p>",
+      "date": "2026-08-21"
+    },
+    {
       "year": "v0.39.1",
       "title": "Options You Can Actually Tap",
       "description": "<p><strong>Forma's option groups get a real appearance, and the chooser stops squeezing itself onto phones.</strong> Two visual fixes and one spacing fix; no API changes.</p><p><strong>Radio and checkbox groups are styled.</strong> <code>type: 'radio'</code> and <code>type: 'checkbox-group'</code> rendered bare browser controls: the inputs carried no class at all, and there was no CSS anywhere for <code>.domma-radio-group</code> or <code>.domma-checkbox-group</code>. They now use <code>.form-check-input</code> - the same custom control <code>.form-check</code> has always had - and each option is a selectable tile: the whole label is the hit area, the checked state tints from <code>--dm-primary</code>, and the group wraps with <code>repeat(auto-fit, minmax(12rem, 1fr))</code>, dropping to one column below 480px.</p><p><strong>The card chooser steps down on narrow screens.</strong> <code>.picker-options</code> used <code>repeat(var(--picker-cols, 3), 1fr)</code> at every width, so a three-across grid stayed three-across on a 360px phone. The chooser now sets <code>--picker-cols-md</code> and <code>--picker-cols-sm</code> when it builds, both capped at the configured count, and steps down at 720px and 460px. A chooser configured with one or two columns is never widened.</p><p>Dialog footers also give the confirm button room to breathe.</p>",

@@ -1,3 +1,24 @@
+### v0.39.2 - Carousels With Words In (2026-08-21)
+
+**A carousel whose slides are text rather than pictures did not appear at all.** One CSS rule; no API
+changes.
+
+🎠 **Text-only slides have height again**
+
+*   `.carousel-slide-content` was unconditionally `position: absolute` - it is the caption overlay for a
+    slide's background image, pinned to the bottom with a dark gradient over it. That works when the
+    slide carries an `<img>`. When it does not, the caption was the slide's ONLY child, so nothing was
+    left in flow: the slide computed to 0px tall, the track and the carousel with it, and the component
+    rendered as a gap between the paragraphs either side of it. Arrows, indicators and slide
+    transitions were all present and working the whole time, on an element with no height.
+
+    Slide content now sits in flow by default and inherits its colour, and the overlay is stated as the
+    enhancement for `.carousel-slide:has(> img)` rather than the default. A browser without `:has()`
+    puts an image slide's caption under the picture instead of over it - degraded, not invisible.
+
+*   In-flow slide content is padded clear of the arrows and indicator dots, which are positioned over
+    the slide and would otherwise sit on top of the words.
+
 ### v0.39.1 - Options You Can Actually Tap (2026-08-21)
 
 **Forma's option groups get a real appearance, and the chooser stops squeezing itself onto phones.**
