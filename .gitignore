@@ -13,3 +13,15 @@ release.json
 
 # Machine-local Claude Code settings (skills are tracked, this is not)
 .claude/settings.local.json
+
+# Machine-local MCP server config (contains a local Chrome path)
+.mcp.json
+
+# Credential material - never commit
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+.env.*
+!.env.example
