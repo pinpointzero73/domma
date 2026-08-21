@@ -491,7 +491,7 @@ class Forma {
    */
   _buildRadioGroup(fieldName, fieldDef, attrs, currentValue) {
     const options = fieldDef.options || [];
-    let html = '<div class="domma-radio-group">';
+    let html = `<div class="domma-radio-group" role="radiogroup">`;
 
     for (const option of options) {
       const value = typeof option === 'string' ? option : option.value;
@@ -499,11 +499,14 @@ class Forma {
       const id = `${attrs.id}-${value}`;
       const checked = value === currentValue ? 'checked' : '';
 
+      // The whole option is the <label>, so the hit area is the tile rather
+      // than a 16px native control. `form-check-input` is Domma's own custom
+      // control styling - without it these were bare browser defaults.
       html += `
-                <div class="domma-radio-option">
-                    <input type="radio" id="${id}" name="${fieldName}" value="${value}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
-                    <label for="${id}">${label}</label>
-                </div>
+                <label class="domma-radio-option" for="${id}">
+                    <input type="radio" class="form-check-input" id="${id}" name="${fieldName}" value="${value}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
+                    <span class="form-check-label">${label}</span>
+                </label>
             `;
     }
 
@@ -526,10 +529,10 @@ class Forma {
       const checked = values.includes(value) ? 'checked' : '';
 
       html += `
-                <div class="domma-checkbox-option">
-                    <input type="checkbox" id="${id}" name="${fieldName}[]" value="${value}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
-                    <label for="${id}">${label}</label>
-                </div>
+                <label class="domma-checkbox-option" for="${id}">
+                    <input type="checkbox" class="form-check-input" id="${id}" name="${fieldName}[]" value="${value}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
+                    <span class="form-check-label">${label}</span>
+                </label>
             `;
     }
 

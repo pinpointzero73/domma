@@ -3769,6 +3769,9 @@ code {
 
 .dm-dialog-footer .dm-dialog-confirm {
     order: 2;
+    /* Confirm sits clear of Cancel. Two buttons a hairline apart is how a
+       "discard" gets clicked by someone aiming at "save". */
+    margin-left: var(--dm-space-2, .5rem);
 }
 
 
@@ -7568,6 +7571,22 @@ code {
     gap: 0.6rem;
 }
 
+/* The column count is fixed at every width unless it is stepped down here:
+   three cards across a 360px phone leaves each one too narrow to read. The
+   -md / -sm values are set alongside --picker-cols when the chooser is built,
+   capped at the configured count. */
+@media (max-width: 720px) {
+    .domma-chooser[data-variant="card"] .picker-options {
+        grid-template-columns: repeat(var(--picker-cols-md, 2), 1fr);
+    }
+}
+
+@media (max-width: 460px) {
+    .domma-chooser[data-variant="card"] .picker-options {
+        grid-template-columns: repeat(var(--picker-cols-sm, 1), 1fr);
+    }
+}
+
 .domma-chooser[data-variant="card"] .picker-option {
     position: relative;
     display: flex;
@@ -7984,4 +8003,74 @@ code {
     justify-content: flex-end;
     padding-top: 0.5rem;
     border-top: 1px solid var(--dm-border);
+}
+
+/* ============================================
+   RADIO / CHECKBOX GROUPS
+   ============================================
+   Forma's option groups (`type: 'radio'`, `type: 'checkbox-group'`) rendered
+   bare browser controls with no classes and no CSS of their own: three
+   unstyled native checkboxes stacked in a column. They now use the same
+   custom control as .form-check, laid out as selectable tiles that wrap to
+   the available width. */
+
+.domma-radio-group,
+.domma-checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.domma-radio-option,
+.domma-checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-3, 0.75rem);
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md, 6px);
+    background: var(--dm-surface);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.domma-radio-option:hover,
+.domma-checkbox-option:hover {
+    border-color: var(--dm-primary);
+}
+
+.domma-radio-option:has(input:checked),
+.domma-checkbox-option:has(input:checked) {
+    border-color: var(--dm-primary);
+    background: color-mix(in srgb, var(--dm-primary) 8%, var(--dm-surface));
+}
+
+.domma-radio-option:has(input:focus-visible),
+.domma-checkbox-option:has(input:focus-visible) {
+    box-shadow: 0 0 0 3px var(--dm-focus-ring);
+}
+
+.domma-radio-option:has(input:disabled),
+.domma-checkbox-option:has(input:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.domma-radio-option .form-check-input,
+.domma-checkbox-option .form-check-input {
+    margin-top: 0;
+}
+
+.domma-radio-option .form-check-label,
+.domma-checkbox-option .form-check-label {
+    padding-top: 0;
+}
+
+@media (max-width: 480px) {
+    .domma-radio-group,
+    .domma-checkbox-group {
+        grid-template-columns: 1fr;
+    }
 }

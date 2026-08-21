@@ -645,7 +645,7 @@ const ModalFactory = {
         html += '</div>';
 
         if (opts.buttons && opts.buttons.length > 0) {
-            html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--dm-border, #e5e7eb); background: var(--dm-surface-raised, #f9fafb);">`;
+            html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 1rem; padding: 1rem 1.5rem; border-top: 1px solid var(--dm-border, #e5e7eb); background: var(--dm-surface-raised, #f9fafb);">`;
             opts.buttons.forEach(btn => {
                 const variant = btn.variant || 'secondary';
                 const safeId = sanitizeModule.sanitise(String(btn.id), {preset: 'basic'});
@@ -10364,6 +10364,11 @@ export const elements = {
         root.setAttribute('data-variant', cfg.variant);
         root.setAttribute('data-density', cfg.density);
         root.style.setProperty('--picker-cols', String(cfg.columns));
+        // Narrow-viewport counts, so a 3-across card grid stops squeezing its
+        // options into slivers on a phone. Derived rather than hard-coded so a
+        // chooser configured with 1 or 2 columns is never widened.
+        root.style.setProperty('--picker-cols-md', String(Math.min(cfg.columns, 2)));
+        root.style.setProperty('--picker-cols-sm', '1');
 
         // Visual option attributes / inline CSS variables
         const SEMANTIC = { primary: 1, success: 1, info: 1, warning: 1, danger: 1 };

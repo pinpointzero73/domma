@@ -1,3 +1,32 @@
+### v0.39.1 - Options You Can Actually Tap (2026-08-21)
+
+**Forma's option groups get a real appearance, and the chooser stops squeezing itself onto phones.**
+Two visual fixes and one spacing fix; no API changes.
+
+🎨 **Radio and checkbox groups are styled**
+
+*   `type: 'radio'` and `type: 'checkbox-group'` rendered bare browser controls: the inputs carried no
+    class at all, and there was no CSS anywhere for `.domma-radio-group` or `.domma-checkbox-group`.
+    Every other control in Forma is themed, so an option group was the one place a form fell back to
+    whatever the browser felt like drawing.
+
+    The inputs now use `.form-check-input` - the same custom control `.form-check` has always had -
+    and each option is a selectable tile: the whole label is the hit area rather than a 16px box, the
+    checked state tints from `--dm-primary`, and the group lays itself out with
+    `repeat(auto-fit, minmax(12rem, 1fr))` so short options sit side by side and wrap when they run
+    out of room. One column below 480px.
+
+📱 **The card chooser steps down on narrow screens**
+
+*   `.picker-options` used `repeat(var(--picker-cols, 3), 1fr)` at every width, so a three-across card
+    grid stayed three-across on a 360px phone and each card was too narrow to read. The chooser now
+    also sets `--picker-cols-md` and `--picker-cols-sm` when it builds, both capped at the configured
+    count, and steps down at 720px and 460px. A chooser configured with one or two columns is never
+    widened.
+
+*   Dialog footers give the confirm button room to breathe: `E.confirm`'s two buttons sat a hairline
+    apart, which is how a "discard" gets clicked by someone aiming at "save".
+
 ### v0.39.0 - Six Ways In (2026-08-09)
 
 **Six new binding attributes and two new reactive powers**, all of them things you previously had to
