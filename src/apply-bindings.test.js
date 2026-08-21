@@ -375,6 +375,68 @@ describe('M.applyBindings', () => {
         warn.mockRestore();
     });
 
+    // ── Ancestor context names ───────────────────────────────────────────────
+    //
+    // $parents and $parentContext arrive with the domma-reactive pin rather
+    // than with any Domma code, which is exactly why they are pinned HERE: a
+    // downgrade, or a re-pin that loses them, fails this test rather than
+    // silently removing two names the Bindings guide tells people to use.
+
+    it('resolves $parents and $parentContext through a nested list', () => {
+        const list = make('ul', {'data-each': 'teams key=id'});
+        list.appendChild(make('li', {}, '{{#each members key=id}}' +
+            '[{{name}}|{{$parents[0].name}}|{{$parents[1].season}}|{{$parentContext.$index}}]' +
+            '{{/each}}'));
+        const root = mount(list);
+
+        const model = M.create({season: {}, teams: {}}, {
+            season: 'summer',
+            teams: [
+                {id: 1, name: 'Red', members: [{id: 11, name: 'Ada'}]},
+                {id: 2, name: 'Blue', members: [{id: 21, name: 'Alan'}, {id: 22, name: 'Grace'}]}
+            ]
+        });
+
+        apply(model, root);
+
+        expect([...list.children].map((li) => li.textContent)).toEqual([
+            // $parents[0] is the team, which $parent already reached.
+            // $parents[1] is the root, which nothing else can reach.
+            // $parentContext.$index is the TEAM's position - a fact about the
+            // member that appears nowhere in the member.
+            '[Ada|Red|summer|0]',
+            '[Alan|Blue|summer|1][Grace|Blue|summer|1]'
+        ]);
+    });
+
+    // A list inside a list is {{#each}}. A second data-each is left exactly as
+    // written - its body renders ONCE against the outer item - and looks close
+    // enough to working to survive review, so it has to say so out loud.
+    it('warns rather than silently doing nothing for a nested data-each', () => {
+        const outer = make('ul', {'data-each': 'teams key=id'});
+        const item = make('li');
+        const inner = make('ol', {'data-each': 'members key=id'});
+        inner.appendChild(make('li', {}, '{{name}}'));
+        item.appendChild(inner);
+        outer.appendChild(item);
+        const root = mount(outer);
+
+        const model = M.create({teams: {}}, {
+            teams: [{id: 1, members: [{id: 11, name: 'Ada'}]}]
+        });
+
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+        apply(model, root);
+
+        expect(warn).toHaveBeenCalled();
+        const said = warn.mock.calls.map((args) => String(args[0])).join(' ');
+        expect(said).toContain('data-each="members key=id"');
+        expect(said).toContain('{{#each members key=id}}');
+
+        warn.mockRestore();
+    });
+
     // ── Plain objects ────────────────────────────────────────────────────────
 
     it('accepts a plain object, with observables read through .value', () => {
