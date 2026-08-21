@@ -243,6 +243,18 @@ block and says so.
 In a component template the same list is `{{#each rows key=id}}…{{/each}}`. There `key=` is optional; omitting it
 re-renders the block wholesale and warns once.
 
+**A list inside a list is `{{#each}}`, not a second `data-each`.** An item template is compiled markup, and the
+compiler discovers lists from `{{#each}}` only - so a `data-each` nested inside one is left exactly as written. Its own
+item template renders once as ordinary markup, and the bindings inside it resolve against the **outer** item. That
+looks close enough to working to survive review, so activation warns, quotes the expression back and names the form to
+write instead. `{{#each}}` nests to any depth, both ancestor context names included:
+
+```html
+<ul data-each="groups key=id">
+    <li>{{#each members key=id}}<b>{{name}} - {{$parentContext.$index}}</b>{{/each}}</li>
+</ul>
+```
+
 ### `data-options`
 
 ```html
@@ -350,10 +362,50 @@ binding's entire job is to call something.
 | `$parent` | The enclosing context's `$data` |
 | `$index` | The item's position in its list |
 | `$length` | The list's length |
+| `$parents` | **All** ancestor data, nearest first. `$parents[0]` is `$parent`, `$parents[1]` is a grandparent |
+| `$parentContext` | The enclosing **context** - the one name here that is a context rather than data |
 
 There is **no scope chain**. A bare name inside a list resolves against the item, not the item and then outward. Reach
 outward explicitly with `$parent` or `$root` - a name that silently means different things at different depths is
 harder to read than one that says where it came from.
+
+#### Reaching past one level
+
+`$parent` is one step out, and for a long time it was the only step there was: two levels up could not be reached at
+all. `$parents` is the whole chain, nearest first, so `$parents[1].heading` reads a grandparent's field with no
+`$data` in sight. At the root `$parent` is `null` and `$parents` is empty, so a binding never has to ask how deep it
+is before it can ask a question.
+
+Ancestor **data** still cannot answer *which row of the outer list am I in?*, because position lives on the context
+rather than on the data. `$parentContext` is the enclosing context itself, and `$parentContext.$index` answers it:
+
+```html
+<ul data-each="groups key=id">
+    <li>
+        {{#each members key=id}}
+            {{name}}
+            - in {{$parents[0].title}}         <!-- the group: same as $parent.title -->
+            - of {{$parents[1].heading}}       <!-- the root: nothing else reaches it -->
+            - group {{$parentContext.$index}}  <!-- the OUTER list's position -->
+        {{/each}}
+    </li>
+</ul>
+```
+
+`$parents` is built only if a template asks for it, by walking the parent chain on first read and caching the result,
+so a list that never mentions the name pays nothing for it. Both are frozen, as every context is: writing to
+`$parents[0]`, or through `$parentContext`, warns and skips like any other unsettable path rather than throwing.
+
+**Known limitation - `$parentContext.$index` does not survive a reorder of the outer list.** Appending to it is fine,
+and so is anything else that leaves existing positions alone. Moving an outer row is not: a sort, a reverse or a
+prepend relocates the DOM correctly and leaves every inner item reading the position its parent used to be in. The
+gate that decides whether an inner item needs a new context compares the parent context by its `$data` and `$root`,
+and a move changes neither - so nothing tells the inner items anything happened. Ancestor **data** is correct
+throughout; `$parent` and `$parents[n]` are unaffected. It is only the enclosing **position** that goes stale, and
+only after a move.
+
+`$parent` stays **data** and not a context. Making it one would force `$parent.$data.name` everywhere, which is why it
+is data in the first place.
 
 ### Helpers
 
@@ -530,6 +582,10 @@ They compose. A page can `applyBindings` its shell and mount components inside i
 | "did not resolve to a function" | The handler is not on the data. Pass it in `options.methods` |
 | A bare name is undefined inside a list | Inside a list a bare name is the item. Use `$parent` or `$root` |
 | `data-each` refused | `key=` is required for `applyBindings`. Add `key=id` |
+| A nested `data-each` renders once, against the wrong item | Inside a list's item template a list is `{{#each}}`. [See above](#data-each) |
+| "is not a settable path" on data that looks settable | The target is frozen - a frozen view model, or `$parents` / `$parentContext`. The write is skipped rather than throwing |
+| `$parents` is empty | You are at the root, where there are no ancestors. `$parent` is `null` there too |
+| `$parentContext.$index` is stale after a sort | Known: a move of the outer list does not refresh inner items. [See above](#reaching-past-one-level) |
 | Applying twice warns | The region is already bound. Dispose the first handle, or bind a narrower root |
 | An input shows `[object Object]` | A raw observable bound by name. Use `.value`, or pass a Model |
 | `data-model` on a nested path types fine but nothing else moves | The write mutates the object in place and the field's observable never fires - [see above](#writing-to-a-nested-path-does-not-notify-the-model) |

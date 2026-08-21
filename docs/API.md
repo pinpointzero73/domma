@@ -3077,7 +3077,8 @@ M.registerHelper('upper', (s) => String(s).toUpperCase());
 ```
 
 **See [Bindings.md](./Bindings.md)** for the attribute reference, the expression grammar, context keys
-(`$data`, `$index`, `$parent`, `$root`, `$length`) and the full handler contract.
+(`$data`, `$index`, `$parent`, `$root`, `$length`, `$parents`, `$parentContext`) and the full handler
+contract.
 
 ### Subscription methods compared
 

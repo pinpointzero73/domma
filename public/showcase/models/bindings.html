@@ -547,7 +547,96 @@ const handle = M.applyBindings(model, '#apply-demo', {
         </div>
     </section>
 
-    <!-- ================= 12. When not to ================= -->
+    <!-- ================= 12. Reaching past one level ================= -->
+    <section class="card mb-6" id="sec-ancestors" data-section="Reaching past one level">
+        <div class="card-header">
+            <h2 class="text-xl font-semibold">Reaching past one level</h2>
+        </div>
+        <div class="card-body">
+            <p class="bind-lead mb-4">
+                <code>$parent</code> is one step out, and for a long time it was the only step there was: from inside a
+                list inside a list, two levels up could not be reached at all.
+            </p>
+
+            <p class="mb-4">
+                <code>$parents</code> is the whole chain, nearest first - <code>$parents[0]</code> is
+                <code>$parent</code>, <code>$parents[1]</code> is a grandparent. And <code>$parentContext</code> is the
+                enclosing <em>context</em> rather than its data, which is the only way to ask a question the data
+                cannot answer: <strong>which row of the outer list am I in?</strong> Position lives on the context, not
+                on the item.
+            </p>
+
+            <div class="bind-demo mb-4" id="ancestors-demo">
+                <ul class="mb-3" data-each="teams key=id">
+                    <li class="mb-3">
+                        <b data-bind-text="name"></b>
+                        <ol class="mb-0">
+                            {{#each members key=id}}
+                                <li>
+                                    {{name}} - on {{$parents[0].name}}, in {{$parents[1].season}}, listed
+                                    {{$parentContext.$index}} places down
+                                </li>
+                            {{/each}}
+                        </ol>
+                    </li>
+                </ul>
+
+                <button class="btn btn-primary btn-sm" data-on-click="addTeam">Add a team</button>
+            </div>
+
+            <p class="mb-4">
+                <strong>Press it.</strong> The new team arrives with its position already resolved, and every member
+                already listed keeps its team and its season - those are ancestor <em>data</em>, and the data did not
+                change. The trailing number is the outer list's <code>$index</code>, which is the one fact about a
+                member that lives nowhere in the member.
+            </p>
+
+            <pre class="code-block language-html mb-4">&lt;ul data-each="teams key=id"&gt;
+  &lt;li&gt;
+    &lt;b data-bind-text="name"&gt;&lt;/b&gt;
+    &lt;ol&gt;
+      {{#each members key=id}}
+        &lt;li&gt;
+          {{name}}
+          - on {{$parents[0].name}}       &lt;!-- the team: same as $parent.name --&gt;
+          - in {{$parents[1].season}}     &lt;!-- the root: nothing else reaches it --&gt;
+          - {{$parentContext.$index}}     &lt;!-- the OUTER list's position --&gt;
+        &lt;/li&gt;
+      {{/each}}
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</pre>
+
+            <p class="bind-note mb-3">
+                <strong>Read the inner list carefully - it is <code>{{#each}}</code>, not a second
+                <code>data-each</code>.</strong> An item template is compiled markup, and the compiler finds lists by
+                looking for <code>{{#each}}</code>. A <code>data-each</code> nested inside one is left exactly as
+                written: its contents render <em>once</em>, as ordinary markup, and every binding in them resolves
+                against the <em>outer</em> item. It looks close enough to working to survive review, so activation now
+                warns and names the form to write instead.
+            </p>
+
+            <p class="mb-3">
+                <code>$parents</code> costs nothing to have available: it is built only if a template asks for it, by
+                walking the chain on first read. Both names are frozen, like every context - writing through
+                <code>$parents[0]</code> warns and skips rather than throwing, which is the same thing a binding does
+                with any path it cannot set.
+            </p>
+
+            <div class="alert alert-warning mb-0">
+                <strong>Known limitation - <code>$parentContext.$index</code> does not survive a reorder.</strong>
+                Appending to the outer list is fine, and so is anything that leaves existing positions alone. But
+                <em>moving</em> an outer row - a sort, a reverse, a prepend - relocates the DOM correctly while leaving
+                the inner items reading the position their group used to be in. The refresh gate compares the parent
+                context by its <code>$data</code> and <code>$root</code>, and a move changes neither, so no inner item
+                is told anything happened. Ancestor <em>data</em> - <code>$parents[n]</code> and
+                <code>$parent</code> - is correct throughout; it is only the enclosing <em>position</em> that goes
+                stale. Fixed and awaiting a <code>domma-reactive</code> release.
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 13. When not to ================= -->
     <section class="card mb-6" id="sec-limits" data-section="When not to reach for it">
         <div class="card-header">
             <h2 class="text-xl font-semibold">When not to reach for it</h2>
@@ -845,6 +934,38 @@ const handle = M.applyBindings(model, '#apply-demo', {
                     name: 'Ada',
                     rows: [{id: 1, label: 'First row'}, {id: 2, label: 'Second row'}]
                 });
+            }
+        }
+    });
+
+    // ── Ancestors: $parents and $parentContext, on a list inside a list ────
+    //
+    // The inner list is {{#each}}, not a second data-each: an item template is
+    // compiled markup, and the compiler discovers lists from {{#each}} only.
+
+    const roster = () => [
+        {id: 1, name: 'Red team',  members: [{id: 11, name: 'Ada'}, {id: 12, name: 'Grace'}]},
+        {id: 2, name: 'Blue team', members: [{id: 21, name: 'Alan'}, {id: 22, name: 'Edsger'}]}
+    ];
+
+    const ancestorsModel = M.create({
+        season: {type: M.types.string},
+        teams: {type: M.types.array}
+    }, {season: 'the summer league', teams: roster()});
+
+    M.applyBindings(ancestorsModel, '#ancestors-demo', {
+        methods: {
+            // Appends. Deliberately NOT a reorder: moving an outer row leaves
+            // $parentContext.$index reading the old position - see the note in
+            // the section above. Appending leaves every existing index alone.
+            addTeam() {
+                const teams = ancestorsModel.get('teams');
+                const id = teams.length + 1;
+                ancestorsModel.set('teams', [...teams, {
+                    id,
+                    name: `Team ${id}`,
+                    members: [{id: id * 10 + 1, name: 'Someone new'}]
+                }]);
             }
         }
     });
