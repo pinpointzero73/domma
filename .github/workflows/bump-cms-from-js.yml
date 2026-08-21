@@ -1,11 +1,13 @@
-name: Bump domma-cms when domma-js changes
+name: Bump domma-cms when domma-js releases
 
+# Fires when a release is tagged, alongside Release Build, which uses the same
+# filter. The earlier trigger was any push touching package.json or src/**, so a
+# test-only commit opened a version-bump PR downstream - noise, and a failed run
+# on every push while CROSS_REPO_PAT was unset.
 on:
   push:
-    branches: [ "main" ]
-    paths:
-      - 'package.json'
-      - 'src/**'
+    tags: [ 'v*' ]
+  workflow_dispatch:
 
 env:
   TARGET_OWNER: pinpointzero73
@@ -15,8 +17,12 @@ jobs:
   bump-cms:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source (domma-js)
-        uses: actions/checkout@v4
+      - name: Resolve source label
+        run: |
+          case "$GITHUB_REF" in
+            refs/tags/*) echo "SRC_LABEL=${GITHUB_REF_NAME}" >> "$GITHUB_ENV" ;;
+            *)           echo "SRC_LABEL=${GITHUB_SHA::7}"   >> "$GITHUB_ENV" ;;
+          esac
 
       - name: Configure git
         run: |
@@ -29,14 +35,14 @@ jobs:
         run: |
           git clone "https://x-access-token:${TOKEN}@github.com/${TARGET_OWNER}/${TARGET_REPO}.git" target
           cd target
-          git checkout -b "bump/js-${GITHUB_SHA::7}"
+          git checkout -b "bump/js-${SRC_LABEL}"
 
       - name: Bump version (patch)
         run: |
           cd target
           node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));const parts=(p.version||'0.0.0').split('.').map(n=>parseInt(n||0));parts[2]=(parts[2]||0)+1;p.version=parts.join('.');fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n');console.log('new version',p.version)"
           git add package.json
-          git commit -m "chore: bump ${TARGET_REPO} version after domma-js update" || echo "no changes to commit"
+          git commit -m "chore: bump ${TARGET_REPO} version for domma-js ${SRC_LABEL}" || echo "no changes to commit"
           git push --set-upstream origin HEAD
 
       - name: Create pull request
@@ -45,8 +51,8 @@ jobs:
         run: |
           cd target
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          TITLE="chore: bump ${TARGET_REPO} for domma-js updates"
-          BODY="Automated version bump from domma-js updates. Source: ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          TITLE="chore: bump ${TARGET_REPO} for domma-js ${SRC_LABEL}"
+          BODY="Automated version bump for the domma-js ${SRC_LABEL} release. Source: ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
           jq -n --arg head "$BRANCH" --arg title "$TITLE" --arg body "$BODY" \
             '{head:$head, base:"main", title:$title, body:$body}' > /tmp/pr.json
           curl -sS -X POST -H "Authorization: token ${TOKEN}" -H "Accept: application/vnd.github+json" \
