@@ -2006,14 +2006,18 @@ class ListGroup extends Component {
 
 class Dropdown extends Component {
     static defaults = {
-        trigger: 'click',
-        position: 'bottom-start',
+        trigger: 'click',           // 'click' | 'hover' - click works in both
+        position: 'bottom-start',   // bottom|top|left|right + -start|-end
         offset: [0, 4],
         animation: true,
         animationDuration: 150,
-        hoverCloseDelay: 180,
+        hoverOpenDelay: 0,          // grace period before a hover opens the menu
+        hoverCloseDelay: 300,       // grace period before a hover closes it
         closeOnSelect: true,
         closeOnClickOutside: true,
+        closeOnEscape: true,
+        closeOthers: true,          // opening this one closes every other dropdown
+        flip: true,                 // flip/clamp to stay inside the viewport
         items: [],
         model: null,
         modelKey: null,
@@ -2023,6 +2027,11 @@ class Dropdown extends Component {
         onSelect: null
     };
 
+    // Every currently open dropdown. Instances used to know only about
+    // themselves, so a click-opened menu and a hover-opened menu could sit on
+    // screen at the same time, each convinced it was the only one.
+    static _open = new Set();
+
     constructor(selector, options = {}) {
         super(selector, options);
         this._menu = null;
@@ -2030,7 +2039,9 @@ class Dropdown extends Component {
         this._items = [...this.options.items];
         this._selectedValue = null;
         this._modelUnsubscribe = null;
+        this._hoverOpenTimer = null;
         this._hoverCloseTimer = null;
+        this._removeTimer = null;
         this._init();
     }
 
@@ -2039,33 +2050,49 @@ class Dropdown extends Component {
 
         const opts = this.options;
 
-        // Setup trigger
-        if (opts.trigger === 'click') {
-            this._addEventListener(this.element, 'click', (e) => {
-                e.stopPropagation();
-                this.toggle();
-            });
-        } else if (opts.trigger === 'hover') {
-            // The menu lives in document.body (a sibling, not a child), so hover must
-            // be tracked on both the heading and the menu. A cancellable delay bridges
-            // the offset gap between them: leaving the heading only closes if the cursor
-            // hasn't reached the menu (or come back) before the timer fires.
-            this._addEventListener(this.element, 'mouseenter', () => {
-                clearTimeout(this._hoverCloseTimer);
+        this.element.setAttribute('aria-haspopup', 'true');
+        this.element.setAttribute('aria-expanded', 'false');
+
+        // Click is bound for both trigger modes. Hover is a pointer-only
+        // affordance - a touch device never sends mouseenter - so a hover
+        // dropdown with no click path simply could not be opened on a phone.
+        // On a hover dropdown the click only ever opens: toggling would close
+        // the menu the pointer is already sitting in, which reads as the menu
+        // refusing the click rather than as a deliberate dismiss.
+        this._addEventListener(this.element, 'click', () => {
+            if (opts.trigger === 'hover') {
                 this.open();
-            });
-            this._addEventListener(this.element, 'mouseleave', () => this._scheduleHoverClose());
+            } else {
+                this.toggle();
+            }
+        });
+
+        if (opts.trigger === 'hover') {
+            this._addEventListener(this.element, 'mouseenter', () => this._hoverIn());
+            this._addEventListener(this.element, 'mouseleave', () => this._hoverOut());
         }
 
-        // Close on click outside
+        // Close on click outside. Note there is deliberately no
+        // stopPropagation() on the trigger: swallowing the click stopped every
+        // *other* dropdown's outside-click handler from ever seeing it, which is
+        // why opening a second menu left the first one hanging open.
         if (opts.closeOnClickOutside) {
             this._outsideClickHandler = (e) => {
-                if (this._isOpen && !this.element.contains(e.target) &&
-                    (!this._menu || !this._menu.contains(e.target))) {
-                    this.close();
-                }
+                if (!this._isOpen) return;
+                if (this.element.contains(e.target)) return;
+                if (this._menu && this._menu.contains(e.target)) return;
+                this.close();
             };
             document.addEventListener('click', this._outsideClickHandler);
+        }
+
+        if (opts.closeOnEscape) {
+            this._keydownHandler = (e) => {
+                if (e.key !== 'Escape' || !this._isOpen) return;
+                this.close();
+                if (typeof this.element.focus === 'function') this.element.focus();
+            };
+            document.addEventListener('keydown', this._keydownHandler);
         }
 
         // Bind to model if specified
@@ -2091,6 +2118,7 @@ class Dropdown extends Component {
                 this._items = [...newVal];
                 if (this._isOpen) {
                     this._renderMenu();
+                    this._positionMenu();
                 }
             };
 
@@ -2105,34 +2133,81 @@ class Dropdown extends Component {
     }
 
     open() {
+        clearTimeout(this._hoverOpenTimer);
+        clearTimeout(this._hoverCloseTimer);
+        this._hoverOpenTimer = this._hoverCloseTimer = null;
+
+        // A close that has not finished fading still owns a live menu node.
+        // Reclaim it rather than stacking a fresh one on top of it: re-opening
+        // inside the animation window used to leave orphaned menus in the DOM,
+        // each with its own listeners, which is what made a fast sweep between
+        // trigger and menu behave differently every time.
+        if (this._removeTimer) {
+            clearTimeout(this._removeTimer);
+            this._removeTimer = null;
+        }
+
         if (this._isOpen) return this;
 
         const opts = this.options;
 
+        if (opts.closeOthers) {
+            Dropdown._open.forEach(other => {
+                if (other !== this) other.close();
+            });
+        }
+
         if (opts.onOpen) opts.onOpen(this);
 
-        this._createMenu();
-        this._positionMenu();
+        if (this._menu) {
+            // Reused node - refresh it, since setItems() may have run while closed.
+            this._renderMenu();
+            this._menu.style.pointerEvents = '';
+            this._menu.classList.add('show');
+        } else {
+            this._createMenu();
+        }
+
         this._isOpen = true;
+        Dropdown._open.add(this);
+        this.element.setAttribute('aria-expanded', 'true');
+
+        this._positionMenu();
+        this._bindOpenListeners();
 
         return this;
     }
 
     close() {
+        clearTimeout(this._hoverOpenTimer);
+        clearTimeout(this._hoverCloseTimer);
+        this._hoverOpenTimer = this._hoverCloseTimer = null;
+
         if (!this._isOpen) return this;
 
         const opts = this.options;
+        const duration = opts.animation ? opts.animationDuration : 0;
 
-        // Detach state synchronously and let the removal timer own *this* node, so a
-        // rapid re-open (which builds a fresh menu) can never be torn down by an
-        // earlier close's timer, and _isOpen never desyncs from the visible menu.
         this._isOpen = false;
+        Dropdown._open.delete(this);
+        this.element.setAttribute('aria-expanded', 'false');
+        this._unbindOpenListeners();
+
         const menu = this._menu;
-        this._menu = null;
 
         if (menu) {
             menu.classList.remove('show');
-            setTimeout(() => menu.remove(), opts.animationDuration);
+            // Drop it out of hit-testing immediately. While it faded it stayed
+            // hoverable and clickable, so a menu that had already closed could
+            // still swallow the pointer and then vanish underneath it.
+            menu.style.pointerEvents = 'none';
+            // The timer owns *this* node, and open() cancels it, so _menu and
+            // the visible menu can never disagree.
+            this._removeTimer = setTimeout(() => {
+                this._removeTimer = null;
+                this._menu = null;
+                menu.remove();
+            }, duration);
         }
 
         if (opts.onClose) opts.onClose(this);
@@ -2144,39 +2219,172 @@ class Dropdown extends Component {
         return this._isOpen ? this.close() : this.open();
     }
 
+    // ---- hover ----------------------------------------------------------
+
+    _hoverIn() {
+        clearTimeout(this._hoverCloseTimer);
+        this._hoverCloseTimer = null;
+
+        if (this._isOpen) return;
+
+        const delay = this.options.hoverOpenDelay;
+        if (!delay) {
+            this.open();
+            return;
+        }
+        clearTimeout(this._hoverOpenTimer);
+        this._hoverOpenTimer = setTimeout(() => this.open(), delay);
+    }
+
+    _hoverOut() {
+        clearTimeout(this._hoverOpenTimer);
+        this._hoverOpenTimer = null;
+        this._scheduleHoverClose();
+    }
+
+    _scheduleHoverClose() {
+        clearTimeout(this._hoverCloseTimer);
+        this._hoverCloseTimer = setTimeout(() => {
+            this._hoverCloseTimer = null;
+            this.close();
+        }, this.options.hoverCloseDelay);
+    }
+
+    /**
+     * Is the pointer somewhere that should keep a hover menu open?
+     *
+     * mouseenter/mouseleave alone cannot answer this. The menu is a document.body
+     * sibling separated from its trigger by `offset`, so the two boxes never
+     * touch, and the path a user takes between them is whatever angle they
+     * happen to choose. Leaving the trigger therefore looks identical to leaving
+     * for good, and the menu closed out from under the pointer.
+     *
+     * So while the menu is open we watch the pointer itself and treat three
+     * regions as "still here": the trigger, the menu, and the corridor spanning
+     * the gap between them. That is geometric, so it holds for any `offset`, for
+     * a diagonal approach, and for a menu that has been flipped to the other
+     * side of its trigger.
+     */
+    _pointerInSafeZone(x, y) {
+        if (!this.element) return false;
+
+        const pad = 2; // sub-pixel rects and integer pointer coordinates
+        const trigger = this.element.getBoundingClientRect();
+        const menu = this._menu ? this._menu.getBoundingClientRect() : null;
+        const inside = (r) => !!r &&
+            x >= r.left - pad && x <= r.right + pad &&
+            y >= r.top - pad && y <= r.bottom + pad;
+
+        if (inside(trigger)) return true;
+        if (!menu) return false;
+        if (inside(menu)) return true;
+
+        // Outside both, but possibly in the gap between them.
+        if (x < Math.min(trigger.left, menu.left) - pad) return false;
+        if (x > Math.max(trigger.right, menu.right) + pad) return false;
+        if (y < Math.min(trigger.top, menu.top) - pad) return false;
+        if (y > Math.max(trigger.bottom, menu.bottom) + pad) return false;
+
+        // Accept only the band that actually separates the two, so a corner
+        // beside the menu does not count as travelling towards it.
+        if (menu.top >= trigger.bottom) {
+            if (y >= trigger.bottom - pad && y <= menu.top + pad) return true;
+        } else if (trigger.top >= menu.bottom) {
+            if (y >= menu.bottom - pad && y <= trigger.top + pad) return true;
+        }
+        if (menu.left >= trigger.right) {
+            if (x >= trigger.right - pad && x <= menu.left + pad) return true;
+        } else if (trigger.left >= menu.right) {
+            if (x >= menu.right - pad && x <= trigger.left + pad) return true;
+        }
+
+        return false;
+    }
+
+    _bindOpenListeners() {
+        if (this._openListenersBound) return;
+        this._openListenersBound = true;
+
+        this._repositionHandler = () => this._positionMenu();
+        window.addEventListener('resize', this._repositionHandler);
+        // Capture, so a scroll inside any ancestor container is caught too.
+        window.addEventListener('scroll', this._repositionHandler, true);
+
+        if (this.options.trigger !== 'hover') return;
+
+        this._pointerMoveHandler = (e) => {
+            if (!this._isOpen) return;
+            if (this._pointerInSafeZone(e.clientX, e.clientY)) {
+                clearTimeout(this._hoverCloseTimer);
+                this._hoverCloseTimer = null;
+            } else if (!this._hoverCloseTimer) {
+                this._scheduleHoverClose();
+            }
+        };
+        document.addEventListener('mousemove', this._pointerMoveHandler, true);
+
+        // The pointer leaving the window sends no further mousemove, so close on
+        // the way out rather than waiting for an event that will not arrive.
+        this._pointerLeaveHandler = () => this._scheduleHoverClose();
+        document.documentElement.addEventListener('mouseleave', this._pointerLeaveHandler);
+    }
+
+    _unbindOpenListeners() {
+        if (!this._openListenersBound) return;
+        this._openListenersBound = false;
+
+        if (this._repositionHandler) {
+            window.removeEventListener('resize', this._repositionHandler);
+            window.removeEventListener('scroll', this._repositionHandler, true);
+            this._repositionHandler = null;
+        }
+        if (this._pointerMoveHandler) {
+            document.removeEventListener('mousemove', this._pointerMoveHandler, true);
+            this._pointerMoveHandler = null;
+        }
+        if (this._pointerLeaveHandler) {
+            document.documentElement.removeEventListener('mouseleave', this._pointerLeaveHandler);
+            this._pointerLeaveHandler = null;
+        }
+    }
+
+    // ---- rendering ------------------------------------------------------
+
     _createMenu() {
         const opts = this.options;
 
         this._menu = document.createElement('div');
         this._menu.className = 'domma-dropdown-menu';
-        // Hover triggers get a transparent bridge (CSS ::before) spanning the gap
-        // between trigger and menu, so the pointer never crosses a dead-zone that
-        // would fire the close. The menu is a document.body sibling, so without this
-        // the offset/margin gap breaks the hover path.
-        if (this.options.trigger === 'hover') {
-            this._menu.classList.add('domma-dropdown-menu-hover');
-        }
+        this._menu.setAttribute('role', 'menu');
 
         this._renderMenu();
 
         document.body.appendChild(this._menu);
 
-        // Keep the dropdown open while the cursor is over the menu, and re-arm the
-        // close delay when it leaves - mirrors the heading's hover handling so the
-        // gap between heading and menu can be crossed in either direction.
+        // One delegated listener for the whole menu, bound once. Per-item
+        // listeners were re-registered on every render and never released, so a
+        // long-lived dropdown accumulated them for the life of the page.
+        this._addEventListener(this._menu, 'click', (e) => {
+            const el = e.target.closest('.domma-dropdown-item');
+            if (!el || !this._menu || !this._menu.contains(el)) return;
+            if (el.classList.contains('disabled')) return;
+            const index = Number(el.dataset.index);
+            this._selectItem(this._items[index], index, el.dataset.value);
+        });
+
+        // Fast path for the common straight-line move; _pointerInSafeZone()
+        // covers everything else.
         if (opts.trigger === 'hover') {
-            this._addEventListener(this._menu, 'mouseenter', () => clearTimeout(this._hoverCloseTimer));
+            this._addEventListener(this._menu, 'mouseenter', () => {
+                clearTimeout(this._hoverCloseTimer);
+                this._hoverCloseTimer = null;
+            });
             this._addEventListener(this._menu, 'mouseleave', () => this._scheduleHoverClose());
         }
 
         // Trigger animation
         this._menu.offsetHeight;
         this._menu.classList.add('show');
-    }
-
-    _scheduleHoverClose() {
-        clearTimeout(this._hoverCloseTimer);
-        this._hoverCloseTimer = setTimeout(() => this.close(), this.options.hoverCloseDelay);
     }
 
     _renderMenu() {
@@ -2188,6 +2396,8 @@ class Dropdown extends Component {
         this._items.forEach((item, index) => {
             const menuItem = document.createElement('div');
             menuItem.className = 'domma-dropdown-item';
+            menuItem.setAttribute('role', 'menuitem');
+            menuItem.dataset.index = index;
 
             // Handle different item formats
             if (typeof item === 'string') {
@@ -2195,10 +2405,12 @@ class Dropdown extends Component {
                 menuItem.dataset.value = item;
             } else if (item.divider) {
                 menuItem.className = 'domma-dropdown-divider';
+                menuItem.setAttribute('role', 'separator');
                 this._menu.appendChild(menuItem);
                 return;
             } else if (item.header) {
                 menuItem.className = 'domma-dropdown-header';
+                menuItem.setAttribute('role', 'presentation');
                 menuItem.textContent = item.header;
                 this._menu.appendChild(menuItem);
                 return;
@@ -2212,6 +2424,7 @@ class Dropdown extends Component {
 
                 if (item.disabled) {
                     menuItem.classList.add('disabled');
+                    menuItem.setAttribute('aria-disabled', 'true');
                 }
 
                 if (item.icon) {
@@ -2221,11 +2434,6 @@ class Dropdown extends Component {
                     menuItem.insertBefore(iconSpan, menuItem.firstChild);
                 }
             }
-
-            this._addEventListener(menuItem, 'click', (e) => {
-                e.stopPropagation();
-                this._selectItem(item, index, menuItem.dataset.value);
-            });
 
             this._menu.appendChild(menuItem);
         });
@@ -2252,35 +2460,69 @@ class Dropdown extends Component {
         }
     }
 
+    /**
+     * Place the menu against its trigger and keep it on screen. `position` is a
+     * preference, not a promise: a menu that would run off the bottom or the
+     * right edge is flipped to the opposite side when there is room there, and
+     * clamped to the viewport either way.
+     */
     _positionMenu() {
         if (!this._menu || !this.element) return;
 
         const opts = this.options;
         const rect = this.element.getBoundingClientRect();
         const [offsetX, offsetY] = opts.offset;
+        const width = this._menu.offsetWidth;
+        const height = this._menu.offsetHeight;
+        const viewW = document.documentElement.clientWidth;
+        const viewH = document.documentElement.clientHeight;
+        const margin = 8; // viewport safety margin (px)
 
-        let top, left;
+        const place = (pos) => {
+            switch (pos) {
+                case 'bottom-end':  return [rect.bottom + offsetY, rect.right - width + offsetX];
+                case 'top-start':   return [rect.top - height - offsetY, rect.left + offsetX];
+                case 'top-end':     return [rect.top - height - offsetY, rect.right - width + offsetX];
+                case 'left-start':  return [rect.top + offsetY, rect.left - width - offsetX];
+                case 'left-end':    return [rect.bottom - height + offsetY, rect.left - width - offsetX];
+                case 'right-start': return [rect.top + offsetY, rect.right + offsetX];
+                case 'right-end':   return [rect.bottom - height + offsetY, rect.right + offsetX];
+                case 'bottom-start':
+                default:            return [rect.bottom + offsetY, rect.left + offsetX];
+            }
+        };
 
-        switch (opts.position) {
-            case 'bottom-start':
-                top = rect.bottom + offsetY;
-                left = rect.left + offsetX;
-                break;
-            case 'bottom-end':
-                top = rect.bottom + offsetY;
-                left = rect.right - this._menu.offsetWidth + offsetX;
-                break;
-            case 'top-start':
-                top = rect.top - this._menu.offsetHeight - offsetY;
-                left = rect.left + offsetX;
-                break;
-            case 'top-end':
-                top = rect.top - this._menu.offsetHeight - offsetY;
-                left = rect.right - this._menu.offsetWidth + offsetX;
-                break;
-            default:
-                top = rect.bottom + offsetY;
-                left = rect.left + offsetX;
+        const parts = String(opts.position || 'bottom-start').split('-');
+        const side = ['bottom', 'top', 'left', 'right'].includes(parts[0]) ? parts[0] : 'bottom';
+        const align = parts[1] === 'end' ? 'end' : 'start';
+
+        let [top, left] = place(`${side}-${align}`);
+
+        if (opts.flip) {
+            const opposite = {bottom: 'top', top: 'bottom', left: 'right', right: 'left'};
+            const roomBelow = viewH - margin - (rect.bottom + offsetY);
+            const roomAbove = rect.top - offsetY - margin;
+            const roomRight = viewW - margin - (rect.right + offsetX);
+            const roomLeft = rect.left - offsetX - margin;
+
+            const shouldFlip =
+                (side === 'bottom' && height > roomBelow && roomAbove >= height) ||
+                (side === 'top' && height > roomAbove && roomBelow >= height) ||
+                (side === 'right' && width > roomRight && roomLeft >= width) ||
+                (side === 'left' && width > roomLeft && roomRight >= width);
+
+            if (shouldFlip) {
+                [top, left] = place(`${opposite[side]}-${align}`);
+            }
+
+            // Clamp on both axes, but only where the menu actually fits - a menu
+            // taller than the viewport would otherwise be dragged over its trigger.
+            if (width <= viewW - margin * 2) {
+                left = Math.max(margin, Math.min(left, viewW - width - margin));
+            }
+            if (height <= viewH - margin * 2) {
+                top = Math.max(margin, Math.min(top, viewH - height - margin));
+            }
         }
 
         // Add scroll offset
@@ -2295,6 +2537,7 @@ class Dropdown extends Component {
         this._items = [...items];
         if (this._isOpen) {
             this._renderMenu();
+            this._positionMenu();
         }
         return this;
     }
@@ -2303,6 +2546,7 @@ class Dropdown extends Component {
         this._items.push(item);
         if (this._isOpen) {
             this._renderMenu();
+            this._positionMenu();
         }
         return this;
     }
@@ -2311,6 +2555,7 @@ class Dropdown extends Component {
         this._items.splice(index, 1);
         if (this._isOpen) {
             this._renderMenu();
+            this._positionMenu();
         }
         return this;
     }
@@ -2325,16 +2570,27 @@ class Dropdown extends Component {
 
     destroy() {
         super.destroy();
+        clearTimeout(this._hoverOpenTimer);
         clearTimeout(this._hoverCloseTimer);
+        clearTimeout(this._removeTimer);
+        this._unbindOpenListeners();
+        Dropdown._open.delete(this);
         if (this._outsideClickHandler) {
             document.removeEventListener('click', this._outsideClickHandler);
+            this._outsideClickHandler = null;
+        }
+        if (this._keydownHandler) {
+            document.removeEventListener('keydown', this._keydownHandler);
+            this._keydownHandler = null;
         }
         if (this._modelUnsubscribe && typeof this._modelUnsubscribe === 'function') {
             this._modelUnsubscribe();
         }
         if (this._menu) {
             this._menu.remove();
+            this._menu = null;
         }
+        this._isOpen = false;
     }
 }
 
@@ -5730,8 +5986,13 @@ class Navbar extends Component {
         position: 'static',     // 'static', 'fixed', 'sticky'
         variant: 'light',       // 'light', 'dark', 'transparent'
         collapsible: true,      // Mobile hamburger menu
-        collapseAt: 768,        // Breakpoint for collapse
+        collapseAt: 993,        // Below this width the bar is collapsed. Matches the
+                                //   `@media (min-width: 993px)` switch in elements.css -
+                                //   at 768 the JS thought it was on desktop while the
+                                //   stylesheet was already showing the mobile drawer.
         appearOnHover: false,   // Desktop: reveal dropdowns/flyouts on hover (click still works as fallback)
+        hoverCloseDelay: 250,   // ms of grace when the pointer leaves the bar, so the
+                                //   gap between a toggle and its menu can be crossed
         actions: [],            // Right-side buttons/elements [{ text, url, variant }]
         onItemClick: null
     };
@@ -5739,6 +6000,9 @@ class Navbar extends Component {
     constructor(selector, options = {}) {
         super(selector, options);
         this._isCollapsed = true;
+        this._pinned = null;          // dropdown a click has pinned open
+        this._hoverSuppressed = null; // dropdown a click has just closed
+        this._navCloseTimer = null;
         this._init();
     }
 
@@ -5925,22 +6189,37 @@ class Navbar extends Component {
             }
         });
 
-        // Dropdown toggle
+        // Dropdown toggle. A click *pins* the dropdown: it stays open until it is
+        // clicked again, or something outside it is. Pinning is what makes the
+        // click meaningful when appearOnHover is also on - a plain class toggle
+        // was undone by the very next mousemove, so the menu appeared to ignore
+        // the click. It also closes sibling dropdowns, which a toggle did not.
         this._addEventListener(this.element, 'click', (e) => {
             const toggle = e.target.closest('.navbar-dropdown-toggle');
-            if (toggle) {
-                const dropdown = toggle.closest('.navbar-dropdown');
-                dropdown.classList.toggle('open');
-                if (dropdown.classList.contains('open')) this._positionMenu(dropdown);
+            if (!toggle) return;
+
+            const dropdown = toggle.closest('.navbar-dropdown');
+
+            if (this._pinned === dropdown) {
+                this._pinned = null;
+                // The pointer has not moved, so hover would reopen this one
+                // immediately. Hold it shut until the pointer leaves it.
+                this._hoverSuppressed = dropdown;
+                this._reconcileDropdowns(null, true);
+                return;
             }
+
+            this._pinned = dropdown;
+            this._hoverSuppressed = null;
+            this._reconcileDropdowns(dropdown);
         });
 
         // Close dropdowns on outside click
         this._addEventListener(document, 'click', (e) => {
             if (!e.target.closest('.navbar-dropdown')) {
-                this.element.querySelectorAll('.navbar-dropdown.open').forEach(dd => {
-                    dd.classList.remove('open');
-                });
+                this._pinned = null;
+                this._hoverSuppressed = null;
+                this._reconcileDropdowns(null, true);
             }
         });
 
@@ -5961,46 +6240,60 @@ class Navbar extends Component {
         // keyboard users. mouseover/mouseout bubble (unlike mouseenter/mouseleave),
         // so one pair of listeners covers every present and future dropdown.
         if (this.options.appearOnHover) {
-            const CLOSE_DELAY = 150; // bridges the cursor gap when leaving the navbar
-            let closeTimer = null;
-
-            // Open every .navbar-dropdown on the path from `target` up to the navbar
-            // (so a hovered flyout keeps its parents open) and close the rest.
-            const reconcile = (target) => {
-                const chain = new Set();
-                for (let n = target; n && n !== this.element; n = n.parentElement) {
-                    if (n.classList && n.classList.contains('navbar-dropdown')) chain.add(n);
-                }
-                this.element.querySelectorAll('.navbar-dropdown').forEach((dd) => {
-                    if (chain.has(dd)) {
-                        if (!dd.classList.contains('open')) {
-                            dd.classList.add('open');
-                            this._positionMenu(dd);
-                        }
-                    } else {
-                        dd.classList.remove('open');
-                    }
-                });
-            };
-
             this._addEventListener(this.element, 'mouseover', (e) => {
                 if (window.innerWidth < this.options.collapseAt) return;
                 if (!e.target.closest('.navbar-dropdown')) return;
-                clearTimeout(closeTimer);
-                reconcile(e.target);
+                // A click has just closed this one - respect that until the
+                // pointer moves off it, or the two fight over the same node.
+                if (this._hoverSuppressed && this._hoverSuppressed.contains(e.target)) return;
+                this._hoverSuppressed = null;
+                clearTimeout(this._navCloseTimer);
+                this._reconcileDropdowns(e.target);
             });
 
             this._addEventListener(this.element, 'mouseout', (e) => {
                 if (window.innerWidth < this.options.collapseAt) return;
                 // Ignore moves that stay inside the navbar; only act on a real exit.
                 if (e.relatedTarget && this.element.contains(e.relatedTarget)) return;
-                clearTimeout(closeTimer);
-                closeTimer = setTimeout(() => {
-                    this.element.querySelectorAll('.navbar-dropdown.open')
-                        .forEach(dd => dd.classList.remove('open'));
-                }, CLOSE_DELAY);
+                clearTimeout(this._navCloseTimer);
+                // The menu hangs a few px below its toggle, so the pointer crosses
+                // a strip of page on the way down. Closing on the instant of that
+                // mouseout is what made a hover menu vanish unless you moved fast
+                // enough to jump the gap between two pointer events.
+                this._navCloseTimer = setTimeout(() => {
+                    this._reconcileDropdowns(null);
+                }, this.options.hoverCloseDelay);
             });
         }
+    }
+
+    /**
+     * Open every .navbar-dropdown on the path from `target` up to the navbar - so
+     * a hovered flyout keeps its parents open - and close the rest. A pinned
+     * dropdown is added to that path whatever the pointer is doing, unless
+     * `force` says the pin itself is being cleared.
+     */
+    _reconcileDropdowns(target, force = false) {
+        const chain = new Set();
+        const addChain = (node) => {
+            for (let n = node; n && n !== this.element; n = n.parentElement) {
+                if (n.classList && n.classList.contains('navbar-dropdown')) chain.add(n);
+            }
+        };
+
+        addChain(target);
+        if (!force && this._pinned) addChain(this._pinned);
+
+        this.element.querySelectorAll('.navbar-dropdown').forEach((dd) => {
+            if (chain.has(dd)) {
+                if (!dd.classList.contains('open')) {
+                    dd.classList.add('open');
+                    this._positionMenu(dd);
+                }
+            } else {
+                dd.classList.remove('open');
+            }
+        });
     }
 
     /**
@@ -6089,6 +6382,13 @@ class Navbar extends Component {
 
     isCollapsed() {
         return this._isCollapsed;
+    }
+
+    destroy() {
+        clearTimeout(this._navCloseTimer);
+        this._pinned = null;
+        this._hoverSuppressed = null;
+        super.destroy();
     }
 }
 

@@ -196,12 +196,17 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
                 <button class="btn btn-primary" id="hover-click-dropdown">Click Me (same menu)</button>
             </div>
             <div class="alert alert-info mt-4" role="note">
-                <strong>Verify the hover fix:</strong>
+                <strong>How the hover path holds together.</strong> The menu is rendered on
+                <code>document.body</code>, so it never touches its trigger: there is always an
+                <code>offset</code> of empty page between them. While the menu is open, Domma tracks the pointer
+                against three regions - the trigger, the menu, and the corridor spanning the gap - so any route
+                between the two counts as staying, whatever angle you take and however long you dawdle.
                 <ol class="mt-2 mb-0">
-                    <li>Hover <em>Hover Me</em> - the menu opens.</li>
-                    <li>Glide the pointer down onto the menu items - it must <strong>stay open</strong> (crossing the gap no longer closes it).</li>
-                    <li>Sweep the pointer rapidly between the button and the menu several times - it must never get stuck shut.</li>
-                    <li><em>Click Me</em> uses a click trigger - confirm it still opens and closes cleanly and is unaffected by the hover demo beside it.</li>
+                    <li>Hover <em>Hover Me</em>, then glide down onto the items - slowly, or at an angle. It stays open.</li>
+                    <li>Stop in the gap and wait. Still open.</li>
+                    <li>Move away properly and it closes after <code>hoverCloseDelay</code> (300ms).</li>
+                    <li><em>Click Me</em> uses a click trigger. Opening it closes the hover menu - only one dropdown is
+                        ever open at a time.</li>
                 </ol>
             </div>
         </div>
@@ -299,19 +304,52 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
                     <td><code>position</code></td>
                     <td>String</td>
                     <td><code>'bottom-start'</code></td>
-                    <td>Position: bottom-start, bottom-end, top-start, top-end, left-start, right-start</td>
+                    <td>Side plus alignment: <code>bottom</code>, <code>top</code>, <code>left</code> or
+                        <code>right</code>, each with <code>-start</code> or <code>-end</code></td>
                 </tr>
                 <tr>
-                    <td><code>closeOnClick</code></td>
+                    <td><code>flip</code></td>
                     <td>Boolean</td>
                     <td><code>true</code></td>
-                    <td>Close when item clicked</td>
+                    <td>Flip to the opposite side, and clamp to the viewport, rather than open off screen</td>
                 </tr>
                 <tr>
-                    <td><code>closeOnOutside</code></td>
+                    <td><code>closeOnSelect</code></td>
                     <td>Boolean</td>
                     <td><code>true</code></td>
-                    <td>Close when clicking outside</td>
+                    <td>Close when an item is chosen</td>
+                </tr>
+                <tr>
+                    <td><code>closeOnClickOutside</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Close when clicking outside the trigger and menu</td>
+                </tr>
+                <tr>
+                    <td><code>closeOnEscape</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Close on <kbd>Esc</kbd> and return focus to the trigger</td>
+                </tr>
+                <tr>
+                    <td><code>closeOthers</code></td>
+                    <td>Boolean</td>
+                    <td><code>true</code></td>
+                    <td>Opening this dropdown closes any other open one</td>
+                </tr>
+                <tr>
+                    <td><code>hoverOpenDelay</code></td>
+                    <td>Number</td>
+                    <td><code>0</code></td>
+                    <td>ms to wait before a hover opens the menu - raise it to stop a menu opening when the
+                        pointer merely sweeps across the trigger</td>
+                </tr>
+                <tr>
+                    <td><code>hoverCloseDelay</code></td>
+                    <td>Number</td>
+                    <td><code>300</code></td>
+                    <td>ms of grace before a hover menu closes once the pointer has left the trigger, the menu
+                        and the space between them</td>
                 </tr>
                 <tr>
                     <td><code>animation</code></td>
@@ -320,10 +358,16 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
                     <td>Enable animations</td>
                 </tr>
                 <tr>
-                    <td><code>offset</code></td>
+                    <td><code>animationDuration</code></td>
                     <td>Number</td>
-                    <td><code>4</code></td>
-                    <td>Offset from toggle (px)</td>
+                    <td><code>150</code></td>
+                    <td>ms the open/close transition runs for</td>
+                </tr>
+                <tr>
+                    <td><code>offset</code></td>
+                    <td>Array</td>
+                    <td><code>[0, 4]</code></td>
+                    <td><code>[x, y]</code> gap between trigger and menu, in px</td>
                 </tr>
                 <tr>
                     <td><code>onOpen</code></td>
@@ -372,6 +416,22 @@ const dropdown = Domma.elements.dropdown('#user-dropdown', {
                 <tr>
                     <td><code>isOpen()</code></td>
                     <td>Check if dropdown is open</td>
+                </tr>
+                <tr>
+                    <td><code>setItems(items)</code></td>
+                    <td>Replace the item list, re-rendering if the menu is open</td>
+                </tr>
+                <tr>
+                    <td><code>addItem(item)</code></td>
+                    <td>Append one item</td>
+                </tr>
+                <tr>
+                    <td><code>removeItem(index)</code></td>
+                    <td>Remove the item at <code>index</code></td>
+                </tr>
+                <tr>
+                    <td><code>getSelected()</code></td>
+                    <td>The value of the last selected item</td>
                 </tr>
                 <tr>
                     <td><code>destroy()</code></td>

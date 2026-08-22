@@ -301,6 +301,18 @@ import {SiteSearch} from './modules/search.js';
           transform: translateY(-10px);
           transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
         }
+        /* The panel sits 8px below a 40px trigger, so the pointer crosses a strip
+           of page on the way down and :hover drops - the menu vanishes mid-move.
+           A transparent strip on the panel closes that gap; it only exists while
+           the panel is visible, so it never blocks the page underneath. */
+        .variant-options::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 100%;
+          height: 10px;
+        }
         .variant-selector:hover .variant-options,
         .variant-selector:focus-within .variant-options {
           opacity: 1;
@@ -868,7 +880,7 @@ import {SiteSearch} from './modules/search.js';
                     items: navItems,
                     variant: config.variant || 'dark',
                     position: 'static',
-                    collapseAt: 992
+                    collapseAt: 993
                 });
 
                 // Customise brand section with logo + version

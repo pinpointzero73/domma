@@ -414,7 +414,7 @@ Domma.elements.navbar('#nav', {
         { text: 'Contact', url: '#'}
     ],
     collapsible: true,  // Enable hamburger menu (default)
-    collapseAt: 768     // Breakpoint in pixels (default 768)
+    collapseAt: 993     // Breakpoint in pixels (default 993)
 });
 </code></pre>
         </div>
@@ -710,15 +710,25 @@ Domma.elements.navbar('#main-nav', {
                 <tr>
                     <td><code>collapseAt</code></td>
                     <td>Number</td>
-                    <td><code>768</code></td>
-                    <td>Viewport width (px) below which navbar collapses to hamburger menu</td>
+                    <td><code>993</code></td>
+                    <td>Viewport width (px) below which the navbar collapses to a hamburger menu. Matches the
+                        breakpoint <code>elements.css</code> switches the bar to its desktop layout at
+                    </td>
                 </tr>
                 <tr>
                     <td><code>appearOnHover</code></td>
                     <td>Boolean</td>
                     <td><code>false</code></td>
-                    <td>Desktop only: reveal dropdowns and flyouts on hover. Click still works as a fallback for touch
-                        and keyboard users
+                    <td>Desktop only: reveal dropdowns and flyouts on hover. A click <em>pins</em> a dropdown open so it
+                        survives the pointer moving away; clicking it again, or anywhere outside, releases it
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>hoverCloseDelay</code></td>
+                    <td>Number</td>
+                    <td><code>250</code></td>
+                    <td>ms of grace once the pointer leaves the bar, so the gap between a toggle and its menu can be
+                        crossed without the menu closing. Only used when <code>appearOnHover</code> is on
                     </td>
                 </tr>
                 <tr>

@@ -9,7 +9,11 @@
 
 export type AnimationType = 'fade' | 'slide' | 'zoom' | 'none';
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
-export type DropdownPosition = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+export type DropdownPosition =
+    | 'bottom-start' | 'bottom-end'
+    | 'top-start' | 'top-end'
+    | 'left-start' | 'left-end'
+    | 'right-start' | 'right-end';
 export type ToastPosition = 'top-left' | 'top-right' | 'top-center' | 'bottom-left' | 'bottom-right' | 'bottom-center';
 export type ToastType = 'default' | 'success' | 'error' | 'warning' | 'info';
 export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
@@ -421,18 +425,28 @@ export interface DropdownSelectEvent {
 export interface DropdownOptions {
     /** How to trigger: 'click' or 'hover' */
     trigger?: 'click' | 'hover';
-    /** Menu position */
+    /** Preferred menu position - flipped or clamped if it would open off screen */
     position?: DropdownPosition;
     /** Position offset [x, y] */
     offset?: [number, number];
+    /** Flip to the opposite side and clamp to the viewport rather than open off screen (default true) */
+    flip?: boolean;
     /** Enable animations */
     animation?: boolean;
     /** Animation duration in ms */
     animationDuration?: number;
+    /** ms before a hover opens the menu (default 0) */
+    hoverOpenDelay?: number;
+    /** ms of grace before a hover menu closes once the pointer has left trigger, menu and the gap between (default 300) */
+    hoverCloseDelay?: number;
     /** Close menu after item selection */
     closeOnSelect?: boolean;
     /** Close menu when clicking outside */
     closeOnClickOutside?: boolean;
+    /** Close on Esc and restore focus to the trigger (default true) */
+    closeOnEscape?: boolean;
+    /** Opening this dropdown closes any other open one (default true) */
+    closeOthers?: boolean;
     /** Menu items */
     items?: (DropdownItem | string)[];
     /** Bind to a Domma Model */

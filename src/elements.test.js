@@ -375,10 +375,10 @@ describe('Domma.elements - UI Components', () => {
       fire(toggle, 'mouseover');
       expect(dropdown.classList.contains('open')).toBe(true);
 
-      // Leaving the navbar entirely schedules a close after CLOSE_DELAY (150ms).
+      // Leaving the navbar entirely schedules a close after hoverCloseDelay.
       fire(toggle, 'mouseout', document.body);
       expect(dropdown.classList.contains('open')).toBe(true); // still open before timer
-      vi.advanceTimersByTime(150);
+      vi.advanceTimersByTime(250);
       expect(dropdown.classList.contains('open')).toBe(false);
 
       nav.destroy();
@@ -404,6 +404,66 @@ describe('Domma.elements - UI Components', () => {
       nav.destroy();
     });
 
+    it('a click pins a hovered dropdown open against the next pointer move', () => {
+      testContainer.innerHTML = '<nav id="nav-pin"></nav>';
+      const nav = Domma.elements.navbar('#nav-pin', {items: ITEMS, appearOnHover: true});
+      const dropdown = nav.element.querySelector('.navbar-dropdown');
+      const toggle = dropdown.querySelector('.navbar-dropdown-toggle');
+
+      fire(toggle, 'mouseover');
+      toggle.click();
+      expect(dropdown.classList.contains('open')).toBe(true);
+
+      // Hover reconciliation used to undo the click on the very next mousemove.
+      fire(nav.element, 'mouseover');
+      expect(dropdown.classList.contains('open')).toBe(true);
+
+      // And leaving the bar no longer closes what was deliberately pinned.
+      fire(toggle, 'mouseout', document.body);
+      vi.advanceTimersByTime(500);
+      expect(dropdown.classList.contains('open')).toBe(true);
+
+      nav.destroy();
+    });
+
+    it('a second click unpins, and hover does not reopen under a still pointer', () => {
+      testContainer.innerHTML = '<nav id="nav-unpin"></nav>';
+      const nav = Domma.elements.navbar('#nav-unpin', {items: ITEMS, appearOnHover: true});
+      const dropdown = nav.element.querySelector('.navbar-dropdown');
+      const toggle = dropdown.querySelector('.navbar-dropdown-toggle');
+
+      toggle.click();
+      expect(dropdown.classList.contains('open')).toBe(true);
+
+      toggle.click();
+      expect(dropdown.classList.contains('open')).toBe(false);
+
+      fire(toggle, 'mouseover');
+      expect(dropdown.classList.contains('open')).toBe(false);
+
+      nav.destroy();
+    });
+
+    it('opening one dropdown by click closes its siblings', () => {
+      testContainer.innerHTML = '<nav id="nav-siblings"></nav>';
+      const nav = Domma.elements.navbar('#nav-siblings', {
+        items: [
+          {text: 'One', items: [{text: 'a', url: '#'}]},
+          {text: 'Two', items: [{text: 'b', url: '#'}]}
+        ]
+      });
+      const [first, second] = nav.element.querySelectorAll('.navbar-dropdown');
+
+      first.querySelector('.navbar-dropdown-toggle').click();
+      expect(first.classList.contains('open')).toBe(true);
+
+      second.querySelector('.navbar-dropdown-toggle').click();
+      expect(first.classList.contains('open')).toBe(false);
+      expect(second.classList.contains('open')).toBe(true);
+
+      nav.destroy();
+    });
+
     it('does not bind hover behaviour when appearOnHover is false', () => {
       testContainer.innerHTML = '<nav id="nav-nohover"></nav>';
       const nav = Domma.elements.navbar('#nav-nohover', {items: ITEMS});
@@ -414,6 +474,187 @@ describe('Domma.elements - UI Components', () => {
       expect(dropdown.classList.contains('open')).toBe(false);
 
       nav.destroy();
+    });
+  });
+  describe('Dropdown', () => {
+    // jsdom gives every element a zero rect, and the hover logic is geometric,
+    // so pin real boxes: a 100x40 trigger with the menu 4px below it.
+    const TRIGGER_BOX = {left: 100, right: 200, top: 100, bottom: 140, width: 100, height: 40};
+    const MENU_BOX = {left: 100, right: 260, top: 144, bottom: 400, width: 160, height: 256};
+
+    const stubRects = (dd) => {
+      dd.element.getBoundingClientRect = () => ({...TRIGGER_BOX, x: TRIGGER_BOX.left, y: TRIGGER_BOX.top});
+      if (dd._menu) {
+        dd._menu.getBoundingClientRect = () => ({...MENU_BOX, x: MENU_BOX.left, y: MENU_BOX.top});
+      }
+    };
+
+    const fire = (el, type, init = {}) =>
+      el.dispatchEvent(new MouseEvent(type, {bubbles: true, ...init}));
+
+    const menus = () => document.querySelectorAll('.domma-dropdown-menu');
+
+    const ITEMS = [{text: 'One', value: 1}, {text: 'Two', value: 2}];
+
+    it('opening one dropdown closes every other one', () => {
+      testContainer.innerHTML = '<button id="dd-a"></button><button id="dd-b"></button>';
+      const a = Domma.elements.dropdown('#dd-a', {items: ITEMS});
+      const b = Domma.elements.dropdown('#dd-b', {items: ITEMS});
+
+      a.open();
+      expect(a.isOpen()).toBe(true);
+
+      b.open();
+      expect(a.isOpen()).toBe(false);
+      expect(b.isOpen()).toBe(true);
+
+      a.destroy();
+      b.destroy();
+    });
+
+    it('does not swallow the trigger click, so other dropdowns still close', () => {
+      testContainer.innerHTML = '<button id="dd-c"></button><button id="dd-d"></button>';
+      const c = Domma.elements.dropdown('#dd-c', {items: ITEMS});
+      const d = Domma.elements.dropdown('#dd-d', {items: ITEMS});
+      const spy = vi.fn();
+      document.addEventListener('click', spy);
+
+      fire(c.element, 'click');
+      expect(c.isOpen()).toBe(true);
+
+      fire(d.element, 'click');
+      expect(c.isOpen()).toBe(false);
+      expect(d.isOpen()).toBe(true);
+      // The trigger click reached document both times - no stopPropagation().
+      expect(spy).toHaveBeenCalledTimes(2);
+
+      document.removeEventListener('click', spy);
+      c.destroy();
+      d.destroy();
+    });
+
+    it('keeps a hover menu open while the pointer is in the gap below the trigger', () => {
+      testContainer.innerHTML = '<button id="dd-hover"></button>';
+      const dd = Domma.elements.dropdown('#dd-hover', {items: ITEMS, trigger: 'hover'});
+
+      fire(dd.element, 'mouseenter');
+      expect(dd.isOpen()).toBe(true);
+      stubRects(dd);
+
+      // Leaving the trigger arms the close...
+      fire(dd.element, 'mouseleave');
+      // ...but the pointer is in the corridor between trigger and menu, which is
+      // outside both boxes. This is the move that used to close the menu.
+      document.dispatchEvent(new MouseEvent('mousemove', {clientX: 150, clientY: 142}));
+      vi.advanceTimersByTime(1000);
+      expect(dd.isOpen()).toBe(true);
+
+      dd.destroy();
+    });
+
+    it('closes a hover menu once the pointer is outside trigger, menu and corridor', () => {
+      testContainer.innerHTML = '<button id="dd-hover2"></button>';
+      const dd = Domma.elements.dropdown('#dd-hover2', {items: ITEMS, trigger: 'hover'});
+
+      fire(dd.element, 'mouseenter');
+      stubRects(dd);
+      fire(dd.element, 'mouseleave');
+
+      document.dispatchEvent(new MouseEvent('mousemove', {clientX: 600, clientY: 600}));
+      expect(dd.isOpen()).toBe(true); // still inside the grace period
+      vi.advanceTimersByTime(300);
+      expect(dd.isOpen()).toBe(false);
+
+      dd.destroy();
+    });
+
+    it('re-opening inside the close animation reuses the menu node', () => {
+      testContainer.innerHTML = '<button id="dd-reopen"></button>';
+      const dd = Domma.elements.dropdown('#dd-reopen', {items: ITEMS});
+
+      dd.open();
+      const node = dd._menu;
+      expect(menus()).toHaveLength(1);
+
+      dd.close();
+      // Node is still fading out here - the old code built a second one on top.
+      dd.open();
+      expect(menus()).toHaveLength(1);
+      expect(dd._menu).toBe(node);
+
+      vi.advanceTimersByTime(500);
+      expect(menus()).toHaveLength(1);
+      expect(dd.isOpen()).toBe(true);
+
+      dd.destroy();
+    });
+
+    it('a closing menu stops taking pointer events immediately', () => {
+      testContainer.innerHTML = '<button id="dd-fade"></button>';
+      const dd = Domma.elements.dropdown('#dd-fade', {items: ITEMS});
+
+      dd.open();
+      const node = dd._menu;
+      dd.close();
+      expect(node.style.pointerEvents).toBe('none');
+
+      vi.advanceTimersByTime(500);
+      expect(menus()).toHaveLength(0);
+
+      dd.destroy();
+    });
+
+    it('selects an item and closes', () => {
+      testContainer.innerHTML = '<button id="dd-select"></button>';
+      const onSelect = vi.fn();
+      const dd = Domma.elements.dropdown('#dd-select', {items: ITEMS, onSelect});
+
+      dd.open();
+      dd._menu.querySelectorAll('.domma-dropdown-item')[1].click();
+
+      expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onSelect.mock.calls[0][0].value).toBe('2');
+      expect(dd.isOpen()).toBe(false);
+
+      dd.destroy();
+    });
+
+    it('Escape closes an open dropdown', () => {
+      testContainer.innerHTML = '<button id="dd-esc"></button>';
+      const dd = Domma.elements.dropdown('#dd-esc', {items: ITEMS});
+
+      dd.open();
+      document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape', bubbles: true}));
+      expect(dd.isOpen()).toBe(false);
+
+      dd.destroy();
+    });
+
+    it('tracks aria-expanded on the trigger', () => {
+      testContainer.innerHTML = '<button id="dd-aria"></button>';
+      const dd = Domma.elements.dropdown('#dd-aria', {items: ITEMS});
+
+      expect(dd.element.getAttribute('aria-haspopup')).toBe('true');
+      expect(dd.element.getAttribute('aria-expanded')).toBe('false');
+      dd.open();
+      expect(dd.element.getAttribute('aria-expanded')).toBe('true');
+      dd.close();
+      expect(dd.element.getAttribute('aria-expanded')).toBe('false');
+
+      dd.destroy();
+    });
+
+    it('destroy() releases the menu and its document listeners', () => {
+      testContainer.innerHTML = '<button id="dd-destroy"></button>';
+      const dd = Domma.elements.dropdown('#dd-destroy', {items: ITEMS});
+
+      dd.open();
+      dd.destroy();
+
+      expect(menus()).toHaveLength(0);
+      // No listener left behind to reopen or throw on a later document click.
+      document.body.click();
+      expect(dd.isOpen()).toBe(false);
     });
   });
 });

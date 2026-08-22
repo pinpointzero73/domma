@@ -5328,7 +5328,9 @@ code {
     z-index: 1000;
     min-width: 10rem;
     padding: 0.5rem 0;
-    margin: 0.125rem 0 0;
+    /* No margin: the menu is placed by JS from `offset`, and a margin here would
+       silently add to it, so the box would not sit where it was measured to. */
+    margin: 0;
     background-color: var(--dm-surface);
     border: 1px solid var(--dm-border);
     border-radius: var(--dm-radius-md);
@@ -5346,30 +5348,13 @@ code {
 }
 
 /*
- * Hover bridge: the menu is rendered as a document.body sibling positioned with a
- * small offset/margin gap from its trigger. On a hover-triggered dropdown that gap
- * is a dead-zone - the pointer leaves the trigger before reaching the menu, firing
- * the close. These transparent pseudo-elements extend the menu's hoverable area
- * above and below it, so the trigger→menu path is one continuous hover surface.
- * Only present on hover dropdowns, so click dropdowns are unaffected.
+ * The trigger→menu gap is bridged in JS, not CSS. A transparent pseudo-element
+ * strip used to sit above and below the menu to keep the hover path continuous,
+ * but it only ever covered a fixed 12px directly in line with the menu box: any
+ * `offset` larger than that, or an approach taken at an angle, fell outside it,
+ * and while open it also blocked the page underneath. Dropdown._pointerInSafeZone()
+ * does the same job geometrically - see src/elements.js.
  */
-.domma-dropdown-menu-hover::before,
-.domma-dropdown-menu-hover::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 0.75rem;
-    /* transparent - a hover surface only, never painted */
-}
-
-.domma-dropdown-menu-hover::before {
-    bottom: 100%; /* bridges the gap when the menu opens below the trigger */
-}
-
-.domma-dropdown-menu-hover::after {
-    top: 100%; /* bridges the gap when the menu opens above the trigger */
-}
 
 .domma-dropdown-item {
     display: block;
