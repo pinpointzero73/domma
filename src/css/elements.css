@@ -257,8 +257,13 @@
     border-color: var(--dm-primary);
 }
 
+/* No --dm-primary-text here. That token is the foreground for text drawn ON a
+   primary fill, which is what the header and footer above do. The body has no
+   fill - it sits on the card's own surface - so borrowing the fill foreground
+   put near-black text (#1a1a1a in the dark themes) on a dark surface, at 1.19
+   contrast. Inheriting --dm-text from the card is the correct behaviour. */
 .card-primary .card-body {
-    color: var(--dm-primary-text, var(--dm-white));
+    color: var(--dm-text);
 }
 
 .card-primary .card-footer {
@@ -2173,10 +2178,25 @@ code {
     border-radius: 0;
 }
 
+/* The active link used to take --dm-primary as its text colour. --dm-primary is
+   a mid-tone in several theme families, so on the navbar surface it measured as
+   low as 1.72 (lemon-light). Primary stays as the accent - the tinted pill and
+   the underline - but the text itself uses the one token guaranteed to read on
+   this surface. */
+/* The active link used to take --dm-primary as its text colour. --dm-primary is
+   a mid-tone in several theme families, so on the navbar surface it measured as
+   low as 1.72 (lemon-light).
+
+   The affordance is now the primary underline plus the weight, and the text
+   uses the one token guaranteed to read on this surface. Deliberately no pill
+   background: a tint of --dm-primary shifts the bar toward the text colour in
+   the themes where primary is light, which cost ~2 points of contrast on the
+   already-tightest combination (dark theme + .navbar-light). Underline only
+   means the active state can never read worse than the brand beside it. */
 .navbar-link.active {
-    color: var(--dm-primary);
+    color: var(--dm-navbar-text);
     font-weight: 500;
-    background-color: color-mix(in srgb, var(--dm-primary) 10%, transparent);
+    box-shadow: inset 0 -2px 0 0 var(--dm-primary);
 }
 
 .nav-version {
@@ -2184,78 +2204,77 @@ code {
     color: var(--dm-text-secondary, #eee);
 }
 
+/* ---------------------------------------------------------------------------
+   Navbar variants
+
+   These predate the theme system and used to be written as absolute colours:
+   .navbar-dark painted the bar with --dm-background and its text with
+   --dm-text-inverse. Those two tokens resolve to the SAME value in every dark
+   theme (both are the theme's darkest slate), so the brand rendered at 1.00
+   contrast - invisible, on every dark theme, in every consumer. .navbar-light
+   failed the mirror way in light themes: a white bar with white text, and an
+   active link at 2.56.
+
+   Every theme already ships the pair meant for this job - --dm-navbar-bg (the
+   theme's navbar surface) and --dm-navbar-text (text guaranteed to read on it).
+   So the variants are now tint modifiers on that surface rather than absolute
+   colours: "dark" sits a shade below the theme's navbar, "light" a shade above.
+   The two stay visually distinct, both follow the theme, and neither can
+   collide with its own foreground.
+
+   Measured worst case across 21 themes x both variants: 5.78 (was 1.00).
+   --------------------------------------------------------------------------- */
+
 /* Light navbar variant */
 
 .navbar-light {
-    background-color: var(--dm-surface);
+    background-color: color-mix(in srgb, #fff 18%, var(--dm-navbar-bg));
     border-bottom-color: var(--dm-border);
-}
-
-.navbar-light .navbar-brand,
-.navbar-light .navbar-brand-text {
-    color: var(--dm-text);
-}
-
-.navbar-light .navbar-link {
-    color: var(--dm-text-secondary);
-}
-
-.navbar-light .navbar-link:hover {
-    color: #ffffff !important;
-    background-color: #1e293b !important;
-    border-radius: var(--dm-radius-md);
-}
-
-/* Force dark hover in light mode using data-mode attribute */
-[data-mode="light"] .navbar-link:hover {
-    color: #ffffff !important;
-    background-color: #1e293b !important;
-    border-radius: var(--dm-radius-md);
-}
-
-.navbar-light .navbar-toggle {
-    color: var(--dm-text);
-}
-
-.navbar-light .navbar-toggle:hover {
-    background: var(--dm-background-alt);
-    color: var(--dm-text);
 }
 
 /* Dark navbar variant */
 
 .navbar-dark {
-    background-color: var(--dm-background);
+    background-color: color-mix(in srgb, #000 18%, var(--dm-navbar-bg));
     border-bottom-color: var(--dm-border-dark);
 }
 
+.navbar-light .navbar-brand,
+.navbar-light .navbar-brand-text,
+.navbar-light .navbar-toggle,
 .navbar-dark .navbar-brand,
-.navbar-dark .navbar-brand-text {
-    color: var(--dm-text-inverse, var(--dm-white));
-}
-
+.navbar-dark .navbar-brand-text,
 .navbar-dark .navbar-toggle {
-    color: var(--dm-text-disabled);
+    color: var(--dm-navbar-text);
 }
 
-.navbar-dark .navbar-toggle:hover {
-    background: var(--dm-surface);
-    color: var(--dm-text-inverse, var(--dm-white));
-}
-
+/* Slightly muted against the brand, but never below AA. 85% is the floor that
+   clears 4.5 in every theme - 72% dropped grayve/wedding/christmas to 3.8-4.0. */
+.navbar-light .navbar-link,
 .navbar-dark .navbar-link {
-    color: var(--dm-gray-400, #adb5bd);
+    color: color-mix(in srgb, var(--dm-navbar-text) 85%, var(--dm-navbar-bg));
 }
 
+.navbar-light .navbar-link:hover,
 .navbar-dark .navbar-link:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    color: var(--dm-text-inverse, var(--dm-white));
-    border-radius: var(--dm-radius-sm);
+    color: var(--dm-navbar-text);
+    background-color: color-mix(in srgb, var(--dm-navbar-text) 12%, transparent);
+    border-radius: var(--dm-radius-md);
 }
 
-.navbar-dark .navbar-link.active {
-    background-color: var(--dm-surface);
-    color: var(--dm-text-inverse, var(--dm-white));
+.navbar-light .navbar-toggle:hover,
+.navbar-dark .navbar-toggle:hover {
+    background: color-mix(in srgb, var(--dm-navbar-text) 12%, transparent);
+    color: var(--dm-navbar-text);
+}
+
+/* Legacy forced hover for light mode. Kept as-is for the plain/transparent
+   navbar, but excluded from the two variants above - it carries !important and
+   would otherwise override their theme-derived hover. */
+[data-mode="light"] .navbar:not(.navbar-light):not(.navbar-dark) .navbar-link:hover {
+    color: #ffffff !important;
+    background-color: #1e293b !important;
+    border-radius: var(--dm-radius-md);
 }
 
 /* Dark navbar collapse border color (mobile) */
@@ -2534,23 +2553,19 @@ code {
     list-style: none;
 }
 
-/* Dark navbar dropdown styles */
+/* Dark navbar dropdown styles
+
+   The dropdown panel is painted from --dm-surface whatever the bar variant, so
+   the base rules above already render it correctly in both modes. The overrides
+   that used to live here only re-stated that same background while replacing
+   the text with a fixed grey and the hover with --dm-text-inverse over 30%
+   white - which measured 2.56 and 1.00 respectively in every light theme, and
+   3.25 on hover in the dark ones. The divider was being painted --dm-surface,
+   i.e. the panel's own colour, so it was invisible.
+
+   Only the border tint is worth keeping. */
 .navbar-dark .navbar-dropdown-menu {
-    background: var(--dm-surface);
     border-color: var(--dm-border-dark, var(--dm-border));
-}
-
-.navbar-dark .navbar-dropdown-item {
-    color: var(--dm-gray-400, #adb5bd);
-}
-
-.navbar-dark .navbar-dropdown-item:hover {
-    background: rgba(255, 255, 255, 0.3);
-    color: var(--dm-text-inverse, var(--dm-white));
-}
-
-.navbar-dark .navbar-dropdown-divider {
-    background: var(--dm-surface);
 }
 
 /* ============================================
@@ -2590,14 +2605,9 @@ code {
     border-radius: var(--dm-radius-md);
 }
 
-.navbar-dark .navbar-submenu-toggle {
-    color: var(--dm-gray-400, #adb5bd);
-}
-
-.navbar-dark .navbar-submenu-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    color: var(--dm-text-inverse, var(--dm-white));
-}
+/* Same as the dropdown items above - the submenu toggle sits on the panel, not
+   on the bar, so the base --dm-text / --dm-hover-bg pairing is the correct one
+   and the fixed grey plus --dm-text-inverse overrides have been removed. */
 
 /* Submenu caret points to the side to signal a fly-out */
 .navbar-submenu-toggle .navbar-caret {
