@@ -1,3 +1,56 @@
+### v0.41.0 - The Brand That Was Never There (2026-08-22)
+
+**A navbar with `variant: dark` rendered its brand at 1.00 contrast on every dark theme.** Same
+colour as the bar it sat on. Not dim, not low-contrast - absent. CSS only; no API changes.
+
+🎨 **One mistake, four rules**
+
+*   `.navbar-dark` painted the bar from `--dm-background` and its text from `--dm-text-inverse`. In a
+    dark theme both resolve to the theme's darkest slate, so the two are the same colour.
+    `.navbar-light` failed the mirror way in light themes: a white bar with white text.
+
+*   `--dm-text-inverse` means *text that contrasts against `--dm-text`*, so in a dark theme it is
+    dark. It reads like the right name at the call site and is the wrong one, which is why the same
+    mistake is in three more places.
+
+*   `.card-primary .card-body` took `--dm-primary-text` - the foreground for text drawn **on** a
+    primary fill. The header and footer set that fill. The body does not; it sits on the card
+    surface. 1.19 on every dark theme.
+
+*   `.navbar-link.active` took `--dm-primary` as its text colour. Primary is a mid-tone in the
+    silver, charcoal and lemon families, so against the navbar surface it measured as low as **1.72**.
+
+*   The `.navbar-dark .navbar-dropdown-*` overrides replaced the panel text with a fixed grey and the
+    hover with `--dm-text-inverse` over 30% white - **2.56** and **1.00** in every light theme. They
+    only ever re-stated the `--dm-surface` background the base rules already set, so they are deleted
+    rather than rewritten. The divider among them was painted `--dm-surface`, the panel's own colour,
+    and had been invisible since the day it was written.
+
+🧭 **The variants are now relative to the theme, not absolute**
+
+*   Every theme already ships the pair meant for this: `--dm-navbar-bg` and `--dm-navbar-text`. The
+    variants become tint modifiers on that surface - `dark` sits a shade below the theme's navbar,
+    `light` a shade above. They stay visually distinct, they follow the theme, and neither can
+    collide with its own foreground.
+
+*   Measured with computed styles in headless Chrome across 26 themes and three variants: navbar and
+    card worst case **1.00 to 5.00**, dropdown worst case **1.00 to 9.57**. Everything clears the 4.5
+    AA threshold.
+
+⚠️ **Two visible changes to live sites**
+
+*   The active link loses its pill background. A `--dm-primary` tint shifts the bar *toward* the text
+    in themes where primary is light, costing about two points of contrast on the tightest
+    combination - a dark theme with `.navbar-light`. The affordance is now the primary underline plus
+    the weight, which means the active state can never read worse than the brand beside it.
+
+*   Dropdown panels under a `.navbar-dark` bar follow the theme now instead of being fixed grey on a
+    surface that was already correct.
+
+**Not fixed:** `validate:theme` caught none of this. It looks for a fixed background inheriting
+themed text, and cannot see two *themed* tokens that happen to resolve to the same value. The
+validator that would have caught all four does not exist yet.
+
 ### v0.40.0 - Two Levels Up (2026-08-21)
 
 **The inlined binding engine moves from 0.5.1 to 1.0.0, and brings two context names with it.** No new
