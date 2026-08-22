@@ -1,3 +1,66 @@
+### v0.42.0 - The Menu That Closed On The Way To Itself (2026-08-22)
+
+**Every menu in Domma is separated from the thing that opens it.** The dropdown renders on
+`document.body`, so `offset` px of page always sits between the two. The navbar's panel hangs 4px
+below its toggle. That gap is the bug: leaving the trigger looks exactly like leaving for good, so
+both components guessed, and both guessed wrong most of the time.
+
+🖱️ **A gap you can only cross by accident**
+
+*   The dropdown bridged it with a 12px transparent CSS strip above the menu. Straight down, it
+    worked. Diagonally, with an `offset` above 12px, or with the menu placed above or beside its
+    trigger, the pointer went round the strip and the menu shut. Whether it survived came down to
+    how fast you moved - fast enough and the pointer jumped the gap between two events.
+
+*   The pointer is now tested against three regions: the trigger, the menu, and the corridor spanning
+    the gap. That is geometry rather than guesswork, so it holds for any `offset`, any angle of
+    approach, and a menu that has been flipped to the other side. The pseudo-element bridge is
+    deleted - while open it also blocked whatever was underneath it.
+
+*   The navbar had the same bug one level up, in Domma CMS, which reimplemented hover-to-open with
+    `mouseleave` removing `.open` on the instant. The navbar's own `appearOnHover` already held a
+    grace period. That period is now an option, `hoverCloseDelay`, defaulting to 250ms.
+
+🔒 **A click that meant nothing**
+
+*   A navbar toggle did a plain `classList.toggle('open')`, which the next mousemove reconciled
+    straight back when `appearOnHover` was on - so clicking a menu to keep it open did nothing you
+    could see. A click now **pins** the dropdown: hover reconciliation and the leave timer both
+    respect it. A second click, or a click anywhere outside, releases it.
+
+*   A toggle also left its siblings open, so two navbar menus could sit on screen at once.
+
+🧹 **Four more, found alongside**
+
+*   The dropdown trigger called `stopPropagation()`, which killed every *other* dropdown's
+    outside-click handler. Opening a second menu left the first one hanging open. Opening one now
+    closes the rest.
+
+*   `close()` nulled `_menu` but left the node live and clickable for the whole fade, so re-opening
+    inside that window stacked a second node on top with its own listeners. The node is reclaimed
+    now, and a closing menu leaves hit-testing at once.
+
+*   `position: 'left-start'` and `'right-start'` silently fell through to bottom - the showcase's own
+    *Left* and *Right* buttons were wrong. All eight side/alignment combinations work, and a menu
+    that would open off screen flips or clamps.
+
+*   A hover dropdown had no click path, so it could not be opened on a touch device at all.
+
+⚠️ **One default moved**
+
+*   `Navbar.collapseAt` was 768 while `elements.css` switches the bar to its desktop layout at 993.
+    Between the two the JS believed it was on desktop while the stylesheet was already showing the
+    mobile drawer: hover fired inside the drawer, and menus were positioned as if free-floating. The
+    default is now 993. Pass `collapseAt` explicitly if you have restyled the breakpoint.
+
+**Also:** `Esc` closes a dropdown, the trigger carries `aria-haspopup` and a tracked `aria-expanded`,
+and per-item click listeners are no longer re-registered on every render and never released. The
+showcase documented `closeOnClick`, `closeOnOutside` and `offset: 4` - none of which exist. New
+options: `hoverOpenDelay`, `hoverCloseDelay`, `closeOnEscape`, `closeOthers`, `flip`.
+
+**Not fixed:** none of this failed a test, because there were no dropdown tests. There are ten now,
+plus three for the navbar; eight of the ten fail against the old implementation.
+
 ### v0.41.0 - The Brand That Was Never There (2026-08-22)
 
 **A navbar with `variant: dark` rendered its brand at 1.00 contrast on every dark theme.** Same
