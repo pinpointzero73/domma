@@ -114,10 +114,9 @@ function renderTraits() {
   names.forEach(name => {
     const trait = traits[name];
 
-    // State goes on the attribute and not through prop(), and the change
-    // handler is delegated from the grid rather than bound here, because
-    // append() inserts a clone of what it is given: a listener bound to this
-    // node, or a property set on it, belongs to the node that gets discarded.
+    // No handler is bound here. renderTraits() runs again on every theme
+    // change, so a per-checkbox listener would be built and thrown away with
+    // each rebuild; the grid below outlives all of them.
     const $checkbox = $('<input>')
       .attr('type', 'checkbox')
       .attr('data-trait', name);
@@ -287,8 +286,8 @@ $(() => {
   $('#traits-all-on').on('click', () => setAllTraits(true));
   $('#traits-all-off').on('click', () => setAllTraits(false));
 
-  // Delegated from the grid, which is in the page markup, so it survives the
-  // rebuild renderTraits() does on every theme change.
+  // Delegated from #traits-grid, which is in the page markup and is never
+  // re-created, so one binding covers every checkbox renderTraits() builds.
   $('#traits-grid').on('change', 'input[data-trait]', function () {
     const name = this.dataset.trait;
     currentTraits[name] = this.checked;
