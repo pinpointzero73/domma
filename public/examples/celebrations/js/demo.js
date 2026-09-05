@@ -114,20 +114,19 @@ function renderTraits() {
   names.forEach(name => {
     const trait = traits[name];
 
+    // State goes on the attribute and not through prop(), and the change
+    // handler is delegated from the grid rather than bound here, because
+    // append() inserts a clone of what it is given: a listener bound to this
+    // node, or a property set on it, belongs to the node that gets discarded.
     const $checkbox = $('<input>')
       .attr('type', 'checkbox')
-      .attr('id', `trait-${name}`)
-      .prop('checked', trait.enabled)
-      .on('change', function () {
-        currentTraits[name] = $(this).prop('checked');
-        celebrationsEffect.setTrait(name, currentTraits[name]);
-        updateInfoPanel();
-      });
+      .attr('data-trait', name);
+
+    if (trait.enabled) $checkbox.attr('checked', 'checked');
 
     $grid.append(
       $('<label>')
         .addClass('flex items-center gap-2 cursor-pointer')
-        .attr('for', `trait-${name}`)
         .append($checkbox)
         .append($('<span>').text(trait.label))
     );
@@ -287,6 +286,15 @@ $(() => {
 
   $('#traits-all-on').on('click', () => setAllTraits(true));
   $('#traits-all-off').on('click', () => setAllTraits(false));
+
+  // Delegated from the grid, which is in the page markup, so it survives the
+  // rebuild renderTraits() does on every theme change.
+  $('#traits-grid').on('change', 'input[data-trait]', function () {
+    const name = this.dataset.trait;
+    currentTraits[name] = this.checked;
+    celebrationsEffect.setTrait(name, this.checked);
+    updateInfoPanel();
+  });
 
   $('#theme-variant-select').on('change', function() {
     const variant = $(this).val();
