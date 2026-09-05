@@ -662,12 +662,19 @@ class DommaCollection {
 
     /**
      * Append content to each element.
+     *
+     * An element or collection is **moved** into place, so the node you built
+     * is the node in the page and any handler bound to it beforehand still
+     * fires. A markup string is parsed fresh for each target. Appending into
+     * several targets at once copies for all but the last - see `_getNodes`.
+     *
      * @param {string|HTMLElement|DommaCollection|Function} content
      * @returns {DommaCollection}
      */
     append(content) {
+        const last = this.elements.length - 1;
         return this.each((i, el) => {
-            const nodes = this._getNodes(content, i, el);
+            const nodes = this._getNodes(content, i, el, i === last);
             nodes.forEach(node => el.appendChild(node));
         });
     }
@@ -678,8 +685,9 @@ class DommaCollection {
      * @returns {DommaCollection}
      */
     prepend(content) {
+        const last = this.elements.length - 1;
         return this.each((i, el) => {
-            const nodes = this._getNodes(content, i, el);
+            const nodes = this._getNodes(content, i, el, i === last);
             const first = el.firstChild;
             nodes.forEach(node => el.insertBefore(node, first));
         });
@@ -691,8 +699,9 @@ class DommaCollection {
      * @returns {DommaCollection}
      */
     after(content) {
+        const last = this.elements.length - 1;
         return this.each((i, el) => {
-            const nodes = this._getNodes(content, i, el);
+            const nodes = this._getNodes(content, i, el, i === last);
             const parent = el.parentNode;
             const next = el.nextSibling;
             nodes.forEach(node => parent.insertBefore(node, next));
@@ -705,8 +714,9 @@ class DommaCollection {
      * @returns {DommaCollection}
      */
     before(content) {
+        const last = this.elements.length - 1;
         return this.each((i, el) => {
-            const nodes = this._getNodes(content, i, el);
+            const nodes = this._getNodes(content, i, el, i === last);
             const parent = el.parentNode;
             nodes.forEach(node => parent.insertBefore(node, el));
         });
@@ -857,8 +867,9 @@ class DommaCollection {
      * @returns {DommaCollection}
      */
     replaceWith(content) {
+        const last = this.elements.length - 1;
         return this.each((i, el) => {
-            const nodes = this._getNodes(content, i, el);
+            const nodes = this._getNodes(content, i, el, i === last);
             const parent = el.parentNode;
             nodes.forEach((node, idx) => {
                 if (idx === 0) {
@@ -880,8 +891,33 @@ class DommaCollection {
         return this;
     }
 
-    // Helper: Get nodes from content
-    _getNodes(content, index, element) {
+    /**
+     * Resolve insertion content to the nodes to insert into one target.
+     *
+     * An existing node is **moved**, not copied, which is what jQuery does and
+     * what callers assume: `$('<input>').on('change', fn)` followed by an
+     * append has to put *that* input in the page, or the handler is bound to a
+     * node nobody can click and the state set with `prop()` is lost with it.
+     * Copying was silent - the markup looked right and nothing threw.
+     *
+     * Only a collection with more than one target needs copies, because a node
+     * cannot be in two places. The original then goes to the **last** target,
+     * as in jQuery, and the earlier ones get `cloneNode(true)`.
+     *
+     * `cloneNode` copies attributes and descendants, never listeners or
+     * properties, so a handler bound before a *multi-target* insert still only
+     * survives on the last one. Bind after inserting, or delegate from a
+     * container, when inserting into several targets at once.
+     *
+     * @param {string|HTMLElement|DommaCollection|Function} content
+     * @param {number} index - Index of the target being filled
+     * @param {HTMLElement} element - The target being filled
+     * @param {boolean} [isLast=true] - Whether this is the final target, and so
+     *   receives the original nodes rather than copies
+     * @returns {Node[]}
+     * @private
+     */
+    _getNodes(content, index, element, isLast = true) {
         if (typeof content === 'function') {
             content = content.call(element, index, element.innerHTML);
         }
@@ -894,10 +930,10 @@ class DommaCollection {
             return [document.createTextNode(content)];
         }
         if (content instanceof HTMLElement) {
-            return [content.cloneNode(true)];
+            return [isLast ? content : content.cloneNode(true)];
         }
         if (content instanceof DommaCollection) {
-            return content.elements.map(el => el.cloneNode(true));
+            return content.elements.map(el => isLast ? el : el.cloneNode(true));
         }
         return [];
     }

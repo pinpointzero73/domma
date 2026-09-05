@@ -180,6 +180,108 @@ describe('Domma - Manipulation', () => {
     `;
   });
 
+  describe('insertion moves nodes rather than copying them', () => {
+    // append() used to insert a cloneNode(true) of whatever it was given. The
+    // markup came out right, so nothing looked wrong, but the node in the page
+    // was never the node the caller held: listeners bound before the append
+    // belonged to the discarded original and never fired again. It cost the
+    // celebrations demo its per-trait checkboxes - they ticked and did nothing.
+
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <div id="test"></div>
+        <div id="parent">
+          <div id="child1" class="child"></div>
+          <div id="child2" class="child"></div>
+          <div id="child3" class="child"></div>
+        </div>
+        <div id="test-elem">Test Element</div>
+        <button id="test-btn">Test Button</button>
+      `;
+    });
+
+    it('append() puts the very node it was given into the DOM', () => {
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      Domma('#test').append(input);
+
+      expect(Domma('#test').get(0).firstElementChild).toBe(input);
+    });
+
+    it('append() keeps a handler bound before insertion', () => {
+      let fired = 0;
+      const $box = Domma('<input>').attr('type', 'checkbox').on('change', () => fired++);
+
+      Domma('#test').append($box);
+      document.querySelector('#test input').click();
+
+      expect(fired).toBe(1);
+    });
+
+    it('append() keeps a property set before insertion', () => {
+      const $box = Domma('<input>').attr('type', 'checkbox').prop('checked', true);
+      Domma('#test').append($box);
+
+      expect(document.querySelector('#test input').checked).toBe(true);
+    });
+
+    it('append() moves a node that is already in the document', () => {
+      const child = document.getElementById('child1');
+      Domma('#test').append(child);
+
+      expect(child.parentElement.id).toBe('test');
+      expect(document.querySelectorAll('#child1').length).toBe(1);
+    });
+
+    it('appendTo() moves too, so the collection stays live', () => {
+      let fired = 0;
+      const $button = Domma('<button>').on('click', () => fired++);
+
+      $button.appendTo('#test');
+      document.querySelector('#test button').click();
+
+      expect(fired).toBe(1);
+      expect(Domma('#test').get(0).firstElementChild).toBe($button.get(0));
+    });
+
+    it('copies for every target but the last when there are several', () => {
+      // A node cannot be in two places, so the extra targets get clones and
+      // the original lands in the last one, as jQuery does it.
+      const $span = Domma('<span>').addClass('inserted');
+      Domma('.child').append($span);
+
+      expect(document.querySelectorAll('.inserted').length).toBe(3);
+      expect(document.getElementById('child3').firstElementChild).toBe($span.get(0));
+    });
+
+    it('parses a markup string fresh for each target', () => {
+      Domma('.child').append('<b class="fresh"></b>');
+      const inserted = document.querySelectorAll('.fresh');
+
+      expect(inserted.length).toBe(3);
+      expect(inserted[0]).not.toBe(inserted[1]);
+    });
+
+    it('prepend(), before(), after() and replaceWith() move as well', () => {
+      const first = document.createElement('i');
+      Domma('#test').prepend(first);
+      expect(Domma('#test').get(0).firstChild).toBe(first);
+
+      const before = document.createElement('u');
+      Domma('#test-elem').before(before);
+      expect(document.getElementById('test-elem').previousElementSibling).toBe(before);
+
+      const after = document.createElement('s');
+      Domma('#test-elem').after(after);
+      expect(document.getElementById('test-elem').nextElementSibling).toBe(after);
+
+      const swap = document.createElement('em');
+      Domma('#test-btn').replaceWith(swap);
+      expect(document.body.contains(swap)).toBe(true);
+      expect(document.getElementById('test-btn')).toBe(null);
+    });
+  });
+
   it('append() and prepend() should add content', () => {
     const container = Domma('#manip-container');
     container.prepend('<span>First</span>');

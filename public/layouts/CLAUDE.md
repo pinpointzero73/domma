@@ -35,6 +35,21 @@ layouts/
     └── theme-controls.html
 ```
 
+### Celebrations are not in this folder
+
+The seasonal celebrations used to be `js/modules/celebrations/`. They are now their own package,
+[`domma-celebrate`](https://github.com/pinpointzero73/domma-celebrate), developed in
+`../domma-celebrate` and copied to `public/dist/celebrate/` by `npm run copy:celebrate`.
+
+`layout.js` loads it through `loadCelebrate()`, declared at **module scope** rather than inside
+the layout IIFE. That placement is load-bearing: as a `let` inside the IIFE it sat in the
+temporal dead zone, because the main flow calls it within the first hundred lines while the
+declaration is hundreds of lines further down the same function body. Every call threw and the
+toggle silently never rendered.
+
+The `celebrations` preset key still works exactly as before - `{ "toggle": true }` renders the
+disc during a celebration period and nothing outside one.
+
 ## How It Works
 
 ### 1. Preset Detection

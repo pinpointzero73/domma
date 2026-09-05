@@ -57,11 +57,12 @@ Full build chain (in order):
 3. `build:info` - write `build-info.json`
 4. `build:metadata` - copy `bundle-metadata.json`
 5. `copy:themes` - copy theme CSS files to `public/dist/themes/`
-6. `build:css` - compile CSS source → `public/dist/*.css`
-7. `build:css-bundles` - compile preset CSS bundles
-8. `build:archives` - generate `.tar.gz` preset archives
-9. **`build:kickstart-files`** - copy templates + dist files to `public/download/kickstart-files/` and generate `kickstart-manifest.json`
-10. `build:miniapps` - build all miniapps
+6. `copy:celebrate` - copy the `domma-celebrate` build to `public/dist/celebrate/`
+7. `build:css` - compile CSS source → `public/dist/*.css`
+8. `build:css-bundles` - compile preset CSS bundles
+9. `build:archives` - generate `.tar.gz` preset archives
+10. **`build:kickstart-files`** - copy templates + dist files to `public/download/kickstart-files/` and generate `kickstart-manifest.json`
+11. `build:miniapps` - build all miniapps
 
 **Validators** (fast, no build needed - but read `public/dist/*.css`, so build CSS first):
 
@@ -98,6 +99,36 @@ test, just markup that renders wrong:
 - Eighteen rules set `background: var(--dm-gray-100)` - a variable no theme
   redefines - with no `color`, so their text followed `--dm-text` and became
   illegible under the dark variant.
+
+## Extracted Packages
+
+Two pieces of Domma are their own npm packages, developed in sibling repositories and consumed
+here. Both exist so they can be used *without* Domma; this repository is simply one consumer.
+
+| Package | Repository | What it is | How Domma consumes it |
+|---------|-----------|------------|----------------------|
+| `domma-reactive` | `../domma-reactive` | Dependency-tracked reactivity and DOM bindings - the primitive beneath `M.observable` and `M.applyBindings` | Bundled into `domma.min.js` by rollup |
+| `domma-celebrate` | `../domma-celebrate` | The eight seasonal celebration themes and their canvas engine | Built separately, copied to `public/dist/celebrate/` by `npm run copy:celebrate` |
+
+**Working on the celebrations means working in `../domma-celebrate`, not here.** The former
+`public/layouts/js/modules/celebrations/` is gone. To see a change in Domma:
+
+```bash
+npm --prefix ../domma-celebrate run build   # build the package
+npm run copy:celebrate                      # copy its dist into public/dist/celebrate/
+```
+
+`npm run build` does both as part of the chain. The package is currently linked as
+`"domma-celebrate": "file:../domma-celebrate"`; that becomes a version range once it is
+published.
+
+The build is deliberately **code-split**: `domma-celebrate.esm.js` is the engine and each theme
+is a chunk under `chunks/`, fetched only when that celebration is in season. Copy the entry
+without the chunks and every celebration 404s on the day it matters, which is why
+`scripts/copy-celebrate.js` copies the whole tree.
+
+`public/layouts/js/layout.js` loads it through `loadCelebrate()`, which resolves the specifier
+against `import.meta.url` so it is correct from a page at any depth.
 
 **Kickstart files only** (fast, no JS/CSS rebuild needed):
 ```bash
