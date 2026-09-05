@@ -1,9 +1,13 @@
 /**
  * Domma Celebrations Demo Page
  * Testing interface for celebrations system
+ *
+ * The celebrations live in their own package, `domma-celebrate`, so that a site
+ * with no Domma in it can use the same eight themes. `npm run copy:celebrate`
+ * puts its build under `public/dist/celebrate/`.
  */
 
-import { CelebrationsEffect } from '../../../layouts/js/modules/celebrations/index.js';
+import { Celebrations } from '../../../dist/celebrate/domma-celebrate.esm.js';
 
 // Global state
 let celebrationsEffect = null;
@@ -11,11 +15,15 @@ let currentTheme = 'auto';
 let currentIntensity = 'medium';
 let isEnabled = false;
 
+// Trait choices survive a theme change: the names are theme-specific, so a
+// Christmas key is simply never consulted at Halloween.
+let currentTraits = {};
+
 /**
  * Get theme display name
  */
 function getThemeDisplayName(theme) {
-  const themes = CelebrationsEffect.getThemes();
+  const themes = Celebrations.getThemes();
   return themes[theme] ? `${themes[theme].emoji} ${themes[theme].displayName}` : theme;
 }
 
@@ -35,7 +43,7 @@ function updateInfoPanel() {
   // Active theme
   let activeTheme = currentTheme;
   if (currentTheme === 'auto') {
-    activeTheme = CelebrationsEffect.getCurrentTheme();
+    activeTheme = Celebrations.getCurrentTheme();
   }
 
   $('#active-theme').text(activeTheme ? getThemeDisplayName(activeTheme) : 'None');
@@ -61,10 +69,15 @@ async function initCelebrations() {
     celebrationsEffect.destroy();
   }
 
-  celebrationsEffect = new CelebrationsEffect({
+  celebrationsEffect = new Celebrations({
     theme: currentTheme,
     intensity: currentIntensity,
-    enabled: false // We'll start manually
+    enabled: false,          // We'll start manually
+    traits: currentTraits,
+    // This page exists to show the effect, and the visitor arrived by choosing
+    // to. The reduced-motion default is right for a site that decorates itself
+    // uninvited; here it would leave the demo blank with no explanation.
+    respectMotionPreference: false
   });
 
   await celebrationsEffect.init();
@@ -73,6 +86,71 @@ async function initCelebrations() {
     celebrationsEffect.start();
   }
 
+  renderTraits();
+  updateInfoPanel();
+}
+
+/**
+ * Build the trait checkboxes from whatever the loaded theme publishes.
+ *
+ * Rebuilt on every theme change rather than filtered, because the traits belong
+ * to the theme: Christmas offers a steam train and Halloween offers witches,
+ * and a stale list would show switches that control nothing.
+ */
+function renderTraits() {
+  const $grid = $('#traits-grid');
+  if (!$grid.length) return;
+
+  const traits = celebrationsEffect ? celebrationsEffect.getTraits() : {};
+  const names = Object.keys(traits);
+
+  $grid.empty();
+
+  if (!names.length) {
+    $grid.append($('<p>').addClass('text-muted').text('No theme loaded yet.'));
+    return;
+  }
+
+  names.forEach(name => {
+    const trait = traits[name];
+
+    const $checkbox = $('<input>')
+      .attr('type', 'checkbox')
+      .attr('id', `trait-${name}`)
+      .prop('checked', trait.enabled)
+      .on('change', function () {
+        currentTraits[name] = $(this).prop('checked');
+        celebrationsEffect.setTrait(name, currentTraits[name]);
+        updateInfoPanel();
+      });
+
+    $grid.append(
+      $('<label>')
+        .addClass('flex items-center gap-2 cursor-pointer')
+        .attr('for', `trait-${name}`)
+        .append($checkbox)
+        .append($('<span>').text(trait.label))
+    );
+  });
+}
+
+/**
+ * Turn every trait of the current theme on or off at once.
+ *
+ * Batched through setTraits rather than looped through setTrait: each change
+ * reseeds the canvas, so fourteen separate calls would visibly stutter.
+ */
+function setAllTraits(enabled) {
+  if (!celebrationsEffect) return;
+
+  const settings = {};
+  Object.keys(celebrationsEffect.getTraits()).forEach(name => {
+    settings[name] = enabled;
+  });
+
+  currentTraits = {...currentTraits, ...settings};
+  celebrationsEffect.setTraits(settings);
+  renderTraits();
   updateInfoPanel();
 }
 
@@ -142,6 +220,7 @@ async function setTheme(theme) {
   // Update theme
   if (celebrationsEffect) {
     await celebrationsEffect.setTheme(theme);
+    renderTraits();
   } else {
     await initCelebrations();
   }
@@ -206,6 +285,9 @@ $(() => {
     setTheme(theme);
   });
 
+  $('#traits-all-on').on('click', () => setAllTraits(true));
+  $('#traits-all-off').on('click', () => setAllTraits(false));
+
   $('#theme-variant-select').on('change', function() {
     const variant = $(this).val();
     if (Domma.theme) {
@@ -228,7 +310,7 @@ $(() => {
   });
 
   // Set initial theme based on auto-detect
-  const detectedTheme = CelebrationsEffect.getCurrentTheme();
+  const detectedTheme = Celebrations.getCurrentTheme();
   if (detectedTheme) {
     console.log(`[Celebrations Demo] Auto-detected theme: ${detectedTheme}`);
   } else {

@@ -101,6 +101,27 @@
   </div>
 </div>
 
+<!-- Trait Controls -->
+<section class="container content-section">
+  <div class="card" id="traits-card">
+    <div class="card-header flex items-center justify-between">
+      <h2 class="mb-0">What appears</h2>
+      <div class="btn-group btn-group-sm">
+        <button id="traits-all-on" class="btn btn-secondary btn-sm">All on</button>
+        <button id="traits-all-off" class="btn btn-secondary btn-sm">All off</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="text-muted">
+        Every theme publishes the individual traits it draws - Santa's sleigh, the steam train,
+        the witches - and any of them can be switched off or thinned out. Changes apply straight
+        away.
+      </p>
+      <div id="traits-grid" class="grid grid-cols-4 gap-3 mt-4"></div>
+    </div>
+  </div>
+</section>
+
 <!-- Main Content -->
 <section class="container content-section">
 <!--  <div class="text-center hero-header">-->
@@ -198,8 +219,14 @@
       <h2>How to Use Domma Celebrations</h2>
     </div>
     <div class="card-body">
+      <p>
+        Celebrations are their own package - <code>domma-celebrate</code> - so they can be used on a
+        site with no Domma in it. Domma ships the build at <code>dist/celebrate/</code> and the layout
+        system drives it for you.
+      </p>
+
       <h3>Quick Start</h3>
-      <p>The Celebrations system automatically detects the current date and activates the appropriate theme during celebration periods. Simply include the layout system in your page:</p>
+      <p>The layout system detects the current date and offers the toggle only during a celebration period. Nothing else to write:</p>
 
       <pre><code class="language-html">&lt;!-- Include Domma --&gt;
 &lt;script src="dist/domma.min.js"&gt;&lt;/script&gt;
@@ -208,21 +235,19 @@
 &lt;script type="module" src="layouts/js/layout.js"&gt;&lt;/script&gt;</code></pre>
 
       <h3 class="mt-4">Manual Control</h3>
-      <p>For testing or manual control, you can enable celebrations with specific settings:</p>
+      <p>For testing or manual control, drive an instance yourself:</p>
 
-      <pre><code class="language-javascript">// Import the celebrations module
-import CelebrationsEffect from './layouts/js/modules/celebrations/index.js';
+      <pre><code class="language-javascript">import { Celebrations } from './dist/celebrate/domma-celebrate.esm.js';
 
-// Create instance with options
-const celebrations = new CelebrationsEffect({
+const celebrations = new Celebrations({
   theme: 'christmas',     // or 'auto' for date detection
   intensity: 'medium',    // 'light', 'medium', or 'heavy'
-  enabled: true,
-  container: document.body
+  enabled: true
 });
 
-// Start the effect
-celebrations.start();
+// Returns false when there is nothing to show - no celebration in season,
+// or a visitor who has asked for reduced motion. It never throws.
+await celebrations.init();
 
 // Change theme dynamically
 await celebrations.setTheme('halloween');
@@ -236,6 +261,35 @@ celebrations.start();
 
 // Cleanup
 celebrations.destroy();</code></pre>
+
+      <h3 class="mt-4">Turning individual traits off</h3>
+      <p>
+        A theme is not one switch. You may want the snow and the trees but not a steam train
+        crossing your header:
+      </p>
+
+      <pre><code class="language-javascript">const celebrations = new Celebrations({
+  theme: 'christmas',
+  traits: {
+    train: false,   // no steam train
+    elf: false,     // no elves
+    tree: 0.5,      // half as many trees
+    firework: 2     // twice as many fireworks
+  }
+});
+
+// Or at runtime
+celebrations.setTrait('sleigh', false);
+celebrations.setTraits({ robin: false, wreath: 0.5 });
+
+// What can this theme switch?
+celebrations.getTraits();</code></pre>
+
+      <p>
+        <code>false</code> is off and a number is a density multiplier - <code>0</code> is off,
+        <code>1</code> is untouched, <code>2</code> is twice as many. The panel at the top of this
+        page is built from <code>getTraits()</code>.
+      </p>
 
       <h3 class="mt-4">Available Themes</h3>
       <ul>
@@ -255,6 +309,16 @@ celebrations.destroy();</code></pre>
         <li><strong>medium</strong> - Balanced particle count, recommended default</li>
         <li><strong>heavy</strong> - Maximum particles and decorations, spectacular display</li>
       </ul>
+
+      <h3 class="mt-4">Using it without Domma</h3>
+      <p>The same package works on any site, from a single script tag:</p>
+
+      <pre><code class="language-html">&lt;script src="domma-celebrate.min.js" data-celebrate&gt;&lt;/script&gt;</code></pre>
+
+      <p>
+        That mounts the canvas and a control disc of its own, and remembers whether the visitor
+        turned it off. See <code>npm install domma-celebrate</code>.
+      </p>
 
       <h3 class="mt-4">Automatic Detection</h3>
       <p>When theme is set to <code>'auto'</code>, the system automatically:</p>
