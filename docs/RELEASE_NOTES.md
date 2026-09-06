@@ -1,3 +1,63 @@
+### v0.43.0 - The Node You Never Held (2026-09-05)
+
+**`$('#list').append($row)` did not put `$row` in the page.** It put a copy there. Every insertion
+method went through one helper that returned `cloneNode(true)` of whatever it was handed, so the
+node you built, held a reference to and bound handlers on was never the node the visitor saw. The
+markup was right, nothing threw, and the only symptom was that your listeners stopped existing.
+
+🧩 **One helper, five methods**
+
+*   `_getNodes()` backed `append()`, `prepend()`, `after()`, `before()` and `replaceWith()`, and
+    `appendTo()` and friends through them. An `HTMLElement` or a `DommaCollection` came back cloned,
+    unconditionally, whether there was one target or twenty.
+
+*   `cloneNode` copies attributes and descendants. It does not copy listeners, and it does not copy
+    properties. So a handler bound before the insert fired on a detached node nobody could click,
+    and `prop('checked', true)` was dropped on the floor while `attr('checked')` survived - the two
+    quietly disagreeing depending on which one you happened to use.
+
+*   `$el[0]` kept pointing at the original for the rest of its life, so there was no way to reach
+    the element that actually landed in the document except by querying for it again.
+
+*   An existing node is now **moved**, which is what jQuery does and what the call site assumes.
+
+🔁 **Except when a node has to be in two places**
+
+*   `$('.card').append($badge)` has three targets and one badge, and a node cannot be in three
+    places. The extras are still clones; the original goes to the **last** target, as in jQuery.
+
+*   Those clones carry no listeners, and cannot: Domma records delegated handlers on the element but
+    not direct ones, so there is nothing to re-bind. Inserting into several targets at once still
+    wants a delegated handler on a container. This is documented on the helper rather than left to
+    be discovered.
+
+*   A markup string is unaffected. It was always parsed fresh for each target, which was always
+    right.
+
+🎄 **The celebrations are their own package now**
+
+*   The eight seasonal themes move to [domma-celebrate](https://www.npmjs.com/package/domma-celebrate),
+    developed separately and consumed here, so a site with no Domma in it can use them. 14,700 lines
+    leave `public/layouts/js/modules/celebrations/`. Nothing in the npm package changes.
+
+*   The build is code-split: the engine is 31 KB and each theme is a chunk fetched only when it is
+    in season, rather than all eight arriving in December and in July alike.
+
+*   Every decoration is now individually configurable. Snow but no steam train, pumpkins but no
+    witches, half as many trees: `traits: { train: false, tree: 0.5 }`, or `setTrait()` at runtime.
+    Each theme publishes what it draws, so a control panel can be built from `getTraits()`.
+
+*   `public/layouts/js/modules/celebrations/` and `templates/celebrations-toggle.html` are gone. If
+    you copied the layout preset system by hand, that is the one thing to know.
+
+**How it was found:** the celebrations demo grew per-trait checkboxes, and they ticked and did
+nothing. "All on" and "All off" worked, because those are static buttons bound by id and were never
+cloned - which is what made it look like a celebrations bug for as long as it did.
+
+**Not caught by anything:** no test failed, and none of the four validators can see this. There are
+nine tests now, six of which fail against the previous implementation, and 605 pass overall
+including the 85-page showcase harness.
+
 ### v0.42.0 - The Menu That Closed On The Way To Itself (2026-08-22)
 
 **Every menu in Domma is separated from the thing that opens it.** The dropdown renders on

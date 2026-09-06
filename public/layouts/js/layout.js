@@ -10,6 +10,36 @@ import {FeaturesModule} from './modules/features.js';
 import {SidebarModule} from './modules/sidebar.js';
 import {SiteSearch} from './modules/search.js';
 
+/**
+ * The seasonal celebrations, which are their own package.
+ *
+ * `domma-celebrate` was extracted from this repository so that a site with no
+ * Domma in it can use the same eight themes; `npm run copy:celebrate` puts its
+ * build under `public/dist/celebrate/`. Resolved against `import.meta.url`
+ * rather than through PathResolver because the specifier has to be right for
+ * the module loader, not for the page - a page three directories deep would
+ * otherwise ask for the wrong one.
+ *
+ * Declared at module scope on purpose. As a `let` inside the layout IIFE it sat
+ * in the temporal dead zone: the main flow calls this within the first hundred
+ * lines, long before a declaration further down the same function body has been
+ * reached, so every call threw "Cannot access 'celebratePromise' before
+ * initialization" and the toggle silently never rendered.
+ *
+ * The promise is cached so a page that renders the toggle does not fetch the
+ * module twice.
+ */
+let celebratePromise = null;
+
+function loadCelebrate() {
+    if (!celebratePromise) {
+        celebratePromise = import(
+            new URL('../../dist/celebrate/domma-celebrate.esm.js', import.meta.url).href
+        );
+    }
+    return celebratePromise;
+}
+
 (async function () {
     // Inject canonical tag as early as possible (before DOMContentLoaded await)
     // so search engines see it even if later layout steps fail.
@@ -1419,16 +1449,13 @@ import {SiteSearch} from './modules/search.js';
     }
 
     /**
-     * Check if current date is in festive season (Dec 1 - Jan 3)
-     */
-    /**
      * Check if any celebration is currently active
-     * (Delegated to CelebrationsEffect module)
+     * (Delegated to the domma-celebrate package)
      */
     async function isCelebrationSeason() {
         try {
-            const { CelebrationsEffect } = await import('./modules/celebrations/index.js');
-            return CelebrationsEffect.isCelebrationSeason();
+            const {isCelebrationSeason: inSeason} = await loadCelebrate();
+            return inSeason();
         } catch (error) {
             console.error('[Domma Layout] Failed to check celebration season:', error);
             return false;
@@ -1466,8 +1493,8 @@ import {SiteSearch} from './modules/search.js';
 
             document.body.insertAdjacentHTML('afterbegin', toggleHtml);
 
-            const { CelebrationsEffect } = await import('./modules/celebrations/index.js');
-            initCelebrationsToggle(CelebrationsEffect);
+            const {Celebrations} = await loadCelebrate();
+            initCelebrationsToggle(Celebrations);
 
             console.log('[Domma Layout] Celebrations toggle rendered');
         } catch (error) {
@@ -1478,7 +1505,7 @@ import {SiteSearch} from './modules/search.js';
     /**
      * Initialize celebrations toggle
      */
-    function initCelebrationsToggle(CelebrationsEffect) {
+    function initCelebrationsToggle(Celebrations) {
         const toggleBtn = document.getElementById('celebrations-toggle');
         const slider = document.getElementById('celebrations-slider');
 
@@ -1491,14 +1518,24 @@ import {SiteSearch} from './modules/search.js';
         const savedEnabled = storage ? storage.get('celebrations-enabled', false) : false;
         const savedIntensity = storage ? storage.get('celebrations-intensity', 'medium') : 'medium';
 
+        // The site's own trait choices, if a preset has expressed any, layered
+        // under whatever the visitor has since turned off themselves.
+        const savedTraits = storage ? storage.get('celebrations-traits', {}) : {};
+
+        function create(intensity) {
+            return new Celebrations({
+                theme: 'auto',
+                intensity,
+                enabled: false,
+                traits: savedTraits
+            });
+        }
+
         // Initialize if enabled
         if (savedEnabled) {
-            celebrationsEffect = new CelebrationsEffect({
-                theme: 'auto',
-                intensity: savedIntensity,
-                enabled: true
-            });
-            celebrationsEffect.init().then(() => {
+            celebrationsEffect = create(savedIntensity);
+            celebrationsEffect.init().then(started => {
+                if (!started) return;
                 celebrationsEffect.start();
                 toggleBtn.classList.add('active');
             });
@@ -1528,12 +1565,9 @@ import {SiteSearch} from './modules/search.js';
             } else {
                 // Enable celebrations
                 const intensity = storage ? storage.get('celebrations-intensity', 'medium') : 'medium';
-                celebrationsEffect = new CelebrationsEffect({
-                    theme: 'auto',
-                    intensity,
-                    enabled: false
-                });
-                celebrationsEffect.init().then(() => {
+                celebrationsEffect = create(intensity);
+                celebrationsEffect.init().then(started => {
+                    if (!started) return;
                     celebrationsEffect.start();
                     toggleBtn.classList.add('active');
                     if (storage) storage.set('celebrations-enabled', true);

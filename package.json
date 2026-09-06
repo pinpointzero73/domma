@@ -1,6 +1,6 @@
 {
     "name": "domma-js",
-    "version": "0.42.0",
+    "version": "0.43.0",
     "description": "Dynamic Object Manipulation & Modeling API - A complete front-end toolkit.",
     "main": "public/dist/domma.min.js",
     "module": "public/dist/domma.esm.js",
@@ -39,9 +39,9 @@
         "start": "node bin/domma-cli.js serve",
         "serve": "node bin/domma-cli.js serve",
         "serve:3096": "node bin/domma-cli.js serve --port 3096",
-        "dev": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run generate:themes && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
-        "dev:watch": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run generate:themes && npm run build:css && npm run build:miniapps && npm run watch:miniapps",
-        "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run generate:themes && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart-files && npm run build:miniapps",
+        "dev": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run copy:celebrate && npm run generate:themes && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
+        "dev:watch": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run copy:celebrate && npm run generate:themes && npm run build:css && npm run build:miniapps && npm run watch:miniapps",
+        "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run copy:celebrate && npm run generate:themes && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart-files && npm run build:miniapps",
         "build:js": "rollup -c",
         "build:css": "node scripts/build-css.js",
         "validate:classes": "node scripts/validate-classes.js",
@@ -66,7 +66,8 @@
         "generate:themes": "node scripts/generate-admin-themes.js",
         "test:vitest": "vitest",
         "test": "vitest",
-        "cypress:run": "cypress run"
+        "cypress:run": "cypress run",
+        "copy:celebrate": "node scripts/copy-celebrate.js"
     },
     "keywords": [
         "dom",
@@ -83,6 +84,7 @@
         "@rollup/plugin-terser": "^0.4.4",
         "@vitest/coverage-v8": "^4.0.16",
         "cypress": "^15.8.1",
+        "domma-celebrate": "file:../domma-celebrate",
         "domma-reactive": "1.0.0",
         "dompurify": "^3.4.13",
         "dotenv": "^17.2.3",
