@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context Menu - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/context-menu/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Context Menu</div>
+        <div class="hero-subtitle">Right-click menus that bind to a container, delegate to its children, and nest without overriding each other</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Context Menu</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                A context menu binds to a container once and covers everything inside it. You do not attach a
+                handler per row: the menu resolves which descendant was right-clicked and hands it to your items,
+                so content rendered later is covered automatically.
+            </p>
+            <p class="mb-4">
+                Menus nest. Putting one inside another does not override the outer menu - the inner one shadows it
+                for the region it covers, and by default appends the outer menu's items beneath its own.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Container binding</strong> - one menu for a whole table, list or page region</li>
+                <li><strong>Delegation</strong> - <code>match</code> picks the row, and your items receive it</li>
+                <li><strong>Graceful nesting</strong> - innermost wins, by DOM depth, never by load order</li>
+                <li><strong>Inheritance</strong> - ancestor items appended, prepended, or left out entirely</li>
+                <li><strong>Keyboard access</strong> - Shift+F10 and the Menu key, arrows, typeahead, Escape</li>
+                <li><strong>Touch</strong> - long-press opens the same menu</li>
+                <li><strong>Native escape hatch</strong> - Shift+right-click still gets the browser's own menu</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+const menu = Domma.elements.contextMenu('#my-container', {
+    items: [
+        { label: 'Edit',   icon: 'edit',  action: (target) => edit(target) },
+        { label: 'Delete', icon: 'trash', danger: true, action: remove },
+        { type: 'divider' },
+        { label: 'Copy', icon: 'copy', shortcut: 'Ctrl+C', action: copy }
+    ]
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+        <div class="card-body">
+            <p class="mb-6 text-gray-600">A working right-click menu in three steps</p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 1 - Mark the region</h3>
+            <p class="mb-2">Any element can host a menu. Give it something the menu can bind to.</p>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;div id="notes" class="dm-context-menu-host"&gt;
+    &lt;div data-note-id="1"&gt;First note&lt;/div&gt;
+    &lt;div data-note-id="2"&gt;Second note&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </div>
+            <p class="mb-4">
+                <code>.dm-context-menu-host</code> is optional. It sets <code>cursor: context-menu</code> so people
+                can tell a menu is there before they try.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 2 - Bind the menu</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+Domma.elements.contextMenu('#notes', {
+    match: '[data-note-id]',
+    items: [
+        { label: 'Open', icon: 'eye',   action: (note) => open(note.dataset.noteId) },
+        { label: 'Delete', icon: 'trash', danger: true }
+    ]
+});
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 3 - Vary the items per row</h3>
+            <p class="mb-2">Pass a function instead of an array and it is called with the row that was clicked.</p>
+            <div class="code-block language-javascript">
+                <pre><code>
+items: (note) => [
+    { label: `Open note ${note.dataset.noteId}`, icon: 'eye' },
+    { label: 'Unlock', visible: note.dataset.locked === 'true' },
+    { label: 'Delete', danger: true, disabled: note.dataset.locked === 'true' }
+]
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Live Demo">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Live Demo</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Right-click anywhere in the panel below. Try a card, then the gap between cards.</p>
+
+            <div id="demo-page" class="p-4 rounded" style="border: 1px dashed var(--dm-border);">
+                <p class="text-gray-600 mb-4">Page region - right-click here for the page menu.</p>
+
+                <div id="demo-collection" class="dm-context-menu-host grid grid-cols-3 gap-4">
+                    <div class="card" data-entry-id="1" data-title="Quarterly Report">
+                        <div class="card-body">
+                            <h4 class="card-title">Quarterly Report</h4>
+                            <p class="card-text text-sm">Right-click me</p>
+                        </div>
+                    </div>
+                    <div class="card" data-entry-id="2" data-title="Design Notes" data-locked="true">
+                        <div class="card-body">
+                            <h4 class="card-title">Design Notes</h4>
+                            <p class="card-text text-sm">Locked - some items disable</p>
+                        </div>
+                    </div>
+                    <div class="card" data-entry-id="3" data-title="Roadmap">
+                        <div class="card-body">
+                            <h4 class="card-title">Roadmap</h4>
+                            <p class="card-text text-sm">Right-click me</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h4 class="text-sm font-semibold mb-2">What happened</h4>
+                <ul id="demo-log" class="list-none p-0 text-sm text-gray-600">
+                    <li>Nothing yet - right-click something above.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Nesting">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Nesting and the cascade</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The demo above has two menus: one on the page region, one on the card grid inside it. Right-click
+                a card and you get the card's items with the page's appended beneath. Right-click the gap between
+                cards and only the page menu opens, because the inner menu's <code>match</code> found nothing and
+                declined.
+            </p>
+
+            <div class="code-block language-javascript">
+                <pre><code>
+// Outer - the page
+Domma.elements.contextMenu('#demo-page', {
+    items: [
+        { label: 'Page settings', icon: 'settings' },
+        { label: 'View source',   icon: 'code' }
+    ]
+});
+
+// Inner - shadows the page menu, but only over the cards
+Domma.elements.contextMenu('#demo-collection', {
+    match: '[data-entry-id]',
+    items: (entry) => [
+        { label: `Open "${entry.dataset.title}"`, icon: 'eye' },
+        { label: 'Delete', icon: 'trash', danger: true,
+          disabled: entry.dataset.locked === 'true' }
+    ]
+});
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">How the winner is chosen</h3>
+            <ol class="mb-4">
+                <li>Walk outward from the element that was right-clicked.</li>
+                <li>The first bound container found is asked whether it wants the gesture.</li>
+                <li>It declines if <code>enabled</code> is false, <code>exclude</code> matches, <code>match</code> finds
+                    nothing, or <code>onBeforeOpen</code> returns <code>false</code>.</li>
+                <li>On a decline the walk continues outward, so the next menu up gets its chance.</li>
+                <li>If nothing claims it, the browser's own menu opens.</li>
+            </ol>
+            <p class="mb-4">
+                DOM depth decides, never script order. Every menu shares one document listener, so a menu registered
+                first cannot shadow one registered later, and rebundling cannot change which menu wins.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Controlling inheritance</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+inherit: 'append'    // default - own items, then the ancestors' beneath
+inherit: 'prepend'   // ancestors' items first
+inherit: false       // stand alone; ancestor items stay out
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Submenus">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Submenus</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Right-click the panel below and hover <em>Export</em>.</p>
+            <div id="demo-submenu" class="dm-context-menu-host p-6 rounded text-center"
+                 style="border: 1px dashed var(--dm-border);">
+                Right-click for a menu with a submenu
+            </div>
+            <div class="code-block language-javascript mt-4">
+                <pre><code>
+items: [
+    { label: 'Rename', icon: 'edit' },
+    { type: 'divider' },
+    {
+        label: 'Export', icon: 'download',
+        submenu: [
+            { label: 'CSV',  action: () => exportAs('csv') },
+            { label: 'JSON', action: () => exportAs('json') },
+            { label: 'PDF',  action: () => exportAs('pdf') }
+        ]
+    }
+]
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Keyboard">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Keyboard and touch</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Right-click has no keyboard equivalent, so a context menu that only answers the mouse is
+                unreachable for anyone who does not use one. This component opens from the keyboard by default.
+            </p>
+            <table class="table mb-4">
+                <thead><tr><th>Key</th><th>Does</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Shift</code> + <code>F10</code></td><td>Open against the focused element</td></tr>
+                    <tr><td><code>Menu</code></td><td>Open against the focused element</td></tr>
+                    <tr><td><code>&uarr;</code> / <code>&darr;</code></td><td>Move between items, skipping disabled ones</td></tr>
+                    <tr><td><code>Home</code> / <code>End</code></td><td>First / last item</td></tr>
+                    <tr><td><code>&rarr;</code> / <code>&larr;</code></td><td>Open / close a submenu</td></tr>
+                    <tr><td><code>Enter</code> / <code>Space</code></td><td>Choose the focused item</td></tr>
+                    <tr><td><code>Esc</code></td><td>Close one level, then the menu</td></tr>
+                    <tr><td>Any letter</td><td>Typeahead to the first item starting with it</td></tr>
+                    <tr><td><code>Shift</code> + right-click</td><td>Pass through to the browser's own menu</td></tr>
+                </tbody>
+            </table>
+            <p class="mb-2">
+                On touch, a long press of <code>longPress</code> ms (500 by default) opens the same menu. Set
+                <code>longPress: false</code> to leave touch alone.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Custom Panels">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Panels that are not item lists</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Some menus cannot be expressed as items - a live attribute editor, a filter builder,
+                anything carrying its own inputs. <code>render</code> lets one join the cascade anyway.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+Domma.elements.contextMenu('[data-ctx]', {
+    enabled: (wrapper) =&gt; hasModel(wrapper),   // declines, falls through outward
+    render: (ctx) =&gt; openMyPanel(ctx.x, ctx.y, ctx.container, ctx.target)
+});
+</code></pre>
+            </div>
+            <p class="mb-2">
+                Arbitration is unchanged: <code>enabled</code>, <code>exclude</code>, <code>match</code>
+                and <code>onBeforeOpen</code> decide whether this menu claims the gesture, and
+                <code>render</code> runs only once it has. Return an element for Domma to position and
+                dismiss, or nothing to manage the panel yourself.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options</h2></div>
+        <div class="card-body">
+            <h3 class="text-lg font-semibold mt-6 mb-3">Targeting and cascade</h3>
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>items</code></td><td>Array | Function | Observable</td><td><code>[]</code></td><td>Items, or a resolver called with the delegated target</td></tr>
+                    <tr><td><code>match</code></td><td>string</td><td><code>null</code></td><td>Delegation selector; null covers the whole container</td></tr>
+                    <tr><td><code>exclude</code></td><td>string</td><td><code>null</code></td><td>Regions that decline and fall through outward</td></tr>
+                    <tr><td><code>enabled</code></td><td>boolean | Function</td><td><code>true</code></td><td>False declines and falls through</td></tr>
+                    <tr><td><code>inherit</code></td><td>'append' | 'prepend' | false</td><td><code>'append'</code></td><td>Whether ancestor menus' items are merged in</td></tr>
+                    <tr><td><code>priority</code></td><td>number</td><td><code>0</code></td><td>Tie-break when two menus bind the same element</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Behaviour</h3>
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>nativeOnShift</code></td><td>boolean</td><td><code>true</code></td><td>Shift+right-click gets the browser menu</td></tr>
+                    <tr><td><code>closeOnSelect</code></td><td>boolean</td><td><code>true</code></td><td>Close after an item is chosen</td></tr>
+                    <tr><td><code>closeOnEscape</code></td><td>boolean</td><td><code>true</code></td><td>Close on Esc</td></tr>
+                    <tr><td><code>closeOnClickOutside</code></td><td>boolean</td><td><code>true</code></td><td>Close on outside mousedown</td></tr>
+                    <tr><td><code>closeOnScroll</code></td><td>boolean</td><td><code>true</code></td><td>Close on scroll - the anchor point has moved</td></tr>
+                    <tr><td><code>longPress</code></td><td>number | false</td><td><code>500</code></td><td>Touch long-press duration in ms</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Presentation</h3>
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>className</code></td><td>string</td><td><code>''</code></td><td>Extra class on the menu root</td></tr>
+                    <tr><td><code>minWidth</code></td><td>string</td><td><code>'200px'</code></td><td>Minimum menu width</td></tr>
+                    <tr><td><code>maxWidth</code></td><td>string</td><td><code>'320px'</code></td><td>Maximum menu width</td></tr>
+                    <tr><td><code>maxHeight</code></td><td>string</td><td><code>'60vh'</code></td><td>Height before the menu scrolls</td></tr>
+                    <tr><td><code>offset</code></td><td>[number, number]</td><td><code>[2, 2]</code></td><td>Offset from the cursor point</td></tr>
+                    <tr><td><code>flip</code></td><td>boolean</td><td><code>true</code></td><td>Flip across the cursor rather than open off screen</td></tr>
+                    <tr><td><code>animation</code></td><td>boolean</td><td><code>true</code></td><td>Fade and scale on open</td></tr>
+                    <tr><td><code>animationDuration</code></td><td>number</td><td><code>120</code></td><td>Animation duration in ms</td></tr>
+                    <tr><td><code>itemTemplate</code></td><td>Function</td><td><code>null</code></td><td>Custom item renderer returning HTML</td></tr>
+                    <tr><td><code>submenuDelay</code></td><td>number</td><td><code>150</code></td><td>Hover grace before a submenu opens</td></tr>
+                    <tr><td><code>render</code></td><td>Function</td><td><code>null</code></td><td>Render your own panel instead of an item list</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Accessibility</h3>
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>keyboardTrigger</code></td><td>boolean</td><td><code>true</code></td><td>Shift+F10 and the Menu key open the menu</td></tr>
+                    <tr><td><code>typeahead</code></td><td>boolean</td><td><code>true</code></td><td>Jump to an item by typing</td></tr>
+                    <tr><td><code>ariaLabel</code></td><td>string</td><td><code>'Context menu'</code></td><td>Label announced for the menu</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Callbacks</h3>
+            <table class="table mb-6">
+                <thead><tr><th>Callback</th><th>Signature</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>onBeforeOpen</code></td><td><code>(ctx) =&gt; boolean</code></td><td>Return false to decline and fall through outward</td></tr>
+                    <tr><td><code>onOpen</code></td><td><code>(ctx) =&gt; void</code></td><td>Fired once the menu is on screen</td></tr>
+                    <tr><td><code>onClose</code></td><td><code>(ctx) =&gt; void</code></td><td>Fired after dismissal</td></tr>
+                    <tr><td><code>onSelect</code></td><td><code>(item, ctx) =&gt; void</code></td><td>Fired before the item's own action</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Item Schema">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Item schema</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Key</th><th>Type</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>label</code></td><td>string</td><td>Item text</td></tr>
+                    <tr><td><code>icon</code></td><td>string</td><td>Domma icon name</td></tr>
+                    <tr><td><code>value</code></td><td>any</td><td>Carried through to <code>onSelect</code></td></tr>
+                    <tr><td><code>action</code></td><td>Function</td><td>Called with the delegated target and the context</td></tr>
+                    <tr><td><code>disabled</code></td><td>boolean | Function</td><td>Greyed but still shown</td></tr>
+                    <tr><td><code>visible</code></td><td>boolean | Function</td><td>Omitted entirely when false</td></tr>
+                    <tr><td><code>danger</code></td><td>boolean</td><td>Destructive styling</td></tr>
+                    <tr><td><code>shortcut</code></td><td>string</td><td>Hint text only - no key is bound for you</td></tr>
+                    <tr><td><code>submenu</code></td><td>Array | Function</td><td>Nested items, unlimited depth</td></tr>
+                    <tr><td><code>type</code></td><td>string</td><td><code>item</code>, <code>divider</code>, <code>header</code>, <code>checkbox</code>, <code>radio</code></td></tr>
+                    <tr><td><code>checked</code></td><td>boolean | Function</td><td>For checkbox and radio items</td></tr>
+                </tbody>
+            </table>
+            <p class="mb-2">
+                Dividers left stranded by hidden items are collapsed automatically, and a menu whose every item
+                resolves away does not open at all - the click falls through to the next menu outward.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Methods">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Methods</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>open(x, y, target)</code></td><td>Open at a viewport point - for a "..." button that should show the same menu</td></tr>
+                    <tr><td><code>close()</code></td><td>Close the menu</td></tr>
+                    <tr><td><code>refresh()</code></td><td>Rebuild the open menu in place, keeping its position</td></tr>
+                    <tr><td><code>isOpen()</code></td><td>Whether this menu is open</td></tr>
+                    <tr><td><code>setItems(items)</code></td><td>Replace the items</td></tr>
+                    <tr><td><code>enable()</code> / <code>disable()</code></td><td>Arm or suppress the menu</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Close, deregister and detach</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Statics</h3>
+            <table class="table mb-4">
+                <thead><tr><th>Member</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>contextMenu.closeAll()</code></td><td>Close whichever menu is open</td></tr>
+                    <tr><td><code>contextMenu.active()</code></td><td>The open instance, or null</td></tr>
+                    <tr><td><code>contextMenu.registry(el)</code></td><td>The resolution chain for an element, innermost first</td></tr>
+                </tbody>
+            </table>
+            <p>
+                <code>registry(el)</code> is the debugging tool for a cascade that is not behaving: it shows exactly
+                which menus enclose an element, in the order they will be offered the gesture.
+            </p>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    Domma.icons.scan();
+
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.html('<li>' + message + '</li>' + list.html().replace(/^<li>Nothing yet[^<]*<\/li>/, ''));
+    };
+
+    // Outer menu - the page region
+    Domma.elements.contextMenu('#demo-page', {
+        items: [
+            {label: 'Page settings', icon: 'settings', action: () => log('Page settings')},
+            {label: 'View source', icon: 'code', action: () => log('View source')}
+        ]
+    });
+
+    // Inner menu - shadows the page menu over the cards only
+    Domma.elements.contextMenu('#demo-collection', {
+        match: '[data-entry-id]',
+        items: (entry) => [
+            {
+                label: 'Open "' + entry.dataset.title + '"',
+                icon: 'eye',
+                action: () => log('Opened entry ' + entry.dataset.entryId)
+            },
+            {
+                label: 'Duplicate', icon: 'copy',
+                action: () => log('Duplicated entry ' + entry.dataset.entryId)
+            },
+            {type: 'divider'},
+            {
+                label: 'Delete', icon: 'trash', danger: true,
+                disabled: entry.dataset.locked === 'true',
+                action: () => log('Deleted entry ' + entry.dataset.entryId)
+            }
+        ],
+        onOpen: (ctx) => log('Collection menu on entry ' + ctx.target.dataset.entryId)
+    });
+
+    // Submenu demo
+    Domma.elements.contextMenu('#demo-submenu', {
+        inherit: false,
+        items: [
+            {label: 'Rename', icon: 'edit', action: () => log('Rename')},
+            {type: 'divider'},
+            {
+                label: 'Export', icon: 'download',
+                submenu: [
+                    {label: 'CSV', action: () => log('Exported CSV')},
+                    {label: 'JSON', action: () => log('Exported JSON')},
+                    {label: 'PDF', action: () => log('Exported PDF')}
+                ]
+            }
+        ]
+    });
+</script>
+
+</body>
+</html>

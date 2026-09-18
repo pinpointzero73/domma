@@ -7,6 +7,7 @@
 
 import Component from './component.js';
 import TreeView from './treeview.js';
+import ContextMenu from './context-menu.js';
 import sanitizeModule from './sanitize.js';
 
 // Web Component wrappers for Phase 1 & 2 components
@@ -10876,6 +10877,19 @@ export const elements = {
         };
     },
 
+    /**
+     * Right-click menu bound to a container and delegated to its children.
+     * Nested menus shadow their parent for the region they cover rather than
+     * overriding it; by default the parent's items are appended beneath.
+     */
+    contextMenu(selector, options = {}) {
+        const instance = new ContextMenu(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
     treeView(selector, options = {}) {
         const instance = new TreeView(selector, options);
         if (instance.element) {
@@ -11020,5 +11034,11 @@ export const elements = {
     }
 };
 
+// Statics hang off the factory so callers reach them the same way they reach
+// every other context-menu concern: E.contextMenu.closeAll().
+elements.contextMenu.closeAll = ContextMenu.closeAll;
+elements.contextMenu.active = ContextMenu.active;
+elements.contextMenu.registry = ContextMenu.registry;
+
 // Export component classes for direct access to static methods
-export {DesktopNotification, TreeView};
+export {DesktopNotification, TreeView, ContextMenu};

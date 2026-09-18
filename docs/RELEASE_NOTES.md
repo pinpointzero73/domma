@@ -58,6 +58,50 @@ cloned - which is what made it look like a celebrations bug for as long as it di
 nine tests now, six of which fail against the previous implementation, and 605 pass overall
 including the 85-page showcase harness.
 
+🖱️ **Context menus, and the nesting problem underneath them**
+
+*   `E.contextMenu(selector, options)` binds a right-click menu to a container and, by delegation,
+    to everything inside it. `match: 'tr[data-id]'` picks the row and hands it to your items, so one
+    binding covers a whole table - including rows rendered after the menu was declared, which a
+    per-element binding loses on the next repaint.
+
+*   **Menus nest without overriding each other.** Bind one inside another and the inner one shadows
+    its parent for the region it covers; everywhere else the parent still answers. By default the
+    parent's items are appended beneath the child's, so an entry menu inside a page menu offers
+    both. `inherit: 'prepend'` reverses the order and `inherit: false` stands alone.
+
+*   A menu **declines** rather than swallowing a click it has nothing for: `enabled` false, an
+    `exclude` match, a `match` that finds nothing, or `onBeforeOpen` returning false all continue
+    the walk outward to the next menu up. Right-click a card and you get the card's menu; right-click
+    the gap between cards and the page menu answers instead. Nothing claims it, and the browser's own
+    menu opens untouched - as it does on Shift+right-click, which stays the escape hatch back to
+    "open in new tab" and spellcheck.
+
+*   The whole component shares **one** document listener and a registry of bound containers, and
+    that is the point rather than an optimisation. An instance owning its own listener makes the
+    winner depend on which script registered first, so a menu can shadow its own parent purely on
+    bundle order - intermittently, and differently in dev and production. Resolution is a walk
+    outward from the event target, so DOM depth decides and load order cannot. Two of the 37 tests
+    assert the same nesting with the outer menu registered first and then registered last.
+
+*   Nothing calls `stopPropagation()`. A menu that swallowed the event would silence every other
+    `contextmenu` listener on the page - analytics, editors, the host application - which is the same
+    bug arriving from the other direction.
+
+*   Keyboard access is on by default, because right-click has no keyboard equivalent and a menu that
+    answers only the mouse cannot be reached without one: `Shift`+`F10` and the `Menu` key open it
+    against the focused element, then arrows, `Home`/`End`, typeahead, `Enter` and `Esc`. Submenus
+    nest to any depth. On touch a long press opens the same menu.
+
+*   `contextMenu.registry(el)` returns the resolution chain for an element, innermost first - the
+    tool for a cascade that is not behaving.
+
+*   **Found while building it:** `color: var(--dm-danger)` on `--dm-surface` is **1.02:1** on
+    admin-smooth-steel, so "Delete" in red would have been invisible on every mid-tone theme.
+    `validate:contrast` caught it before it shipped. Destructive items now carry a `color-mix` wash
+    and keep readable label text. The showcase page also arrived with two dead classes copied from
+    the dropdown page, which `validate:classes` refused; they were replaced rather than baselined.
+
 ### v0.42.0 - The Menu That Closed On The Way To Itself (2026-08-22)
 
 **Every menu in Domma is separated from the thing that opens it.** The dropdown renders on

@@ -807,6 +807,169 @@ export interface ChooserInstance {
     destroy(): void;
 }
 
+// ============================================
+// ContextMenu
+// ============================================
+
+export interface ContextMenuContext {
+    /** The delegated element the menu was opened against (or the container when no `match` is set) */
+    target: HTMLElement;
+    /** The bound container that claimed the gesture */
+    container: HTMLElement;
+    /** Viewport x of the opening point */
+    x: number;
+    /** Viewport y of the opening point */
+    y: number;
+    /** Originating event, or null when opened programmatically */
+    event: Event | null;
+    /** The menu element, once rendered */
+    menu: HTMLElement | null;
+    /** The instance that owns the menu */
+    instance: ContextMenuInstance;
+}
+
+export interface ContextMenuItem {
+    /** Item text */
+    label?: string;
+    /** Domma icon name, rendered through data-icon */
+    icon?: string;
+    /** Arbitrary value carried to onSelect */
+    value?: any;
+    /** Invoked with the delegated target and the open context */
+    action?: (target: HTMLElement | null, ctx: ContextMenuContext) => void | Promise<void>;
+    /** Greyed but still shown; a function is resolved per target */
+    disabled?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    /** Omitted entirely when false; a function is resolved per target */
+    visible?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    /** Destructive styling */
+    danger?: boolean;
+    /** Right-aligned hint text - display only, no key is bound */
+    shortcut?: string;
+    /** Nested items, to unlimited depth */
+    submenu?: ContextMenuItem[] | ((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[]);
+    /** Item kind (default 'item') */
+    type?: 'item' | 'divider' | 'header' | 'checkbox' | 'radio';
+    /** Checked state for checkbox/radio types */
+    checked?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    /** Radio grouping key */
+    group?: string;
+    /** Shorthand for type: 'divider' */
+    divider?: boolean;
+    /** Shorthand for type: 'header' */
+    header?: string;
+}
+
+export interface ContextMenuOptions {
+    /** Items, or a resolver called with the delegated target. Accepts a Domma Reactive observable. */
+    items?: ContextMenuItem[] | ((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[]) | any;
+    /** Delegation selector - the menu claims only descendants matching it (default: the whole container) */
+    match?: string | null;
+    /** Regions inside the container that decline and fall through outward */
+    exclude?: string | null;
+    /** False declines the gesture and falls through to the next menu outward */
+    enabled?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    /** Merge ancestor menus' items rather than replacing them (default 'append') */
+    inherit?: 'append' | 'prepend' | false;
+    /** Tie-break only when two menus bind the SAME element; depth wins otherwise */
+    priority?: number;
+    /** Shift+right-click passes through to the browser's own menu (default true) */
+    nativeOnShift?: boolean;
+    /** Close after an item is chosen (default true) */
+    closeOnSelect?: boolean;
+    /** Close on Esc (default true) */
+    closeOnEscape?: boolean;
+    /** Close on outside mousedown (default true) */
+    closeOnClickOutside?: boolean;
+    /** Close on scroll - the anchoring point has moved (default true) */
+    closeOnScroll?: boolean;
+    /** Long-press duration in ms for touch, or false to disable (default 500) */
+    longPress?: number | false;
+    /** Extra class on the menu root */
+    className?: string;
+    /** Minimum menu width (default '200px') */
+    minWidth?: string;
+    /** Maximum menu width (default '320px') */
+    maxWidth?: string;
+    /** Maximum menu height before it scrolls (default '60vh') */
+    maxHeight?: string;
+    /** Offset [x, y] from the cursor point (default [2, 2]) */
+    offset?: [number, number];
+    /** Flip across the cursor and clamp to the viewport (default true) */
+    flip?: boolean;
+    /** Enable animation (default true) */
+    animation?: boolean;
+    /** Animation duration in ms (default 120) */
+    animationDuration?: number;
+    /** Custom item renderer returning HTML */
+    itemTemplate?: (item: ContextMenuItem, index: number) => string;
+    /** Hover grace before a submenu opens, in ms (default 150) */
+    submenuDelay?: number;
+    /**
+     * Render your own panel instead of an item list, for menus that cannot be
+     * expressed as items. The cascade still arbitrates; this is called only once
+     * this menu has claimed the gesture. Return an element for Domma to position
+     * and dismiss, or nothing to manage it yourself.
+     */
+    render?: (ctx: ContextMenuContext) => HTMLElement | void;
+    /** Open on Shift+F10 and the Menu key against the focused element (default true) */
+    keyboardTrigger?: boolean;
+    /** Jump to an item by typing (default true) */
+    typeahead?: boolean;
+    /** aria-label for the menu */
+    ariaLabel?: string;
+    /** Bind items to a Domma Model */
+    model?: any;
+    /** Model key holding the items array */
+    modelKey?: string;
+    /** Return false to decline and fall through to the next menu outward */
+    onBeforeOpen?: (ctx: ContextMenuContext) => boolean | void;
+    /** Fired once the menu is on screen */
+    onOpen?: (ctx: ContextMenuContext) => void;
+    /** Fired after the menu is dismissed */
+    onClose?: (ctx: ContextMenuContext | null) => void;
+    /** Fired before the item's own action */
+    onSelect?: (item: ContextMenuItem, ctx: ContextMenuContext) => void;
+}
+
+export interface ContextMenuInstance extends ComponentInstance {
+    /** Open at a viewport point, optionally against a specific target */
+    open(x: number, y: number, target?: HTMLElement): ContextMenuInstance;
+
+    /** Close the menu */
+    close(): ContextMenuInstance;
+
+    /** Rebuild the open menu in place, keeping its position */
+    refresh(): ContextMenuInstance;
+
+    /** Whether this menu is currently open */
+    isOpen(): boolean;
+
+    /** Replace the items */
+    setItems(items: ContextMenuItem[] | ((target: HTMLElement) => ContextMenuItem[])): ContextMenuInstance;
+
+    /** Re-arm the menu */
+    enable(): ContextMenuInstance;
+
+    /** Suppress the menu; right-clicks fall through to the next menu outward */
+    disable(): ContextMenuInstance;
+
+    /** Close, deregister and detach */
+    destroy(): void;
+}
+
+export interface ContextMenuStatic {
+    (selector: string | HTMLElement, options?: ContextMenuOptions): ContextMenuInstance;
+
+    /** Close whichever menu is open */
+    closeAll(): void;
+
+    /** The open instance, or null - only one can be open at a time */
+    active(): ContextMenuInstance | null;
+
+    /** Bound menus; with an element, the resolution chain for it, innermost first */
+    registry(forElement?: HTMLElement | null): ContextMenuInstance[];
+}
+
 export interface Elements {
     /** Create a Card component */
     card(selector: string | HTMLElement, options?: CardOptions): CardInstance;
@@ -834,6 +997,13 @@ export interface Elements {
 
     /** Create a Dropdown component */
     dropdown(selector: string | HTMLElement, options?: DropdownOptions): DropdownInstance;
+
+    /**
+     * Bind a right-click menu to a container and, by delegation, its children.
+     * Menus nest: an inner menu shadows its parent for the region it covers,
+     * and by default appends the parent's items beneath its own.
+     */
+    contextMenu: ContextMenuStatic;
 
     /** Create a Carousel component */
     carousel(selector: string | HTMLElement, options?: CarouselOptions): CarouselInstance;

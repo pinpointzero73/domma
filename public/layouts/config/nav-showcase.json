@@ -251,6 +251,12 @@
           "badge": "New"
         },
         {
+          "text": "Context Menu",
+          "url": "showcase/elements/context-menu/index.html",
+          "section": "context-menu",
+          "badge": "New"
+        },
+        {
           "text": "Dialog",
           "url": "showcase/elements/dialog/index.html",
           "section": "dialog"

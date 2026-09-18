@@ -2552,6 +2552,32 @@ See the [NumberBadge showcase](../public/showcase/elements/number-badge/) for in
 
 ---
 
+## Context Menu
+
+A right-click menu bound to a container and delegated to its children. One binding covers a whole
+table, list or page region, including rows rendered later.
+
+```javascript
+Domma.elements.contextMenu('#invoice-table', {
+    match: 'tr[data-id]',
+    items: (row) => [
+        {label: 'Edit',   icon: 'edit',  action: () => edit(row.dataset.id)},
+        {label: 'Delete', icon: 'trash', danger: true, disabled: row.dataset.locked === 'true'},
+        {type: 'divider'},
+        {label: 'Export', icon: 'download', submenu: exportFormats}
+    ]
+});
+```
+
+Menus nest. An inner menu shadows its parent for the region it covers rather than overriding it, and
+by default appends the parent's items beneath its own. The winner is decided by DOM depth, never by
+which script registered first.
+
+Keyboard access (Shift+F10, the Menu key, arrows, typeahead) and touch long-press are on by default,
+and Shift+right-click still reaches the browser's own menu.
+
+See [docs/ContextMenu.md](./ContextMenu.md) for the cascade rules, options and item schema.
+
 ## Chooser
 
 The Chooser is a visual option-picker - the form-friendly equivalent of native radio/checkbox controls when richer presentation is needed. A single component covers four combinations driven by parameters:

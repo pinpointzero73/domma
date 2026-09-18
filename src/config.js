@@ -199,6 +199,7 @@ export const configEngine = {
             tooltip: elements.tooltip,
             carousel: elements.carousel,
             dropdown: elements.dropdown,
+            contextMenu: elements.contextMenu,
             badge: elements.badge,
             numberBadge: elements.numberBadge,
             listGroup: elements.listGroup,

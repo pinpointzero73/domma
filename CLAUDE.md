@@ -25,6 +25,7 @@ modern UI components.
 | Reactive data models              | `M.create(blueprint)`         | Manual state management         |
 | Form generation                   | `F.create(selector, blueprint)` | Manual `<form>` HTML          |
 | UI components (modals, tabs)      | `E.modal(selector, options)`  | Manual HTML/CSS/JS              |
+| Right-click menus                 | `E.contextMenu(sel, options)` | Manual `contextmenu` listeners  |
 | Toast notifications               | `E.toast('Message', {type})`  | Manual notification divs        |
 | Icons                             | `<span data-icon="name">`     | Manual SVG/icon fonts           |
 | DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
@@ -197,6 +198,8 @@ consult that folder's CLAUDE.md for detailed information.
 
 - [docs/API.md](./docs/API.md) - Complete API reference
 - [docs/Reactivity.md](./docs/Reactivity.md) - Dependency tracking: `M.computed()`, `M.effect()`, batching rules
+- [docs/ContextMenu.md](./docs/ContextMenu.md) - Right-click menus: container binding, delegation, the
+  nesting cascade and inheritance
 - [docs/Bindings.md](./docs/Bindings.md) - DOM bindings: `M.applyBindings()`, `data-bind-*`, `data-model`, `data-each`,
   custom bindings and helpers
 - [docs/DommaDocumentation.md](./docs/DommaDocumentation.md) - Comprehensive user documentation
@@ -533,7 +536,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (`Domma.elements`)
 
-- **23 UI Components:**
+- **24 UI Components:**
   - Modal - `modal()` with backdrop, keyboard, animation options
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
@@ -541,6 +544,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Carousel - `carousel()` with autoplay, interval, loop, and three transition modes (`slide` / `fade` / `crossfade`) plus configurable easing
   - Card - `card()` with hover, clickable, **collapsible** (with localStorage persistence)
   - Dropdown - `dropdown()` with positioning
+  - ContextMenu - `contextMenu()` right-click menus bound to a container and delegated to its
+    children; nested menus shadow their parent rather than overriding it, resolved by DOM depth
   - Toast - Static `toast()` method with types
   - Dialog - Promise-based `alert()`, `confirm()`, `prompt()`
   - Loader - `loader()` with types (spinner, dots, pulse, bars)
