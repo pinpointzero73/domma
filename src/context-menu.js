@@ -39,6 +39,34 @@ const OPEN_DEDUPE_MS = 400;
 
 const isFn = (v) => typeof v === 'function';
 
+const ACCENTS = {
+    primary: 'var(--dm-primary)',
+    success: 'var(--dm-success)',
+    danger: 'var(--dm-danger)',
+    warning: 'var(--dm-warning)',
+    info: 'var(--dm-info)'
+};
+
+const SCALE = {none: '0', sm: 'sm', md: 'md', lg: 'lg', xl: 'xl'};
+
+/** A preset key resolves to its token; anything else is passed through as CSS. */
+function accentToCss(value) {
+    if (!value) return null;
+    return ACCENTS[value] || value;
+}
+
+function radiusToCss(value) {
+    if (!value) return null;
+    if (value === 'none') return '0';
+    return SCALE[value] ? `var(--dm-radius-${value})` : value;
+}
+
+function shadowToCss(value) {
+    if (!value) return null;
+    if (value === 'none') return 'none';
+    return SCALE[value] ? `var(--dm-shadow-${value})` : value;
+}
+
 /** An observable is callable AND carries subscribe(); an items resolver is just callable. */
 const isObservable = (v) => isFn(v) && isFn(v.subscribe);
 
@@ -302,6 +330,17 @@ class ContextMenu extends Component {
         flip: true,
         animation: true,
         animationDuration: 120,
+        transition: 'scale',    // 'scale' | 'fade' | 'slide' | 'none'
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+
+        // Theming. Each maps to a custom property on the menu root, so a theme
+        // that redefines the underlying token still wins where these are unset.
+        accent: null,           // preset key or any CSS colour
+        surface: null,          // overrides the panel background
+        radius: null,           // 'none'|'sm'|'md'|'lg'|'xl' or any CSS length
+        shadow: null,           // 'none'|'sm'|'md'|'lg'|'xl'
+        opacity: null,          // 20-100; translucent panel with a blurred backdrop
+        density: 'comfortable', // 'comfortable' | 'compact'
         itemTemplate: null,
         submenuDelay: 150,
 
@@ -526,6 +565,10 @@ class ContextMenu extends Component {
             this._menu = panel;
             if (!panel.parentNode) document.body.appendChild(panel);
             panel.style.position = 'fixed';
+            // A caller-owned panel still gets the theme custom properties, so
+            // `accent` and friends reach it without it adopting our markup.
+            this._applyTheme(panel);
+            panel.classList.add('is-open');
             this._ctx.menu = panel;
             this._positionAt(panel, x, y);
             this._bindOpenListeners();
@@ -553,15 +596,11 @@ class ContextMenu extends Component {
         }
 
         if (opts.animation) {
-            this._menu.style.transition = `opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease`;
             requestAnimationFrame(() => {
-                if (!this._menu) return;
-                this._menu.style.opacity = '1';
-                this._menu.style.transform = 'scale(1)';
+                if (this._menu) this._menu.classList.add('is-open');
             });
         } else {
-            this._menu.style.opacity = '1';
-            this._menu.style.transform = 'scale(1)';
+            this._menu.classList.add('is-open');
         }
 
         this._menu.focus({preventScroll: true});
@@ -591,8 +630,7 @@ class ContextMenu extends Component {
 
         if (menu) {
             if (opts.animation) {
-                menu.style.opacity = '0';
-                menu.style.transform = 'scale(0.97)';
+                menu.classList.remove('is-open');
                 setTimeout(() => menu.remove(), opts.animationDuration);
             } else {
                 menu.remove();
@@ -657,9 +695,40 @@ class ContextMenu extends Component {
         menu.style.minWidth = opts.minWidth;
         menu.style.maxWidth = opts.maxWidth;
         menu.style.maxHeight = opts.maxHeight;
-        menu.style.opacity = '0';
-        menu.style.transform = 'scale(0.97)';
+        this._applyTheme(menu);
         return menu;
+    }
+
+    /**
+     * Theming rides on custom properties rather than on generated rules, so a
+     * menu left unstyled still follows whatever the active theme sets and only
+     * the values actually passed are overridden.
+     */
+    _applyTheme(menu) {
+        const opts = this.options;
+
+        menu.dataset.transition = opts.animation ? (opts.transition || 'scale') : 'none';
+        if (opts.density === 'compact') menu.dataset.density = 'compact';
+
+        const set = (prop, value) => {
+            if (value !== null && value !== undefined && value !== '') {
+                menu.style.setProperty(prop, value);
+            }
+        };
+
+        set('--dm-ctx-accent', accentToCss(opts.accent));
+        set('--dm-ctx-surface', opts.surface);
+        set('--dm-ctx-radius', radiusToCss(opts.radius));
+        set('--dm-ctx-shadow', shadowToCss(opts.shadow));
+        set('--dm-ctx-duration', `${opts.animationDuration}ms`);
+        set('--dm-ctx-easing', opts.easing);
+
+        // Clamped rather than validated: a panel at 5% is invisible, and an
+        // invisible menu reads as the feature being broken.
+        if (opts.opacity !== null && opts.opacity !== undefined) {
+            const pct = Math.min(100, Math.max(20, Number(opts.opacity) || 100));
+            if (pct < 100) set('--dm-ctx-opacity', String(pct / 100));
+        }
     }
 
     _renderInto(menu, items, hit) {
@@ -798,10 +867,14 @@ class ContextMenu extends Component {
         itemEl.classList.add('is-open');
         sub.dataset.owner = itemEl.dataset.index;
 
-        requestAnimationFrame(() => {
-            sub.style.opacity = '1';
-            sub.style.transform = 'scale(1)';
-        });
+        // Matches the root menu: with animation off the panel must be visible
+        // in the same tick, or a caller that opens and reads straight back
+        // sees an empty-looking menu.
+        if (this.options.animation) {
+            requestAnimationFrame(() => sub.classList.add('is-open'));
+        } else {
+            sub.classList.add('is-open');
+        }
     }
 
     _closeSubmenus(fromDepth) {

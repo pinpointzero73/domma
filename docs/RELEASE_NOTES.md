@@ -96,6 +96,19 @@ including the 85-page showcase harness.
 *   `contextMenu.registry(el)` returns the resolution chain for an element, innermost first - the
     tool for a cascade that is not behaving.
 
+*   **Colour, surface and motion are configurable.** `accent` (a preset key or any CSS colour),
+    `surface`, `radius`, `shadow`, `opacity` and `density`, plus `transition`
+    (`scale`/`fade`/`slide`/`none`), `easing` and `animationDuration`. Every one is a custom
+    property with the theme token as its fallback, so a menu given no styling follows the active
+    theme and only what you pass is overridden - no per-instance rules are generated, and a `render`
+    panel gets the properties too.
+
+*   Two of those carry a deliberate restriction. **The accent tints the border and the hover wash,
+    never the label**, because a named colour cannot be guaranteed readable against whatever surface
+    the menu lands on - the same 1.02:1 trap `--dm-danger` fell into above. And `opacity` mixes the
+    *background* with transparent rather than fading the element, which would fade the text along
+    with the panel and take the contrast down with it.
+
 *   **A region can refuse to be taken over.** Depth deciding is wrong for a component that owns its
     region - a data grid with its own filter panel, an editor, a canvas - because any application
     menu bound inside it wins by being deeper. `exclusive: true` inverts the rule for that one menu:

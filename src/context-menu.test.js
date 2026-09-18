@@ -620,6 +620,108 @@ describe('Domma.elements.contextMenu', () => {
         });
     });
 
+    describe('theming and transitions', () => {
+        beforeEach(() => { root.innerHTML = '<p id="para">text</p>'; });
+
+        const openWith = (opts) => {
+            make('#page', {items: [{label: 'One'}], ...opts});
+            rightClick(document.getElementById('para'));
+            return openMenu();
+        };
+
+        it('resolves a preset accent to its token', () => {
+            const menu = openWith({accent: 'danger', animation: false});
+            expect(menu.style.getPropertyValue('--dm-ctx-accent')).toBe('var(--dm-danger)');
+        });
+
+        it('passes a raw colour straight through', () => {
+            const menu = openWith({accent: '#ff8800', animation: false});
+            expect(menu.style.getPropertyValue('--dm-ctx-accent')).toBe('#ff8800');
+        });
+
+        it('maps radius and shadow keys to tokens, and passes lengths through', () => {
+            const menu = openWith({radius: 'lg', shadow: 'xl', animation: false});
+            expect(menu.style.getPropertyValue('--dm-ctx-radius')).toBe('var(--dm-radius-lg)');
+            expect(menu.style.getPropertyValue('--dm-ctx-shadow')).toBe('var(--dm-shadow-xl)');
+            made.pop().destroy();
+
+            const raw = openWith({radius: '2rem', shadow: 'none', animation: false});
+            expect(raw.style.getPropertyValue('--dm-ctx-radius')).toBe('2rem');
+            expect(raw.style.getPropertyValue('--dm-ctx-shadow')).toBe('none');
+        });
+
+        it('sets no custom property for a value left unset', () => {
+            const menu = openWith({animation: false});
+            expect(menu.style.getPropertyValue('--dm-ctx-accent')).toBe('');
+            expect(menu.style.getPropertyValue('--dm-ctx-surface')).toBe('');
+            expect(menu.style.getPropertyValue('--dm-ctx-opacity')).toBe('');
+        });
+
+        it('clamps opacity into a range that stays visible', () => {
+            expect(openWith({opacity: 5, animation: false})
+                .style.getPropertyValue('--dm-ctx-opacity')).toBe('0.2');
+            made.pop().destroy();
+            expect(openWith({opacity: 60, animation: false})
+                .style.getPropertyValue('--dm-ctx-opacity')).toBe('0.6');
+        });
+
+        it('treats a fully opaque panel as needing no override', () => {
+            const menu = openWith({opacity: 100, animation: false});
+            expect(menu.style.getPropertyValue('--dm-ctx-opacity')).toBe('');
+        });
+
+        it('stamps the transition and carries duration and easing', () => {
+            const menu = openWith({transition: 'slide', animationDuration: 300, easing: 'linear'});
+            expect(menu.dataset.transition).toBe('slide');
+            expect(menu.style.getPropertyValue('--dm-ctx-duration')).toBe('300ms');
+            expect(menu.style.getPropertyValue('--dm-ctx-easing')).toBe('linear');
+        });
+
+        it('reports no transition when animation is off', () => {
+            expect(openWith({transition: 'slide', animation: false}).dataset.transition).toBe('none');
+        });
+
+        it('opens immediately without animation, and defers with it', async () => {
+            const off = openWith({animation: false});
+            expect(off.classList.contains('is-open')).toBe(true);
+            made.pop().destroy();
+
+            const on = openWith({});
+            expect(on.classList.contains('is-open')).toBe(false);   // waits a frame
+            await new Promise((r) => requestAnimationFrame(r));
+            expect(on.classList.contains('is-open')).toBe(true);
+        });
+
+        it('marks compact density only when asked', () => {
+            expect(openWith({density: 'compact', animation: false}).dataset.density).toBe('compact');
+            made.pop().destroy();
+            expect(openWith({animation: false}).dataset.density).toBeUndefined();
+        });
+
+        it('themes a caller-owned render panel too', () => {
+            const panel = document.createElement('div');
+            make('#page', {render: () => panel, accent: 'primary', radius: 'sm', animation: false});
+            rightClick(document.getElementById('para'));
+
+            expect(panel.style.getPropertyValue('--dm-ctx-accent')).toBe('var(--dm-primary)');
+            expect(panel.style.getPropertyValue('--dm-ctx-radius')).toBe('var(--dm-radius-sm)');
+            expect(panel.classList.contains('is-open')).toBe(true);
+        });
+
+        it('gives a submenu the same treatment', () => {
+            make('#page', {
+                items: [{label: 'More', submenu: [{label: 'Child'}]}],
+                accent: 'success', animation: false
+            });
+            rightClick(document.getElementById('para'));
+            document.querySelector('.has-submenu').click();
+
+            const sub = document.querySelector('.dm-context-menu-sub');
+            expect(sub.style.getPropertyValue('--dm-ctx-accent')).toBe('var(--dm-success)');
+            expect(sub.classList.contains('is-open')).toBe(true);
+        });
+    });
+
     describe('lifecycle', () => {
         it('destroy deregisters the menu', () => {
             root.innerHTML = '<p id="para">text</p>';

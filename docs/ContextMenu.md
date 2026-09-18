@@ -171,6 +171,41 @@ actions([{label: 'Edit'}, {label: 'Archive'}]);   // an open menu updates
 
 A Model works too, through `model` and `modelKey`.
 
+## Theming
+
+Every themeable value is a **custom property with the theme token as its fallback**, so a menu given
+no styling follows the active theme, and only what you pass is overridden. Nothing generates
+per-instance CSS rules.
+
+```javascript
+Domma.elements.contextMenu('#panel', {
+    accent: 'danger',        // or '#ff8800', or any CSS colour
+    radius: 'lg',
+    shadow: 'xl',
+    opacity: 85,             // translucent, with a blurred backdrop
+    density: 'compact',
+    transition: 'slide',
+    easing: 'ease-out',
+    animationDuration: 180
+});
+```
+
+`accent` takes a preset key (`primary`, `success`, `danger`, `warning`, `info`) or any CSS colour.
+`radius` and `shadow` take the scale keys (`none`, `sm`, `md`, `lg`, `xl`) or a raw CSS value.
+
+**The accent tints the border and the hover wash, never the label.** A named colour cannot be
+guaranteed readable against whatever surface the menu lands on - `--dm-danger` on `--dm-surface` is
+1.02:1 on `admin-smooth-steel` - so labels keep the one pairing every theme guarantees and the
+accent carries the meaning. The same reasoning makes `opacity` mix the *background* with transparent
+rather than fading the element: `opacity` on the element would fade the text along with the panel
+and take the contrast down with it.
+
+A `render` panel gets the custom properties too, so `accent` and friends reach a caller-owned panel
+without it having to adopt this component's markup.
+
+Transitions are CSS-driven off `data-transition` on the panel, and `prefers-reduced-motion` drops
+them regardless of what was configured.
+
 ## Positioning
 
 The menu anchors to the cursor point, not to an element rect, and uses `position: fixed`. A menu
@@ -237,8 +272,16 @@ accident that differs between dev and production.
 | `maxHeight` | `string` | `'60vh'` | Height before the menu scrolls |
 | `offset` | `[number, number]` | `[2, 2]` | Offset from the cursor point |
 | `flip` | `boolean` | `true` | Flip across the cursor rather than open off screen |
-| `animation` | `boolean` | `true` | Fade and scale on open |
-| `animationDuration` | `number` | `120` | Animation duration in ms |
+| `animation` | `boolean` | `true` | Whether to transition on open and close |
+| `animationDuration` | `number` | `120` | Transition duration in ms |
+| `transition` | `'scale' \| 'fade' \| 'slide' \| 'none'` | `'scale'` | How the panel enters |
+| `easing` | `string` | `cubic-bezier(0.16, 1, 0.3, 1)` | Any CSS easing |
+| `accent` | `string` | `null` | Preset key or any CSS colour |
+| `surface` | `string` | `null` | Overrides the panel background |
+| `radius` | `string` | `null` | `none\|sm\|md\|lg\|xl` or any CSS length |
+| `shadow` | `string` | `null` | `none\|sm\|md\|lg\|xl` |
+| `opacity` | `number` | `null` | 20-100; translucent panel with a blurred backdrop |
+| `density` | `'comfortable' \| 'compact'` | `'comfortable'` | Row height and font size |
 | `itemTemplate` | `Function` | `null` | Custom item renderer returning HTML |
 | `submenuDelay` | `number` | `150` | Hover grace before a submenu opens |
 | `render` | `Function` | `null` | Render your own panel instead of an item list - see below |

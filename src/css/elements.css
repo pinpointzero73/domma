@@ -8092,6 +8092,11 @@ code {
    parent for the region they cover; see src/context-menu.js for resolution.
    ============================================ */
 
+/*
+ * Every themeable value is a custom property with the theme token as its
+ * fallback, so an unstyled menu follows the active theme and only the options
+ * actually passed override it. Nothing here generates per-instance rules.
+ */
 .dm-context-menu {
     position: fixed;
     z-index: 10050;
@@ -8100,14 +8105,63 @@ code {
     gap: 1px;
     padding: 4px;
     overflow-y: auto;
-    background: var(--dm-surface);
+    background: var(--dm-ctx-surface, var(--dm-surface));
     color: var(--dm-text);
-    border: 1px solid var(--dm-border);
-    border-radius: var(--dm-radius-md);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    border: 1px solid var(--dm-ctx-accent, var(--dm-border));
+    border-radius: var(--dm-ctx-radius, var(--dm-radius-md));
+    box-shadow: var(--dm-ctx-shadow, 0 8px 24px rgba(0, 0, 0, 0.18));
     font-size: 0.875rem;
     transform-origin: top left;
     outline: none;
+    transition:
+        opacity var(--dm-ctx-duration, 120ms) var(--dm-ctx-easing, ease),
+        transform var(--dm-ctx-duration, 120ms) var(--dm-ctx-easing, ease);
+}
+
+/*
+ * A translucent panel needs its own layer: mixing the surface with transparent
+ * keeps the text fully opaque, which `opacity` on the element would not - that
+ * would fade the labels along with the background and fail contrast outright.
+ */
+.dm-context-menu[style*="--dm-ctx-opacity"] {
+    background: color-mix(
+        in srgb,
+        var(--dm-ctx-surface, var(--dm-surface)) calc(var(--dm-ctx-opacity) * 100%),
+        transparent
+    );
+    backdrop-filter: blur(10px);
+}
+
+/* An accent tints the leading edge as well as the border. */
+.dm-context-menu[style*="--dm-ctx-accent"] {
+    border-left-width: 3px;
+}
+
+/* ---- transitions ---- */
+
+.dm-context-menu[data-transition] {
+    opacity: 0;
+}
+
+.dm-context-menu[data-transition="scale"] { transform: scale(0.97); }
+.dm-context-menu[data-transition="fade"]  { transform: none; }
+.dm-context-menu[data-transition="slide"] { transform: translateY(-6px); }
+.dm-context-menu[data-transition="none"]  { transform: none; transition: none; }
+
+.dm-context-menu.is-open {
+    opacity: 1;
+    transform: none;
+}
+
+/* ---- density ---- */
+
+.dm-context-menu[data-density="compact"] {
+    font-size: 0.8125rem;
+    padding: 2px;
+}
+
+.dm-context-menu[data-density="compact"] .dm-context-menu-item {
+    padding: 0.25rem 0.45rem;
 }
 
 .dm-context-menu-item {
@@ -8130,6 +8184,17 @@ code {
 .dm-context-menu-item:focus-visible {
     background: var(--dm-background-alt);
     outline: none;
+}
+
+/*
+ * The accent tints the hover wash rather than the label. A named colour cannot
+ * be guaranteed readable against whatever surface the menu is on - the same
+ * trap that made --dm-danger 1.02:1 on admin-smooth-steel - so the text keeps
+ * the one pairing every theme guarantees and the accent carries the meaning.
+ */
+.dm-context-menu[style*="--dm-ctx-accent"] .dm-context-menu-item:hover:not(.is-disabled),
+.dm-context-menu[style*="--dm-ctx-accent"] .dm-context-menu-item:focus-visible {
+    background: color-mix(in srgb, var(--dm-ctx-accent) 16%, transparent);
 }
 
 .dm-context-menu-item:focus-visible {
@@ -8198,7 +8263,7 @@ code {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--dm-primary);
+    background: var(--dm-ctx-accent, var(--dm-primary));
 }
 
 .dm-context-menu-divider {
@@ -8221,7 +8286,8 @@ code {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .dm-context-menu {
+    .dm-context-menu,
+    .dm-context-menu[data-transition] {
         transition: none !important;
         transform: none !important;
     }

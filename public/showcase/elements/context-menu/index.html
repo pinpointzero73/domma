@@ -287,6 +287,67 @@ items: [
         </div>
     </section>
 
+    <section class="card mb-6" data-section="Theming">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Theming and transitions</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Right-click each panel below to compare. Every themeable value is a custom property
+                with the theme token as its fallback, so a menu given no styling follows the active
+                theme and only what you pass is overridden.
+            </p>
+
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div id="theme-accent" class="dm-context-menu-host card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Accent + slide</h4>
+                        <p class="card-text text-sm">danger, radius lg, slide</p>
+                    </div>
+                </div>
+                <div id="theme-glass" class="dm-context-menu-host card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Translucent</h4>
+                        <p class="card-text text-sm">opacity 80, shadow xl, fade</p>
+                    </div>
+                </div>
+                <div id="theme-compact" class="dm-context-menu-host card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Compact</h4>
+                        <p class="card-text text-sm">compact density, no transition</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>
+Domma.elements.contextMenu('#panel', {
+    accent: 'danger',        // or '#ff8800', or any CSS colour
+    radius: 'lg',
+    shadow: 'xl',
+    opacity: 85,             // translucent, with a blurred backdrop
+    density: 'compact',
+    transition: 'slide',     // scale | fade | slide | none
+    easing: 'ease-out',
+    animationDuration: 180
+});
+</code></pre>
+            </div>
+
+            <p class="mb-2">
+                <strong>The accent tints the border and the hover wash, never the label.</strong> A
+                named colour cannot be guaranteed readable against whatever surface the menu lands
+                on - <code>--dm-danger</code> on <code>--dm-surface</code> is 1.02:1 on
+                admin-smooth-steel - so labels keep the one pairing every theme guarantees and the
+                accent carries the meaning. For the same reason <code>opacity</code> mixes the
+                background with transparent rather than fading the element, which would take the
+                text down with it.
+            </p>
+            <p class="mb-2">
+                Transitions are CSS-driven, and <code>prefers-reduced-motion</code> drops them
+                regardless of what was configured.
+            </p>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Custom Panels">
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Panels that are not item lists</h2></div>
         <div class="card-body">
@@ -351,8 +412,16 @@ Domma.elements.contextMenu('[data-ctx]', {
                     <tr><td><code>maxHeight</code></td><td>string</td><td><code>'60vh'</code></td><td>Height before the menu scrolls</td></tr>
                     <tr><td><code>offset</code></td><td>[number, number]</td><td><code>[2, 2]</code></td><td>Offset from the cursor point</td></tr>
                     <tr><td><code>flip</code></td><td>boolean</td><td><code>true</code></td><td>Flip across the cursor rather than open off screen</td></tr>
-                    <tr><td><code>animation</code></td><td>boolean</td><td><code>true</code></td><td>Fade and scale on open</td></tr>
-                    <tr><td><code>animationDuration</code></td><td>number</td><td><code>120</code></td><td>Animation duration in ms</td></tr>
+                    <tr><td><code>animation</code></td><td>boolean</td><td><code>true</code></td><td>Whether to transition on open and close</td></tr>
+                    <tr><td><code>animationDuration</code></td><td>number</td><td><code>120</code></td><td>Transition duration in ms</td></tr>
+                    <tr><td><code>transition</code></td><td>string</td><td><code>'scale'</code></td><td><code>scale</code>, <code>fade</code>, <code>slide</code>, <code>none</code></td></tr>
+                    <tr><td><code>easing</code></td><td>string</td><td><code>cubic-bezier(…)</code></td><td>Any CSS easing</td></tr>
+                    <tr><td><code>accent</code></td><td>string</td><td><code>null</code></td><td>Preset key or any CSS colour</td></tr>
+                    <tr><td><code>surface</code></td><td>string</td><td><code>null</code></td><td>Overrides the panel background</td></tr>
+                    <tr><td><code>radius</code></td><td>string</td><td><code>null</code></td><td><code>none|sm|md|lg|xl</code> or a CSS length</td></tr>
+                    <tr><td><code>shadow</code></td><td>string</td><td><code>null</code></td><td><code>none|sm|md|lg|xl</code></td></tr>
+                    <tr><td><code>opacity</code></td><td>number</td><td><code>null</code></td><td>20-100; translucent with a blurred backdrop</td></tr>
+                    <tr><td><code>density</code></td><td>string</td><td><code>'comfortable'</code></td><td><code>comfortable</code> or <code>compact</code></td></tr>
                     <tr><td><code>itemTemplate</code></td><td>Function</td><td><code>null</code></td><td>Custom item renderer returning HTML</td></tr>
                     <tr><td><code>submenuDelay</code></td><td>number</td><td><code>150</code></td><td>Hover grace before a submenu opens</td></tr>
                     <tr><td><code>render</code></td><td>Function</td><td><code>null</code></td><td>Render your own panel instead of an item list</td></tr>
@@ -499,6 +568,34 @@ Domma.elements.contextMenu('[data-ctx]', {
                     {label: 'PDF', action: () => log('Exported PDF')}
                 ]
             }
+        ]
+    });
+    // Theming demos
+    Domma.elements.contextMenu('#theme-accent', {
+        inherit: false, accent: 'danger', radius: 'lg', transition: 'slide',
+        animationDuration: 180,
+        items: [
+            {label: 'Accented hover', icon: 'eye'},
+            {label: 'Another item', icon: 'copy'},
+            {type: 'divider'},
+            {label: 'Delete', icon: 'trash', danger: true}
+        ]
+    });
+
+    Domma.elements.contextMenu('#theme-glass', {
+        inherit: false, opacity: 80, shadow: 'xl', transition: 'fade', accent: '#38bdf8',
+        items: [
+            {label: 'Blurred backdrop', icon: 'layers'},
+            {label: 'Still readable', icon: 'check'}
+        ]
+    });
+
+    Domma.elements.contextMenu('#theme-compact', {
+        inherit: false, density: 'compact', transition: 'none', radius: 'sm',
+        items: [
+            {label: 'Compact row', icon: 'list'},
+            {label: 'Tighter spacing', icon: 'minimize'},
+            {label: 'No transition', icon: 'zap'}
         ]
     });
 </script>

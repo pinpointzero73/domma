@@ -902,10 +902,26 @@ export interface ContextMenuOptions {
     offset?: [number, number];
     /** Flip across the cursor and clamp to the viewport (default true) */
     flip?: boolean;
-    /** Enable animation (default true) */
+    /** Whether to transition on open and close (default true) */
     animation?: boolean;
-    /** Animation duration in ms (default 120) */
+    /** Transition duration in ms (default 120) */
     animationDuration?: number;
+    /** How the panel enters (default 'scale') */
+    transition?: 'scale' | 'fade' | 'slide' | 'none';
+    /** Any CSS easing (default cubic-bezier(0.16, 1, 0.3, 1)) */
+    easing?: string;
+    /** Preset key ('primary'|'success'|'danger'|'warning'|'info') or any CSS colour */
+    accent?: string;
+    /** Overrides the panel background */
+    surface?: string;
+    /** 'none'|'sm'|'md'|'lg'|'xl', or any CSS length */
+    radius?: string;
+    /** 'none'|'sm'|'md'|'lg'|'xl' */
+    shadow?: string;
+    /** 20-100; translucent panel with a blurred backdrop. Clamped. */
+    opacity?: number;
+    /** Row height and font size (default 'comfortable') */
+    density?: 'comfortable' | 'compact';
     /** Custom item renderer returning HTML */
     itemTemplate?: (item: ContextMenuItem, index: number) => string;
     /** Hover grace before a submenu opens, in ms (default 150) */
