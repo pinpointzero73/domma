@@ -88,9 +88,6 @@ jobs:
             exit 1
           fi
 
-      - name: Run tests
-        run: npx vitest run
-
       # `files` in package.json ships public/dist/*, which is gitignored and so
       # absent from a fresh checkout. Publishing without building sends a
       # package with no bundles in it - which npm accepts and cannot be undone.
@@ -104,6 +101,12 @@ jobs:
             test -s "$f" || { echo "::error::$f missing or empty - refusing to publish"; exit 1; }
           done
           echo "all five bundles present"
+
+      # After the build on purpose: these specs load the BUILT bundle and the
+      # showcase harness renders 90 pages against it, so with no dist they fail
+      # for want of a build rather than for anything wrong with the code.
+      - name: Run tests
+        run: npx vitest run
 
       - name: Publish
         run: npm publish --access public
