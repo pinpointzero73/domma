@@ -196,6 +196,31 @@ Domma.elements.contextMenu('#demo-collection', {
                 first cannot shadow one registered later, and rebundling cannot change which menu wins.
             </p>
 
+            <h3 class="text-lg font-semibold mt-6 mb-3">Regions that must not be taken over</h3>
+            <p class="mb-4">
+                Depth normally decides, which is wrong for a component that owns its region and must
+                not be shadowed by application menus. <code>exclusive: true</code> inverts the rule
+                for that menu: once it encloses the click and accepts it, nothing bound deeper is
+                offered the gesture. Declare it on the menu being protected, rather than as a guard
+                on every menu that might collide with it.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+Domma.elements.contextMenu('#data-grid', {
+    exclusive: true,
+    render: (ctx) =&gt; openFilterPanel(ctx)
+});
+
+// Bound deeper, and never reached inside the grid:
+Domma.elements.contextMenu('[data-row-id]', { items: [...] });
+</code></pre>
+            </div>
+            <p class="mb-4">
+                It is not a veto: an exclusive menu that declines steps aside completely and the
+                inner menus answer as normal. It says nothing about menus outside it, which still
+                inherit under the usual rules.
+            </p>
+
             <h3 class="text-lg font-semibold mt-6 mb-3">Controlling inheritance</h3>
             <div class="code-block language-javascript">
                 <pre><code>
@@ -299,6 +324,7 @@ Domma.elements.contextMenu('[data-ctx]', {
                     <tr><td><code>enabled</code></td><td>boolean | Function</td><td><code>true</code></td><td>False declines and falls through</td></tr>
                     <tr><td><code>inherit</code></td><td>'append' | 'prepend' | false</td><td><code>'append'</code></td><td>Whether ancestor menus' items are merged in</td></tr>
                     <tr><td><code>priority</code></td><td>number</td><td><code>0</code></td><td>Tie-break when two menus bind the same element</td></tr>
+                    <tr><td><code>exclusive</code></td><td>boolean</td><td><code>false</code></td><td>This menu owns its region; nothing bound deeper is offered the click</td></tr>
                 </tbody>
             </table>
 

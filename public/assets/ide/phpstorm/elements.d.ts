@@ -872,6 +872,12 @@ export interface ContextMenuOptions {
     inherit?: 'append' | 'prepend' | false;
     /** Tie-break only when two menus bind the SAME element; depth wins otherwise */
     priority?: number;
+    /**
+     * This menu owns its region: once it encloses the click and accepts it, nothing
+     * bound deeper is offered the gesture. For a component that must not be shadowed
+     * by application menus. Not a veto - an exclusive menu that declines steps aside.
+     */
+    exclusive?: boolean;
     /** Shift+right-click passes through to the browser's own menu (default true) */
     nativeOnShift?: boolean;
     /** Close after an item is chosen (default true) */

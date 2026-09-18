@@ -96,6 +96,14 @@ including the 85-page showcase harness.
 *   `contextMenu.registry(el)` returns the resolution chain for an element, innermost first - the
     tool for a cascade that is not behaving.
 
+*   **A region can refuse to be taken over.** Depth deciding is wrong for a component that owns its
+    region - a data grid with its own filter panel, an editor, a canvas - because any application
+    menu bound inside it wins by being deeper. `exclusive: true` inverts the rule for that one menu:
+    once it encloses the click and accepts it, nothing bound deeper is offered the gesture, and the
+    menu it pre-empts never runs its `onBeforeOpen`. It is not a veto - an exclusive menu that
+    declines steps aside completely. Declaring it on the menu being protected is the point: a guard
+    on every menu that might collide protects nothing the first time a registration path forgets one.
+
 *   **Found while building it:** `color: var(--dm-danger)` on `--dm-surface` is **1.02:1** on
     admin-smooth-steel, so "Delete" in red would have been invisible on every mid-tone theme.
     `validate:contrast` caught it before it shipped. Destructive items now carry a `color-mix` wash

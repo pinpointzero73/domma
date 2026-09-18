@@ -73,6 +73,36 @@ Right-click a card: collection items, then page items. Right-click the gap betwe
 misses, the collection declines, the page menu opens alone. Right-click a link: `exclude` matches,
 the collection declines, and since a link is not claimed further out either, the browser menu opens.
 
+### Regions that must not be taken over
+
+Depth normally decides, which is wrong for a component that owns its region and must not be
+shadowed by application menus - a data grid with its own filter panel, an editor, a canvas.
+`exclusive: true` inverts the rule for that menu: once it encloses the click and accepts it,
+nothing bound deeper is offered the gesture.
+
+```javascript
+Domma.elements.contextMenu('[data-ctx]', {
+    exclusive: true,
+    enabled: (display) => hasModel(display),
+    render: (ctx) => openFilterPanel(ctx)
+});
+
+// Bound deeper, and never reached inside a collection display:
+Domma.elements.contextMenu('[data-entry-id]', {items: [...]});
+```
+
+Declare it on the menu being protected, not as a guard on every menu that might collide with it -
+a guard protects nothing the first time a registration path forgets one.
+
+It is **not a veto**. An exclusive menu that declines (`enabled` false, an `exclude` match, a
+`match` miss) steps aside completely, and the inner menus are offered the gesture as normal. It also
+says nothing about menus *outside* it: those still inherit into it under the usual `inherit` rules,
+since exclusivity is about depth rather than about standing alone. `inherit: false` is the separate
+control for that.
+
+A menu it pre-empts never runs its `onBeforeOpen` - the exclusive menu is asked first, rather than
+asked last and used to discard work already done.
+
 ### Debugging a cascade
 
 ```javascript
@@ -184,6 +214,7 @@ accident that differs between dev and production.
 | `enabled` | `boolean \| Function` | `true` | False declines and falls through |
 | `inherit` | `'append' \| 'prepend' \| false` | `'append'` | Whether ancestor menus' items are merged in |
 | `priority` | `number` | `0` | Tie-break only when two menus bind the same element |
+| `exclusive` | `boolean` | `false` | This menu owns its region; nothing bound deeper is offered the click |
 
 ### Behaviour
 

@@ -84,8 +84,32 @@ function collectCandidates(target) {
  * first. The first entry owns the menu; the rest only matter when it inherits.
  */
 function resolveChain(target, event) {
+    const candidates = collectCandidates(target);
+
+    /*
+     * An exclusive menu is offered the gesture BEFORE anything nested inside
+     * it, so a menu it pre-empts never runs its own `onBeforeOpen`. Asking the
+     * inner ones first and discarding them afterwards would reach the same
+     * menu while firing callbacks for menus that were never going to open.
+     */
+    const exIdx = candidates.findIndex((c) => c.instance.options.exclusive);
+    let start = 0;
+    let exclusiveHit = null;
+
+    if (exIdx > -1) {
+        const c = candidates[exIdx];
+        exclusiveHit = c.instance._accept(c.container, target, event);
+        // It declines: it owns nothing here, so the inner menus get their turn.
+        if (exclusiveHit) start = exIdx;
+    }
+
     const chain = [];
-    for (const candidate of collectCandidates(target)) {
+    for (let i = start; i < candidates.length; i++) {
+        if (i === exIdx && exclusiveHit) {
+            chain.push(exclusiveHit);           // already evaluated, do not re-run
+            continue;
+        }
+        const candidate = candidates[i];
         const accepted = candidate.instance._accept(candidate.container, target, event);
         if (accepted) chain.push(accepted);
     }
@@ -243,6 +267,23 @@ class ContextMenu extends Component {
         enabled: true,
         inherit: 'append',      // 'append' | 'prepend' | false
         priority: 0,
+
+        /*
+         * A menu that owns its region outright: once it encloses the click and
+         * accepts it, nothing bound DEEPER is offered the gesture.
+         *
+         * This inverts the usual depth rule on purpose, for a component that
+         * must not be shadowed by application menus - a data grid with its own
+         * filter panel, an editor, a canvas. The alternative is a guard on
+         * every menu that might collide with it, which protects nothing the
+         * first time a registration path forgets one. Declared here, the
+         * protection travels with the thing being protected.
+         *
+         * It is not a veto: an exclusive menu that DECLINES (`enabled` false,
+         * `exclude`, a `match` miss) steps aside completely and the inner menus
+         * are offered the gesture as normal.
+         */
+        exclusive: false,
 
         // Behaviour
         nativeOnShift: true,

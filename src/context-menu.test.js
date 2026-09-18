@@ -515,6 +515,111 @@ describe('Domma.elements.contextMenu', () => {
         });
     });
 
+    describe('hardened panels', () => {
+        /*
+         * A `render` panel is opaque in BOTH directions, which is the accepted
+         * contract rather than an oversight: it merges no ancestor items into
+         * itself, and it contributes none upward either. The second half is the
+         * one with teeth - an inner menu bound inside a hardened panel replaces
+         * it outright for that region, so the panel is only reachable outside
+         * whatever the inner menu claims.
+         */
+        it('contributes no items to an inner menu, and does not run', () => {
+            root.innerHTML = '<div class="ctx"><div data-entry-id="1" id="e">e</div></div>';
+            const panel = vi.fn();
+            make('.ctx', {render: panel, animation: false});
+            make('[data-entry-id]', {items: [{label: 'Author'}], animation: false});
+
+            rightClick(document.getElementById('e'));
+
+            expect(labels()).toEqual(['Author']);
+            expect(panel).not.toHaveBeenCalled();
+        });
+
+        it('still answers outside whatever the inner menu claims', () => {
+            root.innerHTML = '<div class="ctx"><span id="gap">gap</span><div data-entry-id="1">e</div></div>';
+            const panel = vi.fn();
+            make('.ctx', {render: panel, animation: false});
+            make('[data-entry-id]', {items: [{label: 'Author'}], animation: false});
+
+            rightClick(document.getElementById('gap'));
+
+            expect(panel).toHaveBeenCalledTimes(1);
+            expect(labels()).toEqual([]);
+        });
+    });
+
+    describe('exclusive regions', () => {
+        beforeEach(() => {
+            root.innerHTML = '<div class="ctx"><div data-entry-id="1" id="e">e</div>'
+                + '<span id="gap">gap</span></div>';
+        });
+
+        it('pre-empts a menu bound deeper inside it', () => {
+            const panel = vi.fn();
+            make('.ctx', {exclusive: true, render: panel, animation: false});
+            make('[data-entry-id]', {items: [{label: 'Author'}], animation: false});
+
+            rightClick(document.getElementById('e'));
+
+            expect(panel).toHaveBeenCalledTimes(1);
+            expect(labels()).toEqual([]);
+        });
+
+        it('does not run the pre-empted menu\'s onBeforeOpen', () => {
+            const onBeforeOpen = vi.fn(() => true);
+            make('.ctx', {exclusive: true, render: () => {}, animation: false});
+            make('[data-entry-id]', {items: [{label: 'Author'}], onBeforeOpen, animation: false});
+
+            rightClick(document.getElementById('e'));
+
+            expect(onBeforeOpen).not.toHaveBeenCalled();
+        });
+
+        it('steps aside completely when it declines', () => {
+            const panel = vi.fn();
+            make('.ctx', {exclusive: true, enabled: false, render: panel, animation: false});
+            make('[data-entry-id]', {items: [{label: 'Author'}], animation: false});
+
+            rightClick(document.getElementById('e'));
+
+            expect(panel).not.toHaveBeenCalled();
+            expect(labels()).toEqual(['Author']);
+        });
+
+        it('declines on a match miss, leaving the inner menu to answer', () => {
+            const panel = vi.fn();
+            make('.ctx', {exclusive: true, match: '.nothing-here', render: panel, animation: false});
+            make('[data-entry-id]', {items: [{label: 'Author'}], animation: false});
+
+            rightClick(document.getElementById('e'));
+
+            expect(panel).not.toHaveBeenCalled();
+            expect(labels()).toEqual(['Author']);
+        });
+
+        it('does not shadow menus OUTSIDE it', () => {
+            make('#page', {items: [{label: 'Page'}], animation: false});
+            make('.ctx', {exclusive: true, items: [{label: 'Collection'}], animation: false});
+
+            rightClick(document.getElementById('gap'));
+
+            // Outer items still inherit normally - exclusivity is about depth,
+            // not about standing alone. That is what `inherit: false` is for.
+            expect(labels()).toEqual(['Collection', 'Page']);
+        });
+
+        it('leaves clicks outside its region alone', () => {
+            make('#page', {items: [{label: 'Page'}], animation: false});
+            make('.ctx', {exclusive: true, render: () => {}, animation: false});
+            root.insertAdjacentHTML('beforeend', '<p id="outside">outside</p>');
+
+            rightClick(document.getElementById('outside'));
+
+            expect(labels()).toEqual(['Page']);
+        });
+    });
+
     describe('lifecycle', () => {
         it('destroy deregisters the menu', () => {
             root.innerHTML = '<p id="para">text</p>';
