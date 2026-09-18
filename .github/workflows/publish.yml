@@ -91,8 +91,21 @@ jobs:
       # `files` in package.json ships public/dist/*, which is gitignored and so
       # absent from a fresh checkout. Publishing without building sends a
       # package with no bundles in it - which npm accepts and cannot be undone.
+      # NOT `npm run build`. That chain ends in copy:celebrate, build:archives,
+      # build:kickstart-files and build:miniapps, and the first of those needs
+      # domma-celebrate, which is linked as `file:../domma-celebrate` and so
+      # cannot exist on a runner. None of their output is in `files` anyway -
+      # the package ships no celebrate, no archives, no kickstart-files - so
+      # this runs exactly the steps that produce what is published.
       - name: Build the bundles the package ships
-        run: npm run build
+        run: |
+          npm run generate:bundles
+          npx rollup -c
+          npm run build:info
+          npm run build:metadata
+          npm run copy:themes
+          npm run build:css
+          npm run build:css-bundles
 
       - name: Check the bundles are actually there
         run: |
