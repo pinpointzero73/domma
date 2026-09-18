@@ -1,0 +1,109 @@
+# Publish domma-js to npm via trusted publishing (OIDC).
+#
+# No tokens, no one-time codes: GitHub mints a short-lived OIDC token for this
+# exact workflow, and npm trusts it because the package is configured with a
+# Trusted Publisher pointing back here. That replaces the granular-token path,
+# which npm has withdrawn for direct publishing, and it is the only route that
+# works here - this account has no authenticator app, so a local
+# `npm publish` dies on EOTP every time.
+#
+# Mirrors domma-cms/.github/workflows/publish.yml; keep the two in step.
+#
+# npm side, once: npmjs.com -> domma-js -> Settings -> Trusted Publisher
+#   Provider: GitHub Actions
+#   Organization or user: pinpointzero73
+#   Repository:           domma
+#   Workflow filename:    publish.yml
+#   Environment:          (leave empty)
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  # Lets an already-pushed tag be published without re-tagging - which is how
+  # v0.43.0 goes out, since its tag predates this workflow.
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Tag or ref to publish (e.g. v0.43.0)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write          # required for OIDC; without it npm sees no identity
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+
+      # Deliberately NO registry-url: setup-node would then write an .npmrc
+      # containing `//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}`, and
+      # with no NODE_AUTH_TOKEN in the environment that resolves to an empty
+      # credential. npm sees a token-shaped auth config, takes the token path
+      # instead of OIDC, and the registry rejects it as 404 on PUT. The default
+      # registry is registry.npmjs.org anyway.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Trusted publishing needs npm >= 11.5.1. setup-node ships whatever npm
+      # came with the Node release, which is older - so upgrade explicitly
+      # rather than relying on the runner image.
+      - name: Use an npm that speaks OIDC
+        run: npm install -g npm@latest
+
+      # If either of these is wrong, npm silently falls back to token auth and
+      # the failure looks like a permissions problem rather than a config one.
+      - name: Check the OIDC prerequisites
+        run: |
+          echo "npm: $(npm --version)  (needs >= 11.5.1 for OIDC)"
+          if [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ]; then
+            echo "OIDC token endpoint: present"
+          else
+            echo "::error::No OIDC endpoint - 'id-token: write' permission is missing"
+            exit 1
+          fi
+          echo "--- effective npm auth config ---"
+          npm config list | grep -iE 'registry|auth' || echo "(none - correct for OIDC)"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The tag and package.json must agree, or a mistyped tag silently
+      # publishes the wrong version.
+      - name: Check the tag matches package.json
+        run: |
+          REF="${{ github.event.inputs.ref || github.ref_name }}"
+          PKG="v$(node -p "require('./package.json').version")"
+          echo "ref=$REF package.json=$PKG"
+          if [ "$REF" != "$PKG" ]; then
+            echo "::error::Tag $REF does not match package.json version $PKG"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: npx vitest run
+
+      # `files` in package.json ships public/dist/*, which is gitignored and so
+      # absent from a fresh checkout. Publishing without building sends a
+      # package with no bundles in it - which npm accepts and cannot be undone.
+      - name: Build the bundles the package ships
+        run: npm run build
+
+      - name: Check the bundles are actually there
+        run: |
+          for f in public/dist/domma.min.js public/dist/domma.esm.js \
+                   public/dist/domma.css public/dist/elements.css public/dist/grid.css; do
+            test -s "$f" || { echo "::error::$f missing or empty - refusing to publish"; exit 1; }
+          done
+          echo "all five bundles present"
+
+      - name: Publish
+        run: npm publish --access public
