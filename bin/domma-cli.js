@@ -259,12 +259,12 @@ async function handleInit() {
     if (projectMode === 'spa') {
       console.log(`    1. Start server: npm start  (or: npm run serve)`);
       console.log(`    2. Edit domma.config.json to customise routes and navbar`);
-      console.log(`    3. Add new views: npx domma add view <name>`);
+      console.log(`    3. Add new views: npx domma-js add view <name>`);
       console.log(`    4. Edit views in frontend/js/views/`);
     } else {
       console.log(`    1. Start server: npm start  (or: npm run serve)`);
       console.log(`    2. Edit domma.config.json to customise`);
-      console.log(`    3. Add new pages: npx domma add page <name>`);
+      console.log(`    3. Add new pages: npx domma-js add page <name>`);
     }
 
     console.log(`    ${projectMode === 'spa' ? '5' : '4'}. Read the docs: https://github.com/dcbw-it/domma\n`);
@@ -621,7 +621,7 @@ async function handleServe() {
 
   if (!existsSync(configPath)) {
     console.error('\n  ✗ Not in a Domma project directory');
-    console.error('  Run "npx domma init" first to create a project.\n');
+    console.error('  Run "npx domma-js init" first to create a project.\n');
     process.exit(1);
   }
 
@@ -637,7 +637,7 @@ async function handleServe() {
 
     if (answer.toLowerCase() === 'n') {
       console.log('\n  To install manually: npm install live-server');
-      console.log('  Then run: npx domma serve\n');
+      console.log('  Then run: npx domma-js serve\n');
       process.exit(0);
     }
 
@@ -832,7 +832,7 @@ Examples:
   npx domma-js serve               # Direct CLI usage
   npx domma-js serve --port 3096   # Custom port
 
-Note: After 'npx domma init', use 'npm start' to run the server.
+Note: After 'npx domma-js init', use 'npm start' to run the server.
       Paths are automatically calculated based on folder depth.
 `);
 }

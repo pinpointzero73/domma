@@ -180,7 +180,7 @@ Domma.effects.scribe('.terminal-output', {
   cursorChar: '_',
   cursorBlink: true,
   actions: [
-    { render: '$ npm install domma' },
+    { render: '$ npm install domma-js' },
     { wait: '1s' },
     { render: '\n✓ Installed successfully', effect: 'fade' },
     { wait: '500ms' },

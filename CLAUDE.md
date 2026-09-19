@@ -399,17 +399,17 @@ Three overlapping but distinct distribution concepts:
 | Concept | What it is | Entry point |
 |---------|-----------|-------------|
 | **QuickStart** | Step-by-step getting-started docs | `public/quickstart/index.html` |
-| **Kickstart** | Project scaffold templates (`npx domma init`) | `templates/kickstart/` (MPA), `templates/kickstart-spa/` (SPA) |
+| **Kickstart** | Project scaffold templates (`npx domma-js init`) | `templates/kickstart/` (MPA), `templates/kickstart-spa/` (SPA) |
 | **Preset Archives** | Downloadable `.tar.gz` bundles (JS + CSS only) | `public/dist/archives/` |
 
 ### CLI Default
 
-`npx domma init` defaults to **SPA** mode. Pass `--mpa` to scaffold a Multi-Page Application.
+`npx domma-js init` defaults to **SPA** mode. Pass `--mpa` to scaffold a Multi-Page Application.
 
 ```bash
-npx domma init            # SPA (default)
-npx domma init --spa      # explicit SPA
-npx domma init --mpa      # Multi-Page Application
+npx domma-js init            # SPA (default)
+npx domma-js init --spa      # explicit SPA
+npx domma-js init --mpa      # Multi-Page Application
 ```
 
 ### Template Directories (npm published)

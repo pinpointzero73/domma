@@ -122,7 +122,7 @@ The template is pre-configured with working defaults for testing within the Domm
 
 ### For End Users
 
-When users run `npx domma init --spa`, the CLI:
+When users run `npx domma-js init --spa`, the CLI:
 
 1. Copies this template to their project
 2. Replaces template placeholders (e.g., `{{projectName}}` → actual name)

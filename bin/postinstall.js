@@ -147,7 +147,7 @@ async function main() {
   const answer = await prompt(`${colors.bright}Copy AI assistance files to your project? (Y/n): ${colors.reset}`);
 
   if (answer === 'n' || answer === 'no') {
-    console.log(`${colors.gray}Skipped. Run ${colors.bright}npx domma setup-ai${colors.gray} later to add these files.${colors.reset}\n`);
+    console.log(`${colors.gray}Skipped. Run ${colors.bright}npx domma-js setup-ai${colors.gray} later to add these files.${colors.reset}\n`);
     return;
   }
 

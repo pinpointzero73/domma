@@ -28,13 +28,13 @@ npm install domma-js
 Run the interactive setup:
 
 ```bash
-npx domma init
+npx domma-js init
 ```
 
 Or use quick mode with defaults:
 
 ```bash
-npx domma init --quick
+npx domma-js init --quick
 ```
 
 ### What You Get
@@ -318,8 +318,8 @@ Just use regular HTML and Domma's CSS classes:
 
 ```bash
 npm install domma-js       # Install Domma
-npx domma init            # Initialize new project
-npx domma init --quick    # Quick init with defaults
+npx domma-js init            # Initialize new project
+npx domma-js init --quick    # Quick init with defaults
 ```
 
 ---

@@ -33,7 +33,7 @@ Get a complete project structure with development server in seconds:
 ```bash
 npm init -y
 npm install domma-js
-npx domma init      # Creates project structure (prompts to start server)
+npx domma-js init      # Creates project structure (prompts to start server)
 ```
 
 **Or manually start the server:**
@@ -66,8 +66,8 @@ npm run serve:3096     # Explicit port 3096
 
 **Using CLI directly:**
 ```bash
-npx domma serve              # Start server (auto-detects MPA/SPA)
-npx domma serve --port 3096  # Custom port
+npx domma-js serve              # Start server (auto-detects MPA/SPA)
+npx domma-js serve --port 3096  # Custom port
 ```
 
 The server auto-detects your project type (MPA/SPA) and serves from the correct directory with live reload enabled.
@@ -76,7 +76,7 @@ The server auto-detects your project type (MPA/SPA) and serves from the correct 
 ```bash
 # 1. Create project
 npm install domma-js
-npx domma init
+npx domma-js init
 
 # 2. Start developing (auto-starts server or run manually)
 npm start                    # Opens http://localhost:3096

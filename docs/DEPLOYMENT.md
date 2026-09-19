@@ -108,7 +108,7 @@ Features:
 Users can get Domma files from:
 
 1. **GitHub Releases** - Download archives from release page
-2. **npm** (future) - `npm install domma`
+2. **npm** (future) - `npm install domma-js`
 3. **CDN** (future) - jsDelivr, unpkg automatically serve from GitHub releases
 4. **Direct download** - From your production site
 
