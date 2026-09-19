@@ -62,6 +62,8 @@ jobs:
       # If either of these is wrong, npm silently falls back to token auth and
       # the failure looks like a permissions problem rather than a config one.
       - name: Check the OIDC prerequisites
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "npm: $(npm --version)  (needs >= 11.5.1 for OIDC)"
           if [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ]; then
@@ -72,6 +74,17 @@ jobs:
           fi
           echo "--- effective npm auth config ---"
           npm config list | grep -iE 'registry|auth' || echo "(none - correct for OIDC)"
+          # Say which route publishing will take BEFORE the build, so a job that
+          # is going to die on auth says so in five seconds rather than after a
+          # full build-and-test run.
+          echo "--- auth route ---"
+          if [ -n "$NPM_TOKEN" ]; then
+            echo "NPM_TOKEN secret present - the token route will be used."
+          else
+            echo "No NPM_TOKEN secret, so publishing rests entirely on the Trusted"
+            echo "Publisher configured for this package on npmjs.com. If that is"
+            echo "absent, npm attempts no exchange and dies with ENEEDAUTH below."
+          fi
 
       - name: Install dependencies
         run: npm ci
@@ -139,4 +152,28 @@ jobs:
           else
             echo "No NPM_TOKEN secret - publishing via OIDC trusted publishing."
           fi
-          npm publish --access public
+          # ENEEDAUTH here is not a permissions problem and not a bug in this
+          # file: it is npm finding no credential at all. Every CLI-side
+          # prerequisite is checked above, so when it still happens the missing
+          # piece is on npmjs.com - and the bare error says none of that.
+          set -o pipefail
+          if npm publish --access public 2>&1 | tee publish.log; then
+            exit 0
+          fi
+
+          if grep -q ENEEDAUTH publish.log; then
+            echo "::error::npm reached the registry with no credential (ENEEDAUTH). Configure ONE of the two routes below on npmjs.com."
+            echo ""
+            echo "  A. Trusted Publisher - preferred, no tokens to leak or rotate:"
+            echo "       npmjs.com -> domma-js -> Settings -> Trusted Publisher"
+            echo "         Provider:             GitHub Actions"
+            echo "         Organization or user: pinpointzero73"
+            echo "         Repository:           domma"
+            echo "         Workflow filename:    publish.yml"
+            echo "         Environment:          (leave empty)"
+            echo ""
+            echo "  B. Automation token - npmjs.com -> Access Tokens -> Generate,"
+            echo "     then add it to this repository as the NPM_TOKEN secret:"
+            echo "       gh secret set NPM_TOKEN --repo pinpointzero73/domma"
+          fi
+          exit 1
