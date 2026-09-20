@@ -238,11 +238,18 @@ class Model {
     _validateField(field, value) {
         const def = this._schema[field];
 
-        if (def.required && (value === null || value === undefined || value === '')) {
+        // An empty string is ABSENT, not a value of the wrong type. The required
+        // check has always read it that way; the type check below did not, so an
+        // optional field left blank failed with "Expected type date" - or
+        // "Expected type number" - for the crime of being empty. Forma's own
+        // validator already skips empties, which is why the two disagreed.
+        const isEmpty = value === null || value === undefined || value === '';
+
+        if (def.required && isEmpty) {
             return {valid: false, error: 'Required field is empty'};
         }
 
-        if (value !== null && value !== undefined && def.type) {
+        if (!isEmpty && def.type) {
             const typeCheck = models.types[def.type];
             if (typeCheck && !typeCheck(value)) {
                 return {valid: false, error: `Expected type ${def.type}`};
@@ -638,6 +645,48 @@ function bindingSource(data, methods) {
 }
 
 /**
+ * ISO-8601 date, or date and time. Anything looser is somebody's guess.
+ *
+ * Deliberately not `Date.parse` alone: that accepts `"5"` as the year 2001 and
+ * `"2026"` as the first of January, which is not what a field declared as a
+ * date means.
+ */
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?)?$/;
+
+/**
+ * Is this a date?
+ *
+ * A `Date` instance, or the ISO-8601 TEXT a date arrives as. The text form is
+ * not a convenience: `<input type="date">` and `<input type="datetime-local">`
+ * write a string, and so does every JSON API, so a model field declared
+ * `{type: 'date'}` and bound to one could never validate - `F.create` forms
+ * with a date in them failed on every submit, silently, because the only
+ * symptom was a field error nobody had asked for.
+ *
+ * A date-only string is round-tripped through UTC to reject the impossible:
+ * `Date.parse('2026-02-31')` happily rolls over into March, and a day that does
+ * not exist is not a date. Strings carrying a time are left to `Date.parse`,
+ * since a local-time string has no fixed UTC day to compare against.
+ *
+ * @param   {*} val
+ * @returns {boolean}
+ */
+function isDateValue(val) {
+    if (val instanceof Date) return !Number.isNaN(val.getTime());
+    if (typeof val !== 'string' || !ISO_DATE.test(val)) return false;
+
+    const ms = Date.parse(val);
+    if (Number.isNaN(ms)) return false;
+
+    if (val.length === 10) {
+        const d = new Date(ms);
+        const [y, m, day] = val.split('-').map(Number);
+        return d.getUTCFullYear() === y && d.getUTCMonth() + 1 === m && d.getUTCDate() === day;
+    }
+    return true;
+}
+
+/**
  * Models module
  */
 export const models = {
@@ -954,7 +1003,7 @@ export const models = {
         boolean: (val) => typeof val === 'boolean',
         array: (val) => Array.isArray(val),
         object: (val) => val !== null && typeof val === 'object' && !Array.isArray(val),
-        date: (val) => val instanceof Date && !isNaN(val.getTime()),
+        date: isDateValue,
         any: () => true
     },
 

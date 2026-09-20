@@ -89,3 +89,75 @@ describe('grid layout through a wizard', () => {
         expect(form().className).not.toContain('grid-cols-2');
     });
 });
+
+// ── A form with a date in it can be submitted ────────────────────────────────
+//
+// The regression this file exists to stop repeating: `{type: 'date'}` renders
+// <input type="date">, which writes a STRING, while the model's type check
+// accepted only a real Date. validate() therefore returned false on every
+// submit with "Expected type date", and because the only symptom was a field
+// error nobody had asked for, the button simply appeared to do nothing.
+
+describe('a date field', () => {
+    const FIELDS = {
+        title: {type: 'string', label: 'Title', required: true},
+        when:  {type: 'date',   label: 'Date received', required: true},
+        until: {type: 'date',   label: 'Until'}
+    };
+
+    /** Type into a field the way a user does, so the model sees the write. */
+    const type = (name, value) => {
+        const el = form().querySelector(`[name="${name}"]`);
+        el.value = value;
+        el.dispatchEvent(new Event('change', {bubbles: true}));
+    };
+
+    it('renders as a date input', () => {
+        F.render(host, FIELDS, {}, {});
+        expect(form().querySelector('[name="when"]').type).toBe('date');
+    });
+
+    it('validates what that input writes back', () => {
+        const instance = F.create(FIELDS, {}, {});
+        instance.renderTo(host);
+
+        type('title', 'Deposit');
+        type('when', '2026-09-20');
+
+        expect(instance.validate()).toBe(true);
+        expect(instance.getData().when).toBe('2026-09-20');
+    });
+
+    it('lets an OPTIONAL date be left blank', () => {
+        const instance = F.create(FIELDS, {}, {});
+        instance.renderTo(host);
+
+        type('title', 'Deposit');
+        type('when', '2026-09-20');
+        type('until', '');          // cleared, which writes '' and not null
+
+        expect(instance.validate()).toBe(true);
+    });
+
+    it('still refuses a required date left blank', () => {
+        const instance = F.create(FIELDS, {}, {});
+        instance.renderTo(host);
+
+        type('title', 'Deposit');
+
+        expect(instance.validate()).toBe(false);
+    });
+
+    it('reaches onSubmit with the date in it', () => {
+        let submitted = null;
+        const instance = F.create(FIELDS, {}, {onSubmit: (data) => { submitted = data; }});
+        instance.renderTo(host);
+
+        type('title', 'Deposit');
+        type('when', '2026-09-20');
+        form().dispatchEvent(new Event('submit', {bubbles: true, cancelable: true}));
+
+        expect(submitted).not.toBeNull();
+        expect(submitted.when).toBe('2026-09-20');
+    });
+});

@@ -454,6 +454,83 @@ describe('Domma.models - Models Module Tests', () => {
     expect(n.value).toBe(5);
   });
 
+
+  // ── A date is also the text a date arrives as ──────────────────────────────
+  //
+  // `<input type="date">` writes a STRING, and so does every JSON API, so a
+  // field declared {type: 'date'} could never validate against a value that had
+  // come through a form. Every F.create form with a date in it failed on submit
+  // with "Expected type date", silently - the only symptom was a field error.
+
+  it('Models - a date field accepts a Date and the ISO text a date arrives as', () => {
+    const isDate = Domma.models.types.date;
+
+    expect(isDate(new Date('2026-09-20T00:00:00Z'))).toBe(true);
+    expect(isDate('2026-09-20')).toBe(true);                    // <input type="date">
+    expect(isDate('2026-09-20T14:30')).toBe(true);              // datetime-local
+    expect(isDate('2026-09-20T14:30:00')).toBe(true);
+    expect(isDate('2026-09-20T14:30:00.123Z')).toBe(true);
+    expect(isDate('2026-09-20T14:30:00+01:00')).toBe(true);
+    expect(isDate('2026-09-20 14:30')).toBe(true);              // space separator
+  });
+
+  it('Models - a date field still refuses what is not a date', () => {
+    const isDate = Domma.models.types.date;
+
+    expect(isDate(new Date('nonsense'))).toBe(false);           // Invalid Date
+    expect(isDate('abc')).toBe(false);
+    expect(isDate('20/09/2026')).toBe(false);                   // not ISO
+    expect(isDate('2026-9-2')).toBe(false);                     // unpadded
+    expect(isDate(1789920000000)).toBe(false);                  // an epoch is not a Date
+    expect(isDate({})).toBe(false);
+    expect(isDate(null)).toBe(false);
+
+    // Date.parse alone would take all three of these, which is why it is not
+    // used alone: "5" is the year 2001 and "2026" is the 1st of January.
+    expect(isDate('5')).toBe(false);
+    expect(isDate('2026')).toBe(false);
+    // ...and a day that does not exist is not a date, however willingly
+    // Date.parse rolls it over into the next month.
+    expect(isDate('2026-02-31')).toBe(false);
+    expect(isDate('2026-13-01')).toBe(false);
+  });
+
+  it('Models - a date field round-trips through set/validate', () => {
+    const Booking = Domma.models.create({
+      when: {type: 'date', required: true},
+      note: {type: 'string'}
+    });
+
+    Booking.set('when', '2026-09-20');
+    expect(Booking.get('when')).toBe('2026-09-20');
+    expect(Booking.validate().valid).toBe(true);
+  });
+
+  // ── An empty string is absent, not the wrong type ──────────────────────────
+
+  it('Models - an optional field left blank is absent, not a type error', () => {
+    const Form = Domma.models.create({
+      when:  {type: 'date'},
+      count: {type: 'number'},
+      tags:  {type: 'array'}
+    });
+
+    // '' is what a cleared input writes back. The required check has always
+    // read that as absent; the type check used to call it the wrong type.
+    for (const field of ['when', 'count', 'tags']) {
+      Form.set(field, '');
+      expect(Form.validate().valid, `${field} left blank`).toBe(true);
+    }
+  });
+
+  it('Models - a REQUIRED field left blank is still refused', () => {
+    const Form = Domma.models.create({ when: {type: 'date', required: true} });
+
+    // set() throws on a failed validation rather than returning a result, so
+    // the required guard shows up here and not in validate().
+    expect(() => Form.set('when', '')).toThrow(/Required field is empty/);
+  });
+
   it('Models - writing to a read-only M.computed warns and changes nothing', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const total = Domma.models.computed(() => 7);

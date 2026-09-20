@@ -159,7 +159,7 @@ Domma provides 7 built-in type validators:
 | `boolean` | `M.types.boolean` | `true` |
 | `array` | `M.types.array` | `['a', 'b', 'c']` |
 | `object` | `M.types.object` | `{ key: 'value' }` |
-| `date` | `M.types.date` | `new Date()` |
+| `date` | `M.types.date` | `new Date()`, or the ISO text it arrives as: `'2026-09-20'`, `'2026-09-20T14:30'` |
 | `any` | `M.types.any` | Any value |
 
 ### Type Usage
@@ -175,6 +175,17 @@ const productBlueprint = {
     notes: { type: 'any' }  // Accepts anything
 };
 ```
+
+
+A `date` field takes a `Date` **or** the ISO-8601 string a date actually arrives as. That is not a
+convenience: `<input type="date">` and `<input type="datetime-local">` write a string, and so does
+every JSON API, so a date field bound to a form could otherwise never validate. `'2026-09-20'`,
+`'2026-09-20T14:30'` and a full ISO instant all pass; `'20/09/2026'`, `'5'`, `'2026'` and
+`'2026-02-31'` do not - a day that does not exist is not a date, however willingly `Date.parse`
+rolls it into the next month.
+
+An **empty string is absent**, not a value of the wrong type. A field left blank fails its `required`
+check if it has one, and is otherwise skipped - it does not fail as "Expected type number".
 
 ### Form Input Types
 
