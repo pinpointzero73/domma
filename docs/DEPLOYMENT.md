@@ -56,7 +56,7 @@ Two workflows are configured:
 #### CI Builds (`.github/workflows/ci.yml`)
 - Runs on every push to `main` or `develop`
 - Verifies builds work correctly
-- Tests on Node 18.x and 20.x
+- Tests on Node 24.x and 26.x
 - Uploads build artifacts for inspection
 
 #### Release Builds (`.github/workflows/release.yml`)
@@ -147,7 +147,7 @@ Benefits:
 ## Server Requirements
 
 Your production server only needs:
-- Node.js 18+ and npm
+- Node.js 24+ and npm
 - Git
 - Build runs on deploy
 
