@@ -8341,6 +8341,28 @@ code {
     justify-content: center;
 }
 
+/*
+ * Five rules below are recorded in scripts/validate-contrast-pairs.baseline.json
+ * rather than fixed, and the reason is the theme system, not this component.
+ *
+ * The three `--dm-text-disabled` rules (.is-outside, .is-disabled and the
+ * disabled action) sit below 3:1 on `--dm-surface-raised` in ALL 33 themes -
+ * 1.37 at worst. That is the disabled ramp behaving as designed, and WCAG AA
+ * 1.4.3 exempts inactive controls from the contrast minimum. Lifting it to 4.5
+ * here would make disabled dates LIGHTER than the muted weekday header, which
+ * inverts the hierarchy.
+ *
+ * The two `--dm-text-muted` rules (.dm-datepicker-nav, .dm-datepicker-week)
+ * fail on `--dm-surface-raised` in 23 of the 33 themes, worst 3.11. No token
+ * below `--dm-text` clears AA on a raised surface everywhere, so this is not
+ * fixable by picking a different variable - the muted ramp itself would have to
+ * be redesigned across every theme. Using `--dm-text` instead would pass, and
+ * cost the weekday header and adjacent-month days the de-emphasis that makes a
+ * calendar readable at a glance.
+ *
+ * If the muted ramp is ever revisited, `npm run validate:contrast
+ * --update-baseline` should drop these two.
+ */
 .dm-datepicker-nav {
     display: inline-flex;
     align-items: center;

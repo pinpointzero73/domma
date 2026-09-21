@@ -25,21 +25,40 @@ export const FINISHES = {
     tintStyle: 'alpha',
     useAccentOnDark: true,
     foundation: {
-      'background': '#586170', 'background-alt': '#4f5764',
-      'surface': '#646d7c', 'surface-raised': '#6c7686', 'surface-overlay': '#6c7686',
+      /*
+       * The surface ramp is DARK, not mid-grey, and that is load-bearing.
+       *
+       * It used to run #586170 / #646d7c / #6c7686 - a mid-grey that stepped
+       * LIGHTER as it rose. With near-white text that is the wrong direction:
+       * every step up reduced contrast rather than adding depth, and the ramp
+       * ran out of room. `--dm-text` on `--dm-surface-raised` came to 4.35,
+       * below the 4.5 AA needs, making these the only themes of the 33 where
+       * ordinary body text failed - every other theme manages 8.40 or better.
+       * `--dm-text-muted` was 2.39, which is not readable by any measure.
+       *
+       * Darkening the whole ramp by 40% keeps the blue-grey character and the
+       * relative steps between levels, while restoring the headroom: text 8.88,
+       * secondary 6.53, muted 4.88 on `--dm-surface-raised`. A lighter ramp
+       * cannot carry both near-white body text and a dimmer muted tone at AA -
+       * one of the two has to give, and it should not be legibility.
+       *
+       * Check with `npm run validate:contrast` after touching any of these.
+       */
+      'background': '#353a43', 'background-alt': '#2f343c',
+      'surface': '#3c414a', 'surface-raised': '#414750', 'surface-overlay': '#414750',
       'text': '#f7f9fb', 'text-secondary': '#d2d8e0', 'text-muted': '#b3bcc8',
       'text-disabled': '#8a93a1', 'text-inverse': '#1f2733',
-      'border': '#6f7888', 'border-light': '#5c6573', 'border-dark': '#7a8494',
+      'border': '#434852', 'border-light': '#373d45', 'border-dark': '#494f59',
       'hover-bg': 'rgba(255, 255, 255, 0.07)', 'active-bg': 'rgba(255, 255, 255, 0.10)',
       'disabled-opacity': '0.4',
-      'sidebar-bg': '#454d5a', 'sidebar-text': '#d2d8e0', 'sidebar-border': '#3b424d',
-      'navbar-bg': '#4f5764', 'navbar-text': '#f7f9fb', 'navbar-border': '#5c6573',
-      'table-header-bg': '#535b69', 'table-stripe-bg': 'rgba(255, 255, 255, 0.03)',
+      'sidebar-bg': '#292e36', 'sidebar-text': '#d2d8e0', 'sidebar-border': '#232830',
+      'navbar-bg': '#2f343c', 'navbar-text': '#f7f9fb', 'navbar-border': '#373d45',
+      'table-header-bg': '#32373f', 'table-stripe-bg': 'rgba(255, 255, 255, 0.03)',
       'table-hover-bg': 'rgba(255, 255, 255, 0.07)',
       'modal-backdrop': 'rgba(0, 0, 0, 0.6)',
       'tooltip-bg': '#1f2733', 'tooltip-text': '#ffffff',
-      'scrollbar-track': '#4f5764', 'scrollbar-thumb': '#7a8494', 'scrollbar-thumb-hover': '#8b95a5',
-      'code-bg': '#454d5a', 'code-text': '#ffd9a8', 'progress-bg': '#535b69'
+      'scrollbar-track': '#2f343c', 'scrollbar-thumb': '#494f59', 'scrollbar-thumb-hover': '#5a616c',
+      'code-bg': '#292e36', 'code-text': '#ffd9a8', 'progress-bg': '#32373f'
     }
   },
   sharp: {

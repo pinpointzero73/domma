@@ -15,12 +15,49 @@ describe('generate-admin-themes', () => {
     expect(css).toContain('color-scheme: light;');
   });
 
-  it('uses the dark color-scheme and mid-tone surface for the smooth finish', () => {
+  it('uses the dark color-scheme for the smooth finish', () => {
     const css = buildThemeCss('smooth', 'teal');
     expect(css).toContain('.dm-theme-admin-smooth-teal {');
     expect(css).toContain('--dm-primary: #2a8178;');
-    expect(css).toContain('--dm-surface: #646d7c;');
     expect(css).toContain('color-scheme: dark;');
+  });
+
+  /*
+   * The smooth ramp used to be a mid-grey that stepped LIGHTER as it rose,
+   * which with near-white text meant each level had LESS contrast than the one
+   * below. `--dm-text` on `--dm-surface-raised` reached 4.35 - the only theme
+   * of the 33 where ordinary body text failed AA.
+   *
+   * Pinning the ratio rather than the hex is deliberate: the previous test
+   * asserted `--dm-surface: #646d7c` and so recorded the broken value instead
+   * of protecting the property that mattered.
+   */
+  it('keeps smooth-finish text legible on every surface level', () => {
+    const css = buildThemeCss('smooth', 'teal');
+    const tok = (name) => {
+      const m = css.match(new RegExp(`--dm-${name}:\\s*(#[0-9a-f]{6})`, 'i'));
+      expect(m, `--dm-${name} should be a hex colour`).not.toBeNull();
+      return m[1];
+    };
+    const lin = (c) => (c /= 255) <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    const lum = (h) => {
+      const [r, g, b] = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+    };
+    const ratio = (a, b) => {
+      const [x, y] = [lum(a), lum(b)];
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+    };
+
+    const text = tok('text');
+    const muted = tok('text-muted');
+
+    for (const level of ['background', 'surface', 'surface-raised']) {
+      expect(ratio(text, tok(level)), `--dm-text on --dm-${level}`).toBeGreaterThanOrEqual(4.5);
+    }
+    // Muted is real content, not decoration, so it carries the same bar.
+    expect(ratio(muted, tok('surface-raised')), '--dm-text-muted on --dm-surface-raised')
+      .toBeGreaterThanOrEqual(4.5);
   });
 
   it('defines the full component-token contract', () => {
