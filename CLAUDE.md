@@ -108,8 +108,13 @@ here. Both exist so they can be used *without* Domma; this repository is simply 
 
 | Package | Repository | What it is | How Domma consumes it |
 |---------|-----------|------------|----------------------|
-| `domma-reactive` | `../domma-reactive` | Dependency-tracked reactivity and DOM bindings - the primitive beneath `M.observable` and `M.applyBindings` | Bundled into `domma.min.js` by rollup |
-| `domma-celebrate` | `../domma-celebrate` | The eight seasonal celebration themes and their canvas engine | Built separately, copied to `public/dist/celebrate/` by `npm run copy:celebrate` |
+| `domma-reactive` | `../domma-reactive` | Dependency-tracked reactivity and DOM bindings - the primitive beneath `M.observable` and `M.applyBindings` | **Published.** Installed from the npm registry (pinned exactly in `devDependencies`), bundled into `domma.min.js` by rollup |
+| `domma-celebrate` | `../domma-celebrate` | The eight seasonal celebration themes and their canvas engine | Not yet published. Linked as `file:../domma-celebrate`, built separately, copied to `public/dist/celebrate/` by `npm run copy:celebrate` |
+
+`domma-reactive` is **out**: it now comes from the registry, not the working copy next door. Editing
+`../domma-reactive/src` changes nothing here until that package is published and the version bumped in
+`package.json`. To try a change locally, `npm link` it or point the dependency at `file:../domma-reactive`
+temporarily - do not commit that.
 
 **Working on the celebrations means working in `../domma-celebrate`, not here.** The former
 `public/layouts/js/modules/celebrations/` is gone. To see a change in Domma:
@@ -139,8 +144,11 @@ npm run build:kickstart-files
 **Showcase:**
 
 ```bash
-npm run showcase  # Comprehensive showcase with all features
+npm run dev       # build, then serve public/ with live reload; open /showcase/
 ```
+
+There is no `npm run showcase` script. The showcase is static pages under `public/showcase/`, served by
+whatever is serving `public/`.
 
 **Showcase page harness** (slow - loads 85 pages into jsdom; needs `npm run build:js` first):
 
@@ -166,7 +174,10 @@ and accepted, and a page fails only when it gains one that is not recorded. **It
 empty** - all 85 pages are clean - so any finding is a failure. Keep it that way.
 
 **Tests:**
-Open `tests/test.html` in a browser.
+```bash
+npm test          # Vitest: 20 test files in src/, plus the showcase page harness
+```
+There is no `tests/test.html`; `tests/` holds only `setup-vitest.js`.
 
 ## Documentation Structure
 
