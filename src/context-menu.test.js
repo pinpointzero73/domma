@@ -767,4 +767,95 @@ describe('Domma.elements.contextMenu', () => {
             expect(E.contextMenu.active()).toBeNull();
         });
     });
+    describe('cursor affordance', () => {
+        const sheet = () => document.getElementById('dm-context-cursor-rules');
+        const css = () => (sheet() ? sheet().textContent : '');
+
+        it('emits the context-menu keyword by default', () => {
+            make('#page', {items: [{label: 'Page'}]});
+
+            expect(css()).toContain('#page{cursor:context-menu;}');
+        });
+
+        it('writes a rule rather than touching any element', () => {
+            root.innerHTML = '<p id="para">text</p>';
+            make('#page', {items: [{label: 'Page'}], cursor: 'glyph'});
+
+            // The point of a rule: nothing is stamped on the element, so rows
+            // that appear later are covered without an observer.
+            expect(document.getElementById('para').getAttribute('style')).toBeNull();
+            expect(css()).toContain('#page{cursor:url(');
+        });
+
+        it('narrows the rule to match, so the container padding is untouched', () => {
+            make('#page', {items: [{label: 'Row'}], match: 'tr[data-id]', cursor: 'glyph'});
+
+            expect(css()).toContain('#page tr[data-id]{cursor:url(');
+        });
+
+        it('bakes no quotes or parens that would close the url() early', () => {
+            make('#page', {items: [{label: 'Page'}], cursor: 'glyph'});
+            const rule = css();
+            const uri = rule.slice(rule.indexOf("url('") + 5, rule.indexOf("') 1 1"));
+
+            expect(uri).not.toContain('"');
+            expect(uri).not.toContain("'");
+            expect(uri).not.toContain('(');
+            expect(uri).not.toContain(')');
+        });
+
+        it('declares a natural size and the keyword fallback', () => {
+            make('#page', {items: [{label: 'Page'}], cursor: 'glyph', cursorSize: 26});
+            const rule = decodeURIComponent(css());
+
+            // Chrome ignores an SVG cursor with no natural size.
+            expect(rule).toContain('width="26" height="26"');
+            // The spec requires a keyword at the end of the list.
+            expect(css()).toContain("') 1 1, context-menu;");
+        });
+
+        it('clamps a silly size rather than shipping a cursor no browser draws', () => {
+            make('#page', {items: [{label: 'Page'}], cursor: 'glyph', cursorSize: 400});
+
+            expect(decodeURIComponent(css())).toContain('width="32" height="32"');
+        });
+
+        it('drops the image under forced colours', () => {
+            make('#page', {items: [{label: 'Page'}], cursor: 'glyph'});
+
+            expect(css()).toContain('@media (forced-colors:active){#page{cursor:context-menu;}}');
+        });
+
+        it('passes a custom cursor value through verbatim', () => {
+            make('#page', {items: [{label: 'Page'}], cursor: 'crosshair'});
+
+            expect(css()).toContain('#page{cursor:crosshair;}');
+        });
+
+        it('writes nothing when cursor is false', () => {
+            make('#page', {items: [{label: 'Page'}], cursor: false});
+
+            expect(css()).not.toContain('#page{');
+        });
+
+        it('removes its rule on destroy', () => {
+            const menu = make('#page', {items: [{label: 'Page'}], cursor: 'glyph'});
+            expect(css()).toContain('#page{cursor:url(');
+
+            menu.destroy();
+
+            expect(css()).not.toContain('#page{cursor:url(');
+        });
+
+        it('keeps one menu\'s rule when a sibling is destroyed', () => {
+            root.innerHTML = '<div id="inner">x</div>';
+            const outer = make('#page', {items: [{label: 'Page'}], cursor: 'glyph'});
+            make('#inner', {items: [{label: 'Inner'}], cursor: 'glyph'});
+
+            outer.destroy();
+
+            expect(css()).not.toContain('#page{cursor:url(');
+            expect(css()).toContain('#inner{cursor:url(');
+        });
+    });
 });

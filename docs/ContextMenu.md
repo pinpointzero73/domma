@@ -158,6 +158,55 @@ On touch a long press opens the same menu. `longPress` is the duration in ms (50
 `false` to leave touch alone. Registered containers get `-webkit-touch-callout: none` while it is
 enabled, because iOS answers a long press with its own callout and never sends `contextmenu`.
 
+## The cursor
+
+A right-click menu is invisible until someone right-clicks, so nothing on the page says the gesture
+does anything. `cursor` is the affordance.
+
+| Value | Cursor over a claimed region |
+|-------|------------------------------|
+| `'auto'` (default) | The CSS `context-menu` keyword |
+| `'glyph'` | A generated arrow with a list glyph, themed |
+| `false` | Untouched |
+| any string | Used verbatim as the CSS `cursor` value |
+
+```javascript
+Domma.elements.contextMenu('#invoices', {
+    match: 'tr[data-id]',
+    cursor: 'glyph',
+    items: (row) => [{label: 'Edit ' + row.dataset.id}]
+});
+```
+
+**Why the keyword is the default.** It costs nothing, it can never be wrong, and it honours the
+viewer's own cursor theme - including the enlarged pointer someone may have set for low vision,
+which a fixed-size image would quietly replace with something smaller. Its one weakness is that on
+Windows the contextual-menu cursor is by platform convention *identical to the normal arrow*, so a
+large share of users see no change at all. Interfaces that need the affordance to actually land opt
+into `'glyph'`; the two layer rather than compete, because a custom cursor requires a keyword
+fallback anyway.
+
+**What `'glyph'` draws.** A pointer with the three-rule glyph from Domma's own `list` icon at its
+lower right, 26px by default (`cursorSize`, clamped to 32 - browsers ignore anything larger). The
+arrow takes `--dm-text` and its halo `--dm-text-inverse`, so it stays legible on all themes and is
+regenerated when the theme changes. Under `forced-colors` the image is dropped and the keyword
+stands in, because a baked colour cannot answer a high-contrast palette.
+
+**It is a rule, not a class.** The cursor is written into one stylesheet, composed from the
+selector and `match`:
+
+```css
+#invoices tr[data-id] { cursor: url('data:image/svg+xml,…') 1 1, context-menu; }
+```
+
+That matters for the same reason the cascade resolves `match` live: rows rendered long after the
+menu was declared are covered with no observer and no re-binding. The rule is removed by
+`destroy()`.
+
+> A cursor only ever reaches mouse users. It does nothing for keyboard or touch, where
+> `keyboardTrigger` and `longPress` carry the load. If discoverability is the goal, a hover
+> treatment on the matched region does more work than this - the cursor is the polish.
+
 ## Reactive items
 
 `items` accepts a Domma Reactive observable. While the menu is open it re-renders in place.
@@ -261,6 +310,8 @@ accident that differs between dev and production.
 | `closeOnClickOutside` | `boolean` | `true` | Close on outside mousedown |
 | `closeOnScroll` | `boolean` | `true` | Close on scroll |
 | `longPress` | `number \| false` | `500` | Touch long-press duration in ms |
+| `cursor` | `'auto' \| 'glyph' \| false \| string` | `'auto'` | Pointer over a claimed region - see [The cursor](#the-cursor) |
+| `cursorSize` | `number` | `26` | Glyph cursor size in px, clamped to 32 |
 
 ### Presentation
 

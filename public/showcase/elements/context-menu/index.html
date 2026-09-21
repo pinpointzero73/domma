@@ -348,6 +348,79 @@ Domma.elements.contextMenu('#panel', {
         </div>
     </section>
 
+    <section class="card mb-6" data-section="Cursor">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">The cursor</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                A right-click menu is invisible until someone right-clicks, so nothing on the page
+                says the gesture does anything. Hover each panel below - each has the same menu
+                bound, and differs only in <code>cursor</code>.
+            </p>
+
+            <div class="grid grid-cols-3 gap-4 mb-4">
+                <div id="cursor-auto" class="dm-context-menu-host card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">auto</h4>
+                        <p class="card-text text-sm">the built-in keyword</p>
+                    </div>
+                </div>
+                <div id="cursor-glyph" class="dm-context-menu-host card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">glyph</h4>
+                        <p class="card-text text-sm">generated, themed</p>
+                    </div>
+                </div>
+                <div id="cursor-off" class="dm-context-menu-host card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">false</h4>
+                        <p class="card-text text-sm">pointer untouched</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>
+Domma.elements.contextMenu('#invoices', {
+    match: 'tr[data-id]',
+    cursor: 'glyph',         // 'auto' (default) | 'glyph' | false | any CSS cursor
+    cursorSize: 26,          // clamped to 32 - browsers ignore anything larger
+    items: (row) =&gt; [{label: 'Edit ' + row.dataset.id}]
+});
+</code></pre>
+            </div>
+
+            <p class="mb-2">
+                <strong>The keyword is the default because it is the safer one.</strong> It costs
+                nothing, can never be wrong, and honours the viewer&rsquo;s own cursor theme &ndash;
+                including the enlarged pointer someone may have set for low vision, which a
+                fixed-size image would quietly replace with something smaller. Its weakness is that
+                on Windows the contextual-menu cursor is by platform convention identical to the
+                plain arrow, so the first two panels above may look the same to you. Interfaces that
+                need the affordance to land opt into <code>glyph</code>.
+            </p>
+            <p class="mb-2">
+                <strong>The glyph is drawn from Domma&rsquo;s own <code>list</code> icon</strong>,
+                taking <code>--dm-text</code> for the arrow and <code>--dm-text-inverse</code> for
+                its halo, so it stays legible on every theme and is regenerated when the theme
+                changes. Switch the theme with the picker and hover it again. Under
+                <code>forced-colors</code> the image is dropped and the keyword stands in, because a
+                baked colour cannot answer a high-contrast palette.
+            </p>
+            <p class="mb-2">
+                <strong>It is written as a stylesheet rule</strong>, composed from the selector and
+                <code>match</code>, not as a class on each element &ndash; for the same reason the
+                cascade resolves <code>match</code> live. Rows rendered long after the menu was
+                declared are covered with no observer and no re-binding, and
+                <code>destroy()</code> removes the rule.
+            </p>
+            <p class="text-sm text-gray-600">
+                A cursor only reaches mouse users. It does nothing for keyboard or touch, where
+                <code>keyboardTrigger</code> and <code>longPress</code> carry the load &ndash; the
+                cursor is the polish, not the affordance.
+            </p>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Custom Panels">
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Panels that are not item lists</h2></div>
         <div class="card-body">
@@ -597,6 +670,26 @@ Domma.elements.contextMenu('[data-ctx]', {
             {label: 'Tighter spacing', icon: 'minimize'},
             {label: 'No transition', icon: 'zap'}
         ]
+    });
+
+    // Cursor demos - the same menu three times, differing only in `cursor`.
+    const cursorItems = [
+        {label: 'Open', icon: 'folder'},
+        {label: 'Rename', icon: 'edit'},
+        {type: 'divider'},
+        {label: 'Delete', icon: 'trash', danger: true}
+    ];
+
+    Domma.elements.contextMenu('#cursor-auto', {
+        inherit: false, cursor: 'auto', items: cursorItems
+    });
+
+    Domma.elements.contextMenu('#cursor-glyph', {
+        inherit: false, cursor: 'glyph', cursorSize: 26, items: cursorItems
+    });
+
+    Domma.elements.contextMenu('#cursor-off', {
+        inherit: false, cursor: false, items: cursorItems
     });
 </script>
 

@@ -20,6 +20,7 @@
  */
 
 import Component from './component.js';
+import {clearCursorRule, DEFAULT_CURSOR_SIZE, setCursorRule} from './context-cursor.js';
 
 // Every live instance, in registration order. Small by construction: one entry
 // per bound container pattern, not per element.
@@ -30,6 +31,11 @@ const registry = new Set();
 let active = null;
 
 let docBound = false;
+
+// Identifies an instance's cursor rule in the shared stylesheet. Component
+// carries no id of its own, and the rule has to be replaceable and removable
+// without touching anyone else's.
+let cursorSeq = 0;
 
 // Deduplication window for the touch path. Android fires a real `contextmenu`
 // after a long press and iOS does not, so the long-press timer and the native
@@ -321,6 +327,26 @@ class ContextMenu extends Component {
         closeOnScroll: true,
         longPress: 500,
 
+        /*
+         * The pointer shown over a region this menu claims, which is otherwise
+         * the only clue that a right-click does anything.
+         *
+         *   'auto'    the CSS `context-menu` keyword (default)
+         *   'glyph'   a generated arrow-plus-list cursor, themed
+         *   false     nothing; the pointer is left alone
+         *   <string>  any CSS cursor value, used verbatim
+         *
+         * 'auto' rather than 'glyph' by default because the keyword costs
+         * nothing and respects the viewer's own cursor theme - including an
+         * enlarged pointer set for low vision, which a fixed-size image would
+         * quietly replace with something smaller. Its weakness is that Windows
+         * renders it identically to the plain arrow by platform convention, so
+         * interfaces that need the affordance to actually land opt into
+         * 'glyph'. See src/context-cursor.js.
+         */
+        cursor: 'auto',
+        cursorSize: DEFAULT_CURSOR_SIZE,
+
         // Presentation
         className: '',
         minWidth: '200px',
@@ -397,9 +423,48 @@ class ContextMenu extends Component {
         this._restoreFocusTo = null;
         this._chain = null;
 
+        this._cursorId = ++cursorSeq;
+
         registry.add(this);
         bindDocListeners();
         this._applyTouchCallout();
+        this._applyCursor();
+    }
+
+    /**
+     * Put this menu's cursor into the shared stylesheet.
+     *
+     * The rule is composed from the same selector and `match` the cascade
+     * resolves against, so it covers elements that do not exist yet - which is
+     * the whole reason this is a rule rather than a class applied at bind time.
+     *
+     * A menu bound to a node rather than a selector has nothing to write a
+     * rule against, so the node is stamped with a marker attribute and the
+     * rule targets that. Both paths end up as ordinary CSS.
+     */
+    _applyCursor() {
+        const {cursor, cursorSize, match} = this.options;
+        if (cursor === false || cursor === null || typeof document === 'undefined') return;
+
+        let base = this.selector;
+        if (!base) {
+            if (!this._node) return;
+            this._node.setAttribute('data-dm-ctx-cursor', String(this._cursorId));
+            base = `[data-dm-ctx-cursor="${this._cursorId}"]`;
+        }
+
+        // `match` narrows the menu to descendants, so the cursor has to narrow
+        // with it - otherwise the padding around a table's rows claims a
+        // pointer for a gesture it will decline.
+        const selector = match ? `${base} ${match}` : base;
+
+        if (cursor === 'auto') {
+            setCursorRule(this._cursorId, selector, {kind: 'keyword'});
+        } else if (cursor === 'glyph') {
+            setCursorRule(this._cursorId, selector, {kind: 'glyph', size: cursorSize});
+        } else if (typeof cursor === 'string') {
+            setCursorRule(this._cursorId, selector, {kind: 'custom', value: cursor});
+        }
     }
 
     /**
@@ -1128,6 +1193,10 @@ class ContextMenu extends Component {
     destroy() {
         this.close();
         registry.delete(this);
+        clearCursorRule(this._cursorId);
+        if (this._node && this._node.getAttribute('data-dm-ctx-cursor') === String(this._cursorId)) {
+            this._node.removeAttribute('data-dm-ctx-cursor');
+        }
         unbindDocListeners();
         super.destroy();
     }

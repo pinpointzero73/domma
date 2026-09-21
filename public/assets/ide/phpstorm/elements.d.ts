@@ -890,6 +890,23 @@ export interface ContextMenuOptions {
     closeOnScroll?: boolean;
     /** Long-press duration in ms for touch, or false to disable (default 500) */
     longPress?: number | false;
+    /**
+     * Pointer shown over a region this menu claims - the only clue a right-click
+     * does anything.
+     *
+     *   'auto'    the CSS `context-menu` keyword (default)
+     *   'glyph'   a generated arrow-plus-list cursor, themed and regenerated
+     *   false     leave the pointer alone
+     *   string    any CSS cursor value, used verbatim
+     *
+     * 'auto' by default because the keyword honours the viewer's own cursor
+     * theme, including an enlarged pointer set for low vision. Its weakness is
+     * that Windows renders it identically to the plain arrow, so interfaces
+     * that need the affordance to land opt into 'glyph'.
+     */
+    cursor?: 'auto' | 'glyph' | false | string;
+    /** Glyph cursor size in px, clamped to 32 - browsers ignore anything larger (default 26) */
+    cursorSize?: number;
     /** Extra class on the menu root */
     className?: string;
     /** Minimum menu width (default '200px') */
