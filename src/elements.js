@@ -10303,6 +10303,709 @@ class Signature extends Component {
 }
 
 // ============================================
+// DatePicker Component
+// ============================================
+
+/** Month and weekday names, so the calendar does not depend on the dates module. */
+const DP_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+const DP_WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+/**
+ * `YYYY-MM-DD` for a local Date.
+ *
+ * Never `toISOString().slice(0, 10)`: that converts to UTC first, so anywhere
+ * east of Greenwich an evening date comes back as the day before. Every date
+ * this component stores is a calendar date, not an instant.
+ *
+ * @param   {Date} date
+ * @returns {string}
+ */
+function dpToIso(date) {
+    if (!(date instanceof Date) || Number.isNaN(date.getTime())) return '';
+    const pad = n => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+/**
+ * A local Date at midnight from `YYYY-MM-DD`.
+ *
+ * `new Date('2026-09-21')` parses as UTC midnight, which is the previous day in
+ * the Americas. Splitting the parts and using the local constructor is the only
+ * form that means the same day everywhere.
+ *
+ * @param   {string|Date|number|null} value
+ * @returns {Date|null}
+ */
+function dpFromIso(value) {
+    if (value instanceof Date) {
+        return Number.isNaN(value.getTime())
+            ? null
+            : new Date(value.getFullYear(), value.getMonth(), value.getDate());
+    }
+    if (typeof value === 'number') return dpFromIso(new Date(value));
+
+    const text = String(value ?? '').trim();
+    if (!text) return null;
+
+    const iso = /^(\d{4})-(\d{2})-(\d{2})/.exec(text);
+    if (iso) {
+        const date = new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]));
+        // Rejects 2026-02-31, which the Date constructor would roll into March.
+        return date.getMonth() === Number(iso[2]) - 1 ? date : null;
+    }
+
+    const loose = new Date(text);
+    return Number.isNaN(loose.getTime())
+        ? null
+        : new Date(loose.getFullYear(), loose.getMonth(), loose.getDate());
+}
+
+/**
+ * Format a date for display.
+ *
+ * Understands the tokens people actually write in a date format. Deliberately
+ * small and local: the dates module is a sibling, not a dependency of this
+ * bundle's element layer, and a calendar needs four tokens rather than forty.
+ *
+ * @param   {Date} date
+ * @param   {string} format
+ * @returns {string}
+ */
+function dpFormat(date, format) {
+    if (!date) return '';
+    const pad = n => String(n).padStart(2, '0');
+    const map = {
+        YYYY: String(date.getFullYear()),
+        YY: String(date.getFullYear()).slice(-2),
+        MMMM: DP_MONTHS[date.getMonth()],
+        MMM: DP_MONTHS[date.getMonth()].slice(0, 3),
+        MM: pad(date.getMonth() + 1),
+        M: String(date.getMonth() + 1),
+        DDDD: DP_WEEKDAYS[date.getDay()],
+        DDD: DP_WEEKDAYS[date.getDay()].slice(0, 3),
+        DD: pad(date.getDate()),
+        D: String(date.getDate())
+    };
+    // Longest token first, or `DD` would eat the front of `DDDD`.
+    return format.replace(/YYYY|YY|MMMM|MMM|MM|M|DDDD|DDD|DD|D/g, token => map[token]);
+}
+
+/** Same calendar day? */
+function dpSameDay(a, b) {
+    return Boolean(a) && Boolean(b)
+        && a.getFullYear() === b.getFullYear()
+        && a.getMonth() === b.getMonth()
+        && a.getDate() === b.getDate();
+}
+
+/**
+ * A calendar, attached to an input.
+ *
+ * ## Why this exists
+ *
+ * `<input type="date">` is a different control in every engine, cannot be
+ * themed at all, and writes a string that `M.types.date` then refuses - which
+ * is why a Forma field declared `type: 'date'` could never be submitted. This
+ * is one control everywhere, built from `--dm-*` tokens so it takes the host's
+ * theme, and it writes the same ISO string a model expects.
+ *
+ * ## Contract with the input
+ *
+ * The INPUT keeps the value; the popup only edits it. So `data-model`,
+ * `form.getData()`, a `name` in a real form and anything else reading the
+ * element keep working, and every change dispatches `input` and `change`
+ * exactly as typing would - without which a bound model would never hear about
+ * a click on the calendar.
+ *
+ * The stored value is ISO `YYYY-MM-DD` and `getValue()` always returns that.
+ * `format` changes what is DISPLAYED; when it differs from ISO the element
+ * carries the real value in `data-date` as well, because the displayed text is
+ * then no longer the value.
+ */
+class DatePicker extends Component {
+    static defaults = {
+        value: null,               // ISO string, Date, or null to read the input
+        format: 'YYYY-MM-DD',      // what the input SHOWS
+        min: null,
+        max: null,
+        firstDay: 1,               // 0 Sunday, 1 Monday
+        disabledDates: null,       // (Date) => boolean, true means unavailable
+        openOnFocus: true,
+        closeOnSelect: true,
+        closeOnClickOutside: true,
+        closeOnEscape: true,
+        clearable: true,
+        todayButton: true,
+        readonlyInput: false,      // true stops typing and leaves only the calendar
+        inline: false,             // render in place instead of as a popup
+        position: 'bottom-start',
+        offset: [0, 4],
+        weekNumbers: false,
+        placeholder: null,
+        onChange: null,
+        onOpen: null,
+        onClose: null
+    };
+
+    /** Only one popup is ever open, exactly as with a dropdown. */
+    static _open = null;
+
+    constructor(selector, options = {}) {
+        super(selector, options);
+        if (!this.element) return;
+
+        this._panel = null;
+        this._isOpen = false;
+        this._value = null;
+        this._view = null;     // the month on screen
+        this._focused = null;  // the day the keyboard is on
+
+        this._init();
+    }
+
+    _init() {
+        const input = this.element;
+        const opts = this.options;
+
+        // Never `type="date"`: the native picker would open on top of this one.
+        if (input.tagName === 'INPUT' && input.type === 'date') input.type = 'text';
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('aria-haspopup', 'dialog');
+        input.setAttribute('aria-expanded', 'false');
+        if (opts.readonlyInput) input.readOnly = true;
+        if (opts.placeholder !== null) input.placeholder = opts.placeholder;
+        else if (!input.placeholder) input.placeholder = opts.format;
+
+        const initial = opts.value !== null && opts.value !== undefined && opts.value !== ''
+            ? opts.value
+            : input.value;
+        this._value = this._clamp(dpFromIso(initial));
+        this._view = this._value ? new Date(this._value) : this._clamp(new Date()) || new Date();
+        this._renderInput();
+
+        if (opts.inline) {
+            this._buildPanel();
+            input.insertAdjacentElement('afterend', this._panel);
+            this._panel.classList.add('dm-datepicker--inline');
+            this._paint();
+            this._isOpen = true;
+            return;
+        }
+
+        this._addEventListener(input, 'click', () => this.open());
+        if (opts.openOnFocus) this._addEventListener(input, 'focus', () => this.open());
+        this._addEventListener(input, 'keydown', e => this._onInputKey(e));
+        // Typing is a legitimate way to set a date, so what was typed is parsed
+        // on the way out rather than being thrown away when the popup closes.
+        this._addEventListener(input, 'change', () => {
+            if (this._suppress) return;
+            const parsed = dpFromIso(input.value);
+            this.setValue(parsed ? dpToIso(parsed) : '', {silent: false, fromInput: true});
+        });
+    }
+
+    // ---- value ----------------------------------------------------------
+
+    /** The ISO date currently held, or ''. */
+    getValue() {
+        return this._value ? dpToIso(this._value) : '';
+    }
+
+    /** The Date currently held, or null. */
+    getDate() {
+        return this._value ? new Date(this._value) : null;
+    }
+
+    /**
+     * @param   {string|Date|null} value
+     * @param   {{silent?: boolean, fromInput?: boolean}} [options]
+     * @returns {this}
+     */
+    setValue(value, {silent = false, fromInput = false} = {}) {
+        const next = this._clamp(dpFromIso(value));
+        const changed = !dpSameDay(next, this._value) || (!next !== !this._value);
+        this._value = next;
+        if (next) this._view = new Date(next);
+
+        this._renderInput();
+        if (this._panel) this._paint();
+
+        if (changed && !silent) {
+            // The events a typed change would have fired. Without them nothing
+            // bound to the input - a model, a form, a listener - ever hears
+            // that the calendar was used.
+            if (!fromInput) {
+                this._suppress = true;
+                this.element.dispatchEvent(new Event('input', {bubbles: true}));
+                this.element.dispatchEvent(new Event('change', {bubbles: true}));
+                this._suppress = false;
+            }
+            if (typeof this.options.onChange === 'function') {
+                this.options.onChange(this.getValue(), this.getDate(), this);
+            }
+        }
+        return this;
+    }
+
+    /** @returns {this} */
+    clear() {
+        return this.setValue('');
+    }
+
+    _renderInput() {
+        const iso = this.getValue();
+        this._suppress = true;
+        this.element.value = this._value ? dpFormat(this._value, this.options.format) : '';
+        this._suppress = false;
+        // When what is shown is not the value, the value still has to be
+        // readable off the element by anything that did not ask this instance.
+        if (this.options.format === 'YYYY-MM-DD') delete this.element.dataset.date;
+        else this.element.dataset.date = iso;
+    }
+
+    // ---- limits ---------------------------------------------------------
+
+    _min() { return dpFromIso(this.options.min); }
+    _max() { return dpFromIso(this.options.max); }
+
+    /** Pull a date inside min/max, or null if there is no date. */
+    _clamp(date) {
+        if (!date) return null;
+        const min = this._min();
+        const max = this._max();
+        if (min && date < min) return new Date(min);
+        if (max && date > max) return new Date(max);
+        return date;
+    }
+
+    /** Is this day off limits? */
+    _disabled(date) {
+        const min = this._min();
+        const max = this._max();
+        if (min && date < min) return true;
+        if (max && date > max) return true;
+        if (typeof this.options.disabledDates === 'function') {
+            try {
+                return Boolean(this.options.disabledDates(new Date(date)));
+            } catch {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    // ---- the panel ------------------------------------------------------
+
+    _buildPanel() {
+        const panel = document.createElement('div');
+        panel.className = 'dm-datepicker';
+        // The grid gains a column when week numbers are on, and the stylesheet
+        // keys on this rather than on a class so the two cannot drift.
+        if (this.options.weekNumbers) panel.setAttribute('data-week-numbers', '');
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'false');
+        panel.setAttribute('aria-label', 'Choose a date');
+
+        const head = document.createElement('div');
+        head.className = 'dm-datepicker-head';
+
+        const prev = document.createElement('button');
+        prev.type = 'button';
+        prev.className = 'dm-datepicker-nav';
+        prev.setAttribute('aria-label', 'Previous month');
+        prev.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+        this._addEventListener(prev, 'click', () => this._shiftMonth(-1));
+
+        const next = document.createElement('button');
+        next.type = 'button';
+        next.className = 'dm-datepicker-nav';
+        next.setAttribute('aria-label', 'Next month');
+        next.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+        this._addEventListener(next, 'click', () => this._shiftMonth(1));
+
+        // Month and year as SELECTS rather than a label: jumping to a birth
+        // year through 400 clicks on a chevron is the classic failure of a
+        // hand-rolled calendar.
+        const monthSelect = document.createElement('select');
+        monthSelect.className = 'dm-datepicker-select';
+        monthSelect.setAttribute('aria-label', 'Month');
+        DP_MONTHS.forEach((name, index) => {
+            const option = document.createElement('option');
+            option.value = String(index);
+            option.textContent = name;
+            monthSelect.appendChild(option);
+        });
+        this._addEventListener(monthSelect, 'change', () => {
+            this._view = new Date(this._view.getFullYear(), Number(monthSelect.value), 1);
+            this._paint();
+        });
+
+        const yearSelect = document.createElement('select');
+        yearSelect.className = 'dm-datepicker-select';
+        yearSelect.setAttribute('aria-label', 'Year');
+        this._addEventListener(yearSelect, 'change', () => {
+            this._view = new Date(Number(yearSelect.value), this._view.getMonth(), 1);
+            this._paint();
+        });
+
+        head.appendChild(prev);
+        const pickers = document.createElement('div');
+        pickers.className = 'dm-datepicker-pickers';
+        pickers.appendChild(monthSelect);
+        pickers.appendChild(yearSelect);
+        head.appendChild(pickers);
+        head.appendChild(next);
+        panel.appendChild(head);
+
+        const grid = document.createElement('div');
+        grid.className = 'dm-datepicker-grid';
+        grid.setAttribute('role', 'grid');
+        panel.appendChild(grid);
+
+        const foot = document.createElement('div');
+        foot.className = 'dm-datepicker-foot';
+        panel.appendChild(foot);
+
+        // One listener for every day, not one per cell: the grid is rebuilt on
+        // every repaint and per-cell listeners would have to be unwound each
+        // time or they would pile up.
+        this._addEventListener(grid, 'click', e => {
+            const cell = e.target.closest('[data-dm-date]');
+            if (!cell || cell.hasAttribute('aria-disabled')) return;
+            this.setValue(cell.dataset.dmDate);
+            if (this.options.closeOnSelect && !this.options.inline) this.close({focus: true});
+        });
+
+        this._addEventListener(panel, 'keydown', e => this._onPanelKey(e));
+
+        this._panel = panel;
+        this._grid = grid;
+        this._foot = foot;
+        this._monthSelect = monthSelect;
+        this._yearSelect = yearSelect;
+    }
+
+    _shiftMonth(delta) {
+        this._view = new Date(this._view.getFullYear(), this._view.getMonth() + delta, 1);
+        this._paint();
+    }
+
+    /** Redraw the month on screen. */
+    _paint() {
+        const opts = this.options;
+        const view = this._view;
+        const today = new Date();
+
+        // The year list spans the limits where they exist, and a useful range
+        // around today where they do not.
+        const min = this._min();
+        const max = this._max();
+        const firstYear = min ? min.getFullYear() : today.getFullYear() - 100;
+        const lastYear = max ? max.getFullYear() : today.getFullYear() + 10;
+        if (this._yearSelect.dataset.from !== String(firstYear)
+            || this._yearSelect.dataset.to !== String(lastYear)) {
+            this._yearSelect.textContent = '';
+            for (let year = lastYear; year >= firstYear; year--) {
+                const option = document.createElement('option');
+                option.value = String(year);
+                option.textContent = String(year);
+                this._yearSelect.appendChild(option);
+            }
+            this._yearSelect.dataset.from = String(firstYear);
+            this._yearSelect.dataset.to = String(lastYear);
+        }
+        this._monthSelect.value = String(view.getMonth());
+        this._yearSelect.value = String(view.getFullYear());
+
+        const grid = this._grid;
+        grid.textContent = '';
+
+        const header = document.createElement('div');
+        header.className = 'dm-datepicker-row dm-datepicker-weekdays';
+        header.setAttribute('role', 'row');
+        if (opts.weekNumbers) {
+            const spacer = document.createElement('span');
+            spacer.className = 'dm-datepicker-week';
+            header.appendChild(spacer);
+        }
+        for (let i = 0; i < 7; i++) {
+            const name = DP_WEEKDAYS[(opts.firstDay + i) % 7];
+            const cell = document.createElement('span');
+            cell.className = 'dm-datepicker-weekday';
+            cell.setAttribute('role', 'columnheader');
+            cell.setAttribute('aria-label', name);
+            cell.textContent = name.slice(0, 2);
+            header.appendChild(cell);
+        }
+        grid.appendChild(header);
+
+        // Start on the first day of the week containing the 1st.
+        const first = new Date(view.getFullYear(), view.getMonth(), 1);
+        const lead = (first.getDay() - opts.firstDay + 7) % 7;
+        const start = new Date(first.getFullYear(), first.getMonth(), 1 - lead);
+
+        for (let week = 0; week < 6; week++) {
+            const row = document.createElement('div');
+            row.className = 'dm-datepicker-row';
+            row.setAttribute('role', 'row');
+
+            if (opts.weekNumbers) {
+                const weekCell = document.createElement('span');
+                weekCell.className = 'dm-datepicker-week';
+                const monday = new Date(start);
+                monday.setDate(start.getDate() + week * 7);
+                weekCell.textContent = String(this._weekNumber(monday));
+                row.appendChild(weekCell);
+            }
+
+            for (let day = 0; day < 7; day++) {
+                const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + week * 7 + day);
+                const cell = document.createElement('button');
+                cell.type = 'button';
+                cell.className = 'dm-datepicker-day';
+                cell.dataset.dmDate = dpToIso(date);
+                cell.setAttribute('role', 'gridcell');
+                cell.textContent = String(date.getDate());
+                cell.setAttribute('aria-label', dpFormat(date, 'DDDD D MMMM YYYY'));
+
+                if (date.getMonth() !== view.getMonth()) cell.classList.add('is-outside');
+                if (dpSameDay(date, today)) cell.classList.add('is-today');
+                if (dpSameDay(date, this._value)) {
+                    cell.classList.add('is-selected');
+                    cell.setAttribute('aria-selected', 'true');
+                }
+                if (this._disabled(date)) {
+                    cell.classList.add('is-disabled');
+                    cell.setAttribute('aria-disabled', 'true');
+                    cell.disabled = true;
+                }
+                // Exactly one cell is tabbable, which is what makes a grid one
+                // stop rather than forty-two.
+                const focused = this._focused || this._value || today;
+                cell.tabIndex = dpSameDay(date, focused) ? 0 : -1;
+
+                row.appendChild(cell);
+            }
+            grid.appendChild(row);
+        }
+
+        this._paintFoot();
+    }
+
+    _paintFoot() {
+        const foot = this._foot;
+        foot.textContent = '';
+        const opts = this.options;
+
+        if (opts.todayButton) {
+            const todayBtn = document.createElement('button');
+            todayBtn.type = 'button';
+            todayBtn.className = 'dm-datepicker-action';
+            todayBtn.textContent = 'Today';
+            todayBtn.addEventListener('click', () => {
+                const today = new Date();
+                if (this._disabled(today)) {
+                    // Still useful as navigation even when today cannot be picked.
+                    this._view = new Date(today.getFullYear(), today.getMonth(), 1);
+                    this._paint();
+                    return;
+                }
+                this.setValue(dpToIso(today));
+                if (opts.closeOnSelect && !opts.inline) this.close({focus: true});
+            });
+            foot.appendChild(todayBtn);
+        }
+
+        if (opts.clearable) {
+            const clearBtn = document.createElement('button');
+            clearBtn.type = 'button';
+            clearBtn.className = 'dm-datepicker-action';
+            clearBtn.textContent = 'Clear';
+            clearBtn.disabled = !this._value;
+            clearBtn.addEventListener('click', () => {
+                this.clear();
+                if (!opts.inline) this.close({focus: true});
+            });
+            foot.appendChild(clearBtn);
+        }
+
+        if (!foot.childNodes.length) foot.remove();
+        else if (!foot.parentNode) this._panel.appendChild(foot);
+    }
+
+    /** ISO week number, for `weekNumbers`. */
+    _weekNumber(date) {
+        const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        // Thursday decides the year, which is what makes week 1 the week with
+        // the 4th of January in it.
+        target.setDate(target.getDate() + 3 - ((target.getDay() + 6) % 7));
+        const firstThursday = new Date(target.getFullYear(), 0, 4);
+        firstThursday.setDate(firstThursday.getDate() + 3 - ((firstThursday.getDay() + 6) % 7));
+        return 1 + Math.round((target - firstThursday) / (7 * 24 * 3600 * 1000));
+    }
+
+    // ---- open / close ---------------------------------------------------
+
+    /** @returns {this} */
+    open() {
+        if (this._isOpen || this.options.inline || this.element.disabled) return this;
+
+        if (DatePicker._open && DatePicker._open !== this) DatePicker._open.close();
+
+        if (!this._panel) this._buildPanel();
+        // On the body, not beside the input: a calendar inside a slideover or a
+        // table cell would otherwise be clipped by the first ancestor with
+        // `overflow: hidden`.
+        document.body.appendChild(this._panel);
+
+        this._focused = this._value ? new Date(this._value) : null;
+        this._paint();
+        this._position();
+
+        this._isOpen = true;
+        DatePicker._open = this;
+        this.element.setAttribute('aria-expanded', 'true');
+
+        this._onOutside = e => {
+            if (this._panel.contains(e.target) || e.target === this.element) return;
+            this.close();
+        };
+        this._onReposition = () => this._position();
+        if (this.options.closeOnClickOutside) {
+            // Capture, and on the NEXT frame: the click that opened this panel
+            // is still propagating, and a listener added synchronously would
+            // catch it and close again immediately.
+            setTimeout(() => document.addEventListener('mousedown', this._onOutside, true), 0);
+        }
+        window.addEventListener('resize', this._onReposition);
+        window.addEventListener('scroll', this._onReposition, true);
+
+        if (typeof this.options.onOpen === 'function') this.options.onOpen(this);
+        return this;
+    }
+
+    /**
+     * @param   {{focus?: boolean}} [options] - focus true returns the caret to the input
+     * @returns {this}
+     */
+    close({focus = false} = {}) {
+        if (!this._isOpen || this.options.inline) return this;
+
+        document.removeEventListener('mousedown', this._onOutside, true);
+        window.removeEventListener('resize', this._onReposition);
+        window.removeEventListener('scroll', this._onReposition, true);
+
+        this._panel?.remove();
+        this._isOpen = false;
+        if (DatePicker._open === this) DatePicker._open = null;
+        this.element.setAttribute('aria-expanded', 'false');
+        if (focus) this.element.focus();
+
+        if (typeof this.options.onClose === 'function') this.options.onClose(this);
+        return this;
+    }
+
+    /** @returns {this} */
+    toggle() {
+        return this._isOpen ? this.close() : this.open();
+    }
+
+    _position() {
+        const panel = this._panel;
+        if (!panel) return;
+        const anchor = this.element.getBoundingClientRect();
+        const [dx, dy] = this.options.offset;
+
+        panel.style.position = 'absolute';
+        panel.style.visibility = 'hidden';
+        panel.style.top = '0';
+        panel.style.left = '0';
+        const size = panel.getBoundingClientRect();
+
+        let top = anchor.bottom + dy;
+        let left = anchor.left + dx;
+
+        // Flip above when there is no room below but there is above.
+        if (top + size.height > window.innerHeight && anchor.top - size.height - dy > 0) {
+            top = anchor.top - size.height - dy;
+        }
+        if (this.options.position.endsWith('-end')) left = anchor.right - size.width;
+        // Never off the right edge, and never off the left in the correcting.
+        left = Math.max(8, Math.min(left, window.innerWidth - size.width - 8));
+
+        panel.style.top = `${top + window.scrollY}px`;
+        panel.style.left = `${left + window.scrollX}px`;
+        panel.style.visibility = '';
+    }
+
+    // ---- keyboard -------------------------------------------------------
+
+    _onInputKey(e) {
+        if (e.key === 'ArrowDown' || e.key === 'Enter') {
+            if (!this._isOpen) {
+                e.preventDefault();
+                this.open();
+                this._panel?.querySelector('[tabindex="0"]')?.focus();
+            }
+            return;
+        }
+        if (e.key === 'Escape' && this._isOpen) {
+            e.preventDefault();
+            this.close();
+        }
+    }
+
+    _onPanelKey(e) {
+        const step = {ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7}[e.key];
+        const focused = this._focused || this._value || new Date();
+
+        if (step !== undefined) {
+            e.preventDefault();
+            this._moveFocus(new Date(focused.getFullYear(), focused.getMonth(), focused.getDate() + step));
+            return;
+        }
+        if (e.key === 'PageUp' || e.key === 'PageDown') {
+            e.preventDefault();
+            const delta = e.key === 'PageUp' ? -1 : 1;
+            this._moveFocus(new Date(focused.getFullYear(), focused.getMonth() + delta, focused.getDate()));
+            return;
+        }
+        if (e.key === 'Home' || e.key === 'End') {
+            e.preventDefault();
+            const target = e.key === 'Home'
+                ? new Date(focused.getFullYear(), focused.getMonth(), 1)
+                : new Date(focused.getFullYear(), focused.getMonth() + 1, 0);
+            this._moveFocus(target);
+            return;
+        }
+        if (e.key === 'Escape' && this.options.closeOnEscape) {
+            e.preventDefault();
+            this.close({focus: true});
+        }
+    }
+
+    /** Move the keyboard cursor, following it into the next month if need be. */
+    _moveFocus(date) {
+        this._focused = date;
+        if (date.getMonth() !== this._view.getMonth() || date.getFullYear() !== this._view.getFullYear()) {
+            this._view = new Date(date.getFullYear(), date.getMonth(), 1);
+        }
+        this._paint();
+        this._panel?.querySelector(`[data-dm-date="${dpToIso(date)}"]`)?.focus();
+    }
+
+    // ---- lifecycle ------------------------------------------------------
+
+    destroy() {
+        this.close();
+        this._panel?.remove();
+        this._panel = null;
+        super.destroy();
+    }
+}
+
+// ============================================
 // Elements Module Export
 // ============================================
 
@@ -10628,6 +11331,26 @@ export const elements = {
      * @param {Function}         [options.onChange]              called with the new value
      * @returns {{getValue:Function,setValue:Function,disable:Function,enable:Function,destroy:Function,_root:HTMLElement}|null}
      */
+    /**
+     * A themed calendar attached to an input.
+     *
+     * `<input type="date">` is a different control in every engine, cannot be
+     * themed, and writes a string a model then refuses. This is one control
+     * everywhere, drawn from `--dm-*` tokens, writing ISO `YYYY-MM-DD` into
+     * the input and firing the same events typing would.
+     *
+     * @param   {string|HTMLElement} selector - the input to attach to
+     * @param   {object} [options]
+     * @returns {DatePicker}
+     */
+    datePicker(selector, options = {}) {
+        const instance = new DatePicker(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
     chooser(selector, options = {}) {
         const host = typeof selector === 'string'
             ? document.querySelector(selector)

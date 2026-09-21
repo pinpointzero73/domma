@@ -8292,3 +8292,196 @@ code {
         transform: none !important;
     }
 }
+
+/* ============================================
+   DatePicker
+   --------------------------------------------
+   Every colour is a --dm-* token that the theme layer defines, so the calendar
+   takes whatever theme the host is wearing - including one applied to a region
+   by a theme override, since the tokens are inherited rather than hard-coded.
+   Nothing here invents a token: an undefined var() resolves to nothing and
+   paints a blank panel.
+   ============================================ */
+
+.dm-datepicker {
+    position: absolute;
+    z-index: 1080;
+    width: max-content;
+    padding: 0.5rem;
+
+    font-family: var(--dm-font-sans);
+    font-size: var(--dm-font-size-sm);
+    color: var(--dm-text);
+
+    background: var(--dm-surface-raised, var(--dm-surface));
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-lg);
+    box-shadow: var(--dm-shadow-lg);
+}
+
+.dm-datepicker--inline {
+    position: static;
+    box-shadow: none;
+    margin-top: 0.35rem;
+}
+
+/* Header: month and year pickers between two chevrons. */
+
+.dm-datepicker-head {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.4rem;
+}
+
+.dm-datepicker-pickers {
+    display: flex;
+    gap: 0.3rem;
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
+.dm-datepicker-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    flex: 0 0 auto;
+
+    color: var(--dm-text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--dm-radius-md);
+    cursor: pointer;
+    transition: background var(--dm-transition-fast), color var(--dm-transition-fast);
+}
+
+.dm-datepicker-nav:hover {
+    color: var(--dm-text);
+    background: var(--dm-hover-bg);
+}
+
+.dm-datepicker-select {
+    padding: 0.2rem 0.35rem;
+    font: inherit;
+    color: var(--dm-input-text, var(--dm-text));
+    background: var(--dm-input-bg, var(--dm-surface));
+    border: 1px solid var(--dm-input-border, var(--dm-border));
+    border-radius: var(--dm-radius-md);
+    cursor: pointer;
+}
+
+.dm-datepicker-select:focus-visible {
+    outline: none;
+    border-color: var(--dm-input-focus-border, var(--dm-primary));
+    box-shadow: var(--dm-focus-ring);
+}
+
+/* The grid. Seven equal columns, so the weekday row and the days line up
+   whatever the digits are - a table would do the same but cannot carry the
+   roles this needs. */
+
+.dm-datepicker-row {
+    display: grid;
+    grid-template-columns: repeat(7, 2rem);
+    gap: 2px;
+}
+
+.dm-datepicker[data-week-numbers] .dm-datepicker-row {
+    grid-template-columns: 1.6rem repeat(7, 2rem);
+}
+
+.dm-datepicker-weekdays { margin-bottom: 2px; }
+
+.dm-datepicker-weekday,
+.dm-datepicker-week {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.6rem;
+    font-size: var(--dm-font-size-xs);
+    font-weight: var(--dm-font-weight-semibold);
+    color: var(--dm-text-muted);
+}
+
+.dm-datepicker-week { font-weight: 400; }
+
+.dm-datepicker-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    padding: 0;
+
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    color: var(--dm-text);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--dm-radius-md);
+    cursor: pointer;
+    transition: background var(--dm-transition-fast), color var(--dm-transition-fast);
+}
+
+.dm-datepicker-day:hover:not(.is-disabled) { background: var(--dm-hover-bg); }
+
+.dm-datepicker-day:focus-visible {
+    outline: none;
+    box-shadow: var(--dm-focus-ring);
+}
+
+/* The days either side of the month are shown rather than blanked: a calendar
+   with holes in it is harder to read than one that runs on. */
+.dm-datepicker-day.is-outside { color: var(--dm-text-disabled); }
+
+.dm-datepicker-day.is-today {
+    border-color: var(--dm-primary);
+    font-weight: var(--dm-font-weight-semibold);
+}
+
+.dm-datepicker-day.is-selected,
+.dm-datepicker-day.is-selected:hover {
+    color: var(--dm-primary-text);
+    background: var(--dm-primary);
+    border-color: var(--dm-primary);
+}
+
+.dm-datepicker-day.is-disabled {
+    color: var(--dm-text-disabled);
+    cursor: not-allowed;
+    opacity: var(--dm-disabled-opacity);
+}
+
+/* Footer actions. */
+
+.dm-datepicker-foot {
+    display: flex;
+    gap: 0.35rem;
+    justify-content: flex-end;
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+    border-top: 1px solid var(--dm-border);
+}
+
+.dm-datepicker-action {
+    padding: 0.2rem 0.6rem;
+    font: inherit;
+    font-size: var(--dm-font-size-xs);
+    color: var(--dm-link);
+    background: transparent;
+    border: 0;
+    border-radius: var(--dm-radius-md);
+    cursor: pointer;
+}
+
+.dm-datepicker-action:hover:not(:disabled) {
+    color: var(--dm-link-hover);
+    background: var(--dm-hover-bg);
+}
+
+.dm-datepicker-action:disabled {
+    color: var(--dm-text-disabled);
+    cursor: not-allowed;
+}

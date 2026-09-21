@@ -2578,6 +2578,79 @@ and Shift+right-click still reaches the browser's own menu.
 
 See [docs/ContextMenu.md](./ContextMenu.md) for the cascade rules, options and item schema.
 
+## DatePicker
+
+A themed calendar attached to an input. It exists because `<input type="date">`
+is a different control in every engine, cannot be styled at all, and writes a
+string that `M.types.date` then refuses - which is why a Forma field declared
+`type: 'date'` could never be submitted.
+
+```javascript
+Domma.elements.datePicker('#due-date', {
+    min: '2026-01-01',
+    max: '2026-12-31',
+    firstDay: 1,                       // 0 Sunday, 1 Monday
+    format: 'DD MMM YYYY',             // what the input SHOWS
+    disabledDates: d => d.getDay() === 0 || d.getDay() === 6,
+    onChange: iso => console.log(iso)  // always 'YYYY-MM-DD'
+});
+```
+
+### The contract with the input
+
+**The input keeps the value; the calendar only edits it.** So `data-model`,
+`form.getData()`, a `name` in a real form and anything else reading the element
+keep working - and every change dispatches `input` and `change` exactly as
+typing would, without which a bound model would never hear about a click on a
+day.
+
+The stored value is ISO `YYYY-MM-DD` and `getValue()` always returns that.
+`format` changes only what is DISPLAYED; when it is not ISO the element also
+carries the real value in `data-date`, because the text in the box is then no
+longer the value.
+
+Dates are local calendar dates throughout. `new Date('2026-09-21')` parses as
+UTC midnight and `toISOString().slice(0, 10)` converts the other way, so either
+shortcut moves the date by a day for half the world; the component uses neither.
+
+### Options
+
+| Option | Default | Does |
+|---|---|---|
+| `value` | `null` | ISO string or Date; omitted, it reads the input |
+| `format` | `'YYYY-MM-DD'` | Display format: `YYYY YY MMMM MMM MM M DDDD DDD DD D` |
+| `min` / `max` | `null` | Limits; a value outside them is pulled inside |
+| `firstDay` | `1` | Which day the week starts on |
+| `disabledDates` | `null` | `(Date) => boolean`; true means unavailable |
+| `inline` | `false` | Render in place instead of as a popup |
+| `openOnFocus` | `true` | Open when the input takes focus |
+| `closeOnSelect` | `true` | Close once a day is picked |
+| `clearable` / `todayButton` | `true` | The two footer actions |
+| `readonlyInput` | `false` | Stop typing and leave only the calendar |
+| `weekNumbers` | `false` | An ISO week-number column |
+| `placeholder` | `null` | Defaults to the format, so the box says what it wants |
+| `onChange` / `onOpen` / `onClose` | `null` | Callbacks; `onChange(iso, date, picker)` |
+
+### Methods
+
+`getValue()` (ISO string), `getDate()` (a `Date` or null), `setValue(v, {silent})`,
+`clear()`, `open()`, `close()`, `toggle()`, `setOptions({min, max, …})`, `destroy()`.
+
+### Keyboard and assistive technology
+
+Arrow keys move a day, `PageUp`/`PageDown` a month, `Home`/`End` to the ends of
+the month, `Enter` picks, `Escape` closes and returns the caret to the input.
+Exactly one day is tabbable, which makes the grid one tab stop rather than
+forty-two; the panel is a `dialog`, the grid a `grid`, and each day carries its
+full date as its label.
+
+### Theming
+
+Every colour is a `--dm-*` token, so the calendar wears whatever theme the host
+is wearing, including a theme applied to one region by an override - the tokens
+are inherited, not compiled in. Nothing is hard-coded and no token is invented:
+an undefined `var()` resolves to nothing and paints a blank panel.
+
 ## Chooser
 
 The Chooser is a visual option-picker - the form-friendly equivalent of native radio/checkbox controls when richer presentation is needed. A single component covers four combinations driven by parameters:
