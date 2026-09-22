@@ -22,18 +22,6 @@ jobs:
           node-version: '24.x'
           cache: 'npm'
 
-      # domma-celebrate is consumed as `file:../domma-celebrate`, and npm cannot
-      # supply it - the package is unpublished and the npm account is suspended.
-      # The GitHub repository is public, so clone and build it into the sibling
-      # path the link already points at. Its dist/ is gitignored, hence the
-      # build: `copy:celebrate` copies that tree, and without it every
-      # celebration 404s on the day it matters.
-      - name: Fetch and build domma-celebrate
-        run: |
-          git clone --depth 1 https://github.com/pinpointzero73/domma-celebrate.git ../domma-celebrate
-          npm --prefix ../domma-celebrate ci
-          npm --prefix ../domma-celebrate run build
-
       - name: Install dependencies
         run: npm ci
 

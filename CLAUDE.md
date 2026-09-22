@@ -109,24 +109,22 @@ here. Both exist so they can be used *without* Domma; this repository is simply 
 | Package | Repository | What it is | How Domma consumes it |
 |---------|-----------|------------|----------------------|
 | `domma-reactive` | `../domma-reactive` | Dependency-tracked reactivity and DOM bindings - the primitive beneath `M.observable` and `M.applyBindings` | **Published.** Installed from the npm registry (pinned exactly in `devDependencies`), bundled into `domma.min.js` by rollup |
-| `domma-celebrate` | `../domma-celebrate` | The eight seasonal celebration themes and their canvas engine | Not yet published. Linked as `file:../domma-celebrate`, built separately, copied to `public/dist/celebrate/` by `npm run copy:celebrate` |
+| `domma-celebrate` | `../domma-celebrate` | The eight seasonal celebration themes and their canvas engine | **Published.** Installed from the npm registry (`^1.0.0`), copied to `public/dist/celebrate/` by `npm run copy:celebrate` |
 
-`domma-reactive` is **out**: it now comes from the registry, not the working copy next door. Editing
-`../domma-reactive/src` changes nothing here until that package is published and the version bumped in
-`package.json`. To try a change locally, `npm link` it or point the dependency at `file:../domma-reactive`
-temporarily - do not commit that.
+**Both packages are now published, so neither sibling working copy affects this
+repository.** Editing `../domma-reactive/src` or `../domma-celebrate/src` changes nothing here
+until that package is released and the version bumped in `package.json`. To try a change locally,
+`npm link` it or point the dependency at `file:../<pkg>` temporarily - do not commit that.
 
 **Working on the celebrations means working in `../domma-celebrate`, not here.** The former
-`public/layouts/js/modules/celebrations/` is gone. To see a change in Domma:
+`public/layouts/js/modules/celebrations/` is gone. The published tarball ships its `dist/`
+including the theme chunks, so `copy:celebrate` needs no build step:
 
 ```bash
-npm --prefix ../domma-celebrate run build   # build the package
-npm run copy:celebrate                      # copy its dist into public/dist/celebrate/
+npm run copy:celebrate   # copies node_modules/domma-celebrate/dist into public/dist/celebrate/
 ```
 
-`npm run build` does both as part of the chain. The package is currently linked as
-`"domma-celebrate": "file:../domma-celebrate"`; that becomes a version range once it is
-published.
+`npm run build` does this as part of the chain.
 
 The build is deliberately **code-split**: `domma-celebrate.esm.js` is the engine and each theme
 is a chunk under `chunks/`, fetched only when that celebration is in season. Copy the entry

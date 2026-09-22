@@ -41,7 +41,7 @@ repository is simply one consumer of each.
 | Package | What it is | Where it lives |
 |---------|-----------|----------------|
 | [`domma-reactive`](https://www.npmjs.com/package/domma-reactive) | Dependency-tracked reactivity and fine-grained DOM bindings - the engine beneath `M.observable`, `M.computed` and `M.applyBindings` | Bundled into `domma.min.js`; [repo](https://github.com/pinpointzero73/domma-reactive) |
-| `domma-celebrate` | Eight seasonal celebration themes and their canvas engine, code-split so each theme loads only when it is in season | Served from `dist/celebrate/` on dommajs.org |
+| [`domma-celebrate`](https://www.npmjs.com/package/domma-celebrate) | Eight seasonal celebration themes and their canvas engine, code-split so each theme loads only when it is in season | Copied into `dist/celebrate/` at build time; [repo](https://github.com/pinpointzero73/domma-celebrate) |
 
 **`domma-reactive` has moved out.** The reactive core was extracted into a standalone MIT-licensed package
 and is now consumed from the npm registry rather than lived in this repository. Nothing changes for Domma
@@ -51,7 +51,8 @@ usable on its own - about 20 KB gzipped, no dependencies, no build step - in pro
 without the rest of the framework.
 
 ```bash
-npm install domma-reactive   # reactivity and bindings, standalone
+npm install domma-reactive    # reactivity and bindings, standalone
+npm install domma-celebrate   # seasonal celebrations, standalone
 ```
 
 ## Installation
