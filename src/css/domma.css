@@ -373,12 +373,9 @@
     --dm-autocomplete-item-active: var(--dm-selected-bg);
     --dm-autocomplete-highlight: var(--dm-primary-light);
 
-    /* Pillbox */
-    --dm-pillbox-bg: var(--dm-surface);
-    --dm-pillbox-border: var(--dm-border);
-    --dm-pill-bg: var(--dm-gray-200);
-    --dm-pill-color: var(--dm-text);
-    --dm-pill-hover-bg: var(--dm-gray-300);
+    /* Pillbox: --dm-pillbox-bg, --dm-pillbox-border, --dm-pill-bg,
+       --dm-pill-color and --dm-pill-hover-bg are read with their defaults as
+       fallbacks in elements.css, so they follow the theme on <body>. */
 
     /* Tabs */
     --dm-tab-border: var(--dm-border);
