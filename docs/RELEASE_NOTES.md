@@ -1,3 +1,32 @@
+### v0.44.1 - Pills That Look Like Pills (2026-09-23)
+
+**Pillbox pills were never styled.** The stylesheet styled `.dm-pillbox-pill`, `.dm-pillbox-remove`
+and `.dm-pillbox-message`; the script emits `.dm-pill`, `.dm-pill-remove` and `.dm-pillbox-empty`, the
+names the showcase has always documented. Each pill arrived as bare text beside a grey browser button.
+
+💊 **The rules now match the markup**
+
+*   Pills, their remove button, the empty-state message and the size variants (`.dm-pillbox-small`,
+    `.dm-pillbox-large` on the wrapper) are styled under the names the script produces.
+
+*   The focus ring uses `:focus-within`; the `.focused` class it waited for was never set.
+
+*   The options list loses its bullets, a disabled Pillbox looks disabled, and a clearable one keeps
+    its last pill clear of the x.
+
+🎨 **The colours follow the theme**
+
+*   `--dm-pill-bg`, `--dm-pill-color`, `--dm-pill-hover-bg`, `--dm-pillbox-bg` and
+    `--dm-pillbox-border` are read with their defaults as fallbacks in the rules, not declared on
+    `:root`. A theme class sits on `<body>`, so a `:root` variable pointing at `--dm-surface` resolved
+    against the root's colours - a dark theme would have had a white box and pale pills.
+
+*   The pill background defaults to `--dm-primary-light`, which every theme defines, instead of a
+    fixed grey none of them do. A theme that sets its own pill variables (Grayve does) still wins.
+
+*   The dark-mode block is gone. Its selectors lacked a descendant space and never matched; had they
+    matched, they would have drawn text-coloured borders.
+
 ### v0.43.0 - The Node You Never Held (2026-09-05)
 
 **`$('#list').append($row)` did not put `$row` in the page.** It put a copy there. Every insertion
