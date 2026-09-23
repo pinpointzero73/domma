@@ -2925,7 +2925,8 @@ code {
 .dm-pillbox-empty {
     padding: 0.75rem;
     text-align: center;
-    color: var(--dm-text-muted);
+    /* --dm-text-muted falls to 3:1 on --dm-surface in some themes. */
+    color: var(--dm-text-secondary);
     font-size: var(--dm-font-size-sm);
 }
 

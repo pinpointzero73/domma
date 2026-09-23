@@ -48,7 +48,6 @@
   "public/dist/elements.css  .dm-loader-text  var(--dm-text-secondary)",
   "public/dist/elements.css  .dm-pillbox-clear  var(--dm-text-muted)",
   "public/dist/elements.css  .dm-pillbox-input::placeholder  var(--dm-text-muted)",
-  "public/dist/elements.css  .dm-pillbox-message  var(--dm-text-muted, #6c757d)",
   "public/dist/elements.css  .dm-progression-priority-high  var(--dm-text)",
   "public/dist/elements.css  .dm-timeline-description  var(--dm-text)",
   "public/dist/elements.css  .dm-timeline-title  var(--dm-text)",
@@ -143,8 +142,6 @@
   "public/dist/elements.css  [data-mode=\"dark\"] .input-group-icon > .input-group-addon  var(--dm-text-disabled)",
   "public/dist/elements.css  [data-mode=\"dark\"].dm-autocomplete-item  var(--dm-text-disabled)",
   "public/dist/elements.css  [data-mode=\"dark\"].dm-autocomplete-item.active  var(--dm-text)",
-  "public/dist/elements.css  [data-mode=\"dark\"].dm-pillbox-input  var(--dm-text-disabled)",
-  "public/dist/elements.css  [data-mode=\"dark\"].dm-pillbox-option  var(--dm-text-disabled)",
   "public/dist/elements.css  [data-mode=\"dark\"].input-group-text  var(--dm-text-disabled)",
   "public/dist/elements.css  [data-mode=\"light\"] .code-block-copy:hover  var(--dm-text)"
 ]
