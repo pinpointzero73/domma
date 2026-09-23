@@ -686,11 +686,11 @@ pillbox.setValue(['Delta', 'Epsilon']);
                         <td>Empty state message</td>
                     </tr>
                     <tr>
-                        <td><code>.dm-pillbox-sm</code></td>
+                        <td><code>.dm-pillbox-small</code></td>
                         <td>Small size variant</td>
                     </tr>
                     <tr>
-                        <td><code>.dm-pillbox-lg</code></td>
+                        <td><code>.dm-pillbox-large</code></td>
                         <td>Large size variant</td>
                     </tr>
                     <tr>
@@ -891,15 +891,17 @@ M.bind(formModel, 'tags', '#tags-json', {
                 <tr><th>Variable</th><th>Default</th><th>Controls</th></tr>
                 <tr><td><code>--dm-pillbox-bg</code></td><td><code>var(--dm-surface)</code></td><td>Pillbox background</td></tr>
                 <tr><td><code>--dm-pillbox-border</code></td><td><code>var(--dm-border)</code></td><td>Pillbox border</td></tr>
-                <tr><td><code>--dm-pill-bg</code></td><td><code>var(--dm-gray-200)</code></td><td>Individual pill background</td></tr>
+                <tr><td><code>--dm-pill-bg</code></td><td><code>var(--dm-primary-light)</code></td><td>Individual pill background</td></tr>
                 <tr><td><code>--dm-pill-color</code></td><td><code>var(--dm-text)</code></td><td>Pill text colour</td></tr>
+                <tr><td><code>--dm-pill-hover-bg</code></td><td><code>currentColor at 15%</code></td><td>The x on a pill, hovered</td></tr>
             </table>
             <h4 class="category-title">Example Override</h4>
             <pre class="code-block language-css">
-:root {
-    /* Brand-coloured pills */
-    --dm-pill-bg: var(--dm-primary-light);
-    --dm-pill-color: var(--dm-primary);
+/* Solid brand pills. Set them on .dm-pillbox (or anything inside the
+   themed <body>) rather than :root, so they follow a theme switch. */
+.dm-pillbox {
+    --dm-pill-bg: var(--dm-primary);
+    --dm-pill-color: var(--dm-text-inverse);
 }
 </pre>
             <p class="mt-4">

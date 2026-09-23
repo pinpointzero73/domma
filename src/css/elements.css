@@ -2777,11 +2777,12 @@ code {
 .dm-pillbox-container {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0.375rem;
     padding: 0.375rem 0.5rem;
     min-height: 2.5rem;
-    background: var(--dm-surface, #fff);
-    border: 1px solid var(--dm-border, #dee2e6);
+    background: var(--dm-pillbox-bg, var(--dm-surface));
+    border: 1px solid var(--dm-pillbox-border, var(--dm-border));
     border-radius: var(--dm-radius-md);
     cursor: text;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -2791,50 +2792,70 @@ code {
     border-color: var(--dm-text-disabled);
 }
 
-.dm-pillbox-container.focused {
+.dm-pillbox-container:focus-within {
     border-color: var(--dm-primary);
     box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
-.dm-pillbox-pill {
+/*
+ * The pill classes are the ones the script emits (.dm-pill, .dm-pill-remove,
+ * .dm-pillbox-empty) and the showcase documents. They were styled here as
+ * .dm-pillbox-pill / -remove / -message, which nothing produces, so every pill
+ * arrived as bare text beside a grey browser button.
+ *
+ * The --dm-pill-* / --dm-pillbox-* defaults are fallbacks in the rules rather
+ * than :root declarations: a theme class sits on <body>, and a variable
+ * declared on :root as var(--dm-surface) resolves against the root's colours,
+ * so a dark theme got a white box with pale pills. A theme or a page can still
+ * set any of them.
+ */
+.dm-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    background: var(--dm-primary-light);
-    color: var(--dm-text);
+    max-width: 100%;
+    padding: 0.2rem 0.3rem 0.2rem 0.6rem;
+    background: var(--dm-pill-bg, var(--dm-primary-light));
+    color: var(--dm-pill-color, var(--dm-text));
     border-radius: var(--dm-radius-full);
     font-size: var(--dm-font-size-sm);
     line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
-.dm-pillbox-pill.dm-pillbox-size-small {
-    padding: 0.125rem 0.375rem;
+.dm-pillbox-small .dm-pill {
+    padding: 0.1rem 0.25rem 0.1rem 0.45rem;
     font-size: 0.75rem;
 }
 
-.dm-pillbox-pill.dm-pillbox-size-large {
-    padding: 0.375rem 0.625rem;
+.dm-pillbox-large .dm-pill {
+    padding: 0.35rem 0.4rem 0.35rem 0.75rem;
     font-size: 1rem;
 }
 
-.dm-pillbox-remove {
+.dm-pill-remove {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1rem;
-    height: 1rem;
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
     padding: 0;
     background: none;
     border: none;
+    border-radius: 50%;
     color: inherit;
+    font-size: 1rem;
+    line-height: 1;
     cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.15s ease;
+    opacity: 0.65;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
 }
 
-.dm-pillbox-remove:hover {
+.dm-pill-remove:hover,
+.dm-pill-remove:focus-visible {
     opacity: 1;
+    background: var(--dm-pill-hover-bg, color-mix(in srgb, currentColor 15%, transparent));
 }
 
 .dm-pillbox-input {
@@ -2848,8 +2869,19 @@ code {
     color: var(--dm-text);
 }
 
+.dm-pillbox-small .dm-pillbox-input { font-size: var(--dm-font-size-sm); }
+
 .dm-pillbox-input::placeholder {
     color: var(--dm-text-muted);
+}
+
+.dm-pillbox.disabled .dm-pillbox-container {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dm-pillbox.disabled .dm-pill-remove {
+    pointer-events: none;
 }
 
 .dm-pillbox-dropdown {
@@ -2858,13 +2890,19 @@ code {
     left: 0;
     right: 0;
     margin-top: 0.25rem;
-    background: var(--dm-surface, #fff);
-    border: 1px solid var(--dm-border, #dee2e6);
+    background: var(--dm-surface);
+    border: 1px solid var(--dm-border);
     border-radius: var(--dm-radius-md);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     max-height: 200px;
     overflow-y: auto;
     z-index: var(--dm-z-dropdown, 1000);
+}
+
+.dm-pillbox-options {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0;
 }
 
 .dm-pillbox-option {
@@ -2884,10 +2922,10 @@ code {
     color: var(--dm-text);
 }
 
-.dm-pillbox-message {
+.dm-pillbox-empty {
     padding: 0.75rem;
     text-align: center;
-    color: var(--dm-text-muted, #6c757d);
+    color: var(--dm-text-muted);
     font-size: var(--dm-font-size-sm);
 }
 
@@ -2914,27 +2952,9 @@ code {
     opacity: 1;
 }
 
-/* Dark theme pillbox */
-[data-mode="dark"].dm-pillbox-container {
-    background: var(--dm-surface);
-    border-color: var(--dm-text);
-}
-
-[data-mode="dark"].dm-pillbox-input {
-    color: var(--dm-text-disabled);
-}
-
-[data-mode="dark"].dm-pillbox-dropdown {
-    background: var(--dm-surface);
-    border-color: var(--dm-text);
-}
-
-[data-mode="dark"].dm-pillbox-option {
-    color: var(--dm-text-disabled);
-}
-
-[data-mode="dark"].dm-pillbox-option:hover {
-    background-color: var(--dm-text);
+/* A clearable box keeps its last pill clear of the x. */
+.dm-pillbox:has(.dm-pillbox-clear) .dm-pillbox-container {
+    padding-right: 2rem;
 }
 
 /* ============================================
