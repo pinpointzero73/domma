@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.44.2",
+      "title": "Submenus That Let Go",
+      "description": "<p><strong>A context-menu submenu could stay on screen for good.</strong> Hovering another item left an open submenu under the pointer, and opening a second submenu orphaned the first in the document, where not even closing the menu could remove it.</p><p><strong>Each menu now closes its own submenu.</strong> Hovering an item, or opening a submenu, closes from the menu's own depth rather than the one below it, so a sibling's panel is always closed before its slot is reused. Nested submenus are unaffected.</p>",
+      "date": "2026-09-24"
+    },
+    {
       "year": "v0.44.1",
       "title": "Pills That Look Like Pills",
       "description": "<p><strong>Pillbox pills were never styled.</strong> The stylesheet styled <code>.dm-pillbox-pill</code>, <code>.dm-pillbox-remove</code> and <code>.dm-pillbox-message</code>; the script emits <code>.dm-pill</code>, <code>.dm-pill-remove</code> and <code>.dm-pillbox-empty</code>, the names the showcase has always documented. Each pill arrived as bare text beside a grey browser button.</p><p><strong>The rules now match the markup</strong>, including the size variants, a <code>:focus-within</code> focus ring, an unbulleted options list and a disabled state.</p><p><strong>The colours follow the theme.</strong> The <code>--dm-pill-*</code> and <code>--dm-pillbox-*</code> defaults are fallbacks in the rules rather than <code>:root</code> declarations, so they resolve against the theme on <code>&lt;body&gt;</code>; pills default to <code>--dm-primary-light</code>, which every theme defines.</p>",

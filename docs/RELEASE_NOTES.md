@@ -1,3 +1,21 @@
+### v0.44.2 - Submenus That Let Go (2026-09-24)
+
+**A context-menu submenu could stay on screen for good.** Hover an item with a submenu, then move to
+another item, and the submenu stayed open under the pointer. Open a second submenu and the first
+was left in the document, where not even closing the whole menu could remove it.
+
+🗂️ **Each menu closes its own submenu**
+
+*   A menu at depth *d* keeps its submenu in slot *d*. Hovering one of its items closed submenus
+    from *d + 1*, so the one it owned was never included. It now closes from *d*.
+
+*   Opening a submenu did the same before writing slot *d*, overwriting the reference to a
+    sibling's submenu. That panel was orphaned: no hover, Escape or `close()` could reach it. It is
+    now closed before the slot is reused.
+
+*   A nested submenu still behaves: hovering a plain item in its parent closes only the deeper
+    panel, and the parent stays open.
+
 ### v0.44.1 - Pills That Look Like Pills (2026-09-23)
 
 **Pillbox pills were never styled.** The stylesheet styled `.dm-pillbox-pill`, `.dm-pillbox-remove`
