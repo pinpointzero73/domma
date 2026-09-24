@@ -887,7 +887,10 @@ class ContextMenu extends Component {
                     }
                 });
                 el.addEventListener('mouseenter', () => {
-                    this._closeSubmenus(this._depthOf(menu) + 1);
+                    // A menu at depth d keeps its own submenu in _submenus[d],
+                    // so hovering any of its items closes from d - not d + 1,
+                    // which left a sibling's submenu open under the pointer.
+                    this._closeSubmenus(this._depthOf(menu));
                     clearTimeout(this._submenuTimer);
                     if (submenu) {
                         this._submenuTimer = setTimeout(
@@ -913,7 +916,10 @@ class ContextMenu extends Component {
     }
 
     _openSubmenu(itemEl, item, hit, depth) {
-        this._closeSubmenus(depth + 1);
+        // From depth, not depth + 1: the slot about to be written may already
+        // hold a sibling's submenu, and overwriting it orphaned that panel in
+        // the document where not even close() could reach it.
+        this._closeSubmenus(depth);
 
         const items = this._filterItems(
             (resolveValue(item.submenu, hit.target, hit.ctx) || []), hit

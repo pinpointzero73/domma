@@ -436,6 +436,64 @@ describe('Domma.elements.contextMenu', () => {
                 .toEqual(['CSV', 'JSON']);
         });
 
+        it('closes a submenu when a sibling item is hovered', () => {
+            root.innerHTML = '<p id="para">text</p>';
+            make('#page', {
+                items: [{label: 'Export', submenu: [{label: 'CSV'}]}, {label: 'Delete'}],
+                animation: false
+            });
+            rightClick(document.getElementById('para'));
+            document.querySelector('.has-submenu').click();
+            expect(document.querySelectorAll('.dm-context-menu-sub')).toHaveLength(1);
+
+            const items = document.querySelectorAll('.dm-context-menu-item');
+            items[1].dispatchEvent(new MouseEvent('mouseenter'));
+
+            expect(document.querySelector('.dm-context-menu-sub')).toBeNull();
+            expect(items[0].getAttribute('aria-expanded')).toBe('false');
+        });
+
+        it('replaces a sibling submenu rather than orphaning it', () => {
+            root.innerHTML = '<p id="para">text</p>';
+            make('#page', {
+                items: [
+                    {label: 'Export', submenu: [{label: 'CSV'}]},
+                    {label: 'Move', submenu: [{label: 'Up'}]}
+                ],
+                animation: false
+            });
+            rightClick(document.getElementById('para'));
+            const [exp, move] = document.querySelectorAll('.has-submenu');
+            exp.click();
+            move.click();
+
+            const subs = document.querySelectorAll('.dm-context-menu-sub');
+            expect(subs).toHaveLength(1);
+            expect(subs[0].textContent).toContain('Up');
+
+            document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+            document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+            expect(document.querySelector('.dm-context-menu-sub')).toBeNull();
+        });
+
+        it('keeps a nested submenu while its parent submenu is hovered', () => {
+            root.innerHTML = '<p id="para">text</p>';
+            make('#page', {
+                items: [{label: 'More', submenu: [{label: 'Deeper', submenu: [{label: 'Leaf'}]}, {label: 'Other'}]}],
+                animation: false
+            });
+            rightClick(document.getElementById('para'));
+            document.querySelector('.has-submenu').click();
+            document.querySelector('.dm-context-menu-sub .has-submenu').click();
+            expect(document.querySelectorAll('.dm-context-menu-sub')).toHaveLength(2);
+
+            // Hovering a plain item in the first submenu closes only the second.
+            const other = [...document.querySelectorAll('.dm-context-menu-sub .dm-context-menu-item')]
+                .find((n) => n.textContent.includes('Other'));
+            other.dispatchEvent(new MouseEvent('mouseenter'));
+            expect(document.querySelectorAll('.dm-context-menu-sub')).toHaveLength(1);
+        });
+
         it('resolves a function submenu against the target', () => {
             root.innerHTML = '<div data-entry-id="9" id="row">row</div>';
             make('#page', {
