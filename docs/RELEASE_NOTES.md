@@ -1,3 +1,21 @@
+### v0.44.3 - Readers That Hear Every Change (2026-09-24)
+
+**A computed value could stop updating some of the things that read it.** A computed that read another
+computed AND the source that one was built from, two or more levels down, refreshed the inner one early
+while the change was still propagating. The inner computed then looked unchanged when its own turn
+came, so every other reader of it - bindings, effects, other computeds - kept the old value, silently,
+until some unrelated change woke it. A chart reading both a filtered list and the raw data behind it is
+enough to hit it.
+
+🔁 **domma-reactive 1.0.2**
+
+*   An early refresh that changed the value is now remembered and reported when the flush reaches it,
+    so its readers are told. A computed's first evaluation is not counted, so values that recompute
+    to the same thing still stop propagating there.
+
+*   `M.computed`, `M.effect` and `M.applyBindings` all sit on this graph, so no code changes are
+    needed to pick the fix up.
+
 ### v0.44.2 - Submenus That Let Go (2026-09-24)
 
 **A context-menu submenu could stay on screen for good.** Hover an item with a submenu, then move to

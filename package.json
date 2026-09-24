@@ -1,6 +1,6 @@
 {
     "name": "domma-js",
-    "version": "0.44.2",
+    "version": "0.44.3",
     "description": "Dynamic Object Manipulation & Modeling API - A complete front-end toolkit.",
     "main": "public/dist/domma.min.js",
     "module": "public/dist/domma.esm.js",
@@ -88,7 +88,7 @@
         "@vitest/coverage-v8": "^4.0.16",
         "cypress": "^15.8.1",
         "domma-celebrate": "^1.0.0",
-        "domma-reactive": "1.0.1",
+        "domma-reactive": "1.0.2",
         "dompurify": "^3.4.13",
         "dotenv": "^17.2.3",
         "jsdom": "^24.1.0",

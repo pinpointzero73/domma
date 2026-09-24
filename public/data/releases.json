@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.44.3",
+      "title": "Readers That Hear Every Change",
+      "description": "<p><strong>A computed value could stop updating some of its readers.</strong> A computed reading another computed and the source that one was built from refreshed the inner one early, so when the change reached it the inner computed looked unchanged and its other readers kept the old value.</p><p><strong>domma-reactive 1.0.2 remembers the early refresh</strong> and reports it, so every binding, effect and computed that reads it updates. No code changes are needed.</p>",
+      "date": "2026-09-24"
+    },
+    {
       "year": "v0.44.2",
       "title": "Submenus That Let Go",
       "description": "<p><strong>A context-menu submenu could stay on screen for good.</strong> Hovering another item left an open submenu under the pointer, and opening a second submenu orphaned the first in the document, where not even closing the menu could remove it.</p><p><strong>Each menu now closes its own submenu.</strong> Hovering an item, or opening a submenu, closes from the menu's own depth rather than the one below it, so a sibling's panel is always closed before its slot is reused. Nested submenus are unaffected.</p>",
