@@ -1,3 +1,18 @@
+### v0.44.4 - Built On A Typed Core (2026-09-25)
+
+**No change in behaviour - Domma is now built against domma-reactive 1.1.0.** The reactive engine
+under `M.computed`, `M.effect` and `M.applyBindings` is the same code as in 0.44.3: 1.1.0's only
+change is that the standalone package now ships TypeScript declarations.
+
+🧩 **domma-reactive 1.1.0**
+
+*   Domma inlines domma-reactive into its own bundle, so the declarations do not come with it - Domma
+    itself ships no TypeScript types. If you use `domma-reactive` directly, installing 1.1.0 gives
+    you typed `observable`, `computed` and friends, with a read-only computed refusing assignment at
+    compile time.
+
+*   Nothing to change when upgrading.
+
 ### v0.44.3 - Readers That Hear Every Change (2026-09-24)
 
 **A computed value could stop updating some of the things that read it.** A computed that read another

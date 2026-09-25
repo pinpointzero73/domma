@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.44.4",
+      "title": "Built On A Typed Core",
+      "description": "<p><strong>No change in behaviour.</strong> Domma is now built against domma-reactive 1.1.0, whose only change is that the standalone package ships TypeScript declarations. Domma inlines the engine, so its own API is untouched and nothing needs changing when upgrading.</p>",
+      "date": "2026-09-25"
+    },
+    {
       "year": "v0.44.3",
       "title": "Readers That Hear Every Change",
       "description": "<p><strong>A computed value could stop updating some of its readers.</strong> A computed reading another computed and the source that one was built from refreshed the inner one early, so when the change reached it the inner computed looked unchanged and its other readers kept the old value.</p><p><strong>domma-reactive 1.0.2 remembers the early refresh</strong> and reports it, so every binding, effect and computed that reads it updates. No code changes are needed.</p>",
