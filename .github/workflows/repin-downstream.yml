@@ -12,6 +12,9 @@
 #
 #   Actions → Re-pin downstream → Run workflow → 0.44.4
 #
+# Besides the pin and the lockfile, the PR carries admin/dist/domma/domma-tools.*
+# rebuilt at the tag - see "Build Domma Tools at the tag" below.
+#
 # The PR is for review, not auto-merged. Merging it does not release domma-cms;
 # that is domma-cms's own "Cut a release", once its CHANGELOG says what changed.
 #
@@ -85,6 +88,28 @@ jobs:
           echo "::error::$PACKAGE@$VERSION did not appear on npm within 10 minutes"
           exit 1
 
+      # domma-cms serves Domma Tools from admin/dist/domma/, and domma-js does
+      # not ship them to npm, so every re-pin by hand copied them out of a
+      # build. They come from a build of the released tag here, and the CMS
+      # build refuses a tools bundle stamped with a different version from the
+      # core - so the stamp is checked before anything is committed.
+      - uses: actions/checkout@v7
+        with:
+          ref: v${{ env.VERSION }}
+          path: built
+
+      - name: Build Domma Tools at the tag
+        working-directory: built
+        run: |
+          npm ci --no-audit --no-fund
+          npm run generate:bundles
+          NODE_ENV=production npx rollup -c
+          NODE_ENV=production npm run build:css
+          for f in public/dist/domma-tools.min.js public/dist/domma-tools.css; do
+            head -c 300 "$f" | grep -q "v$VERSION" \
+              || { echo "::error::$f is not stamped v$VERSION"; exit 1; }
+          done
+
       - name: Move the pin
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
@@ -99,22 +124,20 @@ jobs:
           fi
           git checkout -b "$BRANCH"
 
-          # --package-lock-only: resolve and record, without installing a tree
-          # nobody here will use. npm re-indents the lockfile to match
-          # package.json, so its original indent is put back afterwards and the
-          # diff is the dependency and nothing else.
-          INDENT=$(node -e "const s=require('fs').readFileSync('package-lock.json','utf8');console.log((s.match(/\n( +)\"/)||[,'  '])[1].length)")
-          npm install "$PACKAGE@$VERSION" --save-exact --package-lock-only --ignore-scripts --no-audit --no-fund
-          node -e "
-            const fs = require('fs');
-            const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
-            fs.writeFileSync('package-lock.json', JSON.stringify(lock, null, $INDENT) + '\n');
-          "
-
-          if git diff --quiet; then
+          # Surgical, not `npm install`: the pin and the three lockfile fields,
+          # nothing re-resolved. Exit 3 means the pin is already there.
+          set +e
+          node ../source/scripts/repin.mjs "$PACKAGE" "$VERSION"
+          STATUS=$?
+          set -e
+          if [ "$STATUS" = 3 ]; then
             echo "$TARGET already pins $PACKAGE $VERSION - nothing to do"
             exit 0
           fi
+          [ "$STATUS" = 0 ] || exit "$STATUS"
+
+          cp ../built/public/dist/domma-tools.css ../built/public/dist/domma-tools.min.js admin/dist/domma/
+
           git diff --stat
 
           git config user.name "github-actions[bot]"
