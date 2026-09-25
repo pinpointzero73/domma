@@ -199,8 +199,12 @@ once npm serves the new version:
 | domma-reactive X.Y.Z | domma | `chore: domma-reactive X.Y.Z` |
 | domma-js X.Y.Z | domma-cms | `chore: domma-js X.Y.Z` |
 
-Each moves the pin and the lockfile and nothing else, and quotes the upstream notes. Merging one does
-not release anything: say what the change means here in `docs/NEXT_RELEASE.md`, then cut a release.
+Each moves the pin and the lockfile surgically, quotes the upstream notes, and pre-fills the pending
+release notes with a factual stub - "Domma is now built against domma-reactive X.Y.Z" in
+`docs/NEXT_RELEASE.md` here, "Built against domma-js X.Y.Z" under `## [Unreleased]` in domma-cms - so an
+upgrade cannot ship unrecorded. A second re-pin before a release replaces the first one's stub. Edit the
+stub before merging when the upgrade means more than a rebuild. Merging does not release anything: cut
+a release for that.
 To open one for a version that is already out, run **Re-pin downstream** by hand in the upstream
 repository.
 
