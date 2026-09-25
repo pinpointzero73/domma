@@ -1,15 +1,37 @@
 # Domma Release Guide
 
-Releases are driven by the **Makefile**. Run `make help` for the current list.
+Releases are cut from the **Actions tab** - see [The release button](#the-release-button). The
+**Makefile** route below does the same thing by hand and remains the fallback; run `make help` for
+the current list.
 
 There are no `npm run release*` scripts and no `scripts/release.sh` - they were removed because they
 did not work. See [Why the npm scripts went](#why-the-npm-scripts-went) if you are looking for them.
 
 ---
 
+## The release button
+
+Write the notes in `docs/NEXT_RELEASE.md` as the work lands - the title on the `# ` line, the notes
+beneath it in the style of `RELEASE_NOTES.md`, and the short HTML summary for the website after the
+`<!-- website -->` marker. Then:
+
+**Actions → Cut a release → Run workflow → patch / minor / major**
+
+It works out the version, moves the notes into `docs/RELEASE_NOTES.md` and
+`public/data/releases.json`, bumps, runs `make build-prod` and `make check`, and commits exactly what
+the make route commits - `release: X.Y.Z - title`, then `Build vX.Y.Z` - tagged. Only when all of that
+has passed does it push main and the tag together, start `publish.yml`, and create the GitHub release
+with the notes and all seven assets. It refuses to run while `NEXT_RELEASE.md` is empty.
+
+Tick **dry run** to do everything up to the commits on the runner and push nothing.
+
+Once npm has the version, `publish.yml` opens a PR in domma-cms that moves its `domma-js` pin - see
+[Downstream](#downstream-domma-reactive-in-domma-cms-out). Then deploy the site - see
+[Making it live](#making-it-live).
+
 ## The process
 
-Six steps, in this order. The order matters and is explained below.
+The same release by hand. Five steps, in this order. The order matters and is explained below.
 
 ```bash
 # 1. Bump the version (package.json + package-lock.json only - no commit, no tag)
@@ -29,12 +51,14 @@ make release-build
 # 4. Everything that is cheaper to check now than after publishing
 make preflight
 
-# 5. Publish
-make release-npm
-
-# 6. Push, tag, and cut the GitHub release
+# 5. Push, tag, and cut the GitHub release. The tag starts publish.yml, which
+#    publishes to npm and then opens the re-pin PR in domma-cms.
 make release-gh
 ```
+
+`make release-npm` publishes from your machine instead. Use it only when CI cannot publish: the tag's
+own publish run then fails, because npm already has the version, and so no domma-cms PR is opened -
+run **Re-pin downstream** by hand afterwards.
 
 Then deploy the site - see [Making it live](#making-it-live).
 
@@ -52,8 +76,10 @@ assets.
 **`preflight` runs after the Build commit, not before.** It checks the version you are about to
 publish, so it has to run once that version is what the tree says.
 
-**npm is published before the tag is pushed.** A failed publish must not leave a tag pointing at a
-version npm does not have.
+**The tag publishes.** `publish.yml` checks the tag against `package.json`, builds, runs the suite and
+publishes. If that run fails, the tag exists and npm does not have the version: fix the cause and
+re-run it for the same tag with **Actions → Publish to npm → Run workflow → vX.Y.Z** rather than
+cutting a new version. The domma-cms PR follows the successful run.
 
 ### What `make preflight` checks
 
@@ -159,22 +185,24 @@ hand if you ever need one.
 
 ---
 
-## Releasing `domma-reactive` alongside
+## Downstream: domma-reactive in, domma-cms out
 
 Domma pins [`domma-reactive`](https://www.npmjs.com/package/domma-reactive) **exactly**, and Rollup
-inlines it, so a fix there does not reach Domma until it is released and re-pinned:
+inlines it, so a fix there does not reach Domma until it is released and re-pinned. domma-cms pins
+`domma-js` exactly in turn.
 
-```bash
-cd ../domma-reactive
-make bump V=0.4.2 && git commit -am "..." && make preflight && make release-npm && make release-gh
+Both links are PRs now, opened by the `downstream` job of the upstream repository's `publish.yml`
+once npm serves the new version:
 
-cd ../domma
-npm install domma-reactive@0.4.2 --save-exact
-npm run build:js        # confirm the fix is actually in the bundle before releasing
-```
+| Released | PR opened in | Titled |
+|---|---|---|
+| domma-reactive X.Y.Z | domma | `chore: domma-reactive X.Y.Z` |
+| domma-js X.Y.Z | domma-cms | `chore: domma-js X.Y.Z` |
 
-That repo has its own Makefile with the same shape. It publishes via npm and tags only - no GitHub
-release objects.
+Each moves the pin and the lockfile and nothing else, and quotes the upstream notes. Merging one does
+not release anything: say what the change means here in `docs/NEXT_RELEASE.md`, then cut a release.
+To open one for a version that is already out, run **Re-pin downstream** by hand in the upstream
+repository.
 
 ---
 

@@ -8,7 +8,12 @@
 #
 # Mirrors domma-cms/.github/workflows/publish.yml,
 # domma-reactive/.github/workflows/publish.yml and
-# domma-celebrate/.github/workflows/publish.yml; keep the four in step.
+# domma-celebrate/.github/workflows/publish.yml; keep the four in step. The
+# `downstream` job at the bottom is this repository's own and has no mirror.
+#
+# Started two ways, and both publish the same thing: by a pushed v* tag (the
+# `make release-gh` route), or by cut-release.yml through workflow_dispatch,
+# because a tag that workflow pushes cannot trigger this.
 #
 # npm side, once: npmjs.com -> domma-js -> Settings -> Trusted Publisher
 #   Provider: GitHub Actions
@@ -185,3 +190,14 @@ jobs:
             echo "       gh secret set NPM_TOKEN --repo pinpointzero73/domma"
           fi
           exit 1
+
+  # Only once the publish has succeeded: domma-cms is told about a version npm
+  # actually has. See repin-downstream.yml.
+  downstream:
+    needs: publish
+    permissions:
+      contents: read
+    uses: ./.github/workflows/repin-downstream.yml
+    with:
+      version: ${{ github.event.inputs.ref || github.ref_name }}
+    secrets: inherit
