@@ -1,0 +1,177 @@
+# Cut a release: the whole of docs/RELEASING.md's six steps, from the Actions
+# tab.
+#
+#   Actions → Cut a release → Run workflow → patch / minor / major
+#
+# The one thing it cannot do is write the release notes, so it refuses to run
+# without them: write them in docs/NEXT_RELEASE.md as the work lands. This
+# moves them into docs/RELEASE_NOTES.md and public/data/releases.json.
+#
+# What happens, in order - and nothing is pushed until every check has passed:
+#
+#   1. the next version is worked out from package.json and the bump chosen
+#   2. the notes are promoted and package.json + lock are bumped
+#   3. `make build-prod`, then `make check` - tests and validators, run after
+#      the build because the specs load the built bundle
+#   4. two commits, as the make route makes them: `release: X.Y.Z - title`
+#      (notes + bump), then `Build vX.Y.Z` (the kickstart manifest), tagged
+#   5. main and the tag are pushed together (--atomic: both or neither)
+#   6. publish.yml is started for the tag
+#   7. the GitHub release is created with the notes and all seven assets
+#
+# Steps 6 and 7 are explicit because a tag pushed with this workflow's
+# GITHUB_TOKEN triggers no other workflow - publish.yml, release.yml and the
+# rest never hear about it. publish.yml takes a ref through workflow_dispatch;
+# the release, and the two archives release.yml would have attached, are made
+# here from the build this job already did. publish.yml then opens the re-pin
+# PR in domma-cms once the version is on npm; see repin-downstream.yml.
+#
+# `dry_run` does steps 1-4 and prints what it would push. Nothing leaves the
+# runner.
+#
+# The make route in docs/RELEASING.md still works and remains the fallback.
+
+name: Cut a release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Which part of the version to bump'
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+        required: true
+      dry_run:
+        description: 'Dry run: build, test and commit on the runner, push nothing'
+        type: boolean
+        default: false
+
+# One release at a time. A second click queues behind the first rather than
+# racing it for the same version number.
+concurrency:
+  group: cut-release
+  cancel-in-progress: false
+
+permissions:
+  contents: write     # push the commits and tag, create the release
+  actions: write      # start publish.yml
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse anything but main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Releases are cut from main, not ${GITHUB_REF}"
+          exit 1
+
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0      # tags, to refuse a version that is already tagged
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Work out the version
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          VERSION=$(node -e "
+            const [maj, min, pat] = require('./package.json').version.split('.').map(Number);
+            const next = {major: [maj + 1, 0, 0], minor: [maj, min + 1, 0], patch: [maj, min, pat + 1]}[process.env.BUMP];
+            console.log(next.join('.'));
+          ")
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          echo "Releasing $(node -p "require('./package.json').version") → $VERSION ($BUMP)"
+
+          if git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+            echo "::error::Tag v$VERSION already exists"
+            exit 1
+          fi
+          if npm view "domma-js@$VERSION" version >/dev/null 2>&1; then
+            echo "::error::domma-js@$VERSION is already on npm"
+            exit 1
+          fi
+
+      - name: Promote the release notes
+        run: |
+          TITLE=$(node scripts/promote-release-notes.mjs "$VERSION" "$(date -u +%F)")
+          echo "TITLE=$TITLE" >> "$GITHUB_ENV"
+
+      - name: Bump package.json and package-lock.json
+        run: node scripts/bump.mjs "$VERSION"
+
+      - name: Production build
+        run: make build-prod
+
+      - name: Tests and validators
+        run: make check
+
+      - name: Commit and tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # The same two commits the make route makes, with the same messages,
+          # so the history reads the same whichever way a release was cut.
+          LOWER=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]')
+          git add docs/NEXT_RELEASE.md docs/RELEASE_NOTES.md public/data/releases.json \
+                  package.json package-lock.json
+          git commit -m "release: $VERSION - $LOWER"
+
+          git add public/download/kickstart-manifest.json
+          git commit --allow-empty -m "Build v$VERSION"
+
+          git tag -a "v$VERSION" -m "Release v$VERSION"
+          git log --stat -2
+
+          # Anything else the build changed is a file nobody expected it to
+          # touch, and the make route would have refused on a dirty tree.
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::The build left changes that are in neither commit:"
+            git status --porcelain
+            exit 1
+          fi
+
+      - name: Dry run - what would have been pushed
+        if: inputs.dry_run
+        run: |
+          echo "Dry run: nothing pushed. Would push main ($(git rev-parse --short HEAD)) and v$VERSION."
+          node scripts/promote-release-notes.mjs --print "$VERSION"
+
+      - name: Push main and the tag
+        if: ${{ !inputs.dry_run }}
+        run: git push --atomic origin HEAD:main "v$VERSION"
+
+      - name: Start publish.yml for the tag
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish.yml --ref main -f ref="v$VERSION"
+
+      # The same release `make release-gh` and release.yml make between them:
+      # the curated notes, the five bundles, and the two archives.
+      - name: Create the GitHub release
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/promote-release-notes.mjs --print "$VERSION" > "$RUNNER_TEMP/notes.md"
+
+          cd public/dist
+          tar -czf "domma-v$VERSION.tar.gz" *.js *.css themes/ bundles/ archives/ || true
+          tar -czf "domma-v$VERSION-min.tar.gz" *.min.js *.css themes/ || true
+
+          gh release create "v$VERSION" \
+            --title "Domma v$VERSION" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            domma.min.js domma.esm.js domma.css grid.css elements.css \
+            "domma-v$VERSION.tar.gz" "domma-v$VERSION-min.tar.gz"

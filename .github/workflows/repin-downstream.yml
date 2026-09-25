@@ -1,0 +1,165 @@
+# Open a PR in domma-cms that moves its exact pin to a released domma-js.
+#
+# domma-cms vendors the Domma bundle from node_modules (scripts/copy-domma.js)
+# at the version it pins exactly, so a release reaches no CMS site until that
+# pin moves. This replaces bump-cms-from-js.yml, which fired on the tag, before
+# npm had the version, and opened PRs that bumped domma-cms's OWN version number
+# without touching the dependency - the title said "for domma-js vX" and the
+# diff did not contain it.
+#
+# Runs as the last job of publish.yml, so only after a publish succeeded, and
+# can be run by hand for a version that is already out:
+#
+#   Actions → Re-pin downstream → Run workflow → 0.44.4
+#
+# Besides the pin and the lockfile, the PR carries admin/dist/domma/domma-tools.*
+# rebuilt at the tag - see "Build Domma Tools at the tag" below.
+#
+# The PR is for review, not auto-merged. Merging it does not release domma-cms;
+# that is domma-cms's own "Cut a release", once its CHANGELOG says what changed.
+#
+# Needs the CROSS_REPO_PAT secret: a token with contents and pull-request write
+# on pinpointzero73/domma-cms.
+#
+# domma-reactive/.github/workflows/repin-downstream.yml is the same workflow one
+# link up the chain; keep the two in step.
+
+name: Re-pin downstream
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The released domma-js version to pin, e.g. 0.44.4'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  PACKAGE: domma-js
+  TARGET: pinpointzero73/domma-cms
+
+jobs:
+  repin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          VERSION="${VERSION#v}"
+          if ! echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::\"$VERSION\" is not an X.Y.Z version"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      # main, not the tag: main holds the released notes too, and a tag cut
+      # before this workflow existed has no promote-release-notes.mjs to print
+      # them with.
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          path: source
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      # npm acknowledges a publish before every registry replica serves it; the
+      # domma-reactive 1.1.0 publish took a few minutes to appear. Installing too early fails
+      # with ETARGET, so wait for it.
+      - name: Wait for npm to serve the version
+        run: |
+          for i in $(seq 1 60); do
+            if npm view "$PACKAGE@$VERSION" version >/dev/null 2>&1; then
+              echo "$PACKAGE@$VERSION is on npm"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::$PACKAGE@$VERSION did not appear on npm within 10 minutes"
+          exit 1
+
+      # domma-cms serves Domma Tools from admin/dist/domma/, and domma-js does
+      # not ship them to npm, so every re-pin by hand copied them out of a
+      # build. They come from a build of the released tag here, and the CMS
+      # build refuses a tools bundle stamped with a different version from the
+      # core - so the stamp is checked before anything is committed.
+      - uses: actions/checkout@v7
+        with:
+          ref: v${{ env.VERSION }}
+          path: built
+
+      - name: Build Domma Tools at the tag
+        working-directory: built
+        run: |
+          npm ci --no-audit --no-fund
+          npm run generate:bundles
+          NODE_ENV=production npx rollup -c
+          NODE_ENV=production npm run build:css
+          for f in public/dist/domma-tools.min.js public/dist/domma-tools.css; do
+            head -c 300 "$f" | grep -q "v$VERSION" \
+              || { echo "::error::$f is not stamped v$VERSION"; exit 1; }
+          done
+
+      - name: Move the pin
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
+        run: |
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${TARGET}.git" target
+          cd target
+
+          BRANCH="repin/$PACKAGE-$VERSION"
+          if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null; then
+            echo "::error::$TARGET already has a $BRANCH branch - close or merge that PR first"
+            exit 1
+          fi
+          git checkout -b "$BRANCH"
+
+          # Surgical, not `npm install`: the pin and the three lockfile fields,
+          # nothing re-resolved. Exit 3 means the pin is already there.
+          set +e
+          node ../source/scripts/repin.mjs "$PACKAGE" "$VERSION"
+          STATUS=$?
+          set -e
+          if [ "$STATUS" = 3 ]; then
+            echo "$TARGET already pins $PACKAGE $VERSION - nothing to do"
+            exit 0
+          fi
+          [ "$STATUS" = 0 ] || exit "$STATUS"
+
+          cp ../built/public/dist/domma-tools.css ../built/public/dist/domma-tools.min.js admin/dist/domma/
+
+          git diff --stat
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: $PACKAGE $VERSION"
+          git push -u origin "$BRANCH"
+
+          NOTES=$(node ../source/scripts/promote-release-notes.mjs --print "$VERSION" 2>/dev/null || echo "_No RELEASE_NOTES.md section found for $VERSION._")
+          {
+            echo "Moves the exact \`$PACKAGE\` pin to **$VERSION**, published from ${GITHUB_REPOSITORY}@\`v$VERSION\`."
+            echo
+            echo "## What $VERSION changes"
+            echo
+            echo "$NOTES"
+            echo
+            echo "## Before this ships"
+            echo
+            echo "Merging does not release domma-cms. Say what this means for CMS sites under \`## [Unreleased]\` in \`CHANGELOG.md\`, then run **Cut a release**."
+            echo
+            echo "---"
+            echo "Opened by [Re-pin downstream](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+          } > ../body.md
+
+          gh pr create --repo "$TARGET" --base main --head "$BRANCH" \
+            --title "chore: $PACKAGE $VERSION" --body-file ../body.md
