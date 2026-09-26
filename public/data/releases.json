@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.44.5",
+      "title": "Menus You Can See Your Way Through",
+      "description": "<p><strong>Context-menu items now highlight on hover in every theme.</strong> The old wash matched the menu surface in every dark theme, so it was invisible; it is now mixed from the theme's text colour, a submenu's parent stays highlighted while the submenu is open, and <code>--dm-ctx-hover</code> overrides it.</p>",
+      "date": "2026-09-26"
+    },
+    {
       "year": "v0.44.4",
       "title": "Built On A Typed Core",
       "description": "<p><strong>No change in behaviour.</strong> Domma is now built against domma-reactive 1.1.0, whose only change is that the standalone package ships TypeScript declarations. Domma inlines the engine, so its own API is untouched and nothing needs changing when upgrading.</p>",

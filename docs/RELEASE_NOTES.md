@@ -1,3 +1,21 @@
+### v0.44.5 - Menus You Can See Your Way Through (2026-09-26)
+
+**Context-menu items now highlight on hover in every theme.** The wash was painted with
+`--dm-background-alt`, which is identical to the menu surface in every dark theme and one shade off
+white in the light ones, so pointing at an item showed nothing.
+
+🖱️ **Context menu**
+
+*   The hover wash is now mixed from the theme's text colour, the one value every theme guarantees
+    contrasts with the surface.
+
+*   An item that opens a submenu keeps its highlight while that submenu is open, so the path through
+    a nested menu stays visible. An `accent` tints it the same way it tints the hover.
+
+*   Set `--dm-ctx-hover` to choose the wash yourself.
+
+*   Nothing to change when upgrading.
+
 ### v0.44.4 - Built On A Typed Core (2026-09-25)
 
 **No change in behaviour - Domma is now built against domma-reactive 1.1.0.** The reactive engine
