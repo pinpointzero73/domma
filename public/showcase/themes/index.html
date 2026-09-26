@@ -36,6 +36,9 @@
             background: var(--dm-surface);
             transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
         }
+        .theme-pair.theme-trio {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
         .theme-pair:hover {
             transform: translateY(-2px);
             box-shadow: var(--dm-shadow-md);
@@ -556,12 +559,43 @@
                 </div>
             </div>
             <div class="theme-pair">
+                <div class="theme-card" data-theme="corporate-light">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #f8fafc, #ffffff);">
+                        <span style="color: #0f172a;">Aa</span>
+                        <div class="theme-card-accent" style="background: #1e40af;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Corporate</div>
+                        <div class="theme-card-mode">☀️ Light</div>
+                    </div>
+                </div>
+                <div class="theme-card" data-theme="corporate-dark">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #0b0f19, #151c2c);">
+                        <span style="color: #f8fafc;">Aa</span>
+                        <div class="theme-card-accent" style="background: #2563eb;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Corporate</div>
+                        <div class="theme-card-mode">🌙 Dark</div>
+                    </div>
+                </div>
+            </div>
+            <div class="theme-pair theme-trio">
                 <div class="theme-card" data-theme="admin-smooth-steel">
-                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #586170, #646d7c);">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #353a43, #3c414a);">
                         <div class="theme-card-accent" style="background: #3b76bc;"></div>
                     </div>
                     <div class="theme-card-body">
                         <div class="theme-card-name">Admin Smooth</div>
+                        <div class="theme-card-mode">Steel</div>
+                    </div>
+                </div>
+                <div class="theme-card" data-theme="admin-slate-steel">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #252c37, #2e3644);">
+                        <div class="theme-card-accent" style="background: #3b76bc;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Admin Slate</div>
                         <div class="theme-card-mode">Steel</div>
                     </div>
                 </div>
@@ -575,13 +609,22 @@
                     </div>
                 </div>
             </div>
-            <div class="theme-pair">
+            <div class="theme-pair theme-trio">
                 <div class="theme-card" data-theme="admin-smooth-indigo">
-                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #586170, #646d7c);">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #353a43, #3c414a);">
                         <div class="theme-card-accent" style="background: #5b63a8;"></div>
                     </div>
                     <div class="theme-card-body">
                         <div class="theme-card-name">Admin Smooth</div>
+                        <div class="theme-card-mode">Indigo</div>
+                    </div>
+                </div>
+                <div class="theme-card" data-theme="admin-slate-indigo">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #252c37, #2e3644);">
+                        <div class="theme-card-accent" style="background: #5b63a8;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Admin Slate</div>
                         <div class="theme-card-mode">Indigo</div>
                     </div>
                 </div>
@@ -595,13 +638,22 @@
                     </div>
                 </div>
             </div>
-            <div class="theme-pair">
+            <div class="theme-pair theme-trio">
                 <div class="theme-card" data-theme="admin-smooth-teal">
-                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #586170, #646d7c);">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #353a43, #3c414a);">
                         <div class="theme-card-accent" style="background: #2a8178;"></div>
                     </div>
                     <div class="theme-card-body">
                         <div class="theme-card-name">Admin Smooth</div>
+                        <div class="theme-card-mode">Teal</div>
+                    </div>
+                </div>
+                <div class="theme-card" data-theme="admin-slate-teal">
+                    <div class="theme-card-preview" style="background: linear-gradient(135deg, #252c37, #2e3644);">
+                        <div class="theme-card-accent" style="background: #2a8178;"></div>
+                    </div>
+                    <div class="theme-card-body">
+                        <div class="theme-card-name">Admin Slate</div>
                         <div class="theme-card-mode">Teal</div>
                     </div>
                 </div>
@@ -621,13 +673,14 @@
     <!-- Admin Theme Builder -->
     <section class="preview-section" data-section="Admin Builder" id="admin-builder">
         <h2 class="themes-section-title">Admin Theme Builder</h2>
-        <p class="dm-text-secondary dm-mb-4">Pick a finish, then an accent. Six looks, two clicks.</p>
+        <p class="dm-text-secondary dm-mb-4">Pick a finish, then an accent. Nine looks, two clicks.</p>
 
         <div class="dm-grid dm-gap-4" style="grid-template-columns: 280px 1fr;">
             <div class="dm-card" style="padding: var(--dm-space-5);">
                 <div class="dm-label">1 · Finish</div>
                 <div class="btn-group" id="admin-finish" role="group" aria-label="Finish" style="display:flex; gap:8px; margin-bottom:20px;">
                     <button class="btn" data-finish="smooth">Smooth</button>
+                    <button class="btn" data-finish="slate">Slate</button>
                     <button class="btn active" data-finish="sharp">Sharp</button>
                 </div>
                 <div class="dm-label">2 · Accent</div>

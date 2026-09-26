@@ -1,0 +1,225 @@
+/**
+ * Domma Corporate Light Theme
+ * Consummate professional executive palette
+ * Light mode variant - Alabaster canvas, pure white surfaces, executive navy accents
+ */
+
+.dm-theme-corporate-light {
+    color-scheme: light;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Light Mode Base
+       ================================================ */
+
+    /* Backgrounds */
+    --dm-background: #f8fafc;
+    --dm-background-alt: #f1f5f9;
+    --dm-surface: #ffffff;
+    --dm-surface-raised: #ffffff;
+    --dm-surface-overlay: #ffffff;
+
+    /* Text */
+    --dm-text: #0f172a;
+    --dm-text-secondary: #475569;
+    --dm-text-muted: #64748b;
+    --dm-text-disabled: #94a3b8;
+    --dm-text-inverse: #ffffff;
+
+    /* Borders */
+    --dm-border: #e2e8f0;
+    --dm-border-light: #f1f5f9;
+    --dm-border-dark: #cbd5e1;
+
+    /* ================================================
+       PRIMARY COLOURS - Executive Deep Navy
+       ================================================ */
+    --dm-primary: #1e40af;
+    --dm-primary-hover: #1d4ed8;
+    --dm-primary-active: #172554;
+    --dm-primary-light: rgba(30, 64, 175, 0.10);
+    --dm-primary-dark: #172554;
+    --dm-primary-text: #ffffff;
+    --dm-primary-hover-text: #ffffff;
+
+    /* Focus & Selection */
+    --dm-focus-ring: 0 0 0 3px rgba(30, 64, 175, 0.35);
+    --dm-border-focus: #1e40af;
+    --dm-selected-bg: rgba(30, 64, 175, 0.12);
+    --dm-tab-active-border: #1e40af;
+    --dm-tab-active-text: #1e40af;
+    --dm-progress-bar: #1e40af;
+
+    /* ================================================
+       SECONDARY COLOURS - Slate Steel
+       ================================================ */
+    --dm-secondary: #475569;
+    --dm-secondary-hover: #334155;
+    --dm-secondary-active: #1e293b;
+    --dm-secondary-light: rgba(71, 85, 105, 0.10);
+    --dm-secondary-dark: #1e293b;
+    --dm-secondary-text: #ffffff;
+    --dm-secondary-hover-text: #ffffff;
+
+    /* ================================================
+       STATUS COLOURS
+       ================================================ */
+    --dm-success: #15803d;
+    --dm-success-hover: #166534;
+    --dm-success-active: #14532d;
+    --dm-success-light: rgba(21, 128, 61, 0.12);
+    --dm-success-dark: #14532d;
+    --dm-success-text: #ffffff;
+    --dm-success-hover-text: #ffffff;
+
+    --dm-danger: #b91c1c;
+    --dm-danger-hover: #991b1b;
+    --dm-danger-active: #7f1d1d;
+    --dm-danger-light: rgba(185, 28, 28, 0.12);
+    --dm-danger-dark: #7f1d1d;
+    --dm-danger-text: #ffffff;
+    --dm-danger-hover-text: #ffffff;
+
+    --dm-warning: #b45309;
+    --dm-warning-hover: #92400e;
+    --dm-warning-active: #78350f;
+    --dm-warning-light: rgba(180, 83, 9, 0.12);
+    --dm-warning-dark: #78350f;
+    --dm-warning-text: #ffffff;
+    --dm-warning-hover-text: #ffffff;
+
+    --dm-info: #0369a1;
+    --dm-info-hover: #075985;
+    --dm-info-active: #0c4a6e;
+    --dm-info-light: rgba(3, 105, 161, 0.12);
+    --dm-info-dark: #0c4a6e;
+    --dm-info-text: #ffffff;
+    --dm-info-hover-text: #ffffff;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #3b82f6;
+    --dm-accent-2: #1d4ed8;
+    --dm-accent-3: #1e40af;
+    --dm-accent-4: #0f172a;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(15, 23, 42, 0.04);
+    --dm-active-bg: rgba(15, 23, 42, 0.08);
+    --dm-disabled-opacity: 0.65;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-sm);
+    --dm-card-header-bg: var(--dm-background-alt);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #e2e8f0;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(15, 23, 42, 0.02);
+    --dm-table-hover-bg: rgba(15, 23, 42, 0.04);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(15, 23, 42, 0.5);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #0f172a;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #e2e8f0;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #f1f5f9;
+    --dm-scrollbar-thumb: #cbd5e1;
+    --dm-scrollbar-thumb-hover: #94a3b8;
+
+    /* Code */
+    --dm-code-bg: #f1f5f9;
+    --dm-code-text: #0f172a;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+    --dm-shadow: 0 1px 3px 0 rgb(15 23 42 / 0.1), 0 1px 2px -1px rgb(15 23 42 / 0.1);
+    --dm-shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.08);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.08);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(15 23 42 / 0.08), 0 8px 10px -6px rgb(15 23 42 / 0.08);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(15 23 42 / 0.2);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(15 23 42 / 0.05);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --dm-elevation-2: 0 4px 6px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
+    --dm-elevation-3: 0 10px 15px rgba(15, 23, 42, 0.08), 0 4px 6px rgba(15, 23, 42, 0.04);
+    --dm-elevation-4: 0 20px 25px rgba(15, 23, 42, 0.12), 0 10px 10px rgba(15, 23, 42, 0.04);
+}

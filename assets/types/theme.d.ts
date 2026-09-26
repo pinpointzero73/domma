@@ -4,7 +4,7 @@
  */
 
 export type ThemeMode = 'light' | 'dark';
-export type ThemeVariant = 'ocean' | 'forest' | 'sunset' | 'royal' | 'lemon' | 'silver' | 'charcoal' | 'default';
+export type ThemeVariant = 'ocean' | 'forest' | 'sunset' | 'royal' | 'lemon' | 'silver' | 'charcoal' | 'christmas' | 'unicorn' | 'dreamy' | 'grayve' | 'mint' | 'wedding' | 'corporate' | 'admin-smooth' | 'admin-sharp' | 'admin-slate' | 'default';
 
 export interface ThemeConfig {
     /** Current theme mode */

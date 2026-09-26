@@ -683,6 +683,10 @@ class ThemeRoller {
                                 <option value="wedding-light" ${currentTheme === 'wedding-light' ? 'selected' : ''}>Wedding Day ☀️</option>
                                 <option value="wedding-dark" ${currentTheme === 'wedding-dark' ? 'selected' : ''}>Wedding Evening 🌙</option>
                             </optgroup>
+                            <optgroup label="Corporate">
+                                <option value="corporate-light" ${currentTheme === 'corporate-light' ? 'selected' : ''}>Corporate Light ☀️</option>
+                                <option value="corporate-dark" ${currentTheme === 'corporate-dark' ? 'selected' : ''}>Corporate Dark 🌙</option>
+                            </optgroup>
                             <optgroup label="Admin (Smooth)">
                                 <option value="admin-smooth-steel" ${currentTheme === 'admin-smooth-steel' ? 'selected' : ''}>Admin Smooth · Steel</option>
                                 <option value="admin-smooth-indigo" ${currentTheme === 'admin-smooth-indigo' ? 'selected' : ''}>Admin Smooth · Indigo</option>
@@ -692,6 +696,11 @@ class ThemeRoller {
                                 <option value="admin-sharp-steel" ${currentTheme === 'admin-sharp-steel' ? 'selected' : ''}>Admin Sharp · Steel</option>
                                 <option value="admin-sharp-indigo" ${currentTheme === 'admin-sharp-indigo' ? 'selected' : ''}>Admin Sharp · Indigo</option>
                                 <option value="admin-sharp-teal" ${currentTheme === 'admin-sharp-teal' ? 'selected' : ''}>Admin Sharp · Teal</option>
+                            </optgroup>
+                            <optgroup label="Admin (Slate)">
+                                <option value="admin-slate-steel" ${currentTheme === 'admin-slate-steel' ? 'selected' : ''}>Admin Slate · Steel</option>
+                                <option value="admin-slate-indigo" ${currentTheme === 'admin-slate-indigo' ? 'selected' : ''}>Admin Slate · Indigo</option>
+                                <option value="admin-slate-teal" ${currentTheme === 'admin-slate-teal' ? 'selected' : ''}>Admin Slate · Teal</option>
                             </optgroup>
                         </select>
                     </div>

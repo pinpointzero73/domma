@@ -24,9 +24,11 @@ const AVAILABLE_THEMES = [
     'mint-light', 'mint-dark',
     'wedding-light', 'wedding-dark',
     'core-light',
+    'corporate-light', 'corporate-dark',
     // Admin family - standalone (no light/dark), finish × accent
     'admin-smooth-steel', 'admin-smooth-indigo', 'admin-smooth-teal',
-    'admin-sharp-steel', 'admin-sharp-indigo', 'admin-sharp-teal'
+    'admin-sharp-steel', 'admin-sharp-indigo', 'admin-sharp-teal',
+    'admin-slate-steel', 'admin-slate-indigo', 'admin-slate-teal'
 ];
 
 // Default theme
@@ -262,7 +264,7 @@ class ThemeEngine {
      * @returns {string[]}
      */
     listBases() {
-        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding', 'admin-smooth', 'admin-sharp'];
+        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding', 'corporate', 'admin-smooth', 'admin-sharp', 'admin-slate'];
     }
 
     /**

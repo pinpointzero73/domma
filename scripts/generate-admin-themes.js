@@ -82,6 +82,28 @@ export const FINISHES = {
       'scrollbar-track': '#eef1f6', 'scrollbar-thumb': '#c4cdda', 'scrollbar-thumb-hover': '#aab6c6',
       'code-bg': '#f0f3f8', 'code-text': '#b3325a', 'progress-bg': '#e4e8ef'
     }
+  },
+  slate: {
+    colorScheme: 'dark',
+    tintStyle: 'alpha',
+    useAccentOnDark: true,
+    foundation: {
+      'background': '#252c37', 'background-alt': '#1e242f',
+      'surface': '#2e3644', 'surface-raised': '#353e4e', 'surface-overlay': '#353e4e',
+      'text': '#ffffff', 'text-secondary': '#dbe2eb', 'text-muted': '#a8b8cc',
+      'text-disabled': '#7d8c9e', 'text-inverse': '#0f172a',
+      'border': '#445166', 'border-light': '#384355', 'border-dark': '#55637a',
+      'hover-bg': 'rgba(255, 255, 255, 0.08)', 'active-bg': 'rgba(255, 255, 255, 0.12)',
+      'disabled-opacity': '0.45',
+      'sidebar-bg': '#1a202a', 'sidebar-text': '#dbe2eb', 'sidebar-border': '#151922',
+      'navbar-bg': '#1e242f', 'navbar-text': '#ffffff', 'navbar-border': '#2d3746',
+      'table-header-bg': '#222833', 'table-stripe-bg': 'rgba(255, 255, 255, 0.03)',
+      'table-hover-bg': 'rgba(255, 255, 255, 0.07)',
+      'modal-backdrop': 'rgba(0, 0, 0, 0.65)',
+      'tooltip-bg': '#151922', 'tooltip-text': '#ffffff',
+      'scrollbar-track': '#1e242f', 'scrollbar-thumb': '#445166', 'scrollbar-thumb-hover': '#55637a',
+      'code-bg': '#1a202a', 'code-text': '#ffd9a8', 'progress-bg': '#222833'
+    }
   }
 };
 
@@ -105,7 +127,7 @@ const STATUS = {
   info:    { base: '#2f6fb0', hover: '#296199', active: '#235485', dark: '#1a3f64', rgb: '47, 111, 176', solidLight: '#e1ecf7', text: '#ffffff', hoverText: '#ffffff' }
 };
 
-const FINISH_LABEL = { smooth: 'Smooth', sharp: 'Sharp' };
+const FINISH_LABEL = { smooth: 'Smooth', sharp: 'Sharp', slate: 'Slate' };
 const ACCENT_LABEL = { steel: 'Steel Blue', indigo: 'Indigo', teal: 'Teal' };
 
 /** Render `  --dm-<key>: <value>;` lines from an object whose keys omit the prefix. */
@@ -189,7 +211,7 @@ export function buildThemeCss(finishKey, accentKey) {
   if (!f || !a) throw new Error(`Unknown finish/accent: ${finishKey}/${accentKey}`);
 
   const activeText = f.useAccentOnDark ? a.onDark : a.primary;
-  const selectedBg = `rgba(${a.rgb}, ${finishKey === 'smooth' ? '0.22' : '0.12'})`;
+  const selectedBg = `rgba(${a.rgb}, ${f.colorScheme === 'dark' ? '0.22' : '0.12'})`;
 
   const primaryBlock = vars({
     'primary': a.primary,
@@ -204,7 +226,7 @@ export function buildThemeCss(finishKey, accentKey) {
     'secondary': '#5f6f7a',
     'secondary-hover': '#52606b',
     'secondary-active': '#46535d',
-    'secondary-light': finishKey === 'smooth' ? 'rgba(255, 255, 255, 0.10)' : '#eef1f6',
+    'secondary-light': f.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.10)' : '#eef1f6',
     'secondary-dark': '#3d4a52',
     'secondary-text': '#ffffff',
     'secondary-hover-text': '#ffffff',

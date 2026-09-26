@@ -1,0 +1,225 @@
+/**
+ * Domma Corporate Dark Theme
+ * Consummate professional executive palette
+ * Dark mode variant - Obsidian canvas, elevated navy-slate surfaces, refined sapphire accents
+ */
+
+.dm-theme-corporate-dark {
+    color-scheme: dark;
+
+    /* ================================================
+       FOUNDATIONAL COLORS - Dark Mode Base
+       ================================================ */
+
+    /* Backgrounds */
+    --dm-background: #0b0f19;
+    --dm-background-alt: #111827;
+    --dm-surface: #151c2c;
+    --dm-surface-raised: #1e293b;
+    --dm-surface-overlay: #1e293b;
+
+    /* Text */
+    --dm-text: #f8fafc;
+    --dm-text-secondary: #cbd5e1;
+    --dm-text-muted: #94a3b8;
+    --dm-text-disabled: #475569;
+    --dm-text-inverse: #0b0f19;
+
+    /* Borders */
+    --dm-border: #26334d;
+    --dm-border-light: #1e293b;
+    --dm-border-dark: #384966;
+
+    /* ================================================
+       PRIMARY COLOURS - Refined Executive Sapphire
+       ================================================ */
+    --dm-primary: #2563eb;
+    --dm-primary-hover: #1d4ed8;
+    --dm-primary-active: #1e40af;
+    --dm-primary-light: rgba(37, 99, 235, 0.20);
+    --dm-primary-dark: #1d4ed8;
+    --dm-primary-text: #ffffff;
+    --dm-primary-hover-text: #ffffff;
+
+    /* Focus & Selection */
+    --dm-focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+    --dm-border-focus: #2563eb;
+    --dm-selected-bg: rgba(37, 99, 235, 0.22);
+    --dm-tab-active-border: #3b82f6;
+    --dm-tab-active-text: #60a5fa;
+    --dm-progress-bar: #2563eb;
+
+    /* ================================================
+       SECONDARY COLOURS - Titanium Slate
+       ================================================ */
+    --dm-secondary: #64748b;
+    --dm-secondary-hover: #94a3b8;
+    --dm-secondary-active: #cbd5e1;
+    --dm-secondary-light: rgba(100, 116, 139, 0.20);
+    --dm-secondary-dark: #334155;
+    --dm-secondary-text: #ffffff;
+    --dm-secondary-hover-text: #ffffff;
+
+    /* ================================================
+       STATUS COLOURS
+       ================================================ */
+    --dm-success: #22c55e;
+    --dm-success-hover: #4ade80;
+    --dm-success-active: #16a34a;
+    --dm-success-light: rgba(34, 197, 94, 0.20);
+    --dm-success-dark: #15803d;
+    --dm-success-text: #0b0f19;
+    --dm-success-hover-text: #0b0f19;
+
+    --dm-danger: #dc2626;
+    --dm-danger-hover: #b91c1c;
+    --dm-danger-active: #991b1b;
+    --dm-danger-light: rgba(220, 38, 38, 0.20);
+    --dm-danger-dark: #7f1d1d;
+    --dm-danger-text: #ffffff;
+    --dm-danger-hover-text: #ffffff;
+
+    --dm-warning: #f59e0b;
+    --dm-warning-hover: #fbbf24;
+    --dm-warning-active: #d97706;
+    --dm-warning-light: rgba(245, 158, 11, 0.20);
+    --dm-warning-dark: #b45309;
+    --dm-warning-text: #0b0f19;
+    --dm-warning-hover-text: #0b0f19;
+
+    --dm-info: #38bdf8;
+    --dm-info-hover: #7dd3fc;
+    --dm-info-active: #0284c7;
+    --dm-info-light: rgba(56, 189, 248, 0.20);
+    --dm-info-dark: #0369a1;
+    --dm-info-text: #0b0f19;
+    --dm-info-hover-text: #0b0f19;
+
+    /* ================================================
+       ACCENT COLOURS
+       ================================================ */
+    --dm-accent-1: #60a5fa;
+    --dm-accent-2: #3b82f6;
+    --dm-accent-3: #1d4ed8;
+    --dm-accent-4: #0f172a;
+
+    /* ================================================
+       INTERACTIVE STATES
+       ================================================ */
+    --dm-hover-bg: rgba(255, 255, 255, 0.06);
+    --dm-active-bg: rgba(255, 255, 255, 0.10);
+    --dm-disabled-opacity: 0.4;
+
+    /* ================================================
+       COMPONENT-SPECIFIC COLORS
+       ================================================ */
+
+    /* Cards */
+    --dm-card-bg: var(--dm-surface);
+    --dm-card-border: var(--dm-border);
+    --dm-card-shadow: var(--dm-shadow-md);
+    --dm-card-header-bg: var(--dm-background-alt);
+
+    /* Inputs */
+    --dm-input-bg: var(--dm-surface);
+    --dm-input-border: var(--dm-border-dark);
+    --dm-input-text: var(--dm-text);
+    --dm-input-placeholder: var(--dm-text-muted);
+    --dm-input-focus-border: var(--dm-primary);
+    --dm-input-focus-shadow: var(--dm-focus-ring);
+    --dm-input-disabled-bg: #111827;
+
+    /* Buttons */
+    --dm-btn-text: var(--dm-text);
+    --dm-btn-bg: var(--dm-surface);
+    --dm-btn-border: var(--dm-border-dark);
+
+    /* Tables */
+    --dm-table-bg: transparent;
+    --dm-table-border: var(--dm-border);
+    --dm-table-header-bg: var(--dm-background-alt);
+    --dm-table-header-text: var(--dm-text);
+    --dm-table-stripe-bg: rgba(255, 255, 255, 0.03);
+    --dm-table-hover-bg: rgba(255, 255, 255, 0.06);
+    --dm-table-selected-bg: var(--dm-selected-bg);
+
+    /* Modals */
+    --dm-modal-bg: var(--dm-surface);
+    --dm-modal-border: var(--dm-border);
+    --dm-modal-backdrop: rgba(0, 0, 0, 0.65);
+    --dm-modal-shadow: var(--dm-shadow-xl);
+
+    /* Dropdowns */
+    --dm-dropdown-bg: var(--dm-surface-raised);
+    --dm-dropdown-border: var(--dm-border);
+    --dm-dropdown-shadow: var(--dm-shadow-lg);
+    --dm-dropdown-item-hover: var(--dm-hover-bg);
+    --dm-dropdown-item-active: var(--dm-selected-bg);
+
+    /* Tooltips */
+    --dm-tooltip-bg: #1e293b;
+    --dm-tooltip-text: #ffffff;
+
+    /* Toasts */
+    --dm-toast-bg: var(--dm-surface);
+    --dm-toast-border: var(--dm-border);
+    --dm-toast-shadow: var(--dm-shadow-lg);
+
+    /* Navbar */
+    --dm-navbar-bg: var(--dm-surface);
+    --dm-navbar-text: var(--dm-text);
+    --dm-navbar-border: var(--dm-border);
+
+    /* Sidebar */
+    --dm-sidebar-bg: var(--dm-surface);
+    --dm-sidebar-text: var(--dm-text);
+    --dm-sidebar-border: var(--dm-border);
+    --dm-sidebar-item-hover: var(--dm-hover-bg);
+    --dm-sidebar-item-active: var(--dm-selected-bg);
+
+    /* Tabs */
+    --dm-tab-border: var(--dm-border);
+    --dm-tab-hover-bg: var(--dm-hover-bg);
+
+    /* Accordion */
+    --dm-accordion-bg: var(--dm-surface);
+    --dm-accordion-border: var(--dm-border);
+    --dm-accordion-header-bg: var(--dm-background-alt);
+    --dm-accordion-header-hover: var(--dm-hover-bg);
+
+    /* Badges */
+    --dm-badge-bg: var(--dm-secondary);
+    --dm-badge-text: #ffffff;
+
+    /* Progress */
+    --dm-progress-bg: #111827;
+
+    /* Scrollbar */
+    --dm-scrollbar-track: #0b0f19;
+    --dm-scrollbar-thumb: #334155;
+    --dm-scrollbar-thumb-hover: #475569;
+
+    /* Code */
+    --dm-code-bg: #111827;
+    --dm-code-text: #93c5fd;
+    --dm-code-border: var(--dm-border);
+
+    /* ================================================
+       SHADOWS
+       ================================================ */
+    --dm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --dm-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+    --dm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --dm-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.45), 0 4px 6px -4px rgb(0 0 0 / 0.45);
+    --dm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+    --dm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+    --dm-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.3);
+
+    /* ================================================
+       ELEVATION / DEPTH
+       ================================================ */
+    --dm-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --dm-elevation-2: 0 4px 6px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.3);
+    --dm-elevation-3: 0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.3);
+    --dm-elevation-4: 0 20px 25px rgba(0, 0, 0, 0.6), 0 10px 10px rgba(0, 0, 0, 0.3);
+}

@@ -65,13 +65,19 @@ const themeFiles = [
   // Wedding themes
   'public/assets/themes/wedding-light.css',
   'public/assets/themes/wedding-dark.css',
+  // Corporate themes
+  'public/assets/themes/corporate-light.css',
+  'public/assets/themes/corporate-dark.css',
   // Admin family (generated)
   'public/assets/themes/admin-smooth-steel.css',
   'public/assets/themes/admin-smooth-indigo.css',
   'public/assets/themes/admin-smooth-teal.css',
   'public/assets/themes/admin-sharp-steel.css',
   'public/assets/themes/admin-sharp-indigo.css',
-  'public/assets/themes/admin-sharp-teal.css'
+  'public/assets/themes/admin-sharp-teal.css',
+  'public/assets/themes/admin-slate-steel.css',
+  'public/assets/themes/admin-slate-indigo.css',
+  'public/assets/themes/admin-slate-teal.css'
 ];
 
 // Build banner

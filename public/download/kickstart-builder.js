@@ -19,8 +19,10 @@
     'grayve-light', 'grayve-dark',
     'mint-light', 'mint-dark',
     'wedding-light', 'wedding-dark',
+    'corporate-light', 'corporate-dark',
     'admin-smooth-steel', 'admin-smooth-indigo', 'admin-smooth-teal',
     'admin-sharp-steel', 'admin-sharp-indigo', 'admin-sharp-teal',
+    'admin-slate-steel', 'admin-slate-indigo', 'admin-slate-teal',
   ];
 
   const DEFAULT_THEME   = 'charcoal-dark';
