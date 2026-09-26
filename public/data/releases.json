@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.44.6",
+      "title": "Corporate Presence and High-Visibility Admin Slate",
+      "description": "<p><strong>Five new themes arrive in Domma: Corporate (light and dark) and Admin Slate (steel, indigo, teal).</strong> Corporate introduces an executive navy aesthetic tailored for business dashboards and reporting, while Admin Slate expands the administrative theme matrix to 3&times;3 with a balanced mid-tone finish designed for high visibility and long work sessions.</p>\n<p><strong>Full tooling support:</strong> all five themes are integrated into the Theme Roller, Kickstart builder, TypeScript declarations, and showcase previews with verified WCAG contrast compliance.</p>",
+      "date": "2026-09-26"
+    },
+    {
       "year": "v0.44.5",
       "title": "Menus You Can See Your Way Through",
       "description": "<p><strong>Context-menu items now highlight on hover in every theme.</strong> The old wash matched the menu surface in every dark theme, so it was invisible; it is now mixed from the theme's text colour, a submenu's parent stays highlighted while the submenu is open, and <code>--dm-ctx-hover</code> overrides it.</p>",
