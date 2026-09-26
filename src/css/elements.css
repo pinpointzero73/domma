@@ -8201,9 +8201,17 @@ code {
     transition: background var(--dm-transition-fast);
 }
 
+/*
+ * The hover wash is mixed from the text colour, not taken from a theme token.
+ * --dm-background-alt equals --dm-surface in every dark theme and sits one
+ * shade off white in the light ones, so the highlight was invisible. The text
+ * colour is the one value every theme guarantees contrasts with the surface.
+ * A submenu's parent keeps the wash while its submenu is open.
+ */
 .dm-context-menu-item:hover:not(.is-disabled),
-.dm-context-menu-item:focus-visible {
-    background: var(--dm-background-alt);
+.dm-context-menu-item:focus-visible,
+.dm-context-menu-item[aria-expanded="true"] {
+    background: var(--dm-ctx-hover, color-mix(in srgb, var(--dm-text) 10%, transparent));
     outline: none;
 }
 
@@ -8214,7 +8222,8 @@ code {
  * the one pairing every theme guarantees and the accent carries the meaning.
  */
 .dm-context-menu[style*="--dm-ctx-accent"] .dm-context-menu-item:hover:not(.is-disabled),
-.dm-context-menu[style*="--dm-ctx-accent"] .dm-context-menu-item:focus-visible {
+.dm-context-menu[style*="--dm-ctx-accent"] .dm-context-menu-item:focus-visible,
+.dm-context-menu[style*="--dm-ctx-accent"] .dm-context-menu-item[aria-expanded="true"] {
     background: color-mix(in srgb, var(--dm-ctx-accent) 16%, transparent);
 }
 
