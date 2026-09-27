@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.45.0",
+      "title": "Lists That Make Room",
+      "description": "<p><strong><code>E.sortable(selector, options)</code> is drag-to-reorder for the children of one container</strong>, by mouse, touch and keyboard. In live mode the other items slide out of the way while you drag; with <code>nest: true</code> nothing moves until the drop, a marker shows whether the item lands before, after or into another, and <code>onDrop</code> hands you the move to update your data and re-render - which the component then animates, matching every item by its key. That is what makes it suit trees, and the Domma CMS menu editor now uses it.</p><p><strong>An order that sticks.</strong> <code>persist</code> remembers the order through Domma storage and puts it back on the next visit. Alt+Arrow moves the focused item, Esc cancels a drag, a handle drags at once on touch while a whole item needs a short press-and-hold so the list still scrolls, and reduced motion skips every glide.</p>",
+      "date": "2026-09-27"
+    },
+    {
       "year": "v0.44.9",
       "title": "Installs Without The Dev Server",
       "description": "<p><strong>Installing domma-js no longer installs a development web server.</strong> <code>live-server</code> was an optional dependency, so every project using domma-js pulled it in with about 180 more packages; it is now a dev dependency only, and <code>domma-js serve</code> still offers to install it when first run.</p>",
@@ -373,5 +379,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.44.9"
+  "latestVersion": "v0.45.0"
 }
