@@ -264,7 +264,7 @@ Domma.elements.sidebar('#sidebar-badges', {
             <aside id="sidebar-light"></aside>
             <div class="demo-content with-sidebar" id="demo-content-light">
                 <h3>Light Sidebar Theme</h3>
-                <p>The sidebar component adapts to light or dark theme variants.</p>
+                <p>The sidebar component adapts to light or dark theme variants. Use <code>variant: 'theme'</code> to follow the active theme instead.</p>
             </div>
         </div>
 
@@ -273,7 +273,7 @@ Domma.elements.sidebar('#sidebar-badges', {
             <pre><code>
 Domma.elements.sidebar('#sidebar-light', {
     contentSelector: '#demo-content-light',
-    variant: 'light',  // or 'dark'
+    variant: 'light',  // or 'dark', or 'theme' to follow the active theme
     items: [/* ... */]
 });
 </code></pre>
@@ -369,7 +369,7 @@ Domma.elements.sidebar('#sidebar-persist', {
                         <td><code>variant</code></td>
                         <td>String</td>
                         <td>'dark'</td>
-                        <td>'light' or 'dark'</td>
+                        <td>'light', 'dark', or 'theme' (follows the active theme)</td>
                     </tr>
                     <tr>
                         <td><code>collapsible</code></td>

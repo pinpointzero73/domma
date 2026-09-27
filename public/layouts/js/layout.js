@@ -989,7 +989,7 @@ function loadCelebrate() {
                     changelogPill.appendChild(pillBadge);
 
                     // Check for new releases (pulse animation)
-                    const lastSeen = localStorage.getItem('domma:lastSeenVersion');
+                    const lastSeen = S.get('lastSeenVersion');
                     const dataPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'data/releases.json' : 'data/releases.json';
                     fetch(dataPath)
                         .then(r => r.json())

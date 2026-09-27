@@ -99,6 +99,8 @@ if (releases.releases.some((r) => r.year === `v${version}`)) {
 writeFileSync(NOTES, `### v${version} - ${title} (${date})\n\n${notes}\n\n${notesSource}`);
 
 releases.releases.unshift({year: `v${version}`, title, description: summary, date});
+// Drives the navbar's What's New pulse; left behind, it pulses for a release people have already seen
+releases.latestVersion = `v${version}`;
 const indent = (releasesSource.match(/\n( +)"/) || [null, '  '])[1];
 writeFileSync(RELEASES, `${JSON.stringify(releases, null, indent)}\n`);
 

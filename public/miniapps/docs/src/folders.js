@@ -67,7 +67,7 @@ export class FolderManager {
       fixed: false,              // Uses grid layout, not fixed
       width: '100%',
       header: { title: 'Folders' },
-      variant: 'light',
+      variant: 'theme',
       collapsible: true,
       collapseAt: 768,
       customContent: `

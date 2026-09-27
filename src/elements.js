@@ -6407,7 +6407,7 @@ class Sidebar extends Component {
         header: null,               // { title, toggle: true/false, icon }
         items: [],                  // Navigation items array
         footer: null,               // Footer content { text, html }
-        variant: 'dark',            // 'light', 'dark'
+        variant: 'dark',            // 'light', 'dark', or 'theme' to follow the active theme
         collapsible: true,          // Mobile toggle behaviour
         collapseAt: 768,            // Breakpoint
         activeSection: null,        // Current active section

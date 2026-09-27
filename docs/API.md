@@ -1999,7 +1999,7 @@ const sidebar = Domma.elements.sidebar('#sidebar', {
 | `header` | Object | `null` | Header config: `{title, toggle, icon}` |
 | `items` | Array | `[]` | Navigation items (see Item Structure) |
 | `footer` | Object | `null` | Footer content: `{text, html}` |
-| `variant` | String | `'dark'` | Theme: `'light'` or `'dark'` |
+| `variant` | String | `'dark'` | `'light'`, `'dark'`, or `'theme'` to follow the active theme's `--dm-sidebar-*` tokens |
 | `collapsible` | Boolean | `true` | Enable mobile toggle |
 | `collapseAt` | Number | `768` | Mobile breakpoint (px) |
 | `activeSection` | String | `null` | Active section identifier |
