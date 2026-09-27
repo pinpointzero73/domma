@@ -13,6 +13,7 @@ release.json
 
 # Machine-local Claude Code settings (skills are tracked, this is not)
 .claude/settings.local.json
+.claude/worktrees/
 
 # Machine-local MCP server config (contains a local Chrome path)
 .mcp.json

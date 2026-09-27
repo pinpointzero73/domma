@@ -1048,6 +1048,7 @@ class TableInstance {
             searchInput.className = `domma-table-search-input${this._searchIsRegex ? ' regex-mode' : ''}`;
             searchInput.placeholder = this._searchIsRegex ? 'Regex pattern...' : opts.searchPlaceholder;
             searchInput.value = this._searchQuery;
+            searchInput.setAttribute('aria-label', 'Search table');
 
             this._addEventHandler(searchInput, 'input', utils.debounce((e) => {
                 this.search(e.target.value);
@@ -1061,6 +1062,8 @@ class TableInstance {
                 regexBtn.type = 'button';
                 regexBtn.className = `domma-table-regex-button${this._searchIsRegex ? ' active' : ''}`;
                 regexBtn.title = this._searchIsRegex ? 'Regex mode (click for text)' : 'Text mode (click for regex)';
+                regexBtn.setAttribute('aria-label', this._searchIsRegex ? 'Regex search mode enabled' : 'Regex search mode disabled');
+                regexBtn.setAttribute('aria-pressed', this._searchIsRegex ? 'true' : 'false');
                 regexBtn.innerHTML = '.*';
 
                 this._addEventHandler(regexBtn, 'click', () => {
@@ -1089,6 +1092,9 @@ class TableInstance {
             const columnBtn = document.createElement('button');
             columnBtn.type = 'button';
             columnBtn.className = 'domma-table-column-button';
+            columnBtn.setAttribute('aria-haspopup', 'true');
+            columnBtn.setAttribute('aria-expanded', this._columnDropdownOpen ? 'true' : 'false');
+            columnBtn.setAttribute('aria-label', 'Toggle column visibility');
             columnBtn.innerHTML = `${icons.html('columns', {size: 16})} Columns`;
 
             const dropdown = document.createElement('div');
@@ -1332,6 +1338,7 @@ class TableInstance {
             th.style.cssText = 'padding: 12px; border: 1px solid var(--dm-border, #ddd); background: var(--dm-table-header-bg, var(--dm-background-alt, #f8f9fa)); width: 40px;';
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
+            checkbox.setAttribute('aria-label', 'Select all rows');
             checkbox.checked = this._selected.size > 0 && this._selected.size === pageData.length;
             this._addEventHandler(checkbox, 'change', () => {
                 if (checkbox.checked) {
@@ -1357,11 +1364,20 @@ class TableInstance {
 
             if (col.sortable) {
                 th.style.cursor = 'pointer';
-                th.innerHTML = `${col.title} <span style="opacity: 0.5">${sort ? (sort.direction === 'asc' ? '▲' : '▼') : '⇅'}</span>`;
-                this._addEventHandler(th, 'click', () => {
+                th.tabIndex = 0;
+                th.setAttribute('aria-sort', sort ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none');
+                th.innerHTML = `${col.title} <span style="opacity: 0.5" aria-hidden="true">${sort ? (sort.direction === 'asc' ? '▲' : '▼') : '⇅'}</span>`;
+                const toggleSort = () => {
                     const currentSort = this._sorts.find(s => s.column === col.key);
                     const newDirection = currentSort?.direction === 'asc' ? 'desc' : 'asc';
                     this.sort(col.key, newDirection);
+                };
+                this._addEventHandler(th, 'click', toggleSort);
+                this._addEventHandler(th, 'keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleSort();
+                    }
                 });
             } else {
                 th.textContent = col.title;
@@ -1399,6 +1415,9 @@ class TableInstance {
             if (this._selected.has(row[key])) {
                 tr.classList.add(classes.selected);
                 tr.style.background = 'var(--dm-primary-light, #e3f2fd)';
+                tr.setAttribute('aria-selected', 'true');
+            } else if (opts.selectable) {
+                tr.setAttribute('aria-selected', 'false');
             }
 
             // Selection checkbox
@@ -1407,6 +1426,7 @@ class TableInstance {
                 td.style.cssText = 'padding: 12px; border: 1px solid var(--dm-border, #ddd);';
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
+                checkbox.setAttribute('aria-label', `Select row ${rowIndex + 1}`);
                 checkbox.checked = this._selected.has(row[key]);
                 this._addEventHandler(checkbox, 'change', () => {
                     this.toggleSelect(row[key]);
@@ -1484,6 +1504,8 @@ class TableInstance {
         if (opts.pagination) {
             const paginationWrapper = document.createElement('div');
             paginationWrapper.className = classes.pagination;
+            paginationWrapper.setAttribute('role', 'navigation');
+            paginationWrapper.setAttribute('aria-label', 'Table pagination');
             paginationWrapper.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px 0;';
 
             const info = this.pageInfo();
@@ -1497,6 +1519,7 @@ class TableInstance {
             pageSizeWrapper.innerHTML = 'Show ';
             const select = document.createElement('select');
             select.className = 'form-select';
+            select.setAttribute('aria-label', 'Rows per page');
             select.style.cssText = 'width: auto; display: inline-block; margin: 0 5px;';
             for (const size of opts.pageSizeOptions) {
                 const option = document.createElement('option');
@@ -1513,22 +1536,31 @@ class TableInstance {
 
             // Page buttons
             const buttonsWrapper = document.createElement('span');
-            const createBtn = (content, onClick, disabled = false, isIcon = false) => {
+            buttonsWrapper.setAttribute('role', 'group');
+            buttonsWrapper.setAttribute('aria-label', 'Pagination controls');
+            const createBtn = (content, onClick, disabled = false, isIcon = false, ariaLabel = '') => {
                 const btn = document.createElement('button');
+                btn.type = 'button';
+                if (ariaLabel) {
+                    btn.setAttribute('aria-label', ariaLabel);
+                }
                 if (isIcon) {
                     btn.innerHTML = content;
                 } else {
                     btn.textContent = content;
                 }
                 btn.disabled = disabled;
+                if (disabled) {
+                    btn.setAttribute('aria-disabled', 'true');
+                }
                 btn.style.cssText = 'padding: 6px 12px; margin: 0 2px; border: 1px solid var(--dm-border, #ddd); background: var(--dm-surface, #fff); cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;';
                 if (disabled) btn.style.opacity = '0.5';
                 this._addEventHandler(btn, 'click', onClick);
                 return btn;
             };
 
-            buttonsWrapper.appendChild(createBtn(icons.html('chevrons-left', {size: 14}), () => this.firstPage(), this._currentPage === 1, true));
-            buttonsWrapper.appendChild(createBtn(icons.html('chevron-left', {size: 14}), () => this.prevPage(), this._currentPage === 1, true));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevrons-left', {size: 14}), () => this.firstPage(), this._currentPage === 1, true, 'First page'));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevron-left', {size: 14}), () => this.prevPage(), this._currentPage === 1, true, 'Previous page'));
 
             // Page numbers
             const maxButtons = 5;
@@ -1537,17 +1569,19 @@ class TableInstance {
             startPage = Math.max(1, endPage - maxButtons + 1);
 
             for (let i = startPage; i <= endPage; i++) {
-                const btn = createBtn(i, () => this.page(i), false);
-                if (i === this._currentPage) {
+                const isCurrent = i === this._currentPage;
+                const btn = createBtn(i, () => this.page(i), false, false, `Page ${i}`);
+                if (isCurrent) {
+                    btn.setAttribute('aria-current', 'page');
                     btn.style.background = 'var(--dm-primary, #007bff)';
-                    btn.style.color = '#fff';
+                    btn.style.color = 'var(--dm-primary-text, #fff)';
                     btn.style.borderColor = 'var(--dm-primary, #007bff)';
                 }
                 buttonsWrapper.appendChild(btn);
             }
 
-            buttonsWrapper.appendChild(createBtn(icons.html('chevron-right', {size: 14}), () => this.nextPage(), this._currentPage === info.totalPages, true));
-            buttonsWrapper.appendChild(createBtn(icons.html('chevrons-right', {size: 14}), () => this.lastPage(), this._currentPage === info.totalPages, true));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevron-right', {size: 14}), () => this.nextPage(), this._currentPage === info.totalPages, true, 'Next page'));
+            buttonsWrapper.appendChild(createBtn(icons.html('chevrons-right', {size: 14}), () => this.lastPage(), this._currentPage === info.totalPages, true, 'Last page'));
 
             paginationWrapper.appendChild(pageSizeWrapper);
             paginationWrapper.appendChild(infoSpan);

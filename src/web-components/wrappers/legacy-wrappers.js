@@ -561,6 +561,8 @@ export class ToastWrapper {
         if (!ToastWrapper._containers[position]) {
             const container = document.createElement('div');
             container.className = `domma-toast-container domma-toast-${position}`;
+            container.setAttribute('aria-live', 'polite');
+            container.setAttribute('aria-atomic', 'true');
             container.style.cssText = `
                 position: fixed;
                 z-index: 9999;
@@ -590,6 +592,9 @@ export class ToastWrapper {
         // Create Web Component
         const webComponent = document.createElement('domma-toast');
         webComponent.style.pointerEvents = 'auto';
+        webComponent.setAttribute('role', opts.type === 'error' ? 'alert' : 'status');
+        webComponent.setAttribute('aria-live', opts.type === 'error' ? 'assertive' : 'polite');
+        webComponent.setAttribute('aria-atomic', 'true');
 
         // Apply options as attributes
         webComponent.setAttribute('message', message);
@@ -750,6 +755,22 @@ export function createModalWrapper(selector, options = {}) {
 
     // Replace original element
     preserveIdentity(element, webComponent, 'modal');
+
+    // Ensure dialog ARIA semantics on host element
+    if (!webComponent.hasAttribute('role')) webComponent.setAttribute('role', 'dialog');
+    if (!webComponent.hasAttribute('aria-modal')) webComponent.setAttribute('aria-modal', 'true');
+    const titleEl = webComponent.querySelector('.modal-title');
+    if (titleEl) {
+        if (!titleEl.id) titleEl.id = 'dm-modal-title-' + Math.random().toString(36).substring(2, 9);
+        if (!webComponent.hasAttribute('aria-labelledby')) webComponent.setAttribute('aria-labelledby', titleEl.id);
+    } else if (options.title && !webComponent.hasAttribute('aria-label')) {
+        webComponent.setAttribute('aria-label', options.title);
+    }
+    const closeBtn = webComponent.querySelector('[data-close], .modal-close, .btn-close, .close');
+    if (closeBtn && !closeBtn.hasAttribute('aria-label')) {
+        closeBtn.setAttribute('aria-label', 'Close');
+    }
+
     element.replaceWith(webComponent);
 
     // Return API-compatible object

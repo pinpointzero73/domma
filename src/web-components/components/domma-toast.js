@@ -94,8 +94,10 @@ export class DommaToast extends DommaElement {
         const { message, title, closable, icon, showProgress } = this._options;
         const toast = document.createElement('div');
         toast.className = 'toast';
-        toast.setAttribute('part', 'toast');
-        toast.setAttribute('role', 'alert');
+        const isError = this._options.type === 'error';
+        toast.setAttribute('role', isError ? 'alert' : 'status');
+        toast.setAttribute('aria-live', isError ? 'assertive' : 'polite');
+        toast.setAttribute('aria-atomic', 'true');
 
         if (icon) {
             const iconWrapper = document.createElement('div');
@@ -132,6 +134,7 @@ export class DommaToast extends DommaElement {
         if (closable) {
             const closeBtn = document.createElement('button');
             closeBtn.className = 'toast-close';
+            closeBtn.setAttribute('aria-label', 'Close');
             closeBtn.innerHTML = '&times;';
             this._addEventListener(closeBtn, 'click', () => this.close());
             toast.appendChild(closeBtn);

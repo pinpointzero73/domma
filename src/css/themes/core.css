@@ -18,6 +18,11 @@
     --dm-warning: var(--dm-core-warning);
     --dm-danger: var(--dm-core-danger);
     --dm-info: var(--dm-core-info);
+    --dm-info-text: #055160;
+    --dm-warning-text: #000000;
+    --dm-primary-text: #ffffff;
+    --dm-danger-text: #ffffff;
+    --dm-success-text: #ffffff;
 
     /* Component specific overrides can go here */
 }

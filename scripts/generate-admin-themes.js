@@ -69,7 +69,7 @@ export const FINISHES = {
     foundation: {
       'background': '#eef1f6', 'background-alt': '#e6ebf3',
       'surface': '#fbfcfe', 'surface-raised': '#ffffff', 'surface-overlay': '#ffffff',
-      'text': '#1f2733', 'text-secondary': '#5a6677', 'text-muted': '#8893a3',
+      'text': '#1f2733', 'text-secondary': '#5a6677', 'text-muted': '#687486',
       'text-disabled': '#aab2bd', 'text-inverse': '#ffffff',
       'border': '#e4e8ef', 'border-light': '#eef1f6', 'border-dark': '#d5dbe5',
       'hover-bg': 'rgba(15, 23, 42, 0.04)', 'active-bg': 'rgba(15, 23, 42, 0.07)',
@@ -124,7 +124,7 @@ export const ACCENTS = {
 // Status colours - shared across the whole family.
 // ---------------------------------------------------------------------------
 const STATUS = {
-  success: { base: '#2e8b50', hover: '#287d49', active: '#226b3f', dark: '#1c5733', rgb: '46, 139, 80',  solidLight: '#e3f3e8', text: '#ffffff', hoverText: '#ffffff' },
+  success: { base: '#287c47', hover: '#236e3e', active: '#1e5f35', dark: '#164627', rgb: '40, 124, 71',  solidLight: '#e3f3e8', text: '#ffffff', hoverText: '#ffffff' },
   danger:  { base: '#c0432f', hover: '#a93a29', active: '#933223', dark: '#742719', rgb: '192, 67, 47',  solidLight: '#fbe6e1', text: '#ffffff', hoverText: '#ffffff' },
   warning: { base: '#8a6d1f', hover: '#79601b', active: '#675217', dark: '#4e3e11', rgb: '138, 109, 31', solidLight: '#fbf0d6', text: '#ffffff', hoverText: '#ffffff' },
   info:    { base: '#2f6fb0', hover: '#296199', active: '#235485', dark: '#1a3f64', rgb: '47, 111, 176', solidLight: '#e1ecf7', text: '#ffffff', hoverText: '#ffffff' }
@@ -276,7 +276,7 @@ export function buildThemeCss(finishKey, accentKey) {
     'primary-text': '#ffffff',
     'primary-hover-text': '#ffffff',
     'focus-ring': `0 0 0 3px rgba(${a.rgb}, 0.35)`,
-    'border-focus': a.primary,
+    'border-focus': f.colorScheme === 'dark' ? a.onDark : a.primary,
     'secondary': '#5f6f7a',
     'secondary-hover': '#52606b',
     'secondary-active': '#46535d',

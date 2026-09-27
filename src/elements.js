@@ -391,10 +391,28 @@ class Modal extends Component {
             document.addEventListener('keydown', this._keyHandler);
         }
 
+        // ARIA semantics
+        if (!el.hasAttribute('role')) {
+            el.setAttribute('role', 'dialog');
+        }
+        if (!el.hasAttribute('aria-modal')) {
+            el.setAttribute('aria-modal', 'true');
+        }
+        const titleEl = el.querySelector('.modal-title, [data-modal-title]');
+        if (titleEl && !el.hasAttribute('aria-labelledby')) {
+            if (!titleEl.id) {
+                titleEl.id = 'dm-modal-title-' + Math.random().toString(36).substring(2, 9);
+            }
+            el.setAttribute('aria-labelledby', titleEl.id);
+        } else if (opts.title && !el.hasAttribute('aria-label')) {
+            el.setAttribute('aria-label', opts.title);
+        }
+
         // Close button (header × button)
         if (opts.closeButton) {
             const closeBtn = el.querySelector('[data-close], .modal-close, .close');
             if (closeBtn) {
+                if (!closeBtn.hasAttribute('aria-label')) closeBtn.setAttribute('aria-label', 'Close');
                 this._addEventListener(closeBtn, 'click', () => this.close());
             }
         }
@@ -821,8 +839,21 @@ class Tabs extends Component {
         this._tabs = this.element.querySelectorAll(opts.tabSelector);
         this._panels = this.element.querySelectorAll(opts.panelSelector);
 
-        // Setup tabs
+        // Setup ARIA roles & relationships
+        const listEl = this.element.querySelector('.tabs-list, .tab-list, .nav-tabs, [data-tab-list]') || this.element;
+        if (!listEl.hasAttribute('role')) listEl.setAttribute('role', 'tablist');
+
         this._tabs.forEach((tab, index) => {
+            if (!tab.hasAttribute('role')) tab.setAttribute('role', 'tab');
+            const panel = this._panels[index];
+            if (panel) {
+                if (!panel.hasAttribute('role')) panel.setAttribute('role', 'tabpanel');
+                if (!tab.id) tab.id = 'dm-tab-' + Math.random().toString(36).substring(2, 9);
+                if (!panel.id) panel.id = 'dm-panel-' + Math.random().toString(36).substring(2, 9);
+                if (!tab.hasAttribute('aria-controls')) tab.setAttribute('aria-controls', panel.id);
+                if (!panel.hasAttribute('aria-labelledby')) panel.setAttribute('aria-labelledby', tab.id);
+            }
+
             this._addEventListener(tab, 'click', (e) => {
                 e.preventDefault();
                 this.activate(index);
@@ -834,6 +865,11 @@ class Tabs extends Component {
     }
 
     activate(index) {
+        if (typeof index === 'string') {
+            const foundIndex = Array.from(this._tabs).findIndex(t => t.dataset?.tab === index || t.getAttribute('data-tab') === index || t.getAttribute('href') === index || t.getAttribute('href') === `#${index}`);
+            if (foundIndex !== -1) index = foundIndex;
+            else index = Number(index);
+        }
         if (index === this._activeIndex) return this;
         if (index < 0 || index >= this._tabs.length) return this;
 
@@ -854,7 +890,10 @@ class Tabs extends Component {
         const opts = this.options;
 
         this._tabs.forEach((tab, i) => {
-            if (i === this._activeIndex) {
+            const isActive = i === this._activeIndex;
+            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            tab.setAttribute('tabindex', isActive ? '0' : '-1');
+            if (isActive) {
                 tab.classList.add(opts.activeClass);
             } else {
                 tab.classList.remove(opts.activeClass);
@@ -862,7 +901,9 @@ class Tabs extends Component {
         });
 
         this._panels.forEach((panel, i) => {
-            if (i === this._activeIndex) {
+            const isActive = i === this._activeIndex;
+            panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+            if (isActive) {
                 panel.style.display = 'block';
                 if (opts.animation === 'fade') {
                     panel.style.opacity = '0';
@@ -908,7 +949,7 @@ class Accordion extends Component {
         animation: true,
         animationDuration: 300,
         headerSelector: '.accordion-header, [data-accordion-header]',
-        contentSelector: '.accordion-body, [data-accordion-content]',
+        contentSelector: '.accordion-body, .accordion-content, [data-accordion-content]',
         activeClass: 'active',
         onChange: null
     };
@@ -931,13 +972,28 @@ class Accordion extends Component {
 
         // Setup initial state based on activeIndex or existing active class
         this._contents.forEach((content, index) => {
+            const header = this._headers[index];
+            if (header) {
+                if (!header.hasAttribute('role') && header.tagName !== 'BUTTON') {
+                    header.setAttribute('role', 'button');
+                }
+                if (!header.hasAttribute('tabindex')) {
+                    header.setAttribute('tabindex', '0');
+                }
+                if (!header.id) header.id = 'dm-accordion-hdr-' + Math.random().toString(36).substring(2, 9);
+                if (!content.id) content.id = 'dm-accordion-body-' + Math.random().toString(36).substring(2, 9);
+                if (!header.hasAttribute('aria-controls')) header.setAttribute('aria-controls', content.id);
+                if (!content.hasAttribute('aria-labelledby')) content.setAttribute('aria-labelledby', header.id);
+                if (!content.hasAttribute('role')) content.setAttribute('role', 'region');
+            }
+
             content.style.overflow = 'hidden';
             content.style.transition = opts.animation
                 ? `height ${opts.animationDuration}ms ease`
                 : 'none';
 
             // Check if should be active: via activeIndex option or existing class
-            const parent = this._headers[index]?.parentElement;
+            const parent = header?.parentElement;
             let shouldBeActive = parent?.classList.contains(opts.activeClass);
 
             // activeIndex can be number or array
@@ -955,6 +1011,11 @@ class Accordion extends Component {
                 }
             }
 
+            if (header) {
+                header.setAttribute('aria-expanded', shouldBeActive ? 'true' : 'false');
+            }
+            content.setAttribute('aria-hidden', shouldBeActive ? 'false' : 'true');
+
             if (shouldBeActive) {
                 // Active items need explicit height for overflow:hidden to work
                 content.style.height = 'auto';
@@ -963,10 +1024,16 @@ class Accordion extends Component {
             }
         });
 
-        // Bind click handlers
+        // Bind click & keyboard handlers
         this._headers.forEach((header, index) => {
             this._addEventListener(header, 'click', () => {
                 this.toggle(index);
+            });
+            this._addEventListener(header, 'keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.toggle(index);
+                }
             });
         });
     }
@@ -975,8 +1042,8 @@ class Accordion extends Component {
         const opts = this.options;
         const header = this._headers[index];
         const content = this._contents[index];
-        const parent = header.parentElement;
-        const isActive = parent.classList.contains(opts.activeClass);
+        const parent = header?.parentElement;
+        const isActive = parent?.classList.contains(opts.activeClass);
 
         if (!opts.allowMultiple) {
             // Close all others
@@ -1004,9 +1071,11 @@ class Accordion extends Component {
         const opts = this.options;
         const header = this._headers[index];
         const content = this._contents[index];
-        const parent = header.parentElement;
+        const parent = header?.parentElement;
 
-        parent.classList.add(opts.activeClass);
+        if (header) header.setAttribute('aria-expanded', 'true');
+        if (content) content.setAttribute('aria-hidden', 'false');
+        parent?.classList.add(opts.activeClass);
         content.style.height = content.scrollHeight + 'px';
 
         // Remove height after animation for responsive content
@@ -1019,9 +1088,11 @@ class Accordion extends Component {
         const opts = this.options;
         const header = this._headers[index];
         const content = this._contents[index];
-        const parent = header.parentElement;
+        const parent = header?.parentElement;
 
-        parent.classList.remove(opts.activeClass);
+        if (header) header.setAttribute('aria-expanded', 'false');
+        if (content) content.setAttribute('aria-hidden', 'true');
+        parent?.classList.remove(opts.activeClass);
 
         // Set current height first for animation
         content.style.height = content.scrollHeight + 'px';
@@ -2620,6 +2691,8 @@ class Toast {
         if (!Toast._containers[position]) {
             const container = document.createElement('div');
             container.className = `domma-toast-container domma-toast-${position}`;
+            container.setAttribute('aria-live', 'polite');
+            container.setAttribute('aria-atomic', 'true');
 
             document.body.appendChild(container);
             Toast._containers[position] = container;
@@ -2715,6 +2788,9 @@ class ToastInstance {
 
         this._element = document.createElement('div');
         this._element.className = `domma-toast domma-toast-${opts.type || 'default'}`;
+        this._element.setAttribute('role', opts.type === 'error' ? 'alert' : 'status');
+        this._element.setAttribute('aria-live', opts.type === 'error' ? 'assertive' : 'polite');
+        this._element.setAttribute('aria-atomic', 'true');
 
         // Icon
         if (opts.icon) {

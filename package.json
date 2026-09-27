@@ -48,6 +48,7 @@
         "validate:theme": "node scripts/validate-theme-contrast.js",
         "validate:contrast": "node scripts/validate-contrast-pairs.js",
         "validate:conventions": "node scripts/validate-conventions.js",
+        "sweep:themes": "node scripts/sweep-themes.js",
         "validate:showcase": "vitest run src/showcase-pages.test.js",
         "validate:showcase:strict": "SHOWCASE_STRICT=1 vitest run src/showcase-pages.test.js",
         "validate:showcase:baseline": "SHOWCASE_BASELINE=1 vitest run src/showcase-pages.test.js",

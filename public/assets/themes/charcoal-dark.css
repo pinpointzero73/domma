@@ -47,8 +47,8 @@
     --dm-link-hover: color-mix(in oklab, var(--dm-primary), var(--dm-text) 55%);
 
     /* Focus ring with charcoal colour */
-    --dm-focus-ring: 0 0 0 3px rgba(54, 69, 79, 0.3);
-    --dm-border-focus: #36454f;
+    --dm-focus-ring: 0 0 0 3px rgba(138, 155, 171, 0.4);
+    --dm-border-focus: #8a9bab;
 
     /* ================================================
        SECONDARY COLOURS - Slate

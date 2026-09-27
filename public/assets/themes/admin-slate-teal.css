@@ -51,7 +51,7 @@
     --dm-primary-text: #ffffff;
     --dm-primary-hover-text: #ffffff;
     --dm-focus-ring: 0 0 0 3px rgba(42, 129, 120, 0.35);
-    --dm-border-focus: #2a8178;
+    --dm-border-focus: #66c2b8;
     --dm-secondary: #5f6f7a;
     --dm-secondary-hover: #52606b;
     --dm-secondary-active: #46535d;
@@ -72,11 +72,11 @@
     --dm-link: color-mix(in oklab, var(--dm-primary), var(--dm-text) 50%);
     --dm-link-hover: color-mix(in oklab, var(--dm-primary), var(--dm-text) 65%);
 
-    --dm-success: #2e8b50;
-    --dm-success-hover: #287d49;
-    --dm-success-active: #226b3f;
-    --dm-success-light: rgba(46, 139, 80, 0.15);
-    --dm-success-dark: #1c5733;
+    --dm-success: #287c47;
+    --dm-success-hover: #236e3e;
+    --dm-success-active: #1e5f35;
+    --dm-success-light: rgba(40, 124, 71, 0.15);
+    --dm-success-dark: #164627;
     --dm-success-text: #ffffff;
     --dm-success-hover-text: #ffffff;
     --dm-danger: #c0432f;

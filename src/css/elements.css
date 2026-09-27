@@ -41,9 +41,12 @@
     box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
-.btn:disabled {
+.btn:disabled,
+.btn[aria-disabled="true"],
+.btn.disabled {
     opacity: 0.65;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 .btn-primary {
@@ -493,7 +496,8 @@
     border-bottom-color: var(--dm-border);
 }
 
-.tab-item.active {
+.tab-item.active,
+.tab-item[aria-selected="true"] {
     color: var(--dm-link, color-mix(in oklab, var(--dm-primary, #0070d6), var(--dm-text, #1a1a1a) 55%));
     border-bottom-color: var(--dm-primary);
 }
@@ -525,7 +529,8 @@
     margin-bottom: 0;
 }
 
-.tabs-pills .tab-item.active {
+.tabs-pills .tab-item.active,
+.tabs-pills .tab-item[aria-selected="true"] {
     background-color: var(--dm-surface);
     box-shadow: var(--dm-shadow-sm);
     border-bottom: none;
@@ -568,7 +573,8 @@
     transition: transform var(--dm-transition-normal);
 }
 
-.accordion-item.active .accordion-icon {
+.accordion-item.active .accordion-icon,
+.accordion-header[aria-expanded="true"] .accordion-icon {
     transform: rotate(180deg);
 }
 
@@ -847,7 +853,10 @@ textarea:not([class])::placeholder {
 
 .form-input:disabled,
 .form-select:disabled,
-.form-textarea:disabled {
+.form-textarea:disabled,
+.form-input[aria-disabled="true"],
+.form-select[aria-disabled="true"],
+.form-textarea[aria-disabled="true"] {
     background-color: var(--dm-hover-bg);
     cursor: not-allowed;
     opacity: 0.7;
@@ -855,7 +864,10 @@ textarea:not([class])::placeholder {
 
 [data-mode="dark"].form-input:disabled,
 [data-mode="dark"].form-select:disabled,
-[data-mode="dark"].form-textarea:disabled {
+[data-mode="dark"].form-textarea:disabled,
+[data-mode="dark"].form-input[aria-disabled="true"],
+[data-mode="dark"].form-select[aria-disabled="true"],
+[data-mode="dark"].form-textarea[aria-disabled="true"] {
     background-color: var(--dm-surface);
 }
 
@@ -873,13 +885,25 @@ textarea:not([class])::placeholder {
 
 .form-input.error,
 .form-select.error,
-.form-textarea.error {
+.form-textarea.error,
+.form-input[aria-invalid="true"],
+.form-select[aria-invalid="true"],
+.form-textarea[aria-invalid="true"],
+.form-input.is-invalid,
+.form-select.is-invalid,
+.form-textarea.is-invalid {
     border-color: var(--dm-danger);
 }
 
 .form-input.error:focus,
 .form-select.error:focus,
-.form-textarea.error:focus {
+.form-textarea.error:focus,
+.form-input[aria-invalid="true"]:focus,
+.form-select[aria-invalid="true"]:focus,
+.form-textarea[aria-invalid="true"]:focus,
+.form-input.is-invalid:focus,
+.form-select.is-invalid:focus,
+.form-textarea.is-invalid:focus {
     box-shadow: 0 0 0 3px var(--dm-focus-ring-danger);
 }
 
@@ -1655,19 +1679,22 @@ textarea:not([class])::placeholder {
 }
 
 /* Active/selected state - accent background takes precedence over colour variants */
-.list-group-item.active {
+.list-group-item.active,
+.list-group-item[aria-selected="true"] {
     background-color: var(--dm-primary);
     color: var(--dm-primary-text, var(--dm-white));
     border-bottom-color: var(--dm-primary-hover);
     z-index: 1;
 }
 
-.list-group-item.active .list-group-item-text {
+.list-group-item.active .list-group-item-text,
+.list-group-item[aria-selected="true"] .list-group-item-text {
     color: rgba(255, 255, 255, 0.75);
 }
 
 /* Disabled state - dimmed and non-interactive */
-.list-group-item.disabled {
+.list-group-item.disabled,
+.list-group-item[aria-disabled="true"] {
     opacity: 0.7;
     cursor: not-allowed;
     pointer-events: none;
@@ -2118,14 +2145,16 @@ code {
     text-decoration: none;
 }
 
-.pagination-link.active {
+.pagination-link.active,
+.pagination-link[aria-current="page"] {
     background-color: var(--dm-primary);
     border-color: var(--dm-primary);
     color: var(--dm-primary-text, var(--dm-white));
 }
 
 .pagination-link:disabled,
-.pagination-link.disabled {
+.pagination-link.disabled,
+.pagination-link[aria-disabled="true"] {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
@@ -5990,7 +6019,8 @@ code {
     color: var(--dm-primary, #6495ED);
 }
 
-.dm-breadcrumbs-item.active {
+.dm-breadcrumbs-item.active,
+.dm-breadcrumbs-item[aria-current="page"] {
     color: var(--dm-text);
     font-weight: 500;
 }
@@ -6008,7 +6038,8 @@ code {
     color: var(--dm-text-muted);
 }
 
-[data-mode="dark"] .dm-breadcrumbs-item.active {
+[data-mode="dark"] .dm-breadcrumbs-item.active,
+[data-mode="dark"] .dm-breadcrumbs-item[aria-current="page"] {
     color: var(--dm-text);
 }
 
