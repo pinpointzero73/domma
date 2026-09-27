@@ -37,6 +37,12 @@
     --dm-primary-light: rgba(212, 192, 106, 0.15);
     --dm-primary-dark: #c9b458;
 
+    /* Links: the primary is 1.63:1 as text here, under the 4.5:1 AA
+       minimum, so links mix in the text colour - the least (55%) that
+       reads at 5:1 or better on the page, surfaces and cards. */
+    --dm-link: color-mix(in oklab, var(--dm-primary), var(--dm-text) 55%);
+    --dm-link-hover: color-mix(in oklab, var(--dm-primary), var(--dm-text) 70%);
+
     --dm-secondary: #b6b1a1;
     --dm-secondary-hover: #c4bfb0;
     --dm-secondary-active: #d2cdbf;

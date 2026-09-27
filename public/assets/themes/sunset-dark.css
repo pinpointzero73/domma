@@ -41,6 +41,12 @@
     --dm-primary-light: rgba(198, 123, 92, 0.15);
     --dm-primary-dark: #a66349;
 
+    /* Links: the primary is 3.15:1 as text here, under the 4.5:1 AA
+       minimum, so links mix in the text colour - the least (45%) that
+       reads at 5:1 or better on the page, surfaces and cards. */
+    --dm-link: color-mix(in oklab, var(--dm-primary), var(--dm-text) 45%);
+    --dm-link-hover: color-mix(in oklab, var(--dm-primary), var(--dm-text) 60%);
+
     /* Focus ring with soft sunset colour */
     --dm-focus-ring: 0 0 0 3px rgba(198, 123, 92, 0.3);
     --dm-border-focus: #c67b5c;
