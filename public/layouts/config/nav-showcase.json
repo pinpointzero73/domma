@@ -309,6 +309,12 @@
           "section": "pillbox"
         },
         {
+          "text": "Popover",
+          "url": "showcase/elements/popover/index.html",
+          "section": "popover",
+          "badge": "New"
+        },
+        {
           "text": "Progression",
           "url": "showcase/elements/progression/index.html",
           "section": "progression",

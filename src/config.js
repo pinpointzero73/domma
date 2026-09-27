@@ -203,6 +203,7 @@ export const configEngine = {
             sortable: elements.sortable,
             skeleton: elements.skeleton,
             inputGroup: elements.inputGroup,
+            popover: elements.popover,
             badge: elements.badge,
             numberBadge: elements.numberBadge,
             listGroup: elements.listGroup,

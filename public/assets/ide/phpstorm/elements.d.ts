@@ -250,6 +250,128 @@ export interface TooltipInstance extends ComponentInstance {
 }
 
 // ============================================
+// Popover Component
+// ============================================
+
+export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
+export type PopoverPlacement =
+    | PopoverSide | 'auto'
+    | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
+    | 'left-start' | 'left-end' | 'right-start' | 'right-end'
+    | 'auto-start' | 'auto-end';
+export type PopoverTrigger = 'click' | 'hover' | 'focus' | 'manual' | string;
+
+/** Text, a DOM node or collection, or a function returning either - called on every open */
+export type PopoverContent =
+    | string
+    | Node
+    | ArrayLike<Node>
+    | null
+    | ((popover: PopoverInstance) => string | Node | ArrayLike<Node> | null);
+
+export interface PopoverOptions {
+    /** Text (default), a Node, or a function returning either; see `html` */
+    content?: PopoverContent;
+    /** Heading; empty for none */
+    title?: PopoverContent;
+    /** Treat string content/title as HTML, passed through Domma's sanitiser (default: false) */
+    html?: boolean;
+    /** 'click' (default), 'hover', 'focus', 'manual', or several separated by spaces */
+    trigger?: PopoverTrigger;
+    /** Preferred side and alignment (default: 'bottom') */
+    placement?: PopoverPlacement;
+    /** Try the other sides when the preferred one has no room (default: true) */
+    flip?: boolean;
+    /** Gap in px, or [crossAxis, mainAxis] (default: 10) */
+    offset?: number | [number, number];
+    /** Show the arrow (default: true) */
+    arrow?: boolean;
+    /** Show a close (x) button (default: false) */
+    dismissible?: boolean;
+    /** Close on a pointer press or focus outside (default: true) */
+    closeOnOutside?: boolean;
+    /** Close on Escape (default: true) */
+    closeOnEscape?: boolean;
+    /** One open at a time per group; null = independent (default: 'default') */
+    group?: string | null;
+    /** Any CSS width; numbers are px */
+    width?: string | number | null;
+    /** Any CSS width; the stylesheet default is 20rem */
+    maxWidth?: string | number | null;
+    /** Extra classes on the panel */
+    className?: string;
+    /** Panel id (generated when omitted) */
+    id?: string | null;
+    /** 'dialog', or 'tooltip' for hover/focus-only triggers (default: auto) */
+    role?: 'dialog' | 'tooltip' | string | null;
+    /** Accessible name when there is no title */
+    ariaLabel?: string | null;
+    /** Move focus into the panel on open; null = for click popovers */
+    autoFocus?: boolean | null;
+    /** Tab cycles inside the panel instead of leaving it (default: false) */
+    trapFocus?: boolean;
+    /** Hover delays in ms (default: {show: 80, hide: 120}) */
+    delay?: number | {show?: number; hide?: number};
+    /** Fade and scale (default: true; skipped under reduced motion) */
+    animation?: boolean;
+    /** ms (default: 150) */
+    animationDuration?: number;
+    /** Where the panel is placed (default: document.body) */
+    container?: string | HTMLElement | null;
+    /** Override the stylesheet's z-index (10045) */
+    zIndex?: number | null;
+    /** Before opening; return false to cancel */
+    onShow?: (popover: PopoverInstance) => boolean | void;
+    /** After the open transition */
+    onShown?: (popover: PopoverInstance) => void;
+    /** Before closing; return false to cancel */
+    onHide?: (popover: PopoverInstance) => boolean | void;
+    /** After the panel has been removed */
+    onHidden?: (popover: PopoverInstance) => void;
+}
+
+/** event.detail of popover:show / popover:shown / popover:hide / popover:hidden (fired on the trigger) */
+export interface PopoverEventDetail {
+    popover: PopoverInstance;
+}
+
+export interface PopoverInstance extends ComponentInstance {
+    /** Panel id */
+    readonly id: string;
+    /** The panel element (created on first show) */
+    readonly panel: HTMLElement | null;
+    /** The trigger element */
+    readonly trigger: HTMLElement | null;
+
+    /** Open; `focus` overrides `autoFocus` for this open */
+    show(options?: {focus?: boolean}): this;
+    /** Close; focus returns to the trigger by default only when it was inside the panel */
+    hide(options?: {returnFocus?: boolean}): this;
+    toggle(options?: {focus?: boolean; returnFocus?: boolean}): this;
+    isOpen(): boolean;
+    /** Replace the content (repositions when open) */
+    setContent(content: PopoverContent): this;
+    /** Replace the title; empty removes the header */
+    setTitle(title: PopoverContent): this;
+    /** Reposition after the trigger moved or the content changed size */
+    update(): this;
+    /** Close at once, remove the panel and listeners, restore the trigger's attributes */
+    destroy(): void;
+}
+
+export interface PopoverStatic {
+    (trigger: string | HTMLElement | ArrayLike<HTMLElement>, options?: PopoverOptions): PopoverInstance;
+    /** Create popovers from [data-popover] / [data-popover-content] markup under root; returns the new ones */
+    scan(root?: string | Element | Document): PopoverInstance[];
+    /** Close every open popover, or one group's */
+    closeAll(group?: string | null): void;
+    /** The popover bound to a trigger */
+    getInstance(trigger: string | HTMLElement): PopoverInstance | null;
+    /** The open popovers, oldest first */
+    open(): PopoverInstance[];
+}
+
+// ============================================
 // Badge Component
 // ============================================
 
@@ -1309,6 +1431,14 @@ export interface Elements {
 
     /** Create Tooltip(s) - returns array if multiple elements match */
     tooltip(selector: string | HTMLElement, options?: TooltipOptions): TooltipInstance | TooltipInstance[];
+
+    /**
+     * Anchor a rich panel (title, text/DOM content, close button) to a trigger,
+     * opened by click, hover, focus or code. Portalled to document.body; flips
+     * and shifts to stay in the viewport. `E.popover.scan(root)` reads
+     * `data-popover` markup.
+     */
+    popover: PopoverStatic;
 
     /** Create Badge(s) - returns array if multiple elements match */
     badge(selector: string | HTMLElement, options?: BadgeOptions): BadgeInstance | BadgeInstance[];

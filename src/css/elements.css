@@ -9048,3 +9048,178 @@ td > .skeleton-text {
         animation: none;
     }
 }
+
+/* ============================================
+   POPOVER
+   E.popover(trigger, options) - src/popover.js
+   ============================================ */
+
+/*
+ * Portalled to <body> and positioned with `fixed`, so no ancestor's overflow
+ * or stacking context can clip it. Above modals and slideovers (a popover is
+ * usually opened from inside one), below the context menu (10050), which can
+ * be opened from inside a popover.
+ *
+ * Width options arrive as custom properties, so a theme or page stylesheet
+ * can still set them without fighting inline styles.
+ */
+.dm-popover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10045;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: var(--dm-popover-width, auto);
+    max-width: min(var(--dm-popover-max-width, 20rem), calc(100vw - 16px));
+    max-height: calc(100vh - 16px);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    box-shadow: var(--dm-shadow-lg);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: break-word;
+    opacity: 0;
+    transform: scale(0.96);
+    transform-origin: top center;
+    transition:
+        opacity var(--dm-popover-duration, 150ms) ease,
+        transform var(--dm-popover-duration, 150ms) cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+}
+
+.dm-popover[data-side="top"]    { transform-origin: bottom center; }
+.dm-popover[data-side="bottom"] { transform-origin: top center; }
+.dm-popover[data-side="left"]   { transform-origin: center right; }
+.dm-popover[data-side="right"]  { transform-origin: center left; }
+
+.dm-popover.is-open {
+    opacity: 1;
+    transform: none;
+}
+
+.dm-popover[data-animation="off"] {
+    transition: none;
+}
+
+/* The trigger has scrolled out of view; the panel waits for it. */
+.dm-popover.is-detached {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.dm-popover [hidden] {
+    display: none;
+}
+
+.dm-popover-header {
+    padding: 0.625rem 0.875rem 0;
+}
+
+.dm-popover-title {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--dm-text);
+}
+
+/* The body scrolls when the content is taller than the viewport, so the
+   panel itself keeps overflow visible and the arrow is not clipped. */
+.dm-popover-body {
+    min-height: 0;
+    padding: 0.625rem 0.875rem;
+    overflow: auto;
+}
+
+.dm-popover-body > :first-child { margin-top: 0; }
+.dm-popover-body > :last-child  { margin-bottom: 0; }
+
+.dm-popover.is-dismissible .dm-popover-header,
+.dm-popover.is-dismissible:not(.has-title) .dm-popover-body {
+    padding-right: 2.25rem;
+}
+
+.dm-popover-close {
+    position: absolute;
+    top: 0.375rem;
+    right: 0.375rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--dm-radius-sm);
+    background: transparent;
+    color: var(--dm-text);
+    cursor: pointer;
+}
+
+.dm-popover-close:hover {
+    background: var(--dm-hover-bg);
+    color: var(--dm-text);
+}
+
+.dm-popover-close:focus-visible {
+    outline: 2px solid var(--dm-primary);
+    outline-offset: 1px;
+}
+
+/*
+ * A square turned 45 degrees, bordered on the two edges that face out, so it
+ * reads as a continuation of the panel's own border. JS sets its position
+ * along the edge (left for top/bottom, top for left/right).
+ */
+.dm-popover-arrow {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    background: var(--dm-surface);
+    border: 1px solid var(--dm-border);
+    transform: rotate(45deg);
+    pointer-events: none;
+}
+
+.dm-popover[data-side="bottom"] .dm-popover-arrow {
+    top: -1px;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.dm-popover[data-side="top"] .dm-popover-arrow {
+    top: calc(100% + 1px);
+    border-left: 0;
+    border-top: 0;
+}
+
+.dm-popover[data-side="right"] .dm-popover-arrow {
+    left: -1px;
+    margin: -5px 0 0 -5px;
+    border-top: 0;
+    border-right: 0;
+}
+
+.dm-popover[data-side="left"] .dm-popover-arrow {
+    left: calc(100% + 1px);
+    border-bottom: 0;
+    border-left: 0;
+}
+
+.dm-popover-trigger[role="button"] {
+    cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-popover {
+        transition: none;
+        transform: none;
+    }
+}

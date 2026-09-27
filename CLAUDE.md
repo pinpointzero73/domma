@@ -26,6 +26,7 @@ modern UI components.
 | Form generation                   | `F.create(selector, blueprint)` | Manual `<form>` HTML          |
 | UI components (modals, tabs)      | `E.modal(selector, options)`  | Manual HTML/CSS/JS              |
 | Right-click menus                 | `E.contextMenu(sel, options)` | Manual `contextmenu` listeners  |
+| Rich click-open panels            | `E.popover(el, opts)`         | Manual floating divs            |
 | Drag-to-reorder lists             | `E.sortable(sel, options)`    | Manual drag/drop listeners      |
 | Icon/text joined to an input      | `formConfig.prefix/suffix` or `E.inputGroup(sel, opts)` | Manual wrapper markup |
 | Show password / clear / stepper / char counter | `formConfig.reveal/clear/stepper/counter` or `E.inputGroup(sel, {reveal, clear, stepper, counter})` | Hand-rolled buttons and listeners |
@@ -213,6 +214,8 @@ consult that folder's CLAUDE.md for detailed information.
 - [docs/Reactivity.md](./docs/Reactivity.md) - Dependency tracking: `M.computed()`, `M.effect()`, batching rules
 - [docs/ContextMenu.md](./docs/ContextMenu.md) - Right-click menus: container binding, delegation, the
   nesting cascade and inheritance
+- [docs/Popover.md](./docs/Popover.md) - Floating panels: triggers, placement and collision, focus and ARIA,
+  groups and nesting, `data-popover` + `E.popover.scan()`
 - [docs/Sortable.md](./docs/Sortable.md) - Drag-to-reorder: live and indicator (tree) modes, `onDrop` re-render,
   keyboard, touch and `persist`
 - [docs/Skeleton.md](./docs/Skeleton.md) - Loading placeholders: CSS shapes, `E.skeleton()` types, `while()`,
@@ -558,6 +561,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
   - Tooltip - `tooltip()` with positioning, triggers
+  - Popover - `popover()` rich panels anchored to a trigger (title, text/DOM/function content, close button);
+    click/hover/focus/manual, flips and shifts inside the viewport, portalled to body, one open per group;
+    dialog focus handling + ARIA; `data-popover` + `E.popover.scan()`. See [docs/Popover.md](./docs/Popover.md)
   - Carousel - `carousel()` with autoplay, interval, loop, and three transition modes (`slide` / `fade` / `crossfade`) plus configurable easing
   - Card - `card()` with hover, clickable, **collapsible** (with localStorage persistence)
   - Dropdown - `dropdown()` with positioning

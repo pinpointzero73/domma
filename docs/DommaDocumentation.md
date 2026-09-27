@@ -2744,6 +2744,42 @@ and a number field with a stepper hides the browser's own spinner.
 See the [Input Addons showcase](../public/showcase/forms/input-addons.html) for every variant, a
 live `E.inputGroup` demo and the extras.
 
+## Popover
+
+A floating panel anchored to a trigger - an optional title, content that can be text, DOM or a small
+form, and an optional close button - opened by click, hover, focus or code. It is portalled to
+`document.body`, flips to another side when the requested one has no room, shifts to stay inside the
+viewport with its arrow still on the trigger, and follows scrolling. Nothing wraps the trigger.
+
+```javascript
+const help = Domma.elements.popover('#slug-help', {
+    title: 'URL slug',
+    content: 'The last part of the page address.',   // text, never parsed as HTML
+    placement: 'top',                                 // top/bottom/left/right/auto, plus -start/-end
+    dismissible: true
+});
+
+help.setContent(() => buildFormNode());               // a Node, or a function returning one
+```
+
+A click popover is a non-modal dialog: focus moves into it and back to the trigger on Esc or close,
+and Tab leaves it in document order as though the panel followed the trigger. Hover and focus
+popovers are `role="tooltip"` and hover ones also open on keyboard focus. Content is text unless you
+pass `html: true`, which goes through the sanitiser. One popover is open at a time per `group`, and a
+popover opened from inside another keeps its parent open.
+
+Markup works too - `data-popover`, `data-popover-title`, `data-popover-placement`, or
+`data-popover-content="#template"` for rich content - activated with `E.popover.scan(root)`:
+
+```html
+<button type="button" aria-label="About the URL slug"
+        data-popover="The last part of the page address." data-popover-title="URL slug">?</button>
+<script>E.popover.scan();</script>
+```
+
+Events: `popover:show` / `shown` / `hide` / `hidden` on the trigger (`show` and `hide` cancelable).
+See [docs/Popover.md](./Popover.md) for every option, the keyboard model, the CSS and stacking.
+
 ## DatePicker
 
 A themed calendar attached to an input. It exists because `<input type="date">`

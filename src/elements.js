@@ -11,6 +11,7 @@ import ContextMenu from './context-menu.js';
 import Sortable from './sortable.js';
 import InputGroup from './input-group.js';
 import skeletonFactory from './skeleton.js';
+import Popover from './popover.js';
 import sanitizeModule from './sanitize.js';
 
 // Web Component wrappers for Phase 1 & 2 components
@@ -11728,6 +11729,24 @@ export const elements = {
         return instance;
     },
 
+    /**
+     * Floating panel anchored to a trigger - rich content, a title, an
+     * optional close button; opened by click, hover, focus or code.
+     * Portalled to document.body; flips and shifts to stay in the viewport.
+     */
+    popover(trigger, options = {}) {
+        const instance = new Popover(trigger, options);
+        if (instance.element) {
+            const el = instance.element;
+            this._instances.set(el, instance);
+            // So E.get() never hands back a destroyed popover.
+            instance._onDestroy = () => {
+                if (this._instances.get(el) === instance) this._instances.delete(el);
+            };
+        }
+        return instance;
+    },
+
     treeView(selector, options = {}) {
         const instance = new TreeView(selector, options);
         if (instance.element) {
@@ -11885,5 +11904,13 @@ elements.skeleton.remove = skeletonFactory.remove;
 elements.skeleton.scan = skeletonFactory.scan;
 elements.skeleton.markup = skeletonFactory.markup;
 
+// Popover statics: E.popover.scan(root) turns [data-popover] markup into
+// popovers (registered like any other instance), E.popover.closeAll(group).
+elements.popover.scan = (root) => Popover.scan(root, (el, opts) => elements.popover(el, opts));
+elements.popover.closeAll = Popover.closeAll;
+elements.popover.getInstance = Popover.getInstance;
+elements.popover.open = Popover.openPopovers;
+
 // Export component classes for direct access to static methods
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};
+export {Popover};
