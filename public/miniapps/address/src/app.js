@@ -459,7 +459,7 @@ class AddressApp {
         icon: 'map-pin'
       },
       items: items,
-      variant: 'dark',
+      variant: 'theme',
       collapsible: true,
       collapsibleDesktop: true,
       persistCollapsed: true,

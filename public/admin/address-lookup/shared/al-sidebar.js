@@ -3,7 +3,7 @@
  *
  * Single source of truth for the AL admin sidebar items, API URL, and date
  * formatting. Extracted from all 5 AL sub-pages to eliminate duplication.
- * Follows the same theme-reactive pattern as admin-sidebar.js.
+ * Follows the same theme-aware pattern as admin-sidebar.js.
  */
 
 /** Address Lookup admin navigation items (shared across all 5 sub-pages). */
@@ -52,9 +52,8 @@ export function formatDate(dateStr, absolute = false) {
 /**
  * Initialise the Address Lookup admin sidebar.
  *
- * Theme-reactive: follows Domma.theme changes just like admin-sidebar.js.
- * The variant starts as dark or light based on the current theme and
- * switches automatically when the user toggles the theme.
+ * Theme-aware: the 'theme' variant follows the active theme's
+ * --dm-sidebar-* tokens, so a theme change restyles it with no JS.
  *
  * @param {string} activeSection - The currently active section key
  */
@@ -72,10 +71,6 @@ export function initALSidebar(activeSection) {
         item => !item.roles || item.roles.includes(userRole)
     );
 
-    // Theme-reactive variant - matches admin-sidebar.js pattern
-    const theme = window.Domma?.theme;
-    const getVariant = () => (theme && theme.isDark()) ? 'dark' : 'light';
-
     Domma.elements.sidebar('#admin-sidebar', {
         position: 'left',
         fixed: true,
@@ -88,7 +83,7 @@ export function initALSidebar(activeSection) {
             icon: null
         },
         items: filteredItems,
-        variant: getVariant(),
+        variant: 'theme',
         collapsible: true,
         collapsibleDesktop: true,
         persistCollapsed: true,
@@ -98,15 +93,4 @@ export function initALSidebar(activeSection) {
         push: true,
         contentSelector: '.admin-main'
     });
-
-    // React to theme changes - swap sidebar variant class
-    if (theme && theme.onChange) {
-        theme.onChange(() => {
-            const el = document.getElementById('admin-sidebar');
-            if (!el) return;
-            const variant = getVariant();
-            el.classList.remove('sidebar-dark', 'sidebar-light');
-            el.classList.add(`sidebar-${variant}`);
-        });
-    }
 }

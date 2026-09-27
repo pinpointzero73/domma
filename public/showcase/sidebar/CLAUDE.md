@@ -182,7 +182,8 @@ The component generates these CSS classes:
 - `.sidebar` - Base container
 - `.sidebar-fixed` - Fixed positioning
 - `.sidebar-left` / `.sidebar-right` - Position variants
-- `.sidebar-dark` / `.sidebar-light` - Theme variants
+- `.sidebar-dark` / `.sidebar-light` - Fixed light/dark variants
+- `.sidebar-theme` - Follows the active theme via `--dm-sidebar-*` tokens (used by the site layout)
 - `.sidebar-header` - Header section
 - `.sidebar-nav` - Navigation container
 - `.sidebar-menu` - Menu list

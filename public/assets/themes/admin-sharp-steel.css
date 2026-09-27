@@ -25,6 +25,8 @@
     --dm-sidebar-bg: #283242;
     --dm-sidebar-text: #c4cdda;
     --dm-sidebar-border: #1f2733;
+    --dm-sidebar-text-muted: #9aa6b8;
+    --dm-sidebar-header-bg: #1f2733;
     --dm-navbar-bg: #fbfcfe;
     --dm-navbar-text: #1f2733;
     --dm-navbar-border: #dde2ea;
@@ -58,6 +60,8 @@
     --dm-secondary-text: #ffffff;
     --dm-secondary-hover-text: #ffffff;
     --dm-selected-bg: rgba(59, 118, 188, 0.12);
+    --dm-sidebar-item-hover: rgba(255, 255, 255, 0.07);
+    --dm-sidebar-item-active: rgba(59, 118, 188, 0.28);
     --dm-tab-active-border: #3b76bc;
     --dm-tab-active-text: #3b76bc;
     --dm-progress-bar: #3b76bc;
@@ -123,8 +127,6 @@
     --dm-toast-bg: var(--dm-surface);
     --dm-toast-border: var(--dm-border);
     --dm-toast-shadow: var(--dm-shadow-lg);
-    --dm-sidebar-item-hover: var(--dm-hover-bg);
-    --dm-sidebar-item-active: var(--dm-selected-bg);
     --dm-tab-border: var(--dm-border);
     --dm-tab-hover-bg: var(--dm-hover-bg);
     --dm-accordion-bg: var(--dm-surface);
