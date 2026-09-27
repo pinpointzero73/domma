@@ -477,6 +477,12 @@ Accessed via `Domma.elements`:
     - Indicator mode (`nest: true` or `live: false`): marker shows before/after/into; `onDrop({item, target, zone, key, targetKey})` - host updates data and re-renders, the component animates it by `key`
     - `persist`: order saved via `S` under `sortable:<persist>` (live mode); Alt+Arrow keyboard moves; Esc cancels
     - Events: `sortable:start|move|sort|drop|cancel|end` on the container. See [docs/Sortable.md](../docs/Sortable.md)
+- **InputGroup** (`input-group.js`): `elements.inputGroup(selector, { prefix, suffix })` → `update({prefix, suffix})`, `destroy()`, `input`, `wrapper`
+    - Joins an icon or short text to an existing input, Bootstrap-style (one shared border, focus ring round the group)
+    - A slot is `{icon}`, `{text}` or a string (shorthand for `{text}`); `null` removes one in `update()`; text is set as text
+    - Writes the same `.input-group-icon` / `.input-group-addon` markup as Forma's `formConfig.prefix` / `formConfig.suffix`
+      (`_wrapAddons()` in forms.js - inputs, selects and textareas; Forma also accepts `{html}`), and reuses a group Forma rendered
+    - `destroy()` removes the addons, and the wrapper only if this instance created it. See docs/DommaDocumentation.md#input-groups
 
 ### tables.js - DataTable-like functionality
 

@@ -140,7 +140,9 @@ const fieldBlueprint = {
         // Advanced
         formConfig: {            // Additional form options
             span: 2,             // Column span in grid layouts
-            rows: 4              // Rows for textarea
+            rows: 4,             // Rows for textarea
+            prefix: {icon: 'search'}, // Addon joined to the start: {icon}, {text}, {html} or a string
+            suffix: 'kg'         // Addon joined to the end (inputs, selects and textareas)
         }
     }
 };
@@ -1362,6 +1364,7 @@ const blueprint = {
 | `options` | array | Options for select/radio | `['A', 'B', 'C']` |
 | `disabled` | boolean | Disable the field | `false` |
 | `formConfig` | object | Additional form options | `{ span: 2, rows: 4 }` |
+| `formConfig.prefix` / `formConfig.suffix` | object \| string | Icon or text joined to the start / end of an input, select or textarea (see [Input groups](./DommaDocumentation.md#input-groups)) | `{ icon: 'search' }`, `'£'`, `{ text: 'kg' }` |
 
 ### Type Validators
 

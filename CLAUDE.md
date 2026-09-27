@@ -27,6 +27,7 @@ modern UI components.
 | UI components (modals, tabs)      | `E.modal(selector, options)`  | Manual HTML/CSS/JS              |
 | Right-click menus                 | `E.contextMenu(sel, options)` | Manual `contextmenu` listeners  |
 | Drag-to-reorder lists             | `E.sortable(sel, options)`    | Manual drag/drop listeners      |
+| Icon/text joined to an input      | `formConfig.prefix/suffix` or `E.inputGroup(sel, opts)` | Manual wrapper markup |
 | Toast notifications               | `E.toast('Message', {type})`  | Manual notification divs        |
 | Icons                             | `<span data-icon="name">`     | Manual SVG/icon fonts           |
 | DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
@@ -548,7 +549,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (`Domma.elements`)
 
-- **25 UI Components:**
+- **26 UI Components:**
   - Modal - `modal()` with backdrop, keyboard, animation options
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
@@ -560,6 +561,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
     children; nested menus shadow their parent rather than overriding it, resolved by DOM depth
   - Sortable - `sortable()` drag-to-reorder by pointer, touch and keyboard (Alt+Arrow); live mode slides
     siblings aside, `nest: true` adds an "into" zone and hands drops to `onDrop` for trees; `persist` remembers the order
+  - InputGroup - `inputGroup()` joins an icon or short text to the start/end of an existing input
+    (Bootstrap-style, one shared border); `update()` / `destroy()`. The same markup Forma writes for
+    `formConfig.prefix` / `formConfig.suffix`, which work on inputs, selects and textareas
   - Toast - Static `toast()` method with types
   - Dialog - Promise-based `alert()`, `confirm()`, `prompt()`
   - Loader - `loader()` with types (spinner, dots, pulse, bars)

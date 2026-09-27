@@ -1142,6 +1142,47 @@ export interface SortableInstance extends ComponentInstance {
     destroy(): void;
 }
 
+// ============================================
+// InputGroup
+// ============================================
+
+/**
+ * One addon slot: an icon (a plain icon name), text (set as text, never
+ * parsed as HTML), or a string, which is shorthand for `{text}`.
+ * `null`, `false` or `''` means no addon.
+ */
+export type InputGroupSlot =
+    | {icon: string}
+    | {text: string | number}
+    | string
+    | number
+    | null
+    | false;
+
+export interface InputGroupOptions {
+    /** Addon joined to the start of the input */
+    prefix?: InputGroupSlot;
+    /** Addon joined to the end of the input */
+    suffix?: InputGroupSlot;
+}
+
+export interface InputGroupInstance extends ComponentInstance {
+    /** The bound input (or select) */
+    readonly input: HTMLElement;
+
+    /** The `.input-group-icon` wrapper; null after destroy() */
+    readonly wrapper: HTMLElement | null;
+
+    /**
+     * Change either addon. `null` removes one; a slot left out is kept.
+     * Returns the instance.
+     */
+    update(slots?: {prefix?: InputGroupSlot; suffix?: InputGroupSlot}): InputGroupInstance;
+
+    /** Remove the addons, and the wrapper too if this instance made it */
+    destroy(): void;
+}
+
 export interface Elements {
     /** Create a Card component */
     card(selector: string | HTMLElement, options?: CardOptions): CardInstance;
@@ -1184,6 +1225,14 @@ export interface Elements {
      * `persist` remembers the order through Domma storage.
      */
     sortable(selector: string | HTMLElement, options?: SortableOptions): SortableInstance;
+
+    /**
+     * Join an icon or short text to the start and/or end of an input already
+     * on the page (Bootstrap-style input group) - the same markup Forma writes
+     * for `formConfig.prefix` / `formConfig.suffix`. Binding an input Forma
+     * already wrapped reuses that group.
+     */
+    inputGroup(selector: string | HTMLElement, options?: InputGroupOptions): InputGroupInstance;
 
     /** Create a Carousel component */
     carousel(selector: string | HTMLElement, options?: CarouselOptions): CarouselInstance;

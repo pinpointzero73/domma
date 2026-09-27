@@ -1,141 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Input Addons - Domma Forms</title>
-  <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
-  <link rel="stylesheet" href="../../dist/domma.css">
-  <link rel="stylesheet" href="../../dist/grid.css">
-  <link rel="stylesheet" href="../../dist/elements.css">
-  <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
-  <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
-  <style>
-    .demo-card {
-      background: var(--dm-surface);
-      border: 1px solid var(--dm-border);
-      border-radius: var(--dm-radius-md);
-      padding: 1.5rem;
-      margin: 1rem 0;
-    }
-    .demo-card h3 { margin-top: 0; }
-    .demo-card pre {
-      background: var(--dm-bg-muted, #0b0b0b);
-      color: #eee;
-      padding: 0.75rem 1rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      overflow-x: auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Addons - Domma Forms</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/forms/input-addons.html">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/grid.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../dist/syntax.css">
+    <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
+    <style>
+        /* Demo-only: the live markup readout under the E.inputGroup demo. */
+        .ig-markup {
+            padding: 0.75rem 1rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    </style>
 </head>
-<body class="dm-cloaked" data-layout="showcase">
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
 
-<main class="container py-8" style="max-width: 780px;">
-  <h1>Input Addons</h1>
-  <p>Decorative prefix / suffix slots for <code>F.create</code> inputs. Set
-    <code>formConfig.prefix</code> and/or <code>formConfig.suffix</code> to an object
-    with one of: <code>{ icon: 'name' }</code>, <code>{ text: '$' }</code>, or
-    <code>{ html: '&lt;kbd&gt;K&lt;/kbd&gt;' }</code>. Addons are decoration only -
-    pointer events are disabled on them.</p>
+<main class="container py-8">
 
-  <div class="demo-card">
-    <h3>Icon prefix - search field</h3>
-    <div id="form-icon-prefix"></div>
-    <pre><code>search: {
-  type: 'text',
-  label: 'Search',
-  formConfig: { prefix: { icon: 'search' } }
-}</code></pre>
-  </div>
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Input Addons</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                An addon is an icon or a little text joined to the start or end of a field - a magnifier on a
+                search box, "£" on a price, "kg" on a weight. The addon and the field share one border and one
+                rounded outline, so they read as a single control: the focus ring goes round the whole group, and
+                the addon takes the focus and error colours along with the field. Each addon is as wide as what it
+                holds, so "£" and "https://" both fit.
+            </p>
+            <p class="mb-4">
+                In a Forma blueprint set <code>formConfig.prefix</code> and/or <code>formConfig.suffix</code>. It
+                works on single-line inputs, selects and textareas. For an input that is already on the page, use
+                <code>E.inputGroup()</code> - it writes exactly the same markup.
+            </p>
 
-  <div class="demo-card">
-    <h3>Text prefix &amp; suffix - price field</h3>
-    <div id="form-text-addons"></div>
-    <pre><code>price: {
-  type: 'number',
-  label: 'Price',
-  formConfig: {
-    prefix: { text: '£' },
-    suffix: { text: '.00' }
-  }
-}</code></pre>
-  </div>
+            <h3 class="text-lg font-semibold mt-6 mb-3">What a slot can be</h3>
+            <table class="table mb-4">
+                <thead><tr><th>Value</th><th>Renders</th><th>Where</th></tr></thead>
+                <tbody>
+                    <tr><td><code>{icon: 'search'}</code></td><td>A Domma icon (a plain icon name only)</td><td>Forma and <code>E.inputGroup</code></td></tr>
+                    <tr><td><code>{text: '£'}</code></td><td>Text, set as text - never parsed as HTML</td><td>Forma and <code>E.inputGroup</code></td></tr>
+                    <tr><td><code>'kg'</code></td><td>Shorthand for <code>{text: 'kg'}</code></td><td>Forma and <code>E.inputGroup</code></td></tr>
+                    <tr><td><code>{html: '&lt;kbd&gt;K&lt;/kbd&gt;'}</code></td><td>Raw HTML - you are responsible for what goes in</td><td>Forma only</td></tr>
+                </tbody>
+            </table>
+            <p class="mb-0 text-sm text-gray-600">
+                Addons are decoration: clicks pass straight through to the field, and they are hidden from screen
+                readers, so the field's label should still say what it is for.
+            </p>
+        </div>
+    </section>
 
-  <div class="demo-card">
-    <h3>HTML suffix - keyboard hint</h3>
-    <div id="form-html-suffix"></div>
-    <pre><code>query: {
-  type: 'text',
-  label: 'Quick search',
-  formConfig: {
-    prefix: { icon: 'search' },
-    suffix: { html: '&lt;kbd&gt;⌘K&lt;/kbd&gt;' }
-  }
-}</code></pre>
-  </div>
+    <section class="card mb-6" data-section="Icon Prefix">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Icon prefix - search field</h2></div>
+        <div class="card-body">
+            <div id="form-icon-prefix" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+search: {
+    type: 'text',
+    label: 'Search',
+    formConfig: {prefix: {icon: 'search'}, placeholder: 'Type to search...'}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
 
-  <div class="demo-card">
-    <h3>Mixed - icon prefix, icon suffix</h3>
-    <div id="form-mixed"></div>
-    <pre><code>email: {
-  type: 'email',
-  label: 'Email',
-  formConfig: {
-    prefix: { icon: 'mail' },
-    suffix: { icon: 'check-circle' }
-  }
-}</code></pre>
-  </div>
+    <section class="card mb-6" data-section="Text Addons">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Text prefix and suffix - price field</h2></div>
+        <div class="card-body">
+            <div id="form-text-addons" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+price: {
+    type: 'number',
+    label: 'Price',
+    formConfig: {
+        prefix: {text: '£'},
+        suffix: {text: '.00'}
+    }
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Units">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Units and schemes</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The addon grows to fit its text, so a unit or a URL scheme sits beside the value without covering
+                it.
+            </p>
+            <div id="form-units" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+weight: {
+    type: 'number',
+    label: 'Parcel weight',
+    formConfig: {suffix: {text: 'kg'}}
+},
+website: {
+    type: 'string',
+    label: 'Website',
+    formConfig: {prefix: {text: 'https://'}, placeholder: 'example.com'}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="String Shorthand">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">String shorthand</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                A plain string is shorthand for <code>{text: ...}</code>.
+            </p>
+            <div id="form-shorthand" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+salary: {
+    type: 'number',
+    label: 'Salary',
+    formConfig: {prefix: '£', suffix: 'a year'}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Select">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">A select with an icon prefix</h2></div>
+        <div class="card-body">
+            <div id="form-select" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+country: {
+    type: 'select',
+    label: 'Country',
+    options: [
+        {value: 'gb', label: 'United Kingdom'},
+        {value: 'ie', label: 'Ireland'},
+        {value: 'fr', label: 'France'}
+    ],
+    formConfig: {prefix: {icon: 'globe'}}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Textarea">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">A textarea with a suffix</h2></div>
+        <div class="card-body">
+            <div id="form-textarea" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+message: {
+    type: 'textarea',
+    label: 'Message',
+    formConfig: {rows: 4, suffix: {icon: 'message-square'}}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="HTML Suffix">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">HTML suffix - keyboard hint</h2></div>
+        <div class="card-body">
+            <div id="form-html-suffix" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+query: {
+    type: 'text',
+    label: 'Quick search',
+    formConfig: {
+        prefix: {icon: 'search'},
+        suffix: {html: '&lt;kbd&gt;Ctrl K&lt;/kbd&gt;'}
+    }
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Mixed">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Icon prefix and icon suffix</h2></div>
+        <div class="card-body">
+            <div id="form-mixed" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+email: {
+    type: 'email',
+    label: 'Email',
+    formConfig: {
+        prefix: {icon: 'mail'},
+        suffix: {icon: 'check-circle'}
+    }
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="E.inputGroup">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">E.inputGroup - on an input already on the page</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The field below is a plain <code>&lt;input class="form-input"&gt;</code> in this page's HTML.
+                <code>E.inputGroup()</code> wraps it and joins the addons. The buttons change them with
+                <code>update()</code>, take them away with <code>destroy()</code>, and bind the input again.
+            </p>
+
+            <div class="form-group mb-4">
+                <label class="form-label" for="ig-demo">Budget</label>
+                <input id="ig-demo" class="form-input" type="number" placeholder="0">
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap mb-4">
+                <button id="ig-text" class="btn btn-outline btn-sm" type="button">Prefix "£"</button>
+                <button id="ig-icon" class="btn btn-outline btn-sm" type="button">
+                    <span data-icon="tag"></span> Icon prefix
+                </button>
+                <button id="ig-kg" class="btn btn-outline btn-sm" type="button">Suffix "kg"</button>
+                <button id="ig-no-suffix" class="btn btn-outline btn-sm" type="button">No suffix</button>
+                <button id="ig-destroy" class="btn btn-outline btn-sm" type="button">
+                    <span data-icon="x"></span> destroy()
+                </button>
+                <button id="ig-bind" class="btn btn-primary btn-sm" type="button" disabled>Bind again</button>
+            </div>
+
+            <p class="mb-2 text-sm text-gray-600">Current markup:</p>
+            <pre id="ig-markup" class="ig-markup mb-4"></pre>
+
+            <div class="code-block language-javascript">
+                <pre><code>
+let group = E.inputGroup('#ig-demo', {prefix: '£', suffix: '.00'});
+
+$('#ig-icon').on('click', () =&gt; group.update({prefix: {icon: 'tag'}}));
+$('#ig-kg').on('click', () =&gt; group.update({suffix: 'kg'}));
+$('#ig-no-suffix').on('click', () =&gt; group.update({suffix: null}));
+$('#ig-destroy').on('click', () =&gt; group.destroy());
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Tutorial">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Tutorial - joining an addon to your own input</h2></div>
+        <div class="card-body">
+            <h3 class="text-lg font-semibold mt-2 mb-3">Step 1 - Write the input as usual</h3>
+            <p class="mb-2">
+                No wrapper markup needed. Give the input the usual <code>form-input</code> (or
+                <code>form-select</code>) class and a label.
+            </p>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;label class="form-label" for="weight"&gt;Parcel weight&lt;/label&gt;
+&lt;input id="weight" class="form-input" type="number"&gt;
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 2 - Join the addons</h3>
+            <p class="mb-2">
+                <code>E.inputGroup(selector, {prefix, suffix})</code> wraps the input in a
+                <code>.input-group-icon</code> group and adds the addons. Each slot takes the same values as
+                <code>formConfig.prefix</code>: an icon, text, or a string.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+const weight = E.inputGroup('#weight', {suffix: 'kg'});
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 3 - Change or remove them later</h3>
+            <p class="mb-2">
+                <code>update()</code> changes either slot and leaves the other alone; <code>null</code> removes
+                one. <code>destroy()</code> removes the addons and, if <code>E.inputGroup</code> made the wrapper,
+                the wrapper too, leaving the input where it was.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+$('#units').on('change', (e) =&gt; {
+    weight.update({suffix: e.target.value === 'metric' ? 'kg' : 'lb'});
+});
+
+weight.update({prefix: {icon: 'package'}});   // add a prefix, keep the suffix
+weight.update({prefix: null});                // and take it off again
+weight.destroy();                             // back to a plain input
+</code></pre>
+            </div>
+            <p class="mb-0 mt-4">
+                Binding an input that Forma already rendered with addons reuses Forma's group, so
+                <code>E.inputGroup()</code> is also the way to change a blueprint field's addons after it is on
+                screen.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Methods">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options and methods</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Option / method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>prefix</code></td><td>Slot at the start: <code>{icon}</code>, <code>{text}</code> or a string. Default <code>null</code></td></tr>
+                    <tr><td><code>suffix</code></td><td>Slot at the end, same values. Default <code>null</code></td></tr>
+                    <tr><td><code>update({prefix, suffix})</code></td><td>Change either slot; <code>null</code> removes one, leaving it out keeps it. Returns the instance</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Remove the addons, and the wrapper if this instance made it</td></tr>
+                    <tr><td><code>input</code> / <code>wrapper</code></td><td>The bound input and its <code>.input-group-icon</code> group</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 <script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
 <script>
-  const F = Domma.forms;
+    const F = Domma.forms;
+    const render = (blueprint, target) => F.create(blueprint, {}, {layout: 'stacked', showSubmitButton: false}).renderTo(target);
 
-  F.create({
-    search: {
-      type: 'text',
-      label: 'Search',
-      formConfig: { prefix: { icon: 'search' }, placeholder: 'Type to search…' }
-    }
-  }, {}, { layout: 'stacked' }).renderTo('#form-icon-prefix');
+    render({
+        search: {
+            type: 'text',
+            label: 'Search',
+            formConfig: {prefix: {icon: 'search'}, placeholder: 'Type to search...'}
+        }
+    }, '#form-icon-prefix');
 
-  F.create({
-    price: {
-      type: 'number',
-      label: 'Price',
-      formConfig: {
-        prefix: { text: '£' },
-        suffix: { text: '.00' },
-        placeholder: '0'
-      }
-    }
-  }, {}, { layout: 'stacked' }).renderTo('#form-text-addons');
+    render({
+        price: {
+            type: 'number',
+            label: 'Price',
+            formConfig: {prefix: {text: '£'}, suffix: {text: '.00'}, placeholder: '0'}
+        }
+    }, '#form-text-addons');
 
-  F.create({
-    query: {
-      type: 'text',
-      label: 'Quick search',
-      formConfig: {
-        prefix: { icon: 'search' },
-        suffix: { html: '<kbd>⌘K</kbd>' },
-        placeholder: 'Search anywhere…'
-      }
-    }
-  }, {}, { layout: 'stacked' }).renderTo('#form-html-suffix');
+    render({
+        weight: {
+            type: 'number',
+            label: 'Parcel weight',
+            formConfig: {suffix: {text: 'kg'}, placeholder: '0.0'}
+        },
+        website: {
+            type: 'string',
+            label: 'Website',
+            formConfig: {prefix: {text: 'https://'}, placeholder: 'example.com'}
+        }
+    }, '#form-units');
 
-  F.create({
-    email: {
-      type: 'email',
-      label: 'Email',
-      formConfig: {
-        prefix: { icon: 'mail' },
-        suffix: { icon: 'check-circle' },
-        placeholder: 'you@example.com'
-      }
-    }
-  }, {}, { layout: 'stacked' }).renderTo('#form-mixed');
+    render({
+        salary: {
+            type: 'number',
+            label: 'Salary',
+            formConfig: {prefix: '£', suffix: 'a year', placeholder: '32000'}
+        }
+    }, '#form-shorthand');
+
+    render({
+        country: {
+            type: 'select',
+            label: 'Country',
+            options: [
+                {value: 'gb', label: 'United Kingdom'},
+                {value: 'ie', label: 'Ireland'},
+                {value: 'fr', label: 'France'}
+            ],
+            formConfig: {prefix: {icon: 'globe'}}
+        }
+    }, '#form-select');
+
+    render({
+        message: {
+            type: 'textarea',
+            label: 'Message',
+            formConfig: {rows: 4, suffix: {icon: 'message-square'}, placeholder: 'Write your message...'}
+        }
+    }, '#form-textarea');
+
+    render({
+        query: {
+            type: 'text',
+            label: 'Quick search',
+            formConfig: {prefix: {icon: 'search'}, suffix: {html: '<kbd>Ctrl K</kbd>'}, placeholder: 'Search anywhere...'}
+        }
+    }, '#form-html-suffix');
+
+    render({
+        email: {
+            type: 'email',
+            label: 'Email',
+            formConfig: {prefix: {icon: 'mail'}, suffix: {icon: 'check-circle'}, placeholder: 'you@example.com'}
+        }
+    }, '#form-mixed');
+
+    // ---- E.inputGroup on a hand-written input --------------------------------
+    let group = null;
+    const updaters = '#ig-text, #ig-icon, #ig-kg, #ig-no-suffix, #ig-destroy';
+
+    const showMarkup = () => {
+        const el = group ? group.wrapper : $('#ig-demo').get(0);
+        // Show icons as the data-icon span they started as, not the SVG they became.
+        const html = el ? el.outerHTML.replace(/<svg[^>]*data-icon="([^"]+)"[\s\S]*?<\/svg>/g, '<span data-icon="$1"></span>') : '';
+        $('#ig-markup').text(html.replace(/></g, '>\n<').replace(/<span data-icon="([^"]+)">\n<\/span>/g, '<span data-icon="$1"></span>'));
+    };
+
+    const bind = () => {
+        group = E.inputGroup('#ig-demo', {prefix: '£', suffix: '.00'});
+        $(updaters).prop('disabled', false);
+        $('#ig-bind').prop('disabled', true);
+        showMarkup();
+    };
+
+    const change = (slots) => {
+        if (!group) return;
+        group.update(slots);
+        showMarkup();
+    };
+
+    $('#ig-text').on('click', () => change({prefix: '£'}));
+    $('#ig-icon').on('click', () => change({prefix: {icon: 'tag'}}));
+    $('#ig-kg').on('click', () => change({suffix: 'kg'}));
+    $('#ig-no-suffix').on('click', () => change({suffix: null}));
+    $('#ig-destroy').on('click', () => {
+        if (!group) return;
+        group.destroy();
+        group = null;
+        $(updaters).prop('disabled', true);
+        $('#ig-bind').prop('disabled', false);
+        showMarkup();
+    });
+    $('#ig-bind').on('click', bind);
+
+    bind();
+    Domma.icons.scan();
 </script>
 </body>
 </html>

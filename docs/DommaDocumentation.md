@@ -2607,6 +2607,56 @@ still scrolls. Every callback also fires as a `sortable:*` event on the containe
 See [docs/Sortable.md](./Sortable.md) for every option, the tree example, the CSS classes and the
 `--dm-sortable-*` custom properties.
 
+## Input groups
+
+An icon or a little text joined to the start or end of a field - a magnifier on a search box, "£" on a
+price, "kg" on a weight - Bootstrap-style: the addon and the field share one border and one rounded
+outline. The focus ring goes round the whole group, the addon takes the focus and error colours with
+the field, and each addon is as wide as what it holds, so "https://" fits as well as "£".
+
+In a Forma blueprint, set `formConfig.prefix` and/or `formConfig.suffix`. This works on single-line
+inputs, selects and textareas:
+
+```javascript
+F.create({
+    search:  {type: 'text',     label: 'Search', formConfig: {prefix: {icon: 'search'}}},
+    price:   {type: 'number',   label: 'Price',  formConfig: {prefix: '£', suffix: '.00'}},
+    weight:  {type: 'number',   label: 'Weight', formConfig: {suffix: {text: 'kg'}}},
+    country: {type: 'select',   label: 'Country', options: ['UK', 'Ireland'], formConfig: {prefix: {icon: 'globe'}}},
+    message: {type: 'textarea', label: 'Message', formConfig: {suffix: {icon: 'message-square'}}}
+}).renderTo('#form');
+```
+
+A slot is one of:
+
+| Value | Renders |
+|-------|---------|
+| `{icon: 'search'}` | A Domma icon. The name must be a plain icon name |
+| `{text: '£'}` | Text, escaped |
+| `'kg'` | Shorthand for `{text: 'kg'}` |
+| `{html: '<kbd>K</kbd>'}` | Raw HTML - Forma only, and what goes in is your responsibility |
+
+For an input that is already on the page, `E.inputGroup(selector, {prefix, suffix})` writes the same
+markup. It takes icon, text and string slots (not `html`), and binding an input Forma already wrapped
+reuses Forma's group, so it is also how to change a blueprint field's addons after render.
+
+```javascript
+const weight = E.inputGroup('#weight', {suffix: 'kg'});
+
+weight.update({suffix: 'lb'});                // change one slot, keep the other
+weight.update({prefix: {icon: 'package'}});   // add a prefix
+weight.update({prefix: null});                // remove it
+weight.destroy();                             // addons gone; the wrapper too if E.inputGroup made it
+```
+
+Addons are decoration: clicks pass through to the field and they are hidden from screen readers, so the
+field still needs a label. The markup is a `.input-group-icon` wrapper (with `.has-addon-left` /
+`.has-addon-right`) around `.input-group-addon` spans and the control. The addon colours come from the
+theme tokens, so it follows light and dark themes without extra rules.
+
+See the [Input Addons showcase](../public/showcase/forms/input-addons.html) for every variant and a
+live `E.inputGroup` demo.
+
 ## DatePicker
 
 A themed calendar attached to an input. It exists because `<input type="date">`

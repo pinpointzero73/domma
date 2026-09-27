@@ -50,7 +50,22 @@ export interface FormConfig {
     rows?: number;
     /** Custom CSS class */
     class?: string;
+    /**
+     * Addon joined to the start of the control (input, select or textarea):
+     * `{icon}`, `{text}`, `{html}` (raw, caller's responsibility) or a string
+     * (shorthand for `{text}`).
+     */
+    prefix?: FormAddon;
+    /** Addon joined to the end of the control - same values as `prefix` */
+    suffix?: FormAddon;
 }
+
+/** A formConfig.prefix / formConfig.suffix addon */
+export type FormAddon =
+    | {icon: string}
+    | {text: string | number}
+    | {html: string}
+    | string;
 
 export interface FieldDefinition {
     /** Field data type (required) */
