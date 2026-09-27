@@ -14,7 +14,7 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# 
+# Popovers
 
 **Popovers** - `E.popover()` anchors a panel to a trigger: a title, text, a list or a small form,
 opened by click, hover, focus or code, and closed by Esc, a click outside or its own close button. It
