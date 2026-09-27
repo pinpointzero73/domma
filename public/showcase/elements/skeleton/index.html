@@ -40,6 +40,7 @@
         }
 
         .sx-sk-panel {
+            max-width: 36rem;
             min-height: 6rem;
         }
 
@@ -270,9 +271,7 @@ $('#demo-table-reload').on('click', async () =&gt; {
                 </label>
             </div>
             <div id="demo-types" class="sx-sk-panel mb-4"></div>
-            <div class="code-block language-javascript">
-                <pre><code id="demo-types-code">E.skeleton('#demo-types', {type: 'text', lines: 4});</code></pre>
-            </div>
+            <p class="mb-2 text-sm">Current call: <code id="demo-types-code">E.skeleton('#demo-types', {type: 'text', lines: 4});</code></p>
         </div>
     </section>
 
@@ -432,6 +431,11 @@ $('#demo-table-reload').on('click', async () =&gt; {
 <script>
     Domma.icons.scan();
 
+    // Markup below is built from escaped strings. $.html() sanitises through
+    // DOMPurify and escapes everything when DOMPurify is absent (as on this
+    // page), so the demos set innerHTML on the element directly.
+    const setHtml = (sel, html) => { $(sel).get(0).innerHTML = html; };
+
     // A stand-in for H.get(): resolves with the data after a pause, or rejects.
     const pretendLoad = (data, fail = false, ms = 1400) => new Promise((resolve, reject) => {
         setTimeout(() => (fail ? reject(new Error('The server did not answer (on purpose)')) : resolve(data)), ms);
@@ -451,7 +455,7 @@ $('#demo-table-reload').on('click', async () =&gt; {
         $('#demo-cards-status').text('Loading...');
         $('#demo-cards-load').prop('disabled', true);
         const posts = await E.skeleton.while('#demo-cards', pretendLoad(POSTS), {type: 'card', count: 3});
-        $('#demo-cards').html(posts.map(renderPost).join(''));
+        setHtml('#demo-cards', posts.map(renderPost).join(''));
         $('#demo-cards-status').text('Loaded ' + posts.length + ' posts.');
         $('#demo-cards-load').prop('disabled', false);
     };
@@ -476,7 +480,7 @@ $('#demo-table-reload').on('click', async () =&gt; {
         $('#demo-list-load, #demo-list-fail').prop('disabled', true);
         try {
             const people = await E.skeleton.while('#demo-list', pretendLoad(PEOPLE, fail), {type: 'list', count: 4});
-            $('#demo-list').html(renderPeople(people));
+            setHtml('#demo-list', renderPeople(people));
         } catch (err) {
             E.toast(err.message, {type: 'danger'});
         }
