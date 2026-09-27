@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.44.7",
+      "title": "domma-reactive 1.1.1",
+      "description": "<p>Domma is now built against domma-reactive 1.1.1.</p>",
+      "date": "2026-09-27"
+    },
+    {
       "year": "v0.44.6",
       "title": "Corporate Presence and High-Visibility Admin Slate",
       "description": "<p><strong>Five new themes arrive in Domma: Corporate (light and dark) and Admin Slate (steel, indigo, teal).</strong> Corporate introduces an executive navy aesthetic tailored for business dashboards and reporting, while Admin Slate expands the administrative theme matrix to 3&times;3 with a balanced mid-tone finish designed for high visibility and long work sessions.</p>\n<p><strong>Full tooling support:</strong> all five themes are integrated into the Theme Roller, Kickstart builder, TypeScript declarations, and showcase previews with verified WCAG contrast compliance.</p>",

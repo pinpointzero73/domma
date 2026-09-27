@@ -1,3 +1,9 @@
+### v0.44.7 - domma-reactive 1.1.1 (2026-09-27)
+
+🔁 **domma-reactive 1.1.1**
+
+*   Domma is now built against domma-reactive 1.1.1 - see [its release notes](https://github.com/pinpointzero73/domma-reactive/blob/v1.1.1/CHANGELOG.md).
+
 ### v0.44.6 - Corporate Presence and High-Visibility Admin Slate (2026-09-26)
 
 **Domma adds five new themes: the executive Corporate suite and the high-visibility Admin Slate trio.** Corporate brings an authoritative, polished aesthetic for business dashboards, portals, and executive reporting. Admin Slate completes the Admin theme matrix with a balanced mid-tone finish engineered for daylight readability and extended administrative workflows.
