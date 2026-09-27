@@ -925,14 +925,15 @@ class Popover extends Component {
         panel.dataset.placement = align === 'center' ? side : `${side}-${align}`;
 
         // The arrow points at the middle of the trigger, wherever the panel shifted to.
+        // The arrow is placed inside the border, so measure from there.
         const arrow = this._parts.arrow;
         if (opts.arrow) {
             if (vertical) {
-                const x = t.left + t.width / 2 - left;
+                const x = t.left + t.width / 2 - left - (panel.clientLeft || 0);
                 arrow.style.left = `${Math.round(Math.min(Math.max(x, ARROW_PADDING), pw - ARROW_PADDING))}px`;
                 arrow.style.top = '';
             } else {
-                const y = t.top + t.height / 2 - top;
+                const y = t.top + t.height / 2 - top - (panel.clientTop || 0);
                 arrow.style.top = `${Math.round(Math.min(Math.max(y, ARROW_PADDING), ph - ARROW_PADDING))}px`;
                 arrow.style.left = '';
             }

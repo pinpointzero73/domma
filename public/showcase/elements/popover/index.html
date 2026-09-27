@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popover - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/popover/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the component itself needs is in elements.css. */
+        .sx-pop-stage {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+            max-width: 36rem;
+            margin: 0 auto;
+        }
+
+        .sx-pop-stage .btn {
+            width: 100%;
+        }
+
+        .sx-pop-edges {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .sx-pop-help {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.375rem;
+            height: 1.375rem;
+            margin-left: 0.375rem;
+            padding: 0;
+            vertical-align: middle;
+            border: 0;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--dm-text-muted);
+            cursor: pointer;
+        }
+
+        .sx-pop-help:hover,
+        .sx-pop-help[aria-expanded="true"] {
+            color: var(--dm-primary);
+            background: var(--dm-hover-bg);
+        }
+
+        .sx-pop-help:focus-visible {
+            outline: 2px solid var(--dm-primary);
+            outline-offset: 1px;
+        }
+
+        .sx-pop-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 15rem;
+        }
+
+        .sx-pop-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .sx-pop-profile {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .sx-pop-avatar {
+            flex: 0 0 2.5rem;
+            height: 2.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: var(--dm-primary);
+            color: var(--dm-text-inverse, var(--dm-surface));
+            font-weight: 600;
+        }
+
+        .sx-pop-link {
+            color: var(--dm-link, var(--dm-primary));
+            text-decoration: underline dotted;
+            cursor: pointer;
+        }
+
+        .sx-pop-output {
+            font-family: var(--dm-font-mono, monospace);
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Popover</div>
+        <div class="hero-subtitle">Rich panels anchored to a trigger - a title, content, even a form - that open by click, hover or focus, flip to stay on screen, and take the keyboard with them</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Popover</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.popover()</code> anchors a floating panel to a trigger. Where a tooltip holds a line of text
+                and vanishes as the pointer leaves, a popover holds whatever you give it - a title, paragraphs,
+                links, a small form - and stays open until it is dismissed. It is what help icons, "quick edit"
+                panels and profile cards are made of.
+            </p>
+            <p class="mb-4">
+                The panel is moved to the end of <code>&lt;body&gt;</code> and positioned against the viewport, so
+                a card with <code>overflow: hidden</code> cannot clip it. It prefers the side you ask for, flips
+                when that side has no room, slides along the edge to stay on screen and keeps its arrow on the
+                trigger. Nothing wraps or moves the trigger itself.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Four triggers</strong> - click, hover, focus or manual, and combinations such as <code>'hover focus'</code></li>
+                <li><strong>Placement</strong> - top, bottom, left, right or auto, each with <code>-start</code> / <code>-end</code></li>
+                <li><strong>Collision handling</strong> - flips, then shifts, and follows scrolling and resizing</li>
+                <li><strong>Safe content</strong> - text by default, DOM nodes as they are, HTML only when asked and then sanitised</li>
+                <li><strong>Accessible</strong> - a real dialog: focus moves in, Tab and Esc behave, focus comes back</li>
+                <li><strong>One at a time</strong> - opening one closes the others in its group</li>
+                <li><strong>Declarative</strong> - <code>data-popover</code> markup and <code>E.popover.scan()</code></li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.popover('#billing-help', {
+    title: 'Billing date',
+    content: 'Invoices are raised on the first working day of each month.',
+    dismissible: true
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+        <div class="card-body">
+            <p class="mb-6 text-gray-600">A help icon next to a form label, in three steps</p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 1 - Add a trigger</h3>
+            <p class="mb-2">
+                Any element can be a trigger, but a <code>&lt;button&gt;</code> is keyboard-operable already. Give
+                it an <code>aria-label</code>, because an icon alone says nothing to a screen reader.
+            </p>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;label for="slug"&gt;
+    URL slug
+    &lt;button id="slug-help" type="button" class="sx-pop-help" aria-label="About the URL slug"&gt;
+        &lt;span data-icon="help-circle" data-icon-size="16"&gt;&lt;/span&gt;
+    &lt;/button&gt;
+&lt;/label&gt;
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 2 - Attach the popover</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.popover('#slug-help', {
+    title: 'URL slug',
+    content: 'The last part of the page address. Lower case, words joined by hyphens.',
+    placement: 'top'
+});
+</code></pre>
+            </div>
+            <p class="mb-4">
+                That is a working popover. A click opens it and moves focus into it; Esc, a click outside or a
+                second click on the trigger closes it and puts focus back on the button. The button gets
+                <code>aria-haspopup="dialog"</code>, <code>aria-expanded</code> and <code>aria-controls</code>.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 3 - Or do it all in markup</h3>
+            <p class="mb-2">
+                For many help icons, write the text into the markup and let <code>E.popover.scan()</code> find
+                them - the same way <code>Domma.icons.scan()</code> finds <code>data-icon</code>. It is safe to
+                call again after rendering more content: triggers that already have a popover are skipped.
+            </p>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;button type="button" aria-label="About the URL slug"
+        data-popover="The last part of the page address."
+        data-popover-title="URL slug"
+        data-popover-placement="top"&gt;?&lt;/button&gt;
+
+&lt;script&gt;
+    E.popover.scan();          // or E.popover.scan('#settings-form')
+&lt;/script&gt;
+</code></pre>
+            </div>
+            <p class="mb-2">
+                <code>data-popover</code> is always treated as text, never HTML. For rich declarative content,
+                point <code>data-popover-content</code> at a <code>&lt;template&gt;</code>; it is cloned each time
+                the popover opens.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Basic">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Title, content and a close button</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Click the button. The panel takes focus; press <code>Esc</code> or use the close button and focus
+                returns to the trigger.
+            </p>
+            <div class="flex gap-3 flex-wrap mb-4">
+                <button id="demo-basic" class="btn btn-primary" type="button">Delivery options</button>
+                <button id="demo-plain" class="btn btn-outline" type="button">Just text</button>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.popover('#demo-basic', {
+    title: 'Delivery options',
+    content: 'Standard delivery takes 3-5 working days. Next-day delivery is available '
+           + 'on orders placed before 2pm.',
+    dismissible: true
+});
+
+E.popover('#demo-plain', {content: 'A popover needs nothing more than content.'});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Placement">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Placement</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>placement</code> is a side - <code>top</code>, <code>bottom</code> (the default),
+                <code>left</code>, <code>right</code> or <code>auto</code> - optionally followed by
+                <code>-start</code> or <code>-end</code> to line the panel up with one edge of the trigger instead
+                of its middle. Every popover in this grid shares a group, so only one is open at a time.
+            </p>
+            <div class="sx-pop-stage mb-6">
+                <button class="btn btn-outline btn-sm" type="button" data-place="top-start">top-start</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="top">top</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="top-end">top-end</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="left">left</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="auto">auto</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="right">right</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="bottom-start">bottom-start</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="bottom">bottom</button>
+                <button class="btn btn-outline btn-sm" type="button" data-place="bottom-end">bottom-end</button>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+$('[data-place]').each((i, el) =&gt; {
+    E.popover(el, {
+        placement: el.dataset.place,
+        group: 'placement',
+        content: 'Placed ' + el.dataset.place + '.'
+    });
+});
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Flipping and shifting</h3>
+            <p class="mb-4">
+                These two ask for <code>left</code> and <code>right</code> from the very edges of the card. On a
+                narrow screen there is no room, so the popover flips to the other side, and failing that to
+                below or above. Open one and scroll the page: it follows the trigger, and when the trigger scrolls
+                out of view the panel waits for it rather than sticking to the edge of the screen.
+            </p>
+            <div class="sx-pop-edges mb-4">
+                <button id="demo-edge-left" class="btn btn-outline btn-sm" type="button">Asks for left</button>
+                <button id="demo-edge-right" class="btn btn-outline btn-sm" type="button">Asks for right</button>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+// onShown reports where the panel actually went - and shows off setContent().
+const whereDidItGo = (asked) =&gt; ({
+    placement: asked,
+    content: 'Asked for ' + asked + '.',
+    onShown: (p) =&gt; p.setContent('Asked for ' + asked + ', placed ' + p.panel.dataset.side + '.')
+});
+E.popover('#demo-edge-left',  whereDidItGo('left'));
+E.popover('#demo-edge-right', whereDidItGo('right'));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Triggers">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Triggers</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>click</code> is the default and the right choice for anything with controls in it. A
+                <code>hover</code> popover stays open while the pointer moves from the trigger into the panel, and
+                also opens on keyboard focus so it is not mouse-only. <code>focus</code> suits hints on form
+                fields. <code>manual</code> binds nothing and leaves <code>show()</code> and <code>hide()</code> to you.
+            </p>
+            <div class="row mb-4">
+                <div class="col-6 mb-4">
+                    <p class="text-sm text-gray-600 mb-2">Hover (or Tab to it)</p>
+                    <p class="mb-0">Written by <span id="demo-hover" class="sx-pop-link">Ada Lovelace</span>.</p>
+                </div>
+                <div class="col-6 mb-4">
+                    <p class="text-sm text-gray-600 mb-2">Focus</p>
+                    <label for="demo-focus" class="form-label">Phone number</label>
+                    <input id="demo-focus" class="form-input" type="tel" placeholder="01632 960123">
+                </div>
+                <div class="col-12">
+                    <p class="text-sm text-gray-600 mb-2">Manual</p>
+                    <div class="flex gap-3 flex-wrap items-center">
+                        <span id="demo-manual" class="badge badge-primary">Target</span>
+                        <button id="demo-manual-show" class="btn btn-sm btn-outline" type="button">show()</button>
+                        <button id="demo-manual-hide" class="btn btn-sm btn-outline" type="button">hide()</button>
+                    </div>
+                </div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.popover('#demo-hover', {trigger: 'hover', title: 'Ada Lovelace', content: profileCard});
+E.popover('#demo-focus', {trigger: 'focus', placement: 'top',
+                          content: 'UK numbers only. Spaces are fine.'});
+
+const manual = E.popover('#demo-manual', {
+    trigger: 'manual', closeOnOutside: false, group: null,
+    content: 'Opened from code. Only hide() - or Esc - closes me.'
+});
+$('#demo-manual-show').on('click', () =&gt; manual.show());
+$('#demo-manual-hide').on('click', () =&gt; manual.hide());
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Rich Content">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Rich content and forms</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>content</code> takes a string (set as text), a DOM node, or a function that returns either -
+                called every time the popover opens, so it can show current data. Here the function builds a small
+                form; focus lands on its input, Tab moves through the buttons, and Tab past the last one leaves
+                the popover for whatever follows the trigger on the page.
+            </p>
+            <div class="flex gap-3 flex-wrap items-center mb-4">
+                <span>Project: <strong id="demo-name">Website refresh</strong></span>
+                <button id="demo-rename" class="btn btn-sm btn-outline" type="button">
+                    <span data-icon="edit" data-icon-size="14"></span> Rename
+                </button>
+                <button id="demo-html" class="btn btn-sm btn-outline" type="button">html: true</button>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const rename = E.popover('#demo-rename', {
+    title: 'Rename project',
+    placement: 'bottom-start',
+    content: () =&gt; {
+        const form = $('&lt;form class="sx-pop-form"&gt;' +
+            '&lt;input class="form-input" name="name" aria-label="Project name"&gt;' +
+            '&lt;div class="sx-pop-actions"&gt;' +
+            '&lt;button type="button" class="btn btn-sm btn-ghost" data-cancel&gt;Cancel&lt;/button&gt;' +
+            '&lt;button class="btn btn-sm btn-primary"&gt;Save&lt;/button&gt;' +
+            '&lt;/div&gt;&lt;/form&gt;');
+        form.find('input').val($('#demo-name').text());
+        form.find('[data-cancel]').on('click', () =&gt; rename.hide({returnFocus: true}));
+        form.on('submit', (e) =&gt; {
+            e.preventDefault();
+            $('#demo-name').text(form.find('input').val());
+            rename.hide({returnFocus: true});
+        });
+        return form.get(0);
+    }
+});
+</code></pre>
+            </div>
+            <p class="mb-2">
+                With <code>html: true</code> a string is treated as markup, and goes through Domma's sanitiser
+                (DOMPurify when the page loads it) first. The button above passes a <code>javascript:</code> link
+                and an <code>onmouseover</code> handler along with the formatting; only the formatting survives.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.popover('#demo-html', {
+    html: true,
+    title: 'Sanitised',
+    content: '&lt;p&gt;&lt;strong&gt;Bold&lt;/strong&gt;, &lt;em&gt;italic&lt;/em&gt; and a &lt;a href="#"&gt;link&lt;/a&gt; survive.&lt;/p&gt;'
+           + '&lt;p&gt;&lt;a href="javascript:alert(1)"&gt;This link&lt;/a&gt; loses its href, '
+           + '&lt;span onmouseover="alert(1)"&gt;this span&lt;/span&gt; its handler.&lt;/p&gt;'
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Declarative">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Declarative help icons</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                This form's help icons are written entirely in markup. One <code>E.popover.scan('#demo-scan')</code>
+                call turns them into popovers. The last one takes its content from a
+                <code>&lt;template&gt;</code>, so it can hold a list and a link.
+            </p>
+            <form id="demo-scan" class="mb-4" onsubmit="return false">
+                <div class="row">
+                    <div class="col-6 mb-4">
+                        <label class="form-label" for="demo-slug">URL slug
+                            <button type="button" class="sx-pop-help" aria-label="About the URL slug"
+                                    data-popover="The last part of the page address. Lower case, with words joined by hyphens."
+                                    data-popover-title="URL slug" data-popover-placement="top">
+                                <span data-icon="help-circle" data-icon-size="16"></span>
+                            </button>
+                        </label>
+                        <input id="demo-slug" class="form-input" value="about-us">
+                    </div>
+                    <div class="col-6 mb-4">
+                        <label class="form-label" for="demo-publish">Publish date
+                            <button type="button" class="sx-pop-help" aria-label="About the publish date"
+                                    data-popover="Leave empty to publish as soon as you save. A future date keeps the page hidden until then."
+                                    data-popover-title="Publish date" data-popover-placement="top" data-popover-dismissible>
+                                <span data-icon="help-circle" data-icon-size="16"></span>
+                            </button>
+                        </label>
+                        <input id="demo-publish" class="form-input" type="date">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="demo-visibility">Visibility
+                            <button type="button" class="sx-pop-help" aria-label="About visibility"
+                                    data-popover-content="#demo-visibility-help"
+                                    data-popover-title="Who can see this page" data-popover-placement="right">
+                                <span data-icon="help-circle" data-icon-size="16"></span>
+                            </button>
+                        </label>
+                        <select id="demo-visibility" class="form-select">
+                            <option>Public</option>
+                            <option>Members</option>
+                            <option>Admins</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <template id="demo-visibility-help">
+                <ul class="mb-2">
+                    <li><strong>Public</strong> - anyone with the link</li>
+                    <li><strong>Members</strong> - signed-in users</li>
+                    <li><strong>Admins</strong> - site administrators only</li>
+                </ul>
+                <a href="#Options">See the options table</a>
+            </template>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;button type="button" aria-label="About visibility"
+        data-popover-content="#visibility-help"
+        data-popover-title="Who can see this page"&gt;?&lt;/button&gt;
+
+&lt;template id="visibility-help"&gt;
+    &lt;ul&gt;&lt;li&gt;&lt;strong&gt;Public&lt;/strong&gt; - anyone with the link&lt;/li&gt; …&lt;/ul&gt;
+&lt;/template&gt;
+</code></pre>
+            </div>
+            <table class="table mb-4">
+                <thead><tr><th>Attribute</th><th>Option</th></tr></thead>
+                <tbody>
+                    <tr><td><code>data-popover</code></td><td><code>content</code> (always text)</td></tr>
+                    <tr><td><code>data-popover-content</code></td><td>Selector of a <code>&lt;template&gt;</code> or element to clone as content</td></tr>
+                    <tr><td><code>data-popover-title</code></td><td><code>title</code></td></tr>
+                    <tr><td><code>data-popover-trigger</code></td><td><code>trigger</code></td></tr>
+                    <tr><td><code>data-popover-placement</code></td><td><code>placement</code></td></tr>
+                    <tr><td><code>data-popover-dismissible</code></td><td><code>dismissible</code> (present = true)</td></tr>
+                    <tr><td><code>data-popover-arrow="false"</code></td><td><code>arrow: false</code></td></tr>
+                    <tr><td><code>data-popover-group</code></td><td><code>group</code> (<code>"none"</code> = independent)</td></tr>
+                    <tr><td><code>data-popover-width</code> / <code>-max-width</code></td><td><code>width</code> / <code>maxWidth</code></td></tr>
+                    <tr><td><code>data-popover-class</code></td><td><code>className</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="In a Modal">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Inside a modal</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Popovers sit above modals and slideovers, so a help icon inside a dialog works. Esc closes the
+                popover first and stops there - the modal stays open until you press it again.
+            </p>
+            <button id="demo-modal-open" class="btn btn-outline mb-4" type="button">Open a modal</button>
+            <div id="demo-modal" class="modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">Invite a colleague</h5>
+                    <button class="modal-close" type="button" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label" for="demo-modal-role">Role
+                        <button id="demo-modal-help" type="button" class="sx-pop-help" aria-label="About roles">
+                            <span data-icon="help-circle" data-icon-size="16"></span>
+                        </button>
+                    </label>
+                    <select id="demo-modal-role" class="form-select">
+                        <option>Editor</option>
+                        <option>Viewer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.popover('#demo-modal-help', {
+    title: 'Roles',
+    content: 'Editors can change pages. Viewers can only read them.',
+    placement: 'right'
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Events">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Each phase calls its callback and then fires a bubbling <code>popover:*</code> event on the trigger,
+                with <code>{popover}</code> as <code>event.detail</code>. Return <code>false</code> from
+                <code>onShow</code> / <code>onHide</code>, or call <code>preventDefault()</code> on
+                <code>popover:show</code> / <code>popover:hide</code>, to cancel. This log listens to the whole page.
+            </p>
+            <ul id="demo-log" class="list-none p-0 text-sm text-gray-600 mb-4">
+                <li>Nothing yet - open a popover above.</li>
+            </ul>
+            <div class="code-block language-javascript">
+                <pre><code>
+$('main').on('popover:shown', (e) =&gt; console.log('Opened', e.detail.popover.panel.id));
+</code></pre>
+            </div>
+            <table class="table mb-4">
+                <thead><tr><th>Callback</th><th>Event</th><th>When</th></tr></thead>
+                <tbody>
+                    <tr><td><code>onShow</code></td><td><code>popover:show</code></td><td>Before opening; cancelable</td></tr>
+                    <tr><td><code>onShown</code></td><td><code>popover:shown</code></td><td>After the open transition</td></tr>
+                    <tr><td><code>onHide</code></td><td><code>popover:hide</code></td><td>Before closing; cancelable</td></tr>
+                    <tr><td><code>onHidden</code></td><td><code>popover:hidden</code></td><td>After the panel has been removed</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Keyboard">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Keyboard and screen readers</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Input</th><th>Does</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Enter</code> / <code>Space</code> on the trigger</td><td>Opens a click popover and moves focus to its first control (or the panel)</td></tr>
+                    <tr><td><code>Tab</code> in the panel</td><td>Moves through its controls; past the last one, focus goes to what follows the trigger and the popover closes</td></tr>
+                    <tr><td><code>Shift</code> + <code>Tab</code> from the first control</td><td>Back to the trigger; <code>Tab</code> from there goes back in</td></tr>
+                    <tr><td><code>Esc</code></td><td>Closes the most recent popover (only) and returns focus to its trigger</td></tr>
+                </tbody>
+            </table>
+            <p class="mb-2">
+                A click popover is <code>role="dialog"</code>, labelled by its title, and its trigger carries
+                <code>aria-haspopup="dialog"</code>, <code>aria-expanded</code> and (while open)
+                <code>aria-controls</code>. A hover or focus popover is <code>role="tooltip"</code> and is joined to
+                its trigger through <code>aria-describedby</code>. A <code>&lt;span&gt;</code> or
+                <code>&lt;div&gt;</code> used as a trigger is given <code>tabindex="0"</code> and, for click,
+                <code>role="button"</code> with Enter/Space; <code>destroy()</code> takes them away again. Under
+                <code>prefers-reduced-motion</code> the fade and scale are skipped.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options</h2></div>
+        <div class="card-body">
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>content</code></td><td>string | Node | Function</td><td><code>''</code></td><td>Text, a DOM node, or <code>(popover) =&gt;</code> either, called on every open</td></tr>
+                    <tr><td><code>title</code></td><td>string | Node | Function</td><td><code>''</code></td><td>Heading; empty for none</td></tr>
+                    <tr><td><code>html</code></td><td>boolean</td><td><code>false</code></td><td>Treat string content and title as HTML, sanitised</td></tr>
+                    <tr><td><code>trigger</code></td><td>string</td><td><code>'click'</code></td><td><code>click</code>, <code>hover</code>, <code>focus</code>, <code>manual</code>, or several separated by spaces</td></tr>
+                    <tr><td><code>placement</code></td><td>string</td><td><code>'bottom'</code></td><td><code>top</code> / <code>bottom</code> / <code>left</code> / <code>right</code> / <code>auto</code>, with optional <code>-start</code> / <code>-end</code></td></tr>
+                    <tr><td><code>flip</code></td><td>boolean</td><td><code>true</code></td><td>Try other sides when the preferred one has no room</td></tr>
+                    <tr><td><code>offset</code></td><td>number | [x, y]</td><td><code>10</code></td><td>Gap in px, or <code>[crossAxis, mainAxis]</code></td></tr>
+                    <tr><td><code>arrow</code></td><td>boolean</td><td><code>true</code></td><td>Show the arrow</td></tr>
+                    <tr><td><code>dismissible</code></td><td>boolean</td><td><code>false</code></td><td>Show a close button</td></tr>
+                    <tr><td><code>closeOnOutside</code></td><td>boolean</td><td><code>true</code></td><td>Close on a press or focus outside</td></tr>
+                    <tr><td><code>closeOnEscape</code></td><td>boolean</td><td><code>true</code></td><td>Close on Esc</td></tr>
+                    <tr><td><code>group</code></td><td>string | null</td><td><code>'default'</code></td><td>One open at a time per group; <code>null</code> for independent</td></tr>
+                    <tr><td><code>width</code> / <code>maxWidth</code></td><td>string | number</td><td><code>null</code></td><td>Any CSS width (numbers are px); the stylesheet caps it at 20rem</td></tr>
+                    <tr><td><code>className</code></td><td>string</td><td><code>''</code></td><td>Extra classes on the panel</td></tr>
+                    <tr><td><code>id</code></td><td>string</td><td>generated</td><td>Panel id</td></tr>
+                    <tr><td><code>role</code></td><td>string</td><td>auto</td><td><code>dialog</code>, or <code>tooltip</code> for hover/focus-only</td></tr>
+                    <tr><td><code>ariaLabel</code></td><td>string</td><td><code>null</code></td><td>Accessible name when there is no title</td></tr>
+                    <tr><td><code>autoFocus</code></td><td>boolean | null</td><td><code>null</code></td><td>Move focus in on open; null means "for click popovers"</td></tr>
+                    <tr><td><code>trapFocus</code></td><td>boolean</td><td><code>false</code></td><td>Tab cycles inside the panel instead of leaving it</td></tr>
+                    <tr><td><code>delay</code></td><td>number | {show, hide}</td><td><code>{show: 80, hide: 120}</code></td><td>Hover delays in ms</td></tr>
+                    <tr><td><code>animation</code></td><td>boolean</td><td><code>true</code></td><td>Fade and scale</td></tr>
+                    <tr><td><code>animationDuration</code></td><td>number</td><td><code>150</code></td><td>ms</td></tr>
+                    <tr><td><code>container</code></td><td>Element | string</td><td><code>document.body</code></td><td>Where the panel is placed</td></tr>
+                    <tr><td><code>zIndex</code></td><td>number</td><td><code>null</code></td><td>Override the stylesheet's 10045</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Methods">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Methods</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>show({focus})</code></td><td>Open; <code>focus</code> overrides <code>autoFocus</code> once</td></tr>
+                    <tr><td><code>hide({returnFocus})</code></td><td>Close; focus returns to the trigger by default only when it was inside the panel</td></tr>
+                    <tr><td><code>toggle()</code></td><td>Open or close</td></tr>
+                    <tr><td><code>isOpen()</code></td><td>Whether it is open</td></tr>
+                    <tr><td><code>setContent(content)</code></td><td>Replace the content (repositions when open)</td></tr>
+                    <tr><td><code>setTitle(title)</code></td><td>Replace the title; empty removes the header</td></tr>
+                    <tr><td><code>update()</code></td><td>Reposition, after the trigger moved or the content changed size</td></tr>
+                    <tr><td><code>setOptions(opts)</code></td><td>Change options, including the trigger type</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Close, remove the panel and listeners, restore the trigger's attributes</td></tr>
+                    <tr><td><code>panel</code> / <code>trigger</code></td><td>Getters for the two elements</td></tr>
+                    <tr><td><code>E.popover.scan(root)</code></td><td>Create popovers from <code>data-popover</code> markup; returns the new instances</td></tr>
+                    <tr><td><code>E.popover.closeAll(group)</code></td><td>Close every open popover, or one group's</td></tr>
+                    <tr><td><code>E.popover.getInstance(el)</code></td><td>The popover bound to a trigger</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Theming">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Theming</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The panel uses theme tokens only - <code>--dm-surface</code>, <code>--dm-text</code>,
+                <code>--dm-border</code>, <code>--dm-shadow-lg</code> and <code>--dm-radius-md</code> - so it follows
+                every theme, light and dark. Width goes through custom properties you can set in CSS too.
+            </p>
+            <div class="code-block language-css">
+                <pre><code>
+.dm-popover.help-pop {
+    --dm-popover-max-width: 24rem;
+    border-color: var(--dm-primary);
+}
+.dm-popover.help-pop .dm-popover-arrow {
+    border-color: var(--dm-primary);
+}
+</code></pre>
+            </div>
+            <p class="mb-2">
+                The panel carries <code>data-side</code> and <code>data-placement</code> with where it actually
+                ended up, <code>.has-title</code>, <code>.is-dismissible</code> and <code>.is-open</code>. The
+                trigger carries <code>.is-popover-open</code> while its popover is open. See
+                <code>docs/Popover.md</code> for the full reference.
+            </p>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(D().format('HH:mm:ss') + ' - ' + message) + '</li>');
+        list.find('li').filter((i) => i >= 8).remove();
+    };
+
+    // ---- Basic -----------------------------------------------------------
+    E.popover('#demo-basic', {
+        title: 'Delivery options',
+        content: 'Standard delivery takes 3-5 working days. Next-day delivery is available on orders placed before 2pm.',
+        dismissible: true
+    });
+    E.popover('#demo-plain', {content: 'A popover needs nothing more than content.'});
+
+    // ---- Placement -------------------------------------------------------
+    $('[data-place]').each((i, el) => {
+        E.popover(el, {
+            placement: el.dataset.place,
+            group: 'placement',
+            content: 'Placed ' + el.dataset.place + '.'
+        });
+    });
+    const whereDidItGo = (asked) => ({
+        placement: asked,
+        content: 'Asked for ' + asked + '.',
+        onShown: (p) => p.setContent('Asked for ' + asked + ', placed ' + p.panel.dataset.side + '.')
+    });
+    E.popover('#demo-edge-left', whereDidItGo('left'));
+    E.popover('#demo-edge-right', whereDidItGo('right'));
+
+    // ---- Triggers ----------------------------------------------------------
+    const profileCard = () => {
+        const card = $('<div class="sx-pop-profile">' +
+            '<span class="sx-pop-avatar" aria-hidden="true">AL</span>' +
+            '<div><p class="m-0 mb-2">Mathematician and writer, best known for her notes on the Analytical Engine.</p>' +
+            '<a href="#Triggers">View profile</a></div></div>');
+        return card.get(0);
+    };
+    E.popover('#demo-hover', {trigger: 'hover', title: 'Ada Lovelace', content: profileCard, placement: 'top'});
+    E.popover('#demo-focus', {trigger: 'focus', placement: 'top', content: 'UK numbers only. Spaces are fine.'});
+
+    const manual = E.popover('#demo-manual', {
+        trigger: 'manual',
+        closeOnOutside: false,
+        group: null,
+        placement: 'top-start',
+        content: 'Opened from code. Only hide() - or Esc - closes me.'
+    });
+    $('#demo-manual-show').on('click', () => manual.show());
+    $('#demo-manual-hide').on('click', () => manual.hide());
+
+    // ---- Rich content ------------------------------------------------------
+    const rename = E.popover('#demo-rename', {
+        title: 'Rename project',
+        placement: 'bottom-start',
+        content: () => {
+            const form = $('<form class="sx-pop-form">' +
+                '<input class="form-input" name="name" aria-label="Project name">' +
+                '<div class="sx-pop-actions">' +
+                '<button type="button" class="btn btn-sm btn-ghost" data-cancel>Cancel</button>' +
+                '<button class="btn btn-sm btn-primary">Save</button>' +
+                '</div></form>');
+            form.find('input').val($('#demo-name').text());
+            form.find('[data-cancel]').on('click', () => rename.hide({returnFocus: true}));
+            form.on('submit', (e) => {
+                e.preventDefault();
+                const value = String(form.find('input').val()).trim();
+                if (value) {
+                    $('#demo-name').text(value);
+                    log('Renamed to ' + value);
+                }
+                rename.hide({returnFocus: true});
+            });
+            return form.get(0);
+        }
+    });
+
+    E.popover('#demo-html', {
+        html: true,
+        title: 'Sanitised',
+        content: '<p><strong>Bold</strong>, <em>italic</em> and a <a href="#Rich Content">link</a> survive.</p>' +
+            '<p><a href="javascript:alert(1)">This link</a> loses its href, ' +
+            '<span onmouseover="alert(1)">this span</span> its handler.</p>'
+    });
+
+    // ---- Declarative -------------------------------------------------------
+    E.popover.scan('#demo-scan');
+
+    // ---- Modal -------------------------------------------------------------
+    const modal = E.modal('#demo-modal');
+    $('#demo-modal-open').on('click', () => modal.open());
+    E.popover('#demo-modal-help', {
+        title: 'Roles',
+        content: 'Editors can change pages. Viewers can only read them.',
+        placement: 'right'
+    });
+
+    // ---- One listener for the whole page -------------------------------------
+    $('main').on('popover:shown', (e) => {
+        const trigger = e.detail.popover.trigger;
+        log('Opened: ' + (trigger.getAttribute('aria-label') || trigger.textContent.trim()));
+    });
+    $('main').on('popover:hidden', (e) => {
+        const trigger = e.detail.popover.trigger;
+        log('Closed: ' + (trigger.getAttribute('aria-label') || trigger.textContent.trim()));
+    });
+</script>
+
+</body>
+</html>
