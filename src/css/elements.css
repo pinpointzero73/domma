@@ -8972,6 +8972,7 @@ code {
 .skeleton-table-row {
     display: grid;
     grid-template-columns: repeat(var(--dm-skeleton-columns, 4), minmax(0, 1fr));
+    align-items: center;
     gap: var(--dm-space-4);
     padding: var(--dm-space-3) var(--dm-space-4);
     border-bottom: 1px solid var(--dm-table-border, var(--dm-border));
@@ -8979,6 +8980,11 @@ code {
 
 .skeleton-table-row:last-child {
     border-bottom: none;
+}
+
+/* Cells sit side by side: no line spacing between them */
+.skeleton-table-row > .skeleton-text + .skeleton-text {
+    margin-top: 0;
 }
 
 .skeleton-table-head {
