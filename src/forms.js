@@ -356,7 +356,7 @@ class Forma {
     // Handle different input types
     switch (type) {
       case 'select':
-        return this._buildSelect(fieldName, fieldDef, attrs, value);
+        return this._wrapAddons(this._buildSelect(fieldName, fieldDef, attrs, value), formConfig);
 
       case 'multiselect':
         attrs.multiple = true;
@@ -364,7 +364,7 @@ class Forma {
 
       case 'textarea':
         const rows = formConfig.rows || 3;
-        return `<textarea ${attrString} rows="${rows}">${this.utils.escapeHtml(value)}</textarea>`;
+        return this._wrapAddons(`<textarea ${attrString} rows="${rows}">${this.utils.escapeHtml(value)}</textarea>`, formConfig);
 
       case 'radio':
         return this._buildRadioGroup(fieldName, fieldDef, attrs, value);
@@ -401,18 +401,30 @@ class Forma {
         const inputType = Forma.inputTypes[type] || 'text';
         const escapedValue = this.utils.escapeHtml(value);
         const inputHtml = `<input type="${inputType}" ${attrString} value="${escapedValue}">`;
-
-        const prefixHtml = this._buildAddon(formConfig.prefix, 'left');
-        const suffixHtml = this._buildAddon(formConfig.suffix, 'right');
-        if (!prefixHtml && !suffixHtml) return inputHtml;
-
-        const wrapperClasses = [
-          'input-group-icon',
-          prefixHtml && 'has-addon-left',
-          suffixHtml && 'has-addon-right'
-        ].filter(Boolean).join(' ');
-        return `<div class="${wrapperClasses}">${prefixHtml}${inputHtml}${suffixHtml}</div>`;
+        return this._wrapAddons(inputHtml, formConfig);
     }
+  }
+
+  /**
+   * Joins formConfig.prefix / formConfig.suffix addons to a control's markup.
+   * Used for single-line inputs, selects and textareas; a control with neither
+   * is returned untouched.
+   *
+   * @param {string} controlHtml
+   * @param {Object} formConfig
+   * @return {string}
+   */
+  _wrapAddons(controlHtml, formConfig = {}) {
+    const prefixHtml = this._buildAddon(formConfig.prefix, 'left');
+    const suffixHtml = this._buildAddon(formConfig.suffix, 'right');
+    if (!prefixHtml && !suffixHtml) return controlHtml;
+
+    const wrapperClasses = [
+      'input-group-icon',
+      prefixHtml && 'has-addon-left',
+      suffixHtml && 'has-addon-right'
+    ].filter(Boolean).join(' ');
+    return `<div class="${wrapperClasses}">${prefixHtml}${controlHtml}${suffixHtml}</div>`;
   }
 
   /**
@@ -422,12 +434,14 @@ class Forma {
    *   { icon: 'search' }   → renders a Domma icon
    *   { text: '$' }        → renders escaped plain text (currency, units, etc.)
    *   { html: '<kbd>K</kbd>' } → renders raw HTML (caller takes responsibility)
+   *   '£'                  → shorthand for { text: '£' }
    *
    * @param {Object|undefined} slot  The prefix/suffix descriptor, or falsy to skip.
    * @param {'left'|'right'} side    Which side the addon renders on.
    * @return {string} The addon HTML, or '' if no addon should be rendered.
    */
   _buildAddon(slot, side) {
+    if (typeof slot === 'string' && slot) slot = {text: slot};
     if (!slot || typeof slot !== 'object') return '';
     const base = `input-group-addon input-group-addon-${side}`;
     let inner = '';

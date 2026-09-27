@@ -9,6 +9,7 @@ import Component from './component.js';
 import TreeView from './treeview.js';
 import ContextMenu from './context-menu.js';
 import Sortable from './sortable.js';
+import InputGroup from './input-group.js';
 import sanitizeModule from './sanitize.js';
 
 // Web Component wrappers for Phase 1 & 2 components
@@ -11627,6 +11628,19 @@ export const elements = {
         return instance;
     },
 
+    /**
+     * Join an icon or short text to the start and/or end of an existing input
+     * (Bootstrap-style input group) - the same markup Forma writes for
+     * formConfig.prefix / formConfig.suffix.
+     */
+    inputGroup(selector, options = {}) {
+        const instance = new InputGroup(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
     treeView(selector, options = {}) {
         const instance = new TreeView(selector, options);
         if (instance.element) {
@@ -11778,4 +11792,4 @@ elements.contextMenu.active = ContextMenu.active;
 elements.contextMenu.registry = ContextMenu.registry;
 
 // Export component classes for direct access to static methods
-export {DesktopNotification, TreeView, ContextMenu, Sortable};
+export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};
