@@ -471,6 +471,24 @@ describe('Domma.elements.popover', () => {
         });
     });
 
+    describe('setOptions', () => {
+        it('switches trigger type while open without re-rendering the content', () => {
+            const content = document.createElement('div');
+            content.innerHTML = '<button id="keep">Keep</button>';
+            const p = make(btn, {content});
+            btn.click();
+            expect(document.activeElement.id).toBe('keep');
+            p.setOptions({trigger: 'hover'});
+            expect(p.isOpen()).toBe(true);
+            expect(document.activeElement.id).toBe('keep');
+            expect(p.panel.getAttribute('role')).toBe('tooltip');
+            expect(btn.hasAttribute('aria-haspopup')).toBe(false);
+            expect(btn.getAttribute('aria-describedby')).toBe(p.panel.id);
+            p.setOptions({content: 'new'});
+            expect(p.panel.querySelector('.dm-popover-body').textContent).toBe('new');
+        });
+    });
+
     describe('destroy', () => {
         it('removes the panel, listeners and ARIA', () => {
             const p = E.popover(btn, {content: 'x', animation: false});

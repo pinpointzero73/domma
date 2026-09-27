@@ -219,7 +219,11 @@ class Popover extends Component {
         if (!this.element) return;
 
         const previous = byTrigger.get(this.element);
-        if (previous && previous !== this) previous.destroy();
+        if (previous && previous !== this) {
+            previous.destroy();
+            // The old instance's teardown cleared the back-reference Component set for us.
+            this.element._dommaComponent = this;
+        }
         byTrigger.set(this.element, this);
 
         this.id = this.options.id || `dm-popover-${++seq}`;
@@ -417,6 +421,11 @@ class Popover extends Component {
         super.destroy();
     }
 
+    setOptions(newOptions = {}) {
+        this._changedKeys = Object.keys(newOptions || {});
+        return super.setOptions(newOptions);
+    }
+
     _applyOptions() {
         if (!this.element || this._destroyed) return;
         this._unbindTrigger();
@@ -424,9 +433,15 @@ class Popover extends Component {
         this._bindTrigger();
         if (this._panel) {
             this._styleNode();
-            this._render();
+            // Re-rendering moves the content out and back in, which would drop
+            // focus from inside an open panel - only do it when it changed.
+            const changed = this._changedKeys || [];
+            if (changed.includes('content') || changed.includes('html')) this._renderBody();
+            if (changed.includes('title') || changed.includes('html')) this._renderTitle();
+            else this._label();
             if (this._open) this.update();
         }
+        this._changedKeys = null;
     }
 
     // ============================================
