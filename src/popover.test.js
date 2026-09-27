@@ -87,6 +87,21 @@ describe('Domma.elements.popover', () => {
             expect(p.isOpen()).toBe(false);
         });
 
+        it('Escape from inside a focus popover returns focus without reopening it', () => {
+            const input = document.getElementById('pop-input');
+            const link = document.createElement('a');
+            link.href = '#x';
+            link.textContent = 'More';
+            const p = make(input, {content: link, trigger: 'focus'});
+            input.focus();
+            expect(p.isOpen()).toBe(true);
+            link.focus();
+            expect(p.isOpen()).toBe(true);
+            key(link, 'Escape');
+            expect(document.activeElement).toBe(input);
+            expect(p.isOpen()).toBe(false);
+        });
+
         it('manual binds nothing and answers to show/hide/toggle', () => {
             const p = make(btn, {content: 'x', trigger: 'manual'});
             btn.click();

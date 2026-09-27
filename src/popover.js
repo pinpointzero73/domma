@@ -292,6 +292,8 @@ class Popover extends Component {
 
         panel.classList.remove('is-open');
         this.update();
+        // update() closes it again when the trigger has left the document.
+        if (!this._open) return this;
         // Reflow, so the transition runs from the closed state.
         void panel.offsetHeight;
         panel.classList.add('is-open');
@@ -341,7 +343,13 @@ class Popover extends Component {
         clearTimeout(this._timers.shown);
 
         if (returnFocus && this.element && isFn(this.element.focus)) {
-            this.element.focus({preventScroll: true});
+            // A focus or hover trigger would take this focus as a reason to reopen.
+            this._returningFocus = true;
+            try {
+                this.element.focus({preventScroll: true});
+            } finally {
+                this._returningFocus = false;
+            }
         }
 
         if (panel) {
@@ -498,7 +506,9 @@ class Popover extends Component {
 
         // Hover popovers open on keyboard focus too, or keyboard users never see them.
         if (triggers.includes('focus') || triggers.includes('hover')) {
-            this._on(el, 'focusin', () => this.show({focus: false}), list);
+            this._on(el, 'focusin', () => {
+                if (!this._returningFocus) this.show({focus: false});
+            }, list);
             this._on(el, 'focusout', (e) => {
                 if (this._contains(e.relatedTarget)) return;
                 // Click into a non-focusable part of the page: nothing takes
