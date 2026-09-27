@@ -208,6 +208,7 @@ class InputGroup extends Component {
     }
 
     _applyOptions() {
+        this.options.labels = {...InputGroup.defaults.labels, ...(this.options.labels || {})};
         this._render();
         this._teardownExtras();
         this._buildExtras();
