@@ -133,6 +133,59 @@ const STATUS = {
 const FINISH_LABEL = { smooth: 'Smooth', sharp: 'Sharp', slate: 'Slate' };
 const ACCENT_LABEL = { steel: 'Steel Blue', indigo: 'Indigo', teal: 'Teal' };
 
+// ---------------------------------------------------------------------------
+// Link colour. Where the accent is too pale to read as text (under 4.5:1 on
+// the page, a surface or a card), links mix in the theme's text colour - the
+// least amount, in 5% steps, that reads at 5:1 on every background token.
+// The same rule the hand-written themes carry (see lemon-light.css).
+// ---------------------------------------------------------------------------
+const hexRgb = (h) => {
+  const x = h.replace('#', '');
+  const f = x.length === 3 ? x.split('').map((c) => c + c).join('') : x;
+  return [0, 2, 4].map((i) => parseInt(f.slice(i, i + 2), 16) / 255);
+};
+const lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+const delin = (c) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055);
+const luminance = (rgb) => { const [r, g, b] = rgb.map(lin); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const contrast = (a, b) => { const x = luminance(a), y = luminance(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+function toOklab(rgb) {
+  const [r, g, b] = rgb.map(lin);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
+}
+function fromOklab([L, A, B]) {
+  const l = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3;
+  const m = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3;
+  const s = (L - 0.0894841775 * A - 1.291485548 * B) ** 3;
+  return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s].map((c) => Math.min(1, Math.max(0, delin(c))));
+}
+const mixOklab = (a, b, t) => { const x = toOklab(a), y = toOklab(b); return fromOklab(x.map((v, i) => v * (1 - t) + y[i] * t)); };
+
+/** The --dm-link pair for an accent on a finish, or {} when the accent already reads. */
+export function linkVars(primary, foundation) {
+  const bgs = ['background', 'background-alt', 'surface', 'surface-raised', 'surface-overlay', 'card-bg']
+    .map((k) => foundation[k]).filter((v) => /^#[0-9a-f]{3,6}$/i.test(v || '')).map(hexRgb);
+  const p = hexRgb(primary);
+  const text = hexRgb(foundation.text);
+  if (Math.min(...bgs.map((b) => contrast(p, b))) >= 4.5) return {};
+  for (let pct = 5; pct < 100; pct += 5) {
+    const mixed = mixOklab(p, text, pct / 100);
+    if (Math.min(...bgs.map((b) => contrast(mixed, b))) >= 5) {
+      return {
+        'link': `color-mix(in oklab, var(--dm-primary), var(--dm-text) ${pct}%)`,
+        'link-hover': `color-mix(in oklab, var(--dm-primary), var(--dm-text) ${Math.min(pct + 15, 95)}%)`
+      };
+    }
+  }
+  return {'link': 'var(--dm-text)', 'link-hover': 'var(--dm-text)'};
+}
+
 /** Render `  --dm-<key>: <value>;` lines from an object whose keys omit the prefix. */
 function vars(map) {
   return Object.entries(map)
@@ -242,7 +295,8 @@ export function buildThemeCss(finishKey, accentKey) {
     'accent-1': '#78909c',
     'accent-2': '#607d8b',
     'accent-3': '#455a64',
-    'accent-4': '#263238'
+    'accent-4': '#263238',
+    ...linkVars(a.primary, f.foundation)
   });
 
   const header =
