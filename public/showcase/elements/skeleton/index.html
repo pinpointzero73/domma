@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skeleton - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/skeleton/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the skeletons themselves need is in elements.css. */
+        .sx-sk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+            gap: 1rem;
+        }
+
+        .sx-sk-cover {
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg,
+                color-mix(in srgb, var(--dm-primary) 55%, var(--dm-surface)),
+                color-mix(in srgb, var(--dm-primary) 20%, var(--dm-surface)));
+        }
+
+        .sx-sk-avatar {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: var(--dm-radius-full);
+            background: var(--dm-primary);
+            color: var(--dm-primary-text, #fff);
+            font-weight: 600;
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .sx-sk-panel {
+            min-height: 6rem;
+        }
+
+        .sx-sk-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sx-sk-row > .skeleton-lines {
+            flex: 1;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Skeleton</div>
+        <div class="hero-subtitle">Shimmering placeholders shaped like the content on its way - so the page keeps its layout while data loads</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Skeleton</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                A spinner says "busy". A skeleton says <em>what</em> is coming: grey bars where the text will be,
+                a circle for the avatar, a block for the image. The page does not jump when the data lands, and
+                the wait feels shorter because the shape is already there.
+            </p>
+            <p class="mb-4">
+                The shapes are plain CSS classes - <code>.skeleton-text</code>, <code>.skeleton-card</code> and
+                friends - so they work in hand-written HTML. <code>E.skeleton()</code> writes them into a
+                container for you, tells screen readers the container is loading, and puts things back when you
+                are done. <code>E.skeleton.while()</code> does all of that around a promise.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Ready-made shapes</strong> - text, card, list and table, or your own markup</li>
+                <li><strong>Theme-aware</strong> - tinted from the theme's own text and surface, quiet on light and dark</li>
+                <li><strong>Promise helper</strong> - <code>E.skeleton.while(target, promise)</code> shows it until the promise settles</li>
+                <li><strong>Nothing lost</strong> - <code>remove()</code> puts back the very same nodes, listeners and all</li>
+                <li><strong>Accessible</strong> - <code>aria-busy</code> and a polite "Loading..." status; the shapes are hidden from screen readers</li>
+                <li><strong>Reduced motion</strong> - no sweep, just the still tint</li>
+                <li><strong>DataTable</strong> - <code>loadingSkeleton: true</code> shows skeleton rows until the data arrives</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+const posts = await E.skeleton.while('#posts', H.get('/api/posts'), {type: 'card', count: 3});
+$('#posts').html(renderPosts(posts));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+        <div class="card-body">
+            <p class="mb-6 text-gray-600">A list that shows placeholders while it loads, in three steps</p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 1 - A container</h3>
+            <p class="mb-2">
+                Any element will do. The skeleton goes inside it, so give it the layout the real content will
+                have - a grid for cards, a plain block for a list.
+            </p>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;div id="users"&gt;&lt;/div&gt;
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 2 - Show a skeleton while you load</h3>
+            <p class="mb-2">
+                Hand <code>E.skeleton.while()</code> the container, the promise and the shape. It resolves with
+                the promise's value once the skeleton has gone, so you render into a clean container.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+const users = await E.skeleton.while('#users', H.get('/api/users'), {type: 'list', count: 4});
+$('#users').html(users.map(renderUser).join(''));
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 3 - Handle failure</h3>
+            <p class="mb-2">
+                If the promise rejects, the skeleton is removed - whatever was in the container before comes
+                back - and the error is rethrown for you to catch.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+try {
+    const users = await E.skeleton.while('#users', H.get('/api/users'), {type: 'list'});
+    $('#users').html(users.map(renderUser).join(''));
+} catch (err) {
+    E.toast('Could not load users', {type: 'danger'});
+}
+</code></pre>
+            </div>
+            <p class="mb-2">
+                Want to drive it yourself? <code>E.skeleton()</code> returns a handle:
+                <code>remove()</code> restores the old content, <code>replace(html)</code> swaps in new content.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+const sk = E.skeleton('#users', {type: 'list'});
+const users = await H.get('/api/users');
+sk.replace(users.map(renderUser).join(''));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Cards">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Cards: load with E.skeleton.while</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Press <em>Load</em>: a pretend request takes a moment and the cards swap in where the placeholders
+                were. The skeleton card has the same frame, padding and 16:9 image as a real <code>.card</code>.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <button id="demo-cards-load" class="btn btn-primary btn-sm" type="button">
+                    <span data-icon="refresh-cw"></span> Load
+                </button>
+                <span id="demo-cards-status" class="text-sm text-gray-600" aria-live="polite"></span>
+            </div>
+            <div id="demo-cards" class="sx-sk-grid mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+$('#demo-cards-load').on('click', async () =&gt; {
+    const posts = await E.skeleton.while('#demo-cards', pretendLoad(POSTS), {type: 'card', count: 3});
+    $('#demo-cards').html(posts.map(renderPost).join(''));
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="List">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">A list, and what happens on failure</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <em>Load</em> fills the list. <em>Load and fail</em> rejects instead: the skeleton goes, the list
+                you had comes back untouched, and the error reaches your <code>catch</code>.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <button id="demo-list-load" class="btn btn-primary btn-sm" type="button">
+                    <span data-icon="users"></span> Load
+                </button>
+                <button id="demo-list-fail" class="btn btn-outline btn-sm" type="button">
+                    <span data-icon="zap"></span> Load and fail
+                </button>
+            </div>
+            <div id="demo-list" class="mb-4">
+                <ul class="list-group">
+                    <li class="list-group-item">Nothing loaded yet - press Load.</li>
+                </ul>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+try {
+    const people = await E.skeleton.while('#demo-list', pretendLoad(PEOPLE, fail), {type: 'list', count: 4});
+    $('#demo-list').html(renderPeople(people));
+} catch (err) {
+    E.toast(err.message, {type: 'danger'});   // the old list is back already
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="DataTable">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">DataTable: loadingSkeleton</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>T.create(sel, {loadingSkeleton: true})</code> draws skeleton rows under the real header until
+                the first <code>setData()</code> or <code>addRow()</code>. <code>setLoading(true)</code> brings them
+                back for a reload. Pass a number instead of <code>true</code> for that many rows.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <button id="demo-table-reload" class="btn btn-primary btn-sm" type="button">
+                    <span data-icon="rotate-ccw"></span> Reload
+                </button>
+            </div>
+            <div id="demo-table" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const table = T.create('#demo-table', {
+    columns: ['name', 'role', 'city'].map((key) =&gt; ({key, title: _.capitalize(key)})),
+    loadingSkeleton: true,
+    pageSize: 5
+});
+table.setData(await H.get('/api/team'));
+
+$('#demo-table-reload').on('click', async () =&gt; {
+    table.setLoading(true);
+    table.setData(await H.get('/api/team'));
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Types">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Every type</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The same call with a different <code>type</code>. Untick <em>Animate</em> for
+                <code>animate: false</code>, a still tint with no sweep.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <div class="btn-group" role="group" aria-label="Skeleton type">
+                    <button class="btn btn-outline btn-sm active" type="button" data-type="text">text</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-type="card">card</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-type="list">list</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-type="table">table</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-type="custom">custom</button>
+                </div>
+                <label class="flex items-center gap-2 text-sm">
+                    <input id="demo-types-animate" type="checkbox" checked> Animate
+                </label>
+            </div>
+            <div id="demo-types" class="sx-sk-panel mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code id="demo-types-code">E.skeleton('#demo-types', {type: 'text', lines: 4});</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="CSS Only">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">CSS only: the shapes by hand</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                No JavaScript needed. Put the shapes in your markup - server-rendered pages can ship them in the
+                first paint - and swap the content in when it is ready.
+            </p>
+            <div class="sx-sk-grid mb-4">
+                <div>
+                    <div class="sx-sk-row mb-4">
+                        <div class="skeleton skeleton-circle skeleton-lg"></div>
+                        <div class="skeleton-lines">
+                            <div class="skeleton skeleton-text skeleton-w-75"></div>
+                            <div class="skeleton skeleton-text skeleton-text-sm skeleton-w-50"></div>
+                        </div>
+                    </div>
+                    <div class="skeleton skeleton-heading"></div>
+                    <div class="skeleton-lines mb-4">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text"></div>
+                    </div>
+                    <span class="skeleton skeleton-button"></span>
+                    <span class="skeleton skeleton-button"></span>
+                </div>
+                <div>
+                    <div class="skeleton skeleton-image skeleton-ratio-4x3 mb-4"></div>
+                    <div class="flex gap-2">
+                        <div class="skeleton skeleton-circle skeleton-sm"></div>
+                        <div class="skeleton skeleton-circle skeleton-sm"></div>
+                        <div class="skeleton skeleton-circle skeleton-sm"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;div class="skeleton skeleton-circle skeleton-lg"&gt;&lt;/div&gt;
+&lt;div class="skeleton skeleton-heading"&gt;&lt;/div&gt;
+&lt;div class="skeleton-lines"&gt;
+    &lt;div class="skeleton skeleton-text"&gt;&lt;/div&gt;
+    &lt;div class="skeleton skeleton-text"&gt;&lt;/div&gt;
+    &lt;div class="skeleton skeleton-text"&gt;&lt;/div&gt;   &lt;!-- the last line runs short --&gt;
+&lt;/div&gt;
+&lt;span class="skeleton skeleton-button"&gt;&lt;/span&gt;
+&lt;div class="skeleton skeleton-image skeleton-ratio-4x3"&gt;&lt;/div&gt;
+</code></pre>
+            </div>
+            <table class="table mb-4">
+                <thead><tr><th>Class</th><th>Shape</th></tr></thead>
+                <tbody>
+                    <tr><td><code>.skeleton</code></td><td>The base: tint, sweep and rounded corners. Every shape needs it</td></tr>
+                    <tr><td><code>.skeleton-text</code></td><td>A line of body text; <code>.skeleton-text-sm</code> for small print</td></tr>
+                    <tr><td><code>.skeleton-lines</code></td><td>Wraps lines as a paragraph; its last line runs to 60%</td></tr>
+                    <tr><td><code>.skeleton-w-25</code> / <code>-50</code> / <code>-75</code> / <code>-100</code></td><td>Line widths</td></tr>
+                    <tr><td><code>.skeleton-heading</code></td><td>A card title</td></tr>
+                    <tr><td><code>.skeleton-circle</code> / <code>.skeleton-avatar</code></td><td>2.5rem circle; <code>.skeleton-sm</code>, <code>-lg</code>, <code>-xl</code></td></tr>
+                    <tr><td><code>.skeleton-rect</code> / <code>.skeleton-image</code></td><td>Full-width 16:9 block; <code>.skeleton-ratio-1x1</code>, <code>-4x3</code>, <code>-16x9</code>, <code>-21x9</code></td></tr>
+                    <tr><td><code>.skeleton-button</code></td><td>The size of a <code>.btn</code></td></tr>
+                    <tr><td><code>.skeleton-card</code></td><td>Card frame; holds <code>.skeleton-image</code> and <code>.skeleton-card-body</code></td></tr>
+                    <tr><td><code>.skeleton-list</code> / <code>.skeleton-list-item</code></td><td>List-group frame; items hold a circle and <code>.skeleton-list-item-content</code></td></tr>
+                    <tr><td><code>.skeleton-table</code> / <code>.skeleton-table-row</code></td><td>Rows of cells; <code>.skeleton-table-head</code> for the header, <code>--dm-skeleton-columns</code> for the count</td></tr>
+                    <tr><td><code>.skeleton-static</code></td><td>No sweep, on a shape or any ancestor</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Declarative">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Declarative: data-skeleton</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Mark containers with <code>data-skeleton="type"</code> and <code>data-skeleton-*</code> options, then
+                call <code>E.skeleton.scan()</code> once. Take one away with <code>E.skeleton.remove(el)</code> or
+                the handle's <code>replace()</code>.
+            </p>
+            <div id="demo-declared" class="mb-4" data-skeleton="list" data-skeleton-count="2" data-skeleton-avatar="false"></div>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <button id="demo-declared-done" class="btn btn-outline btn-sm" type="button">Finish loading</button>
+                <button id="demo-declared-again" class="btn btn-outline btn-sm" type="button">Scan again</button>
+            </div>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;div id="inbox" data-skeleton="list" data-skeleton-count="2" data-skeleton-avatar="false"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+    E.skeleton.scan();
+    H.get('/api/inbox').then((mail) =&gt; E.skeleton.get('#inbox').replace(renderMail(mail)));
+&lt;/script&gt;
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Accessibility">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Accessibility and motion</h2></div>
+        <div class="card-body">
+            <ul class="mb-4">
+                <li>The container gets <code>aria-busy="true"</code> while the skeleton is up and <code>"false"</code> after.</li>
+                <li>A visually hidden <code>role="status"</code> (<code>aria-live="polite"</code>) says "Loading..." - change it with <code>label</code>.</li>
+                <li>The shapes carry <code>aria-hidden="true"</code>: a screen reader hears one status, not forty grey boxes.</li>
+                <li>Under <code>prefers-reduced-motion: reduce</code> the sweep is switched off and the still tint stays.</li>
+            </ul>
+            <p class="mb-2">
+                The tint is the theme's text colour mixed 10% into its surface, so it follows every theme. Override it
+                with <code>--dm-skeleton-bg</code>, the sweep with <code>--dm-skeleton-shine</code> and its speed with
+                <code>--dm-skeleton-duration</code>.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options</h2></div>
+        <div class="card-body">
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>type</code></td><td>string</td><td><code>'text'</code></td><td><code>'text'</code>, <code>'card'</code>, <code>'list'</code>, <code>'table'</code> or <code>'custom'</code></td></tr>
+                    <tr><td><code>lines</code></td><td>number</td><td>3 (list: 2)</td><td>Lines per paragraph, per card, or per list item</td></tr>
+                    <tr><td><code>count</code></td><td>number</td><td>1 (list: 3)</td><td>How many paragraphs, cards or list items</td></tr>
+                    <tr><td><code>rows</code></td><td>number</td><td><code>5</code></td><td>Table rows</td></tr>
+                    <tr><td><code>columns</code></td><td>number</td><td><code>4</code></td><td>Table columns</td></tr>
+                    <tr><td><code>header</code></td><td>boolean</td><td><code>true</code></td><td>Table header row</td></tr>
+                    <tr><td><code>avatar</code></td><td>boolean</td><td><code>true</code></td><td>A circle at the start of each list item</td></tr>
+                    <tr><td><code>image</code></td><td>boolean</td><td><code>true</code></td><td>An image block at the top of each card</td></tr>
+                    <tr><td><code>animate</code></td><td>boolean</td><td><code>true</code></td><td>false = still tint, no sweep</td></tr>
+                    <tr><td><code>template</code></td><td>string | Function</td><td><code>null</code></td><td>Markup for <code>'custom'</code>, or <code>(options) =&gt; html</code></td></tr>
+                    <tr><td><code>label</code></td><td>string</td><td><code>'Loading...'</code></td><td>The screen-reader status</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Methods</h3>
+            <table class="table mb-4">
+                <thead><tr><th>Call</th><th>Returns</th><th>Does</th></tr></thead>
+                <tbody>
+                    <tr><td><code>E.skeleton(target, options)</code></td><td>handle</td><td>Fill the container; a second call starts again from the original content</td></tr>
+                    <tr><td><code>handle.remove()</code></td><td>element</td><td>Take the skeleton away and restore the previous children</td></tr>
+                    <tr><td><code>handle.replace(content)</code></td><td>element</td><td>Take it away and show <code>content</code> instead - an HTML string or a node</td></tr>
+                    <tr><td><code>handle.active</code></td><td>boolean</td><td>Whether it is still showing</td></tr>
+                    <tr><td><code>E.skeleton.while(target, promise, options)</code></td><td>Promise</td><td>Show it until the promise (or a function returning one) settles; resolves or rejects with it</td></tr>
+                    <tr><td><code>E.skeleton.get(target)</code></td><td>handle | null</td><td>The live handle on a container</td></tr>
+                    <tr><td><code>E.skeleton.remove(target)</code></td><td>element | null</td><td>Remove by container</td></tr>
+                    <tr><td><code>E.skeleton.scan(root)</code></td><td>handle[]</td><td>Fill every <code>[data-skeleton]</code> under <code>root</code></td></tr>
+                    <tr><td><code>E.skeleton.markup(options)</code></td><td>string</td><td>The placeholder HTML alone</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    Domma.icons.scan();
+
+    // A stand-in for H.get(): resolves with the data after a pause, or rejects.
+    const pretendLoad = (data, fail = false, ms = 1400) => new Promise((resolve, reject) => {
+        setTimeout(() => (fail ? reject(new Error('The server did not answer (on purpose)')) : resolve(data)), ms);
+    });
+
+    // ---- Cards -------------------------------------------------------------
+    const POSTS = [
+        {title: 'Planting for spring', text: 'What to sow now for colour by April, and what can wait until the frosts have passed.'},
+        {title: 'A kitchen garden in pots', text: 'Herbs, salad and tomatoes on a balcony two metres wide.'},
+        {title: 'Composting without a garden', text: 'Bokashi bins, wormeries and what the council will collect.'}
+    ];
+    const renderPost = (p) =>
+        '<div class="card"><div class="sx-sk-cover"></div><div class="card-body">' +
+        '<h3 class="card-title">' + _.escape(p.title) + '</h3><p class="m-0">' + _.escape(p.text) + '</p></div></div>';
+
+    const loadCards = async () => {
+        $('#demo-cards-status').text('Loading...');
+        $('#demo-cards-load').prop('disabled', true);
+        const posts = await E.skeleton.while('#demo-cards', pretendLoad(POSTS), {type: 'card', count: 3});
+        $('#demo-cards').html(posts.map(renderPost).join(''));
+        $('#demo-cards-status').text('Loaded ' + posts.length + ' posts.');
+        $('#demo-cards-load').prop('disabled', false);
+    };
+    $('#demo-cards-load').on('click', loadCards);
+    loadCards();
+
+    // ---- List, with a failure path ----------------------------------------
+    const PEOPLE = [
+        {name: 'Amara Okafor', role: 'Head of design'},
+        {name: 'Tom Hughes', role: 'Developer'},
+        {name: 'Priya Shah', role: 'Product manager'},
+        {name: 'Callum Reid', role: 'Support lead'}
+    ];
+    const initials = (name) => name.split(' ').map((w) => w[0]).join('');
+    const renderPeople = (people) => '<ul class="list-group">' + people.map((p) =>
+        '<li class="list-group-item"><span class="list-group-item-icon"><span class="sx-sk-avatar">' +
+        _.escape(initials(p.name)) + '</span></span><span class="list-group-item-content">' +
+        '<span class="list-group-item-heading">' + _.escape(p.name) + '</span>' +
+        '<span class="list-group-item-text">' + _.escape(p.role) + '</span></span></li>').join('') + '</ul>';
+
+    const loadList = async (fail) => {
+        $('#demo-list-load, #demo-list-fail').prop('disabled', true);
+        try {
+            const people = await E.skeleton.while('#demo-list', pretendLoad(PEOPLE, fail), {type: 'list', count: 4});
+            $('#demo-list').html(renderPeople(people));
+        } catch (err) {
+            E.toast(err.message, {type: 'danger'});
+        }
+        $('#demo-list-load, #demo-list-fail').prop('disabled', false);
+    };
+    $('#demo-list-load').on('click', () => loadList(false));
+    $('#demo-list-fail').on('click', () => loadList(true));
+
+    // ---- DataTable ---------------------------------------------------------
+    const TEAM = [
+        {id: 1, name: 'Amara Okafor', role: 'Design', city: 'Manchester'},
+        {id: 2, name: 'Tom Hughes', role: 'Engineering', city: 'Cardiff'},
+        {id: 3, name: 'Priya Shah', role: 'Product', city: 'Leeds'},
+        {id: 4, name: 'Callum Reid', role: 'Support', city: 'Glasgow'},
+        {id: 5, name: 'Nia Evans', role: 'Engineering', city: 'Bristol'}
+    ];
+    const table = T.create('#demo-table', {
+        columns: ['name', 'role', 'city'].map((key) => ({key, title: _.capitalize(key)})),
+        loadingSkeleton: true,
+        pageSize: 5,
+        searchable: false
+    });
+    pretendLoad(TEAM).then((rows) => table.setData(rows));
+    $('#demo-table-reload').on('click', async () => {
+        table.setLoading(true);
+        table.setData(await pretendLoad(_.shuffle(TEAM)));
+    });
+
+    // ---- Every type --------------------------------------------------------
+    const TYPE_OPTIONS = {
+        text: {type: 'text', lines: 4},
+        card: {type: 'card', lines: 2},
+        list: {type: 'list', count: 3},
+        table: {type: 'table', rows: 3, columns: 4},
+        custom: {type: 'custom', template: '<div class="sx-sk-row"><div class="skeleton skeleton-circle skeleton-xl"></div>' +
+            '<div class="skeleton-lines"><div class="skeleton skeleton-heading"></div>' +
+            '<div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text"></div></div></div>'}
+    };
+    let currentType = 'text';
+    const showType = () => {
+        const animate = $('#demo-types-animate').prop('checked');
+        const opts = {...TYPE_OPTIONS[currentType], animate};
+        E.skeleton('#demo-types', opts);
+        const shown = _.omit(opts, ['template', 'animate']);
+        if (!animate) shown.animate = false;
+        const args = JSON.stringify(shown).replace(/"(\w+)":/g, '$1: ').replace(/"/g, "'").replace(/,/g, ', ');
+        $('#demo-types-code').text("E.skeleton('#demo-types', " + (currentType === 'custom' ? "{type: 'custom', template: '...'}" : args) + ');');
+    };
+    $('[data-type]').on('click', (e) => {
+        currentType = e.currentTarget.getAttribute('data-type');
+        $('[data-type]').removeClass('active');
+        $(e.currentTarget).addClass('active');
+        showType();
+    });
+    $('#demo-types-animate').on('change', showType);
+    showType();
+
+    // ---- Declarative ------------------------------------------------------
+    E.skeleton.scan();
+    $('#demo-declared-done').on('click', () => {
+        const sk = E.skeleton.get('#demo-declared');
+        if (sk) sk.replace(renderPeople(PEOPLE.slice(0, 2)));
+    });
+    $('#demo-declared-again').on('click', () => {
+        $('#demo-declared').empty();
+        E.skeleton.scan();
+    });
+</script>
+</body>
+</html>

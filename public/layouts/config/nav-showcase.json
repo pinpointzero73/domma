@@ -149,6 +149,12 @@
           "section": "loader"
         },
         {
+          "text": "Skeleton",
+          "url": "showcase/elements/skeleton/index.html",
+          "section": "skeleton",
+          "badge": "New"
+        },
+        {
           "text": "Timer",
           "url": "showcase/elements/timer/index.html",
           "section": "timer"
