@@ -476,6 +476,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://dommajs.org/showcase/elements/popover/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://dommajs.org/showcase/elements/chooser/</loc>
     <lastmod>2026-05-08</lastmod>
     <priority>0.6</priority>

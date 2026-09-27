@@ -9158,7 +9158,7 @@ td > .skeleton-text {
     border: 0;
     border-radius: var(--dm-radius-sm);
     background: transparent;
-    color: var(--dm-text-muted);
+    color: var(--dm-text);
     cursor: pointer;
 }
 

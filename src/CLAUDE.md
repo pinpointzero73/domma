@@ -345,6 +345,22 @@ Accessed via `Domma.elements`:
   `close()`, `toggle()`, `openAll()`, `closeAll()`
 - **Tooltip**: `elements.tooltip(selector, { content, position, trigger, delay, animation })` → `show()`, `hide()`,
   `toggle()`, `setContent()`
+- **Popover** (`popover.js`): `elements.popover(trigger, { content, title, html, trigger, placement, flip, offset, arrow, dismissible, closeOnOutside, closeOnEscape, group, width, maxWidth, className, id, role, ariaLabel, autoFocus, trapFocus, delay, animation, animationDuration, container, zIndex, onShow, onShown, onHide, onHidden })` →
+  `show({focus})`, `hide({returnFocus})`, `toggle()`, `isOpen()`, `setContent()`, `setTitle()`, `update()`, `setOptions()`, `destroy()`, `panel`, `trigger`
+    - Statics: `E.popover.scan(root)` (`data-popover`, `data-popover-title`, `-placement`, `-trigger`, `-dismissible`,
+      `-content="#template"`...; idempotent, not automatic), `E.popover.closeAll(group)`, `E.popover.getInstance(el)`, `E.popover.open()`
+    - Content: string = text; `html: true` = `sanitizeModule.sanitise()`; Node / collection appended; function called on every open
+    - Panel portalled to `document.body`, `position: fixed`, z-index 10045; placement flips (opposite, then perpendicular),
+      shifts inside an 8px viewport margin, arrow tracks the trigger; rAF-throttled update on scroll/resize + ResizeObserver;
+      `.is-detached` while the trigger is out of view. `data-side` / `data-placement` record the result
+    - Shared document listeners (pointerdown / keydown / focusin, capture) bound on first open, removed with the last.
+      Esc closes the top of the open stack only and stops propagation (a surrounding modal stays open)
+    - Click/manual = `role="dialog"`: trigger `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls` (while open);
+      focus moves to the first control or the panel; Tab past the end goes to the next tabbable after the trigger and closes;
+      Shift+Tab from the first goes to the trigger. Hover/focus only = `role="tooltip"` via `aria-describedby`; hover also opens on focus
+    - A popover whose trigger is inside another's panel is its child (`_parent`): exempt from the group rule and outside-click,
+      closed with its parent. Nothing wraps the trigger (unlike Tooltip); `destroy()` restores the saved attributes.
+      See [docs/Popover.md](../docs/Popover.md)
 - **Carousel**:
   `elements.carousel(selector, { autoplay, interval, pauseOnHover, loop, animation, animationDuration, animationEasing, showArrows, showIndicators, onChange })` →
   `next()`, `prev()`, `goTo()`, `play()`, `pause()`, `getIndex()`, `getSlide()`
