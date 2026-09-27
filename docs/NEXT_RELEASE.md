@@ -60,6 +60,14 @@ number stepper and a character counter, joined to the field in the same style as
 *   `destroy()` removes every extra and listener; Forma binds the extras after render and tears them
     down on a re-render or the new `form.destroy()`.
 
+🔗 **Readable links on 25 themes**
+
+*   Where a theme's primary colour is too pale to read as text - lemon-light was 1.63:1, silver-light
+    2.03:1, sunset-light 2.07:1 - the theme now sets `--dm-link` and `--dm-link-hover`: the primary
+    mixed with the theme's text colour, by the least amount that reads at 5:1 or better on the page,
+    surfaces and cards. Themes whose primary already reads are unchanged. The mixes use
+    `var(--dm-primary)` and `var(--dm-text)`, so a custom theme built on one follows its own colours.
+
 <!-- website -->
 
 <p>Four interactive extras for input groups: a show / hide password button, a clear button, a number
@@ -67,4 +75,5 @@ stepper that honours min, max and step, and a live character counter - joined to
 addon, keyboard reachable and screen-reader friendly.</p>
 <p>The same keys work in a blueprint's <code>formConfig</code> and in <code>E.inputGroup()</code>:
 <code>reveal</code>, <code>clear</code>, <code>stepper</code> and <code>counter</code>.</p>
-
+<p>Links now read at 5:1 or better on every theme: the 25 whose main colour was too pale set a
+readable link colour.</p>
