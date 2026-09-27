@@ -14,7 +14,7 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# Skeleton Loaders
+# Skeletons and Access
 
 **Skeleton loaders** - shimmering placeholders shaped like the content on its way, so a page keeps its
 layout while data loads. Plain CSS shapes for hand-written HTML, `E.skeleton()` to write them into a
@@ -52,7 +52,17 @@ container, and `E.skeleton.while()` to show them until a promise settles.
 *   `T.create(sel, {columns, loadingSkeleton: true})` shows skeleton rows under the real header until the
     first `setData()`, and `table.setLoading(true)` brings them back for a reload.
 
+♿ **Accessibility and contrast sweep**
+
+*   Modal, Tabs, Accordion, Toast and Table now add their own ARIA roles and states and keyboard
+    navigation, and the CSS styles the ARIA disabled, selected, invalid and current states.
+
+*   A 38-theme contrast sweep (`npm run sweep:themes`) found and fixed 31 contrast failures: the
+    admin themes' success fill, the sharp finish's muted text and the dark finishes' focus rings,
+    Charcoal Dark's focus border, and text on cyan via new intent text tokens.
+
 <!-- website -->
 
 <p><strong>Skeleton loaders.</strong> Shimmering, theme-aware placeholders shaped like the content on its way: CSS shapes for plain HTML, <code>E.skeleton()</code> for text, card, list and table layouts, <code>E.skeleton.while()</code> to show one until a promise settles, and <code>loadingSkeleton</code> rows for the DataTable.</p>
-
+<p>Plus an accessibility sweep: Modal, Tabs, Accordion, Toast and Table add their own ARIA roles and
+keyboard support, and 31 theme contrast failures are fixed.</p>
