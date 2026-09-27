@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.46.0",
+      "title": "Addons That Join",
+      "description": "<p>Input addons now join the field they belong to: <code>formConfig.prefix</code> and <code>suffix</code> draw as one Bootstrap-style group with a shared border, sized to what they hold, in the theme's own colours - and they work on selects and textareas too.</p>\n<p>New <code>E.inputGroup(selector, {prefix, suffix})</code> does the same for an input already on the page, with <code>update()</code> and <code>destroy()</code>.</p>",
+      "date": "2026-09-27"
+    },
+    {
       "year": "v0.45.0",
       "title": "Lists That Make Room",
       "description": "<p><strong><code>E.sortable(selector, options)</code> is drag-to-reorder for the children of one container</strong>, by mouse, touch and keyboard. In live mode the other items slide out of the way while you drag; with <code>nest: true</code> nothing moves until the drop, a marker shows whether the item lands before, after or into another, and <code>onDrop</code> hands you the move to update your data and re-render - which the component then animates, matching every item by its key. That is what makes it suit trees, and the Domma CMS menu editor now uses it.</p><p><strong>An order that sticks.</strong> <code>persist</code> remembers the order through Domma storage and puts it back on the next visit. Alt+Arrow moves the focused item, Esc cancels a drag, a handle drags at once on touch while a whole item needs a short press-and-hold so the list still scrolls, and reduced motion skips every glide.</p>",
@@ -379,5 +385,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.45.0"
+  "latestVersion": "v0.46.0"
 }
