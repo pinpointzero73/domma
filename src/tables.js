@@ -72,6 +72,11 @@ class TableInstance {
             // Column features
             resizable: true,
 
+            // Loading: skeleton rows until the first setData() / addRow().
+            // true = min(pageSize, 5) rows, or a number of rows.
+            loadingSkeleton: false,
+            loadingLabel: 'Loading...',
+
             // UI
             striped: true,
             hover: true,
@@ -139,6 +144,7 @@ class TableInstance {
         this._eventListeners = new Map();
         this._columnDropdownOpen = false;
         this._searchIsRegex = false;
+        this._loading = !!this.options.loadingSkeleton;
 
         // Normalize columns
         this._columns = this.options.columns.map(col => ({
@@ -260,6 +266,7 @@ class TableInstance {
     // ============================================
 
     setData(data) {
+        this._loading = false;
         this._originalData = [...data];
         this._data = [...data];
         this._applyFiltersAndSort();
@@ -272,6 +279,20 @@ class TableInstance {
         return [...this._getPageData()];
     }
 
+    /**
+     * Show (or hide) skeleton rows in place of the body - for a reload. The
+     * first setData() or addRow() turns it off again.
+     */
+    setLoading(on = true) {
+        this._loading = !!on;
+        this.render();
+        return this;
+    }
+
+    isLoading() {
+        return this._loading;
+    }
+
     getFilteredData() {
         return [...this._filteredData];
     }
@@ -281,6 +302,7 @@ class TableInstance {
     }
 
     addRow(rowData) {
+        this._loading = false;
         this._originalData.push(rowData);
         this._data.push(rowData);
         this._applyFiltersAndSort();
@@ -1378,7 +1400,41 @@ class TableInstance {
         tbody.className = classes.body;
 
         const key = opts.rowKey;
-        pageData.forEach((row, rowIndex) => {
+
+        if (this._loading) {
+            const configured = parseInt(opts.loadingSkeleton, 10);
+            const count = configured > 0 ? configured : Math.min(this._pageSize || 5, 5);
+            const cellCount = visibleColumns.length +
+                (opts.selectable && opts.selectionMode === 'multiple' ? 1 : 0);
+            for (let i = 0; i < count; i++) {
+                const tr = document.createElement('tr');
+                tr.className = `${classes.row} domma-table-skeleton-row`;
+                tr.setAttribute('aria-hidden', 'true');
+                for (let c = 0; c < cellCount; c++) {
+                    const td = document.createElement('td');
+                    td.className = classes.cell;
+                    td.style.cssText = 'padding: 12px; border: 1px solid var(--dm-border, #ddd);';
+                    const bar = document.createElement('span');
+                    bar.className = 'skeleton skeleton-text';
+                    // A little variety so it reads as text, not a grid
+                    bar.style.width = `${[80, 60, 70, 50][(i + c) % 4]}%`;
+                    td.appendChild(bar);
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+            table.setAttribute('aria-busy', 'true');
+            const status = document.createElement('span');
+            status.className = 'skeleton-status';
+            status.setAttribute('role', 'status');
+            status.setAttribute('aria-live', 'polite');
+            status.textContent = opts.loadingLabel;
+            wrapper.appendChild(status);
+        } else if (opts.loadingSkeleton) {
+            table.setAttribute('aria-busy', 'false');
+        }
+
+        (this._loading ? [] : pageData).forEach((row, rowIndex) => {
             const tr = document.createElement('tr');
             tr.className = classes.row;
 
@@ -1480,8 +1536,8 @@ class TableInstance {
         table.appendChild(tbody);
         wrapper.appendChild(table);
 
-        // Pagination
-        if (opts.pagination) {
+        // Pagination (not while loading - "0 entries" would be untrue)
+        if (opts.pagination && !this._loading) {
             const paginationWrapper = document.createElement('div');
             paginationWrapper.className = classes.pagination;
             paginationWrapper.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 10px 0;';

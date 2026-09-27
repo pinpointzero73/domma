@@ -10,6 +10,7 @@ import TreeView from './treeview.js';
 import ContextMenu from './context-menu.js';
 import Sortable from './sortable.js';
 import InputGroup from './input-group.js';
+import skeletonFactory from './skeleton.js';
 import sanitizeModule from './sanitize.js';
 
 // Web Component wrappers for Phase 1 & 2 components
@@ -11629,6 +11630,16 @@ export const elements = {
     },
 
     /**
+     * Shimmering placeholders shaped like the content on its way (text, card,
+     * list, table or custom). Marks the container aria-busy and returns
+     * {remove(), replace(content)}; remove() restores the original children.
+     * E.skeleton.while(target, promise, opts) shows one until a promise settles.
+     */
+    skeleton(target, options = {}) {
+        return skeletonFactory(target, options);
+    },
+
+    /**
      * Join an icon or short text to the start and/or end of an existing input
      * (Bootstrap-style input group) - the same markup Forma writes for
      * formConfig.prefix / formConfig.suffix.
@@ -11790,6 +11801,13 @@ export const elements = {
 elements.contextMenu.closeAll = ContextMenu.closeAll;
 elements.contextMenu.active = ContextMenu.active;
 elements.contextMenu.registry = ContextMenu.registry;
+
+// Skeleton helpers: E.skeleton.while(target, promise, opts), .get, .remove, .scan, .markup
+elements.skeleton.while = skeletonFactory.while;
+elements.skeleton.get = skeletonFactory.get;
+elements.skeleton.remove = skeletonFactory.remove;
+elements.skeleton.scan = skeletonFactory.scan;
+elements.skeleton.markup = skeletonFactory.markup;
 
 // Export component classes for direct access to static methods
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};
