@@ -2654,8 +2654,62 @@ field still needs a label. The markup is a `.input-group-icon` wrapper (with `.h
 `.has-addon-right`) around `.input-group-addon` spans and the control. The addon colours come from the
 theme tokens, so it follows light and dark themes without extra rules.
 
-See the [Input Addons showcase](../public/showcase/forms/input-addons.html) for every variant and a
-live `E.inputGroup` demo.
+### Interactive extras
+
+Four extras are real controls joined to the field in the same style: buttons you can click and tab to,
+each with an accessible name. The keys are the same in `formConfig` and in `E.inputGroup()`'s options,
+and they sit inside any prefix or suffix, so an icon prefix and a clear button share one group.
+
+| Key | Adds | Applies to |
+|-----|------|------------|
+| `reveal: true` | An eye button that switches a password between hidden and shown (`aria-pressed`, eye / eye-off icon) | Password inputs |
+| `clear: true` | An &times; shown only while the field has a value. It empties the field, fires `input` and `change` (so Forma's model and your own listeners follow) and returns focus to the field | Text-like inputs and textareas |
+| `stepper: true` | &minus; and + buttons either side of the field, stepping by `step` and stopping at `min` / `max` (the button at a limit is disabled). Each step fires `input` and `change`; holding a button repeats | Number inputs |
+| `counter: true \| n` | "12 / 200" under the field, updated as you type, `aria-live="polite"` and linked with `aria-describedby`. `true` takes the limit from `maxLength` (in Forma, the field's `maxLength`); a number sets it and is a soft limit. Amber from 90% of the limit, red past it | Text-like inputs and textareas |
+
+```javascript
+F.create({
+    password: {type: 'password', label: 'Password', formConfig: {prefix: {icon: 'lock'}, reveal: true}},
+    search:   {type: 'string',   label: 'Search',   formConfig: {prefix: {icon: 'search'}, clear: true}},
+    guests:   {type: 'integer',  label: 'Guests', min: 1, max: 8, formConfig: {stepper: true}},
+    rate:     {type: 'number',   label: 'Rate', min: 0, step: 12.5, formConfig: {prefix: '£', stepper: true}},
+    bio:      {type: 'textarea', label: 'Bio', maxLength: 200, formConfig: {counter: true}}
+}).renderTo('#form');
+
+// The same on inputs already on the page
+E.inputGroup('#pw', {reveal: true});
+E.inputGroup('#q', {prefix: {icon: 'filter'}, clear: true});
+const qty = E.inputGroup('#qty', {stepper: true, suffix: 'boxes'});
+const note = E.inputGroup('#note', {counter: 120, clear: true});
+```
+
+An extra the control cannot take is skipped (`reveal` needs a password, `stepper` a number), so one
+options object can be shared. A field's `step` (or `formConfig.step`) becomes the input's `step`
+attribute. The buttons are named "Show password", "Clear", "Decrease" and "Increase"; pass
+`labels: {reveal, clear, decrease, increase}` (in `formConfig` or the options) to rename them.
+
+The instance has three more members for the extras:
+
+```javascript
+qty.step(1);                  // one step up (-1 down), as the + button does
+note.update({clear: false});  // update() adds and removes extras as well as addons
+$('#note').val('...');
+note.refresh();               // after setting a value from code without an input event
+qty.extras;                   // {decrease, increase} - the extras' elements (reveal, clear, counter too)
+```
+
+The extras follow the field's `input` and `change` events and a form reset; `refresh()` covers a value
+set from code. `destroy()` removes every extra and its listeners, puts a revealed password back to
+`type="password"` and restores `aria-describedby`. Forma binds the extras after it renders (the control
+carries a `data-input-extras` recipe) and tears them down on a re-render or `form.destroy()`.
+
+The buttons are `.input-group-btn` (with `.input-group-reveal`, `.input-group-clear`,
+`.input-group-decrease`, `.input-group-increase`) and the counter is `.form-counter`, with
+`.is-warning` and `.is-over` for its states. A hidden clear button leaves the field's corner rounded,
+and a number field with a stepper hides the browser's own spinner.
+
+See the [Input Addons showcase](../public/showcase/forms/input-addons.html) for every variant, a
+live `E.inputGroup` demo and the extras.
 
 ## DatePicker
 

@@ -6,6 +6,7 @@
 import {utils} from './utils.js';
 import {models} from './models.js';
 import {elements} from './elements.js';
+import InputGroup from './input-group.js';
 
 /**
  * Utility function to extract data from form element
@@ -345,9 +346,15 @@ class Forma {
       ...(placeholder && {placeholder}),
       ...(fieldDef.min !== undefined && {min: fieldDef.min}),
       ...(fieldDef.max !== undefined && {max: fieldDef.max}),
+      ...((fieldDef.step ?? formConfig.step) !== undefined && {step: fieldDef.step ?? formConfig.step}),
       ...(fieldDef.pattern && {pattern: fieldDef.pattern}),
       ...(formConfig.autocomplete && {autocomplete: formConfig.autocomplete})
     };
+
+    // Interactive extras (reveal / clear / stepper / counter) are joined
+    // post-render by _initInputExtras(); the control only carries the recipe.
+    const extras = this._inputExtras(type, fieldDef);
+    if (extras) attrs['data-input-extras'] = this.utils.escapeHtml(JSON.stringify(extras));
 
     const attrString = Object.entries(attrs)
       .map(([key, val]) => val === true ? key : `${key}="${val}"`)
@@ -403,6 +410,36 @@ class Forma {
         const inputHtml = `<input type="${inputType}" ${attrString} value="${escapedValue}">`;
         return this._wrapAddons(inputHtml, formConfig);
     }
+  }
+
+  /**
+   * The interactive extras a field asks for through formConfig, reduced to
+   * those its type can take, or null:
+   *   reveal: true         password - show / hide toggle
+   *   clear: true          single-line text-like inputs and textareas
+   *   stepper: true        number / integer / float - the - and + buttons
+   *   counter: true | n    text-like inputs and textareas; true reads the
+   *                        field's maxLength
+   *
+   * @param {string} type
+   * @param {Object} fieldDef
+   * @return {Object|null}
+   */
+  _inputExtras(type, fieldDef) {
+    const fc = fieldDef.formConfig || {};
+    if (/^(select|multiselect|radio|checkbox-group|chooser|checkbox|boolean|file|signature|hidden)$/.test(type)) return null;
+    const inputType = type === 'textarea' ? 'textarea' : (Forma.inputTypes[type] || 'text');
+    const out = {};
+    if (fc.reveal && inputType === 'password') out.reveal = true;
+    if (fc.clear && /^(text|email|url|tel|password|number|date|datetime-local|time|textarea)$/.test(inputType)) out.clear = true;
+    if (fc.stepper && inputType === 'number') out.stepper = true;
+    if (fc.counter && /^(text|email|url|tel|password|textarea)$/.test(inputType)) {
+      const limit = typeof fc.counter === 'number' ? fc.counter : fieldDef.maxLength;
+      out.counter = typeof limit === 'number' && limit > 0 ? limit : true;
+    }
+    if (fc.labels && typeof fc.labels === 'object') out.labels = fc.labels;
+    const keys = Object.keys(out).filter((k) => k !== 'labels');
+    return keys.length ? out : null;
   }
 
   /**
@@ -633,6 +670,40 @@ class Forma {
 
     // Initialise Chooser fields - same lifecycle as signature
     this._initChooserFields(formElement);
+
+    // Join the interactive input extras (reveal / clear / stepper / counter)
+    this._initInputExtras(formElement);
+  }
+
+  /**
+   * Bind E.inputGroup to every control that carries `data-input-extras`,
+   * reusing the addon group _wrapAddons may already have written. Instances
+   * live on `this._inputGroups` keyed by field name; a re-render or
+   * destroy() tears the previous ones down.
+   *
+   * @param {HTMLElement} formElement
+   * @private
+   */
+  _initInputExtras(formElement) {
+    this._destroyInputExtras();
+    formElement.querySelectorAll('[data-input-extras]').forEach((control) => {
+      let cfg;
+      try { cfg = JSON.parse(control.getAttribute('data-input-extras')); } catch (e) { return; }
+      const group = new InputGroup(control, cfg);
+      if (group.input) this._inputGroups[control.name || control.id] = group;
+    });
+  }
+
+  _destroyInputExtras() {
+    Object.values(this._inputGroups || {}).forEach((g) => g.destroy());
+    this._inputGroups = {};
+  }
+
+  /**
+   * Remove the listeners and controls the form's input extras added.
+   */
+  destroy() {
+    this._destroyInputExtras();
   }
 
   /**

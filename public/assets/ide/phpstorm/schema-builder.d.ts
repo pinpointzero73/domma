@@ -58,6 +58,40 @@ export interface FormConfig {
     prefix?: FormAddon;
     /** Addon joined to the end of the control - same values as `prefix` */
     suffix?: FormAddon;
+    /** Password fields: an eye button that shows / hides the value (aria-pressed) */
+    reveal?: boolean;
+    /**
+     * Text-like inputs and textareas: a clear button, shown only while there
+     * is a value; clearing fires input + change and refocuses the field
+     */
+    clear?: boolean;
+    /**
+     * Number fields: - and + buttons honouring min / max / step, disabled at
+     * the limits, input + change per step, hold to repeat
+     */
+    stepper?: boolean;
+    /**
+     * Text-like inputs and textareas: a live "12 / 200" counter under the
+     * field (aria-live polite). `true` uses the field's maxLength; a number
+     * sets the limit (soft - past it the counter turns red)
+     */
+    counter?: boolean | number;
+    /** Rename the extras' buttons */
+    labels?: InputExtrasLabels;
+    /** The number input's step attribute (a field-level `step` wins) */
+    step?: number;
+}
+
+/** Accessible names for the input extras' buttons */
+export interface InputExtrasLabels {
+    /** Default 'Show password' */
+    reveal?: string;
+    /** Default 'Clear' */
+    clear?: string;
+    /** Default 'Decrease' */
+    decrease?: string;
+    /** Default 'Increase' */
+    increase?: string;
 }
 
 /** A formConfig.prefix / formConfig.suffix addon */

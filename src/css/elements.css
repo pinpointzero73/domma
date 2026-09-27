@@ -1124,6 +1124,118 @@ textarea:not([class])::placeholder {
     border-color: var(--dm-danger);
 }
 
+/* Input extras (formConfig reveal / clear / stepper, E.inputGroup): real
+ * buttons joined to the input like an addon, but clickable and in the tab
+ * order. Buttons after the input share its right border, buttons before it
+ * its left; only the outermost piece of the group keeps a rounded corner. */
+.input-group-icon > .input-group-btn {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    margin: 0;
+    padding: 0 var(--dm-space-2);
+    font: inherit;
+    line-height: 1;
+    color: var(--dm-text);
+    background-color: color-mix(in srgb, var(--dm-text) 6%, var(--dm-surface, var(--dm-white)));
+    border: 1px solid var(--dm-border, var(--dm-gray-300));
+    border-radius: 0;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+    transition: border-color var(--dm-transition-fast), color var(--dm-transition-fast), background-color var(--dm-transition-fast);
+}
+
+.input-group-icon > .input-group-btn[hidden] {
+    display: none;
+}
+
+.input-group-icon > .input-group-btn svg,
+.input-group-icon > .input-group-btn [data-icon] {
+    width: 1.1em;
+    height: 1.1em;
+    pointer-events: none;
+}
+
+.input-group-icon > .input-group-btn-left {
+    border-right: 0;
+}
+
+.input-group-icon > .input-group-btn-right {
+    border-left: 0;
+}
+
+.input-group-icon > .input-group-btn:first-child {
+    border-radius: var(--dm-radius-md) 0 0 var(--dm-radius-md);
+}
+
+.input-group-icon > .input-group-btn:last-child {
+    border-radius: 0 var(--dm-radius-md) var(--dm-radius-md) 0;
+}
+
+/* Hover and "on" tint the fill with the primary colour and keep the full text
+ * colour: --dm-primary as text is a mid-tone on the lemon and silver families. */
+.input-group-icon > .input-group-btn:hover:not(:disabled),
+.input-group-icon > .input-group-btn[aria-pressed="true"] {
+    background-color: color-mix(in srgb, var(--dm-primary) 14%, var(--dm-surface, var(--dm-white)));
+}
+
+.input-group-icon > .input-group-btn:focus-visible {
+    outline: 2px solid var(--dm-primary);
+    outline-offset: -3px;
+}
+
+.input-group-icon > .input-group-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.input-group-icon:focus-within > .input-group-btn {
+    border-color: var(--dm-primary);
+}
+
+.input-group-icon:has(> .error) > .input-group-btn,
+.has-error .input-group-icon > .input-group-btn {
+    border-color: var(--dm-danger);
+}
+
+/* A number input with a stepper hides the browser's own spinner. */
+.input-group-icon > .input-group-decrease ~ input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+    text-align: center;
+}
+
+.input-group-icon > .input-group-decrease ~ input[type="number"]::-webkit-inner-spin-button,
+.input-group-icon > .input-group-decrease ~ input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Character counter under the control: "12 / 200", amber from 90% of the
+ * limit, red past it. The two state colours are mixed toward the text colour,
+ * as .text-warning / .text-danger are (further, for AA on every theme). */
+.form-counter {
+    margin-top: var(--dm-space-1);
+    font-size: var(--dm-font-size-sm);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--dm-text-secondary);
+    transition: color var(--dm-transition-fast);
+}
+
+.form-counter.is-warning {
+    color: color-mix(in oklab, var(--dm-warning), var(--dm-text) 60%);
+    font-weight: 600;
+}
+
+.form-counter.is-over {
+    color: color-mix(in oklab, var(--dm-danger), var(--dm-text) 50%);
+    font-weight: 600;
+}
+
 /* Prepend/Append style (addon outside input) */
 .input-group-prepend,
 .input-group-append {
