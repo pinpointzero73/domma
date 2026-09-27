@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.49.0",
+      "title": "Popovers",
+      "description": "<p><strong>Popovers.</strong> <code>E.popover()</code> anchors a panel with a title, text or a small form to a trigger - opened by click, hover or focus, flipped and shifted to stay on screen, with focus moving in and back out for keyboard users. <code>data-popover</code> markup and <code>E.popover.scan()</code> do the same without script.</p>",
+      "date": "2026-09-27"
+    },
+    {
       "year": "v0.48.0",
       "title": "Skeletons and Access",
       "description": "<p><strong>Skeleton loaders.</strong> Shimmering, theme-aware placeholders shaped like the content on its way: CSS shapes for plain HTML, <code>E.skeleton()</code> for text, card, list and table layouts, <code>E.skeleton.while()</code> to show one until a promise settles, and <code>loadingSkeleton</code> rows for the DataTable.</p>\n<p>Plus an accessibility sweep: Modal, Tabs, Accordion, Toast and Table add their own ARIA roles and\nkeyboard support, and 31 theme contrast failures are fixed.</p>",
@@ -403,5 +409,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.48.0"
+  "latestVersion": "v0.49.0"
 }
