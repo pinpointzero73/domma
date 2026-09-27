@@ -1164,6 +1164,35 @@ export interface InputGroupOptions {
     prefix?: InputGroupSlot;
     /** Addon joined to the end of the input */
     suffix?: InputGroupSlot;
+    /** Password inputs: show / hide toggle button (aria-pressed, eye / eye-off) */
+    reveal?: boolean;
+    /**
+     * Text-like inputs and textareas: clear button shown while there is a
+     * value; clearing fires input + change and refocuses the input
+     */
+    clear?: boolean;
+    /**
+     * Number inputs: - and + buttons honouring min / max / step, disabled at
+     * the limits, input + change per step, hold to repeat
+     */
+    stepper?: boolean;
+    /**
+     * Text-like inputs and textareas: live "12 / 200" counter after the group
+     * (aria-live polite, added to aria-describedby). `true` reads maxLength;
+     * a number is the limit. `.is-warning` from 90%, `.is-over` past it
+     */
+    counter?: boolean | number;
+    /** Accessible names for the buttons */
+    labels?: {reveal?: string; clear?: string; decrease?: string; increase?: string};
+}
+
+/** The extras' elements, present only for the extras in use */
+export interface InputGroupExtras {
+    reveal?: HTMLButtonElement;
+    clear?: HTMLButtonElement;
+    decrease?: HTMLButtonElement;
+    increase?: HTMLButtonElement;
+    counter?: HTMLElement;
 }
 
 export interface InputGroupInstance extends ComponentInstance {
@@ -1173,13 +1202,28 @@ export interface InputGroupInstance extends ComponentInstance {
     /** The `.input-group-icon` wrapper; null after destroy() */
     readonly wrapper: HTMLElement | null;
 
-    /**
-     * Change either addon. `null` removes one; a slot left out is kept.
-     * Returns the instance.
-     */
-    update(slots?: {prefix?: InputGroupSlot; suffix?: InputGroupSlot}): InputGroupInstance;
+    /** The extras' elements (reveal, clear, decrease, increase, counter) */
+    readonly extras: InputGroupExtras;
 
-    /** Remove the addons, and the wrapper too if this instance made it */
+    /**
+     * Change addons and / or extras. `null` removes an addon, `false` an
+     * extra; a key left out is kept. Returns the instance.
+     */
+    update(options?: InputGroupOptions): InputGroupInstance;
+
+    /**
+     * Re-read the input after setting its value from code without an input
+     * event: clear-button visibility, stepper limits, counter text
+     */
+    refresh(): InputGroupInstance;
+
+    /** Step a stepper input by one step: 1 up, -1 down (fires input + change) */
+    step(dir: 1 | -1): InputGroupInstance;
+
+    /**
+     * Remove the addons and extras (with their listeners), restore a revealed
+     * password and aria-describedby, and remove the wrapper if this instance made it
+     */
     destroy(): void;
 }
 
@@ -1230,7 +1274,8 @@ export interface Elements {
      * Join an icon or short text to the start and/or end of an input already
      * on the page (Bootstrap-style input group) - the same markup Forma writes
      * for `formConfig.prefix` / `formConfig.suffix`. Binding an input Forma
-     * already wrapped reuses that group.
+     * already wrapped reuses that group. `reveal`, `clear`, `stepper` and
+     * `counter` join interactive extras (the same keys as formConfig).
      */
     inputGroup(selector: string | HTMLElement, options?: InputGroupOptions): InputGroupInstance;
 

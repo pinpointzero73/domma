@@ -1365,6 +1365,12 @@ const blueprint = {
 | `disabled` | boolean | Disable the field | `false` |
 | `formConfig` | object | Additional form options | `{ span: 2, rows: 4 }` |
 | `formConfig.prefix` / `formConfig.suffix` | object \| string | Icon or text joined to the start / end of an input, select or textarea (see [Input groups](./DommaDocumentation.md#input-groups)) | `{ icon: 'search' }`, `'£'`, `{ text: 'kg' }` |
+| `formConfig.reveal` | boolean | Show / hide button on a password field (see [Interactive extras](./DommaDocumentation.md#interactive-extras)) | `true` |
+| `formConfig.clear` | boolean | Clear button, shown while a text-like input or textarea has a value; fires `input` + `change` | `true` |
+| `formConfig.stepper` | boolean | &minus; / + buttons on a number field, honouring `min`, `max` and `step` | `true` |
+| `formConfig.counter` | boolean \| number | "12 / 200" under a text-like input or textarea; `true` uses the field's `maxLength` | `true`, `280` |
+| `formConfig.labels` | object | Renames the extras' buttons | `{ reveal: 'Afficher', clear: 'Effacer' }` |
+| `step` (or `formConfig.step`) | number | The number input's `step` attribute (used by `stepper`) | `0.5`, `12.5` |
 
 ### Type Validators
 

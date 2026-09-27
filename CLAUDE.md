@@ -28,6 +28,7 @@ modern UI components.
 | Right-click menus                 | `E.contextMenu(sel, options)` | Manual `contextmenu` listeners  |
 | Drag-to-reorder lists             | `E.sortable(sel, options)`    | Manual drag/drop listeners      |
 | Icon/text joined to an input      | `formConfig.prefix/suffix` or `E.inputGroup(sel, opts)` | Manual wrapper markup |
+| Show password / clear / stepper / char counter | `formConfig.reveal/clear/stepper/counter` or `E.inputGroup(sel, {reveal, clear, stepper, counter})` | Hand-rolled buttons and listeners |
 | Toast notifications               | `E.toast('Message', {type})`  | Manual notification divs        |
 | Icons                             | `<span data-icon="name">`     | Manual SVG/icon fonts           |
 | DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
@@ -564,6 +565,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - InputGroup - `inputGroup()` joins an icon or short text to the start/end of an existing input
     (Bootstrap-style, one shared border); `update()` / `destroy()`. The same markup Forma writes for
     `formConfig.prefix` / `formConfig.suffix`, which work on inputs, selects and textareas
+    Interactive extras joined the same way: `reveal` (show/hide password), `clear` (clear button),
+    `stepper` (-/+ honouring min/max/step, hold to repeat), `counter` (live "12 / 200", aria-live) -
+    same keys in `formConfig` and the options; `refresh()`, `step(dir)`
   - Toast - Static `toast()` method with types
   - Dialog - Promise-based `alert()`, `confirm()`, `prompt()`
   - Loader - `loader()` with types (spinner, dots, pulse, bars)

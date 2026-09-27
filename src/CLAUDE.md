@@ -477,12 +477,22 @@ Accessed via `Domma.elements`:
     - Indicator mode (`nest: true` or `live: false`): marker shows before/after/into; `onDrop({item, target, zone, key, targetKey})` - host updates data and re-renders, the component animates it by `key`
     - `persist`: order saved via `S` under `sortable:<persist>` (live mode); Alt+Arrow keyboard moves; Esc cancels
     - Events: `sortable:start|move|sort|drop|cancel|end` on the container. See [docs/Sortable.md](../docs/Sortable.md)
-- **InputGroup** (`input-group.js`): `elements.inputGroup(selector, { prefix, suffix })` → `update({prefix, suffix})`, `destroy()`, `input`, `wrapper`
+- **InputGroup** (`input-group.js`): `elements.inputGroup(selector, { prefix, suffix, reveal, clear, stepper, counter, labels })` → `update({...})`, `refresh()`, `step(dir)`, `destroy()`, `input`, `wrapper`, `extras`
     - Joins an icon or short text to an existing input, Bootstrap-style (one shared border, focus ring round the group)
     - A slot is `{icon}`, `{text}` or a string (shorthand for `{text}`); `null` removes one in `update()`; text is set as text
     - Writes the same `.input-group-icon` / `.input-group-addon` markup as Forma's `formConfig.prefix` / `formConfig.suffix`
       (`_wrapAddons()` in forms.js - inputs, selects and textareas; Forma also accepts `{html}`), and reuses a group Forma rendered
-    - `destroy()` removes the addons, and the wrapper only if this instance created it. See docs/DommaDocumentation.md#input-groups
+    - Without `prefix` / `suffix` in the options it leaves an existing group's addons alone (Forma's, including `{html}`)
+    - Extras (same keys as `formConfig`): `reveal` (password; toggles type, `aria-pressed`, eye/eye-off), `clear` (text-like
+      and textarea; shown only with a value, fires input + change, refocuses), `stepper` (number; -/+ with min/max/step,
+      disabled at limits, hold to repeat, input + change per step), `counter: true | n` (text-like and textarea; `.form-counter`
+      after the wrapper, aria-live polite, in `aria-describedby`; true = maxLength; `.is-warning` from 90%, `.is-over`)
+    - Extras are `.input-group-btn` buttons inside the wrapper: decrease before the input, then clear / reveal / increase after it,
+      addons outermost. `_syncEdges()` sets `has-addon-left/right` from what is visible, so a hidden clear button keeps the corner round
+    - Forma: `_inputExtras()` puts a `data-input-extras` recipe on the control in `_buildInput`; `_initInputExtras()` (from
+      `_bindEvents`, beside signature / chooser init) binds them into `form._inputGroups`; a re-render or `form.destroy()` tears down
+    - `destroy()` removes the addons and extras (listeners, timers, revealed type, aria-describedby), and the wrapper only if this
+      instance created it. See docs/DommaDocumentation.md#input-groups
 
 ### tables.js - DataTable-like functionality
 
