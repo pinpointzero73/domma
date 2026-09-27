@@ -100,8 +100,5 @@
     },
     "dependencies": {
         "@fastify/cors": "^11.2.0"
-    },
-    "optionalDependencies": {
-        "live-server": "^1.2.0"
     }
 }
