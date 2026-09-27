@@ -1,3 +1,20 @@
+### v0.46.1 - Icons For Every Field (2026-09-27)
+
+**A Forms icon set** - eighteen new icons drawn for the side of a form field, where
+`E.inputGroup` and `formConfig.prefix` / `suffix` put them: `email` (@), `name`, `username`,
+`password`, `signature`, `birthday`, `company`, `telephone`, `mobile`, `address`,
+`postcode`, `website`, `pound`, `dollar`, `euro`, `weight`, `ruler` and `quantity`.
+
+🧾 **The Forms category**
+
+*   A new **Forms** category in `I.listCategories()` and the icon showcase lists the new icons
+    together with the existing ones that suit a field - `mail`, `user`, `phone`, `smartphone`,
+    `map-pin`, `calendar`, `lock`, `globe`, `credit-card` and more - so an icon picker can offer
+    one place to look.
+
+*   Same drawing rules as the rest of the set: a 24px grid, 2px round strokes, no fill, so they
+    sit at any size and take the text colour.
+
 ### v0.46.0 - Addons That Join (2026-09-27)
 
 **Input addons now join the field they belong to.** `formConfig.prefix` and `formConfig.suffix` used

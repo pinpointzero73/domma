@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.46.1",
+      "title": "Icons For Every Field",
+      "description": "<p>A Forms icon set: eighteen new icons for the side of a form field - email, name, phone,\naddress, postcode, website, pound, dollar, euro, weight and more - plus a Forms category that\ngathers every icon suited to a field.</p>",
+      "date": "2026-09-27"
+    },
+    {
       "year": "v0.46.0",
       "title": "Addons That Join",
       "description": "<p>Input addons now join the field they belong to: <code>formConfig.prefix</code> and <code>suffix</code> draw as one Bootstrap-style group with a shared border, sized to what they hold, in the theme's own colours - and they work on selects and textareas too.</p>\n<p>New <code>E.inputGroup(selector, {prefix, suffix})</code> does the same for an input already on the page, with <code>update()</code> and <code>destroy()</code>.</p>",
@@ -385,5 +391,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.46.0"
+  "latestVersion": "v0.46.1"
 }
