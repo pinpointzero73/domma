@@ -80,7 +80,7 @@ stay on the page. Pass a function that clones it if you need both.
 | `width`             | string or number              | `null`                  | Any CSS width; numbers are px |
 | `maxWidth`          | string or number              | `null`                  | Any CSS width; the stylesheet default is `20rem` |
 | `className`         | string                        | `''`                    | Extra classes on the panel |
-| `id`                | string                        | generated               | Panel id (`dm-popover-N`) |
+| `id`                | string                        | generated               | Panel id (`dm-popover-N`); fixed at creation |
 | `role`              | string                        | auto                    | `dialog`, or `tooltip` when every trigger is `hover` / `focus` |
 | `ariaLabel`         | string                        | `null`                  | Accessible name when there is no title |
 | `autoFocus`         | boolean or `null`             | `null`                  | Move focus into the panel on open; `null` = when `trigger` includes `click` |
@@ -95,7 +95,9 @@ stay on the page. Pass a function that clones it if you need both.
 | `onHide`            | Function                      | `null`                  | `(popover)`; return `false` to cancel |
 | `onHidden`          | Function                      | `null`                  | `(popover)`, after the panel is removed |
 
-`setOptions(opts)` changes any of these on a live instance, including the trigger type.
+`setOptions(opts)` changes any of these on a live instance except `id`, including the trigger type.
+Only a change to `content`, `title` or `html` re-renders the panel, so focus inside an open panel is
+kept.
 
 ## Methods
 
@@ -135,6 +137,10 @@ trigger destroys the first.
 - **manual** - binds nothing. Call `show()`, `hide()` and `toggle()` yourself. Set
   `closeOnOutside: false` if only your code should close it.
 
+Combinations such as `'click focus'` or `'click hover'` open on either. A click on a popover that
+focus or hover has just opened keeps it open and makes it a click popover: from then on the pointer
+or focus leaving no longer closes it - a second click, Esc or a click outside does.
+
 ## Placement and collision
 
 The panel is `position: fixed`. On every open, scroll and resize it:
@@ -158,7 +164,11 @@ otherwise), which is the one-at-a-time behaviour help icons want. `group: null` 
 
 A popover whose trigger sits inside another popover's panel is its **child**. Opening it does not
 close the parent through the group rule, a click in the child is not "outside" the parent, Esc closes
-the child first, and closing the parent closes the child.
+the child first, Tab past the end of the child continues inside the parent, and closing the parent
+closes the child (an `onHide` returning `false` cannot keep a child open once its parent has gone).
+
+A context menu opened from inside a popover counts as part of it: using the menu does not close the
+popover.
 
 ## Keyboard and accessibility
 
@@ -169,6 +179,9 @@ the child first, and closing the parent closes the child.
 | Tab in the panel                       | Moves through its controls; past the last, focus goes to the next element after the trigger and the popover closes |
 | Shift + Tab from the first control     | Back to the trigger (the popover stays open) |
 | Esc                                    | Closes the most recent popover only, returns focus to its trigger, and stops the key there - a modal round it stays open |
+
+Esc pressed inside the panel reaches the focused control first: an autocomplete or date picker in the
+panel that handles Esc itself (and calls `preventDefault()`) keeps the popover open.
 
 The panel is always the next thing in the tab order after its trigger, even though it lives at the
 end of `<body>`. With `trapFocus: true` Tab cycles inside the panel instead.
@@ -195,6 +208,8 @@ Each phase calls its callback, then dispatches a bubbling event on the trigger w
 | `onShown`  | `popover:shown`   | After the open transition | no |
 | `onHide`   | `popover:hide`    | Before closing | yes |
 | `onHidden` | `popover:hidden`  | After the panel is removed from the document | no |
+
+A popover shown again while it is still fading out skips `hidden` for that close.
 
 ```javascript
 $('main').on('popover:shown', (e) => console.log('Opened', e.detail.popover.panel.id));

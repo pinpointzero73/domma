@@ -589,6 +589,124 @@ describe('Domma.elements.popover', () => {
         });
     });
 
+    describe('review regressions', () => {
+        it('click after the focus that opened a "click focus" popover keeps it open', () => {
+            const p = make(btn, {content: 'x', trigger: 'click focus'});
+            btn.focus();
+            expect(p.isOpen()).toBe(true);
+            btn.click();
+            expect(p.isOpen()).toBe(true);
+            // Now click-owned: focus leaving the trigger for the panel does not close it,
+            // and the next click does.
+            btn.click();
+            expect(p.isOpen()).toBe(false);
+        });
+
+        it('a hover popover claimed by a click ignores mouseleave', () => {
+            vi.useFakeTimers();
+            const p = make(btn, {content: 'x', trigger: 'click hover', delay: 0});
+            btn.dispatchEvent(new MouseEvent('mouseenter'));
+            expect(p.isOpen()).toBe(true);
+            btn.click();
+            btn.dispatchEvent(new MouseEvent('mouseleave'));
+            vi.advanceTimersByTime(500);
+            expect(p.isOpen()).toBe(true);
+        });
+
+        it('a control inside the panel that uses Esc keeps the popover open', () => {
+            const input = document.createElement('input');
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') e.preventDefault();
+            });
+            const p = make(btn, {content: input});
+            btn.click();
+            expect(document.activeElement).toBe(input);
+            key(input, 'Escape');
+            expect(p.isOpen()).toBe(true);
+            // Unhandled Esc inside the panel still closes it and returns focus.
+            const other2 = document.createElement('button');
+            p.setContent(other2);
+            other2.focus();
+            key(other2, 'Escape');
+            expect(p.isOpen()).toBe(false);
+            expect(document.activeElement).toBe(btn);
+        });
+
+        it('Tab past the end of a child panel continues inside the parent panel', () => {
+            const inner = document.createElement('div');
+            inner.innerHTML = '<button id="child-trig">more</button><button id="sib">next</button>';
+            const parent = make(btn, {content: inner});
+            parent.show();
+            const childContent = document.createElement('div');
+            childContent.innerHTML = '<button id="child-only">ok</button>';
+            const child = make(inner.querySelector('#child-trig'), {content: childContent});
+            inner.querySelector('#child-trig').click();
+            expect(document.activeElement.id).toBe('child-only');
+            key(document.activeElement, 'Tab');
+            expect(child.isOpen()).toBe(false);
+            expect(parent.isOpen()).toBe(true);
+            expect(document.activeElement.id).toBe('sib');
+        });
+
+        it('a child that refuses to close still closes with its parent', () => {
+            const inner = document.createElement('button');
+            const parent = make(btn, {content: inner});
+            parent.show();
+            const child = make(inner, {content: 'c', onHide: () => false});
+            child.show();
+            child.hide();
+            expect(child.isOpen()).toBe(true);
+            parent.hide();
+            expect(child.isOpen()).toBe(false);
+            expect(Popover.openPopovers()).toEqual([]);
+        });
+
+        it('setOptions keeps has-title', () => {
+            const p = make(btn, {content: 'x', title: 'T'});
+            p.show();
+            p.setOptions({placement: 'top'});
+            expect(p.panel.classList.contains('has-title')).toBe(true);
+        });
+
+        it('E.get forgets a destroyed popover', () => {
+            const p = E.popover(btn, {content: 'x', animation: false});
+            expect(E.get(btn)).toBe(p);
+            p.destroy();
+            expect(E.get(btn)).toBeUndefined();
+        });
+
+        it('show() on a trigger that has left the document does nothing', () => {
+            const events = [];
+            const p = make(btn, {content: 'x'});
+            ['show', 'shown', 'hide', 'hidden'].forEach((n) => btn.addEventListener(`popover:${n}`, () => events.push(n)));
+            btn.remove();
+            p.show();
+            expect(p.isOpen()).toBe(false);
+            expect(events).toEqual([]);
+        });
+
+        it('a div trigger does not steal Enter or Space from an input inside it', () => {
+            const div = document.createElement('div');
+            div.innerHTML = '<input id="nested-input">';
+            document.body.appendChild(div);
+            const p = make(div, {content: 'x'});
+            const evt = key(div.querySelector('input'), ' ');
+            expect(evt.defaultPrevented).toBe(false);
+            expect(p.isOpen()).toBe(false);
+        });
+
+        it('pressing inside a context menu does not close the popover', () => {
+            const p = make(btn, {content: 'x'});
+            p.show();
+            const menu = document.createElement('div');
+            menu.className = 'dm-context-menu';
+            menu.innerHTML = '<button>item</button>';
+            document.body.appendChild(menu);
+            pointerDown(menu.querySelector('button'));
+            expect(p.isOpen()).toBe(true);
+        });
+    });
+
     it('works through $.setup as component: popover', () => {
         Domma.setup({'#pop-btn': {component: 'popover', options: {content: 'from setup', animation: false}}});
         const p = Popover.getInstance(btn);

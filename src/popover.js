@@ -90,7 +90,10 @@ function tabbablesIn(root) {
     if (!root) return [];
     return Array.from(root.querySelectorAll(TABBABLE)).filter((el) => {
         if (el.tabIndex < 0) return false;
-        return !el.closest('[hidden], [inert]');
+        if (el.closest('[hidden], [inert]')) return false;
+        // display:none / visibility:hidden (a closed modal, a collapsed section)
+        // cannot take focus. jsdom has no checkVisibility, so it counts as visible there.
+        return typeof el.checkVisibility === 'function' ? el.checkVisibility({visibilityProperty: true}) : true;
     });
 }
 
@@ -120,8 +123,13 @@ function parseDelay(value) {
 // Shared document listeners
 // ============================================
 
+// A context menu opened from inside a popover is part of it for dismissal:
+// using the menu must not close the popover underneath.
+const FLOATING_CHILD = '.dm-context-menu';
+
 function onDocPointerDown(e) {
     const target = e.target;
+    if (target instanceof Element && target.closest(FLOATING_CHILD)) return;
     for (const instance of openStack.slice().reverse()) {
         if (!instance._open || !instance.options.closeOnOutside) continue;
         if (instance._contains(target)) continue;
@@ -133,6 +141,11 @@ function onDocKeyDown(e) {
     if (e.key !== 'Escape' && e.key !== 'Esc') return;
     const top = openStack[openStack.length - 1];
     if (!top || !top.options.closeOnEscape) return;
+    const target = e.target;
+    // Inside the panel, the panel's own listener decides - after the control
+    // that has focus (an autocomplete, a date picker) had its chance at Esc.
+    if (top._panel && target instanceof Node && top._panel.contains(target)) return;
+    if (target instanceof Element && target.closest(FLOATING_CHILD)) return;
     const hadFocus = top._contains(document.activeElement);
     e.preventDefault();
     // Stop here, so a modal or slideover round the trigger stays open.
@@ -142,6 +155,7 @@ function onDocKeyDown(e) {
 
 function onDocFocusIn(e) {
     const target = e.target;
+    if (target instanceof Element && target.closest(FLOATING_CHILD)) return;
     for (const instance of openStack.slice().reverse()) {
         if (!instance._open || !instance._closesOnFocusLeave()) continue;
         if (instance._contains(target)) continue;
@@ -255,11 +269,12 @@ class Popover extends Component {
      * @param {{focus?: boolean}} [opts] - focus overrides `autoFocus` for this open
      */
     show(opts = {}) {
-        if (!this.element || this._destroyed) return this;
+        if (!this.element || this._destroyed || !this.element.isConnected) return this;
         clearTimeout(this._timers.show);
         clearTimeout(this._timers.hide);
         if (this._open) return this;
         if (!this._emit('show', true)) return this;
+        this._openedBy = opts.via || 'api';
 
         const panel = this._ensurePanel();
         this._render();
@@ -300,7 +315,7 @@ class Popover extends Component {
 
         const wantFocus = opts.focus !== undefined ? opts.focus
             : this.options.autoFocus !== null ? this.options.autoFocus
-                : this._triggers().includes('click');
+                : this._openedBy === 'click' || (this._openedBy === 'api' && this._triggers().includes('click'));
         if (wantFocus) this._focusInside();
 
         const duration = this._duration();
@@ -322,11 +337,13 @@ class Popover extends Component {
         clearTimeout(this._timers.show);
         clearTimeout(this._timers.hide);
         if (!this._open) return this;
-        if (!this._emit('hide', true)) return this;
+        const cancelled = !this._emit('hide', !opts._force);
+        if (cancelled && !opts._force) return this;
 
         // Children first, so none is left pointing at a panel that has gone.
+        // They cannot refuse: their parent is going either way.
         for (const child of openStack.slice()) {
-            if (child !== this && child._parent === this) child.hide({returnFocus: false});
+            if (child !== this && child._parent === this) child.hide({returnFocus: false, _force: true});
         }
 
         const panel = this._panel;
@@ -409,7 +426,7 @@ class Popover extends Component {
         const idx = openStack.indexOf(this);
         if (idx > -1) {
             for (const child of openStack.slice()) {
-                if (child !== this && child._parent === this) child.hide({returnFocus: false});
+                if (child !== this && child._parent === this) child.hide({returnFocus: false, _force: true});
             }
             openStack.splice(openStack.indexOf(this), 1);
         }
@@ -426,6 +443,7 @@ class Popover extends Component {
         this._restoreAttrs();
         if (hadFocus && this.element && isFn(this.element.focus)) this.element.focus({preventScroll: true});
         if (this.element && byTrigger.get(this.element) === this) byTrigger.delete(this.element);
+        if (isFn(this._onDestroy)) this._onDestroy(this);
         super.destroy();
     }
 
@@ -486,14 +504,28 @@ class Popover extends Component {
         if (triggers.includes('click')) {
             this._on(el, 'click', (e) => {
                 if (el.matches?.('a[href]')) e.preventDefault();
-                this.toggle();
+                // Opened a moment ago by the focus or hover this click caused:
+                // the click claims it rather than closing it again.
+                if (this._open && this._openedBy !== 'click') {
+                    this._openedBy = 'click';
+                    if (this.options.autoFocus !== false) this._focusInside();
+                    return;
+                }
+                this.toggle({via: 'click'});
             }, list);
             // A span or div made into a trigger needs the keys a button has.
             if (!el.matches?.(NATIVE_INTERACTIVE)) {
                 this._on(el, 'keydown', (e) => {
+                    // Only the trigger's own keys: an input inside it keeps its Space.
+                    if (e.target !== el || e.repeat) return;
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        this.toggle({focus: true});
+                        if (this._open && this._openedBy !== 'click') {
+                            this._openedBy = 'click';
+                            this._focusInside();
+                            return;
+                        }
+                        this.toggle({focus: true, via: 'click'});
                     }
                 }, list);
             }
@@ -501,19 +533,19 @@ class Popover extends Component {
 
         if (triggers.includes('hover')) {
             this._on(el, 'mouseenter', () => this._scheduleShow(delay().show), list);
-            this._on(el, 'mouseleave', () => this._scheduleHide(delay().hide), list);
+            this._on(el, 'mouseleave', () => this._scheduleHide(delay().hide, 'hover'), list);
         }
 
         // Hover popovers open on keyboard focus too, or keyboard users never see them.
         if (triggers.includes('focus') || triggers.includes('hover')) {
             this._on(el, 'focusin', () => {
-                if (!this._returningFocus) this.show({focus: false});
+                if (!this._returningFocus) this.show({focus: false, via: 'focus'});
             }, list);
             this._on(el, 'focusout', (e) => {
                 if (this._contains(e.relatedTarget)) return;
                 // Click into a non-focusable part of the page: nothing takes
                 // focus, relatedTarget is null, and the popover goes.
-                this._scheduleHide(0);
+                this._scheduleHide(0, 'focus');
             }, list);
         }
 
@@ -537,14 +569,16 @@ class Popover extends Component {
         clearTimeout(this._timers.hide);
         clearTimeout(this._timers.show);
         if (this._open) return;
-        if (ms > 0) this._timers.show = setTimeout(() => this.show({focus: false}), ms);
-        else this.show({focus: false});
+        if (ms > 0) this._timers.show = setTimeout(() => this.show({focus: false, via: 'hover'}), ms);
+        else this.show({focus: false, via: 'hover'});
     }
 
-    _scheduleHide(ms) {
+    /** `reason` is what asked: a popover a click opened (or claimed) ignores hover and focus leaving. */
+    _scheduleHide(ms, reason = null) {
         clearTimeout(this._timers.show);
         clearTimeout(this._timers.hide);
         if (!this._open) return;
+        if (reason && this._openedBy === 'click') return;
         if (ms > 0) this._timers.hide = setTimeout(() => this.hide(), ms);
         else this.hide();
     }
@@ -660,13 +694,13 @@ class Popover extends Component {
             if (this._triggers().includes('hover')) clearTimeout(this._timers.hide);
         });
         panel.addEventListener('mouseleave', () => {
-            if (this._triggers().includes('hover')) this._scheduleHide(parseDelay(this.options.delay).hide);
+            if (this._triggers().includes('hover')) this._scheduleHide(parseDelay(this.options.delay).hide, 'hover');
         });
         panel.addEventListener('focusout', (e) => {
             const t = this._triggers();
             if (!(t.includes('focus') || t.includes('hover'))) return;
             if (this._contains(e.relatedTarget)) return;
-            this._scheduleHide(0);
+            this._scheduleHide(0, 'focus');
         });
 
         this._styleNode();
@@ -681,6 +715,9 @@ class Popover extends Component {
         if (opts.dismissible) classes.push('is-dismissible');
         if (!opts.arrow) classes.push('no-arrow');
         if (this._open) classes.push('is-open');
+        // State classes owned by rendering and positioning survive a restyle.
+        if (panel.classList.contains('has-title')) classes.push('has-title');
+        if (panel.classList.contains('is-detached')) classes.push('is-detached');
         if (opts.className) classes.push(...String(opts.className).split(/\s+/).filter(Boolean));
         panel.className = classes.join(' ');
         panel.setAttribute('role', role);
@@ -779,7 +816,17 @@ class Popover extends Component {
     }
 
     _onPanelKeyDown(e) {
-        if (e.key !== 'Tab' || !this._open) return;
+        if (!this._open) return;
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            // Bubble phase: a control inside that used Esc itself (an open
+            // autocomplete list, a date picker) has already said so.
+            if (e.defaultPrevented || !this.options.closeOnEscape) return;
+            e.preventDefault();
+            e.stopPropagation();
+            this.hide({returnFocus: true});
+            return;
+        }
+        if (e.key !== 'Tab') return;
         const items = tabbablesIn(this._panel);
         const first = items[0];
         const last = items[items.length - 1];
@@ -810,14 +857,20 @@ class Popover extends Component {
             const next = this._nextTabbableAfterTrigger();
             e.preventDefault();
             this.hide({returnFocus: !next});
-            if (next) next.focus();
+            if (next) {
+                next.focus();
+                // It would not take focus after all: never leave focus on <body>.
+                if (document.activeElement !== next) this.element.focus({preventScroll: true});
+            }
         }
     }
 
     _nextTabbableAfterTrigger() {
         const trigger = this.element;
-        const all = tabbablesIn(document.body).filter((el) =>
-            !el.closest('.dm-popover') && !trigger.contains(el));
+        // A trigger inside another popover's panel continues within that panel.
+        const own = trigger.closest('.dm-popover');
+        const all = tabbablesIn(own || document.body).filter((el) =>
+            el.closest('.dm-popover') === own && !trigger.contains(el));
         return all.find((el) =>
             trigger.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) || null;
     }
@@ -830,7 +883,9 @@ class Popover extends Component {
         const list = this._openHandlers;
         const schedule = () => {
             if (this._frame) return;
-            const raf = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : (fn) => setTimeout(fn, 16);
+            const useRaf = typeof requestAnimationFrame === 'function';
+            this._frameIsTimeout = !useRaf;
+            const raf = useRaf ? requestAnimationFrame : (fn) => setTimeout(fn, 16);
             this._frame = raf(() => {
                 this._frame = null;
                 this.update();
@@ -857,8 +912,9 @@ class Popover extends Component {
         this._resizeObserver?.disconnect();
         this._resizeObserver = null;
         if (this._frame) {
-            if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(this._frame);
-            clearTimeout(this._frame);
+            // The two schedulers number their handles independently: cancel with the right one.
+            if (this._frameIsTimeout) clearTimeout(this._frame);
+            else if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(this._frame);
             this._frame = null;
         }
     }
@@ -898,6 +954,10 @@ class Popover extends Component {
         const outOfView = t.bottom < 0 || t.top > vh || t.right < 0 || t.left > vw;
         panel.classList.toggle('is-detached', outOfView);
 
+        // Measure from the corner: a fixed box with width:auto shrinks to fit
+        // the room left of wherever it last stood.
+        panel.style.left = '0px';
+        panel.style.top = '0px';
         const pw = panel.offsetWidth;
         const ph = panel.offsetHeight;
         const [skid, gap] = parseOffset(opts.offset);

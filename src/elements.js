@@ -11737,7 +11737,12 @@ export const elements = {
     popover(trigger, options = {}) {
         const instance = new Popover(trigger, options);
         if (instance.element) {
-            this._instances.set(instance.element, instance);
+            const el = instance.element;
+            this._instances.set(el, instance);
+            // So E.get() never hands back a destroyed popover.
+            instance._onDestroy = () => {
+                if (this._instances.get(el) === instance) this._instances.delete(el);
+            };
         }
         return instance;
     },
