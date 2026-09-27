@@ -29,6 +29,7 @@ modern UI components.
 | Drag-to-reorder lists             | `E.sortable(sel, options)`    | Manual drag/drop listeners      |
 | Icon/text joined to an input      | `formConfig.prefix/suffix` or `E.inputGroup(sel, opts)` | Manual wrapper markup |
 | Show password / clear / stepper / char counter | `formConfig.reveal/clear/stepper/counter` or `E.inputGroup(sel, {reveal, clear, stepper, counter})` | Hand-rolled buttons and listeners |
+| Loading placeholders              | `E.skeleton(el, opts)` / `.skeleton-*` | Manual grey boxes      |
 | Toast notifications               | `E.toast('Message', {type})`  | Manual notification divs        |
 | Icons                             | `<span data-icon="name">`     | Manual SVG/icon fonts           |
 | DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
@@ -214,6 +215,8 @@ consult that folder's CLAUDE.md for detailed information.
   nesting cascade and inheritance
 - [docs/Sortable.md](./docs/Sortable.md) - Drag-to-reorder: live and indicator (tree) modes, `onDrop` re-render,
   keyboard, touch and `persist`
+- [docs/Skeleton.md](./docs/Skeleton.md) - Loading placeholders: CSS shapes, `E.skeleton()` types, `while()`,
+  `data-skeleton` and the DataTable's `loadingSkeleton`
 - [docs/Bindings.md](./docs/Bindings.md) - DOM bindings: `M.applyBindings()`, `data-bind-*`, `data-model`, `data-each`,
   custom bindings and helpers
 - [docs/DommaDocumentation.md](./docs/DommaDocumentation.md) - Comprehensive user documentation
@@ -571,6 +574,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Toast - Static `toast()` method with types
   - Dialog - Promise-based `alert()`, `confirm()`, `prompt()`
   - Loader - `loader()` with types (spinner, dots, pulse, bars)
+  - Skeleton - `skeleton()` shimmering placeholders (text, card, list, table, custom) while content loads;
+    aria-busy + polite status, `remove()` restores the old children, `replace()`; `E.skeleton.while(el, promise)`;
+    CSS-only `.skeleton-*` shapes; `data-skeleton` + `E.skeleton.scan()`; DataTable `loadingSkeleton: true`
   - Badge - `badge()` component
   - NumberBadge - `numberBadge()` notification counter with positioning, dot mode, pulse
   - ListGroup - `listGroup()` selectable lists with keyboard nav, colour variants, flush mode
@@ -598,6 +604,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - Features: Sorting, filtering, pagination, search, row selection
 - Export: `toCSV()`, `toJSON()`, `download()`
 - Striping: Named color variants or custom colors
+- Loading: `loadingSkeleton: true | n` shows skeleton rows until the first `setData()`; `setLoading(bool)`
 - Methods: `setData()`, `addRow()`, `updateRow()`, `removeRow()`, `search()`, `filter()`, `sort()`
 
 #### Forms (`Domma.forms`)

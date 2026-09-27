@@ -2607,6 +2607,39 @@ still scrolls. Every callback also fires as a `sortable:*` event on the containe
 See [docs/Sortable.md](./Sortable.md) for every option, the tree example, the CSS classes and the
 `--dm-sortable-*` custom properties.
 
+## Skeleton loaders
+
+Shimmering placeholders shaped like the content on its way, so the page keeps its layout while data
+loads. The shapes are CSS classes that work in plain HTML; `E.skeleton()` writes them for you.
+
+```javascript
+// Show a skeleton until the promise settles, then render as usual
+const posts = await E.skeleton.while('#posts', H.get('/api/posts'), {type: 'card', count: 3});
+$('#posts').html(renderPosts(posts));
+
+// Or drive it yourself
+const sk = E.skeleton('#users', {type: 'list', count: 4});
+sk.replace(renderUsers(await H.get('/api/users')));   // or sk.remove() to restore the old content
+```
+
+Types are `'text'` (`lines`, `count`), `'card'` (`image`, `lines`, `count`), `'list'` (`avatar`,
+`lines`, `count`), `'table'` (`rows`, `columns`, `header`) and `'custom'` (`template`); `animate: false`
+gives a still tint. The container is marked `aria-busy` with a polite "Loading..." status while the
+shapes, hidden from screen readers, are up. `remove()` puts back the very same nodes. If the promise
+passed to `while()` rejects, the skeleton is removed and the error rethrown.
+
+By hand: `.skeleton` plus a shape - `.skeleton-text`, `.skeleton-heading`, `.skeleton-circle`,
+`.skeleton-image`, `.skeleton-button` - or a composite: `.skeleton-card`, `.skeleton-list-item`,
+`.skeleton-table-row`. The tint is the theme's text mixed into its surface, so it works on light and
+dark themes, and `prefers-reduced-motion` drops the sweep.
+
+A DataTable shows skeleton rows until its data arrives with `T.create(sel, {columns, loadingSkeleton:
+true})`; the first `setData()` replaces them, and `table.setLoading(true)` brings them back for a
+reload.
+
+See [docs/Skeleton.md](./Skeleton.md) for every option, the classes, `data-skeleton` and the
+`--dm-skeleton-*` custom properties.
+
 ## Input groups
 
 An icon or a little text joined to the start or end of a field - a magnifier on a search box, "£" on a
