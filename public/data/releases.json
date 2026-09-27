@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.44.8",
+      "title": "Sidebars That Wear The Theme",
+      "description": "<p><strong>Every left-hand menu now takes its colours from the active theme.</strong> A new <code>theme</code> sidebar variant follows the theme's <code>--dm-sidebar-*</code> tokens, light or dark, and the showcase, admin and miniapp sidebars all use it.</p>\n<p>The Admin themes' dark sidebars get washes that show, <code>sunset-dark</code> and <code>grayve-dark</code> selections are readable again, and the What's New pill stops pulsing once you have seen the latest release.</p>",
+      "date": "2026-09-27"
+    },
+    {
       "year": "v0.44.7",
       "title": "domma-reactive 1.1.1",
       "description": "<p>Domma is now built against domma-reactive 1.1.1.</p>",
@@ -361,5 +367,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.44.7"
+  "latestVersion": "v0.44.8"
 }
