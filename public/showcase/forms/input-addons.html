@@ -63,6 +63,23 @@
                 Addons are decoration: clicks pass straight through to the field, and they are hidden from screen
                 readers, so the field's label should still say what it is for.
             </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Interactive extras</h3>
+            <p class="mb-2">
+                Four extras are real controls joined to the field in the same style - buttons you can click and
+                tab to, each with an accessible name. The keys are the same in a blueprint's
+                <code>formConfig</code> and in <code>E.inputGroup()</code>'s options, and they sit happily inside a
+                prefix or suffix.
+            </p>
+            <table class="table mb-0">
+                <thead><tr><th>Key</th><th>Adds</th><th>Applies to</th></tr></thead>
+                <tbody>
+                    <tr><td><code>reveal: true</code></td><td>An eye button that shows and hides the password</td><td>Password inputs</td></tr>
+                    <tr><td><code>clear: true</code></td><td>An &times; that appears once there is a value and empties the field</td><td>Text-like inputs and textareas</td></tr>
+                    <tr><td><code>stepper: true</code></td><td>&minus; and + buttons that honour <code>min</code>, <code>max</code> and <code>step</code></td><td>Number inputs</td></tr>
+                    <tr><td><code>counter: true | 200</code></td><td>"12 / 200" under the field, updated as you type</td><td>Text-like inputs and textareas</td></tr>
+                </tbody>
+            </table>
         </div>
     </section>
 
@@ -263,6 +280,147 @@ $('#ig-destroy').on('click', () =&gt; group.destroy());
         </div>
     </section>
 
+    <section class="card mb-6" data-section="Show Password">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Show / hide password</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>reveal: true</code> adds an eye button that switches the field between hidden and plain
+                text. It is a toggle button (<code>aria-pressed</code>), so a screen reader hears "Show password,
+                toggle button, pressed". Clicking it leaves the caret in the field.
+            </p>
+            <div id="form-reveal" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+password: {
+    type: 'password',
+    label: 'Password',
+    formConfig: {prefix: {icon: 'lock'}, reveal: true}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Clear Button">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Clear button</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>clear: true</code> adds an &times; that shows only while the field has a value. Clicking it
+                empties the field, fires <code>input</code> and <code>change</code> - so the form's model and any
+                listener of your own see the change - and puts the focus back in the field. Here it sits beside an
+                icon prefix; the last value the model saw is shown underneath.
+            </p>
+            <div id="form-clear" class="mb-2"></div>
+            <p class="mb-4 text-sm">Model value: <code id="clear-model">""</code></p>
+            <div class="code-block language-javascript">
+                <pre><code>
+search: {
+    type: 'string',
+    label: 'Search',
+    formConfig: {prefix: {icon: 'search'}, clear: true, placeholder: 'Type, then clear'}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Number Stepper">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Number stepper</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>stepper: true</code> puts &minus; and + either side of a number field. They step by the
+                field's <code>step</code>, stop at <code>min</code> and <code>max</code> (the button at a limit is
+                disabled), and fire <code>input</code> and <code>change</code> on every step. Hold a button down to
+                keep stepping. Addons still go outside, as with the "£" and "per night" here.
+            </p>
+            <div id="form-stepper" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+guests: {
+    type: 'integer',
+    label: 'Guests',
+    min: 1,
+    max: 8,
+    formConfig: {stepper: true}
+},
+rate: {
+    type: 'number',
+    label: 'Nightly rate',
+    min: 0,
+    max: 500,
+    step: 12.5,
+    formConfig: {prefix: '£', suffix: 'per night', stepper: true}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Character Counter">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Character counter</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>counter: true</code> shows "12 / 200" under the field, using the field's
+                <code>maxLength</code>; a number (<code>counter: 60</code>) sets the limit itself. It updates as you
+                type, is announced politely to screen readers and is linked to the field with
+                <code>aria-describedby</code>. It turns amber from 90% of the limit, and red if an explicit limit is
+                passed.
+            </p>
+            <div id="form-counter" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+headline: {
+    type: 'string',
+    label: 'Headline',
+    formConfig: {counter: 60, clear: true}
+},
+bio: {
+    type: 'textarea',
+    label: 'Short bio',
+    maxLength: 200,
+    formConfig: {rows: 3, counter: true}
+}
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Extras on Your Own Inputs">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Extras on inputs already on the page</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The same four keys work with <code>E.inputGroup()</code> on hand-written inputs. The fields below
+                are plain HTML; one call each joins the extras.
+            </p>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="form-group">
+                    <label class="form-label" for="x-pw">New password</label>
+                    <input id="x-pw" class="form-input" type="password" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="x-q">Filter</label>
+                    <input id="x-q" class="form-input" type="search" value="invoices">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="x-qty">Quantity</label>
+                    <input id="x-qty" class="form-input" type="number" min="0" max="10" value="2">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="x-note">Delivery note</label>
+                    <input id="x-note" class="form-input" type="text" maxlength="40">
+                </div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.inputGroup('#x-pw', {reveal: true});
+E.inputGroup('#x-q', {prefix: {icon: 'filter'}, clear: true});
+E.inputGroup('#x-qty', {stepper: true, suffix: 'boxes'});
+E.inputGroup('#x-note', {counter: true, clear: true});   // true reads maxlength="40"
+</code></pre>
+            </div>
+        </div>
+    </section>
+
     <section class="card mb-6" data-section="Tutorial">
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Tutorial - joining an addon to your own input</h2></div>
         <div class="card-body">
@@ -312,6 +470,40 @@ weight.destroy();                             // back to a plain input
                 <code>E.inputGroup()</code> is also the way to change a blueprint field's addons after it is on
                 screen.
             </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 4 - Add the extras</h3>
+            <p class="mb-2">
+                Pass <code>reveal</code>, <code>clear</code>, <code>stepper</code> or <code>counter</code> alongside
+                (or instead of) the addons. An extra the input cannot take is skipped - <code>reveal</code> needs a
+                password, <code>stepper</code> a number - so a shared options object is safe.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+const qty = E.inputGroup('#qty', {stepper: true, suffix: 'boxes'});
+const note = E.inputGroup('#note', {counter: 120, clear: true});
+
+qty.step(1);                       // step from code, as the + button does
+note.update({clear: false});       // extras come and go through update() too
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 5 - Set values from code</h3>
+            <p class="mb-2">
+                The extras follow the field's <code>input</code> and <code>change</code> events and a form reset. If
+                you set <code>value</code> from code without firing an event, call <code>refresh()</code> so the
+                clear button, the stepper limits and the counter catch up.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+$('#note').val('Leave with the neighbour at number 12');
+note.refresh();
+</code></pre>
+            </div>
+            <p class="mb-0 mt-4">
+                In a blueprint, Forma binds the extras after it renders and removes them again on a re-render or
+                <code>form.destroy()</code>; a <code>formConfig.labels</code> object renames the buttons (for another
+                language, say).
+            </p>
         </div>
     </section>
 
@@ -323,9 +515,16 @@ weight.destroy();                             // back to a plain input
                 <tbody>
                     <tr><td><code>prefix</code></td><td>Slot at the start: <code>{icon}</code>, <code>{text}</code> or a string. Default <code>null</code></td></tr>
                     <tr><td><code>suffix</code></td><td>Slot at the end, same values. Default <code>null</code></td></tr>
-                    <tr><td><code>update({prefix, suffix})</code></td><td>Change either slot; <code>null</code> removes one, leaving it out keeps it. Returns the instance</td></tr>
-                    <tr><td><code>destroy()</code></td><td>Remove the addons, and the wrapper if this instance made it</td></tr>
-                    <tr><td><code>input</code> / <code>wrapper</code></td><td>The bound input and its <code>.input-group-icon</code> group</td></tr>
+                    <tr><td><code>reveal</code></td><td><code>true</code>: show / hide button on a password input. Default <code>false</code></td></tr>
+                    <tr><td><code>clear</code></td><td><code>true</code>: clear button, shown while there is a value. Default <code>false</code></td></tr>
+                    <tr><td><code>stepper</code></td><td><code>true</code>: &minus; / + buttons on a number input. Default <code>false</code></td></tr>
+                    <tr><td><code>counter</code></td><td><code>true</code> (limit from <code>maxLength</code>) or a number. Default <code>false</code></td></tr>
+                    <tr><td><code>labels</code></td><td>Button names: <code>{reveal: 'Show password', clear: 'Clear', decrease: 'Decrease', increase: 'Increase'}</code></td></tr>
+                    <tr><td><code>update({...})</code></td><td>Change any of the above; <code>null</code> removes an addon, <code>false</code> an extra, leaving a key out keeps it. Returns the instance</td></tr>
+                    <tr><td><code>refresh()</code></td><td>Re-read the value after setting it from code: clear button, stepper limits, counter</td></tr>
+                    <tr><td><code>step(dir)</code></td><td>Step a stepper field by one step, <code>1</code> up or <code>-1</code> down</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Remove the addons and extras (and their listeners), and the wrapper if this instance made it</td></tr>
+                    <tr><td><code>input</code> / <code>wrapper</code> / <code>extras</code></td><td>The bound input, its <code>.input-group-icon</code> group, and the extras' elements (<code>reveal</code>, <code>clear</code>, <code>decrease</code>, <code>increase</code>, <code>counter</code>)</td></tr>
                 </tbody>
             </table>
         </div>
@@ -414,6 +613,50 @@ weight.destroy();                             // back to a plain input
             formConfig: {prefix: {icon: 'mail'}, suffix: {icon: 'check-circle'}, placeholder: 'you@example.com'}
         }
     }, '#form-mixed');
+
+    // ---- Interactive extras ----------------------------------------------------
+    render({
+        password: {
+            type: 'password',
+            label: 'Password',
+            formConfig: {prefix: {icon: 'lock'}, reveal: true, placeholder: 'Try typing, then the eye'}
+        }
+    }, '#form-reveal');
+
+    const clearForm = F.create({
+        search: {
+            type: 'string',
+            label: 'Search',
+            formConfig: {prefix: {icon: 'search'}, clear: true, placeholder: 'Type, then clear'}
+        }
+    }, {search: 'quarterly report'}, {layout: 'stacked', showSubmitButton: false});
+    clearForm.renderTo('#form-clear');
+    const showClearModel = () => $('#clear-model').text(JSON.stringify(clearForm.getData().search ?? ''));
+    $('#form-clear').on('change', showClearModel);
+    showClearModel();
+
+    render({
+        guests: {type: 'integer', label: 'Guests', min: 1, max: 8, default: 2, formConfig: {stepper: true}},
+        rate: {
+            type: 'number',
+            label: 'Nightly rate',
+            min: 0,
+            max: 500,
+            step: 12.5,
+            default: 100,
+            formConfig: {prefix: '£', suffix: 'per night', stepper: true}
+        }
+    }, '#form-stepper');
+
+    render({
+        headline: {type: 'string', label: 'Headline', formConfig: {counter: 60, clear: true, placeholder: 'Up to 60 characters'}},
+        bio: {type: 'textarea', label: 'Short bio', maxLength: 200, formConfig: {rows: 3, counter: true}}
+    }, '#form-counter');
+
+    E.inputGroup('#x-pw', {reveal: true});
+    E.inputGroup('#x-q', {prefix: {icon: 'filter'}, clear: true});
+    E.inputGroup('#x-qty', {stepper: true, suffix: 'boxes'});
+    E.inputGroup('#x-note', {counter: true, clear: true});
 
     // ---- E.inputGroup on a hand-written input --------------------------------
     let group = null;
