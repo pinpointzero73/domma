@@ -325,6 +325,12 @@
           "section": "slideover"
         },
         {
+          "text": "Sortable",
+          "url": "showcase/elements/sortable/index.html",
+          "section": "sortable",
+          "badge": "New"
+        },
+        {
           "text": "Tabs",
           "url": "showcase/elements/tabs/index.html",
           "section": "tabs"

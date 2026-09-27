@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortable - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/sortable/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the component itself needs is in elements.css. */
+        .sx-sort-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sx-sort-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-sm);
+            cursor: grab;
+        }
+
+        .sx-sort-item:focus-visible {
+            outline: 2px solid var(--dm-primary);
+            outline-offset: 2px;
+        }
+
+        .sx-sort-row {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding: 0.25rem 0 0.75rem;
+        }
+
+        .sx-sort-tile {
+            flex: 0 0 8.5rem;
+            min-height: 7rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0.875rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-sm);
+            cursor: grab;
+        }
+
+        .sx-sort-tile strong {
+            font-size: 1.5rem;
+        }
+
+        .sx-sort-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .sx-sort-node {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-sm);
+            cursor: grab;
+        }
+
+        .sx-sort-node[data-depth="1"] { margin-left: 1.75rem; }
+        .sx-sort-node[data-depth="2"] { margin-left: 3.5rem; }
+        .sx-sort-node[data-depth="3"] { margin-left: 5.25rem; }
+        .sx-sort-node[data-depth="4"] { margin-left: 7rem; }
+
+        /* The component marks the drop target; this page decides how that looks. */
+        .sx-sort-node.dm-sortable-over-into {
+            background: color-mix(in srgb, var(--dm-primary) 10%, var(--dm-surface));
+        }
+
+        .sx-sort-grip {
+            display: inline-flex;
+            padding: 0.25rem;
+            color: var(--dm-text-muted);
+        }
+
+        .sx-sort-field {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sx-sort-output {
+            font-family: var(--dm-font-mono, monospace);
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Sortable</div>
+        <div class="hero-subtitle">Drag to reorder - by mouse, touch and keyboard - with lists that slide aside, trees that animate their re-render, and an order that sticks</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Sortable</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.sortable()</code> makes the children of a container draggable into a new order. Bind it
+                once to the container: items rendered later are sortable without a refresh, and every item is
+                identified by a key (<code>data-id</code> by default) so an order can be reported, saved and
+                restored.
+            </p>
+            <p class="mb-4">
+                It has two modes. In <strong>live</strong> mode (the default) the other items slide out of the
+                way while you drag. In <strong>indicator</strong> mode (<code>nest: true</code>) nothing moves
+                until you let go: a marker shows where the item would land - before, after or into another item -
+                and your code updates its data and re-renders, which the component then animates.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Live reordering</strong> - siblings glide aside as you drag, vertically or horizontally</li>
+                <li><strong>Trees</strong> - <code>nest: true</code> adds an "into" zone; <code>onDrop</code> hands you the move</li>
+                <li><strong>Animated re-renders</strong> - items are matched by key, so a full redraw still glides</li>
+                <li><strong>Sticky order</strong> - <code>persist</code> remembers it through Domma storage</li>
+                <li><strong>Handles</strong> - only the grip drags, and the rest of the item works normally</li>
+                <li><strong>Keyboard</strong> - Alt+Arrow moves the focused item, and Esc cancels a drag</li>
+                <li><strong>Touch</strong> - handles drag at once; whole items need a short press-and-hold, so lists still scroll</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+const list = E.sortable('#tasks', {
+    persist: 'tasks',
+    onSort: ({order}) =&gt; H.post('/api/tasks/order', {order})
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+        <div class="card-body">
+            <p class="mb-6 text-gray-600">A reorderable list that remembers its order, in three steps</p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 1 - Key the items</h3>
+            <p class="mb-2">
+                Any container works. Give each item a <code>data-id</code>: that is what the order is made of.
+                <code>tabindex="0"</code> lets keyboard users focus an item and move it.
+            </p>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;ul id="tasks"&gt;
+    &lt;li data-id="write"  tabindex="0"&gt;Write the brief&lt;/li&gt;
+    &lt;li data-id="review" tabindex="0"&gt;Review it&lt;/li&gt;
+    &lt;li data-id="ship"   tabindex="0"&gt;Ship it&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 2 - Make it sortable</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+const tasks = E.sortable('#tasks', {
+    onSort: ({order, from, to}) =&gt; {
+        console.log('Moved from', from, 'to', to, '- now', order);
+    }
+});
+</code></pre>
+            </div>
+            <p class="mb-4">
+                That is a working list: drag with the mouse, press and hold on a touch screen, or focus an item
+                and press Alt+Up / Alt+Down. <code>tasks.toArray()</code> returns the keys in their current order
+                at any time.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 3 - Make the order stick</h3>
+            <p class="mb-2">
+                Add <code>persist</code> and the order survives a reload. It is saved through Domma storage under
+                <code>sortable:&lt;name&gt;</code> after every move and put back as soon as the component is
+                created. <code>forget()</code> drops it again.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+const tasks = E.sortable('#tasks', {persist: 'tasks'});
+
+$('#reset').on('click', () =&gt; {
+    tasks.forget();                            // drop the saved order
+    tasks.sort(['write', 'review', 'ship']);   // and animate back to the default
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Live List">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Live list with a sticky order</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Drag the items, or focus one and press <code>Alt</code>+<code>&uarr;</code> /
+                <code>&darr;</code>. Then reload the page: the order is remembered. <em>Reset order</em> forgets it.
+            </p>
+
+            <ul id="demo-tasks" class="sx-sort-list mb-4">
+                <li class="sx-sort-item" data-id="brief" tabindex="0"><span data-icon="file-text"></span>Write the brief</li>
+                <li class="sx-sort-item" data-id="design" tabindex="0"><span data-icon="layers"></span>Design the layout</li>
+                <li class="sx-sort-item" data-id="build" tabindex="0"><span data-icon="folder"></span>Build the pages</li>
+                <li class="sx-sort-item" data-id="review" tabindex="0"><span data-icon="user-check"></span>Review with the client</li>
+                <li class="sx-sort-item" data-id="launch" tabindex="0"><span data-icon="star"></span>Launch</li>
+            </ul>
+
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <button id="demo-tasks-reset" class="btn btn-outline btn-sm" type="button">
+                    <span data-icon="rotate-ccw"></span> Reset order
+                </button>
+                <span class="text-sm text-gray-600">Saved order: <span id="demo-tasks-saved" class="sx-sort-output">none</span></span>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>
+const tasks = E.sortable('#demo-tasks', {
+    persist: 'showcase-tasks',
+    onSort: ({order}) =&gt; showSaved(order)
+});
+
+$('#demo-tasks-reset').on('click', () =&gt; {
+    tasks.forget();
+    tasks.sort(['brief', 'design', 'build', 'review', 'launch']);
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Horizontal">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">A horizontal row</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>axis: 'x'</code> sorts a row. Alt+Left / Alt+Right move the focused card, and dragging near
+                either end of the row scrolls it.
+            </p>
+
+            <div id="demo-row" class="sx-sort-row mb-4">
+                <div class="sx-sort-tile" data-id="mon" tabindex="0"><span class="text-sm text-gray-600">Monday</span><strong>12</strong></div>
+                <div class="sx-sort-tile" data-id="tue" tabindex="0"><span class="text-sm text-gray-600">Tuesday</span><strong>8</strong></div>
+                <div class="sx-sort-tile" data-id="wed" tabindex="0"><span class="text-sm text-gray-600">Wednesday</span><strong>15</strong></div>
+                <div class="sx-sort-tile" data-id="thu" tabindex="0"><span class="text-sm text-gray-600">Thursday</span><strong>4</strong></div>
+                <div class="sx-sort-tile" data-id="fri" tabindex="0"><span class="text-sm text-gray-600">Friday</span><strong>21</strong></div>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>
+E.sortable('#demo-row', {axis: 'x'});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Tree">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">A tree: nest and re-render</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                This tree is drawn from data. Drag a page onto the top or bottom edge of another to drop it beside
+                it, or onto the middle to make it a child. A page cannot be dropped into its own subtree.
+            </p>
+
+            <div id="demo-tree" class="sx-sort-tree mb-4"></div>
+
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <button id="demo-tree-reset" class="btn btn-outline btn-sm" type="button">
+                    <span data-icon="rotate-ccw"></span> Reset tree
+                </button>
+                <span id="demo-tree-status" class="text-sm text-gray-600">Drag a page to move it.</span>
+            </div>
+
+            <p class="mb-2">
+                <code>nest: true</code> switches to indicator mode, so nothing moves until the drop. Then
+                <code>onDrop</code> gets the dragged item's key, the target's key and the zone. It edits the data
+                and re-renders the whole tree; because every row carries <code>data-id</code>, the component finds
+                each row again afterwards and glides it from its old place to its new one.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.sortable('#demo-tree', {
+    nest: true,
+    // Never into (or beside) its own descendants
+    accepts: (item, target) =&gt; !contains(locate(tree, item.dataset.id).node, target.dataset.id),
+    onDrop: ({key, targetKey, zone}) =&gt; {
+        const from = locate(tree, key);
+        from.list.splice(from.index, 1);           // take it out...
+
+        const to = locate(tree, targetKey);         // ...then look the target up again
+        if (zone === 'into') to.node.children.push(from.node);
+        else to.list.splice(zone === 'before' ? to.index : to.index + 1, 0, from.node);
+
+        renderTree();                               // the component animates this
+    }
+});
+</code></pre>
+            </div>
+            <p class="mb-2">
+                The target is looked up <em>after</em> the dragged node has been removed, so the index used for
+                <code>before</code> and <code>after</code> is always the current one. Return <code>false</code>
+                from <code>onDrop</code> to refuse a drop, or a promise to wait for the server first.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Handles">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Drag by a handle</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                With <code>handle</code>, only the grip starts a drag. The rest of the row behaves normally, so the
+                fields can be typed in and their text selected. On touch a handle drags straight away, with no
+                press-and-hold.
+            </p>
+
+            <div id="demo-fields" class="sx-sort-list mb-4">
+                <div class="sx-sort-item" data-id="name">
+                    <span class="sx-sort-grip" data-icon="menu" tabindex="0" aria-label="Move Name"></span>
+                    <input class="form-input sx-sort-field" type="text" value="Name" aria-label="Field label">
+                </div>
+                <div class="sx-sort-item" data-id="email">
+                    <span class="sx-sort-grip" data-icon="menu" tabindex="0" aria-label="Move Email"></span>
+                    <input class="form-input sx-sort-field" type="text" value="Email address" aria-label="Field label">
+                </div>
+                <div class="sx-sort-item" data-id="phone">
+                    <span class="sx-sort-grip" data-icon="menu" tabindex="0" aria-label="Move Phone"></span>
+                    <input class="form-input sx-sort-field" type="text" value="Phone number" aria-label="Field label">
+                </div>
+                <div class="sx-sort-item" data-id="message">
+                    <span class="sx-sort-grip" data-icon="menu" tabindex="0" aria-label="Move Message"></span>
+                    <input class="form-input sx-sort-field" type="text" value="Message" aria-label="Field label">
+                </div>
+            </div>
+
+            <div class="code-block language-javascript">
+                <pre><code>
+E.sortable('#demo-fields', {handle: '.sx-sort-grip'});
+</code></pre>
+            </div>
+            <p class="mb-2">
+                Even without a handle, a press on an input, button, link or select inside an item does not start a
+                drag, so forms inside items keep working.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Events">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Every callback also fires as a bubbling <code>sortable:*</code> event on the container, with the same
+                object as <code>event.detail</code>. This log listens to all four demos above.
+            </p>
+            <ul id="demo-log" class="list-none p-0 text-sm text-gray-600 mb-4">
+                <li>Nothing yet - drag something above.</li>
+            </ul>
+            <div class="code-block language-javascript">
+                <pre><code>
+$('#demo-tasks').on('sortable:sort', (e) =&gt; console.log(e.detail.order));
+</code></pre>
+            </div>
+            <table class="table mb-4">
+                <thead><tr><th>Callback</th><th>Event</th><th>Detail</th></tr></thead>
+                <tbody>
+                    <tr><td><code>onStart</code></td><td><code>sortable:start</code></td><td><code>{item, from}</code></td></tr>
+                    <tr><td><code>onMove</code></td><td><code>sortable:move</code></td><td><code>{item, target, zone, x, y}</code></td></tr>
+                    <tr><td><code>onSort</code></td><td><code>sortable:sort</code></td><td><code>{item, from, to, order, previous}</code> - live mode</td></tr>
+                    <tr><td><code>onDrop</code></td><td><code>sortable:drop</code></td><td><code>{item, target, zone, key, targetKey}</code> - indicator mode</td></tr>
+                    <tr><td><code>onCancel</code></td><td><code>sortable:cancel</code></td><td><code>{item}</code></td></tr>
+                    <tr><td><code>onEnd</code></td><td><code>sortable:end</code></td><td><code>{item, changed}</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Keyboard">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Keyboard and touch</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Input</th><th>Does</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Alt</code> + <code>&uarr;</code> / <code>&darr;</code></td><td>Move the focused item one place (live mode)</td></tr>
+                    <tr><td><code>Alt</code> + <code>&larr;</code> / <code>&rarr;</code></td><td>The same with <code>axis: 'x'</code></td></tr>
+                    <tr><td><code>Esc</code></td><td>Cancel a drag; in live mode everything slides back</td></tr>
+                    <tr><td>Finger on a handle</td><td>Drags at once</td></tr>
+                    <tr><td>Finger on an item with no handle</td><td>Press and hold for <code>touchDelay</code> ms (220), otherwise it scrolls</td></tr>
+                </tbody>
+            </table>
+            <p class="mb-2">
+                Each keyboard move is announced to screen readers ("Moved to position 3 of 5"), and under
+                <code>prefers-reduced-motion</code> every glide is skipped.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options</h2></div>
+        <div class="card-body">
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>items</code></td><td>string</td><td><code>null</code></td><td>Selector for the items; null means the direct children</td></tr>
+                    <tr><td><code>handle</code></td><td>string</td><td><code>null</code></td><td>Selector inside an item that starts a drag</td></tr>
+                    <tr><td><code>nest</code></td><td>boolean</td><td><code>false</code></td><td>Adds an "into" zone and switches to indicator mode</td></tr>
+                    <tr><td><code>live</code></td><td>boolean | null</td><td><code>null</code></td><td>null means <code>!nest</code>; false is indicator mode without nesting</td></tr>
+                    <tr><td><code>axis</code></td><td>'y' | 'x'</td><td><code>'y'</code></td><td>A column or a row</td></tr>
+                    <tr><td><code>key</code></td><td>string</td><td><code>'data-id'</code></td><td>Attribute that identifies an item across re-renders</td></tr>
+                    <tr><td><code>animation</code></td><td>number</td><td><code>200</code></td><td>Glide duration in ms; 0 turns it off</td></tr>
+                    <tr><td><code>easing</code></td><td>string</td><td><code>cubic-bezier(…)</code></td><td>Any CSS easing</td></tr>
+                    <tr><td><code>threshold</code></td><td>number</td><td><code>4</code></td><td>Pixels before a press becomes a drag</td></tr>
+                    <tr><td><code>touchDelay</code></td><td>number</td><td><code>220</code></td><td>Press-and-hold in ms for an item with no handle</td></tr>
+                    <tr><td><code>nestZone</code></td><td>number</td><td><code>0.5</code></td><td>Share of an item's height, centred, that means "into"</td></tr>
+                    <tr><td><code>accepts</code></td><td>Function</td><td><code>null</code></td><td><code>(item, target, zone) =&gt; boolean</code> - veto a drop</td></tr>
+                    <tr><td><code>disabled</code></td><td>boolean</td><td><code>false</code></td><td>Start disabled</td></tr>
+                    <tr><td><code>keyboard</code></td><td>boolean</td><td><code>true</code></td><td>Alt+Arrow moves the focused item</td></tr>
+                    <tr><td><code>persist</code></td><td>string | boolean</td><td><code>false</code></td><td>Storage name (true = the container id): remember the order</td></tr>
+                    <tr><td><code>autoScroll</code></td><td>boolean</td><td><code>true</code></td><td>Scroll near the edges while dragging</td></tr>
+                    <tr><td><code>ghostParent</code></td><td>Element</td><td><code>null</code></td><td>Where the dragged copy lives; null means the container</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Methods">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Methods</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>toArray()</code></td><td>The item keys in their current order</td></tr>
+                    <tr><td><code>sort(keys, {animate})</code></td><td>Put the items in that order; items not named keep their slots</td></tr>
+                    <tr><td><code>restore()</code></td><td>Re-apply the saved order</td></tr>
+                    <tr><td><code>forget()</code></td><td>Remove the saved order from storage</td></tr>
+                    <tr><td><code>animate(mutate)</code></td><td>Run a change (or a re-render) and glide every keyed item into place</td></tr>
+                    <tr><td><code>enable()</code> / <code>disable()</code></td><td>Arm or suspend dragging</td></tr>
+                    <tr><td><code>dragging</code></td><td>Getter: whether a drag is in progress</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Cancel any drag and detach</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Theming">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Theming</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The dragged copy, the empty slot and the drop marker all take theme tokens by default. Override
+                them per container with custom properties.
+            </p>
+            <div class="code-block language-css">
+                <pre><code>
+#kanban {
+    --dm-sortable-accent: var(--dm-success);   /* drop marker */
+    --dm-sortable-radius: 12px;
+    --dm-sortable-ghost-bg: var(--dm-surface);
+    --dm-sortable-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+    --dm-sortable-lift: 1.05;                  /* scale while dragged */
+}
+</code></pre>
+            </div>
+            <p class="mb-2">
+                The target in indicator mode carries <code>.dm-sortable-over-before</code>, <code>-after</code> or
+                <code>-into</code>, which the tree above uses to tint the row about to receive a child. See
+                <code>docs/Sortable.md</code> for every class.
+            </p>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    Domma.icons.scan();
+
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(message) + '</li>');
+        list.find('li').filter((i) => i >= 6).remove();
+    };
+
+    // ---- Live list with persist ------------------------------------------
+    const DEFAULT_TASKS = ['brief', 'design', 'build', 'review', 'launch'];
+
+    const showSaved = () => {
+        const saved = S.get('sortable:showcase-tasks');
+        $('#demo-tasks-saved').text(Array.isArray(saved) ? saved.join(', ') : 'none');
+    };
+
+    const tasks = E.sortable('#demo-tasks', {
+        persist: 'showcase-tasks',
+        onSort: ({from, to}) => {
+            showSaved();
+            log('Task list: moved from position ' + (from + 1) + ' to ' + (to + 1));
+        }
+    });
+    showSaved();
+
+    $('#demo-tasks-reset').on('click', () => {
+        tasks.forget();
+        tasks.sort(DEFAULT_TASKS);
+        showSaved();
+        log('Task list: saved order forgotten');
+    });
+
+    // ---- Horizontal row --------------------------------------------------
+    E.sortable('#demo-row', {
+        axis: 'x',
+        onSort: ({order}) => log('Row: ' + order.join(', '))
+    });
+
+    // ---- Tree: nest + onDrop re-render ------------------------------------
+    const initialTree = () => [
+        {id: 'home', label: 'Home', children: []},
+        {id: 'about', label: 'About', children: [
+            {id: 'team', label: 'Our team', children: []},
+            {id: 'history', label: 'History', children: []}
+        ]},
+        {id: 'services', label: 'Services', children: [
+            {id: 'design', label: 'Design', children: []},
+            {id: 'hosting', label: 'Hosting', children: []}
+        ]},
+        {id: 'contact', label: 'Contact', children: []}
+    ];
+    let tree = initialTree();
+
+    // The array holding a node, its index there, and the node itself
+    const locate = (nodes, id) => {
+        for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].id === id) return {list: nodes, index: i, node: nodes[i]};
+            const found = locate(nodes[i].children, id);
+            if (found) return found;
+        }
+        return null;
+    };
+
+    const contains = (node, id) => node.children.some((child) => child.id === id || contains(child, id));
+
+    const renderTree = () => {
+        const rows = [];
+        const walk = (nodes, depth) => nodes.forEach((node) => {
+            const icon = node.children.length ? 'folder' : 'file-text';
+            rows.push(
+                '<div class="sx-sort-node" data-depth="' + Math.min(depth, 4) + '" data-id="' + node.id + '">' +
+                '<span data-icon="' + icon + '"></span>' + _.escape(node.label) + '</div>'
+            );
+            walk(node.children, depth + 1);
+        });
+        walk(tree, 0);
+        // Labels are escaped above. .html() would sanitise away the data-id
+        // keys that the sortable matches rows by, so set the markup directly.
+        const host = $('#demo-tree').get(0);
+        host.innerHTML = rows.join('');
+        Domma.icons.scan(host);
+    };
+    renderTree();
+
+    const treeSort = E.sortable('#demo-tree', {
+        nest: true,
+        accepts: (item, target) => !contains(locate(tree, item.dataset.id).node, target.dataset.id),
+        onDrop: ({key, targetKey, zone}) => {
+            const from = locate(tree, key);
+            from.list.splice(from.index, 1);
+
+            const to = locate(tree, targetKey);
+            if (zone === 'into') to.node.children.push(from.node);
+            else to.list.splice(zone === 'before' ? to.index : to.index + 1, 0, from.node);
+
+            renderTree();
+            const message = from.node.label + ' moved ' + zone + ' ' + to.node.label;
+            $('#demo-tree-status').text(message);
+            log('Tree: ' + message);
+        }
+    });
+
+    $('#demo-tree-reset').on('click', () => {
+        treeSort.animate(() => {
+            tree = initialTree();
+            renderTree();
+        });
+        $('#demo-tree-status').text('Tree reset.');
+    });
+
+    // ---- Handle-only list -------------------------------------------------
+    E.sortable('#demo-fields', {
+        handle: '.sx-sort-grip',
+        onSort: ({order}) => log('Fields: ' + order.join(', '))
+    });
+
+    // ---- One listener for every cancel on the page ------------------------
+    $('main').on('sortable:cancel', () => log('Drag cancelled'));
+</script>
+
+</body>
+</html>

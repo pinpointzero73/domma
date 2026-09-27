@@ -8,6 +8,7 @@
 import Component from './component.js';
 import TreeView from './treeview.js';
 import ContextMenu from './context-menu.js';
+import Sortable from './sortable.js';
 import sanitizeModule from './sanitize.js';
 
 // Web Component wrappers for Phase 1 & 2 components
@@ -11613,6 +11614,19 @@ export const elements = {
         return instance;
     },
 
+    /**
+     * Drag-to-reorder for a container's children - live (siblings slide aside)
+     * or indicator mode with an optional "into" zone for trees. `persist`
+     * remembers the order.
+     */
+    sortable(selector, options = {}) {
+        const instance = new Sortable(selector, options);
+        if (instance.element) {
+            this._instances.set(instance.element, instance);
+        }
+        return instance;
+    },
+
     treeView(selector, options = {}) {
         const instance = new TreeView(selector, options);
         if (instance.element) {
@@ -11764,4 +11778,4 @@ elements.contextMenu.active = ContextMenu.active;
 elements.contextMenu.registry = ContextMenu.registry;
 
 // Export component classes for direct access to static methods
-export {DesktopNotification, TreeView, ContextMenu};
+export {DesktopNotification, TreeView, ContextMenu, Sortable};

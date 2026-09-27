@@ -26,6 +26,7 @@ modern UI components.
 | Form generation                   | `F.create(selector, blueprint)` | Manual `<form>` HTML          |
 | UI components (modals, tabs)      | `E.modal(selector, options)`  | Manual HTML/CSS/JS              |
 | Right-click menus                 | `E.contextMenu(sel, options)` | Manual `contextmenu` listeners  |
+| Drag-to-reorder lists             | `E.sortable(sel, options)`    | Manual drag/drop listeners      |
 | Toast notifications               | `E.toast('Message', {type})`  | Manual notification divs        |
 | Icons                             | `<span data-icon="name">`     | Manual SVG/icon fonts           |
 | DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
@@ -209,6 +210,8 @@ consult that folder's CLAUDE.md for detailed information.
 - [docs/Reactivity.md](./docs/Reactivity.md) - Dependency tracking: `M.computed()`, `M.effect()`, batching rules
 - [docs/ContextMenu.md](./docs/ContextMenu.md) - Right-click menus: container binding, delegation, the
   nesting cascade and inheritance
+- [docs/Sortable.md](./docs/Sortable.md) - Drag-to-reorder: live and indicator (tree) modes, `onDrop` re-render,
+  keyboard, touch and `persist`
 - [docs/Bindings.md](./docs/Bindings.md) - DOM bindings: `M.applyBindings()`, `data-bind-*`, `data-model`, `data-each`,
   custom bindings and helpers
 - [docs/DommaDocumentation.md](./docs/DommaDocumentation.md) - Comprehensive user documentation
@@ -545,7 +548,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (`Domma.elements`)
 
-- **24 UI Components:**
+- **25 UI Components:**
   - Modal - `modal()` with backdrop, keyboard, animation options
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
@@ -555,6 +558,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Dropdown - `dropdown()` with positioning
   - ContextMenu - `contextMenu()` right-click menus bound to a container and delegated to its
     children; nested menus shadow their parent rather than overriding it, resolved by DOM depth
+  - Sortable - `sortable()` drag-to-reorder by pointer, touch and keyboard (Alt+Arrow); live mode slides
+    siblings aside, `nest: true` adds an "into" zone and hands drops to `onDrop` for trees; `persist` remembers the order
   - Toast - Static `toast()` method with types
   - Dialog - Promise-based `alert()`, `confirm()`, `prompt()`
   - Loader - `loader()` with types (spinner, dots, pulse, bars)

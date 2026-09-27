@@ -471,6 +471,12 @@ Accessed via `Domma.elements`:
     - ResizeObserver reflows strokes on container resize
     - Export: `'png'` (canvas data URL) or `'svg'` (rebuilt from stored strokes)
     - `typeFallback: true` shows a Draw / Type toggle; type mode renders cursive text to canvas
+- **Sortable**: `elements.sortable(selector, { items, handle, nest, live, axis, key, animation, easing, threshold, touchDelay, nestZone, accepts, disabled, keyboard, persist, autoScroll, ghostParent, onStart, onMove, onSort, onDrop, onCancel, onEnd })` →
+  `toArray()`, `sort(keys)`, `restore()`, `forget()`, `animate(mutate)`, `enable()`, `disable()`, `dragging`, `destroy()`
+    - Live mode (default): siblings slide aside, `onSort({item, from, to, order, previous})`
+    - Indicator mode (`nest: true` or `live: false`): marker shows before/after/into; `onDrop({item, target, zone, key, targetKey})` - host updates data and re-renders, the component animates it by `key`
+    - `persist`: order saved via `S` under `sortable:<persist>` (live mode); Alt+Arrow keyboard moves; Esc cancels
+    - Events: `sortable:start|move|sort|drop|cancel|end` on the container. See [docs/Sortable.md](../docs/Sortable.md)
 
 ### tables.js - DataTable-like functionality
 

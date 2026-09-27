@@ -200,6 +200,7 @@ export const configEngine = {
             carousel: elements.carousel,
             dropdown: elements.dropdown,
             contextMenu: elements.contextMenu,
+            sortable: elements.sortable,
             badge: elements.badge,
             numberBadge: elements.numberBadge,
             listGroup: elements.listGroup,

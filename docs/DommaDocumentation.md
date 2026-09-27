@@ -2578,6 +2578,35 @@ and Shift+right-click still reaches the browser's own menu.
 
 See [docs/ContextMenu.md](./ContextMenu.md) for the cascade rules, options and item schema.
 
+## Sortable
+
+Drag-to-reorder for the children of one container, by mouse, pen, touch and keyboard. Items carry a
+key (`data-id` by default), and items rendered later are sortable without a refresh.
+
+```javascript
+const list = Domma.elements.sortable('#tasks', {
+    handle: '.drag-grip',        // optional - only the grip starts a drag
+    persist: 'tasks',            // remember the order (S key 'sortable:tasks')
+    onSort: ({order}) => H.post('/api/tasks/order', {order})
+});
+
+list.toArray();                  // ['write', 'review', 'ship']
+list.forget();                   // drop the saved order
+```
+
+There are two modes. **Live** (the default) slides the siblings aside while you drag and moves the
+element itself. **Indicator** (`nest: true`, or `live: false`) moves nothing until the drop: a marker
+shows where the item would land - before, after, or with `nest` into another item - and `onDrop`
+hands you `{key, targetKey, zone}` to update your data and re-render. The component then animates
+the re-render, matching items by key, which is what makes it suit trees and menu editors.
+
+`axis: 'x'` sorts a row. Alt+Arrow moves the focused item, Esc cancels a drag, and on touch a handle
+drags at once while an item without one needs a short press-and-hold (`touchDelay`) so the list
+still scrolls. Every callback also fires as a `sortable:*` event on the container.
+
+See [docs/Sortable.md](./Sortable.md) for every option, the tree example, the CSS classes and the
+`--dm-sortable-*` custom properties.
+
 ## DatePicker
 
 A themed calendar attached to an input. It exists because `<input type="date">`

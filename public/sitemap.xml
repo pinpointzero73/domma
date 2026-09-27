@@ -496,6 +496,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://dommajs.org/showcase/elements/sortable/</loc>
+    <lastmod>2026-09-27</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://dommajs.org/showcase/elements/tabs/</loc>
     <lastmod>2026-03-19</lastmod>
     <priority>0.6</priority>

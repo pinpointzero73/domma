@@ -1009,6 +1009,139 @@ export interface ContextMenuStatic {
     registry(forElement?: HTMLElement | null): ContextMenuInstance[];
 }
 
+// ============================================
+// Sortable
+// ============================================
+
+/** Where an indicator-mode drop lands relative to its target */
+export type SortableZone = 'before' | 'after' | 'into';
+
+export interface SortableStartDetail {
+    item: HTMLElement;
+    /** Index of the item when the drag began */
+    from: number;
+}
+
+export interface SortableMoveDetail {
+    item: HTMLElement;
+    /** The item under the pointer (indicator mode: the accepted drop target), or null */
+    target: HTMLElement | null;
+    /** Indicator mode only; null in live mode */
+    zone: SortableZone | null;
+    x: number;
+    y: number;
+}
+
+export interface SortableSortDetail {
+    item: HTMLElement;
+    from: number;
+    to: number;
+    /** Every item's key, in the new order */
+    order: (string | null)[];
+    /** Every item's key, in the order before the drag */
+    previous: (string | null)[];
+}
+
+export interface SortableDropDetail {
+    /** The dragged element (it has not moved - the host re-renders) */
+    item: HTMLElement;
+    /** The item it was dropped on or beside */
+    target: HTMLElement;
+    zone: SortableZone;
+    /** Value of the `key` attribute on the dragged item */
+    key: string | null;
+    /** Value of the `key` attribute on the target */
+    targetKey: string | null;
+}
+
+export interface SortableEndDetail {
+    item: HTMLElement;
+    /** Whether the order changed */
+    changed: boolean;
+}
+
+export interface SortableOptions {
+    /** Selector for the sortable items; null = the container's direct children */
+    items?: string | null;
+    /** Selector inside an item that starts a drag; null = the whole item */
+    handle?: string | null;
+    /** Adds an "into" drop zone and switches to indicator mode (for trees) */
+    nest?: boolean;
+    /** null = !nest. true = siblings slide aside while you drag; false = indicator mode */
+    live?: boolean | null;
+    /** 'y' for a column, 'x' for a row */
+    axis?: 'x' | 'y';
+    /** Attribute that identifies an item across re-renders (default 'data-id') */
+    key?: string;
+    /** Animation duration in ms; 0 turns it off. Reduced motion always does */
+    animation?: number;
+    /** CSS easing for every glide */
+    easing?: string;
+    /** Pixels the pointer must travel before a press becomes a drag (default 4) */
+    threshold?: number;
+    /** Ms a finger must rest on an item with no handle before it drags (default 220) */
+    touchDelay?: number;
+    /** Share of an item's height, centred, that means "into" (default 0.5) */
+    nestZone?: number;
+    /** Veto a drop. Live mode passes 'before' or 'after' */
+    accepts?: ((item: HTMLElement, target: HTMLElement, zone: SortableZone) => boolean) | null;
+    /** Start disabled */
+    disabled?: boolean;
+    /** Alt+Arrow moves the focused item (live mode). Default true */
+    keyboard?: boolean;
+    /** Storage key (or true = the container's id): remember the order. Live mode */
+    persist?: string | boolean;
+    /** Scroll the nearest scrolling ancestor (or the page) near its edges. Default true */
+    autoScroll?: boolean;
+    /** Where the dragged copy is appended; null = the container */
+    ghostParent?: HTMLElement | null;
+    onStart?: (detail: SortableStartDetail) => void;
+    onMove?: (detail: SortableMoveDetail) => void;
+    /** Live mode: the order changed */
+    onSort?: (detail: SortableSortDetail) => void;
+    /**
+     * Indicator mode: update your data and re-render here. Return false (or a
+     * promise that rejects) to refuse; a returned promise is awaited before animating.
+     */
+    onDrop?: (detail: SortableDropDetail) => boolean | void | Promise<any>;
+    /** Esc, a refused drop, or a drop over nothing */
+    onCancel?: (detail: {item: HTMLElement}) => void;
+    /** Every drag, keyboard move and cancel ends here */
+    onEnd?: (detail: SortableEndDetail) => void;
+}
+
+export interface SortableInstance extends ComponentInstance {
+    /** The item keys, in their current order */
+    toArray(): (string | null)[];
+
+    /** Put the items in the order of `keys`; items not named keep their slots */
+    sort(keys: (string | number)[], options?: {animate?: boolean}): SortableInstance;
+
+    /** Re-apply the saved order (live mode with `persist`) */
+    restore(): SortableInstance;
+
+    /** Forget the saved order */
+    forget(): SortableInstance;
+
+    /**
+     * Run `mutate` (which may re-render the container) and glide every item,
+     * matched by `key`, from where it was to where it is afterwards.
+     */
+    animate<T>(mutate: () => T): T;
+
+    /** Re-arm dragging */
+    enable(): SortableInstance;
+
+    /** Stop dragging; a drag in progress is cancelled */
+    disable(): SortableInstance;
+
+    /** Whether a drag is in progress */
+    readonly dragging: boolean;
+
+    /** Cancel any drag, remove the classes and detach */
+    destroy(): void;
+}
+
 export interface Elements {
     /** Create a Card component */
     card(selector: string | HTMLElement, options?: CardOptions): CardInstance;
@@ -1043,6 +1176,14 @@ export interface Elements {
      * and by default appends the parent's items beneath its own.
      */
     contextMenu: ContextMenuStatic;
+
+    /**
+     * Drag-to-reorder for a container's children, by pointer, touch and keyboard.
+     * Live mode slides siblings aside; `nest: true` switches to indicator mode with
+     * an "into" zone and hands each drop to `onDrop` for the host to re-render.
+     * `persist` remembers the order through Domma storage.
+     */
+    sortable(selector: string | HTMLElement, options?: SortableOptions): SortableInstance;
 
     /** Create a Carousel component */
     carousel(selector: string | HTMLElement, options?: CarouselOptions): CarouselInstance;
