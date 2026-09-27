@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.47.0",
+      "title": "Fields That Help",
+      "description": "<p>Four interactive extras for input groups: a show / hide password button, a clear button, a number\nstepper that honours min, max and step, and a live character counter - joined to the field like an\naddon, keyboard reachable and screen-reader friendly.</p>\n<p>The same keys work in a blueprint's <code>formConfig</code> and in <code>E.inputGroup()</code>:\n<code>reveal</code>, <code>clear</code>, <code>stepper</code> and <code>counter</code>.</p>\n<p>Links now read at 5:1 or better on every theme: the 25 whose main colour was too pale set a\nreadable link colour.</p>",
+      "date": "2026-09-27"
+    },
+    {
       "year": "v0.46.1",
       "title": "Icons For Every Field",
       "description": "<p>A Forms icon set: eighteen new icons for the side of a form field - email, name, phone,\naddress, postcode, website, pound, dollar, euro, weight and more - plus a Forms category that\ngathers every icon suited to a field.</p>",
@@ -391,5 +397,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.46.1"
+  "latestVersion": "v0.47.0"
 }
