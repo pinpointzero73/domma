@@ -96,3 +96,14 @@ describe('Domma.icons - Icons Module', () => {
     expect(nonExistentUnregister).toBe(false);
   });
 });
+describe('Forms icons', () => {
+  it('every icon the Forms category lists exists, new and borrowed alike', () => {
+    const forms = Domma.icons.listCategories().forms;
+    expect(forms).toBeTruthy();
+    const names = forms.icons || [];
+    for (const name of ['email', 'name', 'telephone', 'address', 'pound', 'weight', 'mail', 'user', 'map-pin']) {
+      expect(names).toContain(name);
+    }
+    for (const name of names) expect(Domma.icons.has(name), name).toBe(true);
+  });
+});

@@ -21,6 +21,7 @@ import {buildings} from './buildings.js';
 import {emojis} from './emojis.js';
 import {transport} from './transport.js';
 import code from './code.js';
+import {forms, formsRelated} from './forms.js';
 
 // Merge all icon categories
 export const icons = {
@@ -41,7 +42,8 @@ export const icons = {
     ...buildings,
     ...emojis,
   ...transport,
-    ...code
+    ...code,
+    ...forms
 };
 
 // Export categories for selective imports
@@ -157,6 +159,11 @@ export const categories = {
         name: 'Code & Editor',
         description: 'Text editing, formatting, and code icons',
         icons: Object.keys(code)
+    },
+    forms: {
+        name: 'Forms',
+        description: 'Beside a form field - email, name, phone, address, money, measurements',
+        icons: [...Object.keys(forms), ...formsRelated]
     }
 };
 
