@@ -1143,6 +1143,73 @@ export interface SortableInstance extends ComponentInstance {
 }
 
 // ============================================
+// Skeleton
+// ============================================
+
+export type SkeletonType = 'text' | 'card' | 'list' | 'table' | 'custom';
+
+export interface SkeletonOptions {
+    /** Shape to draw (default 'text') */
+    type?: SkeletonType;
+    /** Lines per paragraph, card or list item (default 3; list 2) */
+    lines?: number;
+    /** Paragraphs, cards or list items (default 1; list 3) */
+    count?: number;
+    /** Table rows (default 5) */
+    rows?: number;
+    /** Table columns (default 4) */
+    columns?: number;
+    /** Table header row (default true) */
+    header?: boolean;
+    /** A circle at the start of each list item (default true) */
+    avatar?: boolean;
+    /** An image block at the top of each card (default true) */
+    image?: boolean;
+    /** false = still tint, no sweep (default true) */
+    animate?: boolean;
+    /** Markup for type 'custom', or a function returning it */
+    template?: string | ((options: SkeletonOptions) => string) | null;
+    /** Screen-reader status text (default 'Loading...') */
+    label?: string;
+}
+
+export interface SkeletonHandle {
+    /** The container */
+    readonly element: HTMLElement;
+    /** The resolved options */
+    readonly options: SkeletonOptions;
+    /** Whether the skeleton is still showing */
+    readonly active: boolean;
+    /** Take the skeleton away and restore the previous children (the same nodes) */
+    remove(): HTMLElement;
+    /** Take the skeleton away and show content instead: an HTML string (unsanitised) or a node */
+    replace(content: string | Node | ArrayLike<Node> | null): HTMLElement;
+    /** Alias of remove() */
+    destroy(): HTMLElement;
+}
+
+export interface SkeletonStatic {
+    /**
+     * Fill a container with placeholders, mark it aria-busy with a polite
+     * "Loading..." status and return a handle. null if nothing matched.
+     */
+    (target: string | HTMLElement | ArrayLike<HTMLElement>, options?: SkeletonOptions): SkeletonHandle | null;
+    /**
+     * Show a skeleton until the promise settles. Resolves with its value once
+     * the skeleton is gone; on rejection removes it and rethrows.
+     */
+    while<T>(target: string | HTMLElement | ArrayLike<HTMLElement>, promise: Promise<T> | (() => Promise<T> | T), options?: SkeletonOptions): Promise<T>;
+    /** The live handle on a container, or null */
+    get(target: string | HTMLElement | ArrayLike<HTMLElement>): SkeletonHandle | null;
+    /** Remove the skeleton from a container, restoring its content */
+    remove(target: string | HTMLElement | ArrayLike<HTMLElement>): HTMLElement | null;
+    /** Fill every [data-skeleton] container under root (options from data-skeleton-*) */
+    scan(root?: string | HTMLElement | Document): SkeletonHandle[];
+    /** The placeholder markup for some options, as a string */
+    markup(options?: SkeletonOptions): string;
+}
+
+// ============================================
 // InputGroup
 // ============================================
 
@@ -1269,6 +1336,13 @@ export interface Elements {
      * `persist` remembers the order through Domma storage.
      */
     sortable(selector: string | HTMLElement, options?: SortableOptions): SortableInstance;
+
+    /**
+     * Shimmering placeholders shaped like the content on its way (text, card,
+     * list, table or custom). E.skeleton.while(target, promise, opts) shows one
+     * until a promise settles; .get, .remove, .scan and .markup round it off.
+     */
+    skeleton: SkeletonStatic;
 
     /**
      * Join an icon or short text to the start and/or end of an input already

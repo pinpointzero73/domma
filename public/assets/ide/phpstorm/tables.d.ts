@@ -117,6 +117,10 @@ export interface TableOptions {
     compact?: boolean;
     /** Responsive wrapper */
     responsive?: boolean;
+    /** Skeleton rows until the first setData()/addRow(): true = min(pageSize, 5), or a row count */
+    loadingSkeleton?: boolean | number;
+    /** Screen-reader status while loading (default 'Loading...') */
+    loadingLabel?: string;
 }
 
 // ============================================
@@ -130,8 +134,14 @@ export interface TableInstance {
     options: TableOptions;
 
     // Data Methods
-    /** Set table data */
+    /** Set table data (ends a loadingSkeleton state) */
     setData(data: Record<string, any>[]): this;
+
+    /** Show (true) or hide skeleton rows in place of the body, e.g. for a reload */
+    setLoading(on?: boolean): this;
+
+    /** Whether skeleton rows are showing */
+    isLoading(): boolean;
 
     /** Get current data (filtered and sorted) */
     getData(): Record<string, any>[];

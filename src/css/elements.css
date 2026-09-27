@@ -8817,3 +8817,234 @@ code {
         transition: none;
     }
 }
+
+/* ============================================
+   SKELETON LOADERS
+   Shimmering placeholders shaped like the content on its way. The tint is the
+   theme's text colour mixed into its surface, so it reads as a quiet grey on
+   light themes and a quiet lift on dark ones. Written by E.skeleton() or by
+   hand. Override hooks: --dm-skeleton-bg, --dm-skeleton-shine,
+   --dm-skeleton-duration, --dm-skeleton-columns (table).
+   ============================================ */
+.skeleton {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background-color: var(--dm-skeleton-bg, color-mix(in srgb, var(--dm-text) 10%, var(--dm-surface)));
+    border-radius: var(--dm-radius-md);
+    user-select: none;
+    pointer-events: none;
+}
+
+/* The sweep: a soft band that crosses each shape. Towards the surface on light
+   themes, towards the text on dark ones - lighter in both cases. */
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg,
+        transparent 0%,
+        var(--dm-skeleton-shine, color-mix(in srgb, var(--dm-surface) 70%, transparent)) 50%,
+        transparent 100%);
+    animation: dm-skeleton-sweep var(--dm-skeleton-duration, 1.6s) ease-in-out infinite;
+}
+
+[data-mode="dark"] .skeleton::after {
+    background-image: linear-gradient(90deg,
+        transparent 0%,
+        var(--dm-skeleton-shine, color-mix(in srgb, var(--dm-text) 8%, transparent)) 50%,
+        transparent 100%);
+}
+
+@keyframes dm-skeleton-sweep {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* animate: false, or by hand on a shape or a group of shapes */
+.skeleton-static::after,
+.skeleton-static .skeleton::after {
+    display: none;
+}
+
+/* Lines of text: 0.875em bars on a 1.5em rhythm, like body copy */
+.skeleton-text {
+    width: 100%;
+    height: 0.875em;
+    border-radius: var(--dm-radius-sm);
+}
+
+.skeleton-text + .skeleton-text {
+    margin-top: 0.625em;
+}
+
+.skeleton-text-sm {
+    height: 0.75em;
+}
+
+/* The last line of a paragraph runs short */
+.skeleton-lines > .skeleton-text:last-child:not(:first-child) {
+    width: 60%;
+}
+
+.skeleton-lines + .skeleton-lines {
+    margin-top: var(--dm-space-6);
+}
+
+.skeleton-heading {
+    width: 50%;
+    height: 1.25rem;
+    margin-bottom: var(--dm-space-4);
+    border-radius: var(--dm-radius-sm);
+}
+
+.skeleton-w-25 { width: 25%; }
+.skeleton-w-50 { width: 50%; }
+.skeleton-w-75 { width: 75%; }
+.skeleton-w-100 { width: 100%; }
+
+.skeleton-lines > .skeleton-w-25:last-child:not(:first-child) { width: 25%; }
+.skeleton-lines > .skeleton-w-50:last-child:not(:first-child) { width: 50%; }
+.skeleton-lines > .skeleton-w-75:last-child:not(:first-child) { width: 75%; }
+.skeleton-lines > .skeleton-w-100:last-child:not(:first-child) { width: 100%; }
+
+/* Circles - avatars, icons. 2.5rem by default */
+.skeleton-circle,
+.skeleton-avatar {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--dm-radius-full);
+}
+
+.skeleton-circle.skeleton-sm,
+.skeleton-avatar.skeleton-sm { width: 2rem; height: 2rem; }
+.skeleton-circle.skeleton-lg,
+.skeleton-avatar.skeleton-lg { width: 3.5rem; height: 3.5rem; }
+.skeleton-circle.skeleton-xl,
+.skeleton-avatar.skeleton-xl { width: 5rem; height: 5rem; }
+
+/* Blocks and images - 16:9 unless told otherwise */
+.skeleton-rect,
+.skeleton-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.skeleton-ratio-1x1 { aspect-ratio: 1 / 1; }
+.skeleton-ratio-4x3 { aspect-ratio: 4 / 3; }
+.skeleton-ratio-16x9 { aspect-ratio: 16 / 9; }
+.skeleton-ratio-21x9 { aspect-ratio: 21 / 9; }
+
+/* The size of a .btn: small text on a 1.5 line, space-2 padding, 1px border */
+.skeleton-button {
+    display: inline-block;
+    width: 6rem;
+    height: calc(var(--dm-font-size-sm) * 1.5 + var(--dm-space-2) * 2 + 2px);
+    vertical-align: middle;
+    border-radius: var(--dm-radius-md);
+}
+
+/* Card: the .card frame, an image with square corners, a .card-body's padding */
+.skeleton-card {
+    overflow: hidden;
+    color: var(--dm-text);
+    background-color: var(--dm-card-bg, var(--dm-surface));
+    border: 1px solid var(--dm-card-border, var(--dm-border));
+    border-radius: var(--dm-radius-lg);
+}
+
+.skeleton-card > .skeleton-image {
+    border-radius: 0;
+}
+
+.skeleton-card-body {
+    padding: var(--dm-space-6);
+}
+
+/* List: the .list-group frame and item padding, circle then two lines */
+.skeleton-list {
+    overflow: hidden;
+    color: var(--dm-text);
+    background-color: var(--dm-surface);
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+}
+
+.skeleton-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-3);
+    padding: var(--dm-space-3) var(--dm-space-4);
+    font-size: var(--dm-font-size-sm);
+    border-bottom: 1px solid var(--dm-border-light);
+}
+
+.skeleton-list-item:last-child {
+    border-bottom: none;
+}
+
+.skeleton-list-item-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Table: rows of cells with .table's padding and rule */
+.skeleton-table {
+    overflow: hidden;
+    color: var(--dm-text);
+    font-size: var(--dm-font-size-sm);
+    border: 1px solid var(--dm-table-border, var(--dm-border));
+    border-radius: var(--dm-radius-md);
+}
+
+.skeleton-table-row {
+    display: grid;
+    grid-template-columns: repeat(var(--dm-skeleton-columns, 4), minmax(0, 1fr));
+    align-items: center;
+    gap: var(--dm-space-4);
+    padding: var(--dm-space-3) var(--dm-space-4);
+    border-bottom: 1px solid var(--dm-table-border, var(--dm-border));
+}
+
+.skeleton-table-row:last-child {
+    border-bottom: none;
+}
+
+/* Cells sit side by side: no line spacing between them */
+.skeleton-table-row > .skeleton-text + .skeleton-text {
+    margin-top: 0;
+}
+
+.skeleton-table-head {
+    color: var(--dm-table-header-text, var(--dm-text));
+    background-color: var(--dm-table-header-bg, var(--dm-background-alt));
+}
+
+/* Inside a real table cell (the DataTable's loading rows) */
+td > .skeleton-text {
+    min-width: 3rem;
+}
+
+/* The "Loading..." announcement: read out, not shown */
+.skeleton-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Reduced motion: no sweep, just the still tint */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton::after {
+        display: none;
+        animation: none;
+    }
+}

@@ -395,6 +395,17 @@ Accessed via `Domma.elements`:
     - Types: `'spinner'`, `'dots'`, `'pulse'`, `'bars'`
     - Sizes: `'small'`, `'medium'`, `'large'`, or number (px)
     - Static: `elements.showLoader(selector)`, `elements.hideLoader(selector)`, `elements.fullscreenLoader(text)`
+- **Skeleton** (`skeleton.js`): `elements.skeleton(target, { type, lines, count, rows, columns, header, avatar, image, animate, template, label })` →
+  handle `{remove(), replace(content), destroy(), active, element, options}` (null if no match)
+    - Types: `'text'`, `'card'`, `'list'`, `'table'`, `'custom'` (`template` string or fn); markup from `skeletonMarkup()`
+    - Moves the container's children into a fragment and puts the same nodes back on `remove()`; `replace()` sets HTML
+      (unsanitised) or appends a node. A second call on the same container removes the first. Handles live in a WeakMap
+    - Container gets `aria-busy="true"`, `.is-skeleton-loading` and a `.skeleton-status` (role=status, aria-live polite);
+      shapes are `aria-hidden`; `animate: false` adds `.skeleton-static`
+    - Statics (attached after the `elements` object, like contextMenu's): `E.skeleton.while(target, promise|fn, opts)`
+      (removes on settle, resolves/rethrows), `.get()`, `.remove()`, `.scan(root)` (`[data-skeleton]` + `data-skeleton-*`), `.markup()`
+    - CSS at the end of elements.css: tint `color-mix(--dm-text 10%, --dm-surface)`, `::after` sweep (lighter band; text-ward
+      under `[data-mode="dark"]`), off under reduced motion. Hooks `--dm-skeleton-bg|shine|duration|columns`. See docs/Skeleton.md
 - **Breadcrumbs**: Navigation trail component
     - `elements.breadcrumbs(selector, { items, separator, homeIcon, responsive, onChange })` →
       `setItems()`, `addItem()`, `removeItem()`, `getItems()`, `destroy()`
@@ -499,7 +510,9 @@ Accessed via `Domma.elements`:
 Accessed via `Domma.tables`:
 
 - **Create**:
-  `tables.create(selector, { data, columns, pagination, pageSize, selectable, selectionMode, exportPanel, columnToggle, regexSearch, evenRowColor, oddRowColor, hoverColor })`
+  `tables.create(selector, { data, columns, pagination, pageSize, selectable, selectionMode, exportPanel, columnToggle, regexSearch, evenRowColor, oddRowColor, hoverColor, loadingSkeleton, loadingLabel })`
+- **Loading**: `loadingSkeleton: true | n` renders `tr.domma-table-skeleton-row` rows (`.skeleton-text` bars) and a status, sets
+  `aria-busy` on the table and hides pagination until the first `setData()` / `addRow()`; `setLoading(bool)`, `isLoading()`
 - **Data**: `setData()`, `getData()`, `addRow()`, `addRows()`, `updateRow()`, `removeRow()`, `removeRows()`, `clear()`,
   `refresh()`
 - **Sort**: `sort()`, `sortMultiple()`, `clearSort()`, `getSortState()`
@@ -540,6 +553,7 @@ $.setup({
 - `card`, `modal`, `tabs`, `accordion`, `tooltip`, `carousel`, `dropdown`
 - `badge`, `backToTop`, `buttonGroup`, `loader`, `breadcrumbs`, `navbar`
 - `notification`, `timer`, `alarm`
+- also registered: `contextMenu`, `sortable`, `skeleton`, `inputGroup` (see the map in `initComponent()`)
 
 **Not Supported via Config Engine:**
 

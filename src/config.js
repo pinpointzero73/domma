@@ -201,6 +201,7 @@ export const configEngine = {
             dropdown: elements.dropdown,
             contextMenu: elements.contextMenu,
             sortable: elements.sortable,
+            skeleton: elements.skeleton,
             inputGroup: elements.inputGroup,
             badge: elements.badge,
             numberBadge: elements.numberBadge,
