@@ -1,3 +1,17 @@
+### v0.44.9 - Installs Without The Dev Server (2026-09-27)
+
+**Installing domma-js no longer installs a development web server.** `live-server` was listed as an
+optional dependency as well as a dev one, so every project that depends on domma-js - every Domma
+CMS site among them - pulled it in with about 180 more packages, several of them old and carrying
+known vulnerabilities, for a command most of them never run.
+
+📦 **Packaging**
+
+*   `live-server` is now a dev dependency only. The library itself never used it.
+
+*   `npx domma-js serve` still works: it already asks to install `live-server` the first time it is
+    needed, and does so on a yes.
+
 ### v0.44.8 - Sidebars That Wear The Theme (2026-09-27)
 
 **Every left-hand menu now takes its colours from the active theme.** The site's page, admin and

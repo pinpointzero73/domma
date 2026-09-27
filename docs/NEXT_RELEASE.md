@@ -14,21 +14,7 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# Installs Without The Dev Server
-
-**Installing domma-js no longer installs a development web server.** `live-server` was listed as an
-optional dependency as well as a dev one, so every project that depends on domma-js - every Domma
-CMS site among them - pulled it in with about 180 more packages, several of them old and carrying
-known vulnerabilities, for a command most of them never run.
-
-📦 **Packaging**
-
-*   `live-server` is now a dev dependency only. The library itself never used it.
-
-*   `npx domma-js serve` still works: it already asks to install `live-server` the first time it is
-    needed, and does so on a yes.
+# 
 
 <!-- website -->
-
-<p><strong>Installing domma-js no longer installs a development web server.</strong> <code>live-server</code> was an optional dependency, so every project using domma-js pulled it in with about 180 more packages; it is now a dev dependency only, and <code>domma-js serve</code> still offers to install it when first run.</p>
 
