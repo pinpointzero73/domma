@@ -144,7 +144,8 @@ class TableInstance {
         this._eventListeners = new Map();
         this._columnDropdownOpen = false;
         this._searchIsRegex = false;
-        this._loading = !!this.options.loadingSkeleton;
+        // Data passed to the constructor has already arrived: no skeleton for it
+        this._loading = !!this.options.loadingSkeleton && !(this.options.data && this.options.data.length);
 
         // Normalize columns
         this._columns = this.options.columns.map(col => ({
@@ -1355,6 +1356,8 @@ class TableInstance {
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.checked = this._selected.size > 0 && this._selected.size === pageData.length;
+            // Nothing to select while skeleton rows stand in for the data
+            checkbox.disabled = this._loading;
             this._addEventHandler(checkbox, 'change', () => {
                 if (checkbox.checked) {
                     this.selectAll();
@@ -1428,8 +1431,9 @@ class TableInstance {
             status.className = 'skeleton-status';
             status.setAttribute('role', 'status');
             status.setAttribute('aria-live', 'polite');
-            status.textContent = opts.loadingLabel;
             wrapper.appendChild(status);
+            // Filled after insertion: a live region that arrives already filled is often not announced
+            setTimeout(() => { if (status.isConnected) status.textContent = opts.loadingLabel; }, 100);
         } else if (opts.loadingSkeleton) {
             table.setAttribute('aria-busy', 'false');
         }

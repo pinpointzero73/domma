@@ -545,7 +545,8 @@ $('#demo-table-reload').on('click', async () =&gt; {
         if (sk) sk.replace(renderPeople(PEOPLE.slice(0, 2)));
     });
     $('#demo-declared-again').on('click', () => {
-        $('#demo-declared').empty();
+        // A finished container is marked data-skeleton-done so a later scan leaves it alone
+        $('#demo-declared').empty().removeAttr('data-skeleton-done');
         E.skeleton.scan();
     });
 </script>

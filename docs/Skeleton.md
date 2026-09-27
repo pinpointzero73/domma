@@ -36,7 +36,8 @@ sk.remove();                                   // the old content back, exactly 
 empty is left empty. Both `remove()` and `replace()` set `aria-busy="false"`.
 
 Calling `E.skeleton()` on a container that already has a skeleton removes the first one before adding
-the new one, so the original content is never lost underneath.
+the new one, so the original content is never lost underneath. The superseded handle is then inert:
+its `replace()` leaves the newer skeleton alone.
 
 ## Options
 
@@ -123,7 +124,9 @@ H.get('/api/inbox').then((mail) => E.skeleton.get('#inbox').replace(renderMail(m
 `data-skeleton` names the type; `data-skeleton-lines`, `-count`, `-rows`, `-columns`, `-avatar`,
 `-image`, `-header`, `-animate` and `-label` set the options (`"false"` turns a boolean off). Options
 passed to `E.skeleton()` win over the attributes. `scan()` skips containers that already have a
-skeleton and returns the new handles. Nothing scans automatically.
+skeleton, and ones whose skeleton has been removed or replaced - those are marked
+`data-skeleton-done` so a later scan (after loading a partial, say) never covers real content. It
+returns the new handles. Nothing scans automatically.
 
 `E.skeleton` is also registered with the config engine: `$.setup({'#feed': {component: 'skeleton',
 options: {type: 'card'}}})`.
@@ -141,7 +144,9 @@ $('#reload').on('click', async () => {
 ```
 
 With `loadingSkeleton: true` the table draws its real header and `min(pageSize, 5)` skeleton rows
-(a number sets the row count) until the first `setData()` or `addRow()`. While loading the `<table>`
+(a number sets the row count) until the first `setData()` or `addRow()`. Rows passed as `data` to
+the constructor count as arrived, so they show at once. The select-all checkbox is disabled while
+loading. While loading the `<table>`
 has `aria-busy="true"`, a "Loading..." status (`loadingLabel` to change it) is announced, and the
 pagination bar is hidden rather than claiming "0 entries". `setLoading(on)` switches it on or off by
 hand; `isLoading()` reports it. The rows are `tr.domma-table-skeleton-row`.
@@ -195,7 +200,9 @@ than the shape in both - towards the surface on light themes, towards the text u
 ## Accessibility
 
 - The container is `aria-busy="true"` while the skeleton shows, `"false"` after.
-- One visually hidden `role="status"` / `aria-live="polite"` element says "Loading..." (`label`).
+- One visually hidden `role="status"` / `aria-live="polite"` element says "Loading..." (`label`). It is
+  inserted empty and filled 100ms later, because a live region that arrives already filled is often
+  not announced.
 - Every shape is `aria-hidden="true"`, so a screen reader hears one status rather than a pile of
   empty boxes.
 - The status sits inside the busy container. Most screen readers announce it regardless; if yours

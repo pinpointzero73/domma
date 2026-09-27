@@ -1,5 +1,7 @@
 // src/skeleton.test.js
 import {afterEach, describe, expect, it} from 'vitest';
+
+const tick = (ms = 150) => new Promise((r) => setTimeout(r, ms));
 import Domma from './index.js';
 import {configEngine} from './config.js';
 import {dom} from './dom.js';
@@ -92,7 +94,7 @@ describe('Domma.elements.skeleton', () => {
     });
 
     describe('accessibility', () => {
-        it('marks the container busy, hides the shapes and announces a status', () => {
+        it('marks the container busy, hides the shapes and announces a status', async () => {
             document.body.innerHTML = '<div id="t"></div>';
             E.skeleton('#t', {type: 'list', label: 'Loading users...'});
             const el = document.getElementById('t');
@@ -102,12 +104,16 @@ describe('Domma.elements.skeleton', () => {
             const status = el.querySelector('.skeleton-status');
             expect(status.getAttribute('role')).toBe('status');
             expect(status.getAttribute('aria-live')).toBe('polite');
+            // Inserted empty, filled a moment later so it is announced
+            expect(status.textContent).toBe('');
+            await tick();
             expect(status.textContent).toBe('Loading users...');
         });
 
-        it('defaults the status text to Loading...', () => {
+        it('defaults the status text to Loading...', async () => {
             document.body.innerHTML = '<div id="t"></div>';
             E.skeleton('#t');
+            await tick();
             expect(document.querySelector('#t .skeleton-status').textContent).toBe('Loading...');
         });
     });
@@ -169,6 +175,20 @@ describe('Domma.elements.skeleton', () => {
             expect(document.getElementById('orig')).not.toBeNull();
         });
 
+        it('a superseded handle cannot wipe the newer skeleton', () => {
+            document.body.innerHTML = '<div id="t"><p id="orig">Keep</p></div>';
+            const first = E.skeleton('#t', {type: 'text'});
+            const second = E.skeleton('#t', {type: 'list'});
+            first.replace('<b>stale</b>');
+            const el = document.getElementById('t');
+            expect(el.querySelector('b')).toBeNull();
+            expect(el.querySelector('.skeleton-list')).not.toBeNull();
+            expect(el.getAttribute('aria-busy')).toBe('true');
+            second.remove();
+            expect(el.children).toHaveLength(1);
+            expect(document.getElementById('orig')).not.toBeNull();
+        });
+
         it('E.skeleton.get() and E.skeleton.remove() find the live handle', () => {
             document.body.innerHTML = '<div id="t"><span id="k">k</span></div>';
             const sk = E.skeleton('#t');
@@ -223,6 +243,14 @@ describe('Domma.elements.skeleton', () => {
             expect($$('#b .skeleton-table-row')).toHaveLength(2);
             expect(E.skeleton.scan()).toHaveLength(0);
         });
+
+        it('a finished container is not covered again by a later scan()', () => {
+            document.body.innerHTML = '<div id="a" data-skeleton="text"></div>';
+            E.skeleton.scan()[0].replace('<p id="real">Loaded</p>');
+            expect(document.getElementById('a').hasAttribute('data-skeleton-done')).toBe(true);
+            expect(E.skeleton.scan()).toHaveLength(0);
+            expect(document.getElementById('real')).not.toBeNull();
+        });
     });
 
     describe('config engine', () => {
@@ -239,7 +267,7 @@ describe('T.create loadingSkeleton', () => {
 
     const columns = [{key: 'name', title: 'Name'}, {key: 'age', title: 'Age'}, {key: 'city', title: 'City'}];
 
-    it('shows skeleton rows until setData(), then the data', () => {
+    it('shows skeleton rows until setData(), then the data', async () => {
         document.body.innerHTML = '<div id="tbl"></div>';
         const table = T.create('#tbl', {columns, loadingSkeleton: true});
         expect(table.isLoading()).toBe(true);
@@ -247,6 +275,7 @@ describe('T.create loadingSkeleton', () => {
         expect(rows).toHaveLength(5);
         expect($$('td .skeleton.skeleton-text', rows[0])).toHaveLength(3);
         expect(document.querySelector('#tbl table').getAttribute('aria-busy')).toBe('true');
+        await tick();
         expect(document.querySelector('#tbl .skeleton-status').textContent).toBe('Loading...');
         expect(document.querySelector('#tbl .domma-table-pagination')).toBeNull();
 
@@ -268,6 +297,22 @@ describe('T.create loadingSkeleton', () => {
         table.addRow({id: 2, name: 'Bo'});
         expect(table.isLoading()).toBe(false);
         expect($$('#tbl tbody tr')).toHaveLength(2);
+    });
+
+    it('does not hide data passed to the constructor', () => {
+        document.body.innerHTML = '<div id="tbl"></div>';
+        const table = T.create('#tbl', {columns, loadingSkeleton: true, data: [{id: 1, name: 'Ann'}]});
+        expect(table.isLoading()).toBe(false);
+        expect(document.querySelector('#tbl .domma-table-skeleton-row')).toBeNull();
+        expect(document.querySelector('#tbl tbody').textContent).toContain('Ann');
+    });
+
+    it('disables select-all while loading', () => {
+        document.body.innerHTML = '<div id="tbl"></div>';
+        const table = T.create('#tbl', {columns, loadingSkeleton: true, selectable: true, selectionMode: 'multiple'});
+        expect(document.querySelector('#tbl thead input[type="checkbox"]').disabled).toBe(true);
+        table.setData([{id: 1, name: 'Ann'}]);
+        expect(document.querySelector('#tbl thead input[type="checkbox"]').disabled).toBe(false);
     });
 
     it('is off by default', () => {

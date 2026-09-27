@@ -20,6 +20,8 @@
  * puts back the very same nodes - listeners and state intact.
  */
 
+const ANNOUNCE_DELAY = 100;
+
 const TYPES = new Set(['text', 'card', 'list', 'table', 'custom']);
 
 const DEFAULTS = {
@@ -162,10 +164,11 @@ export function skeleton(target, options = {}) {
     status.className = 'skeleton-status';
     status.setAttribute('role', 'status');
     status.setAttribute('aria-live', 'polite');
-    status.textContent = o.label;
-
     el.appendChild(tpl.content);
     el.appendChild(status);
+    // Filled after insertion: a live region that arrives already filled is
+    // often not announced.
+    setTimeout(() => { if (status.parentNode === el) status.textContent = o.label; }, ANNOUNCE_DELAY);
     el.setAttribute('aria-busy', 'true');
     el.classList.add('is-skeleton-loading');
 
@@ -176,6 +179,8 @@ export function skeleton(target, options = {}) {
         if (status.parentNode === el) el.removeChild(status);
         el.setAttribute('aria-busy', 'false');
         el.classList.remove('is-skeleton-loading');
+        // A declared container has had its turn: a later scan() must not cover the real content
+        if (el.hasAttribute('data-skeleton')) el.setAttribute('data-skeleton-done', '');
         if (active.get(el) === handle) active.delete(el);
         live = false;
     };
@@ -198,6 +203,9 @@ export function skeleton(target, options = {}) {
          * A string is set as HTML (like $.html()); a node or fragment is appended.
          */
         replace(content) {
+            // A newer skeleton owns the container now: leave it alone
+            const current = active.get(el);
+            if (!live && current && current !== handle) return el;
             if (live) clear();
             el.textContent = '';
             if (content == null) return el;
@@ -250,12 +258,13 @@ skeleton.remove = function (target) {
 
 /**
  * Fill every `[data-skeleton]` container under `root` that has no skeleton
- * yet. Options come from `data-skeleton-*` attributes. Returns the handles.
+ * yet and has not had one removed (`data-skeleton-done`). Options come from
+ * `data-skeleton-*` attributes. Returns the handles.
  */
 skeleton.scan = function (root = document) {
     const scope = resolveTarget(root) || document;
     return Array.from(scope.querySelectorAll('[data-skeleton]'))
-        .filter((el) => !active.has(el))
+        .filter((el) => !active.has(el) && !el.hasAttribute('data-skeleton-done'))
         .map((el) => skeleton(el));
 };
 
