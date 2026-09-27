@@ -184,6 +184,31 @@ export const navigation = {
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
     },
+    // Drag handles: six dots, the usual "grab here" mark (E.sortable's handle).
+    'grip-vertical': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M9 5m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M15 5m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M9 12m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M15 12m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M9 19m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M15 19m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0'
+        ],
+        fill: 'currentColor'
+    },
+    'grip-horizontal': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M5 9m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M5 15m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M12 9m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M12 15m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M19 9m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0',
+            'M19 15m-1.5 0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0'
+        ],
+        fill: 'currentColor'
+    },
     'expand': {
         viewBox: '0 0 24 24',
         path: 'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7',

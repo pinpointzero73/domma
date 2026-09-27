@@ -225,9 +225,16 @@ With `handle`, only the handle starts a drag, and the rest of the item behaves n
 be selected, links and buttons work. Handles get `.dm-sortable-handle` (a grab cursor and
 `touch-action: none`), and handles rendered later are picked up automatically.
 
+```html
+<div class="field"><span class="drag-grip" data-icon="grip-vertical" data-icon-size="18"></span> Name</div>
+```
+
 ```javascript
 Domma.elements.sortable('#fields', {handle: '.drag-grip'});
 ```
+
+The `grip-vertical` icon (six dots, and `grip-horizontal` turned on its side) is the usual mark for
+a handle.
 
 Without a handle, a press on an input, textarea, select, button, link or editable region inside an
 item does not start a drag, so forms inside items still work.
