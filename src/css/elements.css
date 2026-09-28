@@ -9223,3 +9223,255 @@ td > .skeleton-text {
         transform: none;
     }
 }
+
+/* ============================================
+   AVATAR
+   ============================================
+ * A person's picture, initials or an icon. Sizes set --dm-avatar-size, which
+ * everything else (font, dot, overlap) scales from; shapes set
+ * --dm-avatar-radius. On a group the size sits on the list and the avatars
+ * inherit it.
+ *
+ * Tones: eight hues mixed 24% into the theme surface, the initials the same hue
+ * mixed 30% into the theme text. Following the theme on both sides is what keeps
+ * them AA everywhere - the lowest measured pair across all 39 themes is 5.2:1.
+ *
+ * --dm-avatar-gap-color is the ring that separates stacked avatars and circles
+ * the status dot: the page background by default, the card inside a card.
+ */
+.avatar {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: var(--dm-avatar-size, 2.5rem);
+    height: var(--dm-avatar-size, 2.5rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--dm-avatar-radius, var(--dm-radius-full));
+    background-color: color-mix(in srgb, var(--dm-text) 12%, var(--dm-surface));
+    color: var(--dm-text);
+    font-family: inherit;
+    font-size: calc(var(--dm-avatar-size, 2.5rem) * 0.4);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    vertical-align: middle;
+    user-select: none;
+}
+
+a.avatar,
+button.avatar {
+    cursor: pointer;
+}
+
+a.avatar:focus-visible,
+button.avatar:focus-visible {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: 2px;
+}
+
+.avatar-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.avatar-initials {
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.avatar-icon {
+    display: inline-flex;
+}
+
+.avatar-icon svg {
+    width: calc(var(--dm-avatar-size, 2.5rem) * 0.55);
+    height: calc(var(--dm-avatar-size, 2.5rem) * 0.55);
+}
+
+/* Sizes */
+.avatar-xs, .avatar-group-xs { --dm-avatar-size: 1.5rem; }
+.avatar-sm, .avatar-group-sm { --dm-avatar-size: 2rem; }
+.avatar-md, .avatar-group-md { --dm-avatar-size: 2.5rem; }
+.avatar-lg, .avatar-group-lg { --dm-avatar-size: 3.5rem; }
+.avatar-xl, .avatar-group-xl { --dm-avatar-size: 5rem; }
+
+/* Shapes - circle is the default */
+.avatar-rounded { --dm-avatar-radius: calc(var(--dm-avatar-size, 2.5rem) * 0.22); }
+.avatar-square { --dm-avatar-radius: 0; }
+
+/* Tones, picked from the name by E.avatar() */
+.avatar-tone-0 {
+    background-color: color-mix(in srgb, var(--dm-red-500) 24%, var(--dm-surface));
+    color: color-mix(in srgb, var(--dm-red-500) 30%, var(--dm-text));
+}
+
+.avatar-tone-1 {
+    background-color: color-mix(in srgb, color-mix(in srgb, var(--dm-red-500) 50%, var(--dm-amber-500)) 24%, var(--dm-surface));
+    color: color-mix(in srgb, color-mix(in srgb, var(--dm-red-500) 50%, var(--dm-amber-500)) 30%, var(--dm-text));
+}
+
+.avatar-tone-2 {
+    background-color: color-mix(in srgb, var(--dm-amber-500) 24%, var(--dm-surface));
+    color: color-mix(in srgb, var(--dm-amber-500) 30%, var(--dm-text));
+}
+
+.avatar-tone-3 {
+    background-color: color-mix(in srgb, var(--dm-green-500) 24%, var(--dm-surface));
+    color: color-mix(in srgb, var(--dm-green-500) 30%, var(--dm-text));
+}
+
+.avatar-tone-4 {
+    background-color: color-mix(in srgb, color-mix(in srgb, var(--dm-green-500) 50%, var(--dm-sky-500)) 24%, var(--dm-surface));
+    color: color-mix(in srgb, color-mix(in srgb, var(--dm-green-500) 50%, var(--dm-sky-500)) 30%, var(--dm-text));
+}
+
+.avatar-tone-5 {
+    background-color: color-mix(in srgb, var(--dm-sky-500) 24%, var(--dm-surface));
+    color: color-mix(in srgb, var(--dm-sky-500) 30%, var(--dm-text));
+}
+
+.avatar-tone-6 {
+    background-color: color-mix(in srgb, var(--dm-blue-500) 24%, var(--dm-surface));
+    color: color-mix(in srgb, var(--dm-blue-500) 30%, var(--dm-text));
+}
+
+.avatar-tone-7 {
+    background-color: color-mix(in srgb, color-mix(in srgb, var(--dm-blue-500) 55%, var(--dm-red-500)) 24%, var(--dm-surface));
+    color: color-mix(in srgb, color-mix(in srgb, var(--dm-blue-500) 55%, var(--dm-red-500)) 30%, var(--dm-text));
+}
+
+/* Where the ring colour comes from */
+.card {
+    --dm-avatar-gap-color: var(--dm-card-bg, var(--dm-surface));
+}
+
+.dm-popover {
+    --dm-avatar-gap-color: var(--dm-surface);
+}
+
+/* Ring */
+.avatar-ring {
+    box-shadow: 0 0 0 2px var(--dm-avatar-gap-color, var(--dm-background)), 0 0 0 4px var(--dm-primary);
+}
+
+/* Status dot. Offline is hollow and busy carries a bar, so colour is not the
+   only difference; the word itself is in the avatar's accessible name. */
+.avatar-status {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    width: max(0.5rem, calc(var(--dm-avatar-size, 2.5rem) * 0.28));
+    height: max(0.5rem, calc(var(--dm-avatar-size, 2.5rem) * 0.28));
+    border-radius: var(--dm-radius-full);
+    background-color: var(--dm-text-muted);
+    box-shadow: 0 0 0 2px var(--dm-avatar-gap-color, var(--dm-background));
+}
+
+.avatar-status-online { background-color: var(--dm-success); }
+.avatar-status-away { background-color: var(--dm-warning); }
+.avatar-status-busy { background-color: var(--dm-danger); }
+
+.avatar-status-busy::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 22%;
+    right: 22%;
+    height: 2px;
+    margin-top: -1px;
+    border-radius: 1px;
+    background-color: var(--dm-avatar-gap-color, var(--dm-background));
+}
+
+.avatar-status-offline {
+    background-color: var(--dm-avatar-gap-color, var(--dm-background));
+    border: 2px solid var(--dm-text-muted);
+}
+
+.avatar-square .avatar-status,
+.avatar-rounded .avatar-status {
+    right: -0.125rem;
+    bottom: -0.125rem;
+}
+
+/* Group: a list of overlapping avatars */
+.avatar-group {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.avatar-group > * {
+    position: relative;
+    display: inline-flex;
+    margin: 0;
+    padding: 0;
+}
+
+.avatar-group > * + * {
+    margin-inline-start: calc(-1 * var(--dm-avatar-overlap, calc(var(--dm-avatar-size, 2.5rem) * 0.3)));
+}
+
+.avatar-group .avatar {
+    box-shadow: 0 0 0 2px var(--dm-avatar-gap-color, var(--dm-background));
+}
+
+.avatar-group .avatar-ring {
+    box-shadow: 0 0 0 2px var(--dm-avatar-gap-color, var(--dm-background)), 0 0 0 4px var(--dm-primary);
+}
+
+.avatar-group > *:hover,
+.avatar-group > *:focus-within {
+    z-index: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .avatar-group .avatar {
+        transition: transform var(--dm-transition-fast);
+    }
+
+    .avatar-group .avatar:hover,
+    .avatar-group .avatar:focus-visible {
+        transform: translateY(-3px);
+    }
+}
+
+/* The "+N" bubble */
+.avatar-more {
+    background-color: color-mix(in srgb, var(--dm-text) 16%, var(--dm-surface));
+    color: var(--dm-text);
+    font-size: calc(var(--dm-avatar-size, 2.5rem) * 0.34);
+    font-weight: 600;
+}
+
+.avatar-more-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dm-space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.avatar-more-person {
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-2);
+    color: inherit;
+    text-decoration: none;
+}
+
+a.avatar-more-person:hover .avatar-more-name {
+    text-decoration: underline;
+}

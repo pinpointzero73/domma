@@ -1196,8 +1196,9 @@ code, pre {
     letter-spacing: 0.025em;
 }
 
-/* Truncate */
-.truncate {
+/* Truncate - one line with an ellipsis. .text-truncate is the Bootstrap spelling. */
+.truncate,
+.text-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2170,6 +2171,123 @@ code, pre {
 
 .select-text {
     user-select: text;
+}
+
+/* ============================================
+   ACCESSIBILITY & TEXT UTILITIES
+   Screen-reader-only text, skip links, line clamping,
+   whole-card links and a divider with a word in it.
+   Tailwind names (.sr-only, .line-clamp-*) with the Bootstrap
+   spellings (.visually-hidden, .text-truncate) as aliases.
+   ============================================ */
+
+/* Hidden on screen, still read by screen readers. The -focusable form comes
+   back when it (or something inside it) takes focus - the skip link pattern. */
+.sr-only,
+.visually-hidden,
+.sr-only-focusable:not(:focus):not(:focus-within),
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Undo .sr-only, e.g. at a breakpoint or from a script */
+.not-sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+}
+
+/* Line clamp - cut text after N lines with an ellipsis */
+.line-clamp-1,
+.line-clamp-2,
+.line-clamp-3,
+.line-clamp-4,
+.line-clamp-5 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+}
+
+.line-clamp-1 { -webkit-line-clamp: 1; }
+.line-clamp-2 { -webkit-line-clamp: 2; }
+.line-clamp-3 { -webkit-line-clamp: 3; }
+.line-clamp-4 { -webkit-line-clamp: 4; }
+.line-clamp-5 { -webkit-line-clamp: 5; }
+
+.line-clamp-none {
+    display: block;
+    overflow: visible;
+    -webkit-box-orient: horizontal;
+    -webkit-line-clamp: unset;
+}
+
+/* Stretched link - the link's ::after covers its nearest positioned ancestor,
+   so the whole card is the link. A .card holding one is positioned for you;
+   anything else needs .relative. Other links or buttons inside must sit above
+   it: give them .relative .z-10. */
+.stretched-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.card:has(.stretched-link),
+.list-group-item:has(.stretched-link) {
+    position: relative;
+}
+
+.stretched-link:focus-visible {
+    outline: none;
+}
+
+.stretched-link:focus-visible::after {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: -2px;
+}
+
+/* Divider with text - a rule either side of a word, e.g. "or" between two
+   sign-in options. -start / -end push the text to one side. */
+.divider-text {
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-3);
+    margin: var(--dm-space-4) 0;
+    color: var(--dm-text-secondary);
+    font-size: var(--dm-font-size-sm);
+    line-height: 1.4;
+}
+
+.divider-text::before,
+.divider-text::after {
+    content: "";
+    flex: 1 1 0;
+    border-top: 1px solid var(--dm-border);
+}
+
+.divider-text:empty {
+    gap: 0;
+}
+
+.divider-text-start::before,
+.divider-text-end::after {
+    flex: 0 0 var(--dm-space-6);
 }
 
 /* ============================================
