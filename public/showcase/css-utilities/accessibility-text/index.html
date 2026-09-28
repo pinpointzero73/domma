@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Utilities - Accessibility &amp; Text - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/css-utilities/accessibility-text/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/grid.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        .sx-demo-box {
+            max-width: 34rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+        }
+
+        .sx-demo-narrow {
+            max-width: 18rem;
+        }
+
+        .sx-stretch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+            gap: 1rem;
+        }
+
+        .sx-signin {
+            max-width: 22rem;
+        }
+
+        .sx-signin .btn {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="subpage">
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Accessibility &amp; Text Utilities</div>
+        <div class="hero-subtitle">Screen-reader-only text and skip links, line clamping, whole-card links and a divider with a word in it</div>
+    </div>
+</div>
+
+<main id="main-content" class="container py-6" tabindex="-1">
+
+    <section data-section="Naming">
+        <div class="section-header-grid">
+            <h2>Names</h2>
+            <p>
+                Tailwind's names, because the rest of Domma's utilities use them (<code>.hidden</code>,
+                <code>.truncate</code>), with Bootstrap's spellings as aliases where they differ:
+                <code>.visually-hidden</code> for <code>.sr-only</code>, <code>.visually-hidden-focusable</code> for
+                <code>.sr-only-focusable</code>, and <code>.text-truncate</code> for <code>.truncate</code>.
+                <code>.stretched-link</code> is Bootstrap's own; Tailwind has none.
+            </p>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN-READER-ONLY
+         ========================================== -->
+    <section data-section="Screen Reader Only">
+        <div class="section-header-grid">
+            <h2>Screen-reader-only text</h2>
+            <p>
+                <code>.sr-only</code> (or <code>.visually-hidden</code>) takes text off the screen but leaves it in the
+                accessibility tree. Use it for the words an icon-only button needs, or context a sighted reader gets
+                from the layout. Unlike <code>.hidden</code> or <code>display: none</code>, a screen reader still reads it.
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3 flex-wrap mb-4">
+            <button type="button" class="btn btn-outline btn-sm" id="demo-sr-bell">
+                <span data-icon="bell" aria-hidden="true"></span>
+                <span class="sr-only">Notifications</span>
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="demo-sr-trash">
+                <span data-icon="trash" aria-hidden="true"></span>
+                <span class="visually-hidden">Delete this draft</span>
+            </button>
+            <span class="text-sm">What a screen reader announces: <code id="demo-sr-names"></code></span>
+        </div>
+
+        <p class="text-sm font-semibold mb-2">Usage</p>
+        <pre class="code-block language-html">&lt;button type="button" class="btn"&gt;
+    &lt;span data-icon="bell" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;span class="sr-only"&gt;Notifications&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;h2&gt;Orders &lt;span class="sr-only"&gt;for March 2026&lt;/span&gt;&lt;/h2&gt;</pre>
+
+        <p class="mt-4 mb-2">
+            <code>.not-sr-only</code> undoes it - at a breakpoint, or from a script once the context is on screen.
+        </p>
+    </section>
+
+    <!-- ==========================================
+         SKIP LINK
+         ========================================== -->
+    <section data-section="Skip Link">
+        <div class="section-header-grid">
+            <h2>Skip link: <code>.skip-link</code> and <code>.sr-only-focusable</code></h2>
+            <p>
+                <code>.sr-only-focusable</code> hides an element like <code>.sr-only</code> until it (or something inside
+                it) takes focus - then it is back on screen. <code>.skip-link</code> is that plus a look: the first thing
+                in the page, invisible until a keyboard user presses Tab, then pinned top left in the primary colour so
+                they can jump past the navigation. This page has one: press Tab from the address bar, or
+                <button type="button" class="btn btn-outline btn-sm" id="demo-skip-focus">focus it now</button>.
+            </p>
+        </div>
+
+        <p class="text-sm font-semibold mb-2">Usage</p>
+        <pre class="code-block language-html">&lt;body&gt;
+    &lt;a href="#main" class="skip-link"&gt;Skip to main content&lt;/a&gt;
+    &lt;nav&gt;...&lt;/nav&gt;
+    &lt;main id="main" tabindex="-1"&gt;...&lt;/main&gt;
+&lt;/body&gt;</pre>
+        <p class="mt-2 mb-0 text-sm">Want your own look? Use <code>.sr-only-focusable</code> and style the focused state yourself.</p>
+    </section>
+
+    <!-- ==========================================
+         LINE CLAMP
+         ========================================== -->
+    <section data-section="Line Clamp">
+        <div class="section-header-grid">
+            <h2>Line clamp</h2>
+            <p>
+                <code>.line-clamp-1</code> to <code>.line-clamp-5</code> cut a block of text after that many lines with an
+                ellipsis - card summaries, list previews. <code>.line-clamp-none</code> lets it run again, for a
+                "Read more" toggle. For one line inside something narrower, <code>.truncate</code> does the same for
+                a single line and needs no block box.
+            </p>
+        </div>
+
+        <div class="btn-group mb-4" role="group" aria-label="Lines">
+            <button class="btn btn-outline btn-sm" type="button" data-clamp="1">1</button>
+            <button class="btn btn-outline btn-sm active" type="button" data-clamp="2">2</button>
+            <button class="btn btn-outline btn-sm" type="button" data-clamp="3">3</button>
+            <button class="btn btn-outline btn-sm" type="button" data-clamp="5">5</button>
+            <button class="btn btn-outline btn-sm" type="button" data-clamp="none">none</button>
+        </div>
+        <div class="sx-demo-box mb-4">
+            <p id="demo-clamp" class="line-clamp-2 m-0">
+                The allotment was a quarter of an acre of clay that had not been dug in a decade. The first winter went on
+                paths and a shed; the second on raised beds, a water butt and more compost than seemed reasonable. By the
+                third summer there were beans up the fence, courgettes nobody could give away fast enough, and a row of
+                sweet peas that the neighbours stopped to ask about. The clay is still clay. It is simply better fed.
+            </p>
+        </div>
+        <div class="sx-demo-box sx-demo-narrow mb-4">
+            <p class="truncate m-0">quarterly-report-final-v3-actually-final-2026.pdf</p>
+        </div>
+
+        <p class="text-sm font-semibold mb-2">Usage</p>
+        <pre class="code-block language-html">&lt;p class="line-clamp-3"&gt;A long summary...&lt;/p&gt;
+&lt;span class="truncate"&gt;a-very-long-file-name.pdf&lt;/span&gt;   &lt;!-- .text-truncate also works --&gt;</pre>
+        <p class="mt-2 mb-0 text-sm">Responsive <code>md:</code> variants are not provided; switch the class from a script.</p>
+    </section>
+
+    <!-- ==========================================
+         STRETCHED LINK
+         ========================================== -->
+    <section data-section="Stretched Link">
+        <div class="section-header-grid">
+            <h2>Stretched link</h2>
+            <p>
+                Put <code>.stretched-link</code> on the card's main link and its <code>::after</code> covers the whole card,
+                so a click anywhere follows it - while the markup keeps one link with one name, not a link wrapped round a
+                paragraph. It covers its nearest positioned ancestor: a <code>.card</code> or <code>.list-group-item</code>
+                holding one is positioned for you; anything else needs <code>.relative</code>. Anything else clickable
+                inside must sit above it with <code>.relative .z-10</code>.
+            </p>
+        </div>
+
+        <div class="sx-stretch-grid mb-4">
+            <div class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title"><a href="#stretched-link" class="stretched-link" data-demo-link="Planting for spring">Planting for spring</a></h3>
+                    <p class="card-text">What to sow now for colour by April. The whole card is the link.</p>
+                </div>
+            </div>
+            <div class="card card-hover">
+                <div class="card-body">
+                    <h3 class="card-title"><a href="#stretched-link" class="stretched-link" data-demo-link="A kitchen garden in pots">A kitchen garden in pots</a></h3>
+                    <p class="card-text">Herbs and salad on a balcony. The tag below is its own link.</p>
+                    <a href="#stretched-link" class="badge badge-secondary relative z-10" data-demo-link="the Containers tag">Containers</a>
+                </div>
+            </div>
+            <div class="sx-demo-box relative">
+                <strong><a href="#stretched-link" class="stretched-link" data-demo-link="Composting without a garden">Composting without a garden</a></strong>
+                <p class="m-0 mt-2 text-sm">Not a card: <code>.relative</code> on the box makes it the target.</p>
+            </div>
+        </div>
+        <p class="text-sm mb-4">Last followed: <code id="demo-stretch-out">nothing yet</code></p>
+
+        <p class="text-sm font-semibold mb-2">Usage</p>
+        <pre class="code-block language-html">&lt;div class="card"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h3 class="card-title"&gt;&lt;a href="/posts/spring" class="stretched-link"&gt;Planting for spring&lt;/a&gt;&lt;/h3&gt;
+        &lt;p class="card-text"&gt;What to sow now...&lt;/p&gt;
+        &lt;a href="/tags/containers" class="badge relative z-10"&gt;Containers&lt;/a&gt;   &lt;!-- stays clickable --&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+        <p class="mt-2 mb-0 text-sm">Keyboard focus draws the focus ring round the whole card, where the click would land.</p>
+    </section>
+
+    <!-- ==========================================
+         DIVIDER TEXT
+         ========================================== -->
+    <section data-section="Divider Text">
+        <div class="section-header-grid">
+            <h2>Divider with text</h2>
+            <p>
+                <code>.divider-text</code> draws a rule either side of a short word - "or" between two ways to sign in, a
+                date between two days of messages. The rule is the theme's border colour and the word its secondary
+                text colour, which stays AA on every theme (the muted colour does not on all of them).
+                <code>.divider-text-start</code> and <code>-end</code> push the word to one side; empty, it is a plain rule.
+            </p>
+        </div>
+
+        <div class="sx-signin mb-4">
+            <button type="button" class="btn btn-primary">Sign in with email</button>
+            <div class="divider-text">or</div>
+            <button type="button" class="btn btn-outline">Continue with a passkey</button>
+        </div>
+        <div class="sx-demo-box mb-4">
+            <div class="divider-text divider-text-start">Yesterday</div>
+            <p class="m-0 text-sm">Three messages...</p>
+            <div class="divider-text divider-text-end">End of thread</div>
+            <div class="divider-text"></div>
+        </div>
+
+        <p class="text-sm font-semibold mb-2">Usage</p>
+        <pre class="code-block language-html">&lt;div class="divider-text"&gt;or&lt;/div&gt;
+&lt;div class="divider-text divider-text-start"&gt;Yesterday&lt;/div&gt;
+&lt;div class="divider-text"&gt;&lt;/div&gt;   &lt;!-- a plain rule --&gt;</pre>
+    </section>
+
+    <!-- ==========================================
+         REFERENCE
+         ========================================== -->
+    <section data-section="Reference">
+        <div class="section-header-grid">
+            <h2>Reference</h2>
+            <p>All of these live in <code>domma.css</code>. The full opacity and translucency set is on the
+                <a href="../">Opacity &amp; Translucency</a> page.</p>
+        </div>
+
+        <table class="table">
+            <thead><tr><th>Class</th><th>Alias</th><th>Does</th></tr></thead>
+            <tbody>
+                <tr><td><code>.sr-only</code></td><td><code>.visually-hidden</code></td><td>Off screen, still read by screen readers</td></tr>
+                <tr><td><code>.sr-only-focusable</code></td><td><code>.visually-hidden-focusable</code></td><td>The same until it or something in it has focus</td></tr>
+                <tr><td><code>.skip-link</code></td><td></td><td>A styled skip link: hidden until focused, then pinned top left</td></tr>
+                <tr><td><code>.not-sr-only</code></td><td></td><td>Undo <code>.sr-only</code></td></tr>
+                <tr><td><code>.line-clamp-1</code> ... <code>-5</code></td><td></td><td>Cut after N lines with an ellipsis</td></tr>
+                <tr><td><code>.line-clamp-none</code></td><td></td><td>Undo the clamp</td></tr>
+                <tr><td><code>.truncate</code></td><td><code>.text-truncate</code></td><td>One line with an ellipsis</td></tr>
+                <tr><td><code>.stretched-link</code></td><td></td><td>The link covers its nearest positioned ancestor</td></tr>
+                <tr><td><code>.divider-text</code></td><td></td><td>Rule, word, rule; <code>-start</code> / <code>-end</code> to one side</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    I.scan();
+
+    // What a screen reader would hear for the two icon buttons: their text content,
+    // since the icons are aria-hidden and the .sr-only spans are not.
+    $('#demo-sr-names').text(['#demo-sr-bell', '#demo-sr-trash']
+        .map((sel) => '"' + $(sel).text().trim() + '"').join(', '));
+
+    // Focus the skip link so it can be seen without leaving the page.
+    $('#demo-skip-focus').on('click', () => $('.skip-link').get(0).focus());
+
+    // Line clamp switcher
+    $('[data-clamp]').on('click', (e) => {
+        const n = e.currentTarget.getAttribute('data-clamp');
+        $('[data-clamp]').removeClass('active');
+        $(e.currentTarget).addClass('active');
+        $('#demo-clamp')
+            .removeClass('line-clamp-1 line-clamp-2 line-clamp-3 line-clamp-5 line-clamp-none')
+            .addClass('line-clamp-' + n);
+    });
+
+    // Stretched links go nowhere here; say which one was followed instead.
+    $('[data-demo-link]').on('click', (e) => {
+        e.preventDefault();
+        $('#demo-stretch-out').text(e.currentTarget.getAttribute('data-demo-link'));
+    });
+</script>
+</body>
+</html>

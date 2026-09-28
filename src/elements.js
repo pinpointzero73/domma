@@ -11,6 +11,7 @@ import ContextMenu from './context-menu.js';
 import Sortable from './sortable.js';
 import InputGroup from './input-group.js';
 import skeletonFactory from './skeleton.js';
+import avatarFactory, {avatarGroup as avatarGroupFactory} from './avatar.js';
 import Popover from './popover.js';
 import sanitizeModule from './sanitize.js';
 
@@ -11717,6 +11718,25 @@ export const elements = {
     },
 
     /**
+     * A person's picture, initials or an icon, sized, shaped, with an optional
+     * status dot and ring. Initials and a stable tint come from the name; a
+     * picture that fails to load falls back to them. Returns
+     * {element, update(opts), destroy()}; E.avatar.scan() reads data-avatar.
+     */
+    avatar(target, options = {}) {
+        return avatarFactory(target, options);
+    },
+
+    /**
+     * A stack of overlapping avatars as a list, with a "+N" bubble for the rest
+     * that opens a popover naming them (or calls onMore). Returns
+     * {element, update(opts), setPeople(people), destroy()}.
+     */
+    avatarGroup(target, options = {}) {
+        return avatarGroupFactory(target, options);
+    },
+
+    /**
      * Join an icon or short text to the start and/or end of an existing input
      * (Bootstrap-style input group) - the same markup Forma writes for
      * formConfig.prefix / formConfig.suffix.
@@ -11903,6 +11923,13 @@ elements.skeleton.get = skeletonFactory.get;
 elements.skeleton.remove = skeletonFactory.remove;
 elements.skeleton.scan = skeletonFactory.scan;
 elements.skeleton.markup = skeletonFactory.markup;
+
+// Avatar helpers: E.avatar.scan(root) (data-avatar), .get, .initials(name), .tone(name)
+elements.avatar.scan = avatarFactory.scan;
+elements.avatar.get = avatarFactory.get;
+elements.avatar.initials = avatarFactory.initials;
+elements.avatar.tone = avatarFactory.tone;
+elements.avatarGroup.get = avatarGroupFactory.get;
 
 // Popover statics: E.popover.scan(root) turns [data-popover] markup into
 // popovers (registered like any other instance), E.popover.closeAll(group).

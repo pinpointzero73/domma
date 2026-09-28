@@ -858,6 +858,12 @@ function loadCelebrate() {
     /**
      * Render navbar
      */
+    /** Where layout chrome goes at the top of <body>: after a leading .skip-link, if the page has one. */
+    function bodyStart() {
+        const first = document.body.firstElementChild;
+        return first && first.classList.contains('skip-link') ? first.nextSibling : document.body.firstChild;
+    }
+
     async function renderNavbar(config, data, presetConfig) {
         try {
             // Check if navbar already exists in HTML
@@ -868,11 +874,12 @@ function loadCelebrate() {
                 const template = await TemplateLoader.load('navbar');
                 const html = template({});
 
-                // Inject into page (safe: template is from trusted local source)
+                // Inject into page (safe: template is from trusted local source).
+                // A page's .skip-link stays the first thing Tab reaches.
                 const body = document.body;
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = html;
-                body.insertBefore(tempDiv.firstElementChild, body.firstChild);
+                body.insertBefore(tempDiv.firstElementChild, bodyStart());
             }
 
             // Logo SVG
@@ -1502,7 +1509,9 @@ function loadCelebrate() {
                 </div>
             `;
 
-            document.body.insertAdjacentHTML('afterbegin', toggleHtml);
+            const toggleHost = document.createElement('div');
+            toggleHost.innerHTML = toggleHtml;
+            document.body.insertBefore(toggleHost.firstElementChild, bodyStart());
 
             const {Celebrations} = await loadCelebrate();
             initCelebrationsToggle(Celebrations);

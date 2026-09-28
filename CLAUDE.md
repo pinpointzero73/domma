@@ -31,6 +31,8 @@ modern UI components.
 | Icon/text joined to an input      | `formConfig.prefix/suffix` or `E.inputGroup(sel, opts)` | Manual wrapper markup |
 | Show password / clear / stepper / char counter | `formConfig.reveal/clear/stepper/counter` or `E.inputGroup(sel, {reveal, clear, stepper, counter})` | Hand-rolled buttons and listeners |
 | Loading placeholders              | `E.skeleton(el, opts)` / `.skeleton-*` | Manual grey boxes      |
+| User pictures / initials          | `E.avatar` / `E.avatarGroup`  | Hand-made circles and initials code |
+| Screen-reader-only text           | `.sr-only` (`.skip-link` for skip links) | Ad-hoc off-screen CSS |
 | Toast notifications               | `E.toast('Message', {type})`  | Manual notification divs        |
 | Icons                             | `<span data-icon="name">`     | Manual SVG/icon fonts           |
 | DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
@@ -218,6 +220,8 @@ consult that folder's CLAUDE.md for detailed information.
   groups and nesting, `data-popover` + `E.popover.scan()`
 - [docs/Sortable.md](./docs/Sortable.md) - Drag-to-reorder: live and indicator (tree) modes, `onDrop` re-render,
   keyboard, touch and `persist`
+- [docs/Avatar.md](./docs/Avatar.md) - Avatars and avatar groups: initials and tone rules, picture fallback,
+  status, "+N" popover, `data-avatar` + `E.avatar.scan()`, the CSS classes
 - [docs/Skeleton.md](./docs/Skeleton.md) - Loading placeholders: CSS shapes, `E.skeleton()` types, `while()`,
   `data-skeleton` and the DataTable's `loadingSkeleton`
 - [docs/Bindings.md](./docs/Bindings.md) - DOM bindings: `M.applyBindings()`, `data-bind-*`, `data-model`, `data-each`,
@@ -556,7 +560,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 #### Elements (`Domma.elements`)
 
-- **28 UI Components:**
+- **29 UI Components:**
   - Modal - `modal()` with backdrop, keyboard, animation options
   - Tabs - `tabs()` with active index, onChange
   - Accordion - `accordion()` with multiExpand
@@ -583,6 +587,9 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
   - Skeleton - `skeleton()` shimmering placeholders (text, card, list, table, custom) while content loads;
     aria-busy + polite status, `remove()` restores the old children, `replace()`; `E.skeleton.while(el, promise)`;
     CSS-only `.skeleton-*` shapes; `data-skeleton` + `E.skeleton.scan()`; DataTable `loadingSkeleton: true`
+  - Avatar - `avatar()` a picture, initials or icon; five sizes, three shapes, status dot, ring; initials and a
+    stable tint (8 AA-safe tones) from the name, picture falls back to initials; `avatarGroup()` overlapping `<ul>`
+    with "+N" (popover naming the hidden people, or `onMore`); `data-avatar` + `E.avatar.scan()`. See [docs/Avatar.md](./docs/Avatar.md)
   - Badge - `badge()` component
   - NumberBadge - `numberBadge()` notification counter with positioning, dot mode, pulse
   - ListGroup - `listGroup()` selectable lists with keyboard nav, colour variants, flush mode
@@ -721,6 +728,8 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 - **Display:** `.block`, `.inline-block`, `.flex`, `.grid`, `.hidden` - Tailwind-style names. There are no
   `.d-*` variants; the Bootstrap spellings resolve to nothing.
 - **Colors:** Full color palette (slate, blue, green, red, amber, sky, etc.)
+- **Accessibility & text:** `.sr-only` / `.visually-hidden`, `.sr-only-focusable`, `.skip-link`, `.not-sr-only`,
+  `.line-clamp-1`...`-5` / `-none`, `.truncate` / `.text-truncate`, `.stretched-link`, `.divider-text` (`-start` / `-end`)
 - **Opacity:** Full scale `.opacity-0` → `.opacity-100` (steps of 10, plus `.opacity-25`, `.opacity-75`)
 - **Translucency:**
   - Semantic: `.translucent-light` (0.85), `.translucent` (0.70), `.translucent-heavy` (0.50)

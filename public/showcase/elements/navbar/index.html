@@ -595,20 +595,7 @@ Domma.elements.navbar('#docs-navbar', {
 &lt;/main&gt;
 
 &lt;style&gt;
-/* Skip link (hidden until focused) */
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--dm-primary);
-    color: var(--dm-white);
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    z-index: 100;
-}
-.skip-link:focus {
-    top: 0;
-}
+/* .skip-link is a Domma utility (domma.css): hidden until focused, then pinned top left */
 
 /* Fixed navbar body padding */
 body {

@@ -1332,6 +1332,136 @@ export interface SkeletonStatic {
 }
 
 // ============================================
+// Avatar
+// ============================================
+
+export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type AvatarShape = 'circle' | 'rounded' | 'square';
+export type AvatarStatus = 'online' | 'away' | 'busy' | 'offline';
+
+export interface AvatarOptions {
+    /** The person: initials, tone and accessible name come from it */
+    name?: string | null;
+    /** Picture URL; falls back to the initials (or icon) if it fails to load */
+    src?: string | null;
+    /** Accessible name when it should differ from name */
+    alt?: string | null;
+    /** Size (default 'md') */
+    size?: AvatarSize;
+    /** Shape (default 'circle') */
+    shape?: AvatarShape;
+    /** Status dot; the word goes into the accessible name */
+    status?: AvatarStatus | null;
+    /** Words for the statuses in the accessible name, e.g. {busy: 'in a meeting'} */
+    statusLabels?: Partial<Record<AvatarStatus, string>> | null;
+    /** Icon name shown instead of initials ('user' when there is no name) */
+    icon?: string | null;
+    /** Hover text; true = the accessible name */
+    title?: string | true | null;
+    /** A primary-coloured ring (default false) */
+    ring?: boolean;
+    /** 0-7 to choose the tint; default is a hash of the name */
+    tone?: number | null;
+    /** aria-hidden: the name is written next to it (default false) */
+    decorative?: boolean;
+}
+
+export interface AvatarHandle {
+    /** The avatar element */
+    readonly element: HTMLElement;
+    /** The options in force */
+    readonly options: AvatarOptions;
+    /** The initials drawn ('' when an icon is shown) */
+    readonly initials: string;
+    /** The tone 0-7, or null with nothing to hash */
+    readonly tone: number | null;
+    /** The accessible name, e.g. 'Jane Smith (online)' */
+    readonly label: string;
+    /** Merge options and redraw */
+    update(options?: AvatarOptions): AvatarHandle;
+    /** Restore the element's previous children, classes and attributes */
+    destroy(): HTMLElement;
+}
+
+export interface AvatarStatic {
+    /**
+     * Turn the element into an avatar. With no target (null, or the options
+     * object first) a detached <span> is created. null if a selector matched nothing.
+     */
+    (target: string | HTMLElement | ArrayLike<HTMLElement> | null, options?: AvatarOptions): AvatarHandle | null;
+    (options: AvatarOptions): AvatarHandle;
+    /** Every [data-avatar] under root (options from data-avatar-*), once */
+    scan(root?: string | HTMLElement | Document): AvatarHandle[];
+    /** The live handle on an element, or null */
+    get(target: string | HTMLElement | ArrayLike<HTMLElement>): AvatarHandle | null;
+    /** Initials for a name: 'Jane Smith' -> 'JS', 'jane.smith@x.com' -> 'JS', 'Madonna' -> 'M' */
+    initials(name: string | null | undefined): string;
+    /** The tone (0-7) a name gets - stable across pages and sessions */
+    tone(name: string): number;
+}
+
+export interface AvatarPerson {
+    name?: string;
+    src?: string;
+    status?: AvatarStatus;
+    /** Makes the avatar a link */
+    href?: string;
+    alt?: string;
+    icon?: string;
+    tone?: number;
+    /** Hover text (default: the accessible name) */
+    title?: string | true;
+}
+
+export interface AvatarGroupOptions {
+    /** People, or plain names */
+    people?: Array<AvatarPerson | string>;
+    /** Show this many, then "+N"; null = everyone */
+    max?: number | null;
+    /** Size (default 'md') */
+    size?: AvatarSize;
+    /** Shape (default 'circle') */
+    shape?: AvatarShape;
+    /** 'none' | 'sm' | 'md' | 'lg', pixels, or any CSS length; null = the stylesheet's 25% */
+    overlap?: 'none' | 'sm' | 'md' | 'lg' | number | string | null;
+    /** Accessible name for the list */
+    label?: string | null;
+    statusLabels?: Partial<Record<AvatarStatus, string>> | null;
+    /** Called when "+N" is pressed, instead of the popover */
+    onMore?: ((hidden: AvatarPerson[], event: MouseEvent) => void) | null;
+    /** false: no popover, the hidden names go in the button's title (default true) */
+    popover?: boolean;
+    /** The "+N" button's accessible name (default '3 more: A, B and C') */
+    moreLabel?: ((count: number, names: string[]) => string) | null;
+}
+
+export interface AvatarGroupHandle {
+    /** The <ul> */
+    readonly element: HTMLUListElement | HTMLOListElement;
+    readonly options: AvatarGroupOptions;
+    readonly people: AvatarPerson[];
+    /** Drawn as avatars */
+    readonly shown: AvatarPerson[];
+    /** Folded into "+N" */
+    readonly hidden: AvatarPerson[];
+    /** The "+N" button, or null */
+    readonly more: HTMLButtonElement | null;
+    /** The "+N" popover, or null */
+    readonly popover: PopoverInstance | null;
+    update(options?: AvatarGroupOptions): AvatarGroupHandle;
+    setPeople(people: Array<AvatarPerson | string>): AvatarGroupHandle;
+    /** Remove everything and restore the host */
+    destroy(): HTMLElement;
+}
+
+export interface AvatarGroupStatic {
+    /** Fill a <ul>/<ol>, or put a new <ul> into any other element. null if nothing matched */
+    (target: string | HTMLElement | ArrayLike<HTMLElement>, options?: AvatarGroupOptions): AvatarGroupHandle | null;
+    /** The live group handle on a host, or null */
+    get(target: string | HTMLElement | ArrayLike<HTMLElement>): AvatarGroupHandle | null;
+}
+
+// ============================================
 // InputGroup
 // ============================================
 
@@ -1473,6 +1603,10 @@ export interface Elements {
      * until a promise settles; .get, .remove, .scan and .markup round it off.
      */
     skeleton: SkeletonStatic;
+    /** A picture, initials or icon; E.avatar.scan() for data-avatar */
+    avatar: AvatarStatic;
+    /** Overlapping avatars with "+N" */
+    avatarGroup: AvatarGroupStatic;
 
     /**
      * Join an icon or short text to the start and/or end of an input already
