@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/avatar/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only layout. Everything the avatars need is in elements.css. */
+        .sx-av-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sx-av-tones {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+            gap: 0.75rem;
+        }
+
+        .sx-av-tone {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .sx-av-projects {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sx-av-project {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem 1.5rem;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--dm-border);
+        }
+
+        .sx-av-project:last-child {
+            border-bottom: 0;
+        }
+
+        .sx-av-project-name {
+            margin: 0 0 0.125rem;
+            font-weight: 600;
+        }
+
+        .sx-av-project-meta {
+            margin: 0;
+            color: var(--dm-text-secondary);
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .sx-av-try {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sx-av-try input {
+            max-width: 20rem;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Avatar</div>
+        <div class="hero-subtitle">A person's picture, initials or an icon - alone, or stacked in a group with a "+N" for the rest</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Avatar</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                Every app with people in it needs the little circle: the signed-in user in the navbar, the author
+                of a comment, the team on a project card. <code>E.avatar()</code> draws one from a name - initials
+                and a colour that stays the same wherever that name appears - or from a picture, falling back to
+                the initials if the picture will not load.
+            </p>
+            <p class="mb-4">
+                <code>E.avatarGroup()</code> stacks several, overlapping, and folds the rest into a
+                <strong>+N</strong> bubble. Press it and a popover lists who is hidden.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Initials that make sense</strong> - first and last word, one letter for a single name, the part before the @ of an email, any script</li>
+                <li><strong>Stable colours</strong> - the name picks one of eight tints, the same on every page and every visit</li>
+                <li><strong>AA on every theme</strong> - tints and initials both follow the theme; the weakest pair measures 5.2:1</li>
+                <li><strong>Picture fallback</strong> - a broken image turns back into the initials</li>
+                <li><strong>Five sizes, three shapes</strong>, a status dot and a ring</li>
+                <li><strong>Groups</strong> - overlap, a ring in the background colour, a hover lift, "+N" with a popover</li>
+                <li><strong>Accessible</strong> - each avatar has a name (with its status in words), a group is a list</li>
+                <li><strong>Declarative</strong> - <code>data-avatar="Jane Smith"</code> and <code>E.avatar.scan()</code></li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.avatar('#me', {name: 'Jane Smith', src: '/img/jane.jpg', status: 'online'});
+
+E.avatarGroup('#team', {people: team, max: 4, size: 'sm', label: 'Project team'});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Getting Started">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Getting Started</h2></div>
+        <div class="card-body">
+            <p class="mb-6 text-gray-600">A comment header and a project team, in three steps</p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 1 - One avatar from a name</h3>
+            <p class="mb-2">
+                Give it an element and a name. The element becomes the avatar: initials, a tint, and an accessible
+                name for screen readers. Pass options without a target and you get a new <code>&lt;span&gt;</code>
+                back to insert yourself.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.avatar('#author', {name: comment.author, size: 'sm'});
+
+const a = E.avatar({name: 'Tom Hughes'});   // no target: a detached span
+$('#row').prepend(a.element);
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 2 - Add the picture</h3>
+            <p class="mb-2">
+                Add <code>src</code>. Until it loads the tint shows; if it fails, the initials take its place. The
+                picture itself has an empty <code>alt</code> - the avatar already carries the person's name.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.avatar('#author', {name: comment.author, src: comment.authorPhoto, size: 'sm'});
+</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Step 3 - A team</h3>
+            <p class="mb-2">
+                Hand <code>E.avatarGroup()</code> the people. <code>max</code> caps how many show; the rest go into
+                "+N", which opens a popover naming them. Give each person an <code>href</code> and their avatar
+                becomes a link.
+            </p>
+            <div class="code-block language-javascript">
+                <pre><code>
+const team = await H.get('/api/projects/42/team');
+E.avatarGroup('#team', {
+    people: team.map((u) =&gt; ({name: u.name, src: u.photo, href: `/people/${u.id}`})),
+    max: 4,
+    size: 'sm',
+    label: 'Project team'
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Try a Name">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Try a name</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Type anything - a full name, a single name, an email address, a name in another script. The
+                initials and the colour are worked out as you type. The same name always gets the same colour.
+            </p>
+            <div class="sx-av-try mb-4">
+                <span id="demo-try-avatar"></span>
+                <label class="sr-only" for="demo-try-input">Name</label>
+                <input id="demo-try-input" class="form-input" type="text" value="Jane Smith" autocomplete="off">
+                <span class="text-sm">Initials <code id="demo-try-initials">JS</code>, tone <code id="demo-try-tone">6</code></span>
+            </div>
+            <div class="sx-av-row mb-4" id="demo-try-examples"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const me = E.avatar('#demo-try-avatar', {name: 'Jane Smith', size: 'xl'});
+$('#demo-try-input').on('input', (e) =&gt; me.update({name: e.target.value}));
+
+E.avatar.initials('jane.smith@example.com');   // 'JS'
+E.avatar.tone('Jane Smith');                   // 6 - always
+</code></pre>
+            </div>
+            <table class="table mb-2">
+                <thead><tr><th>Name</th><th>Initials</th><th>Rule</th></tr></thead>
+                <tbody>
+                    <tr><td>Jane Smith</td><td><code>JS</code></td><td>First and last word</td></tr>
+                    <tr><td>Jane Q. Public</td><td><code>JP</code></td><td>Middle names and initials are skipped</td></tr>
+                    <tr><td>Madonna</td><td><code>M</code></td><td>One word, one letter</td></tr>
+                    <tr><td>jane.smith@example.com</td><td><code>JS</code></td><td>An email: the part before the @, split on <code>. _ - +</code></td></tr>
+                    <tr><td>Jean-Luc Picard</td><td><code>JP</code></td><td>Hyphens split words</td></tr>
+                    <tr><td>Jane Smith (Admin)</td><td><code>JS</code></td><td>Bracketed notes are dropped</td></tr>
+                    <tr><td>Łukasz Żuk / Анна Каренина</td><td><code>ŁŻ</code> / <code>АК</code></td><td>Any alphabet</td></tr>
+                    <tr><td>王小明</td><td><code>王</code></td><td>No spaces: the first character</td></tr>
+                    <tr><td>(empty)</td><td>-</td><td>A person icon instead</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Sizes and Shapes">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Sizes and shapes</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>size</code>: <code>xs</code> (1.5rem), <code>sm</code> (2rem), <code>md</code> (2.5rem, the
+                default), <code>lg</code> (3.5rem), <code>xl</code> (5rem). <code>shape</code>: <code>circle</code>
+                (default), <code>rounded</code> or <code>square</code>. The initials, dot and overlap scale with the size.
+            </p>
+            <div id="demo-sizes" class="sx-av-row mb-4"></div>
+            <div id="demo-shapes" class="sx-av-row mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+['xs', 'sm', 'md', 'lg', 'xl'].forEach((size) =&gt;
+    $('#demo-sizes').append(E.avatar({name: 'Amara Okafor', size}).element));
+
+['circle', 'rounded', 'square'].forEach((shape) =&gt;
+    $('#demo-shapes').append(E.avatar({name: 'Tom Hughes', src: 'img/tom.svg', size: 'lg', shape}).element));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Pictures and Fallbacks">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Pictures, initials, icons and fallbacks</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                A picture; a picture whose address is wrong (the initials take over); no picture; an icon of your
+                choice; and nothing at all, which shows the person icon and is hidden from screen readers because
+                there is nothing to say.
+            </p>
+            <div id="demo-fallbacks" class="sx-av-row mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.avatar(el1, {name: 'Priya Shah', src: 'img/priya.svg', size: 'lg'});
+E.avatar(el2, {name: 'Callum Reid', src: 'img/does-not-exist.png', size: 'lg'});   // shows CR
+E.avatar(el3, {name: 'Nia Evans', size: 'lg'});
+E.avatar(el4, {name: 'Support team', icon: 'headphones', size: 'lg'});
+E.avatar(el5, {size: 'lg'});                                                       // person icon
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Status and Ring">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Status and ring</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>status</code> adds a dot: <code>online</code>, <code>away</code>, <code>busy</code> (with a bar)
+                or <code>offline</code> (hollow), so colour is not the only difference. The word goes into the
+                avatar's accessible name - "Amara Okafor (online)" - and <code>statusLabels</code> translates it.
+                <code>ring: true</code> draws a primary-coloured ring, for the current user or a selection.
+            </p>
+            <div id="demo-status" class="sx-av-row mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.avatar(el, {name: 'Amara Okafor', src: 'img/amara.svg', size: 'lg', status: 'online'});
+E.avatar(el, {name: 'Tom Hughes', size: 'lg', status: 'busy', statusLabels: {busy: 'in a meeting'}});
+E.avatar(el, {name: 'Priya Shah', size: 'lg', ring: true});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Tones">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">The eight tones</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Each tone is a hue mixed a quarter of the way into the theme's surface, with the initials the same
+                hue mixed into the theme's text. Both sides follow the theme, so the pair keeps its contrast on light
+                and dark themes alike. Switch themes and watch them move. <code>tone: 0-7</code> picks one by hand.
+            </p>
+            <div id="demo-tones" class="sx-av-tones mb-4"></div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Groups">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Groups and "+N"</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Change how many show, the size and the overlap. Press <strong>+N</strong> for the people it hides.
+                Each avatar in a group has a ring in the background colour, so neighbours stay apart, and lifts a
+                little under the pointer.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <div class="btn-group" role="group" aria-label="How many to show">
+                    <button class="btn btn-outline btn-sm" type="button" data-max="2">max 2</button>
+                    <button class="btn btn-outline btn-sm active" type="button" data-max="4">max 4</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-max="6">max 6</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-max="">everyone</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Size">
+                    <button class="btn btn-outline btn-sm" type="button" data-gsize="sm">sm</button>
+                    <button class="btn btn-outline btn-sm active" type="button" data-gsize="md">md</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-gsize="lg">lg</button>
+                </div>
+                <div class="btn-group" role="group" aria-label="Overlap">
+                    <button class="btn btn-outline btn-sm" type="button" data-overlap="none">no overlap</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-overlap="sm">sm</button>
+                    <button class="btn btn-outline btn-sm active" type="button" data-overlap="md">md</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-overlap="lg">lg</button>
+                </div>
+            </div>
+            <div id="demo-group" class="mb-4"></div>
+            <p class="mb-2 text-sm">Current call: <code id="demo-group-code">E.avatarGroup('#demo-group', {people, max: 4});</code></p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Team List">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">A team list built with E.avatarGroup</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                One group per project, three faces each. The last project uses <code>onMore</code> instead of the
+                popover - here it raises a toast, but it could open a members page.
+            </p>
+            <ul id="demo-projects" class="sx-av-projects mb-4"></ul>
+            <div class="code-block language-javascript">
+                <pre><code>
+projects.forEach((p) =&gt; {
+    const $row = $(renderProjectRow(p));          // name, due date, an empty .team span
+    $('#projects').append($row);
+    E.avatarGroup($row.find('.team'), {
+        people: p.team,
+        max: 3,
+        size: 'sm',
+        label: `${p.name} team`,
+        onMore: p.members ? (hidden) =&gt; E.toast(`${hidden.length} more on ${p.name}`) : null
+    });
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Declarative">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Declarative: data-avatar</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Put the name in <code>data-avatar</code> and the options in <code>data-avatar-*</code>, then call
+                <code>E.avatar.scan()</code> once. It skips anything it has already done.
+            </p>
+            <div id="demo-declared" class="sx-av-row mb-4">
+                <span data-avatar="Amara Okafor" data-avatar-src="img/amara.svg" data-avatar-size="lg" data-avatar-status="online"></span>
+                <span data-avatar="Rhys Morgan" data-avatar-size="lg" data-avatar-shape="rounded"></span>
+                <span data-avatar="sofia.rossi@example.com" data-avatar-size="lg" data-avatar-ring></span>
+            </div>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;span data-avatar="Amara Okafor" data-avatar-src="img/amara.svg" data-avatar-size="lg" data-avatar-status="online"&gt;&lt;/span&gt;
+&lt;span data-avatar="Rhys Morgan" data-avatar-size="lg" data-avatar-shape="rounded"&gt;&lt;/span&gt;
+&lt;span data-avatar="sofia.rossi@example.com" data-avatar-size="lg" data-avatar-ring&gt;&lt;/span&gt;
+
+&lt;script&gt;E.avatar.scan();&lt;/script&gt;
+</code></pre>
+            </div>
+            <p class="mb-2">
+                Attributes: <code>data-avatar-src</code>, <code>-alt</code>, <code>-size</code>, <code>-shape</code>,
+                <code>-status</code>, <code>-icon</code>, <code>-title</code>, <code>-tone</code>, <code>-ring</code>,
+                <code>-decorative</code>.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="CSS Only">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">CSS only</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The classes work in hand-written or server-rendered HTML. Without the script you choose the tone
+                and write the initials yourself - and the accessible name.
+            </p>
+            <ul class="avatar-group avatar-group-md mb-4" aria-label="Reviewers">
+                <li><span class="avatar avatar-md avatar-tone-3" role="img" aria-label="Nia Evans"><span class="avatar-initials" aria-hidden="true">NE</span></span></li>
+                <li><span class="avatar avatar-md avatar-tone-6" role="img" aria-label="Rhys Morgan (away)"><span class="avatar-initials" aria-hidden="true">RM</span><span class="avatar-status avatar-status-away" aria-hidden="true"></span></span></li>
+                <li><span class="avatar avatar-md" role="img" aria-label="Priya Shah"><img class="avatar-img" src="img/priya.svg" alt=""></span></li>
+            </ul>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;ul class="avatar-group avatar-group-md" aria-label="Reviewers"&gt;
+    &lt;li&gt;&lt;span class="avatar avatar-md avatar-tone-3" role="img" aria-label="Nia Evans"&gt;
+        &lt;span class="avatar-initials" aria-hidden="true"&gt;NE&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span class="avatar avatar-md avatar-tone-6" role="img" aria-label="Rhys Morgan (away)"&gt;
+        &lt;span class="avatar-initials" aria-hidden="true"&gt;RM&lt;/span&gt;
+        &lt;span class="avatar-status avatar-status-away" aria-hidden="true"&gt;&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;span class="avatar avatar-md" role="img" aria-label="Priya Shah"&gt;
+        &lt;img class="avatar-img" src="img/priya.svg" alt=""&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+            </div>
+            <table class="table mb-4">
+                <thead><tr><th>Class</th><th>What it does</th></tr></thead>
+                <tbody>
+                    <tr><td><code>.avatar</code></td><td>The circle: neutral tint, centred content</td></tr>
+                    <tr><td><code>.avatar-xs</code> ... <code>-xl</code></td><td>Sizes (set <code>--dm-avatar-size</code>)</td></tr>
+                    <tr><td><code>.avatar-rounded</code> / <code>.avatar-square</code></td><td>Shapes</td></tr>
+                    <tr><td><code>.avatar-tone-0</code> ... <code>-7</code></td><td>The eight name tints</td></tr>
+                    <tr><td><code>.avatar-img</code> / <code>.avatar-initials</code> / <code>.avatar-icon</code></td><td>What goes inside</td></tr>
+                    <tr><td><code>.avatar-status</code> + <code>-online</code> / <code>-away</code> / <code>-busy</code> / <code>-offline</code></td><td>The dot</td></tr>
+                    <tr><td><code>.avatar-ring</code></td><td>Primary ring</td></tr>
+                    <tr><td><code>.avatar-group</code> + <code>.avatar-group-xs</code> ... <code>-xl</code></td><td>The overlapping stack; children may be <code>li</code>s or avatars</td></tr>
+                    <tr><td><code>.avatar-more</code></td><td>The "+N" bubble</td></tr>
+                </tbody>
+            </table>
+            <p class="mb-2">
+                Custom properties: <code>--dm-avatar-size</code>, <code>--dm-avatar-radius</code>,
+                <code>--dm-avatar-overlap</code>, and <code>--dm-avatar-gap-color</code> - the ring between stacked
+                avatars and round the dot. It is the page background by default and the card colour inside a
+                <code>.card</code>; set it wherever avatars sit on something else.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Accessibility">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Accessibility</h2></div>
+        <div class="card-body">
+            <ul class="mb-4">
+                <li>An avatar is <code>role="img"</code> with <code>aria-label</code> - the name, or <code>alt</code> if given, plus the status in words.</li>
+                <li>A linked avatar stays a link and is named with <code>aria-label</code>.</li>
+                <li>The picture has <code>alt=""</code>; initials, icon and dot are <code>aria-hidden</code>, so nothing is read twice.</li>
+                <li><code>decorative: true</code> hides it altogether - use it when the name is written right next to it.</li>
+                <li>A group is a <code>&lt;ul&gt;</code>; <code>label</code> names the list.</li>
+                <li>"+N" is a real button named "3 more: Nia Evans, Rhys Morgan and Sofia Rossi", so the hidden names are heard without opening it. Its popover is a dialog and takes focus.</li>
+                <li>Under <code>prefers-reduced-motion</code> the hover lift is off.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options</h2></div>
+        <div class="card-body">
+            <h3 class="text-lg font-semibold mb-3">E.avatar(target, options)</h3>
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>name</code></td><td>string</td><td><code>null</code></td><td>Initials, tone and accessible name come from it</td></tr>
+                    <tr><td><code>src</code></td><td>string</td><td><code>null</code></td><td>Picture; falls back to initials or icon if it fails</td></tr>
+                    <tr><td><code>alt</code></td><td>string</td><td><code>null</code></td><td>Accessible name when it should differ from <code>name</code></td></tr>
+                    <tr><td><code>size</code></td><td>string</td><td><code>'md'</code></td><td><code>xs</code>, <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code></td></tr>
+                    <tr><td><code>shape</code></td><td>string</td><td><code>'circle'</code></td><td><code>circle</code>, <code>rounded</code>, <code>square</code></td></tr>
+                    <tr><td><code>status</code></td><td>string</td><td><code>null</code></td><td><code>online</code>, <code>away</code>, <code>busy</code>, <code>offline</code></td></tr>
+                    <tr><td><code>statusLabels</code></td><td>object</td><td><code>null</code></td><td>Words for the statuses in the accessible name</td></tr>
+                    <tr><td><code>icon</code></td><td>string</td><td><code>null</code></td><td>Icon instead of initials; <code>user</code> when there is no name</td></tr>
+                    <tr><td><code>title</code></td><td>string | true</td><td><code>null</code></td><td>Hover text; <code>true</code> uses the accessible name</td></tr>
+                    <tr><td><code>ring</code></td><td>boolean</td><td><code>false</code></td><td>Primary ring</td></tr>
+                    <tr><td><code>tone</code></td><td>number</td><td>from the name</td><td>0-7, to choose the tint</td></tr>
+                    <tr><td><code>decorative</code></td><td>boolean</td><td><code>false</code></td><td>Hide from assistive technology</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mb-3">E.avatarGroup(target, options)</h3>
+            <table class="table mb-6">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>people</code></td><td>array</td><td><code>[]</code></td><td><code>{name, src, status, href, alt, icon, tone, title}</code> or plain names</td></tr>
+                    <tr><td><code>max</code></td><td>number</td><td><code>null</code></td><td>Show this many, then "+N"; <code>null</code> shows everyone</td></tr>
+                    <tr><td><code>size</code> / <code>shape</code></td><td>string</td><td><code>'md'</code> / <code>'circle'</code></td><td>As for one avatar</td></tr>
+                    <tr><td><code>overlap</code></td><td>string | number</td><td>stylesheet (<code>md</code>)</td><td><code>none</code>, <code>sm</code>, <code>md</code>, <code>lg</code>, pixels, or any CSS length</td></tr>
+                    <tr><td><code>label</code></td><td>string</td><td><code>null</code></td><td>Accessible name for the list</td></tr>
+                    <tr><td><code>onMore</code></td><td>function</td><td><code>null</code></td><td><code>(hiddenPeople, event)</code>; replaces the popover</td></tr>
+                    <tr><td><code>popover</code></td><td>boolean</td><td><code>true</code></td><td><code>false</code>: the hidden names go in the button's title instead</td></tr>
+                    <tr><td><code>moreLabel</code></td><td>function</td><td><code>null</code></td><td><code>(count, names) =&gt; string</code> - the "+N" button's accessible name</td></tr>
+                    <tr><td><code>statusLabels</code></td><td>object</td><td><code>null</code></td><td>Passed to each avatar</td></tr>
+                </tbody>
+            </table>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Methods</h3>
+            <table class="table mb-4">
+                <thead><tr><th>Call</th><th>Returns</th><th>Does</th></tr></thead>
+                <tbody>
+                    <tr><td><code>E.avatar(target, options)</code></td><td>handle | null</td><td>Turn the element into an avatar; no target makes a detached span</td></tr>
+                    <tr><td><code>handle.update(options)</code></td><td>handle</td><td>Merge options and redraw</td></tr>
+                    <tr><td><code>handle.destroy()</code></td><td>element</td><td>Restore the element's previous content, classes and attributes</td></tr>
+                    <tr><td><code>handle.initials</code> / <code>.tone</code> / <code>.label</code></td><td></td><td>What was drawn</td></tr>
+                    <tr><td><code>E.avatar.scan(root)</code></td><td>handle[]</td><td>Every <code>[data-avatar]</code> under <code>root</code>, once</td></tr>
+                    <tr><td><code>E.avatar.get(el)</code></td><td>handle | null</td><td>The live handle</td></tr>
+                    <tr><td><code>E.avatar.initials(name)</code> / <code>E.avatar.tone(name)</code></td><td>string / number</td><td>The rules on their own</td></tr>
+                    <tr><td><code>E.avatarGroup(target, options)</code></td><td>handle | null</td><td>Fill a <code>&lt;ul&gt;</code>, or put a new one inside any element</td></tr>
+                    <tr><td><code>group.update(options)</code> / <code>group.setPeople(people)</code></td><td>handle</td><td>Redraw</td></tr>
+                    <tr><td><code>group.shown</code> / <code>.hidden</code> / <code>.more</code> / <code>.popover</code></td><td></td><td>Who is visible, who is folded, the "+N" button and its popover</td></tr>
+                    <tr><td><code>group.destroy()</code></td><td>element</td><td>Restore the host</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    Domma.icons.scan();
+
+    const PEOPLE = [
+        {name: 'Amara Okafor', src: 'img/amara.svg', status: 'online'},
+        {name: 'Tom Hughes', src: 'img/tom.svg'},
+        {name: 'Priya Shah', src: 'img/priya.svg', status: 'away'},
+        {name: 'Callum Reid', status: 'busy'},
+        {name: 'Nia Evans'},
+        {name: 'Rhys Morgan', status: 'offline'},
+        {name: 'Sofia Rossi'},
+        {name: 'Dafydd Price'},
+        {name: 'Mei Chen'}
+    ];
+
+    // ---- Try a name --------------------------------------------------------
+    const me = E.avatar('#demo-try-avatar', {name: 'Jane Smith', size: 'xl'});
+    const showTry = () => {
+        $('#demo-try-initials').text(me.initials || '(icon)');
+        $('#demo-try-tone').text(me.tone == null ? '-' : String(me.tone));
+    };
+    $('#demo-try-input').on('input', (e) => { me.update({name: e.target.value}); showTry(); });
+    showTry();
+    ['Madonna', 'jane.smith@example.com', 'Jean-Luc Picard', 'Łukasz Żuk', 'Анна Каренина', '王小明', 'محمد علي']
+        .forEach((name) => $('#demo-try-examples').append(E.avatar({name, title: true}).element));
+
+    // ---- Sizes and shapes ------------------------------------------------
+    ['xs', 'sm', 'md', 'lg', 'xl'].forEach((size) =>
+        $('#demo-sizes').append(E.avatar({name: 'Amara Okafor', size, title: size}).element));
+    ['circle', 'rounded', 'square'].forEach((shape) =>
+        $('#demo-shapes').append(E.avatar({name: 'Tom Hughes', src: 'img/tom.svg', size: 'lg', shape, title: shape}).element));
+
+    // ---- Fallbacks --------------------------------------------------------
+    [
+        {name: 'Priya Shah', src: 'img/priya.svg'},
+        {name: 'Callum Reid', src: 'img/does-not-exist.png'},
+        {name: 'Nia Evans'},
+        {name: 'Support team', icon: 'headphones'},
+        {}
+    ].forEach((o) => $('#demo-fallbacks').append(E.avatar({size: 'lg', title: true, ...o}).element));
+
+    // ---- Status and ring ---------------------------------------------------
+    [
+        {name: 'Amara Okafor', src: 'img/amara.svg', status: 'online'},
+        {name: 'Priya Shah', status: 'away'},
+        {name: 'Tom Hughes', status: 'busy', statusLabels: {busy: 'in a meeting'}},
+        {name: 'Rhys Morgan', status: 'offline'},
+        {name: 'Sofia Rossi', ring: true},
+        {name: 'Mei Chen', src: 'img/does-not-exist.png', ring: true, status: 'online', shape: 'rounded'}
+    ].forEach((o) => $('#demo-status').append(E.avatar({size: 'lg', title: true, ...o}).element));
+
+    // ---- Tones -------------------------------------------------------------
+    const TONE_NAMES = ['Red', 'Orange', 'Amber', 'Green', 'Teal', 'Sky', 'Blue', 'Violet'];
+    TONE_NAMES.forEach((label, tone) => {
+        const $cell = $('<div class="sx-av-tone"></div>');
+        $cell.append(E.avatar({name: label + ' Tone', tone, decorative: true}).element);
+        $cell.append($('<span></span>').text(`${tone} - ${label}`));
+        $('#demo-tones').append($cell);
+    });
+
+    // ---- Groups ------------------------------------------------------------
+    const groupState = {max: 4, size: 'md', overlap: 'md'};
+    const group = E.avatarGroup('#demo-group', {people: PEOPLE, max: 4, label: 'Design team'});
+    const drawGroup = () => {
+        group.update({max: groupState.max, size: groupState.size, overlap: groupState.overlap});
+        const parts = ['people'];
+        if (groupState.max != null) parts.push(`max: ${groupState.max}`);
+        if (groupState.size !== 'md') parts.push(`size: '${groupState.size}'`);
+        if (groupState.overlap !== 'md') parts.push(`overlap: '${groupState.overlap}'`);
+        $('#demo-group-code').text(`E.avatarGroup('#demo-group', {${parts.join(', ')}});`);
+    };
+    const choose = (attr, key, parse) => $(`[${attr}]`).on('click', (e) => {
+        const btn = e.currentTarget;
+        $(`[${attr}]`).removeClass('active');
+        $(btn).addClass('active');
+        groupState[key] = parse(btn.getAttribute(attr));
+        drawGroup();
+    });
+    choose('data-max', 'max', (v) => (v === '' ? null : Number(v)));
+    choose('data-gsize', 'size', (v) => v);
+    choose('data-overlap', 'overlap', (v) => v);
+
+    // ---- Team list ---------------------------------------------------------
+    const PROJECTS = [
+        {name: 'Website refresh', due: D().add(12, 'day'), team: PEOPLE.slice(0, 5)},
+        {name: 'Mobile app', due: D().add(1, 'month'), team: PEOPLE.slice(2, 4)},
+        {name: 'Annual report', due: D().add(3, 'day'), team: PEOPLE.slice(3, 9)},
+        {name: 'Help centre', due: D().add(2, 'month'), team: PEOPLE, members: true}
+    ];
+    PROJECTS.forEach((p) => {
+        const $row = $('<li class="sx-av-project"><div><p class="sx-av-project-name"></p>' +
+            '<p class="sx-av-project-meta"></p></div><div data-team></div></li>');
+        $row.find('.sx-av-project-name').text(p.name);
+        $row.find('.sx-av-project-meta').text(`${p.team.length} people - due ${p.due.fromNow()}`);
+        $('#demo-projects').append($row);
+        E.avatarGroup($row.find('[data-team]'), {
+            people: p.team,
+            max: 3,
+            size: 'sm',
+            label: `${p.name} team`,
+            onMore: p.members ? (hidden) => E.toast(`${hidden.length} more on ${p.name}: ` +
+                hidden.map((h) => h.name).join(', ')) : null
+        });
+    });
+
+    // ---- Declarative -------------------------------------------------------
+    E.avatar.scan('#demo-declared');
+</script>
+</body>
+</html>

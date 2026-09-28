@@ -2186,7 +2186,8 @@ code, pre {
 .sr-only,
 .visually-hidden,
 .sr-only-focusable:not(:focus):not(:focus-within),
-.visually-hidden-focusable:not(:focus):not(:focus-within) {
+.visually-hidden-focusable:not(:focus):not(:focus-within),
+.skip-link:not(:focus):not(:focus-within) {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -2197,6 +2198,25 @@ code, pre {
     clip-path: inset(50%) !important;
     white-space: nowrap !important;
     border: 0 !important;
+}
+
+/* A ready-made skip link: the first thing in <body>, hidden until Tab reaches
+   it, then pinned top left above everything (popovers are 10045). */
+.skip-link:focus,
+.skip-link:focus-within {
+    position: fixed;
+    top: var(--dm-space-3);
+    left: var(--dm-space-3);
+    z-index: 10100;
+    padding: var(--dm-space-2) var(--dm-space-4);
+    border-radius: var(--dm-radius-md);
+    background-color: var(--dm-primary);
+    color: var(--dm-primary-text, var(--dm-white));
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--dm-shadow-lg);
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: 2px;
 }
 
 /* Undo .sr-only, e.g. at a breakpoint or from a script */

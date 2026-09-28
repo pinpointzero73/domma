@@ -179,6 +179,12 @@
           "section": "grid"
         },
         {
+          "text": "Accessibility & Text",
+          "url": "showcase/css-utilities/accessibility-text/index.html",
+          "section": "css-accessibility-text",
+          "badge": "New"
+        },
+        {
           "text": "Icons",
           "url": "showcase/icons/index.html",
           "section": "icons"
@@ -224,6 +230,12 @@
           "text": "Autocomplete",
           "url": "showcase/elements/autocomplete/index.html",
           "section": "autocomplete"
+        },
+        {
+          "text": "Avatar",
+          "url": "showcase/elements/avatar/index.html",
+          "section": "avatar",
+          "badge": "New"
         },
         {
           "text": "Badge",

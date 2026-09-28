@@ -364,7 +364,7 @@ describe('Accessibility and text utilities (domma.css)', () => {
 
     it('defines the screen-reader, clamp, stretched-link, divider and truncate classes', () => {
         for (const sel of [
-            '.sr-only', '.visually-hidden', '.sr-only-focusable', '.visually-hidden-focusable', '.not-sr-only',
+            '.sr-only', '.visually-hidden', '.sr-only-focusable', '.visually-hidden-focusable', '.not-sr-only', '.skip-link',
             '.line-clamp-1', '.line-clamp-2', '.line-clamp-3', '.line-clamp-4', '.line-clamp-5', '.line-clamp-none',
             '.stretched-link', '.divider-text', '.divider-text-start', '.divider-text-end',
             '.truncate', '.text-truncate'
