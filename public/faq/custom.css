@@ -13,11 +13,13 @@
             color: var(--dm-primary);
             margin: 0 0 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--dm-primary-light);
+            border-bottom: 2px solid var(--dm-primary-bg, var(--dm-primary-light));
         }
 
         .faq-category .accordion-content pre {
-            background: var(--dm-gray-100);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-text);
             padding: 1rem;
             border-radius: 8px;
             overflow-x: auto;

@@ -648,7 +648,7 @@ sig.destroy()           // Remove all events and disconnect ResizeObserver</code
         return;
       }
       const b64 = overviewSig.toBase64('png');
-      $('#overview-output').html(`<img src="${b64}" style="max-height:80px;background:#fff;border-radius:4px;padding:4px;">`);
+      $('#overview-output').html(`<img src="${b64}" style="max-height:80px;background:#fff;color:var(--dm-gray-900);border-radius:4px;padding:4px;">`);
     });
 
     $('#overview-isEmpty-btn').on('click', () => {
@@ -745,7 +745,7 @@ sig.destroy()           // Remove all events and disconnect ResizeObserver</code
         <strong>Submitted!</strong><br>
         Name: ${_.escapeHtml ? _.escapeHtml(fullName) : fullName}<br>
         Agreed: ${agreed}<br>
-        Signature: <img src="${b64}" style="height:40px;vertical-align:middle;background:#fff;border-radius:4px;padding:2px;margin-left:4px;">
+        Signature: <img src="${b64}" style="height:40px;vertical-align:middle;background:#fff;color:var(--dm-gray-900);border-radius:4px;padding:2px;margin-left:4px;">
       `;
       $('#tutorial-output').html(output).show();
       E.toast('Contract signed successfully!', { type: 'success' });

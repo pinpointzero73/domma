@@ -17,14 +17,14 @@
       .content-section p {
           font-size: 1.1rem;
           line-height: 1.8;
-          color: var(--dm-gray-700);
+          color: var(--dm-text);
           margin-bottom: 1.5rem;
       }
 
       .content-section ul {
           font-size: 1.1rem;
           line-height: 1.8;
-          color: var(--dm-gray-700);
+          color: var(--dm-text);
           margin-bottom: 1.5rem;
           padding-left: 2rem;
       }
@@ -34,7 +34,8 @@
       }
 
       .info-card {
-          background: var(--dm-gray-100);
+          background: var(--dm-surface-raised, var(--dm-surface));
+          border: 1px solid var(--dm-border);
           border-left: 4px solid var(--dm-primary);
           border-radius: 8px;
           padding: 1.5rem;
@@ -49,6 +50,7 @@
 
       .info-card p {
           margin-bottom: 0.75rem;
+          color: var(--dm-text);
       }
 
       .info-card p:last-child {
@@ -57,14 +59,15 @@
 
       .last-updated {
           font-style: italic;
-          color: var(--dm-gray-600);
+          color: var(--dm-text-secondary);
           margin-top: 3rem;
           padding-top: 2rem;
-          border-top: 1px solid var(--dm-gray-300);
+          border-top: 1px solid var(--dm-border, var(--dm-gray-300));
       }
 
       .highlight {
-          background: var(--dm-primary-light, #e3f2fd);
+          background: var(--dm-primary-bg, var(--dm-primary-light, #e3f2fd));
+          color: var(--dm-primary);
           padding: 0.125rem 0.375rem;
           border-radius: 4px;
       }

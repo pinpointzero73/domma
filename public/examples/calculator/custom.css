@@ -89,34 +89,38 @@
         }
 
         .calc-btn-operator {
-            background: var(--dm-primary-light);
-            color: var(--dm-primary-dark);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-primary);
             font-weight: 700;
         }
 
         .calc-btn-operator:hover {
             background: var(--dm-primary);
-            color: var(--dm-white);
+            color: var(--dm-primary-text, #ffffff);
         }
 
         .calc-btn-equals {
             background: var(--dm-success);
-            color: var(--dm-white);
+            color: var(--dm-success-text, #ffffff);
             grid-column: span 2;
         }
 
         .calc-btn-equals:hover {
-            background: var(--dm-success-dark);
+            background: var(--dm-success);
+            opacity: 0.9;
+            color: var(--dm-success-text, #ffffff);
         }
 
         .calc-btn-clear {
-            background: var(--dm-danger-light);
-            color: var(--dm-danger-dark);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-danger);
         }
 
         .calc-btn-clear:hover {
             background: var(--dm-danger);
-            color: var(--dm-white);
+            color: var(--dm-danger-text, #ffffff);
         }
 
         /* Mode toggle */
@@ -141,7 +145,7 @@
 
         .mode-btn.active {
             background: var(--dm-primary);
-            color: var(--dm-white);
+            color: var(--dm-primary-text, #ffffff);
             border-color: var(--dm-primary);
         }
 
@@ -170,9 +174,9 @@
         }
 
         .angle-btn.active {
-            background: var(--dm-info);
-            color: var(--dm-white);
-            border-color: var(--dm-info);
+            background: var(--dm-primary);
+            color: var(--dm-primary-text, #ffffff);
+            border-color: var(--dm-primary);
         }
 
         .angle-btn:hover:not(.active) {
@@ -199,41 +203,44 @@
 
         /* Function buttons */
         .calc-btn-function {
-            background: var(--dm-info-light);
-            color: var(--dm-info-dark);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-info-dark, var(--dm-info));
             font-size: 0.85rem;
             font-weight: 600;
         }
 
         .calc-btn-function:hover {
             background: var(--dm-info);
-            color: var(--dm-white);
+            color: var(--dm-info-text, #ffffff);
         }
 
         /* Memory buttons */
         .calc-btn-memory {
-            background: var(--dm-warning-light);
-            color: var(--dm-warning-dark);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-warning-dark, var(--dm-warning));
             font-size: 0.85rem;
             font-weight: 600;
         }
 
         .calc-btn-memory:hover {
             background: var(--dm-warning);
-            color: var(--dm-white);
+            color: var(--dm-warning-text, var(--dm-text));
         }
 
         /* Constant buttons */
         .calc-btn-constant {
-            background: var(--dm-success-light);
-            color: var(--dm-success-dark);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-success-dark, var(--dm-success));
             font-weight: 700;
             font-size: 1.1rem;
         }
 
         .calc-btn-constant:hover {
             background: var(--dm-success);
-            color: var(--dm-white);
+            color: var(--dm-success-text, #ffffff);
         }
 
         /* Memory indicator */
@@ -243,8 +250,8 @@
             left: 0.5rem;
             font-size: 0.75rem;
             font-weight: 700;
-            color: var(--dm-warning);
-            background: var(--dm-warning-light);
+            color: var(--dm-warning-text, var(--dm-text));
+            background: var(--dm-warning);
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
         }
@@ -260,7 +267,7 @@
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: var(--dm-danger);
-            color: var(--dm-white);
+            color: var(--dm-danger-text, #ffffff);
             padding: 1rem 1.5rem;
             border-radius: 8px;
             box-shadow: var(--dm-shadow-lg);

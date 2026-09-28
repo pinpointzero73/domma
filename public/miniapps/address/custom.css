@@ -11,7 +11,8 @@
 }
 
 body {
-  background: #f8fafc;
+  background: var(--dm-background);
+  color: var(--dm-text);
   margin: 0;
   padding: 0;
 }
@@ -24,7 +25,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8fafc;
+  background: var(--dm-background);
+  color: var(--dm-text);
 }
 
 /* ===================================
@@ -45,7 +47,7 @@ body {
   left: 0;
   right: 0;
   height: 60px;
-  background: var(--dm-slate-900);
+  background: var(--dm-dark, #1e293b);
   border-bottom: 1px solid var(--dm-slate-700);
   display: flex;
   align-items: center;
@@ -53,6 +55,7 @@ body {
   padding: 0 1rem;
   z-index: 1000;
   gap: 1rem;
+  color: var(--dm-white, #ffffff);
 }
 
 .navbar-brand {
@@ -61,7 +64,7 @@ body {
   gap: 0.5rem;
   font-size: 1.125rem;
   font-weight: 700;
-  color: white;
+  color: var(--dm-white, #ffffff);
 }
 
 .navbar-user {
@@ -69,7 +72,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: var(--dm-slate-300);
+  color: var(--dm-slate-300, rgba(255, 255, 255, 0.8));
 }
 
 .navbar-actions {
@@ -115,12 +118,12 @@ body {
 .app-footer {
   margin-top: auto;
   padding: 1.5rem 2rem;
-  background: var(--dm-slate-900);
+  background: var(--dm-dark, #1e293b);
   border-top: 1px solid var(--dm-slate-700);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--dm-slate-400);
+  color: var(--dm-slate-300, rgba(255, 255, 255, 0.8));
   font-size: 0.875rem;
 }
 
@@ -130,14 +133,14 @@ body {
 }
 
 .footer-links a {
-  color: var(--dm-slate-400);
+  color: var(--dm-slate-300, rgba(255, 255, 255, 0.8));
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.2s;
 }
 
 .footer-links a:hover {
-  color: var(--dm-blue-400);
+  color: var(--dm-white, #ffffff);
   text-decoration: underline;
 }
 
@@ -157,7 +160,8 @@ body {
  * =================================== */
 .lookup-inline-options {
   padding: 1rem;
-  background: var(--dm-slate-50);
+  background: var(--dm-surface-raised, var(--dm-surface));
+  border: 1px solid var(--dm-border);
   border-radius: 0.5rem;
   margin-bottom: 1rem;
 }
@@ -167,7 +171,7 @@ body {
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
-  color: var(--dm-gray-700);
+  color: var(--dm-text);
 }
 
 .save-mode-label {
@@ -183,7 +187,7 @@ body {
 
 .save-mode-label-secondary {
   font-size: 0.875rem;
-  color: var(--dm-gray-700);
+  color: var(--dm-text-secondary);
   font-weight: 500;
 }
 
@@ -216,7 +220,8 @@ body {
  * Lookup Section Improvements
  * =================================== */
 #lookupSection .card {
-  border: none;
+  border: 1px solid var(--dm-border);
+  background: var(--dm-card-bg);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -228,7 +233,7 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: var(--dm-slate-900);
+  color: var(--dm-text);
 }
 
 /* ===================================
@@ -242,15 +247,17 @@ body {
 
 .address-item {
   padding: 1rem;
-  border: 1px solid var(--dm-slate-200);
+  border: 1px solid var(--dm-border);
   border-radius: 8px;
   cursor: pointer;
+  background: var(--dm-card-bg);
+  color: var(--dm-text);
   transition: all 0.2s;
 }
 
 .address-item:hover {
   border-color: var(--dm-primary);
-  background: var(--dm-slate-50);
+  background: var(--dm-hover-bg, rgba(0, 0, 0, 0.05));
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -263,7 +270,9 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: var(--dm-slate-100);
+  background: var(--dm-surface-raised, var(--dm-surface));
+  border: 1px solid var(--dm-border);
+  color: var(--dm-text);
   border-radius: 8px;
   font-family: 'Courier New', monospace;
   font-size: 0.875rem;
@@ -271,7 +280,7 @@ body {
 }
 
 .api-key-prefix {
-  color: var(--dm-slate-600);
+  color: var(--dm-text-secondary);
 }
 
 .api-key-copy-btn {
@@ -293,19 +302,21 @@ body {
 .stat-card {
   padding: 1.5rem;
   border-radius: 8px;
+  background: var(--dm-card-bg);
+  border: 1px solid var(--dm-border);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .stat-label {
   font-size: 0.875rem;
-  color: var(--dm-slate-600);
+  color: var(--dm-text-secondary);
   margin-bottom: 0.5rem;
 }
 
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--dm-slate-900);
+  color: var(--dm-text);
 }
 
 /* ===================================
@@ -319,7 +330,9 @@ body {
 
 .credit-pack {
   padding: 1.5rem;
-  border: 2px solid var(--dm-slate-200);
+  border: 2px solid var(--dm-border);
+  background: var(--dm-card-bg);
+  color: var(--dm-text);
   border-radius: 8px;
   transition: all 0.2s;
   cursor: pointer;
@@ -333,7 +346,7 @@ body {
 
 .credit-pack.popular {
   border-color: var(--dm-primary);
-  background: rgba(59, 130, 246, 0.05);
+  background: var(--dm-primary-bg, rgba(59, 130, 246, 0.05));
   position: relative;
 }
 
@@ -344,7 +357,7 @@ body {
   right: 10px;
   padding: 0.25rem 0.5rem;
   background: var(--dm-primary);
-  color: white;
+  color: var(--dm-primary-text, #ffffff);
   font-size: 0.75rem;
   font-weight: 700;
   border-radius: 4px;
@@ -371,13 +384,13 @@ body {
 
 .pack-description {
   font-size: 0.875rem;
-  color: var(--dm-slate-600);
+  color: var(--dm-text-secondary);
   margin-bottom: 1rem;
 }
 
 .pack-per-lookup {
   font-size: 0.75rem;
-  color: var(--dm-slate-500);
+  color: var(--dm-text-muted, var(--dm-text-secondary));
 }
 
 /* ===================================
@@ -385,7 +398,9 @@ body {
  * =================================== */
 .saved-address-card {
   padding: 1rem;
-  border: 1px solid var(--dm-slate-200);
+  border: 1px solid var(--dm-border);
+  background: var(--dm-card-bg);
+  color: var(--dm-text);
   border-radius: 8px;
   margin-bottom: 0.5rem;
 }
@@ -410,7 +425,9 @@ body {
 .tag {
   display: inline-block;
   padding: 0.25rem 0.5rem;
-  background: var(--dm-slate-200);
+  background: var(--dm-surface-raised, var(--dm-surface));
+  border: 1px solid var(--dm-border);
+  color: var(--dm-text);
   border-radius: 4px;
   font-size: 0.75rem;
   margin-right: 0.25rem;
@@ -420,7 +437,7 @@ body {
   display: inline-block;
   padding: 0.25rem 0.5rem;
   background: var(--dm-primary);
-  color: white;
+  color: var(--dm-primary-text, #ffffff);
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 700;
@@ -444,7 +461,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--dm-gray-700);
+  color: var(--dm-text);
   font-size: 0.9rem;
 }
 

@@ -11,7 +11,7 @@
         .loading-message {
             text-align: center;
             padding: 3rem;
-            color: var(--dm-gray-600);
+            color: var(--dm-text-secondary);
             font-size: 1.1rem;
         }
 

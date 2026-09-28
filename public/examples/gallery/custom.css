@@ -13,7 +13,8 @@
             border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
-            background: var(--dm-gray-200);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -87,6 +88,7 @@
             align-items: center;
             justify-content: center;
             background: var(--dm-black);
+            color: var(--dm-white);
         }
 
         .lightbox-modal img {
@@ -115,7 +117,8 @@
             gap: 2rem;
             justify-content: center;
             padding: 2rem;
-            background: var(--dm-gray-100);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
             border-radius: 12px;
             margin-bottom: 2rem;
         }

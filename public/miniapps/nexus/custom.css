@@ -8,7 +8,8 @@
       }
 
       body {
-          background: var(--dm-slate-50);
+          background: var(--dm-background);
+          color: var(--dm-text);
           min-height: 100vh;
           display: flex;
           flex-direction: column;
@@ -41,7 +42,7 @@
           gap: 0.75rem;
           font-size: 1.875rem;
           font-weight: 700;
-          color: var(--dm-slate-900);
+          color: var(--dm-text);
           margin: 0;
       }
 
@@ -50,7 +51,7 @@
           align-items: center;
           gap: 1rem;
           font-size: 0.875rem;
-          color: var(--dm-slate-600);
+          color: var(--dm-text-secondary);
       }
 
       .connection-status.online {
@@ -185,7 +186,7 @@
 
       .contact-name {
           font-weight: 600;
-          color: var(--dm-slate-900);
+          color: var(--dm-text);
           margin-bottom: 0.25rem;
           display: flex;
           align-items: center;
@@ -197,7 +198,7 @@
       }
 
       .contact-details {
-          color: var(--dm-slate-600);
+          color: var(--dm-text-secondary);
           font-size: 0.875rem;
       }
 
@@ -218,8 +219,9 @@
 
       .tag {
           padding: 0.125rem 0.5rem;
-          background: var(--dm-slate-100);
-          color: var(--dm-slate-700);
+          background: var(--dm-surface-raised, var(--dm-surface));
+          border: 1px solid var(--dm-border);
+          color: var(--dm-text);
           font-size: 0.75rem;
           border-radius: 12px;
       }
@@ -236,8 +238,8 @@
           align-items: center;
           gap: 1rem;
           padding: 1rem;
-          background: white;
-          border: 1px solid var(--dm-slate-200);
+          background: var(--dm-card-bg);
+          border: 1px solid var(--dm-border);
           border-radius: 8px;
           margin-bottom: 0.75rem;
           transition: all 0.2s;
@@ -262,19 +264,19 @@
 
       .group-name {
           font-weight: 600;
-          color: var(--dm-slate-900);
+          color: var(--dm-text);
           margin-bottom: 0.25rem;
       }
 
       .group-details {
-          color: var(--dm-slate-600);
+          color: var(--dm-text-secondary);
           font-size: 0.875rem;
           display: flex;
           gap: 1rem;
       }
 
       .group-description {
-          color: var(--dm-slate-500);
+          color: var(--dm-text-muted, var(--dm-text-secondary));
           font-size: 0.875rem;
           margin-top: 0.25rem;
       }
@@ -287,10 +289,10 @@
 
       /* Card Styling - Rounded boxes with drop shadows */
       #contacts-table, #groups-table {
-          background: white;
+          background: var(--dm-card-bg);
           border-radius: 12px;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          border: 1px solid var(--dm-slate-200);
+          border: 1px solid var(--dm-border);
           overflow: hidden;
           margin-bottom: 1.5rem;
           padding: 1.5rem;
@@ -303,16 +305,17 @@
       }
 
       #contacts-table thead th, #groups-table thead th {
-          background: var(--dm-slate-50);
-          border-bottom: 1px solid var(--dm-slate-200);
+          background: var(--dm-surface-raised, var(--dm-surface));
+          border-bottom: 1px solid var(--dm-border);
           padding: 1rem;
           font-weight: 600;
-          color: var(--dm-slate-700);
+          color: var(--dm-text);
       }
 
       #contacts-table tbody td, #groups-table tbody td {
           padding: 1rem;
-          border-bottom: 1px solid var(--dm-slate-100);
+          border-bottom: 1px solid var(--dm-border);
+          color: var(--dm-text);
       }
 
       #contacts-table tbody tr:last-child td, #groups-table tbody tr:last-child td {
@@ -320,7 +323,7 @@
       }
 
       #contacts-table tbody tr:hover, #groups-table tbody tr:hover {
-          background: var(--dm-slate-50);
+          background: var(--dm-hover-bg, rgba(0, 0, 0, 0.05));
       }
 
       /* Groups list card styling */
@@ -336,18 +339,18 @@
       .empty-state {
           text-align: center;
           padding: 3rem 1rem;
-          color: var(--dm-slate-500);
+          color: var(--dm-text-muted, var(--dm-text-secondary));
       }
 
       .empty-state .icon {
           font-size: 3rem;
-          color: var(--dm-slate-300);
+          color: var(--dm-text-muted, var(--dm-text-secondary));
           margin-bottom: 1rem;
       }
 
       .empty-state h3 {
           font-size: 1.25rem;
-          color: var(--dm-slate-700);
+          color: var(--dm-text);
           margin-bottom: 0.5rem;
       }
 
@@ -408,7 +411,8 @@
           padding: 3rem 1rem;
           max-width: 400px;
           margin: 2rem auto;
-          background: white;
+          background: var(--dm-card-bg);
+          border: 1px solid var(--dm-border);
           border-radius: 12px;
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
       }
@@ -421,11 +425,11 @@
 
       .login-prompt h2 {
           margin-bottom: 0.5rem;
-          color: var(--dm-slate-900);
+          color: var(--dm-text);
       }
 
       .login-prompt p {
-          color: var(--dm-slate-600);
+          color: var(--dm-text-secondary);
           margin-bottom: 2rem;
       }
 

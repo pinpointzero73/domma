@@ -13,7 +13,7 @@
         .content-section p {
             font-size: 1.1rem;
             line-height: 1.8;
-            color: var(--dm-gray-700);
+            color: var(--dm-text);
             margin-bottom: 1.5rem;
         }
 
@@ -25,7 +25,8 @@
         }
 
         .value-card {
-            background: var(--dm-gray-100);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
             border-radius: 12px;
             padding: 1.5rem;
             text-align: center;
@@ -40,16 +41,17 @@
         .value-card h3 {
             font-size: 1.25rem;
             margin: 0 0 0.75rem;
+            color: var(--dm-text);
         }
 
         .value-card p {
             font-size: 0.95rem;
-            color: var(--dm-gray-600);
+            color: var(--dm-text-secondary);
             margin: 0;
         }
 
         .team-section {
-            background: var(--dm-gray-50);
+            background: var(--dm-background-alt, var(--dm-surface));
             padding: 4rem 2rem;
         }
 
@@ -68,5 +70,5 @@
         .team-content p {
             font-size: 1.1rem;
             line-height: 1.8;
-            color: var(--dm-gray-700);
+            color: var(--dm-text);
         }

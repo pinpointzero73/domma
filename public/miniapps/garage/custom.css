@@ -6,7 +6,8 @@
       }
 
       body {
-          background: var(--dm-slate-50);
+          background: var(--dm-background);
+          color: var(--dm-text);
           min-height: 100vh;
           display: flex;
           flex-direction: column;
@@ -68,7 +69,7 @@
       .search-btn {
           padding: 1rem 3rem;
           background: var(--dm-primary);
-          color: white;
+          color: var(--dm-primary-text, #ffffff);
           border: none;
           border-radius: 8px;
           font-size: 1.125rem;
@@ -121,7 +122,8 @@
           display: flex;
           gap: 0.5rem;
           padding: 0.5rem;
-          background-color: var(--dm-gray-100);
+          background-color: var(--dm-surface-raised, var(--dm-surface));
+          border: 1px solid var(--dm-border);
           border-radius: var(--dm-radius-lg);
       }
 
@@ -142,13 +144,13 @@
       }
 
       .tab-pill:hover:not(.active) {
-          background-color: var(--dm-surface-raised);
-          color: var(--dm-primary);
+          background-color: var(--dm-hover-bg, rgba(0, 0, 0, 0.05));
+          color: var(--dm-text);
       }
 
       .tab-pill.active {
-          background-color: var(--dm-white);
-          color: var(--dm-primary);
+          background-color: var(--dm-primary);
+          color: var(--dm-primary-text, #ffffff);
           box-shadow: var(--dm-shadow-sm);
       }
 
@@ -584,23 +586,23 @@
       }
 
       .save-vehicle-btn {
-          background: #10b981;
-          color: white;
+          background: #059669;
+          color: #ffffff;
       }
 
       .save-vehicle-btn:hover {
-          background: #059669;
+          background: #047857;
           transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
       }
 
       .remove-vehicle-btn {
-          background: #ef4444;
-          color: white;
+          background: #dc2626;
+          color: #ffffff;
       }
 
       .remove-vehicle-btn:hover {
-          background: #dc2626;
+          background: #b91c1c;
           transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
       }
@@ -700,7 +702,7 @@
           width: 100%;
           padding: 0.875rem;
           background: var(--dm-primary);
-          color: white;
+          color: var(--dm-primary-text, #ffffff);
           border: none;
           border-radius: 8px;
           font-size: 1rem;

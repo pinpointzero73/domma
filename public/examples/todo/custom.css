@@ -172,12 +172,12 @@
         .todo-empty {
             text-align: center;
             padding: 4rem 2rem;
-            color: var(--dm-gray-500);
+            color: var(--dm-text-muted, var(--dm-text-secondary));
         }
 
         .todo-empty h3 {
             margin: 1rem 0 0.5rem;
-            color: var(--dm-gray-600);
+            color: var(--dm-text-secondary);
         }
 
         .todo-empty p {
@@ -187,6 +187,7 @@
         /* Code display */
         .code-display {
             background: var(--dm-gray-900);
+            color: var(--dm-gray-100);
             border-radius: 8px;
             padding: 1.5rem;
             overflow-x: auto;
@@ -196,10 +197,12 @@
             margin: 0;
             font-size: 0.875rem;
             line-height: 1.5;
+            color: inherit;
         }
 
         .code-display code {
             color: var(--dm-gray-100);
+            background: transparent;
             font-family: 'Courier New', monospace;
         }
 
@@ -214,41 +217,43 @@
         }
 
         .badge-not-started {
-            background: var(--dm-gray-200);
-            color: var(--dm-gray-700);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-text-secondary);
         }
 
         .badge-in-progress {
-            background: var(--dm-info-light);
-            color: var(--dm-info-dark);
+            background: var(--dm-info);
+            color: var(--dm-info-text, #ffffff);
         }
 
         .badge-completed {
-            background: var(--dm-success-light);
-            color: var(--dm-success-dark);
+            background: var(--dm-success);
+            color: var(--dm-success-text, #ffffff);
         }
 
         .badge-highest {
             background: var(--dm-danger);
-            color: var(--dm-white);
+            color: var(--dm-danger-text, #ffffff);
         }
 
         .badge-high {
-            background: var(--dm-warning); /* Mapped from #fd7e14 */
-            color: var(--dm-white);
+            background: var(--dm-warning);
+            color: var(--dm-warning-text, var(--dm-text));
         }
 
         .badge-medium {
-            background: var(--dm-warning); /* Mapped from #ffc107 */
-            color: var(--dm-black);
+            background: var(--dm-warning);
+            color: var(--dm-warning-text, var(--dm-text));
         }
 
         .badge-low {
-            background: var(--dm-info); /* Mapped from #20c997 */
-            color: var(--dm-white);
+            background: var(--dm-info);
+            color: var(--dm-info-text, #ffffff);
         }
 
         .badge-lowest {
-            background: var(--dm-gray-400);
-            color: var(--dm-white);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-text);
         }

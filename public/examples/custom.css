@@ -19,7 +19,7 @@
 
         .examples-intro p {
             font-size: 1.125rem;
-            color: var(--dm-gray-600);
+            color: var(--dm-text-secondary);
             line-height: 1.7;
         }
 
@@ -56,7 +56,7 @@
         }
 
         .example-card-header [data-icon] {
-            color: var(--dm-white);
+            color: var(--dm-primary-text, var(--dm-white));
         }
 
         .example-card-body {
@@ -75,7 +75,7 @@
 
         .example-card-body p {
             font-size: 1rem;
-            color: var(--dm-gray-600);
+            color: var(--dm-text-secondary);
             line-height: 1.6;
             margin: 0 0 1.5rem;
             flex: 1;
@@ -89,8 +89,9 @@
         }
 
         .example-tag {
-            background: var(--dm-gray-100);
-            color: var(--dm-gray-700);
+            background: var(--dm-surface-raised, var(--dm-surface));
+            border: 1px solid var(--dm-border);
+            color: var(--dm-text);
             font-size: 0.75rem;
             font-weight: 500;
             padding: 0.25rem 0.75rem;

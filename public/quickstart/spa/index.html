@@ -40,7 +40,7 @@
     }
     .spa-nav-link.active {
       background: var(--dm-primary);
-      color: white;
+      color: var(--dm-primary-text, #ffffff);
     }
     #spa-app {
       min-height: 300px;
@@ -203,7 +203,7 @@
     <!-- Router Demo Container -->
     <div class="demo-container">
       <!-- Demo Navigation -->
-      <div class="p-4 text-center" style="background: var(--dm-gray-900); border-bottom: 1px solid var(--dm-border);">
+      <div class="p-4 text-center" style="background: var(--dm-dark, #1e293b); color: var(--dm-white, #ffffff); border-bottom: 1px solid var(--dm-border);">
         <a class="spa-nav-link active" data-view="home">
           <span data-icon="home" data-icon-size="18"></span> Home
         </a>

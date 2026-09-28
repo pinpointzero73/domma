@@ -42,7 +42,7 @@
 
 .dm-btn-primary {
     background: var(--dm-primary);
-    color: var(--dm-white);
+    color: var(--dm-primary-text, var(--dm-white));
     border-color: var(--dm-primary);
 }
 
@@ -52,7 +52,7 @@
 
 .dm-btn-secondary {
     background: var(--dm-secondary);
-    color: var(--dm-white);
+    color: var(--dm-secondary-text, var(--dm-white));
     border-color: var(--dm-secondary);
 }
 
@@ -62,7 +62,7 @@
 
 .dm-btn-success {
     background: var(--dm-success);
-    color: var(--dm-white);
+    color: var(--dm-success-text, var(--dm-white));
     border-color: var(--dm-success);
 }
 
@@ -118,7 +118,8 @@
 /* Theme Toggle Buttons */
 .dm-theme-toggle {
     display: flex;
-    background: var(--dm-gray-200);
+    background: var(--dm-surface-raised, var(--dm-surface));
+    border: 1px solid var(--dm-border);
     border-radius: var(--dm-radius-full);
     padding: 0.25rem;
 }
@@ -141,7 +142,7 @@
 
 .dm-theme-btn.active {
     background: var(--dm-primary);
-    color: var(--dm-white);
+    color: var(--dm-primary-text, var(--dm-white));
 }
 
 /* Presets */
@@ -180,7 +181,7 @@
 .dm-preset-btn.active {
     background: var(--dm-primary);
     border-color: var(--dm-primary);
-    color: var(--dm-white);
+    color: var(--dm-primary-text, var(--dm-white));
 }
 
 /* Sections (Accordion) */
@@ -301,7 +302,7 @@
     flex: 1;
     height: 6px;
     border-radius: 3px;
-    background: var(--dm-gray-300);
+    background: var(--dm-border);
     appearance: none;
     cursor: pointer;
 }
@@ -590,8 +591,8 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--dm-radius-md);
-    background: var(--dm-primary-light, var(--dm-primary));
-    color: var(--dm-primary);
+    background: var(--dm-primary);
+    color: var(--dm-primary-text, var(--dm-white));
 }
 
 .qr-library-name {
@@ -735,7 +736,7 @@
 
 .qr-btn-primary {
     background: var(--dm-primary);
-    color: var(--dm-white);
+    color: var(--dm-primary-text, var(--dm-white));
     border-color: var(--dm-primary);
 }
 
@@ -888,7 +889,7 @@
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--dm-border);
-    background: var(--dm-white);
+    background: var(--dm-surface);
 }
 
 .qr-preview-header {
@@ -993,7 +994,7 @@
 
 .qr-align-btn.active {
     background: var(--dm-primary);
-    color: var(--dm-white);
+    color: var(--dm-primary-text, var(--dm-white));
     border-color: var(--dm-primary);
 }
 
@@ -1073,7 +1074,7 @@
 .dm-editor-toolbar-btn:active,
 .dm-editor-toolbar-btn.active {
     background: var(--dm-primary);
-    color: var(--dm-white);
+    color: var(--dm-primary-text, var(--dm-white));
 }
 
 /* Content Areas */

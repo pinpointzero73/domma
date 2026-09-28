@@ -226,7 +226,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--dm-black-t50);
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -237,7 +238,7 @@
         .loading-spinner {
             width: 48px;
             height: 48px;
-            border: 4px solid var(--dm-white-t30);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             border-top-color: var(--dm-primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -251,7 +252,7 @@
 
         .loading-overlay p {
             margin-top: 1rem;
-            color: var(--dm-white);
+            color: inherit;
             font-size: 1rem;
         }
 
@@ -264,7 +265,8 @@
             padding: 1rem 1.5rem;
             border-radius: 8px;
             box-shadow: var(--dm-shadow);
-            color: var(--dm-white);
+            background: var(--dm-dark, #1e293b);
+            color: var(--dm-white, #ffffff);
             font-size: 0.95rem;
             z-index: 10000;
             opacity: 0;
@@ -280,10 +282,12 @@
 
         .weather-toast.error {
             background: var(--dm-danger);
+            color: var(--dm-danger-text, #ffffff);
         }
 
         .weather-toast.success {
             background: var(--dm-success);
+            color: var(--dm-success-text, #ffffff);
         }
 
         /* Responsive */

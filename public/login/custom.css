@@ -60,15 +60,16 @@
       }
 
       .auth-tab-pill:hover {
-          background: var(--dm-primary-t10);
-          border-color: var(--dm-primary-t50);
+          background: var(--dm-primary-bg, rgba(59, 130, 246, 0.1));
+          border-color: var(--dm-primary);
+          color: var(--dm-primary);
       }
 
       .auth-tab-pill.active {
           background: var(--dm-primary);
-          color: #ffffff;
+          color: var(--dm-primary-text, #ffffff);
           border-color: var(--dm-primary);
-          box-shadow: 0 4px 12px var(--dm-primary-t30);
+          box-shadow: 0 4px 12px var(--dm-primary-bg, rgba(59, 130, 246, 0.3));
       }
 
       .login-footer {

@@ -40,7 +40,7 @@
           height: 2.5rem;
           border-radius: 50%;
           background: var(--dm-primary);
-          color: white;
+          color: var(--dm-primary-text, #ffffff);
           font-weight: 700;
           font-size: 1.25rem;
           margin-right: 1rem;
@@ -99,7 +99,7 @@
       .badge-time {
           display: inline-block;
           background: var(--dm-success);
-          color: white;
+          color: var(--dm-success-text, #ffffff);
           padding: 0.25rem 0.75rem;
           border-radius: 20px;
           font-size: 0.85rem;
@@ -159,8 +159,8 @@
           display: inline-flex;
           align-items: center;
           gap: 0.75rem;
-          background: var(--dm-white-t95);
-          color: var(--dm-primary-dark);
+          background: #ffffff;
+          color: #0f172a;
           font-size: 1.1rem;
           font-weight: 600;
           padding: 0.875rem 2rem;
@@ -173,18 +173,19 @@
       .cta:hover {
           transform: translateY(-2px);
           box-shadow: 0 6px 30px var(--dm-black-t30);
-          color: var(--dm-primary-dark);
+          color: #0f172a;
           text-decoration: none;
       }
 
       .cta-secondary {
-          background: var(--dm-white-t15);
-          color: var(--dm-white);
-          border: 2px solid var(--dm-white-t40);
+          background: rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+          border: 2px solid rgba(255, 255, 255, 0.4);
       }
 
       .cta-secondary:hover {
-          color: var(--dm-white);
+          background: rgba(255, 255, 255, 0.25);
+          color: #ffffff;
       }
 
       .cta-arrow {
