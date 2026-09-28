@@ -1,3 +1,32 @@
+### v0.50.1 - Safer Bindings (2026-09-28)
+
+**Accordions open again, and reactive bindings fail safe.** Accordions whose answer sits inside an
+`.accordion-body > .accordion-content` pair showed an empty panel; they now open to the right
+content. Domma Reactive 1.2 stops a binding from showing content when it is handed an observable
+instead of its value, and expressions gain object and array literals.
+
+🪗 **Accordion**
+
+*   Each header now pairs with its outermost panel. Since 0.48.0 the panel selector matched both
+    `.accordion-body` and the `.accordion-content` inside it, so every header after the first opened
+    the wrong panel and an open item showed a zero-height inner panel. Domma CMS renders exactly that
+    markup for `[accordion]` and collection accordions.
+
+⚡ **Domma Reactive 1.2**
+
+*   A binding whose expression resolves to a bare observable (`data-if="show"` rather than
+    `show.value`) now warns once - `"show" is an observable, not its value - use "show.value"` - and
+    reads as empty: `data-if` and `{{#if}}` hide, hidden/disabled/checked stay off, text and
+    attributes render `''` instead of `[object Object]`. It used to show the content, because an
+    observable object is truthy.
+
+*   A virtual `<!-- dm if -->` nested in a virtual list body is left out of the rows instead of
+    rendering in every one; the warning still points at `{{#if flag}}`.
+
+*   Expressions accept object literals (`{a: x, 'b-c': y}`) and array literals (`[a, b]`). Computed
+    keys, spread, methods and `__proto__`-style keys are refused with the position of the problem.
+    Still no `eval` - the parser stays CSP-safe.
+
 ### v0.50.0 - Faces and Fine Print (2026-09-28)
 
 **Avatars** - `E.avatar()` draws a person as their picture, their initials or an icon, and

@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.50.1",
+      "title": "Safer Bindings",
+      "description": "<p><strong>Accordions open again.</strong> Accordions whose answer sits inside a body and content pair - the markup Domma CMS renders - now open to the right panel instead of an empty one.</p>\n<p><strong>Safer bindings.</strong> Domma Reactive 1.2 warns and hides content when a binding is handed an observable instead of its value, and expressions accept object and array literals.</p>",
+      "date": "2026-09-28"
+    },
+    {
       "year": "v0.50.0",
       "title": "Faces and Fine Print",
       "description": "<p><strong>Avatars.</strong> <code>E.avatar()</code> shows a person as their picture or their initials, in a colour that stays the same wherever their name appears and readable on every theme; <code>E.avatarGroup()</code> stacks a team with a \"+N\" that lists the rest.</p>\n<p>Plus accessibility and text utilities: <code>.sr-only</code>, a ready-made <code>.skip-link</code>, <code>.line-clamp-*</code>, <code>.stretched-link</code> for whole-card links and <code>.divider-text</code>.</p>",
@@ -415,5 +421,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.50.0"
+  "latestVersion": "v0.50.1"
 }
