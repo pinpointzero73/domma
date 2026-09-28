@@ -9267,6 +9267,12 @@ button.avatar {
     cursor: pointer;
 }
 
+/* The global a:hover colour would otherwise repaint a linked avatar's initials */
+a.avatar:hover {
+    background-color: color-mix(in srgb, var(--dm-text) 12%, var(--dm-surface));
+    color: var(--dm-text);
+}
+
 a.avatar:focus-visible,
 button.avatar:focus-visible {
     outline: 2px solid var(--dm-border-focus);
@@ -9308,43 +9314,52 @@ svg.avatar-icon,
 .avatar-rounded { --dm-avatar-radius: calc(var(--dm-avatar-size, 2.5rem) * 0.22); }
 .avatar-square { --dm-avatar-radius: 0; }
 
-/* Tones, picked from the name by E.avatar() */
-.avatar-tone-0 {
+/* Tones, picked from the name by E.avatar(). The a:hover form keeps a linked
+   avatar's initials their own colour under the global link hover. */
+.avatar-tone-0,
+a.avatar-tone-0:hover {
     background-color: color-mix(in srgb, var(--dm-red-500) 24%, var(--dm-surface));
     color: color-mix(in srgb, var(--dm-red-500) 30%, var(--dm-text));
 }
 
-.avatar-tone-1 {
+.avatar-tone-1,
+a.avatar-tone-1:hover {
     background-color: color-mix(in srgb, color-mix(in srgb, var(--dm-red-500) 50%, var(--dm-amber-500)) 24%, var(--dm-surface));
     color: color-mix(in srgb, color-mix(in srgb, var(--dm-red-500) 50%, var(--dm-amber-500)) 30%, var(--dm-text));
 }
 
-.avatar-tone-2 {
+.avatar-tone-2,
+a.avatar-tone-2:hover {
     background-color: color-mix(in srgb, var(--dm-amber-500) 24%, var(--dm-surface));
     color: color-mix(in srgb, var(--dm-amber-500) 30%, var(--dm-text));
 }
 
-.avatar-tone-3 {
+.avatar-tone-3,
+a.avatar-tone-3:hover {
     background-color: color-mix(in srgb, var(--dm-green-500) 24%, var(--dm-surface));
     color: color-mix(in srgb, var(--dm-green-500) 30%, var(--dm-text));
 }
 
-.avatar-tone-4 {
+.avatar-tone-4,
+a.avatar-tone-4:hover {
     background-color: color-mix(in srgb, color-mix(in srgb, var(--dm-green-500) 50%, var(--dm-sky-500)) 24%, var(--dm-surface));
     color: color-mix(in srgb, color-mix(in srgb, var(--dm-green-500) 50%, var(--dm-sky-500)) 30%, var(--dm-text));
 }
 
-.avatar-tone-5 {
+.avatar-tone-5,
+a.avatar-tone-5:hover {
     background-color: color-mix(in srgb, var(--dm-sky-500) 24%, var(--dm-surface));
     color: color-mix(in srgb, var(--dm-sky-500) 30%, var(--dm-text));
 }
 
-.avatar-tone-6 {
+.avatar-tone-6,
+a.avatar-tone-6:hover {
     background-color: color-mix(in srgb, var(--dm-blue-500) 24%, var(--dm-surface));
     color: color-mix(in srgb, var(--dm-blue-500) 30%, var(--dm-text));
 }
 
-.avatar-tone-7 {
+.avatar-tone-7,
+a.avatar-tone-7:hover {
     background-color: color-mix(in srgb, color-mix(in srgb, var(--dm-blue-500) 55%, var(--dm-red-500)) 24%, var(--dm-surface));
     color: color-mix(in srgb, color-mix(in srgb, var(--dm-blue-500) 55%, var(--dm-red-500)) 30%, var(--dm-text));
 }
