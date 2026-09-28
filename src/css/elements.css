@@ -9290,6 +9290,8 @@ button.avatar:focus-visible {
     display: inline-flex;
 }
 
+/* Domma.icons.scan() swaps the span for the svg and keeps its classes */
+svg.avatar-icon,
 .avatar-icon svg {
     width: calc(var(--dm-avatar-size, 2.5rem) * 0.55);
     height: calc(var(--dm-avatar-size, 2.5rem) * 0.55);
@@ -9412,15 +9414,19 @@ button.avatar:focus-visible {
     list-style: none;
 }
 
+/* E.avatarGroup() sets --dm-avatar-z on each item, highest first, so each
+   avatar sits over the next and its status dot stays in view. Hand-written
+   groups stack the other way (later on top) unless they set it too. */
 .avatar-group > * {
     position: relative;
+    z-index: var(--dm-avatar-z, auto);
     display: inline-flex;
     margin: 0;
     padding: 0;
 }
 
 .avatar-group > * + * {
-    margin-inline-start: calc(-1 * var(--dm-avatar-overlap, calc(var(--dm-avatar-size, 2.5rem) * 0.3)));
+    margin-inline-start: calc(-1 * var(--dm-avatar-overlap, calc(var(--dm-avatar-size, 2.5rem) * 0.25)));
 }
 
 .avatar-group .avatar {
@@ -9433,7 +9439,7 @@ button.avatar:focus-visible {
 
 .avatar-group > *:hover,
 .avatar-group > *:focus-within {
-    z-index: 1;
+    z-index: 1000;
 }
 
 @media (prefers-reduced-motion: no-preference) {

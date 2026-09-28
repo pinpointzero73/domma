@@ -33,7 +33,7 @@ export const AVATAR_STATUSES = ['online', 'away', 'busy', 'offline'];
 /** How many `.avatar-tone-*` classes elements.css defines. */
 export const AVATAR_TONES = 8;
 
-const OVERLAP = {none: 0, sm: 0.15, md: 0.3, lg: 0.45};
+const OVERLAP = {none: 0, sm: 0.15, md: 0.25, lg: 0.4};
 const ICON_NAME = /^[a-z0-9-]+$/i;
 
 const DEFAULTS = {
@@ -373,7 +373,7 @@ const GROUP_DEFAULTS = {
     max: null,           // show this many, then "+N"; null = everyone
     size: 'md',
     shape: 'circle',
-    overlap: null,       // 'none' | 'sm' | 'md' | 'lg', a number (px) or any CSS length; null = the stylesheet's (md)
+    overlap: null,       // 'none' | 'sm' | 'md' | 'lg', a number (px) or any CSS length; null = the stylesheet's (a quarter)
     label: null,         // accessible name for the list, e.g. 'Project team'
     statusLabels: null,
     onMore: null,        // function(hiddenPeople, event) - replaces the built-in popover
@@ -500,9 +500,12 @@ export function avatarGroup(target, options = {}) {
         if (overlap != null) list.style.setProperty('--dm-avatar-overlap', overlap);
         else list.style.removeProperty('--dm-avatar-overlap');
 
+        // Highest first: each avatar sits over the next, so its status dot shows.
+        let z = state.shown.length + 1;
         for (const person of state.shown) {
             const li = document.createElement('li');
             li.className = 'avatar-group-item';
+            li.style.setProperty('--dm-avatar-z', String(z--));
             li.appendChild(personAvatar(person, {...o, size}));
             list.appendChild(li);
         }
@@ -512,6 +515,7 @@ export function avatarGroup(target, options = {}) {
             const names = state.hidden.map((p) => p.name || p.alt || '').filter(Boolean);
             const li = document.createElement('li');
             li.className = 'avatar-group-item';
+            li.style.setProperty('--dm-avatar-z', String(z));
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = `avatar avatar-more avatar-${size}`;

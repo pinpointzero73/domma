@@ -295,6 +295,9 @@ describe('Domma.elements.avatarGroup', () => {
         expect(more.textContent).toBe('+3');
         expect(more.getAttribute('type')).toBe('button');
         expect(more.getAttribute('aria-label')).toBe('3 more: Nia Evans, Rhys Morgan and Sofia Rossi');
+        // earlier avatars stack over later ones, so status dots stay visible
+        const z = $$('li', ul).map((li) => Number(li.style.getPropertyValue('--dm-avatar-z')));
+        expect(z).toEqual([5, 4, 3, 2, 1]);
     });
 
     it('the "+N" opens a popover listing the hidden people', () => {
@@ -341,7 +344,7 @@ describe('Domma.elements.avatarGroup', () => {
         document.body.innerHTML = '<ul id="team"></ul>';
         const g = E.avatarGroup('#team', {people: ['Jane Smith', 'Tom Hughes'], overlap: 'lg'});
         expect($$('#team .avatar-initials').map((n) => n.textContent)).toEqual(['JS', 'TH']);
-        expect(g.element.style.getPropertyValue('--dm-avatar-overlap')).toContain('0.45');
+        expect(g.element.style.getPropertyValue('--dm-avatar-overlap')).toContain('0.4');
         g.update({overlap: 6});
         expect(g.element.style.getPropertyValue('--dm-avatar-overlap')).toBe('6px');
     });
