@@ -185,7 +185,7 @@ function drawIcons(el) {
  * Write the avatar into `el`: classes, content, status dot, ARIA. Returns the
  * facts a handle reports. `el` is emptied first - callers keep what was there.
  */
-function paint(el, o) {
+function paint(el, o, ownTitle = null) {
     const size = pick(AVATAR_SIZES, o.size, 'md');
     const shape = pick(AVATAR_SHAPES, o.shape, 'circle');
     const initials = avatarInitials(o.name || (o.alt && !o.src ? o.alt : ''));
@@ -242,6 +242,7 @@ function paint(el, o) {
 
     const title = o.title === true ? label : o.title;
     if (title) el.setAttribute('title', String(title));
+    else if (ownTitle != null) el.setAttribute('title', ownTitle);
     else el.removeAttribute('title');
 
     drawIcons(el);
@@ -252,6 +253,15 @@ function paint(el, o) {
 function optionsFromData(el) {
     const d = el.dataset || {};
     const out = {};
+    // Classes already in the markup are defaults too: <span class="avatar avatar-lg avatar-ring" data-avatar="...">
+    const cls = el.classList;
+    const size = AVATAR_SIZES.find((sz) => cls.contains(`avatar-${sz}`));
+    if (size) out.size = size;
+    if (cls.contains('avatar-rounded')) out.shape = 'rounded';
+    if (cls.contains('avatar-square')) out.shape = 'square';
+    if (cls.contains('avatar-ring')) out.ring = true;
+    const toneClass = Array.from(cls).find((c) => /^avatar-tone-\d+$/.test(c));
+    if (toneClass) out.tone = Number(toneClass.slice(12));
     if (d.avatar) out.name = d.avatar;
     const keys = ['src', 'alt', 'size', 'shape', 'status', 'icon', 'title', 'tone'];
     for (const key of keys) {
@@ -305,7 +315,7 @@ export function avatar(target, options = {}) {
     while (el.firstChild) saved.children.appendChild(el.firstChild);
 
     let o = {...DEFAULTS, ...optionsFromData(el), ...options};
-    let facts = paint(el, o);
+    let facts = paint(el, o, saved.attrs.title);
 
     const handle = {
         element: el,
@@ -317,7 +327,7 @@ export function avatar(target, options = {}) {
         /** Merge new options and redraw. */
         update(changes = {}) {
             o = {...o, ...changes};
-            facts = paint(el, o);
+            facts = paint(el, o, saved.attrs.title);
             return handle;
         },
 
@@ -327,7 +337,8 @@ export function avatar(target, options = {}) {
             avatars.delete(el);
             el.textContent = '';
             el.appendChild(saved.children);
-            for (const c of Array.from(el.classList)) if (!saved.classes.has(c)) el.classList.remove(c);
+            el.className = [...saved.classes].join(' ');
+            if (!el.className) el.removeAttribute('class');
             for (const [a, v] of Object.entries(saved.attrs)) {
                 if (v == null) el.removeAttribute(a);
                 else el.setAttribute(a, v);
@@ -402,8 +413,10 @@ function overlapValue(v) {
 }
 
 function personAvatar(person, o, extra = {}) {
-    const el = document.createElement(person.href ? 'a' : 'span');
-    if (person.href) el.setAttribute('href', String(person.href));
+    // A link needs a name: without name or alt the person is drawn but not linked
+    const href = person.href && (person.name || person.alt) ? person.href : null;
+    const el = document.createElement(href ? 'a' : 'span');
+    if (href) el.setAttribute('href', String(href));
     const handle = avatar(el, {
         name: person.name,
         src: person.src,
@@ -431,7 +444,7 @@ function hiddenList(hidden, o) {
         if (person.href) row.setAttribute('href', String(person.href));
         const pic = document.createElement('span');
         avatar(pic, {
-            name: person.name, src: person.src, icon: person.icon, tone: person.tone,
+            name: person.name, alt: person.alt, src: person.src, icon: person.icon, tone: person.tone,
             size: 'xs', shape: o.shape, decorative: true
         });
         const name = document.createElement('span');
@@ -481,6 +494,10 @@ export function avatarGroup(target, options = {}) {
     };
 
     const draw = () => {
+        // A redraw replaces the "+N" button; keep keyboard focus on its successor.
+        const active = document.activeElement;
+        const hadFocus = !!active && ((state.more && state.more === active) ||
+            (state.popover && state.popover.panel && state.popover.panel.contains(active)));
         teardownMore();
         const people = (Array.isArray(o.people) ? o.people : []).map(normalisePerson).filter(Boolean);
         const size = pick(AVATAR_SIZES, o.size, 'md');
@@ -495,7 +512,8 @@ export function avatarGroup(target, options = {}) {
         for (const c of Array.from(list.classList)) if (/^avatar-group-(xs|sm|md|lg|xl)$/.test(c)) list.classList.remove(c);
         list.classList.add('avatar-group', `avatar-group-${size}`);
         if (o.label) list.setAttribute('aria-label', String(o.label));
-        else if (!ownList || savedLabel == null) list.removeAttribute('aria-label');
+        else if (ownList && savedLabel != null) list.setAttribute('aria-label', savedLabel);
+        else list.removeAttribute('aria-label');
         const overlap = overlapValue(o.overlap);
         if (overlap != null) list.style.setProperty('--dm-avatar-overlap', overlap);
         else list.style.removeProperty('--dm-avatar-overlap');
@@ -544,6 +562,14 @@ export function avatarGroup(target, options = {}) {
                 btn.title = names.join(', ');
             }
         }
+
+        if (hadFocus) {
+            if (state.more) state.more.focus();
+            else {
+                if (!list.hasAttribute('tabindex')) list.setAttribute('tabindex', '-1');
+                list.focus();
+            }
+        }
     };
 
     draw();
@@ -573,7 +599,8 @@ export function avatarGroup(target, options = {}) {
             teardownMore();
             if (ownList) {
                 list.textContent = '';
-                for (const c of Array.from(list.classList)) if (!savedClasses.has(c)) list.classList.remove(c);
+                list.className = [...savedClasses].join(' ');
+                if (!list.className) list.removeAttribute('class');
                 if (savedLabel == null) list.removeAttribute('aria-label');
                 else list.setAttribute('aria-label', savedLabel);
                 if (savedOverlap) list.style.setProperty('--dm-avatar-overlap', savedOverlap);

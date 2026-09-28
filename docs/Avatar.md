@@ -115,6 +115,9 @@ Chromium and Firefox). An avatar with no tone - the "+N" bubble, a hand-written 
 
 Attributes: `data-avatar` (the name), `data-avatar-src`, `-alt`, `-size`, `-shape`, `-status`, `-icon`,
 `-title`, `-tone`, and the booleans `-ring` and `-decorative` (present = true, `"false"` = false).
+Size, shape, ring and tone classes already on the element (`class="avatar avatar-lg avatar-ring"`) count
+as defaults too; options and `data-avatar-*` win over them, and `destroy()` puts the class list back
+exactly. A `title` already on the element is kept unless you pass `title`.
 `scan()` is not automatic - call it after rendering - and skips elements it has done, including ones
 whose avatar was destroyed (`data-avatar-done`).
 
@@ -151,7 +154,10 @@ team.setPeople(await H.get('/api/projects/42/team'));
 | `popover` | boolean | `true` | `false`: no popover; the hidden names go in the button's `title` |
 | `moreLabel` | function | `null` | `(count, names) => string` - the "+N" button's accessible name |
 
-A person with an `href` becomes an `<a class="avatar">`; the others are `<span role="img">`. Every
+A person with an `href` becomes an `<a class="avatar">` (only if they have a `name` or `alt`, so no link is
+left without a name); the others are `<span role="img">`. A redraw (`update()`, `setPeople()`) keeps
+keyboard focus on the "+N" button, or on the list if "+N" has gone. The group has `isolation: isolate`,
+so a hovered avatar never rises above a sticky navbar or an open menu. Every
 avatar in a group gets `title` set to its accessible name, so a pointer user can see who is who.
 
 ### Group handle

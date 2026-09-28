@@ -9421,6 +9421,7 @@ a.avatar-tone-7:hover {
 
 /* Group: a list of overlapping avatars */
 .avatar-group {
+    isolation: isolate;     /* the items' z-index stays inside the group, under navbars and menus */
     display: inline-flex;
     flex-direction: row;
     align-items: center;

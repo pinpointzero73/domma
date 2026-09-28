@@ -240,6 +240,17 @@ describe('Domma.elements.avatar', () => {
             expect(E.avatar.get(d1)).toBe(handles[0]);
         });
 
+        it('classes in the markup are defaults, and destroy() restores them exactly', () => {
+            document.body.innerHTML = '<span id="d" class="avatar avatar-lg avatar-ring" data-avatar="Jane Smith" title="Jane"></span>';
+            const [h] = E.avatar.scan();
+            const el = document.getElementById('d');
+            expect(el.classList.contains('avatar-lg')).toBe(true);
+            expect(el.classList.contains('avatar-ring')).toBe(true);
+            expect(el.getAttribute('title')).toBe('Jane');       // no title option: the element's own stays
+            h.destroy();
+            expect(el.className).toBe('avatar avatar-lg avatar-ring');
+        });
+
         it('a destroyed declared avatar is not rescanned', () => {
             document.body.innerHTML = '<span id="d" data-avatar="Jane"></span>';
             const [h] = E.avatar.scan();
@@ -347,6 +358,32 @@ describe('Domma.elements.avatarGroup', () => {
         expect(g.element.style.getPropertyValue('--dm-avatar-overlap')).toContain('0.4');
         g.update({overlap: 6});
         expect(g.element.style.getPropertyValue('--dm-avatar-overlap')).toBe('6px');
+    });
+
+    it('an existing list keeps its classes and label through update() and destroy()', () => {
+        document.body.innerHTML = '<ul id="team" class="avatar-group avatar-group-lg" aria-label="Orig"></ul>';
+        const g = E.avatarGroup('#team', {people: PEOPLE, label: 'New', size: 'sm'});
+        expect(g.element.getAttribute('aria-label')).toBe('New');
+        g.update({label: null});
+        expect(g.element.getAttribute('aria-label')).toBe('Orig');
+        g.destroy();
+        expect(g.element.className).toBe('avatar-group avatar-group-lg');
+    });
+
+    it('focus on "+N" survives a redraw', () => {
+        document.body.innerHTML = '<ul id="team"></ul>';
+        const g = E.avatarGroup('#team', {people: PEOPLE, max: 3});
+        g.more.focus();
+        g.setPeople(PEOPLE.slice(0, 6));
+        expect(document.activeElement).toBe(g.more);
+        g.setPeople(PEOPLE.slice(0, 2));
+        expect(document.activeElement).toBe(g.element);
+    });
+
+    it('a person with an href but no name is not an unnamed link', () => {
+        document.body.innerHTML = '<ul id="team"></ul>';
+        E.avatarGroup('#team', {people: [{href: '/x'}, {name: 'Jane', href: '/jane'}]});
+        expect($$('#team a')).toHaveLength(1);
     });
 
     it('setPeople() redraws; destroy() restores the host', () => {
