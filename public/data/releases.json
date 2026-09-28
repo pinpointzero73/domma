@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.50.2",
+      "title": "One Clear Warning",
+      "description": "<p><strong>One clear warning.</strong> Domma Reactive 1.2.1 names every binding an unkeyed list dropped in a single message, and points at <code>key=</code> - the fix that makes them bind.</p>",
+      "date": "2026-09-28"
+    },
+    {
       "year": "v0.50.1",
       "title": "Safer Bindings",
       "description": "<p><strong>Accordions open again.</strong> Accordions whose answer sits inside a body and content pair - the markup Domma CMS renders - now open to the right panel instead of an empty one.</p>\n<p><strong>Safer bindings.</strong> Domma Reactive 1.2 warns and hides content when a binding is handed an observable instead of its value, and expressions accept object and array literals.</p>",
@@ -421,5 +427,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.50.1"
+  "latestVersion": "v0.50.2"
 }
