@@ -422,6 +422,24 @@ Accessed via `Domma.elements`:
       (removes on settle, resolves/rethrows), `.get()`, `.remove()`, `.scan(root)` (`[data-skeleton]` + `data-skeleton-*`), `.markup()`
     - CSS at the end of elements.css: tint `color-mix(--dm-text 10%, --dm-surface)`, `::after` sweep (lighter band; text-ward
       under `[data-mode="dark"]`), off under reduced motion. Hooks `--dm-skeleton-bg|shine|duration|columns`. See docs/Skeleton.md
+- **Avatar** (`avatar.js`): `elements.avatar(target, { name, src, alt, size, shape, status, statusLabels, icon, title, ring, tone, decorative })` →
+  handle `{element, options, initials, tone, label, update(opts), destroy()}`; no target (or options first) makes a detached `<span>`
+    - The target becomes the avatar: children moved aside and restored on `destroy()`, own classes/role/aria/title saved too
+    - `avatarInitials()`: first + last word, one letter for one word, email local part split on `. _ - +`, bracketed notes dropped,
+      leading non-letters skipped, first letter keeps its combining marks (`\P{M}\p{M}*`), upper-cased
+    - `avatarTone()`: FNV-1a of the trimmed, lower-cased, space-collapsed name mod 8 → `.avatar-tone-N` (hash key falls back to alt, src)
+    - `src` → `img.avatar-img alt=""`; on `error` it is swapped for initials / icon and `.avatar-img-failed` is added. Icons are
+      `span[data-icon]` scanned by `window.Domma.icons` (scan swaps in an `svg.avatar-icon`)
+    - ARIA: `role="img"` + `aria-label` (name or alt, status word in brackets); `A`/`BUTTON` keep their role; nothing to say or
+      `decorative` → `aria-hidden`
+    - Statics: `E.avatar.scan(root)` (`[data-avatar]` + `data-avatar-*`; `data-avatar-done` after destroy), `.get()`, `.initials()`, `.tone()`
+- **AvatarGroup** (`avatar.js`): `elements.avatarGroup(target, { people, max, size, shape, overlap, label, statusLabels, onMore, popover, moreLabel })` →
+  `{element, people, shown, hidden, more, popover, update(), setPeople(), destroy()}`; `E.avatarGroup.get(host)`
+    - Fills a `UL`/`OL` target or appends a new `<ul>` to any other; `li.avatar-group-item` each, `--dm-avatar-z` highest first
+    - "+N" = `button.avatar.avatar-more` named "N more: A, B and C"; opens a `Popover` (imported directly, class
+      `avatar-more-popover`) listing the hidden people, or calls `onMore(hidden, event)`; `popover: false` → `title`
+    - CSS at the end of elements.css: tones = hue 24% into `--dm-surface`, text = hue 30% into `--dm-text` (min 5.2:1 on all themes);
+      hooks `--dm-avatar-size|radius|overlap|gap-color|z`. See [docs/Avatar.md](../docs/Avatar.md)
 - **Breadcrumbs**: Navigation trail component
     - `elements.breadcrumbs(selector, { items, separator, homeIcon, responsive, onChange })` →
       `setItems()`, `addItem()`, `removeItem()`, `getItems()`, `destroy()`
@@ -569,7 +587,7 @@ $.setup({
 - `card`, `modal`, `tabs`, `accordion`, `tooltip`, `carousel`, `dropdown`
 - `badge`, `backToTop`, `buttonGroup`, `loader`, `breadcrumbs`, `navbar`
 - `notification`, `timer`, `alarm`
-- also registered: `contextMenu`, `sortable`, `skeleton`, `inputGroup` (see the map in `initComponent()`)
+- also registered: `contextMenu`, `sortable`, `skeleton`, `avatar`, `avatarGroup`, `inputGroup`, `popover` (see the map in `initComponent()`)
 
 **Not Supported via Config Engine:**
 

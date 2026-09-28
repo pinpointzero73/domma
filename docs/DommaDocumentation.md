@@ -2780,6 +2780,42 @@ Markup works too - `data-popover`, `data-popover-title`, `data-popover-placement
 Events: `popover:show` / `shown` / `hide` / `hidden` on the trigger (`show` and `hide` cancelable).
 See [docs/Popover.md](./Popover.md) for every option, the keyboard model, the CSS and stacking.
 
+## Avatars
+
+A person's picture, their initials or an icon, in a circle, rounded or square tile, at five sizes, with an
+optional status dot and ring. `E.avatarGroup()` stacks several, overlapping, and folds the rest into a "+N"
+button that opens a popover naming them.
+
+```javascript
+E.avatar('#me', {name: 'Jane Smith', src: '/img/jane.jpg', size: 'lg', status: 'online'});
+
+const pic = E.avatar({name: 'Tom Hughes'});    // no target: a detached <span> to insert
+$('#comment-head').prepend(pic.element);
+
+E.avatarGroup('#team', {
+    people: [{name: 'Amara Okafor', src: '/img/amara.jpg', href: '/people/amara'}, 'Tom Hughes', 'Priya Shah'],
+    max: 4,
+    size: 'sm',
+    label: 'Project team'          // names the list
+});
+```
+
+**Initials** come from the first and last word (`Jane Q. Public` is `JP`), one letter for a single name, the
+part before the `@` of an email address (`jane.smith@example.com` is `JS`), and work in any script. **The
+colour** is one of eight tints picked by a stable hash of the name, so a person keeps their colour on every
+page. Each tint mixes a hue into the theme surface and the initials the same hue into the theme text, so the
+pair stays AA on every theme (the weakest measures 5.2:1). A picture that fails to load turns back into the
+initials, or the icon when there is no name.
+
+Each avatar is `role="img"` named by the name and its status in words ("Jane Smith (online)"); a linked one
+keeps its link role. Pictures carry `alt=""`. `decorative: true` hides one whose name is written next to it.
+The group is a `<ul>`, and "+N" is a button whose accessible name lists the hidden people. Pass `onMore`
+to handle it yourself.
+
+Markup: `<span data-avatar="Jane Smith" data-avatar-size="lg"></span>` with `E.avatar.scan(root)`. The
+classes (`.avatar`, `.avatar-lg`, `.avatar-tone-3`, `.avatar-status-online`, `.avatar-group`...) also work
+by hand. See [docs/Avatar.md](./Avatar.md) and the [Avatar showcase](../public/showcase/elements/avatar/index.html).
+
 ## DatePicker
 
 A themed calendar attached to an input. It exists because `<input type="date">`
@@ -3071,6 +3107,47 @@ All translucency values are CSS variables, making them easy to override per-them
     --dm-translucent-glass-opacity: 0.75;   /* .translucent-glass alpha */
 }
 ```
+
+---
+
+## CSS Utilities - Accessibility &amp; Text
+
+Tailwind's names, like the rest of Domma's utilities, with Bootstrap's spellings as aliases where they differ.
+
+```html
+<!-- Read by screen readers, not shown -->
+<button type="button" class="btn"><span data-icon="bell" aria-hidden="true"></span><span class="sr-only">Notifications</span></button>
+
+<!-- Skip link: hidden until Tab reaches it, then pinned top left -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- Three lines, then an ellipsis -->
+<p class="line-clamp-3">A long summary...</p>
+
+<!-- The whole card follows the link -->
+<div class="card"><div class="card-body">
+    <h3 class="card-title"><a href="/posts/spring" class="stretched-link">Planting for spring</a></h3>
+    <a href="/tags/containers" class="badge relative z-10">Containers</a>   <!-- stays clickable -->
+</div></div>
+
+<!-- A rule either side of a word -->
+<div class="divider-text">or</div>
+```
+
+| Class | Alias | Does |
+|-------|-------|------|
+| `.sr-only` | `.visually-hidden` | Off screen, still in the accessibility tree |
+| `.sr-only-focusable` | `.visually-hidden-focusable` | The same until it, or something inside it, has focus |
+| `.skip-link` | | A styled skip link: hidden until focused, then fixed top left in the primary colour |
+| `.not-sr-only` | | Undo `.sr-only` |
+| `.line-clamp-1` ... `.line-clamp-5` | | Cut after N lines with an ellipsis |
+| `.line-clamp-none` | | Undo the clamp |
+| `.truncate` | `.text-truncate` | One line with an ellipsis |
+| `.stretched-link` | | The link's `::after` covers its nearest positioned ancestor; a `.card` or `.list-group-item` holding one is positioned for you, anything else needs `.relative`; other controls inside need `.relative .z-10` |
+| `.divider-text` | | Rule, word, rule; `.divider-text-start` / `-end` push the word to one side; empty, a plain rule |
+
+`.divider-text` uses `--dm-text-secondary`, not `--dm-text-muted`: muted text falls below AA on the page
+background of some themes. See the [Accessibility &amp; Text showcase](../public/showcase/css-utilities/accessibility-text/index.html).
 
 ---
 
