@@ -1,3 +1,27 @@
+### v0.50.3 - Readable Everywhere (2026-09-28)
+
+**A contrast sweep across the library and the whole Domma site.** Buttons, heroes, footers, toggles and
+range sliders now take their colours from the theme's own text tokens, so text stays readable on every theme,
+light and dark.
+
+🎨 **Library CSS**
+
+*   Primary, secondary and success buttons, active toggles and editor toolbar buttons use
+    `--dm-primary-text` / `--dm-secondary-text` / `--dm-success-text`, falling back to white.
+
+*   `.hero-dark`, `.hero-primary` and `.footer-dark` get fixed readable pairs; `.bg-dark`, `.bg-*-light`,
+    sidebar and chooser colours are corrected in `elements.css`.
+
+*   Switches, range tracks and the theme toggle use `--dm-border` and surface tokens instead of fixed greys, so
+    they show in dark mode. New token `--dm-secondary-dark`.
+
+🌐 **Site**
+
+*   Every page stylesheet and mini-app theme moved to semantic tokens; inline colours fixed.
+
+*   New `npm run sweep:site` check (part of `npm run validate`): 173 pages and 83 stylesheets, 0 issues.
+    Theme contrast risks are down from 11 to 0.
+
 ### v0.50.2 - One Clear Warning (2026-09-28)
 
 **Domma Reactive 1.2.1: one cause, one message.** A binding inside an unkeyed `{{#each}}` used to add its own
