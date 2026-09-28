@@ -971,7 +971,12 @@ class Accordion extends Component {
 
         const opts = this.options;
         this._headers = this.element.querySelectorAll(opts.headerSelector);
-        this._contents = this.element.querySelectorAll(opts.contentSelector);
+        // Outermost panels only: `.accordion-body > .accordion-content` (the
+        // markup Domma CMS renders) matches the selector twice per item, and
+        // counting both paired every header after the first with the wrong
+        // panel - an open item showed an empty, zero-height inner panel.
+        const panels = [...this.element.querySelectorAll(opts.contentSelector)];
+        this._contents = panels.filter(el => !panels.some(other => other !== el && other.contains(el)));
 
         // Setup initial state based on activeIndex or existing active class
         this._contents.forEach((content, index) => {

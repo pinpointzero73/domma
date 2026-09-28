@@ -297,6 +297,35 @@ describe('Theme Contrast & ARIA Compatibility Suite', () => {
       acc.destroy();
     });
 
+    it('Accordion pairs each header with its outermost panel when .accordion-content sits inside .accordion-body', () => {
+      document.body.innerHTML = `
+        <div id="nested-accordion" class="accordion">
+          <div class="accordion-item">
+            <h3 class="accordion-header"><button class="accordion-button" type="button">One</button></h3>
+            <div class="accordion-body"><div class="accordion-content">Answer one</div></div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header"><button class="accordion-button" type="button">Two</button></h3>
+            <div class="accordion-body"><div class="accordion-content">Answer two</div></div>
+          </div>
+        </div>
+      `;
+      const acc = Domma.elements.accordion('#nested-accordion');
+      const headers = document.querySelectorAll('.accordion-header');
+      const bodies = document.querySelectorAll('.accordion-body');
+      const inner = document.querySelectorAll('.accordion-content');
+
+      expect(headers[1].getAttribute('aria-controls')).toBe(bodies[1].id);
+      expect(inner[0].style.height).toBe('');
+      expect(inner[0].hasAttribute('aria-hidden')).toBe(false);
+
+      acc.toggle(1);
+      expect(bodies[1].getAttribute('aria-hidden')).toBe('false');
+      expect(bodies[0].getAttribute('aria-hidden')).toBe('true');
+
+      acc.destroy();
+    });
+
     it('Toast sets aria-live and atomic container attributes and appropriate alert/status roles', () => {
       Domma.elements.toast.success('Operation succeeded', { duration: 0 });
       const container = document.querySelector('.domma-toast-container');
