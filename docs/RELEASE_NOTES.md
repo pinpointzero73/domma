@@ -1,3 +1,12 @@
+### v0.51.1 - Quiet Card Highlights (2026-09-29)
+
+**Cards respond to hover without jumping.** The card hover utility now highlights the outline in the active theme's primary colour. Domma CMS cards and boxes use the same treatment by default; colour-tinted boxes highlight in their own theme colour.
+
+🎨 **Theme-aware card hover**
+
+*   `.card-hover` no longer lifts and enlarges its shadow on hover; it highlights the border and outline using `--dm-primary`.
+*   Domma CMS shortcode cards and boxes now use the theme-colour outline by default. Tinted boxes use their selected theme tone, and `hover="off"` still disables the effect.
+
 ### v0.51.0 - Lists Without the Boilerplate (2026-09-29)
 
 **Binding expressions can now ask questions of a list.** Twelve array helpers ship built in - no

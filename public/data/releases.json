@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.1",
+      "title": "Quiet Card Highlights",
+      "description": "<p>Cards and boxes respond to hover with a subtle outline in the active theme colour instead of lifting off the page.</p>",
+      "date": "2026-09-29"
+    },
+    {
       "year": "v0.51.0",
       "title": "Lists Without the Boilerplate",
       "description": "<p>Built-in array helpers for binding expressions: <code>len</code>, <code>includes</code>, <code>count</code>, <code>where</code>, <code>sortBy</code> and more - no computed needed to ask whether a list is empty or how many rows are done.</p>",
