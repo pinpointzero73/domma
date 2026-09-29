@@ -14,7 +14,12 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# 
+# domma-reactive 1.3.0
+
+🔁 **domma-reactive 1.3.0**
+
+*   Domma is now built against domma-reactive 1.3.0 - see [its release notes](https://github.com/pinpointzero73/domma-reactive/blob/v1.3.0/CHANGELOG.md).
 
 <!-- website -->
 
+<p>Domma is now built against domma-reactive 1.3.0.</p>
