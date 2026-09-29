@@ -1,3 +1,20 @@
+### v0.51.0 - Lists Without the Boilerplate (2026-09-29)
+
+**Binding expressions can now ask questions of a list.** Twelve array helpers ship built in - no
+`M.registerHelper` needed - so "is it empty?", "how many are done?" and "only the open ones" no longer
+each need a computed.
+
+🧮 **Built-in array helpers** (domma-reactive 1.3.0)
+
+*   `len`, `includes`, `some`, `every`, `count`, `where`, `sum`, `pluck`, `sortBy`, `first`, `last` and `join`, callable from any `data-bind-*`, `data-if`, `data-each` or `{{ }}` expression.
+*   They take an `M.observable` or observable array directly (`len(todos)`), read observable fields on each row (`count(todos, 'done')`), and those reads are tracked - ticking one row re-runs the count.
+*   `where` and `sortBy` return new arrays, so they can drive a list: `data-each="where(todos, 'done', false) key=id"`.
+*   Keys may be dotted paths (`'meta.tag'`) and go through the same prototype guard as every other read. A helper you register under the same name still wins.
+
+🔁 **domma-reactive 1.3.0**
+
+*   Domma is now built against domma-reactive 1.3.0 - see [its release notes](https://github.com/pinpointzero73/domma-reactive/blob/v1.3.0/CHANGELOG.md).
+
 ### v0.50.3 - Readable Everywhere (2026-09-28)
 
 **A contrast sweep across the library and the whole Domma site.** Buttons, heroes, footers, toggles and

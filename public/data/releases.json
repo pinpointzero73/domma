@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.0",
+      "title": "Lists Without the Boilerplate",
+      "description": "<p>Built-in array helpers for binding expressions: <code>len</code>, <code>includes</code>, <code>count</code>, <code>where</code>, <code>sortBy</code> and more - no computed needed to ask whether a list is empty or how many rows are done.</p>",
+      "date": "2026-09-29"
+    },
+    {
       "year": "v0.50.3",
       "title": "Readable Everywhere",
       "description": "<p><strong>Readable everywhere.</strong> A contrast sweep moves buttons, heroes, footers and form controls onto the theme's own text colours, so text stays readable on every theme, light and dark.</p>",
@@ -433,5 +439,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.50.3"
+  "latestVersion": "v0.51.0"
 }
