@@ -207,12 +207,13 @@
 }
 
 .card-hover {
-    transition: transform var(--dm-transition-normal), box-shadow var(--dm-transition-normal);
+    transition: border-color var(--dm-transition-normal), outline-color var(--dm-transition-normal);
 }
 
 .card-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--dm-shadow-lg);
+    border-color: var(--dm-primary);
+    outline: 2px solid color-mix(in srgb, var(--dm-primary) 38%, transparent);
+    outline-offset: 1px;
 }
 
 .card-header {
