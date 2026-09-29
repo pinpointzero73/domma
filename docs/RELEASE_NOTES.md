@@ -1,3 +1,12 @@
+### v0.51.2 - Subtle Card Hover (2026-09-29)
+
+**Cards and boxes now change only their border colour on hover.** The border transitions smoothly from its existing colour to the active theme colour, without an outline or lift.
+
+🎨 **Subtle theme-aware card hover**
+
+*   `.card-hover` transitions only its border to `--dm-primary` on hover.
+*   Domma CMS shortcode cards and boxes use the same treatment by default; tinted boxes transition to their selected theme tone, and `hover="off"` still disables the effect.
+
 ### v0.51.1 - Quiet Card Highlights (2026-09-29)
 
 **Cards respond to hover without jumping.** The card hover utility now highlights the outline in the active theme's primary colour. Domma CMS cards and boxes use the same treatment by default; colour-tinted boxes highlight in their own theme colour.

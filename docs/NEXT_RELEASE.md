@@ -14,14 +14,7 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# Subtle Card Hover
-
-**Cards and boxes now change only their border colour on hover.** The border transitions smoothly from its existing colour to the active theme colour, without an outline or lift.
-
-🎨 **Subtle theme-aware card hover**
-
-*   `.card-hover` transitions only its border to `--dm-primary` on hover.
-*   Domma CMS shortcode cards and boxes use the same treatment by default; tinted boxes transition to their selected theme tone, and `hover="off"` still disables the effect.
+# 
 
 <!-- website -->
-<p>Cards and boxes change only their border colour on hover, transitioning smoothly from their existing colour to the active theme colour.</p>
+

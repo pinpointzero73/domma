@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.2",
+      "title": "Subtle Card Hover",
+      "description": "<p>Cards and boxes change only their border colour on hover, transitioning smoothly from their existing colour to the active theme colour.</p>",
+      "date": "2026-09-29"
+    },
+    {
       "year": "v0.51.1",
       "title": "Quiet Card Highlights",
       "description": "<p>Cards and boxes respond to hover with a subtle outline in the active theme colour instead of lifting off the page.</p>",
@@ -445,5 +451,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.0"
+  "latestVersion": "v0.51.2"
 }
