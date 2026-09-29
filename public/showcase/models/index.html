@@ -841,7 +841,7 @@ navigator.clipboard.writeText(JSON.stringify(usersModel.get('users'), null, 2));
                     <div class="models-user-info">
                         <div class="models-user-name">${_.escape(user.name)}</div>
                         <div class="models-user-meta">
-                            ${_.escape(user.email)} · ${user.role}
+                            ${_.escape(user.email)} &middot; ${user.role}
                             <span class="models-status-badge models-status-${user.status}">${user.status}</span>
                         </div>
                     </div>
