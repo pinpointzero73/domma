@@ -207,13 +207,11 @@
 }
 
 .card-hover {
-    transition: border-color var(--dm-transition-normal), outline-color var(--dm-transition-normal);
+    transition: border-color var(--dm-transition-normal);
 }
 
 .card-hover:hover {
     border-color: var(--dm-primary);
-    outline: 2px solid color-mix(in srgb, var(--dm-primary) 38%, transparent);
-    outline-offset: 1px;
 }
 
 .card-header {
