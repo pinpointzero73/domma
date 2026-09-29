@@ -14,7 +14,18 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# domma-reactive 1.3.0
+# Lists Without the Boilerplate
+
+**Binding expressions can now ask questions of a list.** Twelve array helpers ship built in - no
+`M.registerHelper` needed - so "is it empty?", "how many are done?" and "only the open ones" no longer
+each need a computed.
+
+🧮 **Built-in array helpers** (domma-reactive 1.3.0)
+
+*   `len`, `includes`, `some`, `every`, `count`, `where`, `sum`, `pluck`, `sortBy`, `first`, `last` and `join`, callable from any `data-bind-*`, `data-if`, `data-each` or `{{ }}` expression.
+*   They take an `M.observable` or observable array directly (`len(todos)`), read observable fields on each row (`count(todos, 'done')`), and those reads are tracked - ticking one row re-runs the count.
+*   `where` and `sortBy` return new arrays, so they can drive a list: `data-each="where(todos, 'done', false) key=id"`.
+*   Keys may be dotted paths (`'meta.tag'`) and go through the same prototype guard as every other read. A helper you register under the same name still wins.
 
 🔁 **domma-reactive 1.3.0**
 
@@ -22,4 +33,4 @@ This comment is instructions only and is never copied.
 
 <!-- website -->
 
-<p>Domma is now built against domma-reactive 1.3.0.</p>
+<p>Built-in array helpers for binding expressions: <code>len</code>, <code>includes</code>, <code>count</code>, <code>where</code>, <code>sortBy</code> and more - no computed needed to ask whether a list is empty or how many rows are done.</p>
