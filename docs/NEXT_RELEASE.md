@@ -14,7 +14,15 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# 
+# Christmas In Motion
+
+**The Christmas sleigh and steam train have been redrawn with a consistent illustrated style.** Domma now includes domma-celebrate 1.0.1.
+
+### 🎄 Seasonal effects
+
+- Santa's sleigh has a lacquered red body, brass runners, gifts, and five distinct galloping reindeer.
+- The vintage green steam train has brass trim, warm carriage windows, rotating spokes and coupling rods, and soft smoke.
 
 <!-- website -->
 
+<p>Christmas gets a little more magic: a redrawn sleigh with five galloping reindeer, and a vintage green Christmas express with warm windows and moving wheels.</p>
