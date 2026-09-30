@@ -1,3 +1,13 @@
+### v0.51.3 - Christmas Characters And Mischief (2026-09-30)
+
+**Christmas decorations now share a warm illustrated style, with two optional naughty elves.** Domma includes domma-celebrate 1.1.0.
+
+### 🎄 Seasonal effects
+
+- Redrawn trees with wrapped gifts, evergreen wreaths, feathered robins, dressed elves, Santa's sleigh and the vintage Christmas express.
+- Opt-in peeing and thieving elves, both off by default. The thief takes a real present from a tree and runs away carrying it.
+- Separate switches preserve regular walking elves; a thief needs a visible tree and an available gift.
+
 ### v0.51.2 - Subtle Card Hover (2026-09-29)
 
 **Cards and boxes now change only their border colour on hover.** The border transitions smoothly from its existing colour to the active theme colour, without an outline or lift.

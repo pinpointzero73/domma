@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.3",
+      "title": "Christmas Characters And Mischief",
+      "description": "<p>Christmas gets illustrated trees, wreaths, robins, elves, Santa's sleigh and a vintage express. Two optional naughty elves add a little mischief; both are off by default.</p>",
+      "date": "2026-09-30"
+    },
+    {
       "year": "v0.51.2",
       "title": "Subtle Card Hover",
       "description": "<p>Cards and boxes change only their border colour on hover, transitioning smoothly from their existing colour to the active theme colour.</p>",
@@ -451,5 +457,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.2"
+  "latestVersion": "v0.51.3"
 }
