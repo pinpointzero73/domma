@@ -14,16 +14,7 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# A Snowman To Match
-
-**The snowman joins the illustrated Christmas cast.** Domma includes domma-celebrate 1.1.1.
-
-### ⛄ Seasonal effects
-
-- Softly shaded snow, forked twig arms, coal features, a carved carrot, a striped knitted scarf and a holly-trimmed felt top hat.
-- Includes all the Christmas redraws and both naughty elves, which remain off by default.
+# 
 
 <!-- website -->
-
-<p>The Christmas snowman now matches the illustrated trees, wreaths, robins, elves, sleigh and train, with shaded snow, a knitted scarf and a holly-trimmed top hat.</p>
 

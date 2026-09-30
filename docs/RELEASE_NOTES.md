@@ -1,3 +1,12 @@
+### v0.51.4 - A Snowman To Match (2026-09-30)
+
+**The snowman joins the illustrated Christmas cast.** Domma includes domma-celebrate 1.1.1.
+
+### ⛄ Seasonal effects
+
+- Softly shaded snow, forked twig arms, coal features, a carved carrot, a striped knitted scarf and a holly-trimmed felt top hat.
+- Includes all the Christmas redraws and both naughty elves, which remain off by default.
+
 ### v0.51.3 - Christmas Characters And Mischief (2026-09-30)
 
 **Christmas decorations now share a warm illustrated style, with two optional naughty elves.** Domma includes domma-celebrate 1.1.0.

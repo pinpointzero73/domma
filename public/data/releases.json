@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.4",
+      "title": "A Snowman To Match",
+      "description": "<p>The Christmas snowman now matches the illustrated trees, wreaths, robins, elves, sleigh and train, with shaded snow, a knitted scarf and a holly-trimmed top hat.</p>",
+      "date": "2026-09-30"
+    },
+    {
       "year": "v0.51.3",
       "title": "Christmas Characters And Mischief",
       "description": "<p>Christmas gets illustrated trees, wreaths, robins, elves, Santa's sleigh and a vintage express. Two optional naughty elves add a little mischief; both are off by default.</p>",
@@ -457,5 +463,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.3"
+  "latestVersion": "v0.51.4"
 }
