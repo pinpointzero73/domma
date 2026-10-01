@@ -1,3 +1,5 @@
+import {drawIllustratedButterfly} from './butterfly-drawing.js';
+
 /**
  * Domma Effects Module
  * Visual effects and animations for UI elements
@@ -2622,33 +2624,6 @@ export function butterflies(selector, options = {}) {
     }
   }
 
-  function drawButterfly(ctx, b) {
-    const spread = Math.abs(Math.sin(b.flapPhase));     // 0 = edge-on, 1 = open
-    const wingW = (b.size * (0.25 + spread * 0.75)) / 2;
-    const wingH = b.size * 0.6;
-    ctx.save();
-    ctx.globalAlpha = b.alpha;
-    ctx.translate(b.x, b.y);
-    ctx.rotate(b.heading + Math.PI / 2);
-    ctx.fillStyle = b.colourUpper;
-    ctx.beginPath();
-    ctx.ellipse(-wingW, -wingH * 0.3, wingW, wingH * 0.6, 0, 0, Math.PI * 2);
-    ctx.ellipse(wingW, -wingH * 0.3, wingW, wingH * 0.6, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = b.colourLower;
-    ctx.beginPath();
-    ctx.ellipse(-wingW * 0.85, wingH * 0.35, wingW * 0.8, wingH * 0.5, 0, 0, Math.PI * 2);
-    ctx.ellipse(wingW * 0.85, wingH * 0.35, wingW * 0.8, wingH * 0.5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(40,30,30,0.8)';
-    ctx.lineWidth = Math.max(1, b.size * 0.06);
-    ctx.beginPath();
-    ctx.moveTo(0, -wingH * 0.7);
-    ctx.lineTo(0, wingH * 0.7);
-    ctx.stroke();
-    ctx.restore();
-  }
-
   // ── Canvas setup (mirrors tickerTape) ─────────────────────────────────────
 
   function createCanvas(container, isFixed) {
@@ -2745,7 +2720,7 @@ export function butterflies(selector, options = {}) {
         const p = particles[i];
         updateButterfly(p, canvas.width, canvas.height);
         if (p.alive) {
-          drawButterfly(ctx, p);
+          drawIllustratedButterfly(ctx, p);
         } else {
           particles.splice(i, 1);
         }
