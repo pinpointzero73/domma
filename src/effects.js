@@ -1,3 +1,4 @@
+import {drawTickerStrip, advanceTickerStrip} from './ticker-tape-drawing.js';
 import {drawIllustratedButterfly} from './butterfly-drawing.js';
 
 /**
@@ -2203,7 +2204,7 @@ export function twinkle(selector, options = {}) {
  */
 export function tickerTape(selector, options = {}) {
   const defaults = {
-    palette: 'theme',
+    palette: "theme",
     density: 50,
     speed: 1,
     sway: 60,
@@ -2218,20 +2219,15 @@ export function tickerTape(selector, options = {}) {
     zIndex: 1,
     respectMotionPreference: true
   };
-
   const opts = { ...defaults, ...options };
-
-  if (opts.respectMotionPreference &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    console.log('[Domma.effects.tickerTape] Disabled due to prefers-reduced-motion');
+  if (opts.respectMotionPreference && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    console.log("[Domma.effects.tickerTape] Disabled due to prefers-reduced-motion");
     return noopControl();
   }
-
-  const isFullPage = !selector || selector === 'body' || selector === document.body;
-
+  const isFullPage = !selector || selector === "body" || selector === document.body;
   let containers = [];
   if (!isFullPage) {
-    if (typeof selector === 'string') {
+    if (typeof selector === "string") {
       containers = Array.from(document.querySelectorAll(selector));
     } else if (selector instanceof Element) {
       containers = [selector];
@@ -2239,22 +2235,18 @@ export function tickerTape(selector, options = {}) {
       containers = Array.from(selector);
     }
     if (containers.length === 0) {
-      console.warn('[Domma.effects.tickerTape] No elements found for selector:', selector);
+      console.warn("[Domma.effects.tickerTape] No elements found for selector:", selector);
       return null;
     }
   }
-
   const colours = resolveTickerPalette(opts.palette);
-
   let running = false;
   let paused = false;
   let animationFrame = null;
   const instanceId = `domma-ticker-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   const canvases = [];
   let resizeObserver = null;
-
-  // ── Particle (rectangular tape strip) ────────────────────────────────────
-
+  let lastFrame = null;
   function createParticle(width, height, fromTop) {
     const stripW = opts.minWidth + Math.random() * (opts.maxWidth - opts.minWidth);
     const stripH = opts.minHeight + Math.random() * (opts.maxHeight - opts.minHeight);
@@ -2262,190 +2254,139 @@ export function tickerTape(selector, options = {}) {
       x: Math.random() * width,
       // Stagger initial Y across the height when seeding the canvas; otherwise spawn just above
       y: fromTop ? -stripH - Math.random() * 40 : Math.random() * -height,
-      vy: (1 + Math.random() * 2.2) * opts.speed,           // base fall velocity
-      vx: (Math.random() - 0.5) * 0.4 * opts.speed,         // gentle drift
+      vy: (1 + Math.random() * 2.2) * opts.speed,
+      // base fall velocity
+      vx: (Math.random() - 0.5) * 0.4 * opts.speed,
+      // gentle drift
       swayPhase: Math.random() * Math.PI * 2,
-      swayFreq: 0.005 + Math.random() * 0.01,
+      swayFreq: 5e-3 + Math.random() * 0.01,
       width: stripW,
       height: stripH,
       rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: ((Math.random() - 0.5) * opts.rotationSpeed * Math.PI) / 180,
+      rotationSpeed: (Math.random() - 0.5) * opts.rotationSpeed * Math.PI / 180,
+      flipPhase: Math.random() * Math.PI * 2,
+      flipSpeed: 0.018 + Math.random() * 0.035,
+      curlPhase: Math.random() * Math.PI * 2,
+      alpha: 1,
       colour: colours[Math.floor(Math.random() * colours.length)],
       alive: true
     };
   }
-
-  function updateParticle(p, height) {
-    p.swayPhase += p.swayFreq;
-    p.x += p.vx + Math.sin(p.swayPhase) * (opts.sway * 0.02);
-    p.y += p.vy;
-    p.rotation += p.rotationSpeed;
-
-    // Determine fade based on vertical position
-    const progress = p.y / height;
-    if (progress >= opts.fadeStart) {
-      const fadeRange = 1 - opts.fadeStart;
-      const fadeProgress = (progress - opts.fadeStart) / fadeRange;
-      p.alpha = Math.max(0, 1 - fadeProgress);
-    } else {
-      p.alpha = 1;
-    }
-
-    // Mark dead once invisible or off-screen
-    if (p.y - p.height > height || p.alpha <= 0.01) {
-      p.alive = false;
-    }
-  }
-
-  function drawParticle(ctx, p) {
-    if (p.alpha <= 0) return;
-    ctx.save();
-    ctx.globalAlpha = p.alpha;
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.rotation);
-    ctx.fillStyle = p.colour;
-    ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
-    ctx.restore();
-  }
-
-  // ── Canvas setup ─────────────────────────────────────────────────────────
-
   function createCanvas(container, isFixed) {
-    const canvas = document.createElement('canvas');
-    canvas.id = instanceId + (canvases.length > 0 ? `-${canvases.length}` : '');
-    canvas.setAttribute('data-domma-effect', 'ticker-tape');
-    canvas.style.pointerEvents = 'none';
+    const canvas = document.createElement("canvas");
+    canvas.id = instanceId + (canvases.length > 0 ? `-${canvases.length}` : "");
+    canvas.setAttribute("data-domma-effect", "ticker-tape");
+    canvas.style.pointerEvents = "none";
     canvas.style.zIndex = opts.zIndex;
-
     if (isFixed) {
-      canvas.style.position = 'fixed';
-      canvas.style.top = '0';
-      canvas.style.left = '0';
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
+      canvas.style.position = "fixed";
+      canvas.style.top = "0";
+      canvas.style.left = "0";
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       document.body.appendChild(canvas);
     } else {
       const computedPosition = window.getComputedStyle(container).position;
-      if (computedPosition === 'static') {
-        container.style.position = 'relative';
+      if (computedPosition === "static") {
+        container.style.position = "relative";
       }
-      canvas.style.position = 'absolute';
-      canvas.style.top = '0';
-      canvas.style.left = '0';
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
+      canvas.style.position = "absolute";
+      canvas.style.top = "0";
+      canvas.style.left = "0";
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
       canvas.width = container.offsetWidth || container.getBoundingClientRect().width;
       canvas.height = container.offsetHeight || container.getBoundingClientRect().height;
       container.appendChild(canvas);
     }
-
-    const ctx = canvas.getContext('2d');
-    return { canvas, ctx, particles: [], container, burstFired: false };
+    const ctx = canvas.getContext("2d");
+    const entry = { canvas, ctx, particles: [], container, isFixed, burstFired: false };
+    resizeCanvas(entry);
+    return entry;
   }
-
   function seedParticles(entry) {
     entry.particles = [];
     if (opts.burst) {
-      // In burst mode, scatter all strips above the canvas at varied heights
       for (let i = 0; i < opts.burstCount; i++) {
-        const p = createParticle(entry.canvas.width, entry.canvas.height, false);
-        // Stagger Y so they cascade rather than all arriving simultaneously
-        p.y = -Math.random() * entry.canvas.height * 1.5;
+        const p = createParticle(entry.width, entry.height, false);
+        p.y = -Math.random() * entry.height * 1.5;
         entry.particles.push(p);
       }
       entry.burstFired = true;
     } else {
-      // Continuous mode: pre-fill so canvas isn't empty on start
       const initial = Math.floor(opts.density * 0.5);
       for (let i = 0; i < initial; i++) {
-        entry.particles.push(createParticle(entry.canvas.width, entry.canvas.height, false));
+        entry.particles.push(createParticle(entry.width, entry.height, false));
       }
     }
   }
-
   function resizeCanvas(entry) {
-    if (entry.isFixed) {
-      entry.canvas.width = window.innerWidth;
-      entry.canvas.height = window.innerHeight;
-    } else {
-      const rect = entry.container.getBoundingClientRect();
-      entry.canvas.width = rect.width || entry.container.offsetWidth;
-      entry.canvas.height = rect.height || entry.container.offsetHeight;
-    }
+    const bounds = entry.isFixed ? { width: window.innerWidth, height: window.innerHeight } : entry.container.getBoundingClientRect();
+    entry.width = bounds.width || entry.container.offsetWidth || 1;
+    entry.height = bounds.height || entry.container.offsetHeight || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    entry.canvas.width = Math.round(entry.width * dpr);
+    entry.canvas.height = Math.round(entry.height * dpr);
+    entry.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-
-  // ── Initialise ──────────────────────────────────────────────────────────
-
   if (isFullPage) {
     const entry = createCanvas(document.body, true);
     entry.isFixed = true;
     seedParticles(entry);
     canvases.push(entry);
-
-    const onWindowResize = () => canvases.forEach(e => resizeCanvas(e));
-    window.addEventListener('resize', onWindowResize);
+    const onWindowResize = () => canvases.forEach((e) => resizeCanvas(e));
+    window.addEventListener("resize", onWindowResize);
     canvases[0]._resizeHandler = onWindowResize;
   } else {
-    containers.forEach(container => {
+    containers.forEach((container) => {
       const entry = createCanvas(container, false);
       entry.isFixed = false;
       seedParticles(entry);
       canvases.push(entry);
     });
-
-    if (typeof ResizeObserver !== 'undefined') {
+    if (typeof ResizeObserver !== "undefined") {
       resizeObserver = new ResizeObserver(() => {
-        canvases.forEach(e => resizeCanvas(e));
+        canvases.forEach((e) => resizeCanvas(e));
       });
-      containers.forEach(c => resizeObserver.observe(c));
+      containers.forEach((c) => resizeObserver.observe(c));
     }
   }
-
-  // ── Animation loop ──────────────────────────────────────────────────────
-
-  function animate() {
+  function animate(now = performance.now()) {
     if (!running || paused) return;
-
-    canvases.forEach(entry => {
+    const frames = lastFrame === null ? 1 : Math.min(3, Math.max(0, (now - lastFrame) / (1e3 / 60)));
+    lastFrame = now;
+    canvases.forEach((entry) => {
       const { canvas, ctx, particles } = entry;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Update and draw alive particles
+      ctx.clearRect(0, 0, entry.width, entry.height);
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        updateParticle(p, canvas.height);
+        advanceTickerStrip(p, entry.height, opts, frames);
         if (p.alive) {
-          drawParticle(ctx, p);
+          drawTickerStrip(ctx, p);
         } else {
           particles.splice(i, 1);
         }
       }
-
-      // Top up to maintain density (continuous mode only)
       if (!opts.burst) {
         const target = opts.density;
-        // Stochastic spawn - gives a natural rather than uniform stream
         while (particles.length < target && Math.random() < 0.6) {
-          particles.push(createParticle(canvas.width, canvas.height, true));
+          particles.push(createParticle(entry.width, entry.height, true));
         }
       }
     });
-
     animationFrame = requestAnimationFrame(animate);
   }
-
   function startAnimation() {
     if (running) return;
     running = true;
     paused = false;
+    lastFrame = null;
     animate();
   }
-
   startAnimation();
-  console.log(`[Domma.effects.tickerTape] Initialised (${isFullPage ? 'full-page' : 'container'} mode, palette: ${Array.isArray(opts.palette) ? 'custom' : opts.palette})`);
-
+  console.log(`[Domma.effects.tickerTape] Initialised (${isFullPage ? "full-page" : "container"} mode, palette: ${Array.isArray(opts.palette) ? "custom" : opts.palette})`);
   return {
     pause() {
       if (!running || paused) return;
@@ -2458,6 +2399,7 @@ export function tickerTape(selector, options = {}) {
     resume() {
       if (!running || !paused) return;
       paused = false;
+      lastFrame = null;
       animate();
     },
     stop() {
@@ -2470,13 +2412,13 @@ export function tickerTape(selector, options = {}) {
     },
     restart() {
       this.stop();
-      canvases.forEach(e => seedParticles(e));
+      canvases.forEach((e) => seedParticles(e));
       startAnimation();
     },
     destroy() {
       this.stop();
       if (isFullPage && canvases[0]?._resizeHandler) {
-        window.removeEventListener('resize', canvases[0]._resizeHandler);
+        window.removeEventListener("resize", canvases[0]._resizeHandler);
       }
       if (resizeObserver) {
         resizeObserver.disconnect();

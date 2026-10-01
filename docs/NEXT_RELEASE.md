@@ -1,20 +1,12 @@
-<!--
-The next release's notes. Write them here as the work lands.
+# Paper in motion and seasonal characters
 
-"Cut a release" (Actions tab) moves them into docs/RELEASE_NOTES.md and
-public/data/releases.json, stamped with the version and date, and resets this
-file. It refuses to run while the title or either section is empty.
+**Ticker tape now curls, tumbles and catches the light. The remaining seasonal characters get the same illustrated treatment as Christmas and Halloween.**
 
-  - The line starting "# " is the release title, e.g. "# Readers That Hear Every Change".
-  - Between the title and the website marker: the notes, in RELEASE_NOTES.md
-    style - a bold lead paragraph, then emoji-headed groups of bullets.
-  - After the website marker: the short HTML summary for releases.json -
-    one or two <p> elements.
-
-This comment is instructions only and is never copied.
--->
-
-# 
+- Curved paper strips with shaded folds, turning faces and a fine lit edge.
+- Consistent ticker motion across display refresh rates and sharper rendering on high-resolution screens.
+- Bonfire Night's fire, Guy, Catherine wheel, Roman candle and sparklers redrawn in domma-celebrate 1.3.0.
+- Illustrated leprechauns, bagpiper, knight, green and Welsh dragons, and Cupid.
+- Preserve existing palettes, controls, movement and reduced-motion preferences.
 
 <!-- website -->
-
+<p>Curled ticker tape with shaded folds and consistent motion, plus illustrated Bonfire Night decorations, leprechauns, bagpiper, knight, dragons and Cupid.</p>
