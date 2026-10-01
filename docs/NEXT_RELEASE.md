@@ -14,12 +14,13 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# Butterflies With Character
+# Seasonal Illustrations And Butterflies
 
-**The butterfly effect gets a new illustrated silhouette.** Tapered wings, delicate veins, wing markings and antennae replace the plain oval wings.
+**Halloween and butterflies share a new illustrated finish.** Tapered wings, delicate veins, wing markings and antennae replace the plain oval wings.
 
 ### 🦋 Effects
 
+- Redrawn Halloween pumpkins, ghosts, bats, scarecrow and haunted house, plus Valentine butterflies through domma-celebrate 1.2.0.
 - Hinged wingbeats preserve each butterfly’s existing flight path and palette controls.
 - Keep pause, resume, burst, container and reduced-motion behavior.
 
