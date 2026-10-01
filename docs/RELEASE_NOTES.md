@@ -1,3 +1,13 @@
+### v0.51.5 - Seasonal Illustrations And Butterflies (2026-10-01)
+
+**Halloween and butterflies share a new illustrated finish.** Tapered wings, delicate veins, wing markings and antennae replace the plain oval wings.
+
+### 🦋 Effects
+
+- Redrawn Halloween pumpkins, ghosts, bats, scarecrow and haunted house, plus Valentine butterflies through domma-celebrate 1.2.0.
+- Hinged wingbeats preserve each butterfly’s existing flight path and palette controls.
+- Keep pause, resume, burst, container and reduced-motion behavior.
+
 ### v0.51.4 - A Snowman To Match (2026-09-30)
 
 **The snowman joins the illustrated Christmas cast.** Domma includes domma-celebrate 1.1.1.

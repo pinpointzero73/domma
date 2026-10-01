@@ -14,17 +14,7 @@ file. It refuses to run while the title or either section is empty.
 This comment is instructions only and is never copied.
 -->
 
-# Seasonal Illustrations And Butterflies
-
-**Halloween and butterflies share a new illustrated finish.** Tapered wings, delicate veins, wing markings and antennae replace the plain oval wings.
-
-### 🦋 Effects
-
-- Redrawn Halloween pumpkins, ghosts, bats, scarecrow and haunted house, plus Valentine butterflies through domma-celebrate 1.2.0.
-- Hinged wingbeats preserve each butterfly’s existing flight path and palette controls.
-- Keep pause, resume, burst, container and reduced-motion behavior.
+# 
 
 <!-- website -->
-
-<p>Butterflies now have tapered wings, fine veins and markings, antennae and a gentler illustrated finish.</p>
 

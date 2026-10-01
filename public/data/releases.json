@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.5",
+      "title": "Seasonal Illustrations And Butterflies",
+      "description": "<p>Butterflies now have tapered wings, fine veins and markings, antennae and a gentler illustrated finish.</p>",
+      "date": "2026-10-01"
+    },
+    {
       "year": "v0.51.4",
       "title": "A Snowman To Match",
       "description": "<p>The Christmas snowman now matches the illustrated trees, wreaths, robins, elves, sleigh and train, with shaded snow, a knitted scarf and a holly-trimmed top hat.</p>",
@@ -463,5 +469,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.4"
+  "latestVersion": "v0.51.5"
 }
