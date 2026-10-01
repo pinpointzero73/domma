@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.6",
+      "title": "Paper in motion and seasonal characters",
+      "description": "<p>Curled ticker tape with shaded folds and consistent motion, plus illustrated Bonfire Night decorations, leprechauns, bagpiper, knight, dragons and Cupid.</p>",
+      "date": "2026-10-01"
+    },
+    {
       "year": "v0.51.5",
       "title": "Seasonal Illustrations And Butterflies",
       "description": "<p>Butterflies now have tapered wings, fine veins and markings, antennae and a gentler illustrated finish.</p>",
@@ -469,5 +475,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.5"
+  "latestVersion": "v0.51.6"
 }

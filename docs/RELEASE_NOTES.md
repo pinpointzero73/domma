@@ -1,3 +1,13 @@
+### v0.51.6 - Paper in motion and seasonal characters (2026-10-01)
+
+**Ticker tape now curls, tumbles and catches the light. The remaining seasonal characters get the same illustrated treatment as Christmas and Halloween.**
+
+- Curved paper strips with shaded folds, turning faces and a fine lit edge.
+- Consistent ticker motion across display refresh rates and sharper rendering on high-resolution screens.
+- Bonfire Night's fire, Guy, Catherine wheel, Roman candle and sparklers redrawn in domma-celebrate 1.3.0.
+- Illustrated leprechauns, bagpiper, knight, green and Welsh dragons, and Cupid.
+- Preserve existing palettes, controls, movement and reduced-motion preferences.
+
 ### v0.51.5 - Seasonal Illustrations And Butterflies (2026-10-01)
 
 **Halloween and butterflies share a new illustrated finish.** Tapered wings, delicate veins, wing markings and antennae replace the plain oval wings.
