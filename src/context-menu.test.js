@@ -245,6 +245,24 @@ describe('Domma.elements.contextMenu', () => {
             expect(document.querySelectorAll('.dm-context-menu-item.is-disabled').length).toBe(1);
         });
 
+        it('adds an item\'s own className, as a string or an array', () => {
+            make('#page', {
+                items: [
+                    {label: 'One', className: 'cta  is-new'},
+                    {label: 'Two', className: ['a', 'b']},
+                    {label: 'Three'}
+                ],
+                animation: false
+            });
+
+            rightClick(document.getElementById('para'));
+
+            const items = document.querySelectorAll('.dm-context-menu-item');
+            expect([...items[0].classList]).toEqual(['dm-context-menu-item', 'cta', 'is-new']);
+            expect([...items[1].classList]).toEqual(['dm-context-menu-item', 'a', 'b']);
+            expect([...items[2].classList]).toEqual(['dm-context-menu-item']);
+        });
+
         it('collapses dividers stranded by hidden items', () => {
             make('#page', {
                 items: [
