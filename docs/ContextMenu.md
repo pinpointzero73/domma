@@ -132,6 +132,10 @@ items: (row) => [
 ]
 ```
 
+An item's `className` (a string of names, or an array) is added to its button beside
+`dm-context-menu-item`, for styling one item from your own CSS: `{label: 'Upgrade', className: 'menu-cta'}`.
+The menu-level `className` option does the same for the whole panel.
+
 Dividers stranded by hidden items are collapsed, and a menu whose every item resolves away does not
 open at all - the gesture falls through to the next menu outward rather than flashing an empty box.
 

@@ -828,6 +828,10 @@ class ContextMenu extends Component {
             el.setAttribute('tabindex', '-1');
             el.dataset.index = String(index);
             if (item.danger) el.classList.add('is-danger');
+            // The author's own classes - a string of names or an array of them.
+            for (const c of [].concat(item.className || []).join(' ').split(/\s+/)) {
+                if (c) el.classList.add(c);
+            }
             if (disabled) {
                 el.classList.add('is-disabled');
                 el.setAttribute('aria-disabled', 'true');
