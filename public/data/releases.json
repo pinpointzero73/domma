@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.7",
+      "title": "Your own classes on context menu items",
+      "description": "Context menu items take their own CSS classes through a new `className` option.",
+      "date": "2026-10-09"
+    },
+    {
       "year": "v0.51.6",
       "title": "Paper in motion and seasonal characters",
       "description": "<p>Curled ticker tape with shaded folds and consistent motion, plus illustrated Bonfire Night decorations, leprechauns, bagpiper, knight, dragons and Cupid.</p>",
@@ -475,5 +481,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.6"
+  "latestVersion": "v0.51.7"
 }
