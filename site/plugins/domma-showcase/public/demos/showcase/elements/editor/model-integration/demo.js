@@ -17,10 +17,10 @@ export function mount(root) {
     M.bind(contentModel, 'text', '#model-display', {
             format: (val) => val || '(empty)'
         });
-    window.updateModel = function () {
+    function updateModel() {
             contentModel.set('text', 'Hello from Model!\n\nThis text was set programmatically via model.set()');
         };
-    window.clearModel = function () {
+    function clearModel() {
             contentModel.set('text', '');
         };
 

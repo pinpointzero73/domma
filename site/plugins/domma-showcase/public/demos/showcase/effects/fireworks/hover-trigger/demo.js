@@ -190,43 +190,6 @@ export function mount(root) {
           }, i * 50);
         }
       }
-      // Launch multiple fireworks function
-    function launchMultipleFireworks(containerId = 'firework-demo-3', theme = 'mixed', count = 5) {
-        const container = $('#' + containerId)[0];
-        if (!container) return;
-
-        // Clear any existing fireworks for a fresh display
-        container.innerHTML = '';
-
-        // Calculate optimal particle count based on total fireworks
-        // Formula: More fireworks = fewer particles each for better performance
-        const particleCount = Math.max(50, Math.min(200, Math.floor(300 / count)));
-
-        // If mixed theme, use random themes
-        const themes = ['celebration', 'special', 'birthday', 'newyear', 'christmas', 'valentine', 'ocean', 'purple', 'patriotic', 'sunset', 'romance', 'success', 'winter'];
-
-        for (let i = 0; i < count; i++) {
-          setTimeout(() => {
-            const currentTheme = theme === 'mixed' ? themes[Math.floor(Math.random() * themes.length)] : theme;
-            const position = 20 + Math.random() * 60; // Random position between 20% and 80%
-            launchFirework(containerId, currentTheme, position, particleCount);
-          }, i * 300 + Math.random() * 200);
-        }
-      }
-      // Continuous display functionality
-    let continuousInterval = null;
-    function startContinuousDisplay(containerId = 'continuous-container') {
-        if (continuousInterval) return;
-
-        // Launch immediately with optimized count
-        launchMultipleFireworks(containerId, 'mixed', 3);
-
-        // Then launch every 2 seconds with smaller displays for performance
-        continuousInterval = setInterval(() => {
-          const count = Math.floor(Math.random() * 2) + 2; // 2-3 fireworks for continuous display
-          launchMultipleFireworks(containerId, 'mixed', count);
-        }, 2000);
-      }
         // Add hover trigger
     $(root).find('#hover-btn').on('mouseenter', () => {
           launchFirework('hover-demo', 'celebration', 50);

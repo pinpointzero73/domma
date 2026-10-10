@@ -45,6 +45,14 @@ export function mount(root) {
             if (Array.isArray(repeat)) return repeat.join(', ');
             return repeat;
         }
+    function toggleAlarm(id) {
+            alarmManager.toggle(id);
+            updateAllLists();
+        };
+    function deleteAlarm(id) {
+            alarmManager.remove(id);
+            updateAllLists();
+        };
     function updateAllLists() {
             const allAlarms = alarmManager.getAlarms();
             ['tutorial-alarm-list', 'example-workday-list', 'example-fitness-list', 'example-medication-list'].forEach(id => {
@@ -76,4 +84,6 @@ export function mount(root) {
                 notification: true
             });
         });
+        // Initial load
+    updateAllLists();
 }

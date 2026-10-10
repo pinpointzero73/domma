@@ -49,11 +49,11 @@ export function mount(root) {
             if (Array.isArray(repeat)) return repeat.join(', ');
             return repeat;
         }
-    window.toggleAlarm = function (id) {
+    function toggleAlarm(id) {
             alarmManager.toggle(id);
             updateAllLists();
         };
-    window.deleteAlarm = function (id) {
+    function deleteAlarm(id) {
             alarmManager.remove(id);
             updateAllLists();
         };
@@ -73,6 +73,4 @@ export function mount(root) {
             });
             $(root).find('#quick-status').text(`✓ Alarm set for ${time}`).removeClass().addClass('mt-2 text-success');
         });
-        // Initial load
-    updateAllLists();
 }

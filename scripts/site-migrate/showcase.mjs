@@ -51,7 +51,7 @@ const STANDARD_SCRIPTS = /purify\.min\.js|domma\.min\.js|domma-syntax\.min\.js|l
  * Statements that only re-did page set-up the CMS already does: icon and syntax
  * scans (guarded or not), theme start-up, Domma.init, start-up logging.
  */
-const SETUP_CALL = String.raw`(?:I\.scan|Domma\.icons\.scan|Domma\.syntax\.scan|DommaSyntax\.\w+|window\.DommaSyntax\.\w+|Domma\.theme\.init|Domma\.init\??\.?|E\.skeleton\.scan|console\.(?:log|info))\s*\([^;]*?\)`;
+const SETUP_CALL = String.raw`(?:(?:I\.scan|Domma\.icons\.scan|Domma\.syntax\.scan|DommaSyntax\.\w+|window\.DommaSyntax\.\w+|Domma\.theme\.init|Domma\.init\??\.?|E\.skeleton\.scan|console\.(?:log|info))\s*\([^;]*?\)|\$\.setup\(\s*\{\s*scanIcons:\s*true\s*\}\s*\))`;
 /** The old effects pages' reduced-motion notice - the CMS's effects controls do this now. */
 const MOTION_NOTICE = /^\s*if\s*\(\s*window\.matchMedia\(\s*['"]\(prefers-reduced-motion: reduce\)['"]\s*\)\.matches\s*\)\s*\{\s*\$\(\s*['"]#motion-notice['"]\s*\)\.show\(\);?\s*\}\s*$/;
 const NOOP = new RegExp(String.raw`^\s*(?:${SETUP_CALL}\s*;?\s*)+$|^\s*if\s*\([^)]*(?:Domma\.(?:icons|syntax)|DommaSyntax)[^)]*\)\s*\{?\s*(?:${SETUP_CALL}\s*;?\s*)+\}?\s*$`, 's');
@@ -219,7 +219,7 @@ function convertPage(page) {
 
     // What the page's script touches: a block holding any of these is live, so it is a demo.
     const scriptText = [...doc.querySelectorAll('script:not([src])')].map(x => x.textContent).join('\n');
-    const touchedIds = new Set([...scriptText.matchAll(/['"`]#([A-Za-z][\w-]*)/g)].map(m => m[1]));
+    const touchedIds = new Set([...scriptText.matchAll(/['"`]#([A-Za-z][\w-]*)/g), ...scriptText.matchAll(/getElementById\(\s*['"`]([A-Za-z][\w-]*)['"`]/g)].map(m => m[1]));
     const touchedClasses = new Set([...scriptText.matchAll(/['"`]\.([A-Za-z][\w-]*)['"`]/g)].map(m => m[1]));
     function touched(el) {
         if (el.tagName === 'PRE' || el.tagName === 'SCRIPT') return false;
@@ -291,9 +291,13 @@ function convertPage(page) {
             const declares = [];
             if (st.type === 'VariableDeclaration') for (const d of st.declarations) if (d.id.type === 'Identifier') declares.push(d.id.name);
             if (st.type === 'FunctionDeclaration' && st.id) declares.push(st.id.name);
-            stmts.push({index, src, declares, owner: null, fn: st.type === 'FunctionDeclaration',
+            // window.copyToClipboard = function … - a page global, called from inline handlers.
+            const asg = st.type === 'ExpressionStatement' && st.expression.type === 'AssignmentExpression' ? st.expression : null;
+            if (asg && asg.left.type === 'MemberExpression' && asg.left.object.name === 'window' && !asg.left.computed) declares.push(asg.left.property.name);
+            stmts.push({index, src, declares, owner: null, fn: st.type === 'FunctionDeclaration' || /^window\.\w+\s*=\s*(?:async\s+)?function/.test(code.slice(st.start, st.end)),
                 // Not hex colours ('#facc15'), which look like ids.
-                ids: [...src.matchAll(/['"`]#([A-Za-z][\w-]*)/g)].map(m => m[1]).filter(id => !/^(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(id)),
+                ids: [...src.matchAll(/['"`]#([A-Za-z][\w-]*)/g), ...src.matchAll(/getElementById\(\s*['"`]([A-Za-z][\w-]*)['"`]/g)]
+                    .map(m => m[1]).filter(id => !/^(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(id)),
                 classes: [...src.matchAll(/['"`]\.([A-Za-z][\w-]*)['"`]/g)].map(m => m[1]),
                 words: new Set([...src.matchAll(/(?<![\w$])([A-Za-z_$][\w$]*)/g)].map(m => m[1]))});
         });
@@ -309,14 +313,30 @@ function convertPage(page) {
             const prefixes = [...x.src.matchAll(/['"`]#([A-Za-z][\w-]*?)(?:\$\{|['"`]\s*\+)/g)].map(m => m[1]).filter(p => p.length >= 2);
             const attrSels = [...x.src.matchAll(/['"`](\[[\w-]+(?:[~|^$*]?=[^\]]+)?\])['"`]/g)].map(m => m[1]);
             const safe = (d, sel) => { try { return has(d, sel); } catch { return false; } };
+            // Bare strings that are a demo element's id ('pos-tl', used as '#' + id) count too.
+            const bare = [...x.src.matchAll(/['"]([A-Za-z][\w-]*)['"]/g)].map(m => m[1])
+                .filter(id => demos.some(d => safe(d, `#${CSS.escape(id)}`)));
             x.owner = demos.find(d => x.ids.some(id => has(d, `#${CSS.escape(id)}`)))
+                || demos.find(d => bare.some(id => has(d, `#${CSS.escape(id)}`)))
                 || demos.find(d => attrSels.some(sel => safe(d, sel)))
                 || demos.find(d => prefixes.some(p => safe(d, `[id^="${p}"]`)))
                 || demos.find(d => x.classes.some(c => has(d, `.${CSS.escape(c)}`))) || null;
             // A helper registered for bindings goes to the demo whose markup calls it.
             const helper = !x.owner && /registerHelper\(\s*['"]([\w$]+)['"]/.exec(x.src);
             if (helper) x.owner = demos.find(d => d.el.outerHTML.includes(`${helper[1]}(`)) || null;
+            // So does a component (its tag) or a custom binding (its data-bind-* attribute).
+            const component = !x.owner && /Domma\.component\(\s*['"]([\w-]+)['"]/.exec(x.src);
+            if (component) x.owner = demos.find(d => d.el.outerHTML.includes(`<${component[1]}`)) || null;
+            const binding = !x.owner && /registerBinding\(\s*['"]([\w-]+)['"]/.exec(x.src);
+            const bindAttr = binding && (/attribute:\s*['"]([\w-]+)['"]/.exec(x.src)?.[1] || `data-bind-${binding[1]}`);
+            if (binding) x.owner = demos.find(d => d.el.outerHTML.includes(bindAttr)) || null;
             x.direct = !!x.owner;
+        }
+        for (const x of stmts) {
+            const component = !x.owner && !x.pseudo && /Domma\.component\(\s*['"]([\w-]+)['"]/.exec(x.src);
+            if (!component) continue;
+            const user = stmts.find(y => y !== x && y.owner && !y.pseudo && new RegExp(`['"]${component[1]}['"]`).test(y.src));
+            if (user) { x.owner = user.owner; x.direct = true; }
         }
         for (let moved = true; moved;) {
             moved = false;
@@ -401,9 +421,14 @@ function convertPage(page) {
             if (!DRY) { fs.mkdirSync(path.dirname(path.join(ASSETS_OUT, out)), {recursive: true}); fs.copyFileSync(src, path.join(ASSETS_OUT, out)); }
             return `${q}${ASSETS_URL}/${out}`;
         }).replace(/https?:\/\/via\.placeholder\.com\/(\d+)(?:x(\d+))?(?:\/([0-9a-f]{3,6}))?(?:\/([0-9a-f]{3,6}))?(?:\?text=([\w%+-]*))?/gi, (m, w, h, bg, fg, text) => {
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h || w}"><rect width="100%" height="100%" fill="#${bg || 'cccccc'}"/>`
-                + `<text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="sans-serif" font-size="${Math.round((h || w) / 2)}" fill="#${fg || '333333'}">${decodeURIComponent((text || '').replace(/\+/g, ' '))}</text></svg>`;
-            return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+            h = h || w;
+            const label = decodeURIComponent((text || '').replace(/\+/g, ' ')).replace(/[<&>]/g, '');
+            const size = Math.round(Math.min(h * 0.4, (w / Math.max(label.length, 1)) * 1.6));
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="#${bg || 'cccccc'}"/>`
+                + `<text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="sans-serif" font-size="${size}" fill="#${fg || '333333'}">${label}</text></svg>\n`;
+            const name = `placeholders/${w}x${h}-${bg || 'cccccc'}-${fg || '333333'}${label ? '-' + label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : ''}.svg`;
+            if (!DRY) { fs.mkdirSync(path.join(ASSETS_OUT, 'placeholders'), {recursive: true}); fs.writeFileSync(path.join(ASSETS_OUT, name), svg); }
+            return `${ASSETS_URL}/${name}`;
         });
     }
     report.demos = demos.length;
@@ -417,6 +442,8 @@ function convertPage(page) {
  */
 function upgrade(js) {
     return js
+        // A page global the old inline handlers called becomes a function of the demo's own.
+        .replace(/^(\s*)window\.(\w+)\s*=\s*(async\s+)?function\s*\(/gm, '$1$3function $2(')
         .replace(/\bDomma\.elements\./g, 'E.')
         .replace(/(^|[^.\w])alert\(/g, '$1E.toast(')
         .replace(/\$\((['"])#([A-Za-z][\w-]*)\1\)/g, '$(root).find(\'#$2\')')

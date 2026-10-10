@@ -8,6 +8,19 @@ export function mount(root) {
         // section above; this only brings it to life.
         // A helper, so an expression can shape a value without calling a method.
     M.registerHelper('greet', (n) => (n ? `Hello, ${n}` : 'Hello'));
+        // A custom binding kind, registered through the same function every
+        // built-in uses.
+    M.registerBinding('uppercase', {
+            attribute: 'data-uppercase',
+            expression: true,   // parse the attribute value
+            tracks: true,       // re-run when what it reads changes
+            primes: true,       // run once after the first paint
+            update({binding, nodes, context}) {
+                const value = binding.evaluate(context);
+                for (const el of nodes) el.textContent = String(value).toUpperCase();
+                return true;
+            }
+        });
     const applyModel = M.create({
             name: {type: M.types.string},
             rows: {type: M.types.array}

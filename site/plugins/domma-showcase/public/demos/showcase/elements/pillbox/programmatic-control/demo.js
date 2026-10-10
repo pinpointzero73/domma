@@ -7,23 +7,23 @@ export function mount(root) {
     const programmaticPillbox = E.pillbox(root.querySelector('#programmatic-pillbox'), {
             data: items
         });
-    window.addRandomPill = function () {
+    function addRandomPill() {
             const available = items.filter(item => !programmaticPillbox.getValue().includes(item));
             if (available.length > 0) {
                 const random = available[Math.floor(Math.random() * available.length)];
                 programmaticPillbox.addPill(random, random);
             }
         };
-    window.removeLast = function () {
+    function removeLast() {
             const count = programmaticPillbox.getCount();
             if (count > 0) {
                 programmaticPillbox.removePillAt(count - 1);
             }
         };
-    window.clearAll = function () {
+    function clearAll() {
             programmaticPillbox.clear();
         };
-    window.showValues = function () {
+    function showValues() {
             const values = programmaticPillbox.getValue();
             E.toast('Current values: ' + (values.length > 0 ? values.join(', ') : 'None'));
         };

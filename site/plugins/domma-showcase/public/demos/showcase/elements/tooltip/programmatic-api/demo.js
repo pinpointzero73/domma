@@ -11,12 +11,12 @@ export function mount(root) {
             'Back to original'
         ];
     let contentIndex = 0;
-    window.updateTooltipContent = function() {
+    function updateTooltipContent() {
             const tooltip = $(root).find('#programmable-tooltip')[0];
             contentIndex = (contentIndex + 1) % tooltipContents.length;
             tooltip.setContent(tooltipContents[contentIndex]);
         };
-    window.changeTooltipPosition = function() {
+    function changeTooltipPosition() {
             const tooltip = $(root).find('#programmable-tooltip')[0];
             currentPosIndex = (currentPosIndex + 1) % positions.length;
             tooltip.setPosition(positions[currentPosIndex]);

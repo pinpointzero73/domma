@@ -8,3 +8,30 @@
             color: var(--dm-text);
             padding: 1rem;
         }
+
+        .showcase-demo[data-demo^="showcase/models/bindings/"] .bind-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--dm-border);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+        }
+
+        .showcase-demo[data-demo^="showcase/models/bindings/"] .bind-row:last-child { border-bottom: none; }
+
+        .showcase-demo[data-demo^="showcase/models/bindings/"] .bind-tag {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            padding: 0.125rem 0.4rem;
+            border-radius: 4px;
+            background: var(--dm-hover-bg);
+            color: var(--dm-text);
+        }
+
+        .showcase-demo[data-demo^="showcase/models/bindings/"] .bind-stamp {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            color: var(--dm-text-muted, var(--dm-text));
+        }

@@ -19,3 +19,15 @@
       .showcase-demo[data-demo^="showcase/effects/fireworks/"] .celebration-btn {
           z-index: 10;
       }
+  
+
+                @keyframes rocket-launch {
+                    0% {
+                        bottom: 0;
+                        opacity: 1;
+                    }
+                    100% {
+                        bottom: 80%;
+                        opacity: 0;
+                    }
+                }

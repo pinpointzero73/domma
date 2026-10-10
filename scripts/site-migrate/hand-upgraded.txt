@@ -12,3 +12,6 @@ pages/showcase/elements/card.md
 pages/showcase/elements/tabs.md
 showcase/elements/badge/wrapper-api-backwards-compatible
 showcase/elements/loader/wrapper-api-backwards-compatible
+# Never written: their pages were hand-edited to prose.
+showcase/elements/card/related-elements
+showcase/elements/tabs/related-elements

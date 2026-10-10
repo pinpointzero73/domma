@@ -43,6 +43,10 @@ for (const f of walk(DEMOS)) {
     for (const m of src.matchAll(/['"`]([a-z][\w-]*-)['"`]\s*\+/g)) prefixes.add(m[1]);
 }
 const isUsed = (c) => used.has(c) || [...prefixes].some(p => c.startsWith(p));
+// Every word the demos' code and markup contain - an animation the script sets inline
+// (style.animation = 'rocket-launch 1s') keeps its @keyframes.
+const demoWords = new Set(walk(DEMOS).filter(f => /\.(html|js)$/.test(f))
+    .flatMap(f => fs.readFileSync(f, 'utf8').match(/[\w-]+/g) || []));
 
 // Domma's own classes - never restyled from here.
 const domma = new Set();
@@ -52,6 +56,22 @@ for (const f of ['domma.css', 'grid.css', 'elements.css']) {
 }
 const classesOf = (sel) => [...sel.matchAll(/\.([A-Za-z][\w-]*)/g)].map(m => m[1]);
 const keep = (sel) => { const cls = classesOf(sel); return cls.length > 0 && cls.every(isUsed) && cls.some(c => !domma.has(c)); };
+
+/**
+ * CSS a page's script injected rather than wrote in a <style> block:
+ * `style.textContent = \`…\``, `$('<style>…</style>')` and `$('<style>').text(name)`
+ * with `const name = \`…\``.
+ */
+function injected(html) {
+    const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]).join('\n');
+    const out = [...scripts.matchAll(/textContent\s*=\s*`([^`]*)`/g)].map(m => m[1]);
+    out.push(...[...scripts.matchAll(/\$\(\s*'<style>([\s\S]*?)<\/style>'\s*\)/g)].map(m => m[1]));
+    for (const [, name] of scripts.matchAll(/\$\(\s*'<style>'\s*\)\s*\.text\(\s*(\w+)\s*\)/g)) {
+        const def = new RegExp(`(?:const|let|var)\\s+${name}\\s*=\\s*\`([^\`]*)\``).exec(scripts);
+        if (def) out.push(def[1]);
+    }
+    return out.filter(c => /[{:]/.test(c) && !c.includes('${'));
+}
 
 /** Only the demo rules of a stylesheet; `scope` prefixes every selector kept. */
 function filter(css, scope = '') {
@@ -66,7 +86,7 @@ function filter(css, scope = '') {
         kept++;
         rule.walkDecls(/^animation(-name)?$/, d => d.value.split(/[\s,]+/).forEach(v => animations.add(v)));
     });
-    root.walkAtRules(/keyframes$/i, at => { if (!animations.has(at.params.trim())) at.remove(); });
+    root.walkAtRules(/keyframes$/i, at => { if (!animations.has(at.params.trim()) && !demoWords.has(at.params.trim())) at.remove(); });
     root.walkAtRules(at => { if (!/keyframes$/i.test(at.name) && !at.nodes?.length) at.remove(); });
     root.walkComments(c => c.remove());
     return {css: root.toString().replace(/\n{3,}/g, '\n\n').trim(), kept};
@@ -84,7 +104,8 @@ let pages = 0;
 let kept = shared.kept;
 for (const f of walk(OLD).filter(x => x.endsWith('.html') && !x.includes(`${path.sep}css${path.sep}`))) {
     const page = path.relative(OLD, f).replace(/\/index\.html$/, '').replace(/\.html$/, '');
-    const css = [...fs.readFileSync(f, 'utf8').matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
+    const html = fs.readFileSync(f, 'utf8');
+    const css = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map(m => m[1]).concat(injected(html)).join('\n');
     if (!css.trim() || page === 'index') continue;
     let out;
     try { out = filter(css, `.showcase-demo[data-demo^="showcase/${page}/"]`); } catch (err) { console.warn(`${page}: its <style> did not parse (${err.message}) - skipped`); continue; }

@@ -5,19 +5,19 @@ export function mount(root) {
         // Web Components Section JavaScript
     const loaderTypes = ['spinner', 'dots', 'pulse', 'bars'];
     let currentTypeIndex = 0;
-    window.showProgrammableLoader = function() {
+    function showProgrammableLoader() {
             const loader = $(root).find('#programmable-loader')[0];
             loader.show();
         };
-    window.hideProgrammableLoader = function() {
+    function hideProgrammableLoader() {
             const loader = $(root).find('#programmable-loader')[0];
             loader.hide();
         };
-    window.toggleProgrammableLoader = function() {
+    function toggleProgrammableLoader() {
             const loader = $(root).find('#programmable-loader')[0];
             loader.toggle();
         };
-    window.changeLoaderType = function() {
+    function changeLoaderType() {
             const loader = $(root).find('#programmable-loader')[0];
             currentTypeIndex = (currentTypeIndex + 1) % loaderTypes.length;
             const newType = loaderTypes[currentTypeIndex];

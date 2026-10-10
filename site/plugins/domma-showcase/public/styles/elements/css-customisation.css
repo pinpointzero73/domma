@@ -1,0 +1,11 @@
+/* Domma Showcase - demo styles from public/showcase/elements/css-customisation, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/css-customisation/"] .custom-brand {
+                --dm-primary: #16a34a;
+                --dm-primary-hover: #15803d;
+                --dm-surface: #f0fdf4;
+                --dm-text: #14532d;
+                --dm-radius-md: 0.5rem;
+                --dm-card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }

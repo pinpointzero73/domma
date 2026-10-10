@@ -14,10 +14,10 @@ export function mount(root) {
                 $(root).find('#last-saved')[0].textContent = D().format('HH:mm:ss');
             }
         });
-    window.manualSave = function () {
+    function manualSave() {
             autosaveEditor.save();
         };
-    window.clearStorage = function () {
+    function clearStorage() {
             S.remove('editor:domma-autosave-demo');
             autosaveEditor.clear();
             $(root).find('#last-saved')[0].textContent = 'Never';

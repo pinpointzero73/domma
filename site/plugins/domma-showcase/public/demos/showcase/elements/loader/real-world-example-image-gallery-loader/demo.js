@@ -24,12 +24,12 @@ export function mount(root) {
 
             // Display placeholder images
             const placeholderImages = [
-              'https://via.placeholder.com/200x150/2563eb/ffffff?text=Image+1',
-              'https://via.placeholder.com/200x150/16a34a/ffffff?text=Image+2',
-              'https://via.placeholder.com/200x150/dc2626/ffffff?text=Image+3',
-              'https://via.placeholder.com/200x150/f59e0b/1e293b?text=Image+4',
-              'https://via.placeholder.com/200x150/0ea5e9/ffffff?text=Image+5',
-              'https://via.placeholder.com/200x150/475569/ffffff?text=Image+6'
+              '/plugins/domma-showcase/public/assets/placeholders/200x150-2563eb-ffffff-image-1.svg',
+              '/plugins/domma-showcase/public/assets/placeholders/200x150-16a34a-ffffff-image-2.svg',
+              '/plugins/domma-showcase/public/assets/placeholders/200x150-dc2626-ffffff-image-3.svg',
+              '/plugins/domma-showcase/public/assets/placeholders/200x150-f59e0b-1e293b-image-4.svg',
+              '/plugins/domma-showcase/public/assets/placeholders/200x150-0ea5e9-ffffff-image-5.svg',
+              '/plugins/domma-showcase/public/assets/placeholders/200x150-475569-ffffff-image-6.svg'
             ];
 
             $(root).find('#gallery-container').html(placeholderImages.map(url =>

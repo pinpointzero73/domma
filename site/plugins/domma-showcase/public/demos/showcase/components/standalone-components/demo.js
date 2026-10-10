@@ -2,6 +2,10 @@
  * Standalone Components - from public/showcase/components.
  */
 export function mount(root) {
+        // ── Collapsible example cards ────────────────────────────────────────────
+    ['card-counter', 'card-user-card', 'card-router', 'card-sfc', 'card-api'].forEach(id => {
+            E.card(`#${id}`, { collapsible: true });
+        });
         // ── Lifecycle log helper ────────────────────────────────────────────────
     function makeLogger($log) {
             return function log(msg, type = 'update') {
@@ -107,6 +111,116 @@ export function mount(root) {
                 button:hover { opacity: 0.85; }
                 .btn-dec { background: var(--dm-danger, #dc2626); }
                 .btn-rst { background: #6b7280; font-size: 0.85rem; }
+            `
+        });
+        // ── Example 2: User Card ────────────────────────────────────────────────
+    Domma.component('user-card-demo', {
+            props: {
+                userId:     { type: 'number',  required: true },
+                showAvatar: { type: 'boolean', default: true  }
+            },
+
+            data() {
+                return { name: '', role: '', department: '', loading: true };
+            },
+
+            computed: {
+                initials() {
+                    if (!this.data.name) return '?';
+                    return this.data.name.split(' ')
+                        .map(n => n[0] || '')
+                        .join('')
+                        .toUpperCase()
+                        .slice(0, 2);
+                }
+            },
+
+            methods: {
+                async fetchUser() {
+                    this.set({ loading: true });
+
+                    // Simulated API call - replace with H.get('/api/users/' + this.props.userId)
+                    await new Promise(r => setTimeout(r, 700));
+
+                    const db = {
+                        42: { name: 'Alice Nguyen',   role: 'Senior Engineer',    department: 'Platform' },
+                         7: { name: 'Bob Okafor',     role: 'Product Manager',    department: 'Product'  },
+                        99: { name: 'Carol Lindström', role: 'Design Lead',        department: 'UX'       }
+                    };
+
+                    const user = db[this.props.userId] ?? { name: 'Unknown User', role: '-', department: '-' };
+                    this.set({ name: user.name, role: user.role, department: user.department, loading: false });
+                }
+            },
+
+            onMount() { this.fetchUser(); },
+
+            onPropsChanged(name) {
+                if (name === 'userId') this.fetchUser();
+            },
+
+            template: `
+                <div class="uc">
+                    {{#if loading}}
+                    <div class="skeleton-wrap">
+                        <div class="sk sk-avatar"></div>
+                        <div class="flex-fill">
+                            <div class="sk sk-line"></div>
+                            <div class="sk sk-line sk-short"></div>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{#unless loading}}
+                    <div class="user-row">
+                        {{#if showAvatar}}
+                        <div class="avatar">{{initials}}</div>
+                        {{/if}}
+                        <div class="user-info">
+                            <p class="name">{{name}}</p>
+                            <p class="role">{{role}}</p>
+                            <p class="dept">{{department}}</p>
+                        </div>
+                    </div>
+                    {{/unless}}
+                </div>
+            `,
+
+            style: `
+                .uc {
+                    font-family: system-ui, sans-serif;
+                    padding: 1.5rem;
+                    min-width: 220px;
+                }
+                .user-row { display: flex; align-items: center; gap: 1rem; }
+                .avatar {
+                    width: 3.5rem; height: 3.5rem;
+                    border-radius: 50%;
+                    background: var(--dm-primary, #6495ED);
+                    color: #fff;
+                    display: flex; align-items: center; justify-content: center;
+                    font-size: 1.2rem; font-weight: 700;
+                    flex-shrink: 0;
+                }
+                .name  { font-weight: 700; font-size: 1.05rem; margin: 0 0 .2rem; }
+                .role  { color: #6b7280; font-size: .85rem; margin: 0 0 .15rem; }
+                .dept  { font-size: .75rem; color: #9ca3af; margin: 0;
+                         text-transform: uppercase; letter-spacing: .05em; }
+
+                /* Skeleton loader */
+                .skeleton-wrap { display: flex; align-items: center; gap: 1rem; }
+                .sk {
+                    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+                    background-size: 200% 100%;
+                    animation: shimmer 1.5s infinite;
+                    border-radius: 4px;
+                }
+                .sk-avatar { width: 3.5rem; height: 3.5rem; border-radius: 50%; flex-shrink: 0; }
+                .sk-line   { height: 14px; margin-bottom: 8px; width: 120px; }
+                .sk-short  { width: 80px; margin-bottom: 0; }
+                @keyframes shimmer {
+                    0%   { background-position: 200% 0; }
+                    100% { background-position: -200% 0; }
+                }
             `
         });
         // ── User Card controls ──────────────────────────────────────────────────

@@ -5,7 +5,7 @@ export function mount(root) {
         // Web Components - Programmatic API demo
     const variants = ['primary', 'secondary', 'success', 'danger', 'warning', 'info'];
     let currentIndex = 0;
-    window.changeVariant = function() {
+    function changeVariant() {
           const badge = $(root).find('#programmable-badge')[0];
           currentIndex = (currentIndex + 1) % variants.length;
           const newVariant = variants[currentIndex];

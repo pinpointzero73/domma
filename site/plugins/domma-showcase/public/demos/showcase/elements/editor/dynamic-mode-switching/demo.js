@@ -8,7 +8,7 @@ export function mount(root) {
             placeholder: 'Try switching modes...',
             minHeight: 200
         });
-    window.switchMode = function (mode) {
+    function switchMode(mode) {
             switchableEditor.setMode(mode);
 
             // Update button states
