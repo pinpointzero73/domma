@@ -1,0 +1,154 @@
+<div class="djs-downloads" id="djs-downloads">
+    <p class="djs-dl-loading" data-if="!ready.value && !problem.value"><span data-icon="loader" data-icon-size="16"></span> Getting the latest release&hellip;</p>
+    <p class="djs-dl-problem" role="alert" data-if="problem.value" data-bind-text="problem.value"></p>
+
+    <div data-if="ready.value">
+        <p class="djs-dl-version">Everything here is <strong>Domma <span data-bind-text="version.value"></span></strong>, the latest release - also on npm as <code>domma-js</code>.</p>
+
+        <!-- ── Kickstart ─────────────────────────────────────────────── -->
+        <section class="djs-dl-section" id="kickstart" aria-labelledby="djs-dl-kickstart">
+            <h2 id="djs-dl-kickstart">Kickstart a new project</h2>
+            <p class="text-muted">A complete project in seconds - navbar, footer, themes, routing and pages included.</p>
+            <div class="djs-dl-grid djs-dl-grid--2">
+                <div class="card djs-dl-card djs-dl-card--success">
+                    <div class="card-body">
+                        <div class="djs-dl-card-head"><span data-icon="zap" data-icon-size="28"></span><h3>SPA Kickstart</h3><span class="badge badge-success">Recommended</span></div>
+                        <p class="text-muted">A single-page application: client-side routing, instant transitions, state shared between views.</p>
+                        <pre class="djs-dl-command"><code>npx domma-js init --spa</code></pre>
+                        <a href="/quickstart/spa" class="btn btn-sm btn-success"><span data-icon="book-open" data-icon-size="16"></span> SPA QuickStart</a>
+                    </div>
+                </div>
+                <div class="card djs-dl-card djs-dl-card--primary">
+                    <div class="card-body">
+                        <div class="djs-dl-card-head"><span data-icon="file-text" data-icon-size="28"></span><h3>MPA Kickstart</h3></div>
+                        <p class="text-muted">A multi-page application of ordinary HTML pages - for content-heavy sites where search matters.</p>
+                        <pre class="djs-dl-command"><code>npx domma-js init --mpa</code></pre>
+                        <a href="/quickstart/mpa" class="btn btn-sm btn-primary"><span data-icon="book-open" data-icon-size="16"></span> MPA QuickStart</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card djs-dl-builder">
+                <div class="card-header"><span data-icon="settings" data-icon-size="16"></span> <strong>Kickstart builder</strong> <span class="badge badge-info">Built in your browser</span></div>
+                <div class="card-body">
+                    <div class="djs-dl-grid djs-dl-grid--2">
+                        <div>
+                            <label class="form-label">Architecture</label>
+                            <div class="btn-group" role="group" aria-label="Architecture">
+                                <button type="button" class="btn btn-sm" data-bind-class="ksMode.value === 'spa' ? 'btn-primary' : 'btn-outline'" data-on-click="setMode('spa')">SPA</button>
+                                <button type="button" class="btn btn-sm" data-bind-class="ksMode.value === 'mpa' ? 'btn-primary' : 'btn-outline'" data-on-click="setMode('mpa')">MPA</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" for="djs-ks-name">Project name</label>
+                            <input id="djs-ks-name" class="form-input" maxlength="64" placeholder="my-app" data-model="ksName.value">
+                        </div>
+                        <div>
+                            <label class="form-label" for="djs-ks-theme">Theme</label>
+                            <select id="djs-ks-theme" class="form-select" data-options="themes.value" data-model="ksTheme.value"></select>
+                        </div>
+                        <div>
+                            <label class="form-label">Options</label>
+                            <label class="djs-dl-check"><input type="checkbox" data-model="ksAi.value"> AI files <small class="text-muted">(CLAUDE.md, blueprints)</small></label>
+                            <label class="djs-dl-check"><input type="checkbox" data-model="ksSelector.value"> Theme selector widget</label>
+                        </div>
+                    </div>
+                    <label class="form-label mt-3">Pages</label>
+                    <div class="djs-dl-pages" data-each="ksGroups.value key=group">
+                        <label class="djs-dl-check" data-bind-class="required && 'is-required'">
+                            <input type="checkbox" data-bind-checked="required || on" data-bind-disabled="required" data-on-change="$root.toggleGroup($data)">
+                            <span data-bind-text="label"></span> <small class="text-muted" data-if="required">(always)</small>
+                        </label>
+                    </div>
+                    <div class="djs-dl-actions">
+                        <button type="button" class="btn btn-primary" data-on-click="kickstart" data-bind-disabled="ksBusy.value"><span data-icon="download" data-icon-size="16"></span> Download <span data-bind-text="ksFile.value"></span></button>
+                        <span class="text-muted" role="status" data-bind-text="ksStatus.value"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Core library ─────────────────────────────────────────────── -->
+        <section class="djs-dl-section" id="core-library" aria-labelledby="djs-dl-core">
+            <h2 id="djs-dl-core">Core library</h2>
+            <div class="djs-dl-grid djs-dl-grid--2" data-each="core.value key=file">
+                <div class="card djs-dl-card">
+                    <div class="card-body">
+                        <div class="djs-dl-card-head"><span data-icon="file-code" data-icon-size="28"></span><h3 data-bind-text="file"></h3></div>
+                        <p class="text-muted" data-bind-text="about"></p>
+                        <p class="djs-dl-size" data-bind-text="sizeText"></p>
+                        <a class="btn btn-primary" data-bind-href="url"><span data-icon="download" data-icon-size="16"></span> Download</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Presets ──────────────────────────────────────────────────── -->
+        <section class="djs-dl-section" id="presets" aria-labelledby="djs-dl-presets">
+            <h2 id="djs-dl-presets">Preset packages</h2>
+            <p class="text-muted">Ready-made selections of modules. The package holds the bundle, its CSS, a starter page and a README.</p>
+            <div class="djs-dl-grid djs-dl-grid--4" data-each="presets.value key=key">
+                <div class="card djs-dl-card">
+                    <div class="card-body">
+                        <h3 data-bind-text="name"></h3>
+                        <p class="text-muted" data-bind-text="description"></p>
+                        <p class="djs-dl-modules" data-bind-text="modulesText"></p>
+                        <p class="djs-dl-size" data-bind-text="sizeText"></p>
+                        <div class="djs-dl-buttons">
+                            <a class="btn btn-sm btn-primary" data-if="archiveUrl" data-bind-href="archiveUrl"><span data-icon="package" data-icon-size="16"></span> Package</a>
+                            <a class="btn btn-sm btn-outline" data-if="jsUrl" data-bind-href="jsUrl">.min.js</a>
+                            <button type="button" class="btn btn-sm btn-ghost" data-on-click="$root.startFrom($data)" title="Start the custom builder from this preset">Customise</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── CSS and extras ───────────────────────────────────────────── -->
+        <section class="djs-dl-section" id="css" aria-labelledby="djs-dl-css">
+            <h2 id="djs-dl-css">Styles and extras</h2>
+            <table class="table djs-dl-table">
+                <thead><tr><th>File</th><th>What it is</th><th>Size</th><th></th></tr></thead>
+                <tbody data-each="extras.value key=file">
+                    <tr>
+                        <td><code data-bind-text="file"></code></td>
+                        <td data-bind-text="about"></td>
+                        <td data-bind-text="sizeText"></td>
+                        <td><a class="btn btn-sm btn-outline" data-bind-href="url" data-bind-aria-label="'Download ' + file"><span data-icon="download" data-icon-size="16"></span></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- ── Custom bundle ────────────────────────────────────────────── -->
+        <section class="djs-dl-section" id="custom-bundle" aria-labelledby="djs-dl-custom">
+            <h2 id="djs-dl-custom">Custom bundle</h2>
+            <p class="text-muted">Choose the modules you use; what they need comes with them. We build it for you from the Domma <span data-bind-text="version.value"></span> source - a minified script, an ES module, the CSS it needs and a README.</p>
+            <div class="djs-dl-presets-row">
+                <span class="text-muted">Start from:</span>
+                <span data-each="presets.value key=key"><button type="button" class="btn btn-sm btn-outline" data-on-click="$root.startFrom($data)" data-bind-text="name"></button></span>
+                <button type="button" class="btn btn-sm btn-ghost" data-on-click="clearModules">Clear</button>
+            </div>
+            <div class="djs-dl-modules-grid" data-each="modules.value key=key">
+                <label class="djs-dl-module" data-bind-class="(checked.value || needed.value) && 'is-on'">
+                    <input type="checkbox" data-bind-checked="checked.value || needed.value" data-bind-disabled="needed.value && !checked.value" data-on-change="$root.toggleModule($data)">
+                    <span class="djs-dl-module-text">
+                        <strong data-bind-text="name"></strong>
+                        <small data-bind-text="description"></small>
+                        <small class="djs-dl-needed" data-if="needed.value && !checked.value">needed by your choice</small>
+                    </span>
+                </label>
+            </div>
+            <div class="djs-dl-summary">
+                <div><strong>Modules:</strong> <span data-bind-text="pickedText.value"></span></div>
+                <div><strong>CSS included:</strong> <span data-bind-text="cssText.value"></span></div>
+            </div>
+            <div class="djs-dl-actions">
+                <button type="button" class="btn btn-primary" data-on-click="buildBundle" data-bind-disabled="building.value || !picked.value.length">
+                    <span data-icon="package" data-icon-size="16"></span> <span data-bind-text="building.value ? 'Building…' : 'Build and download'"></span>
+                </button>
+                <span class="text-muted" role="status" data-bind-text="buildStatus.value"></span>
+            </div>
+        </section>
+    </div>
+</div>

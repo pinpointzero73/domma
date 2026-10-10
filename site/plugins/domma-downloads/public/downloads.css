@@ -1,0 +1,53 @@
+/* Domma Downloads - the page's own look (template.html). */
+.djs-downloads { margin: 1.5rem 0 3rem; }
+.djs-dl-version { margin: 0 0 2rem; color: var(--dm-text-secondary); }
+.djs-dl-loading, .djs-dl-problem { padding: 1rem 1.25rem; border: 1px solid var(--dm-border); border-radius: 10px; }
+.djs-dl-problem { border-color: var(--dm-danger); }
+.djs-dl-section { margin: 0 0 3rem; }
+.djs-dl-section > h2 { margin: 0 0 0.5rem; }
+.djs-dl-grid { display: grid; gap: 1.25rem; margin: 1rem 0; }
+.djs-dl-grid--2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.djs-dl-grid--4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.djs-dl-card .card-body { display: flex; flex-direction: column; gap: 0.5rem; height: 100%; }
+.djs-dl-card h3 { margin: 0; font-size: 1.1rem; }
+.djs-dl-card--success { border: 2px solid var(--dm-success); }
+.djs-dl-card--primary { border: 2px solid var(--dm-primary); }
+.djs-dl-card-head { display: flex; align-items: center; gap: 0.6rem; color: var(--dm-primary); }
+.djs-dl-card-head h3 { color: var(--dm-text); }
+.djs-dl-card .btn { align-self: flex-start; margin-top: auto; }
+.djs-dl-command { margin: 0.25rem 0; padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+.djs-dl-size { margin: 0; font-size: 0.85rem; color: var(--dm-text-muted); }
+.djs-dl-modules { margin: 0; font-size: 0.8rem; color: var(--dm-text-secondary); }
+.djs-dl-buttons { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+.djs-dl-buttons .btn { margin-top: 0; }
+.djs-dl-builder { margin-top: 1.5rem; }
+.djs-dl-builder .card-header { display: flex; align-items: center; gap: 0.5rem; }
+.djs-dl-check { display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0; cursor: pointer; }
+.djs-dl-check.is-required { opacity: 0.7; cursor: default; }
+.djs-dl-pages { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.25rem 1rem; }
+.djs-dl-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: 1.25rem; }
+.djs-dl-table code { white-space: nowrap; }
+.djs-dl-presets-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 1rem 0; }
+.djs-dl-modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.6rem; }
+.djs-dl-module {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.6rem;
+    align-items: start;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--dm-border);
+    border-radius: 10px;
+    background: var(--dm-surface-raised);
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+.djs-dl-module.is-on { border-color: var(--dm-primary); }
+.djs-dl-module input { margin-top: 0.2rem; }
+.djs-dl-module-text { display: flex; flex-direction: column; gap: 0.15rem; }
+.djs-dl-module-text small { color: var(--dm-text-secondary); }
+.djs-dl-module-size { font-size: 0.8rem; color: var(--dm-text-muted); white-space: nowrap; }
+.djs-dl-needed { color: var(--dm-primary) !important; font-style: italic; }
+.djs-dl-summary { display: grid; gap: 0.25rem; margin-top: 1.25rem; padding: 0.9rem 1rem; border: 1px solid var(--dm-border); border-radius: 10px; }
+.djs-downloads .btn { display: inline-flex; align-items: center; gap: 0.4rem; }
+.djs-dl-module { grid-template-columns: auto minmax(0, 1fr); }
+.djs-dl-presets-row > span { display: inline-flex; gap: 0.4rem; flex-wrap: wrap; }
