@@ -1,0 +1,2243 @@
+[
+  {
+    "old": "/about/",
+    "new": "/about",
+    "status": 200,
+    "action": "keep",
+    "file": "about/index.html",
+    "title": "About Us - Domma",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/about/index.html",
+    "new": "/about",
+    "status": 301,
+    "action": "keep",
+    "file": "about/index.html",
+    "title": "About Us - Domma",
+    "note": "Prose page"
+  },
+  {
+    "old": "/changelog/",
+    "new": "/changelog",
+    "status": 200,
+    "action": "keep",
+    "file": "changelog/index.html",
+    "title": "What's New - Domma Changelog",
+    "note": "Releases collection (served as is)"
+  },
+  {
+    "old": "/changelog/index.html",
+    "new": "/changelog",
+    "status": 301,
+    "action": "keep",
+    "file": "changelog/index.html",
+    "title": "What's New - Domma Changelog",
+    "note": "Releases collection"
+  },
+  {
+    "old": "/cms/admin-panel/",
+    "new": "https://cms.dommajs.org/features/admin",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/admin-panel/index.html",
+    "title": "Admin Panel - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/admin-panel/index.html",
+    "new": "https://cms.dommajs.org/features/admin",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/admin-panel/index.html",
+    "title": "Admin Panel - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/auth/",
+    "new": "https://cms.dommajs.org/features/users-and-security",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/auth/index.html",
+    "title": "Authentication & Roles - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/auth/index.html",
+    "new": "https://cms.dommajs.org/features/users-and-security",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/auth/index.html",
+    "title": "Authentication & Roles - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/blocks/",
+    "new": "https://cms.dommajs.org/features/components-blocks",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/blocks/index.html",
+    "title": "Blocks - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/blocks/index.html",
+    "new": "https://cms.dommajs.org/features/components-blocks",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/blocks/index.html",
+    "title": "Blocks - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/collections/",
+    "new": "https://cms.dommajs.org/features/collections",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/collections/index.html",
+    "title": "Collections - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/collections/index.html",
+    "new": "https://cms.dommajs.org/features/collections",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/collections/index.html",
+    "title": "Collections - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/configuration/",
+    "new": "https://cms.dommajs.org/features",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/configuration/index.html",
+    "title": "Configuration - Domma CMS",
+    "note": "New page needed on cms.dommajs.org for \"configuration\"; redirect to /features until then"
+  },
+  {
+    "old": "/cms/configuration/index.html",
+    "new": "https://cms.dommajs.org/features",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/configuration/index.html",
+    "title": "Configuration - Domma CMS",
+    "note": "New page needed on cms.dommajs.org for \"configuration\"; redirect to /features until then"
+  },
+  {
+    "old": "/cms/data-pro/",
+    "new": "https://cms.dommajs.org/features/collections",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/data-pro/index.html",
+    "title": "Pro: Views & Actions - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/data-pro/index.html",
+    "new": "https://cms.dommajs.org/features/collections",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/data-pro/index.html",
+    "title": "Pro: Views & Actions - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/forms/",
+    "new": "https://cms.dommajs.org/features/forms",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/forms/index.html",
+    "title": "Forms - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/forms/index.html",
+    "new": "https://cms.dommajs.org/features/forms",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/forms/index.html",
+    "title": "Forms - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/getting-started/",
+    "new": "https://cms.dommajs.org/get-started",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/getting-started/index.html",
+    "title": "Getting Started - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/getting-started/index.html",
+    "new": "https://cms.dommajs.org/get-started",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/getting-started/index.html",
+    "title": "Getting Started - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/",
+    "new": "https://cms.dommajs.org/features",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/index.html",
+    "title": "Domma CMS - Flat-File Content Management",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/index.html",
+    "new": "https://cms.dommajs.org/features",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/index.html",
+    "title": "Domma CMS - Flat-File Content Management",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/media/",
+    "new": "https://cms.dommajs.org/features",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/media/index.html",
+    "title": "Media Management - Domma CMS",
+    "note": "New page needed on cms.dommajs.org for \"media\"; redirect to /features until then"
+  },
+  {
+    "old": "/cms/media/index.html",
+    "new": "https://cms.dommajs.org/features",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/media/index.html",
+    "title": "Media Management - Domma CMS",
+    "note": "New page needed on cms.dommajs.org for \"media\"; redirect to /features until then"
+  },
+  {
+    "old": "/cms/pages/",
+    "new": "https://cms.dommajs.org/features/page-editor",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/pages/index.html",
+    "title": "Pages & Content - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/pages/index.html",
+    "new": "https://cms.dommajs.org/features/page-editor",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/pages/index.html",
+    "title": "Pages & Content - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/plugins/",
+    "new": "https://cms.dommajs.org/plugins",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/plugins/index.html",
+    "title": "Plugins - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/plugins/index.html",
+    "new": "https://cms.dommajs.org/plugins",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/plugins/index.html",
+    "title": "Plugins - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/tutorials/",
+    "new": "https://cms.dommajs.org/tutorials",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/tutorials/index.html",
+    "title": "Tutorials - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cms/tutorials/index.html",
+    "new": "https://cms.dommajs.org/tutorials",
+    "status": 301,
+    "action": "merge",
+    "file": "cms/tutorials/index.html",
+    "title": "Tutorials - Domma CMS",
+    "note": "Merge into the existing page there"
+  },
+  {
+    "old": "/cookie-policy/",
+    "new": "/cookie-policy",
+    "status": 200,
+    "action": "keep",
+    "file": "cookie-policy/index.html",
+    "title": "Cookie Policy - Domma",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/cookie-policy/index.html",
+    "new": "/cookie-policy",
+    "status": 301,
+    "action": "keep",
+    "file": "cookie-policy/index.html",
+    "title": "Cookie Policy - Domma",
+    "note": "Prose page"
+  },
+  {
+    "old": "/download/",
+    "new": "/download",
+    "status": 200,
+    "action": "keep",
+    "file": "download/index.html",
+    "title": "Download - Domma",
+    "note": "Page; the builders become plugin files (served as is)"
+  },
+  {
+    "old": "/download/index.html",
+    "new": "/download",
+    "status": 301,
+    "action": "keep",
+    "file": "download/index.html",
+    "title": "Download - Domma",
+    "note": "Page; the builders become plugin files"
+  },
+  {
+    "old": "/examples/calculator/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/calculator/index.html",
+    "title": "Calculator - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/calculator/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/calculator/index.html",
+    "title": "Calculator - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/calculator/template.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/calculator/template.html",
+    "title": "",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/celebrations/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/celebrations/index.html",
+    "title": "Domma Celebrations - Demo & Testing",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/celebrations/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/celebrations/index.html",
+    "title": "Domma Celebrations - Demo & Testing",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/contacts/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/contacts/index.html",
+    "title": "Contact Management - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/contacts/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/contacts/index.html",
+    "title": "Contact Management - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/contacts/template.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/contacts/template.html",
+    "title": "",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/gallery/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/gallery/index.html",
+    "title": "Image Gallery - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/gallery/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/gallery/index.html",
+    "title": "Image Gallery - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/index.html",
+    "title": "Examples - Domma",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/index.html",
+    "title": "Examples - Domma",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/markdown/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/markdown/index.html",
+    "title": "Markdown Editor - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/markdown/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/markdown/index.html",
+    "title": "Markdown Editor - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/markdown/template.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/markdown/template.html",
+    "title": "",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/notes/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/notes/index.html",
+    "title": "Notes - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/notes/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/notes/index.html",
+    "title": "Notes - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/notes/template.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/notes/template.html",
+    "title": "",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/todo/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/todo/index.html",
+    "title": "To-Do List - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/todo/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/todo/index.html",
+    "title": "To-Do List - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/todo/template.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/todo/template.html",
+    "title": "",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/weather/",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/weather/index.html",
+    "title": "Weather App - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/examples/weather/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "drop",
+    "file": "examples/weather/index.html",
+    "title": "Weather App - Domma Examples",
+    "note": "Examples dropped - the showcase covers the same ground"
+  },
+  {
+    "old": "/faq/",
+    "new": "/faq",
+    "status": 200,
+    "action": "keep",
+    "file": "faq/index.html",
+    "title": "FAQs - Domma",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/faq/index.html",
+    "new": "/faq",
+    "status": 301,
+    "action": "keep",
+    "file": "faq/index.html",
+    "title": "FAQs - Domma",
+    "note": "Prose page"
+  },
+  {
+    "old": "/",
+    "new": "/",
+    "status": 200,
+    "action": "keep",
+    "file": "index.html",
+    "title": "DommaJS - Dynamic Object Manipulation & Modeling API",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/index.html",
+    "new": "/",
+    "status": 301,
+    "action": "keep",
+    "file": "index.html",
+    "title": "DommaJS - Dynamic Object Manipulation & Modeling API",
+    "note": "Prose page"
+  },
+  {
+    "old": "/miniapps/docs/",
+    "new": "https://cms.dommajs.org/tools/docs",
+    "status": 301,
+    "action": "drop",
+    "file": "miniapps/docs/index.html",
+    "title": "Domma Docs - Document Editor",
+    "note": "Domma Docs lives on Domma CMS"
+  },
+  {
+    "old": "/miniapps/docs/index.html",
+    "new": "https://cms.dommajs.org/tools/docs",
+    "status": 301,
+    "action": "drop",
+    "file": "miniapps/docs/index.html",
+    "title": "Domma Docs - Document Editor",
+    "note": "Domma Docs lives on Domma CMS"
+  },
+  {
+    "old": "/miniapps/docs/test.html",
+    "new": "",
+    "status": 410,
+    "action": "drop",
+    "file": "miniapps/docs/test.html",
+    "title": "Docs Test",
+    "note": "Test page"
+  },
+  {
+    "old": "/miniapps/",
+    "new": "https://cms.dommajs.org/tools",
+    "status": 301,
+    "action": "drop",
+    "file": "miniapps/index.html",
+    "title": "MiniApps - Domma Framework",
+    "note": "Mini-apps live on Domma CMS"
+  },
+  {
+    "old": "/miniapps/index.html",
+    "new": "https://cms.dommajs.org/tools",
+    "status": 301,
+    "action": "drop",
+    "file": "miniapps/index.html",
+    "title": "MiniApps - Domma Framework",
+    "note": "Mini-apps live on Domma CMS"
+  },
+  {
+    "old": "/privacy-policy/",
+    "new": "/privacy-policy",
+    "status": 200,
+    "action": "keep",
+    "file": "privacy-policy/index.html",
+    "title": "Privacy Policy - Domma",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/privacy-policy/index.html",
+    "new": "/privacy-policy",
+    "status": 301,
+    "action": "keep",
+    "file": "privacy-policy/index.html",
+    "title": "Privacy Policy - Domma",
+    "note": "Prose page"
+  },
+  {
+    "old": "/quickstart/",
+    "new": "/quickstart",
+    "status": 200,
+    "action": "keep",
+    "file": "quickstart/index.html",
+    "title": "Domma QuickStart - Up and Running in 30 Seconds",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/quickstart/index.html",
+    "new": "/quickstart",
+    "status": 301,
+    "action": "keep",
+    "file": "quickstart/index.html",
+    "title": "Domma QuickStart - Up and Running in 30 Seconds",
+    "note": "Prose page"
+  },
+  {
+    "old": "/quickstart/mpa/",
+    "new": "/quickstart/mpa",
+    "status": 200,
+    "action": "keep",
+    "file": "quickstart/mpa/index.html",
+    "title": "MPA QuickStart - Domma Multi-Page Application Guide",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/quickstart/mpa/index.html",
+    "new": "/quickstart/mpa",
+    "status": 301,
+    "action": "keep",
+    "file": "quickstart/mpa/index.html",
+    "title": "MPA QuickStart - Domma Multi-Page Application Guide",
+    "note": "Prose page"
+  },
+  {
+    "old": "/quickstart/spa/",
+    "new": "/quickstart/spa",
+    "status": 200,
+    "action": "keep",
+    "file": "quickstart/spa/index.html",
+    "title": "SPA QuickStart - Domma Single Page Application Guide",
+    "note": "Prose page (served as is)"
+  },
+  {
+    "old": "/quickstart/spa/index.html",
+    "new": "/quickstart/spa",
+    "status": 301,
+    "action": "keep",
+    "file": "quickstart/spa/index.html",
+    "title": "SPA QuickStart - Domma Single Page Application Guide",
+    "note": "Prose page"
+  },
+  {
+    "old": "/showcase/blueprints/",
+    "new": "/showcase/blueprints",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/blueprints/index.html",
+    "title": "Blueprints - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/blueprints/index.html",
+    "new": "/showcase/blueprints",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/blueprints/index.html",
+    "title": "Blueprints - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/components/",
+    "new": "/showcase/components",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/components/index.html",
+    "title": "Components - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/components/index.html",
+    "new": "/showcase/components",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/components/index.html",
+    "title": "Components - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/config/all-components.html",
+    "new": "/showcase/config/all-components",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/config/all-components.html",
+    "title": "All Config Engine Components - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/config/",
+    "new": "/showcase/config",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/config/index.html",
+    "title": "Config Engine - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/config/index.html",
+    "new": "/showcase/config",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/config/index.html",
+    "title": "Config Engine - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/css-utilities/accessibility-text/",
+    "new": "/showcase/css-utilities/accessibility-text",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/css-utilities/accessibility-text/index.html",
+    "title": "CSS Utilities - Accessibility & Text - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/css-utilities/accessibility-text/index.html",
+    "new": "/showcase/css-utilities/accessibility-text",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/css-utilities/accessibility-text/index.html",
+    "title": "CSS Utilities - Accessibility & Text - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/css-utilities/",
+    "new": "/showcase/css-utilities",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/css-utilities/index.html",
+    "title": "CSS Utilities - Opacity & Translucency - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/css-utilities/index.html",
+    "new": "/showcase/css-utilities",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/css-utilities/index.html",
+    "title": "CSS Utilities - Opacity & Translucency - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/dates/",
+    "new": "/showcase/dates",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/dates/index.html",
+    "title": "Dates - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/dates/index.html",
+    "new": "/showcase/dates",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/dates/index.html",
+    "title": "Dates - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/dom/",
+    "new": "/showcase/dom",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/dom/index.html",
+    "title": "DOM - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/dom/index.html",
+    "new": "/showcase/dom",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/dom/index.html",
+    "title": "DOM - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/ambient.html",
+    "new": "/showcase/effects/ambient",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/ambient.html",
+    "title": "Ambient Background Effects - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/animations.html",
+    "new": "/showcase/effects/animations",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/animations.html",
+    "title": "Animations - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/breathe.html",
+    "new": "/showcase/effects/breathe",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/breathe.html",
+    "title": "Breathe Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/butterflies.html",
+    "new": "/showcase/effects/butterflies",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/butterflies.html",
+    "title": "Butterflies Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/counter.html",
+    "new": "/showcase/effects/counter",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/counter.html",
+    "title": "Counter Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/filters.html",
+    "new": "/showcase/effects/filters",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/filters.html",
+    "title": "Filters - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/fireworks.html",
+    "new": "/showcase/effects/fireworks",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/fireworks.html",
+    "title": "Fireworks Effects - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/glow.html",
+    "new": "/showcase/effects/glow",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/glow.html",
+    "title": "Glow Effects - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/gradients.html",
+    "new": "/showcase/effects/gradients",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/gradients.html",
+    "title": "Gradients - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/",
+    "new": "/showcase/effects",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/effects/index.html",
+    "title": "Effects - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/effects/index.html",
+    "new": "/showcase/effects",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/index.html",
+    "title": "Effects - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/javascript.html",
+    "new": "/showcase/effects/javascript",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/javascript.html",
+    "title": "JavaScript Effects - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/pulse.html",
+    "new": "/showcase/effects/pulse",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/pulse.html",
+    "title": "Pulse Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/reveal.html",
+    "new": "/showcase/effects/reveal",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/reveal.html",
+    "title": "Reveal Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/ripple.html",
+    "new": "/showcase/effects/ripple",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/ripple.html",
+    "title": "Ripple Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/scramble.html",
+    "new": "/showcase/effects/scramble",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/scramble.html",
+    "title": "Scramble Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/scribe.html",
+    "new": "/showcase/effects/scribe",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/scribe.html",
+    "title": "Scribe Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/shadows.html",
+    "new": "/showcase/effects/shadows",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/shadows.html",
+    "title": "Shadow Effects - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/shake.html",
+    "new": "/showcase/effects/shake",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/shake.html",
+    "title": "Shake Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/strobe.html",
+    "new": "/showcase/effects/strobe",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/strobe.html",
+    "title": "Strobe Lighting Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/ticker-tape.html",
+    "new": "/showcase/effects/ticker-tape",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/ticker-tape.html",
+    "title": "Ticker Tape Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/effects/twinkle.html",
+    "new": "/showcase/effects/twinkle",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/effects/twinkle.html",
+    "title": "Twinkle Effect - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/accordion/",
+    "new": "/showcase/elements/accordion",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/accordion/index.html",
+    "title": "Accordion - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/accordion/index.html",
+    "new": "/showcase/elements/accordion",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/accordion/index.html",
+    "title": "Accordion - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/alarm/",
+    "new": "/showcase/elements/alarm",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/alarm/index.html",
+    "title": "Alarm - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/alarm/index.html",
+    "new": "/showcase/elements/alarm",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/alarm/index.html",
+    "title": "Alarm - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/autocomplete/",
+    "new": "/showcase/elements/autocomplete",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/autocomplete/index.html",
+    "title": "Autocomplete - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/autocomplete/index.html",
+    "new": "/showcase/elements/autocomplete",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/autocomplete/index.html",
+    "title": "Autocomplete - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/avatar/",
+    "new": "/showcase/elements/avatar",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/avatar/index.html",
+    "title": "Avatar - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/avatar/index.html",
+    "new": "/showcase/elements/avatar",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/avatar/index.html",
+    "title": "Avatar - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/back-to-top/",
+    "new": "/showcase/elements/back-to-top",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/back-to-top/index.html",
+    "title": "Back to Top - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/back-to-top/index.html",
+    "new": "/showcase/elements/back-to-top",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/back-to-top/index.html",
+    "title": "Back to Top - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/badge/",
+    "new": "/showcase/elements/badge",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/badge/index.html",
+    "title": "Badge - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/badge/index.html",
+    "new": "/showcase/elements/badge",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/badge/index.html",
+    "title": "Badge - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/breadcrumbs/",
+    "new": "/showcase/elements/breadcrumbs",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/breadcrumbs/index.html",
+    "title": "Breadcrumbs - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/breadcrumbs/index.html",
+    "new": "/showcase/elements/breadcrumbs",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/breadcrumbs/index.html",
+    "title": "Breadcrumbs - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/button-group/",
+    "new": "/showcase/elements/button-group",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/button-group/index.html",
+    "title": "Button Group - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/button-group/index.html",
+    "new": "/showcase/elements/button-group",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/button-group/index.html",
+    "title": "Button Group - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/card/",
+    "new": "/showcase/elements/card",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/card/index.html",
+    "title": "Card - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/card/index.html",
+    "new": "/showcase/elements/card",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/card/index.html",
+    "title": "Card - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/carousel/",
+    "new": "/showcase/elements/carousel",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/carousel/index.html",
+    "title": "Carousel - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/carousel/index.html",
+    "new": "/showcase/elements/carousel",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/carousel/index.html",
+    "title": "Carousel - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/chooser/",
+    "new": "/showcase/elements/chooser",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/chooser/index.html",
+    "title": "Chooser - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/chooser/index.html",
+    "new": "/showcase/elements/chooser",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/chooser/index.html",
+    "title": "Chooser - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/context-menu/",
+    "new": "/showcase/elements/context-menu",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/context-menu/index.html",
+    "title": "Context Menu - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/context-menu/index.html",
+    "new": "/showcase/elements/context-menu",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/context-menu/index.html",
+    "title": "Context Menu - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/cookie-consent/",
+    "new": "/showcase/elements/cookie-consent",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/cookie-consent/index.html",
+    "title": "Cookie Consent - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/cookie-consent/index.html",
+    "new": "/showcase/elements/cookie-consent",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/cookie-consent/index.html",
+    "title": "Cookie Consent - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/css-customisation/",
+    "new": "/showcase/elements/css-customisation",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/css-customisation/index.html",
+    "title": "CSS Customisation Cheat-Sheet - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/css-customisation/index.html",
+    "new": "/showcase/elements/css-customisation",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/css-customisation/index.html",
+    "title": "CSS Customisation Cheat-Sheet - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/dialog/",
+    "new": "/showcase/elements/dialog",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/dialog/index.html",
+    "title": "Dialog - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/dialog/index.html",
+    "new": "/showcase/elements/dialog",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/dialog/index.html",
+    "title": "Dialog - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/dropdown/",
+    "new": "/showcase/elements/dropdown",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/dropdown/index.html",
+    "title": "Dropdown - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/dropdown/index.html",
+    "new": "/showcase/elements/dropdown",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/dropdown/index.html",
+    "title": "Dropdown - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/editor/",
+    "new": "/showcase/elements/editor",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/editor/index.html",
+    "title": "Editor - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/editor/index.html",
+    "new": "/showcase/elements/editor",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/editor/index.html",
+    "title": "Editor - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/forms/",
+    "new": "/showcase/elements/forms",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/forms/index.html",
+    "title": "Forms - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/forms/index.html",
+    "new": "/showcase/elements/forms",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/forms/index.html",
+    "title": "Forms - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/hero/",
+    "new": "/showcase/elements/hero",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/hero/index.html",
+    "title": "Hero - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/hero/index.html",
+    "new": "/showcase/elements/hero",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/hero/index.html",
+    "title": "Hero - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/",
+    "new": "/showcase/elements",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/index.html",
+    "title": "Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/index.html",
+    "new": "/showcase/elements",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/index.html",
+    "title": "Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/list-group/",
+    "new": "/showcase/elements/list-group",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/list-group/index.html",
+    "title": "List Group - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/list-group/index.html",
+    "new": "/showcase/elements/list-group",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/list-group/index.html",
+    "title": "List Group - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/loader/",
+    "new": "/showcase/elements/loader",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/loader/index.html",
+    "title": "Loader - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/loader/index.html",
+    "new": "/showcase/elements/loader",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/loader/index.html",
+    "title": "Loader - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/modal/",
+    "new": "/showcase/elements/modal",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/modal/index.html",
+    "title": "Modal - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/modal/index.html",
+    "new": "/showcase/elements/modal",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/modal/index.html",
+    "title": "Modal - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/navbar/",
+    "new": "/showcase/elements/navbar",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/navbar/index.html",
+    "title": "Navbar - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/navbar/index.html",
+    "new": "/showcase/elements/navbar",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/navbar/index.html",
+    "title": "Navbar - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/notification/",
+    "new": "/showcase/elements/notification",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/notification/index.html",
+    "title": "DesktopNotification - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/notification/index.html",
+    "new": "/showcase/elements/notification",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/notification/index.html",
+    "title": "DesktopNotification - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/number-badge/",
+    "new": "/showcase/elements/number-badge",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/number-badge/index.html",
+    "title": "Number Badge - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/number-badge/index.html",
+    "new": "/showcase/elements/number-badge",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/number-badge/index.html",
+    "title": "Number Badge - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/pillbox/",
+    "new": "/showcase/elements/pillbox",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/pillbox/index.html",
+    "title": "Pillbox - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/pillbox/index.html",
+    "new": "/showcase/elements/pillbox",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/pillbox/index.html",
+    "title": "Pillbox - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/popover/",
+    "new": "/showcase/elements/popover",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/popover/index.html",
+    "title": "Popover - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/popover/index.html",
+    "new": "/showcase/elements/popover",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/popover/index.html",
+    "title": "Popover - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/progression/",
+    "new": "/showcase/elements/progression",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/progression/index.html",
+    "title": "Progression - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/progression/index.html",
+    "new": "/showcase/elements/progression",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/progression/index.html",
+    "title": "Progression - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/signature/",
+    "new": "/showcase/elements/signature",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/signature/index.html",
+    "title": "Signature - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/signature/index.html",
+    "new": "/showcase/elements/signature",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/signature/index.html",
+    "title": "Signature - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/skeleton/",
+    "new": "/showcase/elements/skeleton",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/skeleton/index.html",
+    "title": "Skeleton - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/skeleton/index.html",
+    "new": "/showcase/elements/skeleton",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/skeleton/index.html",
+    "title": "Skeleton - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/slideover/",
+    "new": "/showcase/elements/slideover",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/slideover/index.html",
+    "title": "Slideover - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/slideover/index.html",
+    "new": "/showcase/elements/slideover",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/slideover/index.html",
+    "title": "Slideover - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/sortable/",
+    "new": "/showcase/elements/sortable",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/sortable/index.html",
+    "title": "Sortable - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/sortable/index.html",
+    "new": "/showcase/elements/sortable",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/sortable/index.html",
+    "title": "Sortable - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/tabs/",
+    "new": "/showcase/elements/tabs",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/tabs/index.html",
+    "title": "Tabs - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/tabs/index.html",
+    "new": "/showcase/elements/tabs",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/tabs/index.html",
+    "title": "Tabs - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/timeline/",
+    "new": "/showcase/elements/timeline",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/timeline/index.html",
+    "title": "Timeline Component - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/timeline/index.html",
+    "new": "/showcase/elements/timeline",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/timeline/index.html",
+    "title": "Timeline Component - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/timer/",
+    "new": "/showcase/elements/timer",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/timer/index.html",
+    "title": "Timer - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/timer/index.html",
+    "new": "/showcase/elements/timer",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/timer/index.html",
+    "title": "Timer - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/toast/",
+    "new": "/showcase/elements/toast",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/toast/index.html",
+    "title": "Toast - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/toast/index.html",
+    "new": "/showcase/elements/toast",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/toast/index.html",
+    "title": "Toast - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/tooltip/",
+    "new": "/showcase/elements/tooltip",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/tooltip/index.html",
+    "title": "Tooltip - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/tooltip/index.html",
+    "new": "/showcase/elements/tooltip",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/tooltip/index.html",
+    "title": "Tooltip - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/treeview/",
+    "new": "/showcase/elements/treeview",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/treeview/index.html",
+    "title": "TreeView - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/treeview/index.html",
+    "new": "/showcase/elements/treeview",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/treeview/index.html",
+    "title": "TreeView - Domma Elements",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/flags/",
+    "new": "/showcase/flags",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/flags/index.html",
+    "title": "Flags - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/flags/index.html",
+    "new": "/showcase/flags",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/flags/index.html",
+    "title": "Flags - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/footer/",
+    "new": "/showcase/footer",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/footer/index.html",
+    "title": "Footer - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/footer/index.html",
+    "new": "/showcase/footer",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/footer/index.html",
+    "title": "Footer - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/forms/",
+    "new": "/showcase/forms",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/forms/index.html",
+    "title": "Forms - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/forms/index.html",
+    "new": "/showcase/forms",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/forms/index.html",
+    "title": "Forms - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/forms/input-addons.html",
+    "new": "/showcase/forms/input-addons",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/forms/input-addons.html",
+    "title": "Input Addons - Domma Forms",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/grid/",
+    "new": "/showcase/grid",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/grid/index.html",
+    "title": "Grid System - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/grid/index.html",
+    "new": "/showcase/grid",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/grid/index.html",
+    "title": "Grid System - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/http/",
+    "new": "/showcase/http",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/http/index.html",
+    "title": "HTTP - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/http/index.html",
+    "new": "/showcase/http",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/http/index.html",
+    "title": "HTTP - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/icons/",
+    "new": "/showcase/icons",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/icons/index.html",
+    "title": "Icons - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/icons/index.html",
+    "new": "/showcase/icons",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/icons/index.html",
+    "title": "Icons - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/",
+    "new": "/showcase",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/index.html",
+    "title": "Domma Showcase - Lightweight JavaScript Framework",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/index.html",
+    "new": "/showcase",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/index.html",
+    "title": "Domma Showcase - Lightweight JavaScript Framework",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/integrations/",
+    "new": "/showcase/integrations",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/integrations/index.html",
+    "title": "Integrations - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/integrations/index.html",
+    "new": "/showcase/integrations",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/integrations/index.html",
+    "title": "Integrations - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/models/bindings.html",
+    "new": "/showcase/models/bindings",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/models/bindings.html",
+    "title": "Template Bindings - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/models/dot-notation.html",
+    "new": "/showcase/models/dot-notation",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/models/dot-notation.html",
+    "title": "Dot Notation with Models - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/models/",
+    "new": "/showcase/models",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/models/index.html",
+    "title": "Models - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/models/index.html",
+    "new": "/showcase/models",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/models/index.html",
+    "title": "Models - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/models/reactivity.html",
+    "new": "/showcase/models/reactivity",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/models/reactivity.html",
+    "title": "Reactivity - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/page-roller/",
+    "new": "/showcase/page-roller",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/page-roller/index.html",
+    "title": "Page Roller - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/page-roller/index.html",
+    "new": "/showcase/page-roller",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/page-roller/index.html",
+    "title": "Page Roller - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/print-to-pdf/",
+    "new": "/showcase/print-to-pdf",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/print-to-pdf/index.html",
+    "title": "Print-to-PDF Tool - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/print-to-pdf/index.html",
+    "new": "/showcase/print-to-pdf",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/print-to-pdf/index.html",
+    "title": "Print-to-PDF Tool - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/reference/",
+    "new": "/showcase/reference",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/reference/index.html",
+    "title": "Domma Reference - Cheat Sheet",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/reference/index.html",
+    "new": "/showcase/reference",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/reference/index.html",
+    "title": "Domma Reference - Cheat Sheet",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/router/",
+    "new": "/showcase/router",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/router/index.html",
+    "title": "Router - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/router/index.html",
+    "new": "/showcase/router",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/router/index.html",
+    "title": "Router - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/schema-builder/",
+    "new": "/showcase/schema-builder",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/schema-builder/index.html",
+    "title": "Schema Builder - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/schema-builder/index.html",
+    "new": "/showcase/schema-builder",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/schema-builder/index.html",
+    "title": "Schema Builder - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/sidebar/",
+    "new": "/showcase/sidebar",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/sidebar/index.html",
+    "title": "Sidebar - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/sidebar/index.html",
+    "new": "/showcase/sidebar",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/sidebar/index.html",
+    "title": "Sidebar - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/storage/",
+    "new": "/showcase/storage",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/storage/index.html",
+    "title": "Storage - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/storage/index.html",
+    "new": "/showcase/storage",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/storage/index.html",
+    "title": "Storage - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/tables/",
+    "new": "/showcase/tables",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/tables/index.html",
+    "title": "Tables - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/tables/index.html",
+    "new": "/showcase/tables",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/tables/index.html",
+    "title": "Tables - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/theme-roller/",
+    "new": "/showcase/theme-roller",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/theme-roller/index.html",
+    "title": "Theme Roller - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/theme-roller/index.html",
+    "new": "/showcase/theme-roller",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/theme-roller/index.html",
+    "title": "Theme Roller - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/themes/",
+    "new": "/showcase/themes",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/themes/index.html",
+    "title": "Themes - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/themes/index.html",
+    "new": "/showcase/themes",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/themes/index.html",
+    "title": "Themes - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/utils/",
+    "new": "/showcase/utils",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/utils/index.html",
+    "title": "Utils - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/utils/index.html",
+    "new": "/showcase/utils",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/utils/index.html",
+    "title": "Utils - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/blog/",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Blog - its posts came from the removed API"
+  },
+  {
+    "old": "/blog/index.html",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Blog - its posts came from the removed API"
+  },
+  {
+    "old": "/feedback/",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Feedback form - posted to the removed API"
+  },
+  {
+    "old": "/feedback/index.html",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Feedback form - posted to the removed API"
+  },
+  {
+    "old": "/login/",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Sign-in - the removed API"
+  },
+  {
+    "old": "/login/index.html",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Sign-in - the removed API"
+  },
+  {
+    "old": "/admin/",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Admin area - the removed API"
+  },
+  {
+    "old": "/admin/index.html",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Admin area - the removed API"
+  },
+  {
+    "old": "/api/",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Address Lookup API docs"
+  },
+  {
+    "old": "/api/index.html",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Address Lookup API docs"
+  },
+  {
+    "old": "/miniapps/address/",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Address Lookup app"
+  },
+  {
+    "old": "/miniapps/address/index.html",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Address Lookup app"
+  },
+  {
+    "old": "/miniapps/nexus/",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Nexus app (never launched)"
+  },
+  {
+    "old": "/miniapps/nexus/index.html",
+    "new": "",
+    "status": 410,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "Nexus app (never launched)"
+  },
+  {
+    "old": "/miniapps/garage/",
+    "new": "https://cms.dommajs.org/tools/garage",
+    "status": 301,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "My Garage - lives on as a Domma CMS Tool"
+  },
+  {
+    "old": "/miniapps/garage/index.html",
+    "new": "https://cms.dommajs.org/tools/garage",
+    "status": 301,
+    "action": "removed",
+    "file": "",
+    "title": "",
+    "note": "My Garage - lives on as a Domma CMS Tool"
+  }
+]

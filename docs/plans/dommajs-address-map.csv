@@ -1,0 +1,250 @@
+old,new,status,action,title,file,note
+/about/,/about,200,keep,About Us - Domma,about/index.html,Prose page (served as is)
+/about/index.html,/about,301,keep,About Us - Domma,about/index.html,Prose page
+/changelog/,/changelog,200,keep,What's New - Domma Changelog,changelog/index.html,Releases collection (served as is)
+/changelog/index.html,/changelog,301,keep,What's New - Domma Changelog,changelog/index.html,Releases collection
+/cms/admin-panel/,https://cms.dommajs.org/features/admin,301,merge,Admin Panel - Domma CMS,cms/admin-panel/index.html,Merge into the existing page there
+/cms/admin-panel/index.html,https://cms.dommajs.org/features/admin,301,merge,Admin Panel - Domma CMS,cms/admin-panel/index.html,Merge into the existing page there
+/cms/auth/,https://cms.dommajs.org/features/users-and-security,301,merge,Authentication & Roles - Domma CMS,cms/auth/index.html,Merge into the existing page there
+/cms/auth/index.html,https://cms.dommajs.org/features/users-and-security,301,merge,Authentication & Roles - Domma CMS,cms/auth/index.html,Merge into the existing page there
+/cms/blocks/,https://cms.dommajs.org/features/components-blocks,301,merge,Blocks - Domma CMS,cms/blocks/index.html,Merge into the existing page there
+/cms/blocks/index.html,https://cms.dommajs.org/features/components-blocks,301,merge,Blocks - Domma CMS,cms/blocks/index.html,Merge into the existing page there
+/cms/collections/,https://cms.dommajs.org/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
+/cms/collections/index.html,https://cms.dommajs.org/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
+/cms/configuration/,https://cms.dommajs.org/features,301,merge,Configuration - Domma CMS,cms/configuration/index.html,"New page needed on cms.dommajs.org for ""configuration""; redirect to /features until then"
+/cms/configuration/index.html,https://cms.dommajs.org/features,301,merge,Configuration - Domma CMS,cms/configuration/index.html,"New page needed on cms.dommajs.org for ""configuration""; redirect to /features until then"
+/cms/data-pro/,https://cms.dommajs.org/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
+/cms/data-pro/index.html,https://cms.dommajs.org/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
+/cms/forms/,https://cms.dommajs.org/features/forms,301,merge,Forms - Domma CMS,cms/forms/index.html,Merge into the existing page there
+/cms/forms/index.html,https://cms.dommajs.org/features/forms,301,merge,Forms - Domma CMS,cms/forms/index.html,Merge into the existing page there
+/cms/getting-started/,https://cms.dommajs.org/get-started,301,merge,Getting Started - Domma CMS,cms/getting-started/index.html,Merge into the existing page there
+/cms/getting-started/index.html,https://cms.dommajs.org/get-started,301,merge,Getting Started - Domma CMS,cms/getting-started/index.html,Merge into the existing page there
+/cms/,https://cms.dommajs.org/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
+/cms/index.html,https://cms.dommajs.org/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
+/cms/media/,https://cms.dommajs.org/features,301,merge,Media Management - Domma CMS,cms/media/index.html,"New page needed on cms.dommajs.org for ""media""; redirect to /features until then"
+/cms/media/index.html,https://cms.dommajs.org/features,301,merge,Media Management - Domma CMS,cms/media/index.html,"New page needed on cms.dommajs.org for ""media""; redirect to /features until then"
+/cms/pages/,https://cms.dommajs.org/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
+/cms/pages/index.html,https://cms.dommajs.org/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
+/cms/plugins/,https://cms.dommajs.org/plugins,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
+/cms/plugins/index.html,https://cms.dommajs.org/plugins,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
+/cms/tutorials/,https://cms.dommajs.org/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
+/cms/tutorials/index.html,https://cms.dommajs.org/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
+/cookie-policy/,/cookie-policy,200,keep,Cookie Policy - Domma,cookie-policy/index.html,Prose page (served as is)
+/cookie-policy/index.html,/cookie-policy,301,keep,Cookie Policy - Domma,cookie-policy/index.html,Prose page
+/download/,/download,200,keep,Download - Domma,download/index.html,Page; the builders become plugin files (served as is)
+/download/index.html,/download,301,keep,Download - Domma,download/index.html,Page; the builders become plugin files
+/examples/calculator/,/showcase,301,drop,Calculator - Domma Examples,examples/calculator/index.html,Examples dropped - the showcase covers the same ground
+/examples/calculator/index.html,/showcase,301,drop,Calculator - Domma Examples,examples/calculator/index.html,Examples dropped - the showcase covers the same ground
+/examples/calculator/template.html,/showcase,301,drop,,examples/calculator/template.html,Examples dropped - the showcase covers the same ground
+/examples/celebrations/,/showcase,301,drop,Domma Celebrations - Demo & Testing,examples/celebrations/index.html,Examples dropped - the showcase covers the same ground
+/examples/celebrations/index.html,/showcase,301,drop,Domma Celebrations - Demo & Testing,examples/celebrations/index.html,Examples dropped - the showcase covers the same ground
+/examples/contacts/,/showcase,301,drop,Contact Management - Domma Examples,examples/contacts/index.html,Examples dropped - the showcase covers the same ground
+/examples/contacts/index.html,/showcase,301,drop,Contact Management - Domma Examples,examples/contacts/index.html,Examples dropped - the showcase covers the same ground
+/examples/contacts/template.html,/showcase,301,drop,,examples/contacts/template.html,Examples dropped - the showcase covers the same ground
+/examples/gallery/,/showcase,301,drop,Image Gallery - Domma Examples,examples/gallery/index.html,Examples dropped - the showcase covers the same ground
+/examples/gallery/index.html,/showcase,301,drop,Image Gallery - Domma Examples,examples/gallery/index.html,Examples dropped - the showcase covers the same ground
+/examples/,/showcase,301,drop,Examples - Domma,examples/index.html,Examples dropped - the showcase covers the same ground
+/examples/index.html,/showcase,301,drop,Examples - Domma,examples/index.html,Examples dropped - the showcase covers the same ground
+/examples/markdown/,/showcase,301,drop,Markdown Editor - Domma Examples,examples/markdown/index.html,Examples dropped - the showcase covers the same ground
+/examples/markdown/index.html,/showcase,301,drop,Markdown Editor - Domma Examples,examples/markdown/index.html,Examples dropped - the showcase covers the same ground
+/examples/markdown/template.html,/showcase,301,drop,,examples/markdown/template.html,Examples dropped - the showcase covers the same ground
+/examples/notes/,/showcase,301,drop,Notes - Domma Examples,examples/notes/index.html,Examples dropped - the showcase covers the same ground
+/examples/notes/index.html,/showcase,301,drop,Notes - Domma Examples,examples/notes/index.html,Examples dropped - the showcase covers the same ground
+/examples/notes/template.html,/showcase,301,drop,,examples/notes/template.html,Examples dropped - the showcase covers the same ground
+/examples/todo/,/showcase,301,drop,To-Do List - Domma Examples,examples/todo/index.html,Examples dropped - the showcase covers the same ground
+/examples/todo/index.html,/showcase,301,drop,To-Do List - Domma Examples,examples/todo/index.html,Examples dropped - the showcase covers the same ground
+/examples/todo/template.html,/showcase,301,drop,,examples/todo/template.html,Examples dropped - the showcase covers the same ground
+/examples/weather/,/showcase,301,drop,Weather App - Domma Examples,examples/weather/index.html,Examples dropped - the showcase covers the same ground
+/examples/weather/index.html,/showcase,301,drop,Weather App - Domma Examples,examples/weather/index.html,Examples dropped - the showcase covers the same ground
+/faq/,/faq,200,keep,FAQs - Domma,faq/index.html,Prose page (served as is)
+/faq/index.html,/faq,301,keep,FAQs - Domma,faq/index.html,Prose page
+/,/,200,keep,DommaJS - Dynamic Object Manipulation & Modeling API,index.html,Prose page (served as is)
+/index.html,/,301,keep,DommaJS - Dynamic Object Manipulation & Modeling API,index.html,Prose page
+/miniapps/docs/,https://cms.dommajs.org/tools/docs,301,drop,Domma Docs - Document Editor,miniapps/docs/index.html,Domma Docs lives on Domma CMS
+/miniapps/docs/index.html,https://cms.dommajs.org/tools/docs,301,drop,Domma Docs - Document Editor,miniapps/docs/index.html,Domma Docs lives on Domma CMS
+/miniapps/docs/test.html,,410,drop,Docs Test,miniapps/docs/test.html,Test page
+/miniapps/,https://cms.dommajs.org/tools,301,drop,MiniApps - Domma Framework,miniapps/index.html,Mini-apps live on Domma CMS
+/miniapps/index.html,https://cms.dommajs.org/tools,301,drop,MiniApps - Domma Framework,miniapps/index.html,Mini-apps live on Domma CMS
+/privacy-policy/,/privacy-policy,200,keep,Privacy Policy - Domma,privacy-policy/index.html,Prose page (served as is)
+/privacy-policy/index.html,/privacy-policy,301,keep,Privacy Policy - Domma,privacy-policy/index.html,Prose page
+/quickstart/,/quickstart,200,keep,Domma QuickStart - Up and Running in 30 Seconds,quickstart/index.html,Prose page (served as is)
+/quickstart/index.html,/quickstart,301,keep,Domma QuickStart - Up and Running in 30 Seconds,quickstart/index.html,Prose page
+/quickstart/mpa/,/quickstart/mpa,200,keep,MPA QuickStart - Domma Multi-Page Application Guide,quickstart/mpa/index.html,Prose page (served as is)
+/quickstart/mpa/index.html,/quickstart/mpa,301,keep,MPA QuickStart - Domma Multi-Page Application Guide,quickstart/mpa/index.html,Prose page
+/quickstart/spa/,/quickstart/spa,200,keep,SPA QuickStart - Domma Single Page Application Guide,quickstart/spa/index.html,Prose page (served as is)
+/quickstart/spa/index.html,/quickstart/spa,301,keep,SPA QuickStart - Domma Single Page Application Guide,quickstart/spa/index.html,Prose page
+/showcase/blueprints/,/showcase/blueprints,200,keep,Blueprints - Domma Showcase,showcase/blueprints/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/blueprints/index.html,/showcase/blueprints,301,keep,Blueprints - Domma Showcase,showcase/blueprints/index.html,Showcase: prose + [showcase-demo]
+/showcase/components/,/showcase/components,200,keep,Components - Domma Showcase,showcase/components/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/components/index.html,/showcase/components,301,keep,Components - Domma Showcase,showcase/components/index.html,Showcase: prose + [showcase-demo]
+/showcase/config/all-components.html,/showcase/config/all-components,301,keep,All Config Engine Components - Domma Showcase,showcase/config/all-components.html,Showcase: prose + [showcase-demo]
+/showcase/config/,/showcase/config,200,keep,Config Engine - Domma Showcase,showcase/config/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/config/index.html,/showcase/config,301,keep,Config Engine - Domma Showcase,showcase/config/index.html,Showcase: prose + [showcase-demo]
+/showcase/css-utilities/accessibility-text/,/showcase/css-utilities/accessibility-text,200,keep,CSS Utilities - Accessibility & Text - Domma Showcase,showcase/css-utilities/accessibility-text/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/css-utilities/accessibility-text/index.html,/showcase/css-utilities/accessibility-text,301,keep,CSS Utilities - Accessibility & Text - Domma Showcase,showcase/css-utilities/accessibility-text/index.html,Showcase: prose + [showcase-demo]
+/showcase/css-utilities/,/showcase/css-utilities,200,keep,CSS Utilities - Opacity & Translucency - Domma Showcase,showcase/css-utilities/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/css-utilities/index.html,/showcase/css-utilities,301,keep,CSS Utilities - Opacity & Translucency - Domma Showcase,showcase/css-utilities/index.html,Showcase: prose + [showcase-demo]
+/showcase/dates/,/showcase/dates,200,keep,Dates - Domma Showcase,showcase/dates/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/dates/index.html,/showcase/dates,301,keep,Dates - Domma Showcase,showcase/dates/index.html,Showcase: prose + [showcase-demo]
+/showcase/dom/,/showcase/dom,200,keep,DOM - Domma Showcase,showcase/dom/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/dom/index.html,/showcase/dom,301,keep,DOM - Domma Showcase,showcase/dom/index.html,Showcase: prose + [showcase-demo]
+/showcase/effects/ambient.html,/showcase/effects/ambient,301,keep,Ambient Background Effects - Domma Showcase,showcase/effects/ambient.html,Showcase: prose + [showcase-demo]
+/showcase/effects/animations.html,/showcase/effects/animations,301,keep,Animations - Domma Showcase,showcase/effects/animations.html,Showcase: prose + [showcase-demo]
+/showcase/effects/breathe.html,/showcase/effects/breathe,301,keep,Breathe Effect - Domma Showcase,showcase/effects/breathe.html,Showcase: prose + [showcase-demo]
+/showcase/effects/butterflies.html,/showcase/effects/butterflies,301,keep,Butterflies Effect - Domma Showcase,showcase/effects/butterflies.html,Showcase: prose + [showcase-demo]
+/showcase/effects/counter.html,/showcase/effects/counter,301,keep,Counter Effect - Domma Showcase,showcase/effects/counter.html,Showcase: prose + [showcase-demo]
+/showcase/effects/filters.html,/showcase/effects/filters,301,keep,Filters - Domma Showcase,showcase/effects/filters.html,Showcase: prose + [showcase-demo]
+/showcase/effects/fireworks.html,/showcase/effects/fireworks,301,keep,Fireworks Effects - Domma Showcase,showcase/effects/fireworks.html,Showcase: prose + [showcase-demo]
+/showcase/effects/glow.html,/showcase/effects/glow,301,keep,Glow Effects - Domma Showcase,showcase/effects/glow.html,Showcase: prose + [showcase-demo]
+/showcase/effects/gradients.html,/showcase/effects/gradients,301,keep,Gradients - Domma Showcase,showcase/effects/gradients.html,Showcase: prose + [showcase-demo]
+/showcase/effects/,/showcase/effects,200,keep,Effects - Domma Showcase,showcase/effects/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/effects/index.html,/showcase/effects,301,keep,Effects - Domma Showcase,showcase/effects/index.html,Showcase: prose + [showcase-demo]
+/showcase/effects/javascript.html,/showcase/effects/javascript,301,keep,JavaScript Effects - Domma Showcase,showcase/effects/javascript.html,Showcase: prose + [showcase-demo]
+/showcase/effects/pulse.html,/showcase/effects/pulse,301,keep,Pulse Effect - Domma Showcase,showcase/effects/pulse.html,Showcase: prose + [showcase-demo]
+/showcase/effects/reveal.html,/showcase/effects/reveal,301,keep,Reveal Effect - Domma Showcase,showcase/effects/reveal.html,Showcase: prose + [showcase-demo]
+/showcase/effects/ripple.html,/showcase/effects/ripple,301,keep,Ripple Effect - Domma Showcase,showcase/effects/ripple.html,Showcase: prose + [showcase-demo]
+/showcase/effects/scramble.html,/showcase/effects/scramble,301,keep,Scramble Effect - Domma Showcase,showcase/effects/scramble.html,Showcase: prose + [showcase-demo]
+/showcase/effects/scribe.html,/showcase/effects/scribe,301,keep,Scribe Effect - Domma Showcase,showcase/effects/scribe.html,Showcase: prose + [showcase-demo]
+/showcase/effects/shadows.html,/showcase/effects/shadows,301,keep,Shadow Effects - Domma Showcase,showcase/effects/shadows.html,Showcase: prose + [showcase-demo]
+/showcase/effects/shake.html,/showcase/effects/shake,301,keep,Shake Effect - Domma Showcase,showcase/effects/shake.html,Showcase: prose + [showcase-demo]
+/showcase/effects/strobe.html,/showcase/effects/strobe,301,keep,Strobe Lighting Effect - Domma Showcase,showcase/effects/strobe.html,Showcase: prose + [showcase-demo]
+/showcase/effects/ticker-tape.html,/showcase/effects/ticker-tape,301,keep,Ticker Tape Effect - Domma Showcase,showcase/effects/ticker-tape.html,Showcase: prose + [showcase-demo]
+/showcase/effects/twinkle.html,/showcase/effects/twinkle,301,keep,Twinkle Effect - Domma Showcase,showcase/effects/twinkle.html,Showcase: prose + [showcase-demo]
+/showcase/elements/accordion/,/showcase/elements/accordion,200,keep,Accordion - Elements - Domma Showcase,showcase/elements/accordion/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/accordion/index.html,/showcase/elements/accordion,301,keep,Accordion - Elements - Domma Showcase,showcase/elements/accordion/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/alarm/,/showcase/elements/alarm,200,keep,Alarm - Domma Elements,showcase/elements/alarm/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/alarm/index.html,/showcase/elements/alarm,301,keep,Alarm - Domma Elements,showcase/elements/alarm/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/autocomplete/,/showcase/elements/autocomplete,200,keep,Autocomplete - Elements - Domma Showcase,showcase/elements/autocomplete/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/autocomplete/index.html,/showcase/elements/autocomplete,301,keep,Autocomplete - Elements - Domma Showcase,showcase/elements/autocomplete/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/avatar/,/showcase/elements/avatar,200,keep,Avatar - Elements - Domma Showcase,showcase/elements/avatar/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/avatar/index.html,/showcase/elements/avatar,301,keep,Avatar - Elements - Domma Showcase,showcase/elements/avatar/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/back-to-top/,/showcase/elements/back-to-top,200,keep,Back to Top - Elements - Domma Showcase,showcase/elements/back-to-top/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/back-to-top/index.html,/showcase/elements/back-to-top,301,keep,Back to Top - Elements - Domma Showcase,showcase/elements/back-to-top/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/badge/,/showcase/elements/badge,200,keep,Badge - Elements - Domma Showcase,showcase/elements/badge/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/badge/index.html,/showcase/elements/badge,301,keep,Badge - Elements - Domma Showcase,showcase/elements/badge/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/breadcrumbs/,/showcase/elements/breadcrumbs,200,keep,Breadcrumbs - Elements - Domma Showcase,showcase/elements/breadcrumbs/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/breadcrumbs/index.html,/showcase/elements/breadcrumbs,301,keep,Breadcrumbs - Elements - Domma Showcase,showcase/elements/breadcrumbs/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/button-group/,/showcase/elements/button-group,200,keep,Button Group - Elements - Domma Showcase,showcase/elements/button-group/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/button-group/index.html,/showcase/elements/button-group,301,keep,Button Group - Elements - Domma Showcase,showcase/elements/button-group/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/card/,/showcase/elements/card,200,keep,Card - Domma Elements,showcase/elements/card/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/card/index.html,/showcase/elements/card,301,keep,Card - Domma Elements,showcase/elements/card/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/carousel/,/showcase/elements/carousel,200,keep,Carousel - Elements - Domma Showcase,showcase/elements/carousel/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/carousel/index.html,/showcase/elements/carousel,301,keep,Carousel - Elements - Domma Showcase,showcase/elements/carousel/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/chooser/,/showcase/elements/chooser,200,keep,Chooser - Elements - Domma Showcase,showcase/elements/chooser/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/chooser/index.html,/showcase/elements/chooser,301,keep,Chooser - Elements - Domma Showcase,showcase/elements/chooser/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/context-menu/,/showcase/elements/context-menu,200,keep,Context Menu - Elements - Domma Showcase,showcase/elements/context-menu/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/context-menu/index.html,/showcase/elements/context-menu,301,keep,Context Menu - Elements - Domma Showcase,showcase/elements/context-menu/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/cookie-consent/,/showcase/elements/cookie-consent,200,keep,Cookie Consent - Domma Elements,showcase/elements/cookie-consent/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/cookie-consent/index.html,/showcase/elements/cookie-consent,301,keep,Cookie Consent - Domma Elements,showcase/elements/cookie-consent/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/css-customisation/,/showcase/elements/css-customisation,200,keep,CSS Customisation Cheat-Sheet - Domma Elements,showcase/elements/css-customisation/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/css-customisation/index.html,/showcase/elements/css-customisation,301,keep,CSS Customisation Cheat-Sheet - Domma Elements,showcase/elements/css-customisation/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/dialog/,/showcase/elements/dialog,200,keep,Dialog - Elements - Domma Showcase,showcase/elements/dialog/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/dialog/index.html,/showcase/elements/dialog,301,keep,Dialog - Elements - Domma Showcase,showcase/elements/dialog/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/dropdown/,/showcase/elements/dropdown,200,keep,Dropdown - Elements - Domma Showcase,showcase/elements/dropdown/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/dropdown/index.html,/showcase/elements/dropdown,301,keep,Dropdown - Elements - Domma Showcase,showcase/elements/dropdown/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/editor/,/showcase/elements/editor,200,keep,Editor - Domma Showcase,showcase/elements/editor/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/editor/index.html,/showcase/elements/editor,301,keep,Editor - Domma Showcase,showcase/elements/editor/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/forms/,/showcase/elements/forms,200,keep,Forms - Elements - Domma Showcase,showcase/elements/forms/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/forms/index.html,/showcase/elements/forms,301,keep,Forms - Elements - Domma Showcase,showcase/elements/forms/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/hero/,/showcase/elements/hero,200,keep,Hero - Elements - Domma Showcase,showcase/elements/hero/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/hero/index.html,/showcase/elements/hero,301,keep,Hero - Elements - Domma Showcase,showcase/elements/hero/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/,/showcase/elements,200,keep,Elements - Domma Showcase,showcase/elements/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/index.html,/showcase/elements,301,keep,Elements - Domma Showcase,showcase/elements/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/list-group/,/showcase/elements/list-group,200,keep,List Group - Elements - Domma Showcase,showcase/elements/list-group/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/list-group/index.html,/showcase/elements/list-group,301,keep,List Group - Elements - Domma Showcase,showcase/elements/list-group/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/loader/,/showcase/elements/loader,200,keep,Loader - Elements - Domma Showcase,showcase/elements/loader/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/loader/index.html,/showcase/elements/loader,301,keep,Loader - Elements - Domma Showcase,showcase/elements/loader/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/modal/,/showcase/elements/modal,200,keep,Modal - Domma Elements,showcase/elements/modal/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/modal/index.html,/showcase/elements/modal,301,keep,Modal - Domma Elements,showcase/elements/modal/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/navbar/,/showcase/elements/navbar,200,keep,Navbar - Elements - Domma Showcase,showcase/elements/navbar/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/navbar/index.html,/showcase/elements/navbar,301,keep,Navbar - Elements - Domma Showcase,showcase/elements/navbar/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/notification/,/showcase/elements/notification,200,keep,DesktopNotification - Domma Elements,showcase/elements/notification/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/notification/index.html,/showcase/elements/notification,301,keep,DesktopNotification - Domma Elements,showcase/elements/notification/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/number-badge/,/showcase/elements/number-badge,200,keep,Number Badge - Elements - Domma Showcase,showcase/elements/number-badge/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/number-badge/index.html,/showcase/elements/number-badge,301,keep,Number Badge - Elements - Domma Showcase,showcase/elements/number-badge/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/pillbox/,/showcase/elements/pillbox,200,keep,Pillbox - Elements - Domma Showcase,showcase/elements/pillbox/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/pillbox/index.html,/showcase/elements/pillbox,301,keep,Pillbox - Elements - Domma Showcase,showcase/elements/pillbox/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/popover/,/showcase/elements/popover,200,keep,Popover - Elements - Domma Showcase,showcase/elements/popover/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/popover/index.html,/showcase/elements/popover,301,keep,Popover - Elements - Domma Showcase,showcase/elements/popover/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/progression/,/showcase/elements/progression,200,keep,Progression - Elements - Domma Showcase,showcase/elements/progression/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/progression/index.html,/showcase/elements/progression,301,keep,Progression - Elements - Domma Showcase,showcase/elements/progression/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/signature/,/showcase/elements/signature,200,keep,Signature - Elements - Domma Showcase,showcase/elements/signature/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/signature/index.html,/showcase/elements/signature,301,keep,Signature - Elements - Domma Showcase,showcase/elements/signature/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/skeleton/,/showcase/elements/skeleton,200,keep,Skeleton - Elements - Domma Showcase,showcase/elements/skeleton/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/skeleton/index.html,/showcase/elements/skeleton,301,keep,Skeleton - Elements - Domma Showcase,showcase/elements/skeleton/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/slideover/,/showcase/elements/slideover,200,keep,Slideover - Domma Elements,showcase/elements/slideover/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/slideover/index.html,/showcase/elements/slideover,301,keep,Slideover - Domma Elements,showcase/elements/slideover/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/sortable/,/showcase/elements/sortable,200,keep,Sortable - Elements - Domma Showcase,showcase/elements/sortable/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/sortable/index.html,/showcase/elements/sortable,301,keep,Sortable - Elements - Domma Showcase,showcase/elements/sortable/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/tabs/,/showcase/elements/tabs,200,keep,Tabs - Domma Elements,showcase/elements/tabs/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/tabs/index.html,/showcase/elements/tabs,301,keep,Tabs - Domma Elements,showcase/elements/tabs/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/timeline/,/showcase/elements/timeline,200,keep,Timeline Component - Domma Showcase,showcase/elements/timeline/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/timeline/index.html,/showcase/elements/timeline,301,keep,Timeline Component - Domma Showcase,showcase/elements/timeline/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/timer/,/showcase/elements/timer,200,keep,Timer - Domma Elements,showcase/elements/timer/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/timer/index.html,/showcase/elements/timer,301,keep,Timer - Domma Elements,showcase/elements/timer/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/toast/,/showcase/elements/toast,200,keep,Toast - Elements - Domma Showcase,showcase/elements/toast/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/toast/index.html,/showcase/elements/toast,301,keep,Toast - Elements - Domma Showcase,showcase/elements/toast/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/tooltip/,/showcase/elements/tooltip,200,keep,Tooltip - Elements - Domma Showcase,showcase/elements/tooltip/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/tooltip/index.html,/showcase/elements/tooltip,301,keep,Tooltip - Elements - Domma Showcase,showcase/elements/tooltip/index.html,Showcase: prose + [showcase-demo]
+/showcase/elements/treeview/,/showcase/elements/treeview,200,keep,TreeView - Domma Elements,showcase/elements/treeview/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/elements/treeview/index.html,/showcase/elements/treeview,301,keep,TreeView - Domma Elements,showcase/elements/treeview/index.html,Showcase: prose + [showcase-demo]
+/showcase/flags/,/showcase/flags,200,keep,Flags - Domma Showcase,showcase/flags/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/flags/index.html,/showcase/flags,301,keep,Flags - Domma Showcase,showcase/flags/index.html,Showcase: prose + [showcase-demo]
+/showcase/footer/,/showcase/footer,200,keep,Footer - Domma Showcase,showcase/footer/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/footer/index.html,/showcase/footer,301,keep,Footer - Domma Showcase,showcase/footer/index.html,Showcase: prose + [showcase-demo]
+/showcase/forms/,/showcase/forms,200,keep,Forms - Domma Showcase,showcase/forms/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/forms/index.html,/showcase/forms,301,keep,Forms - Domma Showcase,showcase/forms/index.html,Showcase: prose + [showcase-demo]
+/showcase/forms/input-addons.html,/showcase/forms/input-addons,301,keep,Input Addons - Domma Forms,showcase/forms/input-addons.html,Showcase: prose + [showcase-demo]
+/showcase/grid/,/showcase/grid,200,keep,Grid System - Domma Showcase,showcase/grid/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/grid/index.html,/showcase/grid,301,keep,Grid System - Domma Showcase,showcase/grid/index.html,Showcase: prose + [showcase-demo]
+/showcase/http/,/showcase/http,200,keep,HTTP - Domma Showcase,showcase/http/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/http/index.html,/showcase/http,301,keep,HTTP - Domma Showcase,showcase/http/index.html,Showcase: prose + [showcase-demo]
+/showcase/icons/,/showcase/icons,200,keep,Icons - Domma Showcase,showcase/icons/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/icons/index.html,/showcase/icons,301,keep,Icons - Domma Showcase,showcase/icons/index.html,Showcase: prose + [showcase-demo]
+/showcase/,/showcase,200,keep,Domma Showcase - Lightweight JavaScript Framework,showcase/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/index.html,/showcase,301,keep,Domma Showcase - Lightweight JavaScript Framework,showcase/index.html,Showcase: prose + [showcase-demo]
+/showcase/integrations/,/showcase/integrations,200,keep,Integrations - Domma Showcase,showcase/integrations/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/integrations/index.html,/showcase/integrations,301,keep,Integrations - Domma Showcase,showcase/integrations/index.html,Showcase: prose + [showcase-demo]
+/showcase/models/bindings.html,/showcase/models/bindings,301,keep,Template Bindings - Domma Showcase,showcase/models/bindings.html,Showcase: prose + [showcase-demo]
+/showcase/models/dot-notation.html,/showcase/models/dot-notation,301,keep,Dot Notation with Models - Domma Showcase,showcase/models/dot-notation.html,Showcase: prose + [showcase-demo]
+/showcase/models/,/showcase/models,200,keep,Models - Domma Showcase,showcase/models/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/models/index.html,/showcase/models,301,keep,Models - Domma Showcase,showcase/models/index.html,Showcase: prose + [showcase-demo]
+/showcase/models/reactivity.html,/showcase/models/reactivity,301,keep,Reactivity - Domma Showcase,showcase/models/reactivity.html,Showcase: prose + [showcase-demo]
+/showcase/page-roller/,/showcase/page-roller,200,keep,Page Roller - Domma Showcase,showcase/page-roller/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/page-roller/index.html,/showcase/page-roller,301,keep,Page Roller - Domma Showcase,showcase/page-roller/index.html,Showcase: prose + [showcase-demo]
+/showcase/print-to-pdf/,/showcase/print-to-pdf,200,keep,Print-to-PDF Tool - Domma Showcase,showcase/print-to-pdf/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/print-to-pdf/index.html,/showcase/print-to-pdf,301,keep,Print-to-PDF Tool - Domma Showcase,showcase/print-to-pdf/index.html,Showcase: prose + [showcase-demo]
+/showcase/reference/,/showcase/reference,200,keep,Domma Reference - Cheat Sheet,showcase/reference/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/reference/index.html,/showcase/reference,301,keep,Domma Reference - Cheat Sheet,showcase/reference/index.html,Showcase: prose + [showcase-demo]
+/showcase/router/,/showcase/router,200,keep,Router - Domma Showcase,showcase/router/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/router/index.html,/showcase/router,301,keep,Router - Domma Showcase,showcase/router/index.html,Showcase: prose + [showcase-demo]
+/showcase/schema-builder/,/showcase/schema-builder,200,keep,Schema Builder - Domma Showcase,showcase/schema-builder/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/schema-builder/index.html,/showcase/schema-builder,301,keep,Schema Builder - Domma Showcase,showcase/schema-builder/index.html,Showcase: prose + [showcase-demo]
+/showcase/sidebar/,/showcase/sidebar,200,keep,Sidebar - Domma Showcase,showcase/sidebar/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/sidebar/index.html,/showcase/sidebar,301,keep,Sidebar - Domma Showcase,showcase/sidebar/index.html,Showcase: prose + [showcase-demo]
+/showcase/storage/,/showcase/storage,200,keep,Storage - Domma Showcase,showcase/storage/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/storage/index.html,/showcase/storage,301,keep,Storage - Domma Showcase,showcase/storage/index.html,Showcase: prose + [showcase-demo]
+/showcase/tables/,/showcase/tables,200,keep,Tables - Domma Showcase,showcase/tables/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/tables/index.html,/showcase/tables,301,keep,Tables - Domma Showcase,showcase/tables/index.html,Showcase: prose + [showcase-demo]
+/showcase/theme-roller/,/showcase/theme-roller,200,keep,Theme Roller - Domma Showcase,showcase/theme-roller/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/theme-roller/index.html,/showcase/theme-roller,301,keep,Theme Roller - Domma Showcase,showcase/theme-roller/index.html,Showcase: prose + [showcase-demo]
+/showcase/themes/,/showcase/themes,200,keep,Themes - Domma Showcase,showcase/themes/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/themes/index.html,/showcase/themes,301,keep,Themes - Domma Showcase,showcase/themes/index.html,Showcase: prose + [showcase-demo]
+/showcase/utils/,/showcase/utils,200,keep,Utils - Domma Showcase,showcase/utils/index.html,Showcase: prose + [showcase-demo] (served as is)
+/showcase/utils/index.html,/showcase/utils,301,keep,Utils - Domma Showcase,showcase/utils/index.html,Showcase: prose + [showcase-demo]
+/blog/,,410,removed,,,Blog - its posts came from the removed API
+/blog/index.html,,410,removed,,,Blog - its posts came from the removed API
+/feedback/,,410,removed,,,Feedback form - posted to the removed API
+/feedback/index.html,,410,removed,,,Feedback form - posted to the removed API
+/login/,,410,removed,,,Sign-in - the removed API
+/login/index.html,,410,removed,,,Sign-in - the removed API
+/admin/,,410,removed,,,Admin area - the removed API
+/admin/index.html,,410,removed,,,Admin area - the removed API
+/api/,,410,removed,,,Address Lookup API docs
+/api/index.html,,410,removed,,,Address Lookup API docs
+/miniapps/address/,,410,removed,,,Address Lookup app
+/miniapps/address/index.html,,410,removed,,,Address Lookup app
+/miniapps/nexus/,,410,removed,,,Nexus app (never launched)
+/miniapps/nexus/index.html,,410,removed,,,Nexus app (never launched)
+/miniapps/garage/,https://cms.dommajs.org/tools/garage,301,removed,,,My Garage - lives on as a Domma CMS Tool
+/miniapps/garage/index.html,https://cms.dommajs.org/tools/garage,301,removed,,,My Garage - lives on as a Domma CMS Tool

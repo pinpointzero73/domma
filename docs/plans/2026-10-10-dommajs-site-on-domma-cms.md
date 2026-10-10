@@ -23,7 +23,7 @@ what the CMS already does, and the site itself becomes the best demonstration of
 | Section | Pages | Notes |
 |---|---|---|
 | Home, about, FAQ, quickstart (3), privacy, cookies, changelog | ~9 | Prose and marketing. Changelog renders `data/releases.json`. |
-| Showcase | 67 | Each page: prose + ~20 live demos (`.demo-area`) each followed by its code (`.code-block`). The heart of the site. |
+| Showcase | 92 | Each page: prose + ~20 live demos (`.demo-area`) each followed by its code (`.code-block`). The heart of the site. |
 | CMS docs | 13 | Domma CMS documentation - belongs on cms.dommajs.org. |
 | Download | 10 | Bundle builder and kickstart builder (small JS apps) plus the files they hand out. |
 | Data | - | `releases.json`, `features.json`, `carousel-slides.json`, `search-index.json`. |
@@ -46,7 +46,7 @@ what the CMS already does, and the site itself becomes the best demonstration of
 
 ## The showcase: how a demo works
 
-The 67 showcase pages hold about 1,300 demos. Each needs three things to survive the move: the markup, the
+The 92 showcase pages hold about 1,300 demos. Each needs three things to survive the move: the markup, the
 behaviour, and the code shown beside it - and the code shown must be the code that runs.
 
 **A `domma-showcase` plugin** (in this repo's site, not the marketplace) owns the demos:
@@ -75,7 +75,7 @@ the HTML, writes prose sections to Markdown, and for each `.demo-area` + followi
 a demo folder and a `[showcase-demo]` line. Inline `<script>` blocks and `onclick` attributes are moved into
 `demo.js` and flagged in a report for hand conversion to bindings. It runs on 3 pilot pages first
 (`elements/card`, `elements/tabs`, `models` - static, interactive and reactive), is reviewed side by side
-with the live page, then runs on the rest.
+with the live page, then runs on the rest (all 92).
 
 ## Order of work
 
@@ -84,6 +84,16 @@ Each phase ends with a check before the next starts.
 0. **Inventory and address map.** A script lists every page, its new address, and anything dropped.
    Old addresses (`/showcase/elements/card/index.html` and `/showcase/elements/card/`) map to new ones
    (`/showcase/elements/card`). *Check: every current page has a row.*
+
+   **Done 2026-10-10.** `node scripts/site-migrate/address-map.mjs --check` writes
+   `docs/plans/dommajs-address-map.csv` (for review) and `.json` (for the phase 7 import):
+   132 pages and 249 old addresses - 102 pages kept, 13 merged into cms.dommajs.org, 17 dropped
+   (examples, mini-apps); 157 addresses need a 301, 15 are gone (410), 77 need nothing because
+   Domma CMS serves `/a/b/` as `/a/b` (and a rule between them would point at itself). Every
+   sitemap address has a row. Two CMS docs pages, *Configuration* and *Media*, have no page on
+   cms.dommajs.org yet - phase 6 writes them; until then they redirect to `/features`. The
+   showcase is 92 pages, not 67: the 25 single pages under `effects/`, `models/`, `forms/` and
+   `config/` count too. My Garage redirects to its Domma CMS Tool page.
 1. **The site.** Create `dommajs-site` in the fleet on dcm, previewed at **next.dommajs.org**. Theme to
    match the current look; navbar, footer and showcase menus; Showcase project. *Check: the skeleton
    renders on desktop and mobile.*
