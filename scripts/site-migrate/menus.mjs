@@ -135,13 +135,16 @@ void navPublic;
 // Home first: the rail has no brand link of its own to click.
 navShowcase.items = [{text: 'Home', url: '/', icon: 'home'}, ...navShowcase.items, {type: 'theme-switcher'}];
 const menus = [
-    menu('main', 'Main navigation', 'The old site\'s navbar (nav-showcase.json), as dropdowns', navShowcase.items, {variant: 'dark', position: 'sticky', orientation: 'vertical', side: 'right'}),
+    menu('main', 'Main navigation', 'The old site\'s navbar (nav-showcase.json), as dropdowns', navShowcase.items, {variant: 'dark', position: 'static', orientation: 'vertical', side: 'right', highlight: {hover: 'darken', active: 'darken'}}),
     menu('footer', 'Footer', 'From footer-landing.json', footerGroups),
 ];
 
 // Celebrations was one of the dropped examples; it is a showcase page now, under Effects.
 const effectsMenu = menus[0].items.find(i => i.text === 'Effects');
 if (effectsMenu && !effectsMenu.items.some(i => i.text === 'Celebrations')) effectsMenu.items.push({text: 'Celebrations', url: '/showcase/effects/celebrations'});
+// ...and its own entry straight after Effects as well.
+const effectsAt = menus[0].items.indexOf(effectsMenu);
+if (effectsAt >= 0 && !menus[0].items.some(i => i.text === 'Celebrations')) menus[0].items.splice(effectsAt + 1, 0, {text: 'Celebrations', url: '/showcase/effects/celebrations'});
 addIcons(menus[0].items);
 
 fs.mkdirSync(OUT, {recursive: true});
