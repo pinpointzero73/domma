@@ -7,7 +7,7 @@ export function mount(root) {
     const cartBadge = $(root).find('#cart-badge');
     const addToCartBtn = $(root).find('#add-to-cart-btn');
     const notificationsContainer = $(root).find('#event-notifications');
-    M.subscribe('cart:updated', (data) => {
+    const unsubscribe = M.subscribe('cart:updated', (data) => {
             cartBadge.text(data.count);
 
             // Show notification
@@ -25,4 +25,6 @@ export function mount(root) {
             cartCount++;
             M.publish('cart:updated', { count: cartCount });
         });
+
+    return unsubscribe;
 }

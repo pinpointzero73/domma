@@ -27,8 +27,6 @@ export function mount(root) {
     $(root).find('#pause-5').on('click', () => { if (ctrl5) { ctrl5.pause(); setStatus(badge5, 'paused'); } });
     $(root).find('#resume-5').on('click', () => { if (ctrl5) { ctrl5.resume(); setStatus(badge5, 'running'); } });
     $(root).find('#destroy-5').on('click', () => { if (ctrl5) { ctrl5.destroy(); ctrl5 = null; setStatus(badge5, 'stopped'); } });
-        // ── Cleanup full-page on navigation ─────────────────────────────────
-    $(window).on('beforeunload', () => {
-          if (ctrl5) ctrl5.destroy();
-        });
+    // The full-page effect goes with the demo: stopped when it is reset or left.
+    return () => { if (ctrl5) ctrl5.destroy(); };
 }

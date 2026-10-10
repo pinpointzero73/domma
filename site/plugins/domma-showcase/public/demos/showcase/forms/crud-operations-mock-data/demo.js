@@ -108,7 +108,7 @@ export function mount(root) {
               logToOutput('#crud-output', 'CRUD table initialized with ' + mockUsers.length + ' users');
             }
             // CRUD Event Handlers
-    $('.crud-add-btn').on('click', () => {
+    $(root).find('.crud-add-btn').on('click', () => {
               try {
                 const modal = Domma.forms.modal(userBlueprint, {}, {
                   title: 'Add New User',
@@ -127,14 +127,14 @@ export function mount(root) {
                 logToOutput('#crud-output', 'Add user error: ' + error.message);
               }
             });
-    $('.crud-refresh-btn').on('click', () => {
+    $(root).find('.crud-refresh-btn').on('click', () => {
               if (crudTable) {
                 crudTable.setData([...mockUsers]);
                 logToOutput('#crud-output', 'Table refreshed');
               }
             });
-            // Event delegation for edit/delete buttons
-    $(document).on('click', '.crud-edit-btn', function () {
+            // Event delegation for edit/delete buttons, on the demo (it goes when the demo resets)
+    $(root).on('click', '.crud-edit-btn', function () {
               const userId = parseInt($(this).attr('data-id'));
               const user = mockUsers.find(u => u.id === userId);
               if (user) {
@@ -159,7 +159,7 @@ export function mount(root) {
                 }
               }
             });
-    $(document).on('click', '.crud-delete-btn', async function () {
+    $(root).on('click', '.crud-delete-btn', async function () {
               const userId = parseInt($(this).attr('data-id'));
               const user = mockUsers.find(u => u.id === userId);
               if (user) {

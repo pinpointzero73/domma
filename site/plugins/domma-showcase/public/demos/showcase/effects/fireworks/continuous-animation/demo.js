@@ -241,4 +241,6 @@ export function mount(root) {
     $(root).find('[data-action="2"]').on('click', function (event) {
         stopContinuousDisplay();
     });
+
+    return () => clearInterval(continuousInterval);
 }

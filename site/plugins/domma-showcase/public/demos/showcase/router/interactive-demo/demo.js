@@ -92,20 +92,21 @@ export function mount(root) {
         transitions: { duration: 250 }
       });
       // Log router events
-    M.subscribe('router:ready', () => {
+    const subscriptions = [];
+    subscriptions.push(M.subscribe('router:ready', () => {
         addLog('🚀 Router initialised');
-      });
-    M.subscribe('router:beforeChange', ({ from, to }) => {
+      }));
+    subscriptions.push(M.subscribe('router:beforeChange', ({ from, to }) => {
         const fromPath = from?.path || 'none';
         addLog(`🧭 Navigating: ${fromPath} → ${to.path}`);
-      });
-    M.subscribe('router:afterChange', ({ to }) => {
+      }));
+    subscriptions.push(M.subscribe('router:afterChange', ({ to }) => {
         addLog(`📍 Navigation complete: ${to.path}`);
 
         // Update active nav links
         $('.demo-nav-link').removeClass('active');
         $(`.demo-nav-link[href="#${to.path}"]`).addClass('active');
-      });
+      }));
       // History navigation buttons
     $(root).find('#demo-back').on('click', () => {
         addLog('⬅️ Back button clicked');
@@ -117,4 +118,6 @@ export function mount(root) {
       });
       // Initial log
     addLog('📄 Page loaded - router ready');
+
+    return () => subscriptions.forEach(off => off());
 }

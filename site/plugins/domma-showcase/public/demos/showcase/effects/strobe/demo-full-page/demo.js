@@ -24,8 +24,6 @@ export function mount(root) {
           setStatus(badge3, 'running');
         });
     $(root).find('#stop-3').on('click', () => { if (ctrl3) { ctrl3.stop(); ctrl3 = null; setStatus(badge3, 'stopped'); } });
-        // ── Cleanup full-page on navigation ─────────────────────────────────
-    $(window).on('beforeunload', () => {
-          if (ctrl3) ctrl3.destroy();
-        });
+    // The full-page effect goes with the demo: stopped when it is reset or left.
+    return () => { if (ctrl3) ctrl3.destroy(); };
 }

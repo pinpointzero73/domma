@@ -238,4 +238,6 @@ export function mount(root) {
     $(root).find('[data-action="3"]').on('click', function (event) {
         launchMultipleFireworks('firework-demo-3', 'newyear', 10);
     });
+
+    return () => clearInterval(continuousInterval);
 }

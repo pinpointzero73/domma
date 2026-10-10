@@ -215,7 +215,8 @@ export function mount(root) {
           onOpen: () => {
             // Update status every 500ms
             const interval = setInterval(() => {
-              const statusEl = $(root).find('#is-open-status')[0];
+              // The slideover sits at the end of the page, not inside the demo.
+              const statusEl = $('#is-open-status').get(0);
               if (statusEl && currentSlideover) {
                 statusEl.textContent = currentSlideover.isOpen() ? 'true ✅' : 'false ❌';
               } else {
@@ -226,4 +227,6 @@ export function mount(root) {
         });
         currentSlideover.open();
       }
+
+    return () => currentSlideover?.close?.();
 }

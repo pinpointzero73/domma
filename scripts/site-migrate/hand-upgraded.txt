@@ -15,3 +15,15 @@ showcase/elements/loader/wrapper-api-backwards-compatible
 # Never written: their pages were hand-edited to prose.
 showcase/elements/card/related-elements
 showcase/elements/tabs/related-elements
+# Teardowns and fixes by hand (2026-10-10)
+showcase/config/all-components/supported-16-alarm
+showcase/config/all-components/supported-9-backtotop
+showcase/effects/fireworks/continuous-animation
+showcase/effects/fireworks/multiple-display
+showcase/elements/slideover/event-callbacks
+showcase/integrations/subscribers
+showcase/router/interactive-demo
+showcase/effects/ticker-tape/demo-full-page-overlay
+showcase/effects/strobe/demo-full-page
+showcase/effects/butterflies/demo-full-page-overlay
+showcase/forms/crud-operations-mock-data
