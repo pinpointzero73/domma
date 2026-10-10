@@ -94,9 +94,22 @@ Each phase ends with a check before the next starts.
    cms.dommajs.org yet - phase 6 writes them; until then they redirect to `/features`. The
    showcase is 92 pages, not 67: the 25 single pages under `effects/`, `models/`, `forms/` and
    `config/` count too. My Garage redirects to its Domma CMS Tool page.
-1. **The site.** Create `dommajs-site` in the fleet on dcm, previewed at **next.dommajs.org**. Theme to
+1. **The site.** Create `dommajs` in the fleet on dcm, previewed at **dommajs.sites.dommajs.org**. Theme to
    match the current look; navbar, footer and showcase menus; Showcase project. *Check: the skeleton
    renders on desktop and mobile.*
+   **Done 2026-10-10.** The site is `dommajs` in the fleet (port 4111), previewed at
+   https://dommajs.sites.dommajs.org - the fleet's wildcard address, so no vhost or certificate is
+   needed until cut-over (next.dommajs.org is dropped). `scripts/site-migrate/menus.mjs` converts
+   the old nav files to `main` (navbar), `footer` (four columns) and `showcase` menus through the
+   address map; `scripts/site-migrate/apply-site.mjs <site-dir>` applies them with the theme
+   (charcoal-dark, Roboto, light/dark switcher) and the Showcase project (`/showcase`), and is
+   safe to re-run. Checked on desktop and mobile: renders, no console errors.
+
+   **Gap found:** the CMS's *With Sidebar* layout builds its sidebar from the page's headings (a
+   table of contents); it cannot show a menu. The showcase needs its section menu down the side,
+   so phase 3 adds a `sidebar` menu slot to Domma CMS, bindable like the others (here: bound to the
+   Showcase project), with the heading contents kept as the fallback when no menu is bound.
+
 2. **Prose pages.** Home, about, FAQ, quickstart, privacy, cookies - converted and tidied, heroes as
    blocks. *Check: side by side with the live site.*
 3. **Showcase plugin and converter.** Build both, run the 3 pilots, review, fix, then all 67 pages. Hand-
@@ -114,7 +127,7 @@ Each phase ends with a check before the next starts.
    page lost, every redirect answers 301.*
 7. **SEO and redirects.** Redirect rules for every old address (from the phase 0 map), titles and
    descriptions, sitemap, search. *Check: a crawl of the old sitemap gets 200 or one 301 for every URL.*
-8. **Review** on next.dommajs.org.
+8. **Review** on dommajs.sites.dommajs.org.
 9. **Cut-over.** Point the dommajs.org vhost at the manager like the other fleet sites (as
    `sites.dommajs.org` already is). Keep `public/` and the old vhost file for a quick switch back; remove
    them after a few weeks without problems. *Check: the phase 7 crawl again, on the live domain.*
