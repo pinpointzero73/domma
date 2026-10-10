@@ -1,0 +1,21 @@
+/* Domma Showcase - demo styles from public/showcase/effects/fireworks, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/fireworks/"] .demo-box {
+          min-height: 300px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          overflow: hidden;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/fireworks/"] .dark-demo-box {
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/fireworks/"] .celebration-btn {
+          z-index: 10;
+      }

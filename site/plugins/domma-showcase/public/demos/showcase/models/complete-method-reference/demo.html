@@ -1,52 +1,54 @@
-<div class="tab-list">
-    <button class="tab-item active" data-tab="pubsub">Pub/Sub</button>
-    <button class="tab-item" data-tab="factory">Model Factory</button>
-    <button class="tab-item" data-tab="instance">Instance Methods</button>
-    <button class="tab-item" data-tab="types">Type Validators</button>
-</div>
-<div class="tab-content">
-    <div class="tab-panel active" data-tab="pubsub">
-        <p class="text-muted mb-3">Event system for decoupled communication between components.</p>
-        <div class="models-method-grid">
-            <span class="models-method-item">subscribe()</span>
-            <span class="models-method-item">publish()</span>
-            <span class="models-method-item">unsubscribe()</span>
-            <span class="models-method-item">once()</span>
-            <span class="models-method-item">on()</span>
-            <span class="models-method-item">off()</span>
-            <span class="models-method-item">emit()</span>
-        </div>
+<div id="method-tabs" class="tabs">
+    <div class="tab-list">
+        <button type="button" class="tab-item active" data-tab="pubsub">Pub/Sub</button>
+        <button type="button" class="tab-item" data-tab="factory">Model Factory</button>
+        <button type="button" class="tab-item" data-tab="instance">Instance Methods</button>
+        <button type="button" class="tab-item" data-tab="types">Type Validators</button>
     </div>
-    <div class="tab-panel" data-tab="factory">
-        <p class="text-muted mb-3">Static methods on the M/Models namespace.</p>
-        <div class="models-method-grid">
-            <span class="models-method-item">create()</span>
-            <span class="models-method-item">bind()</span>
-            <span class="models-method-item">unbind()</span>
+    <div class="tab-content">
+        <div class="tab-panel active" role="tabpanel" data-tab="pubsub">
+            <p class="text-muted mb-3">Event system for decoupled communication between components.</p>
+            <div class="models-method-grid">
+                <span class="models-method-item">subscribe()</span>
+                <span class="models-method-item">publish()</span>
+                <span class="models-method-item">unsubscribe()</span>
+                <span class="models-method-item">once()</span>
+                <span class="models-method-item">on()</span>
+                <span class="models-method-item">off()</span>
+                <span class="models-method-item">emit()</span>
+            </div>
         </div>
-    </div>
-    <div class="tab-panel" data-tab="instance">
-        <p class="text-muted mb-3">Methods available on model instances returned by M.create().</p>
-        <div class="models-method-grid">
-            <span class="models-method-item">get()</span>
-            <span class="models-method-item">set()</span>
-            <span class="models-method-item">toJSON()</span>
-            <span class="models-method-item">validate()</span>
-            <span class="models-method-item">onChange()</span>
-            <span class="models-method-item">offChange()</span>
-            <span class="models-method-item">reset()</span>
+        <div class="tab-panel" role="tabpanel" data-tab="factory">
+            <p class="text-muted mb-3">Static methods on the M/Models namespace.</p>
+            <div class="models-method-grid">
+                <span class="models-method-item">create()</span>
+                <span class="models-method-item">bind()</span>
+                <span class="models-method-item">unbind()</span>
+            </div>
         </div>
-    </div>
-    <div class="tab-panel" data-tab="types">
-        <p class="text-muted mb-3">Built-in validators for blueprint definitions.</p>
-        <div class="models-method-grid">
-            <span class="models-method-item">types.string</span>
-            <span class="models-method-item">types.number</span>
-            <span class="models-method-item">types.boolean</span>
-            <span class="models-method-item">types.array</span>
-            <span class="models-method-item">types.object</span>
-            <span class="models-method-item">types.date</span>
-            <span class="models-method-item">types.any</span>
+        <div class="tab-panel" role="tabpanel" data-tab="instance">
+            <p class="text-muted mb-3">Methods available on model instances returned by M.create().</p>
+            <div class="models-method-grid">
+                <span class="models-method-item">get()</span>
+                <span class="models-method-item">set()</span>
+                <span class="models-method-item">toJSON()</span>
+                <span class="models-method-item">validate()</span>
+                <span class="models-method-item">onChange()</span>
+                <span class="models-method-item">offChange()</span>
+                <span class="models-method-item">reset()</span>
+            </div>
+        </div>
+        <div class="tab-panel" role="tabpanel" data-tab="types">
+            <p class="text-muted mb-3">Built-in validators for blueprint definitions.</p>
+            <div class="models-method-grid">
+                <span class="models-method-item">types.string</span>
+                <span class="models-method-item">types.number</span>
+                <span class="models-method-item">types.boolean</span>
+                <span class="models-method-item">types.array</span>
+                <span class="models-method-item">types.object</span>
+                <span class="models-method-item">types.date</span>
+                <span class="models-method-item">types.any</span>
+            </div>
         </div>
     </div>
 </div>

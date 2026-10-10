@@ -1,0 +1,45 @@
+<pre class="code-block language-javascript mb-4">// Helper function for binding nested properties
+    function bindNested(model, field, path, selector, options = {}) {
+    M.bind(model, field, selector, {
+    ...options,
+    format: (data) =&gt; _.get(data, path, ''),
+    parse: (value) =&gt; {
+    const data = _.cloneDeep(model.get(field) || {});
+    _.set(data, path, value);
+    return data;
+    }
+    });
+    }
+
+    // Create form model
+    const formModel = M.create({
+    userData: { type: 'object', default: {} }
+    });
+
+    // Bind form inputs with dot notation paths
+    bindNested(formModel, 'userData', 'user.name', '#user-name', { twoWay: true });
+    bindNested(formModel, 'userData', 'user.email', '#user-email', { twoWay: true });
+    bindNested(formModel, 'userData', 'address.city', '#address-city', { twoWay: true });
+</pre>
+
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <h4 class="font-semibold mb-3">Form Inputs:</h4>
+        <div class="form-group">
+            <label class="form-label">User Name (user.name)</label>
+            <input type="text" id="user-name" class="form-input" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email (user.email)</label>
+            <input type="email" id="user-email" class="form-input" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label class="form-label">City (address.city)</label>
+            <input type="text" id="address-city" class="form-input" placeholder="Enter city">
+        </div>
+    </div>
+    <div>
+        <h4 class="font-semibold mb-3">Live Model Data:</h4>
+        <div class="nested-display" id="ex2-display">{}</div>
+    </div>
+</div>

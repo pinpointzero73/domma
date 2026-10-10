@@ -1,0 +1,15 @@
+<div class="col-6">
+    <button type="button" class="btn btn-primary mb-2" id="rx-burst">Write 3 fields separately</button>
+    <button type="button" class="btn btn-primary mb-2" id="rx-batch">Write 3 fields in one set()</button>
+    <button type="button" class="btn btn-outline mb-2" id="rx-sync">Write, then M.flush()</button>
+</div>
+<div class="col-6">
+    <div class="rx-stat">
+        <div class="rx-stat-label">Effect runs</div>
+        <div class="rx-counter" id="rx-runs">1</div>
+    </div>
+    <p class="text-sm mt-2">
+        Three writes, one run. The naive implementation would give you three renders and let the
+        user see two intermediate states that never really existed.
+    </p>
+</div>

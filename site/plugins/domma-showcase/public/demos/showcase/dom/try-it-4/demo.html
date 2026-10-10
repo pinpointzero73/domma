@@ -1,0 +1,15 @@
+<button type="button" class="btn btn-outline btn-sm" data-traverse="parent">parent()</button>
+<button type="button" class="btn btn-outline btn-sm" data-traverse="siblings">siblings()</button>
+<button type="button" class="btn btn-outline btn-sm" data-traverse="next">next()</button>
+<button type="button" class="btn btn-outline btn-sm" data-traverse="prev">prev()</button>
+<button type="button" class="btn btn-outline btn-sm" data-traverse="first">first()</button>
+<button type="button" class="btn btn-outline btn-sm" data-traverse="last">last()</button>
+<div class="p-4 border rounded bg-gray-50 flex gap-2 flex-wrap" id="traverse-container">
+    <div class="demo-item badge badge-success" id="traverse-target">Target</div>
+    <div class="demo-item badge badge-primary">Sibling 1</div>
+    <div class="demo-item badge badge-primary">Sibling 2</div>
+    <div class="demo-item badge badge-primary">Sibling 3</div>
+</div>
+<div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm" id="traverse-result">Click a method to
+    see result
+</div>

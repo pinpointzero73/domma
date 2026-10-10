@@ -1,0 +1,41 @@
+<pre class="code-block language-javascript mb-4">// Create model with nested object values
+    const userModel = M.create({
+    profile: { type: 'object', default: {} },
+    address: { type: 'object', default: {} }
+    });
+
+    // Set nested data
+    userModel.set('profile', {
+    firstName: 'John',
+    lastName: 'Doe',
+    bio: 'Software developer'
+    });
+
+    userModel.set('address', {
+    street: '123 Main St',
+    city: 'New York',
+    zip: '10001'
+    });
+
+    // Access nested properties using utilities
+    const city = _.get(userModel.get('address'), 'city');
+    console.log('City:', city);  // 'New York'
+
+    // Update nested property
+    const address = userModel.get('address');
+    _.set(address, 'city', 'Boston');
+    userModel.set('address', address);  // Trigger change events
+</pre>
+
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <h4 class="font-semibold mb-2">Try It:</h4>
+        <button type="button" class="btn btn-primary mb-2" id="ex1-init">Initialize Model</button>
+        <button type="button" class="btn btn-success mb-2" id="ex1-update">Update City to Boston</button>
+        <button type="button" class="btn btn-info" id="ex1-get">Get Nested Values</button>
+    </div>
+    <div>
+        <h4 class="font-semibold mb-2">Model State:</h4>
+        <div class="nested-display" id="ex1-display">Click "Initialize Model" to start</div>
+    </div>
+</div>

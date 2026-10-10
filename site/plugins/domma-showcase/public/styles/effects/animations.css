@@ -1,0 +1,19 @@
+/* Domma Showcase - demo styles from public/showcase/effects/animations, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/animations/"] .demo-box {
+          background: linear-gradient(135deg, var(--dm-primary) 0%, var(--dm-primary-dark) 100%);
+          color: white;
+          padding: 2rem;
+          border-radius: 8px;
+          text-align: center;
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 1rem 0;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/animations/"] .demo-trigger:hover {
+          cursor: pointer;
+      }
+  
+.showcase-demo[data-demo^="showcase/effects/animations/"] .demo-box:not(.animate-infinite) { cursor: pointer; }

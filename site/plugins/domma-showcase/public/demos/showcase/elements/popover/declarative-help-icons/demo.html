@@ -1,0 +1,32 @@
+<form id="demo-scan" class="mb-4" data-action="1">
+    <div class="row">
+        <div class="col-6 mb-4">
+            <label class="form-label" for="demo-slug">URL slug
+                <button type="button" class="sx-pop-help" aria-label="About the URL slug" data-popover="The last part of the page address. Lower case, with words joined by hyphens." data-popover-title="URL slug" data-popover-placement="top">
+                    <span data-icon="help-circle" data-icon-size="16"></span>
+                </button>
+            </label>
+            <input id="demo-slug" class="form-input" value="about-us">
+        </div>
+        <div class="col-6 mb-4">
+            <label class="form-label" for="demo-publish">Publish date
+                <button type="button" class="sx-pop-help" aria-label="About the publish date" data-popover="Leave empty to publish as soon as you save. A future date keeps the page hidden until then." data-popover-title="Publish date" data-popover-placement="top" data-popover-dismissible="">
+                    <span data-icon="help-circle" data-icon-size="16"></span>
+                </button>
+            </label>
+            <input id="demo-publish" class="form-input" type="date">
+        </div>
+        <div class="col-12">
+            <label class="form-label" for="demo-visibility">Visibility
+                <button type="button" class="sx-pop-help" aria-label="About visibility" data-popover-content="#demo-visibility-help" data-popover-title="Who can see this page" data-popover-placement="right">
+                    <span data-icon="help-circle" data-icon-size="16"></span>
+                </button>
+            </label>
+            <select id="demo-visibility" class="form-select">
+                <option>Public</option>
+                <option>Members</option>
+                <option>Admins</option>
+            </select>
+        </div>
+    </div>
+</form>

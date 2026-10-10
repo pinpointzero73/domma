@@ -1,0 +1,30 @@
+/* Domma Showcase - demo styles from public/showcase/effects/shadows, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/shadows/"] .shadow-box {
+          background: var(--dm-surface, #fff);
+          padding: 2rem;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 150px;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/shadows/"] .dark-bg {
+          background: #1e293b;
+          padding: 2rem;
+          border-radius: 8px;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/shadows/"] .elevation-demo {
+          background: var(--dm-surface, #fff);
+          padding: 2rem;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/shadows/"] .elevation-demo:hover {
+          transform: translateY(-2px);
+      }

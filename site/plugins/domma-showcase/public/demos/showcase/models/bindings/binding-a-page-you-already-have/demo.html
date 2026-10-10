@@ -1,0 +1,25 @@
+<div class="bind-demo mb-4" id="apply-demo">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input class="form-input" data-model="name" placeholder="type a name…">
+    </div>
+
+    <p class="mb-2">Greeting: <b data-bind-text="greet(name)">rendered by the server</b></p>
+    <p class="mb-3" data-uppercase="name">rendered by the server</p>
+
+    <p class="mb-3" data-if="name">
+        <span class="badge badge-success">Ready</span>
+    </p>
+
+    <ul class="mb-3" data-each="rows key=id">
+        <li>
+            <span data-bind-text="label"></span>
+            <!-- Inside a list a bare name is looked for on the ITEM, so a row
+            reaches the handler that owns it through $parent. -->
+            <button type="button" class="btn btn-sm" data-on-click="$parent.drop($data)">remove</button>
+        </li>
+    </ul>
+
+    <button type="button" class="btn btn-primary btn-sm" data-on-click="add">Add a row</button>
+    <button type="button" class="btn btn-sm" data-on-click="reset">Reset</button>
+</div>

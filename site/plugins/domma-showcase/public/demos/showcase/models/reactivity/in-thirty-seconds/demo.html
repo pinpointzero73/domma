@@ -1,0 +1,16 @@
+<textarea class="try-it-editor" rows="13" spellcheck="false">                    // A model holds the raw facts.
+    const order = M.create({price: {}, qty: {}}, {price: 10, qty: 3});
+
+    // A computed is a value defined by an expression, not by an assignment.
+    const total = M.computed(() =&gt; order.get('price') * order.get('qty'));
+
+    // An effect is work that should re-happen whenever what it read changes.
+    M.effect(() =&gt; log('total is', total.get()));
+
+    // Nobody calls the effect. Writing to the model is enough.
+    order.set('qty', 4);
+    M.flush();
+
+    order.set('price', 12);
+    M.flush();
+</textarea>

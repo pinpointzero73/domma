@@ -1,0 +1,146 @@
+/* Domma Showcase - demo styles from public/showcase/themes, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/themes/"] .theme-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 2px solid var(--dm-border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--dm-surface);
+            transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-pair.theme-trio {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-pair:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--dm-shadow-md);
+            border-color: var(--dm-primary);
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card {
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            transition: background 0.15s ease;
+            min-width: 0;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card + .theme-card {
+            border-left: 1px solid var(--dm-border);
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card:hover {
+            background: var(--dm-surface-alt, rgba(0,0,0,0.04));
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card.active {
+            box-shadow: inset 0 0 0 3px var(--dm-primary);
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card:only-child {
+            grid-column: 1 / -1;
+        }
+
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card-preview {
+            height: 64px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card-accent {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card-body {
+            padding: 0.5rem 0.75rem;
+            border-top: 1px solid var(--dm-border-light);
+        }
+
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--dm-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-card-mode {
+            font-size: 0.65rem;
+            color: var(--dm-text-muted);
+            margin-top: 1px;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-toggle {
+            display: flex; align-items: center; gap: 0.4rem;
+            padding: 0.4rem 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--dm-surface);
+            font-size: 0.85rem; font-weight: 500;
+            transition: all 0.15s ease;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-toggle.active { background: var(--dm-danger); color: #fff; border-color: var(--dm-danger); }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-summary { font-size: 0.85rem; font-weight: 600; padding: 0.4rem 0.75rem; border-radius: 6px; }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-summary.has-issues { background: rgba(239, 68, 68, 0.15); color: #b91c1c; }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-summary.clean      { background: rgba(34, 197, 94, 0.15); color: #15803d; }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-summary.idle       { background: var(--dm-surface-alt, rgba(0,0,0,0.05)); color: var(--dm-text-secondary); }
+
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-fail {
+            outline: 2px dashed #ef4444 !important;
+            outline-offset: 2px !important;
+            position: relative;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-fail::after {
+            content: attr(data-audit-ratio) ":1";
+            position: absolute;
+            top: -9px; right: -9px;
+            background: #ef4444; color: #fff;
+            font-size: 10px; font-weight: 700;
+            padding: 1px 5px; border-radius: 3px;
+            font-family: monospace; z-index: 10;
+            pointer-events: none; white-space: nowrap;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-label {
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--dm-text-secondary);
+            text-transform: uppercase; letter-spacing: 0.04em;
+            margin: 0.5rem 0 0.4rem;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-block {
+            padding: 0.75rem;
+            background: var(--dm-surface-alt, rgba(0,0,0,0.02));
+            border-radius: 6px;
+            border: 1px solid var(--dm-border);
+            margin-bottom: 0.75rem;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .swatch-primary   { background: var(--dm-primary);   color: var(--dm-primary-text,   #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .swatch-secondary { background: var(--dm-secondary); color: var(--dm-secondary-text, #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .swatch-success   { background: var(--dm-success);   color: var(--dm-success-text,   #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .swatch-warning   { background: var(--dm-warning);   color: var(--dm-warning-text,   #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .swatch-danger    { background: var(--dm-danger);    color: var(--dm-danger-text,    #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .swatch-info      { background: var(--dm-info);      color: var(--dm-info-text,      #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .surf-bg      { background: var(--dm-background);   color: var(--dm-text); }
+        .showcase-demo[data-demo^="showcase/themes/"] .surf-surface { background: var(--dm-surface);      color: var(--dm-text); }
+        .showcase-demo[data-demo^="showcase/themes/"] .surf-alt     { background: var(--dm-surface-alt);  color: var(--dm-text); }
+        .showcase-demo[data-demo^="showcase/themes/"] .surf-raised  { background: var(--dm-surface-raised, var(--dm-surface)); color: var(--dm-text); }
+        .showcase-demo[data-demo^="showcase/themes/"] .accent-tag {
+            display: inline-block;
+            font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            padding: 0.15rem 0.45rem;
+            border-radius: 999px;
+            margin-bottom: 0.4rem;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .accent-tag.primary { background: var(--dm-primary); color: var(--dm-primary-text, #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .accent-tag.success { background: var(--dm-success); color: var(--dm-success-text, #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .accent-tag.warning { background: var(--dm-warning); color: var(--dm-warning-text, #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .accent-tag.danger  { background: var(--dm-danger);  color: var(--dm-danger-text,  #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .accent-tag.info    { background: var(--dm-info);    color: var(--dm-info-text,    #fff); }

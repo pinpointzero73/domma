@@ -1,0 +1,28 @@
+<button type="button" class="btn btn-primary" id="open-parent">Open Parent Modal</button>
+
+<div id="parent-modal" class="modal">
+    <div class="modal-header">
+        <h5 class="modal-title">Parent Modal</h5>
+        <button type="button" class="modal-close">×</button>
+    </div>
+    <div class="modal-body">
+        <p class="mb-3">This is the parent modal.</p>
+        <button type="button" class="btn btn-secondary" id="open-child">Open Child Modal</button>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn">Close</button>
+    </div>
+</div>
+
+<div id="child-modal" class="modal">
+    <div class="modal-header">
+        <h5 class="modal-title">Child Modal</h5>
+        <button type="button" class="modal-close">×</button>
+    </div>
+    <div class="modal-body">
+        <p>This modal was opened from the parent modal.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary modal-close-btn">Close Child</button>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+/* Domma Showcase - demo styles from public/showcase/elements/signature, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/signature/"] .sig-output {
+      margin-top: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      border: 1px dashed var(--dm-border);
+      border-radius: var(--dm-radius);
+      font-size: 0.8125rem;
+      color: var(--dm-text-muted);
+      min-height: 2.25rem;
+    }
+    .showcase-demo[data-demo^="showcase/elements/signature/"] .sig-preview-img {
+      max-width: 100%;
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius);
+      background: #fff;
+      display: block;
+      margin-top: 0.5rem;
+    }

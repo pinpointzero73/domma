@@ -1,0 +1,18 @@
+/* Domma Showcase - demo styles from public/showcase/config/all-components, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/config/all-components/"] .demo-card-hover {
+          transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .showcase-demo[data-demo^="showcase/config/all-components/"] .demo-card-hover:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .showcase-demo[data-demo^="showcase/config/all-components/"] .breadcrumb-container {
+          padding: 1rem;
+          background: var(--dm-surface);
+          color: var(--dm-text);
+          border-radius: 4px;
+      }

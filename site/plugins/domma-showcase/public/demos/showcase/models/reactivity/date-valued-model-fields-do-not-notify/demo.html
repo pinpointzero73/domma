@@ -1,0 +1,20 @@
+<textarea class="try-it-editor" rows="16" spellcheck="false">                    const booking = M.create({when: {}}, {when: new Date('2026-01-01')});
+
+    let fired = 0;
+    booking.onChange(() =&gt; fired++);
+
+    booking.set('when', new Date('2030-06-30'));
+    M.flush();
+
+    log('stored year:', booking.get('when').getFullYear(), '- the write landed');
+    log('change notifications:', fired, '- nobody was told');
+
+    // Workaround: store a timestamp, format it for display.
+    const fixed = M.create({whenMs: {}}, {whenMs: Date.parse('2026-01-01')});
+    let fired2 = 0;
+    fixed.onChange(() =&gt; fired2++);
+    fixed.set('whenMs', Date.parse('2030-06-30'));
+
+    log('with a timestamp, notifications:', fired2);
+    log('display it with D():', D(fixed.get('whenMs')).format('D MMM YYYY'));
+</textarea>

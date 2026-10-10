@@ -1,0 +1,104 @@
+/**
+ * Basic Form - from public/showcase/forms.
+ */
+export function mount(root) {
+            // Common blueprints for examples
+    const userBlueprint = {
+              name: {
+                type: 'string',
+                label: 'Full Name',
+                required: true,
+                minLength: 2,
+                formConfig: {
+                  placeholder: 'Enter your full name'
+                }
+              },
+              email: {
+                type: 'email',
+                label: 'Email Address',
+                required: true,
+                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                formConfig: {
+                  placeholder: 'user@example.com'
+                }
+              },
+              age: {
+                type: 'number',
+                label: 'Age',
+                min: 18,
+                max: 120,
+                formConfig: {
+                  helperText: 'Must be between 18 and 120'
+                }
+              },
+              role: {
+                type: 'select',
+                label: 'Role',
+                options: [
+                  {value: 'user', label: 'User'},
+                  {value: 'moderator', label: 'Moderator'},
+                  {value: 'admin', label: 'Administrator'}
+                ],
+                default: 'user'
+              },
+              newsletter: {
+                type: 'boolean',
+                label: 'Subscribe to Newsletter',
+                default: false
+              }
+            };
+    const sampleData = {
+              name: 'Alice Johnson',
+              email: 'alice@example.com',
+              age: 28,
+              role: 'user',
+              newsletter: true
+            };
+            // Log function for outputs
+    function logToOutput(selector, message) {
+              const output = $(selector);
+              if (output.length === 0) {
+                console.warn('Output element not found:', selector);
+                return;
+              }
+              const timestamp = D().format('HH:mm:ss');
+              output.text(output.text() + `[${timestamp}] ${message}\n`);
+              if (output[0]) {
+                output.scrollTop(output[0].scrollHeight);
+              }
+            }
+            // Basic Form Generation
+    $(root).find('#generate-basic-form').on('click', () => {
+              try {
+                const form = Domma.forms.create(userBlueprint, sampleData, {
+                  layout: 'grid',
+                  columns: 2,
+                  onSubmit: (data, formInstance) => {
+                    logToOutput('#basic-form-output', 'Form submitted: ' + JSON.stringify(data, null, 2));
+                  },
+                  onValidationError: (errors, formInstance) => {
+                    logToOutput('#basic-form-output', 'Validation errors: ' + JSON.stringify(errors, null, 2));
+                  }
+                });
+
+                // Wrap form in a card
+                $(root).find('#basic-form-container').html(`
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Generated Basic Form</h4>
+                        </div>
+                        <div class="card-body" id="basic-form-wrapper">
+                        </div>
+                    </div>
+                `);
+                form.renderTo('#basic-form-wrapper');
+                logToOutput('#basic-form-output', 'Form generated successfully!');
+              } catch (error) {
+                logToOutput('#basic-form-output', 'Error: ' + error.message);
+              }
+            });
+    $(root).find('#clear-basic-form').on('click', () => {
+              $(root).find('#basic-form-container').empty();
+              $(root).find('#basic-form-output').text('Cleared. Click "Generate Form" to create a new form...');
+            });
+}

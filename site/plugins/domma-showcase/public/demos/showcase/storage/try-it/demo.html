@@ -1,0 +1,22 @@
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <div class="form-group">
+            <label>Key</label>
+            <input type="text" id="storage-key" class="form-input" value="test-key">
+        </div>
+        <div class="form-group">
+            <label>Value (JSON)</label>
+            <textarea id="storage-value" class="form-input" rows="3">{"message": "Hello, Domma!"}</textarea>
+        </div>
+        <div class="flex gap-2">
+            <button type="button" class="btn btn-primary" id="btn-set">Set</button>
+            <button type="button" class="btn btn-secondary" id="btn-get">Get</button>
+            <button type="button" class="btn btn-outline" id="btn-remove">Remove</button>
+            <button type="button" class="btn btn-danger" id="btn-clear">Clear All</button>
+        </div>
+    </div>
+    <div>
+        <label class="font-semibold mb-2 block">Result</label>
+        <div class="storage-demo-result" id="storage-result">Click a button to see result</div>
+    </div>
+</div>

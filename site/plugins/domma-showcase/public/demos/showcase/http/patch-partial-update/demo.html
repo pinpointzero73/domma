@@ -1,0 +1,23 @@
+<div>
+    <div class="form-group mb-3">
+        <label class="form-label">Update Title Only</label>
+        <input type="text" class="form-input" id="patch-title" value="Patched Title">
+    </div>
+    <pre class="code-block language-javascript mb-4">// Only update the title field
+        const patched = await Domma.http.patch(
+        'https://jsonplaceholder.typicode.com/posts/1',
+        {
+        title: 'Patched Title'
+        // Other fields (body, userId) remain unchanged
+        }
+        );
+    </pre>
+    <button type="button" class="btn btn-info" id="demo-patch">
+        <span data-icon="edit" data-icon-size="16"></span>
+        Patch Post
+    </button>
+</div>
+<div>
+    <label class="form-label">Response:</label>
+    <div class="http-response-area" id="patch-response">Click "Patch Post" to see the response...</div>
+</div>

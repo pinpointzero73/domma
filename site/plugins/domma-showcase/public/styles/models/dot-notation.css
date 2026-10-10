@@ -1,0 +1,36 @@
+/* Domma Showcase - demo styles from public/showcase/models/dot-notation, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/models/dot-notation/"] .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1rem;
+      }
+
+      .showcase-demo[data-demo^="showcase/models/dot-notation/"] .nested-display {
+          background: var(--dm-color-bg-secondary);
+          padding: 1rem;
+          border-radius: 4px;
+          font-family: monospace;
+          white-space: pre-wrap;
+          max-height: 300px;
+          overflow-y: auto;
+      }
+
+      .showcase-demo[data-demo^="showcase/models/dot-notation/"] .validation-message {
+          margin-top: 0.5rem;
+          padding: 0.5rem;
+          border-radius: 4px;
+      }
+
+      .showcase-demo[data-demo^="showcase/models/dot-notation/"] .validation-success {
+          background: var(--dm-color-success-bg);
+          color: var(--dm-color-success);
+          border: 1px solid var(--dm-color-success);
+      }
+
+      .showcase-demo[data-demo^="showcase/models/dot-notation/"] .validation-error {
+          background: var(--dm-color-danger-bg);
+          color: var(--dm-color-danger);
+          border: 1px solid var(--dm-color-danger);
+      }

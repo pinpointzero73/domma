@@ -1,0 +1,44 @@
+/* Domma Showcase - demo styles from public/showcase/elements/skeleton, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/skeleton/"] .sx-sk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+            gap: 1rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/skeleton/"] .sx-sk-cover {
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg,
+                color-mix(in srgb, var(--dm-primary) 55%, var(--dm-surface)),
+                color-mix(in srgb, var(--dm-primary) 20%, var(--dm-surface)));
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/skeleton/"] .sx-sk-avatar {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: var(--dm-radius-full);
+            background: var(--dm-primary);
+            color: var(--dm-primary-text, #fff);
+            font-weight: 600;
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/skeleton/"] .sx-sk-panel {
+            max-width: 36rem;
+            min-height: 6rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/skeleton/"] .sx-sk-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/skeleton/"] .sx-sk-row > .skeleton-lines {
+            flex: 1;
+        }

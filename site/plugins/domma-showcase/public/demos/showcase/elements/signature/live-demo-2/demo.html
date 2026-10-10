@@ -1,0 +1,18 @@
+<form id="tutorial-contract-form" style="max-width: 560px;">
+    <div class="mb-4">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" name="fullName" placeholder="Jane Smith" required="">
+    </div>
+    <div class="mb-4">
+        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+            <input type="checkbox" name="agreed" id="tutorial-agreed">
+            I agree to the terms &amp; conditions
+        </label>
+    </div>
+    <div class="mb-4">
+        <label class="form-label">Signature</label>
+        <div id="tutorial-sig"></div>
+    </div>
+    <button type="submit" id="tutorial-submit-btn" class="btn btn-primary" disabled="">Sign &amp; Submit</button>
+</form>
+<div id="tutorial-output" class="sig-output mt-4" style="display:none;"></div>

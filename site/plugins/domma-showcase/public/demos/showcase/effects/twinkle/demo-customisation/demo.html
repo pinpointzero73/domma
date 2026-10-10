@@ -1,0 +1,27 @@
+<label>Count</label>
+<input type="range" id="opt-count" min="20" max="300" value="80">
+<span id="val-count">80</span>
+<label>Min Size</label>
+<input type="range" id="opt-min-size" min="0.5" max="3" step="0.5" value="1">
+<span id="val-min-size">1</span>
+<label>Max Size</label>
+<input type="range" id="opt-max-size" min="1" max="8" step="0.5" value="3">
+<span id="val-max-size">3</span>
+<label>Twinkle Speed</label>
+<input type="range" id="opt-speed" min="0.001" max="0.02" step="0.001" value="0.003">
+<span id="val-speed">0.003</span>
+<strong style="font-size: 0.9rem;">Colour preset:</strong>
+<div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+    <button type="button" class="btn btn-sm colour-btn active" data-colour="rgba(255, 240, 200, 1)">Warm White</button>
+    <button type="button" class="btn btn-sm colour-btn" data-colour="rgba(180, 210, 255, 1)">Cool Blue</button>
+    <button type="button" class="btn btn-sm colour-btn" data-colour="rgba(200, 255, 200, 1)">Soft Green</button>
+    <button type="button" class="btn btn-sm colour-btn" data-colour="rgba(255, 180, 200, 1)">Rose</button>
+    <button type="button" class="btn btn-sm colour-btn" data-colour="rgba(255, 200, 120, 1)">Amber</button>
+</div>
+<div class="star-container mt-4" id="star-container-3" style="min-height: 200px;">
+    <div class="star-container-label">
+        <div style="font-size: 0.9rem; opacity: 0.8;">Adjust sliders above and click Apply</div>
+    </div>
+</div>
+<button type="button" class="btn btn-primary" id="apply-3">Apply Options</button>
+<button type="button" class="btn btn-danger" id="destroy-3">Destroy</button>

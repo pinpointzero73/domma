@@ -1,0 +1,25 @@
+<table class="domma-table table-bordered table-sm">
+    <thead>
+        <tr><th>Key</th><th>Type</th><th>Default</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><code>variant</code></td><td><code>'card' | 'chip'</code></td><td><code>'card'</code></td><td>Visual style</td></tr>
+        <tr><td><code>multiple</code></td><td>boolean</td><td>false</td><td>Single ↔ multi-select; value becomes string vs array</td></tr>
+        <tr><td><code>density</code></td><td><code>'comfortable' | 'compact'</code></td><td><code>'comfortable'</code></td><td>Compact strips description</td></tr>
+        <tr><td><code>columns</code></td><td>1-6</td><td>3</td><td>Card variant only; chips wrap</td></tr>
+        <tr><td><code>accent</code></td><td>semantic or hex</td><td><code>'primary'</code></td><td>Selected/recommended highlight</td></tr>
+        <tr><td><code>accentStyle</code></td><td>5 styles</td><td><code>'border'</code></td><td><code>border | solid | glow | overlay | underline</code></td></tr>
+        <tr><td><code>glow</code></td><td>boolean</td><td>false</td><td>Outer glow on selected</td></tr>
+        <tr><td><code>shadow</code></td><td><code>none | sm | md | lg | xl</code></td><td><code>'none'</code></td><td>Applied to every option</td></tr>
+        <tr><td><code>options[].icon</code></td><td>string</td><td>-</td><td>Domma icon name</td></tr>
+        <tr><td><code>options[].description</code></td><td>string</td><td>-</td><td>Card + comfortable only</td></tr>
+        <tr><td><code>options[].tooltip</code></td><td>string</td><td>-</td><td>Hover hint</td></tr>
+        <tr><td><code>options[].badge</code></td><td><code>{ text, type }</code></td><td>-</td><td>Corner badge - primary/success/info/warning/danger</td></tr>
+        <tr><td><code>options[].recommended</code></td><td>boolean</td><td>false</td><td>Success-coloured ring</td></tr>
+        <tr><td><code>options[].disabled</code></td><td>boolean</td><td>false</td><td>Non-interactive, skipped by keyboard</td></tr>
+    </tbody>
+</table>
+<p class="mt-2"><a href="../elements/chooser/" class="btn btn-secondary btn-sm">
+        <span data-icon="external-link" data-icon-size="14"></span>
+        See full Chooser showcase
+</a></p>

@@ -1,0 +1,48 @@
+/* Domma Showcase - demo styles from public/showcase/elements/carousel, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/carousel/"] .transition-demo { height: 480px; border-radius: var(--dm-radius-lg); overflow: hidden; }
+            .showcase-demo[data-demo^="showcase/elements/carousel/"] .transition-demo .carousel-slide {
+                height: 480px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                text-align: center;
+                padding: 2rem;
+            }
+            .showcase-demo[data-demo^="showcase/elements/carousel/"] .transition-demo .slide-eyebrow {
+                font-size: 0.875rem;
+                font-weight: 600;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                opacity: 0.85;
+                margin-bottom: 0.75rem;
+                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+            }
+            .showcase-demo[data-demo^="showcase/elements/carousel/"] .transition-demo .slide-title {
+                font-size: clamp(2.5rem, 5vw, 4rem);
+                font-weight: 800;
+                line-height: 1.05;
+                margin: 0 0 0.75rem;
+                text-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+            }
+            .showcase-demo[data-demo^="showcase/elements/carousel/"] .transition-demo .slide-sub {
+                font-size: 1.15rem;
+                max-width: 38rem;
+                opacity: 0.92;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            }
+            .showcase-demo[data-demo^="showcase/elements/carousel/"] .easing-demo { height: 320px; border-radius: var(--dm-radius-lg); overflow: hidden; }
+            .showcase-demo[data-demo^="showcase/elements/carousel/"] .easing-demo .carousel-slide {
+                height: 320px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 2.25rem;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            }

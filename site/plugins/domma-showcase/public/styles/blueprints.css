@@ -1,0 +1,59 @@
+/* Domma Showcase - demo styles from public/showcase/blueprints, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/blueprints/"] .blueprint-code {
+            background: var(--dm-code-bg, #282c34);
+            color: var(--dm-slate-300, #abb2bf);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .showcase-demo[data-demo^="showcase/blueprints/"] .result-pane {
+            background: var(--dm-surface-raised);
+            border: 1px solid var(--dm-border);
+            border-radius: 4px;
+            padding: 1.5rem;
+            min-height: 200px;
+        }
+
+        .showcase-demo[data-demo^="showcase/blueprints/"] .model-state {
+            background: var(--dm-surface-raised);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/blueprints/"] .model-state h4 {
+            margin-top: 0;
+            font-size: 0.9rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/blueprints/"] .model-state pre {
+            margin: 0;
+            background: var(--dm-surface);
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+
+        .showcase-demo[data-demo^="showcase/blueprints/"] .blueprint-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/blueprints/"] .blueprint-method {
+            background: var(--dm-primary-bg);
+            color: var(--dm-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            text-align: center;
+        }

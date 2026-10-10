@@ -1,0 +1,17 @@
+<div id="demo-table"></div>
+<div class="flex gap-2">
+    <select id="role-filter" class="form-select" style="width: 150px;">
+        <option value="">All Roles</option>
+        <option value="Admin">Admin</option>
+        <option value="Manager">Manager</option>
+        <option value="Developer">Developer</option>
+        <option value="Designer">Designer</option>
+    </select>
+    <button type="button" class="btn btn-outline btn-sm" id="clear-filters">Clear Filters</button>
+</div>
+<div class="flex gap-2">
+    <button type="button" class="btn btn-outline btn-sm" id="select-all">Select All</button>
+    <button type="button" class="btn btn-outline btn-sm" id="deselect-all">Deselect All</button>
+    <button type="button" class="btn btn-danger btn-sm" id="delete-selected" disabled="">Delete Selected</button>
+</div>
+<div id="selected-info" class="text-sm text-muted mt-3">No rows selected</div>

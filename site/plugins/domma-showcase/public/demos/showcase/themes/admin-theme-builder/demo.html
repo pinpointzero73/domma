@@ -1,0 +1,39 @@
+<div class="dm-card" style="padding: var(--dm-space-5);">
+    <div class="dm-label">1 · Finish</div>
+    <div class="btn-group" id="admin-finish" role="group" aria-label="Finish" style="display:flex; gap:8px; margin-bottom:20px;">
+        <button type="button" class="btn" data-finish="smooth">Smooth</button>
+        <button type="button" class="btn" data-finish="slate">Slate</button>
+        <button type="button" class="btn active" data-finish="sharp">Sharp</button>
+    </div>
+    <div class="dm-label">2 · Accent</div>
+    <div id="admin-accent" style="display:flex; gap:12px; margin-top:8px;">
+        <button type="button" class="admin-acc active" data-accent="steel" data-tooltip="Steel Blue" aria-label="Steel Blue accent" style="flex:1; height:44px; border-radius:8px; border:2px solid var(--dm-text); background:#3b76bc;"></button>
+        <button type="button" class="admin-acc" data-accent="indigo" data-tooltip="Indigo" aria-label="Indigo accent" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#5b63a8;"></button>
+        <button type="button" class="admin-acc" data-accent="teal" data-tooltip="Teal" aria-label="Teal accent" style="flex:1; height:44px; border-radius:8px; border:2px solid transparent; background:#2a8178;"></button>
+    </div>
+    <div class="dm-mt-4 dm-text-sm dm-text-secondary">Theme: <code id="admin-current">admin-sharp-steel</code></div>
+</div>
+
+<div class="dm-card" id="admin-preview" style="padding:0; overflow:hidden;">
+    <div style="display:flex; min-height:300px;">
+        <aside style="width:160px; background:var(--dm-sidebar-bg); color:var(--dm-sidebar-text); padding:16px;">
+            <strong style="color:var(--dm-text-inverse,#fff); display:block; margin-bottom:16px;">Admin</strong>
+            <div style="background:var(--dm-primary); color:var(--dm-primary-text, #fff); padding:8px; border-radius:6px; margin-bottom:4px;">Dashboard</div>
+            <div style="padding:8px;">Users</div>
+            <div style="padding:8px;">Reports</div>
+        </aside>
+        <div style="flex:1; background:var(--dm-background); padding:16px;">
+            <div class="dm-grid dm-gap-3 dm-mb-4" style="grid-template-columns:repeat(3,1fr);">
+                <div class="dm-card" style="padding:12px;"><div class="dm-text-xs dm-text-muted">Revenue</div><div style="font-size:20px; font-weight:700;">£48k</div></div>
+                <div class="dm-card" style="padding:12px;"><div class="dm-text-xs dm-text-muted">Orders</div><div style="font-size:20px; font-weight:700;">1,204</div></div>
+                <div class="dm-card" style="padding:12px;"><div class="dm-text-xs dm-text-muted">Active</div><div style="font-size:20px; font-weight:700;">317</div></div>
+            </div>
+            <div id="admin-preview-table"></div>
+            <div class="dm-mt-4" style="display:flex; gap:8px; align-items:center;">
+                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn">Cancel</button>
+                <span class="badge badge-success">Active</span>
+            </div>
+        </div>
+    </div>
+</div>

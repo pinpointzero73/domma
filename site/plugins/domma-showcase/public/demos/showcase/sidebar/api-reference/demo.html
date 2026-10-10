@@ -1,0 +1,159 @@
+<h3 class="text-xl font-semibold mb-3">Options</h3>
+<div class="table-responsive mb-6">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Option</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>position</code></td>
+                <td>String</td>
+                <td>'left'</td>
+                <td>'left' or 'right'</td>
+            </tr>
+            <tr>
+                <td><code>fixed</code></td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>Fixed or static positioning</td>
+            </tr>
+            <tr>
+                <td><code>width</code></td>
+                <td>String</td>
+                <td>'250px'</td>
+                <td>Sidebar width</td>
+            </tr>
+            <tr>
+                <td><code>top</code></td>
+                <td>String</td>
+                <td>'0'</td>
+                <td>Top offset (e.g., '60px' for navbar)</td>
+            </tr>
+            <tr>
+                <td><code>header</code></td>
+                <td>Object</td>
+                <td>null</td>
+                <td>{ title, toggle, icon }</td>
+            </tr>
+            <tr>
+                <td><code>items</code></td>
+                <td>Array</td>
+                <td>[]</td>
+                <td>Navigation items</td>
+            </tr>
+            <tr>
+                <td><code>footer</code></td>
+                <td>Object</td>
+                <td>null</td>
+                <td>{ text, html }</td>
+            </tr>
+            <tr>
+                <td><code>variant</code></td>
+                <td>String</td>
+                <td>'dark'</td>
+                <td>'light', 'dark', or 'theme' (follows the active theme)</td>
+            </tr>
+            <tr>
+                <td><code>collapsible</code></td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>Mobile toggle behaviour</td>
+            </tr>
+            <tr>
+                <td><code>collapseAt</code></td>
+                <td>Number</td>
+                <td>768</td>
+                <td>Breakpoint (px)</td>
+            </tr>
+            <tr>
+                <td><code>push</code></td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>Push content instead of overlay when sidebar opens</td>
+            </tr>
+            <tr>
+                <td><code>contentSelector</code></td>
+                <td>String</td>
+                <td>'.main-content'</td>
+                <td>CSS selector for content element to push (when push: true)</td>
+            </tr>
+            <tr>
+                <td><code>activeSection</code></td>
+                <td>String</td>
+                <td>null</td>
+                <td>Current active section</td>
+            </tr>
+            <tr>
+                <td><code>persistExpanded</code></td>
+                <td>Boolean</td>
+                <td>false</td>
+                <td>Persist expanded state</td>
+            </tr>
+            <tr>
+                <td><code>persistKey</code></td>
+                <td>String</td>
+                <td>null</td>
+                <td>localStorage key</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3 class="text-xl font-semibold mb-3">Methods</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>open()</code></td>
+                <td>Open sidebar (mobile)</td>
+            </tr>
+            <tr>
+                <td><code>close()</code></td>
+                <td>Close sidebar (mobile)</td>
+            </tr>
+            <tr>
+                <td><code>toggle()</code></td>
+                <td>Toggle sidebar (mobile)</td>
+            </tr>
+            <tr>
+                <td><code>isOpen()</code></td>
+                <td>Check if sidebar is open</td>
+            </tr>
+            <tr>
+                <td><code>setActive(section)</code></td>
+                <td>Set active section</td>
+            </tr>
+            <tr>
+                <td><code>setItems(items)</code></td>
+                <td>Replace all items</td>
+            </tr>
+            <tr>
+                <td><code>addItem(item, index)</code></td>
+                <td>Add item at index</td>
+            </tr>
+            <tr>
+                <td><code>removeItem(index)</code></td>
+                <td>Remove item at index</td>
+            </tr>
+            <tr>
+                <td><code>expandAll()</code></td>
+                <td>Expand all submenus</td>
+            </tr>
+            <tr>
+                <td><code>collapseAll()</code></td>
+                <td>Collapse all submenus</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

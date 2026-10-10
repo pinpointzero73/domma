@@ -1,0 +1,29 @@
+<label>Origins</label>
+<label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="tl" checked=""> Top-left</label>
+<label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="tr" checked=""> Top-right</label>
+<label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="bl" checked=""> Bottom-left</label>
+<label style="min-width:auto;"><input type="checkbox" class="opt-origin" value="br" checked=""> Bottom-right</label>
+<label>Motion</label>
+<select class="form-control" id="opt-motion" style="max-width:180px;">
+    <option value="sweep" selected="">sweep</option>
+    <option value="rotate">rotate</option>
+</select>
+<label style="min-width:auto;"><input type="checkbox" id="opt-flicker" checked=""> Flicker</label>
+<label>Sweep arc (°)</label>
+<input type="range" id="opt-arc" min="20" max="180" step="5" value="100">
+<span class="readout" id="val-arc">100</span>
+<label>Flicker (Hz)</label>
+<input type="range" id="opt-hz" min="1" max="15" step="1" value="10">
+<span class="readout" id="val-hz">10</span>
+<label>Speed</label>
+<input type="range" id="opt-speed" min="0.2" max="3" step="0.1" value="1">
+<span class="readout" id="val-speed">1</span>
+<label>Beam width (°)</label>
+<input type="range" id="opt-beam" min="4" max="40" step="1" value="16">
+<span class="readout" id="val-beam">16</span>
+<label>Intensity</label>
+<input type="range" id="opt-intensity" min="0.2" max="1" step="0.05" value="0.7">
+<span class="readout" id="val-intensity">0.7</span>
+<label>Colours</label>
+<input type="color" id="colour-a" value="#ffffff">
+<input type="color" id="colour-b" value="#38bdf8">

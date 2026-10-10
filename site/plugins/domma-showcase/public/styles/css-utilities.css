@@ -1,0 +1,106 @@
+/* Domma Showcase - demo styles from public/showcase/css-utilities, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/css-utilities/"] .opacity-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .opacity-box {
+            width: 72px;
+            height: 72px;
+            background: var(--dm-primary);
+            border-radius: 8px;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .opacity-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--dm-text-muted);
+            font-family: monospace;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .translucent-card {
+            background: var(--dm-primary);
+            color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .translucent-card code {
+            display: block;
+            font-size: 11px;
+            opacity: 0.85;
+            margin-top: 6px;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .glass-panel {
+            border-radius: 12px;
+            padding: 20px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            text-align: center;
+            min-width: 160px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .glass-panel strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .glass-panel code {
+            font-size: 11px;
+            opacity: 0.85;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .hover-box {
+            width: 120px;
+            height: 80px;
+            background: var(--dm-primary);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            gap: 4px;
+            cursor: default;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .hover-box span {
+            font-size: 10px;
+            opacity: 0.8;
+            font-family: monospace;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .interactive-target {
+            width: 120px;
+            height: 80px;
+            background: var(--dm-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 22px;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .opacity-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .showcase-demo[data-demo^="showcase/css-utilities/"] .opacity-controls input[type="range"] {
+            width: 220px;
+        }

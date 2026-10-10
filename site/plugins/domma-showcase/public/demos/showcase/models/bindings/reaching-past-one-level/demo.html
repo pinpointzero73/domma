@@ -1,0 +1,17 @@
+<div class="bind-demo mb-4" id="ancestors-demo">
+    <ul class="mb-3" data-each="teams key=id">
+        <li class="mb-3">
+            <b data-bind-text="name"></b>
+            <ol class="mb-0">
+                {{#each members key=id}}
+                <li>
+                    {{name}} - on {{$parents[0].name}}, in {{$parents[1].season}}, listed
+                    {{$parentContext.$index}} places down
+                </li>
+                {{/each}}
+            </ol>
+        </li>
+    </ul>
+
+    <button type="button" class="btn btn-primary btn-sm" data-on-click="addTeam">Add a team</button>
+</div>

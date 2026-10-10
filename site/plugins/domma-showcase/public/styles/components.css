@@ -1,0 +1,78 @@
+/* Domma Showcase - demo styles from public/showcase/components, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/components/"] .card-accent-primary { border-left: 4px solid var(--dm-primary); }
+        .showcase-demo[data-demo^="showcase/components/"] .code-block-scroll {
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .showcase-demo[data-demo^="showcase/components/"] .code-file-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #161622;
+            color: #64748b;
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.72rem;
+            letter-spacing: 0.02em;
+            padding: 0.35rem 1rem;
+            border-radius: var(--dm-radius-md) var(--dm-radius-md) 0 0;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-bottom: none;
+        }
+
+        .showcase-demo[data-demo^="showcase/components/"] .code-file-tab + .code-block {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8rem;
+            max-height: 160px;
+            overflow-y: auto;
+            background: var(--dm-gray-900, #111);
+            color: #7dd3fc;
+            padding: 0.75rem;
+            border-radius: var(--dm-radius-md);
+            line-height: 1.6;
+        }
+
+        .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log p { margin: 0; padding: 0.1rem 0; }
+        .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log .log-time    { color: #94a3b8; margin-right: 0.5rem; }
+
+        .showcase-demo[data-demo^="showcase/components/"] .component-demo-wrapper {
+            border: 1px solid var(--dm-gray-200, #e5e7eb);
+            border-radius: var(--dm-radius-lg);
+            overflow: hidden;
+        }
+
+        .showcase-demo[data-demo^="showcase/components/"] .component-demo-header {
+            background: var(--dm-gray-100, #f9fafb);
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--dm-gray-200, #e5e7eb);
+            font-size: 0.8rem;
+            color: var(--dm-gray-500, #6b7280);
+            font-family: var(--dm-font-mono, monospace);
+        }
+
+        .showcase-demo[data-demo^="showcase/components/"] .demo-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--dm-gray-300, #d1d5db);
+        }
+        .showcase-demo[data-demo^="showcase/components/"] .demo-dot.red    { background: #f87171; }
+        .showcase-demo[data-demo^="showcase/components/"] .demo-dot.yellow { background: #fbbf24; }
+        .showcase-demo[data-demo^="showcase/components/"] .demo-dot.green  { background: #34d399; }
+
+        .showcase-demo[data-demo^="showcase/components/"] .component-demo-body {
+            padding: 2rem;
+            background: var(--dm-body-bg, #fff);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }

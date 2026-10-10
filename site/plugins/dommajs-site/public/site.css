@@ -1,0 +1,273 @@
+/* dommajs.org - the site's own look (see site.js). */
+
+/* ---- The opening hero, lifted out of the body column by site.js ---------- */
+.site-main > .site-hero {
+    grid-column: 1 / -1;
+    margin: 0;
+    border-radius: 0;
+}
+/* Flush with the top of the page: no gap above it. */
+.site-main:has(> .site-hero) { padding-top: 0; }
+
+/* Page heroes at half the height they come with: less padding, no gap above the title. */
+.hero.hero-responsive { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.hero.hero-responsive .hero-title { margin-top: 0; }
+.hero.hero-responsive .hero-subtitle { margin-bottom: 0; }
+
+/* Content above the ambient blobs. */
+.hero.bg-ambient-float-blobs > *,
+.djs-hero > *,
+.djs-cms-band > * { position: relative; z-index: 1; }
+
+/* ---- Home: the hero ---------------------------------------------------------- */
+.djs-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1rem 3rem;
+    background-color: var(--dm-background);
+    color: var(--dm-text);
+    overflow: hidden;
+}
+
+.djs-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto 2.5rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+@media (min-width: 769px) {
+    .djs-hero { padding: 3rem 2rem 3rem; }
+    .djs-hero-grid { grid-template-columns: auto 1fr; gap: 3rem; align-items: center; }
+}
+
+.djs-hero-brand { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; }
+
+.djs-hero-logo {
+    color: var(--dm-text);
+    flex-shrink: 0;
+    animation: djs-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes djs-glow {
+    from { filter: drop-shadow(0 0 20px var(--dm-white-t30, rgba(255, 255, 255, .3))); }
+    to   { filter: drop-shadow(0 0 40px var(--dm-white-t50, rgba(255, 255, 255, .5))); }
+}
+
+.djs-hero .djs-hero-name {
+    margin: 0;
+    font-size: 5rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1.1;
+    color: var(--dm-text);
+}
+
+.djs-backronym {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+    color: var(--dm-text-secondary);
+}
+.djs-backronym strong { font-weight: 600; color: var(--dm-text); }
+
+.djs-tagline {
+    margin: 0 0 1.5rem;
+    max-width: 600px;
+    min-height: 3.2em;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--dm-text-secondary);
+}
+
+.djs-hero-cta { text-align: right; }
+
+.djs-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    background: var(--dm-primary);
+    color: var(--dm-text-inverse);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--dm-shadow-lg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.djs-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(0, 0, 0, .3); color: var(--dm-text-inverse); }
+
+/* The module tiles, grouped */
+.djs-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1300px;
+}
+
+.djs-feature-group { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+.djs-feature-group-label {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--dm-border);
+    border-radius: 20px;
+    background: var(--dm-surface-raised);
+    color: var(--dm-text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.djs-feature-group-items { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+
+.djs-feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--dm-border);
+    border-radius: 12px;
+    background: var(--dm-surface-raised);
+    color: var(--dm-text);
+    text-align: center;
+    text-decoration: none;
+}
+.djs-feature:hover { background: var(--dm-hover-bg, var(--dm-surface)); color: var(--dm-text); animation: djs-heartbeat 1.5s ease-in-out infinite; }
+
+@keyframes djs-heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.djs-feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    margin-bottom: 0.5rem;
+    color: var(--dm-primary);
+}
+.djs-feature-icon svg { width: 40px; height: 40px; }
+
+.djs-feature-label { font-size: 0.875rem; opacity: 0.9; color: var(--dm-text-secondary); }
+
+/* ---- Home: the Domma CMS band ------------------------------------------------- */
+/* Lifted out of the body column by site.js, like the hero: full width. */
+.site-main > .djs-cms-band { grid-column: 1 / -1; margin-bottom: 0; }
+
+.djs-cms-band {
+    position: relative;
+    margin: 4rem 0;
+    padding: 5rem 0;
+    overflow: hidden;
+    background: linear-gradient(180deg,
+        color-mix(in oklab, var(--dm-surface), var(--dm-primary) 6%) 0%,
+        color-mix(in oklab, var(--dm-surface), var(--dm-primary) 2%) 100%);
+    border-top: 1px solid var(--dm-border);
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.djs-cms-band-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+}
+
+.djs-cms-band .djs-cms-band-headline {
+    margin: 0 0 1rem;
+    min-height: 1.05em;
+    font-size: clamp(2rem, 5.5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--dm-text);
+    text-shadow: 0 2px 24px color-mix(in oklab, var(--dm-primary), transparent 65%);
+}
+
+.djs-cms-band-subhead {
+    margin: 0 auto 1rem;
+    max-width: 720px;
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    font-weight: 500;
+    color: var(--dm-text);
+}
+.djs-cms-band-subhead strong { color: var(--dm-primary); font-weight: 700; }
+
+.djs-cms-band-lead {
+    margin: 0 auto 2.5rem;
+    max-width: 640px;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--dm-text-secondary);
+}
+
+.djs-cms-band-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    max-width: 760px;
+    margin: 0 auto 2.5rem;
+}
+
+.djs-cms-stat {
+    padding: 1.25rem 0.75rem;
+    border: 1px solid var(--dm-border);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--dm-surface-raised), var(--dm-primary) 4%);
+    backdrop-filter: blur(4px);
+}
+
+.djs-cms-stat-number {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--dm-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.djs-cms-stat-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    line-height: 1.3;
+    color: var(--dm-text-secondary);
+}
+
+.djs-cms-band-cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+.djs-cms-band-cta .btn { min-width: 200px; }
+.djs-cms-band-cta .btn-primary { font-size: 1.0625rem; padding: 0.85rem 1.75rem; }
+
+.djs-cms-band-tagline { margin: 0; font-size: 0.85rem; letter-spacing: 0.02em; color: var(--dm-text-muted); }
+.djs-cms-band-tagline .sep { margin: 0 0.5rem; opacity: 0.7; }
+
+@media (max-width: 768px) {
+    .djs-hero-name { font-size: 3.25rem; }
+    .djs-hero-cta { text-align: left; }
+    .djs-cms-band { padding: 3.5rem 0; margin: 2rem 0; }
+    .djs-cms-band-stats { grid-template-columns: repeat(2, 1fr); max-width: 380px; }
+    .djs-cms-band-cta { flex-direction: column; align-items: stretch; padding: 0 1.5rem; }
+    .djs-cms-band-cta .btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .djs-hero-logo, .djs-feature:hover { animation: none; }
+}
+html.dm-reduced-motion .djs-hero-logo,
+html.dm-reduced-motion .djs-feature:hover { animation: none; }

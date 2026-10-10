@@ -1,0 +1,34 @@
+<p class="mb-6 text-gray-600">A simple sidebar with icon navigation</p>
+
+<div class="demo-container mb-6">
+    <aside id="sidebar-basic"></aside>
+    <div class="demo-content with-sidebar" id="demo-content-basic">
+        <h3>Main Content Area</h3>
+        <p>The sidebar is fixed to the left. Try clicking the navigation items!</p>
+        <button type="button" id="toggle-basic" class="btn btn-primary mt-4">Toggle Sidebar (Mobile)</button>
+    </div>
+</div>
+
+<h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+<div class="code-block language-javascript">
+    <pre><code>
+            const sidebar = Domma.elements.sidebar('#sidebar-basic', {
+            contentSelector: '#demo-content-basic',
+            position: 'left',
+            fixed: true,
+            width: '250px',
+            top: '60px',
+            header: {
+            title: 'Navigation',
+            toggle: true
+            },
+            items: [
+            { text: 'Dashboard', url: '#dashboard', icon: 'layout', section: 'dashboard' },
+            { text: 'Users', url: '#users', icon: 'users', section: 'users' },
+            { text: 'Settings', url: '#settings', icon: 'settings', section: 'settings' }
+            ],
+            variant: 'dark',
+            activeSection: 'dashboard'
+            });
+    </code></pre>
+</div>

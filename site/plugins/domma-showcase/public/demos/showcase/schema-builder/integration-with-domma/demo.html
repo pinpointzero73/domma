@@ -1,0 +1,37 @@
+<div class="card-body">
+    <h3 class="card-title">Using Generated Blueprints</h3>
+    <div class="code-block language-javascript">
+        <span class="comment">// 1. Build your blueprint in Schema Builder</span>
+        <span class="comment">// 2. Export as JavaScript</span>
+        const contactBlueprint = {
+        name: { type: 'string', required: true, label: 'Full Name' },
+        email: { type: 'email', required: true, label: 'Email Address' },
+        message: { type: 'textarea', required: true, label: 'Message' }
+        };
+
+        <span class="comment">// 3. Use with Domma.forms to generate a form</span>
+        const form = Domma.forms.create('#contact-form', {
+        blueprint: contactBlueprint,
+        layout: 'stacked',
+        submitText: 'Send Message',
+        onSubmit: async (data) =&gt; {
+        console.log('Form data:', data);
+        await Domma.http.post('/api/contact', data);
+        }
+        });
+
+        <span class="comment">// 4. Or use with Domma.models for reactive data</span>
+        const model = M.create(contactBlueprint, {
+        name: '',
+        email: '',
+        message: ''
+        });
+
+        <span class="comment">// 5. Or use with CRUD helper for complete data management</span>
+        Domma.forms.crud('#crud-container', {
+        blueprint: contactBlueprint,
+        endpoint: '/api/contacts',
+        title: 'Contacts'
+        });
+    </div>
+</div>

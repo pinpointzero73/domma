@@ -1,0 +1,13 @@
+<textarea class="try-it-editor" rows="13" spellcheck="false">                    // Standalone:  import {observable, computed, effect} from 'domma-reactive';
+    // Here:        M.observable / M.computed / M.effect - the same functions.
+
+    const price = M.observable(10);
+    const qty   = M.observable(3);
+
+    const total = M.computed(() =&gt; price.value * qty.value);
+
+    M.effect(() =&gt; log('total is', total.get()));
+
+    qty.value = 4;
+    M.flush();      // the standalone package calls this flushSync()
+</textarea>

@@ -1,0 +1,159 @@
+/* Domma Showcase - demo styles from public/showcase/forms, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/forms/"] .forms-output {
+          background: var(--bg-darker);
+          border-radius: 4px;
+          padding: 1rem;
+          font-family: 'Courier New', monospace;
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          white-space: pre-wrap;
+          max-height: 200px;
+          overflow-y: auto;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .forms-controls {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          flex-wrap: wrap;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .crud-demo-table {
+          margin-top: 1rem;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .mock-data-info {
+          background: var(--warning-bg);
+          color: var(--warning-text);
+          padding: 0.75rem;
+          border-radius: 4px;
+          margin-bottom: 1rem;
+          font-size: 0.9rem;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-card {
+          background: var(--dm-color-surface);
+          border: 1px solid var(--dm-color-border);
+          border-radius: 6px;
+          padding: 0.75rem;
+          margin-bottom: 0.75rem;
+          transition: all 0.2s ease;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-card:hover {
+          border-color: var(--dm-color-primary);
+          box-shadow: 0 2px 8px rgba(var(--dm-color-primary-rgb), 0.1);
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 0.5rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid var(--dm-color-border);
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-header .icon {
+          width: 18px;
+          height: 18px;
+          color: var(--dm-color-primary);
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-header h3 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--dm-color-text);
+          margin: 0;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-body {
+          padding: 0;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 0.5rem;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.4rem 0.6rem;
+          background: var(--dm-color-surface-light);
+          border: 1px solid var(--dm-color-border-light);
+          border-radius: 4px;
+          transition: all 0.15s ease;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-item:hover {
+          background: var(--dm-color-surface-lighter);
+          border-color: var(--dm-color-primary-light);
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-item code {
+          font-family: var(--dm-font-mono);
+          font-weight: 600;
+          color: var(--dm-color-primary);
+          font-size: 0.8rem;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .reference-item span {
+          color: var(--dm-color-text-muted);
+          font-size: 0.75rem;
+          flex: 1;
+          margin-left: 0.5rem;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .copy-btn {
+          background: var(--dm-color-primary-light);
+          border: none;
+          border-radius: 3px;
+          padding: 0.25rem;
+          cursor: pointer;
+          opacity: 0.7;
+          transition: all 0.15s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 24px;
+          height: 24px;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .copy-btn:hover {
+          opacity: 1;
+          background: var(--dm-color-primary);
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .copy-btn span {
+          width: 14px;
+          height: 14px;
+          color: white;
+          margin: 0;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .copy-btn {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          background: var(--dm-color-primary);
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 0.25rem 0.5rem;
+          font-size: 0.7rem;
+          cursor: pointer;
+          opacity: 0;
+          transition: all 0.2s ease;
+      }
+
+      .showcase-demo[data-demo^="showcase/forms/"] .copy-btn:hover {
+          background: var(--dm-color-primary-darker);
+      }

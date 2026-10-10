@@ -1,0 +1,12 @@
+/* Domma Showcase - demo styles from public/showcase/effects/gradients, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/gradients/"] .gradient-demo {
+          padding: 3rem;
+          border-radius: 8px;
+          text-align: center;
+          color: white;
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 1rem 0;
+      }

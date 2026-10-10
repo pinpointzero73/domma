@@ -1,0 +1,22 @@
+<p class="mb-6 text-gray-600">Remember expanded menus across page reloads</p>
+
+<div class="demo-container mb-6">
+    <aside id="sidebar-persist"></aside>
+    <div class="demo-content with-sidebar" id="demo-content-persist">
+        <h3>Persistent State</h3>
+        <p>Expand some menus, then reload the page. The expanded state will be remembered!</p>
+        <button type="button" id="reload-demo" class="btn btn-primary mt-4">Reload Page</button>
+    </div>
+</div>
+
+<h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+<div class="code-block language-javascript">
+    <pre><code>
+            Domma.elements.sidebar('#sidebar-persist', {
+            contentSelector: '#demo-content-persist',
+            persistExpanded: true,
+            persistKey: 'my-app-sidebar',  // Unique key for this sidebar
+            items: [/* ... */]
+            });
+    </code></pre>
+</div>

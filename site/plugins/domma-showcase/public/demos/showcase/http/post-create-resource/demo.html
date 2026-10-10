@@ -1,0 +1,27 @@
+<div>
+    <div class="form-group mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="post-title" value="My New Post">
+    </div>
+    <div class="form-group mb-3">
+        <label class="form-label">Body</label>
+        <textarea class="form-textarea" id="post-body" rows="2">This is the post content.</textarea>
+    </div>
+    <pre class="code-block language-javascript mb-4">const newPost = await Domma.http.post(
+        'https://jsonplaceholder.typicode.com/posts',
+        {
+        title: 'My New Post',
+        body: 'This is the post content.',
+        userId: 1
+        }
+        );
+    </pre>
+    <button type="button" class="btn btn-primary" id="demo-post">
+        <span data-icon="plus" data-icon-size="16"></span>
+        Create Post
+    </button>
+</div>
+<div>
+    <label class="form-label">Response:</label>
+    <div class="http-response-area" id="post-response">Click "Create Post" to see the response...</div>
+</div>

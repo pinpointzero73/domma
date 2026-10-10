@@ -1,0 +1,10 @@
+/* Domma Showcase - demo styles from public/showcase/models/bindings, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/models/bindings/"] .bind-demo {
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius, 8px);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            padding: 1rem;
+        }

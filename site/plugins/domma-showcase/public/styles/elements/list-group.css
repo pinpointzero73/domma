@@ -1,0 +1,62 @@
+/* Domma Showcase - demo styles from public/showcase/elements/list-group, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/list-group/"] .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/list-group/"] .demo-col {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/list-group/"] .demo-label {
+      font-size: 0.7rem;
+      color: var(--dm-text-muted);
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/list-group/"] .demo-output {
+      margin-top: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      border: 1px dashed var(--dm-border);
+      border-radius: var(--dm-radius);
+      font-size: 0.8125rem;
+      color: var(--dm-text-muted);
+      min-height: 2.25rem;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/list-group/"] .settings-layout {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/list-group/"] .settings-sidebar {
+      flex: 0 0 200px;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/list-group/"] .settings-panel {
+      flex: 1;
+      padding: 1.25rem;
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius-md);
+      background-color: var(--dm-surface);
+      min-height: 160px;
+    }
+
+    @media (max-width: 640px) {
+      .showcase-demo[data-demo^="showcase/elements/list-group/"] .settings-layout {
+        flex-direction: column;
+      }
+      .showcase-demo[data-demo^="showcase/elements/list-group/"] .settings-sidebar {
+        flex: none;
+        width: 100%;
+      }
+    }

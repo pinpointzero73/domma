@@ -1,0 +1,19 @@
+<textarea class="try-it-editor" rows="16" spellcheck="false">                    const items = M.observableArray(['milk', 'eggs']);
+
+    const summary = M.computed(
+    () =&gt; items.length + ' item(s): ' + items.value.join(', ')
+    );
+
+    M.effect(() =&gt; log(summary.get()));
+
+    items.push('bread');
+    M.flush();
+
+    items.remove('eggs');
+    M.flush();
+
+    items.sort();
+    M.flush();
+
+    log('length is tracked too:', items.length);
+</textarea>

@@ -1,0 +1,53 @@
+/* Domma Showcase - demo styles from public/showcase/elements/avatar, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-tones {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+            gap: 0.75rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-tone {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: var(--dm-font-size-sm);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-projects {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-project {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem 1.5rem;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--dm-border);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-project:last-child {
+            border-bottom: 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-project-name {
+            margin: 0 0 0.125rem;
+            font-weight: 600;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/avatar/"] .sx-av-project-meta {
+            margin: 0;
+            color: var(--dm-text-secondary);
+            font-size: var(--dm-font-size-sm);
+        }

@@ -1,0 +1,98 @@
+/* Domma Showcase - demo styles from public/showcase/elements/number-badge, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/number-badge/"] .demo-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 9999px;
+      background-color: var(--dm-primary);
+      color: var(--dm-white);
+      font-weight: 700;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .demo-target-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .demo-label {
+      font-size: 0.7rem;
+      color: var(--dm-text-muted);
+      text-align: center;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .demo-variants-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.25rem 0;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .demo-dot-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .demo-dot-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .demo-counters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: flex-end;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .live-count-display {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--dm-primary);
+      min-width: 3rem;
+      text-align: center;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .mock-navbar {
+      background: var(--dm-surface-2);
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .inbox-list {
+      max-width: 280px;
+      border: 1px solid var(--dm-border);
+      border-radius: var(--dm-radius);
+      overflow: hidden;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .inbox-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.625rem 1rem;
+      border-bottom: 1px solid var(--dm-border);
+      font-size: 0.875rem;
+    }
+
+    .showcase-demo[data-demo^="showcase/elements/number-badge/"] .inbox-row:last-child {
+      border-bottom: none;
+    }

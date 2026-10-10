@@ -1,0 +1,20 @@
+<div class="col-6">
+    <label class="form-label" for="rx-mode">Mode</label>
+    <select class="form-select mb-3" id="rx-mode">
+        <option value="x">Read X</option>
+        <option value="y">Read Y</option>
+    </select>
+
+    <label class="form-label" for="rx-x">X</label>
+    <input type="number" class="form-input mb-3" id="rx-x" value="1">
+
+    <label class="form-label" for="rx-y">Y</label>
+    <input type="number" class="form-input mb-3" id="rx-y" value="100">
+</div>
+<div class="col-6">
+    <div class="rx-log" id="rx-branch-log"></div>
+    <p class="text-sm mt-2">
+        In <strong>Read X</strong> mode, editing Y produces nothing - not a filtered-out run, no run
+        at all. Switch modes and the roles swap immediately.
+    </p>
+</div>

@@ -1,0 +1,525 @@
+<p class="text-gray-600 mb-6">Structural components for building interfaces</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+
+    <!-- Accordion -->
+    <a href="accordion/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="chevron-down"></div>
+            <h3 class="card-title">Accordion</h3>
+            <p class="card-text">Collapsible content sections with smooth animations.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Single or multi-expand</li>
+                <li>Smooth animations</li>
+                <li>Nested support</li>
+                <li>Keyboard accessible</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.accordion('#faq', { multiExpand: false })</code>
+        </div>
+    </a>
+
+    <!-- Avatar -->
+    <a href="avatar/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="users"></div>
+            <h3 class="card-title">Avatar</h3>
+            <p class="card-text">A person's picture, initials or an icon - alone or stacked in a group.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Initials and a stable colour from the name</li>
+                <li>Picture with initials fallback</li>
+                <li>Sizes, shapes, status dot and ring</li>
+                <li>Groups with "+N" and a popover</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.avatarGroup('#team', { people, max: 4 })</code>
+        </div>
+    </a>
+
+    <!-- Badge -->
+    <a href="badge/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="box"></div>
+            <h3 class="card-title">Badge</h3>
+            <p class="card-text">Small status indicators and labels.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Multiple variants</li>
+                <li>Pill &amp; rounded styles</li>
+                <li>Dismissible badges</li>
+                <li>Counter badges</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.badge('#el', { variant: 'primary' })</code>
+        </div>
+    </a>
+
+    <!-- Number Badge -->
+    <a href="number-badge/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="bell"></div>
+            <h3 class="card-title">Number Badge</h3>
+            <p class="card-text">Positioned notification counters and presence dots.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>CSS-only or JS API</li>
+                <li>Auto-hide at zero</li>
+                <li>Dot mode for presence</li>
+                <li>Pulse animation</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.numberBadge('#btn', { count: 5 })</code>
+        </div>
+    </a>
+
+    <!-- List Group -->
+    <a href="list-group/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="list"></div>
+            <h3 class="card-title">List Group</h3>
+            <p class="card-text">Selectable lists with keyboard navigation and colour variants.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Single &amp; multi-select</li>
+                <li>Keyboard navigation</li>
+                <li>Colour variants</li>
+                <li>Flush &amp; numbered modes</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.listGroup('#list', { mode: 'single' })</code>
+        </div>
+    </a>
+
+    <!-- Signature -->
+    <a href="signature/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="edit"></div>
+            <h3 class="card-title">Signature</h3>
+            <p class="card-text">Canvas-based handwriting pad for capturing signatures in forms.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Mouse, touch &amp; stylus</li>
+                <li>Undo / redo history</li>
+                <li>PNG &amp; SVG export</li>
+                <li>Type-your-name fallback</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.signature('#pad', { typeFallback: true })</code>
+        </div>
+    </a>
+
+    <!-- Breadcrumbs -->
+    <a href="breadcrumbs/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="chevron-right"></div>
+            <h3 class="card-title">Breadcrumbs</h3>
+            <p class="card-text">Navigation trail showing user location.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Dynamic updates</li>
+                <li>Custom separators</li>
+                <li>Home icon support</li>
+                <li>Responsive collapsing</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.breadcrumbs('#nav', { items: [...] })</code>
+        </div>
+    </a>
+
+    <!-- Button Group -->
+    <a href="button-group/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="grid"></div>
+            <h3 class="card-title">Button Group</h3>
+            <p class="card-text">Radio and checkbox button groups.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Single or multi-select</li>
+                <li>Vertical layout</li>
+                <li>Value binding</li>
+                <li>Programmatic control</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.buttonGroup('.btns', { mode: 'single' })</code>
+        </div>
+    </a>
+
+    <!-- Card -->
+    <a href="card/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="zap"></div>
+            <h3 class="card-title">Card</h3>
+            <p class="card-text">Container components with hover effects and clickability.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Hover effects</li>
+                <li>Click handling</li>
+                <li>Header &amp; footer</li>
+                <li>Image support</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.card('.card', { hover: true })</code>
+        </div>
+    </a>
+
+    <!-- Carousel -->
+    <a href="carousel/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="image"></div>
+            <h3 class="card-title">Carousel</h3>
+            <p class="card-text">Image and content sliders with controls.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Auto-play</li>
+                <li>Touch support</li>
+                <li>Multiple transitions</li>
+                <li>Indicators &amp; arrows</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.carousel('#slider', { autoplay: true })</code>
+        </div>
+    </a>
+
+    <!-- Dialog -->
+    <a href="dialog/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="message-circle"></div>
+            <h3 class="card-title">Dialog</h3>
+            <p class="card-text">Promise-based modal dialogs (alert, confirm, prompt).</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Promise-based API</li>
+                <li>Alert, confirm, prompt</li>
+                <li>Custom styling</li>
+                <li>Keyboard support</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>await elements.confirm('Are you sure?')</code>
+        </div>
+    </a>
+
+    <!-- Dropdown -->
+    <a href="dropdown/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="chevron-down"></div>
+            <h3 class="card-title">Dropdown</h3>
+            <p class="card-text">Contextual overlay menus with smart positioning.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Click or hover trigger</li>
+                <li>Auto-positioning</li>
+                <li>Nested support</li>
+                <li>Close on outside click</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.dropdown('#menu', { trigger: 'hover' })</code>
+        </div>
+    </a>
+
+    <!-- Context Menu -->
+    <a href="context-menu/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="menu"></div>
+            <h3 class="card-title">Context Menu</h3>
+            <p class="card-text">Right-click menus bound to a container and delegated to its children.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Delegated to rows</li>
+                <li>Nests without overriding</li>
+                <li>Keyboard and long-press</li>
+                <li>Submenus</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.contextMenu('#grid', { match: 'tr' })</code>
+        </div>
+    </a>
+
+    <!-- Sortable -->
+    <a href="sortable/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="move"></div>
+            <h3 class="card-title">Sortable</h3>
+            <p class="card-text">Drag-to-reorder lists, rows and trees by mouse, touch and keyboard.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Live or indicator mode</li>
+                <li>Nested trees with onDrop</li>
+                <li>Remembers the order</li>
+                <li>Handles, touch and Alt+Arrow</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.sortable('#list', { persist: 'tasks' })</code>
+        </div>
+    </a>
+
+    <!-- Forms -->
+    <a href="forms/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="edit"></div>
+            <h3 class="card-title">Forms</h3>
+            <p class="card-text">Enhanced form controls with validation.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Input validation</li>
+                <li>Custom controls</li>
+                <li>Error handling</li>
+                <li>Submit management</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>&lt;input class="form-input" required&gt;</code>
+        </div>
+    </a>
+
+    <!-- hero -->
+    <a href="hero/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="layout"></div>
+            <h3 class="card-title">hero</h3>
+            <p class="card-text">Hero sections with flexible layouts (CSS-only).</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Multiple layouts</li>
+                <li>Split layouts</li>
+                <li>Gradient overlays</li>
+                <li>Responsive sizing</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>class="hero hero-primary"</code>
+        </div>
+    </a>
+
+    <!-- Modal -->
+    <a href="modal/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="box"></div>
+            <h3 class="card-title">Modal</h3>
+            <p class="card-text">Dialog overlays with backdrop and animations.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Backdrop control</li>
+                <li>Keyboard shortcuts</li>
+                <li>Nested support</li>
+                <li>Size variants</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.modal('#modal').open()</code>
+        </div>
+    </a>
+
+    <!-- Navbar -->
+    <a href="navbar/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="menu"></div>
+            <h3 class="card-title">Navbar</h3>
+            <p class="card-text">Responsive navigation bar with mobile menu.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Mobile responsive</li>
+                <li>Dropdown support</li>
+                <li>Brand/logo area</li>
+                <li>Fixed/sticky modes</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.navbar('#nav', { collapsible: true })</code>
+        </div>
+    </a>
+
+    <!-- Sidebar -->
+    <a href="../sidebar/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="sidebar"></div>
+            <h3 class="card-title">Sidebar</h3>
+            <p class="card-text">Navigation sidebar with unlimited depth nesting.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Unlimited depth menus</li>
+                <li>Mobile drawer</li>
+                <li>State persistence</li>
+                <li>Light/dark themes</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.sidebar('#nav', { variant: 'dark' })</code>
+        </div>
+    </a>
+
+    <!-- Footer -->
+    <a href="../footer/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="layout"></div>
+            <h3 class="card-title">Footer</h3>
+            <p class="card-text">Page footer with three layout modes and theme variants.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Simple/columns/minimal</li>
+                <li>Theme variants</li>
+                <li>Social media icons</li>
+                <li>Brand integration</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.footer('#footer', { layout: 'simple' })</code>
+        </div>
+    </a>
+
+    <!-- Autocomplete -->
+    <a href="autocomplete/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="search"></div>
+            <h3 class="card-title">Autocomplete</h3>
+            <p class="card-text">Text input with intelligent suggestion dropdown.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Static &amp; async data</li>
+                <li>Match highlighting</li>
+                <li>Keyboard navigation</li>
+                <li>Model binding</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.autocomplete('#search', { data: [...] })</code>
+        </div>
+    </a>
+
+    <!-- Pillbox -->
+    <a href="pillbox/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="tag"></div>
+            <h3 class="card-title">Pillbox</h3>
+            <p class="card-text">Multi-select tag input with removable pills.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Tag creation</li>
+                <li>Searchable dropdown</li>
+                <li>Validation rules</li>
+                <li>Model binding</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.pillbox('#tags', { creatable: true })</code>
+        </div>
+    </a>
+
+    <!-- Chooser -->
+    <a href="chooser/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="check-square"></div>
+            <h3 class="card-title">Chooser</h3>
+            <p class="card-text">Visual option-picker with cards or chips, single or multi-select.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Card or chip variants</li>
+                <li>Per-option icons, badges, descriptions</li>
+                <li>Keyboard accessible</li>
+                <li>Blueprint-driven for forms</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.chooser('#host', { variant: 'card' })</code>
+        </div>
+    </a>
+
+    <!-- TreeView -->
+    <a href="treeview/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="folder"></div>
+            <h3 class="card-title">TreeView</h3>
+            <p class="card-text">Hierarchical tree structure with expand/collapse.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Nested nodes</li>
+                <li>Checkboxes</li>
+                <li>Lazy loading</li>
+                <li>Keyboard navigation</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.treeview('#tree', { data: tree })</code>
+        </div>
+    </a>
+
+    <!-- Editor -->
+    <a href="editor/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="edit"></div>
+            <h3 class="card-title">Editor</h3>
+            <p class="card-text">Rich text editor with formatting tools.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Formatting toolbar</li>
+                <li>HTML/Preview modes</li>
+                <li>Image support</li>
+                <li>Markdown export</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.editor('#editor', { toolbar: true })</code>
+        </div>
+    </a>
+
+    <!-- Tabs -->
+    <a href="tabs/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="layout"></div>
+            <h3 class="card-title">Tabs</h3>
+            <p class="card-text">Tabbed content panels with animations.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Animated transitions</li>
+                <li>Vertical layout</li>
+                <li>Dynamic tabs</li>
+                <li>Keyboard navigation</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.tabs('#tabs', { activeIndex: 0 })</code>
+        </div>
+    </a>
+
+    <!-- Timeline -->
+    <a href="timeline/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="activity"></div>
+            <h3 class="card-title">Timeline</h3>
+            <p class="card-text">Chronological event display with multiple layouts.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Vertical &amp; horizontal</li>
+                <li>Centered layout</li>
+                <li>Custom styling</li>
+                <li>Event markers</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.timeline('#timeline', { layout: 'centered' })</code>
+        </div>
+    </a>
+
+    <!-- Tooltip -->
+    <a href="tooltip/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="info"></div>
+            <h3 class="card-title">Tooltip</h3>
+            <p class="card-text">Contextual popups on hover or click.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Multiple triggers</li>
+                <li>Smart positioning</li>
+                <li>HTML content</li>
+                <li>Custom styling</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>elements.tooltip('[title]', { trigger: 'hover' })</code>
+        </div>
+    </a>
+
+    <!-- Popover -->
+    <a href="popover/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="message-square"></div>
+            <h3 class="card-title">Popover</h3>
+            <p class="card-text">Rich panels anchored to a trigger - a title, content or a small form.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Click, hover, focus or manual</li>
+                <li>Flips and shifts to stay on screen</li>
+                <li>Focus moves in and comes back</li>
+                <li>data-popover markup</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.popover('#help', { title, content })</code>
+        </div>
+    </a>
+</div>

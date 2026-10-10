@@ -1,0 +1,41 @@
+<p class="mb-6 text-gray-600">Unlimited depth with collapsible submenus</p>
+
+<div class="demo-container mb-6">
+    <aside id="sidebar-nested"></aside>
+    <div class="demo-content with-sidebar" id="demo-content-nested">
+        <h3>Multi-Level Navigation</h3>
+        <p>Click on items with arrows to expand/collapse submenus. The component supports unlimited nesting depth.</p>
+        <button type="button" id="expand-all" class="btn btn-primary mt-4 mr-2">Expand All</button>
+        <button type="button" id="collapse-all" class="btn btn-secondary mt-4">Collapse All</button>
+    </div>
+</div>
+
+<h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+<div class="code-block language-javascript">
+    <pre><code>
+            const sidebar = Domma.elements.sidebar('#sidebar-nested', {
+            contentSelector: '#demo-content-nested',
+            items: [
+            { text: 'Dashboard', url: '#', icon: 'layout' },
+            {
+            text: 'Products',
+            icon: 'box',
+            items: [
+            { text: 'All Products', url: '#products' },
+            { text: 'Categories', url: '#categories' },
+            {
+            text: 'Advanced',
+            items: [
+            { text: 'Import', url: '#import' },
+            { text: 'Export', url: '#export' }
+            ]
+            }
+            ]
+            },
+            { divider: true },
+            { heading: 'SYSTEM' },
+            { text: 'Settings', url: '#settings', icon: 'settings' }
+            ]
+            });
+    </code></pre>
+</div>

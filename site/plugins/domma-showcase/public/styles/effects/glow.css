@@ -1,0 +1,10 @@
+/* Domma Showcase - demo styles from public/showcase/effects/glow, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/glow/"] .demo-dark {
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          padding: 3rem;
+          border-radius: 8px;
+          text-align: center;
+          color: white;
+      }

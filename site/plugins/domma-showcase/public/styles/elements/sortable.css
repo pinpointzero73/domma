@@ -1,0 +1,92 @@
+/* Domma Showcase - demo styles from public/showcase/elements/sortable, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-sm);
+            cursor: grab;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-item:focus-visible {
+            outline: 2px solid var(--dm-primary);
+            outline-offset: 2px;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-row {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding: 0.25rem 0 0.75rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-tile {
+            flex: 0 0 8.5rem;
+            min-height: 7rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0.875rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-sm);
+            cursor: grab;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-tile strong {
+            font-size: 1.5rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-node {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-sm);
+            cursor: grab;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-node[data-depth="1"] { margin-left: 1.75rem; }
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-node[data-depth="2"] { margin-left: 3.5rem; }
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-node[data-depth="3"] { margin-left: 5.25rem; }
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-node[data-depth="4"] { margin-left: 7rem; }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-grip {
+            display: inline-flex;
+            padding: 0.25rem;
+            color: var(--dm-text-muted);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-field {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/sortable/"] .sx-sort-output {
+            font-family: var(--dm-font-mono, monospace);
+            word-break: break-word;
+        }

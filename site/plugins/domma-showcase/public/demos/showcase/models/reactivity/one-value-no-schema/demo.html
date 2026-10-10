@@ -1,0 +1,14 @@
+<textarea class="try-it-editor" rows="12" spellcheck="false">                    // No blueprint, no field names - just one value that other things can watch.
+    const count = M.observable(0);
+
+    const doubled = M.computed(() =&gt; count.value * 2);
+
+    log('doubled is', doubled.get());
+
+    count.value = 5;
+    log('after the write:', doubled.get());
+
+    // peek() reads without subscribing - handy inside a derivation
+    // that needs a value but must not re-run when it changes.
+    log('peek says:', count.peek());
+</textarea>

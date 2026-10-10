@@ -1,0 +1,21 @@
+<textarea class="try-it-editor" rows="18" spellcheck="false">                    const list = M.observable(['a']);
+
+    let runs = 0;
+    M.effect(() =&gt; { runs++; list.value.length; });
+    M.flush();
+    log('effect runs after setup:', runs);
+
+    // WRONG - mutate in place, then assign the same reference back.
+    const live = list.peek();
+    live.push('b');
+    list.value = live;
+    M.flush();
+    log('after an in-place push:', runs, '(nothing was told)');
+
+    // RIGHT - assign a new array.
+    list.value = [...list.peek(), 'c'];
+    M.flush();
+    log('after assigning a new array:', runs, '(dependents woke up)');
+
+    log('the value itself was correct all along:', list.peek().join(','));
+</textarea>

@@ -4,8 +4,10 @@
  * Domma CMS site up as dommajs.org - the look, the menus and the Showcase
  * project. Safe to run again: it only writes what differs.
  *
- *   - config/theme.json   charcoal-dark, Roboto, a light/dark switcher (the old site's look)
- *   - config/menus/       main and footer, from scripts/site-migrate/out/menus
+ *   - config/theme.json   with --theme only: charcoal-dark, Roboto, a light/dark switcher (the old site's look)
+ *   - config/presets.json the With Sidebar layout's contents on the left (the main menu is a rail on the right)
+ *   - config/menus/       main and footer, from scripts/site-migrate/out/menus - when the site has
+ *                         none yet, or with --menus (they are the admin's after that)
  *                         (run menus.mjs first); main -> navbar, footer -> footer-primary
  *   - projects collection a Showcase project rooted at /showcase
  *   - content/pages/      every page under scripts/site-migrate/pages/ (phase 2 on), same path
@@ -20,7 +22,7 @@
  * The site reads these at boot: restart it afterwards (its manager restarts a
  * site when its process is ended).
  *
- * Usage: node scripts/site-migrate/apply-site.mjs <site-dir> [--dry] [--reseed]
+ * Usage: node scripts/site-migrate/apply-site.mjs <site-dir> [--dry] [--reseed] [--theme] [--menus]
  */
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -38,10 +40,14 @@ if (!fs.existsSync(path.join(SITE, 'config', 'site.json'))) { console.error(`Not
 
 const readJson = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 const changes = [];
-/** Write JSON atomically, only when it changed. */
+/** Write JSON atomically, only when its content changed (the CMS may reformat a file it saves). */
 function write(p, value) {
     const text = JSON.stringify(value, null, 2) + '\n';
-    if (fs.existsSync(p) && fs.readFileSync(p, 'utf8') === text) return;
+    if (fs.existsSync(p)) {
+        let current;
+        try { current = JSON.stringify(JSON.parse(fs.readFileSync(p, 'utf8'))); } catch { current = null; }
+        if (current === JSON.stringify(value)) return;
+    }
     changes.push(path.relative(SITE, p));
     if (DRY) return;
     fs.mkdirSync(path.dirname(p), {recursive: true});
@@ -50,21 +56,35 @@ function write(p, value) {
     fs.renameSync(tmp, p);
 }
 
-// ---- Theme: the old site's look -------------------------------------------
+// ---- Theme: the old site's look - only with --theme (a new site): after that the theme is
+// the admin's, and a re-run must not undo what was changed there ------------------------
 const themeFile = path.join(SITE, 'config', 'theme.json');
 const theme = readJson(themeFile);
-write(themeFile, {
+if (process.argv.includes('--theme')) write(themeFile, {
     ...theme,
     theme: 'charcoal-dark',
     font: {...(theme.font || {}), family: 'Roboto'},
-    switcher: {...(theme.switcher || {}), enabled: true, themes: ['charcoal-dark', 'charcoal-light']},
+    // The switcher is set up once; after that it is the admin's (where it sits, whether it shows).
+    switcher: {...(theme.switcher || {}), enabled: true, themes: []},   // empty = every theme
 });
+
+// ---- Layouts: the With Sidebar layout (the showcase's) has its contents on the left, as the
+// main menu is a vertical rail on the right ----
+const presetsFile = path.join(SITE, 'config', 'presets.json');
+if (fs.existsSync(presetsFile)) {
+    const presets = readJson(presetsFile);
+    if (presets['with-sidebar'] && presets['with-sidebar'].sidebarSide !== 'left') {
+        write(presetsFile, {...presets, 'with-sidebar': {...presets['with-sidebar'], sidebarSide: 'left'}});
+    }
+}
 
 // ---- Menus ------------------------------------------------------------------
 if (!fs.existsSync(path.join(MENUS, 'main.json'))) { console.error('No converted menus: run scripts/site-migrate/menus.mjs first'); process.exit(1); }
+// Written when the site has none yet (or with --menus): after that the menus are the admin's.
 for (const slug of ['main', 'footer']) {
     const menu = readJson(path.join(MENUS, `${slug}.json`));
     const target = path.join(SITE, 'config', 'menus', `${slug}.json`);
+    if (fs.existsSync(target) && !process.argv.includes('--menus')) continue;
     // Keep the site's own timestamps on a menu it already has, so a re-run is a no-op.
     if (fs.existsSync(target)) menu.meta = {...menu.meta, createdAt: readJson(target).meta?.createdAt ?? menu.meta.createdAt, updatedAt: readJson(target).meta?.updatedAt ?? menu.meta.updatedAt};
     write(target, menu);
@@ -124,7 +144,15 @@ mirror(SM, path.join(SITE, 'content'), ['custom.css']);
 // ---- Site plugins (site/plugins/<name>/) - mirrored in, then enabled ------------
 const SITE_PLUGINS = path.join(ROOT, 'site', 'plugins');
 for (const name of fs.existsSync(SITE_PLUGINS) ? fs.readdirSync(SITE_PLUGINS) : []) {
-    mirror(path.join(SITE_PLUGINS, name), path.join(SITE, 'plugins', name), allFiles(path.join(SITE_PLUGINS, name)));
+    const srcFiles = allFiles(path.join(SITE_PLUGINS, name));
+    mirror(path.join(SITE_PLUGINS, name), path.join(SITE, 'plugins', name), srcFiles);
+    // An exact mirror: what the repo no longer has goes from the site too (never the plugin's data/).
+    const keepSet = new Set(srcFiles);
+    for (const rel of allFiles(path.join(SITE, 'plugins', name))) {
+        if (keepSet.has(rel) || rel.startsWith('data/')) continue;
+        changes.push(`removed plugins/${name}/${rel}`);
+        if (!DRY) fs.rmSync(path.join(SITE, 'plugins', name, rel));
+    }
     const pluginsFile = path.join(SITE, 'config', 'plugins.json');
     const plugins = readJson(pluginsFile);
     if (plugins[name]?.enabled !== true) write(pluginsFile, {...plugins, [name]: {...(plugins[name] || {}), enabled: true}});

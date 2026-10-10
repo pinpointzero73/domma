@@ -24,7 +24,7 @@ if (figures.length && typeof $ !== 'undefined') {
             const teardown = await mod.mount?.(stage, {figure: fig});
             s.teardown = typeof teardown === 'function' ? teardown : null;
         } catch (err) {
-            console.warn(`[showcase] demo "${fig.dataset.demo}" did not load:`, err);
+            console.warn(`[showcase] demo "${fig.dataset.demo}" did not load: ${err?.message || err}`, err);
             $(stage).append('<p class="showcase-demo-error" role="alert">This demo did not load.</p>');
         }
     }
@@ -48,10 +48,26 @@ if (figures.length && typeof $ !== 'undefined') {
         }
     }
 
+    // Opt-in bundles some demos need (data-needs): loaded once, before any demo mounts.
+    const BUNDLES = {
+        tools: {js: '/plugins/domma-showcase/public/vendor/domma-tools.min.js', css: '/plugins/domma-showcase/public/vendor/domma-tools.css'},
+        flags: {js: '/dist/domma/domma-flags.min.js'},
+    };
+    const load = (b) => new Promise((resolve) => {
+        if (b.css) $('head').append(`<link rel="stylesheet" href="${b.css}">`);
+        const s = document.createElement('script');
+        s.src = b.js;
+        s.onload = resolve;
+        s.onerror = () => { console.warn(`[showcase] could not load ${b.js}`); resolve(); };
+        document.head.appendChild(s);
+    });
+    const wanted = new Set(figures.flatMap(f => (f.dataset.needs || '').split(' ').filter(n => BUNDLES[n])));
+    const ready = Promise.all([...wanted].map(n => load(BUNDLES[n])));
+
     for (const fig of figures) {
         const code = fig.querySelector('.showcase-demo-code');
         if (code) E.tabs(code);
-        mount(fig);
+        ready.then(() => mount(fig));
     }
 
     const host = document.querySelector('.page-body') || document.body;

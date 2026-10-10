@@ -1,0 +1,20 @@
+<div>
+    <pre class="code-block language-javascript mb-4">const updated = await Domma.http.put(
+        'https://jsonplaceholder.typicode.com/posts/1',
+        {
+        id: 1,
+        title: 'Updated Title',
+        body: 'Updated content here.',
+        userId: 1
+        }
+        );
+    </pre>
+    <button type="button" class="btn btn-warning" id="demo-put">
+        <span data-icon="edit" data-icon-size="16"></span>
+        Update Post
+    </button>
+</div>
+<div>
+    <label class="form-label">Response:</label>
+    <div class="http-response-area" id="put-response">Click "Update Post" to see the response...</div>
+</div>

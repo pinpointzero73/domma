@@ -1,0 +1,28 @@
+/* Domma Showcase - demo styles from public/showcase/footer, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/footer/"] .demo-container {
+            border: 2px dashed var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/footer/"] .demo-page {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .showcase-demo[data-demo^="showcase/footer/"] .demo-main {
+            flex: 1;
+            padding: 2rem;
+            background: var(--dm-gray-50, #f8f9fa);
+        }
+
+        .showcase-demo[data-demo^="showcase/footer/"] .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }

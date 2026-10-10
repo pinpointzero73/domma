@@ -1,0 +1,18 @@
+<div class="dropdown-flex-center-wrap">
+    <button type="button" class="btn btn-outline" id="hover-dropdown">Hover Me</button>
+    <button type="button" class="btn btn-primary" id="hover-click-dropdown">Click Me (same menu)</button>
+</div>
+<div class="alert alert-info mt-4" role="note">
+    <strong>How the hover path holds together.</strong> The menu is rendered on
+    <code>document.body</code>, so it never touches its trigger: there is always an
+    <code>offset</code> of empty page between them. While the menu is open, Domma tracks the pointer
+    against three regions - the trigger, the menu, and the corridor spanning the gap - so any route
+    between the two counts as staying, whatever angle you take and however long you dawdle.
+    <ol class="mt-2 mb-0">
+        <li>Hover <em>Hover Me</em>, then glide down onto the items - slowly, or at an angle. It stays open.</li>
+        <li>Stop in the gap and wait. Still open.</li>
+        <li>Move away properly and it closes after <code>hoverCloseDelay</code> (300ms).</li>
+        <li><em>Click Me</em> uses a click trigger. Opening it closes the hover menu - only one dropdown is
+            ever open at a time.</li>
+    </ol>
+</div>

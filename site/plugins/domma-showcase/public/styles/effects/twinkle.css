@@ -1,0 +1,62 @@
+/* Domma Showcase - demo styles from public/showcase/effects/twinkle, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/twinkle/"] .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/twinkle/"] .nav-link:hover {
+            background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/twinkle/"] .star-container {
+            position: relative;
+            min-height: 220px;
+            background: #0a0a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/twinkle/"] .star-container-label {
+            position: relative;
+            z-index: 10;
+            color: rgba(255, 240, 200, 0.85);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/twinkle/"] .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/twinkle/"] .status-badge.stopped {
+            background: rgba(107, 114, 128, 0.15);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/twinkle/"] .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }

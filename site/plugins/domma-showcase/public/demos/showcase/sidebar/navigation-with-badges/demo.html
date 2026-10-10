@@ -1,0 +1,23 @@
+<p class="mb-6 text-gray-600">Add badges to show counts or status</p>
+
+<div class="demo-container mb-6">
+    <aside id="sidebar-badges"></aside>
+    <div class="demo-content with-sidebar" id="demo-content-badges">
+        <h3>Notification Badges</h3>
+        <p>Badges can display counts, status, or notifications.</p>
+    </div>
+</div>
+
+<h3 class="text-xl font-semibold mb-3">JavaScript</h3>
+<div class="code-block language-javascript">
+    <pre><code>
+            Domma.elements.sidebar('#sidebar-badges', {
+            contentSelector: '#demo-content-badges',
+            items: [
+            { text: 'Inbox', url: '#inbox', icon: 'mail', badge: '12' },
+            { text: 'Notifications', url: '#notifications', icon: 'bell', badge: '3' },
+            { text: 'Messages', url: '#messages', icon: 'message-square', badge: '99+' }
+            ]
+            });
+    </code></pre>
+</div>

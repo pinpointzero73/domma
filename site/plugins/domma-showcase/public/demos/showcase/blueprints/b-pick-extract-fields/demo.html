@@ -1,0 +1,21 @@
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+        <pre class="code-block language-javascript">const full = {
+            name: { type: 'string' },
+            email: { type: 'email' },
+            age: { type: 'number' },
+            role: { type: 'string' }
+            };
+
+            const subset = B.pick(full, ['name', 'email']);
+            // { name: {...}, email: {...} }
+        </pre>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary mb-2" id="pick-demo">Run Example</button>
+        <div class="result-pane" id="pick-result" style="display: none;">
+            <h5>Result:</h5>
+            <pre id="pick-result-code"></pre>
+        </div>
+    </div>
+</div>

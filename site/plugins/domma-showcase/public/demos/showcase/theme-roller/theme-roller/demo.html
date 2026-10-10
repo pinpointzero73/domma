@@ -1,0 +1,57 @@
+<div class="theme-main-content">
+    <!-- Theme Roller Component -->
+    <div class="theme-roller-container-style" id="theme-roller-container">
+        <!-- Theme Roller will be rendered here -->
+    </div>
+
+    <br>
+
+    <!-- Usage Section -->
+    <div class="theme-usage-section">
+        <h3>Usage</h3>
+
+        <div class="code-block language-javascript">
+            <span class="comment">// Initialise Theme Roller</span>
+            <span class="keyword">const</span> roller = Domma.elements.<span class="function">themeRoller</span>(
+            <span class="string">'#container'</span>, {
+            baseTheme: <span class="string">'charcoal-light'</span>,
+            showPresets: <span class="keyword">true</span>,
+            livePreview: <span class="keyword">true</span>
+            });
+
+            <span class="comment">// Get/Set values</span>
+            roller.<span class="function">set</span>(<span class="string">'--dm-primary'</span>, <span class="string">'#ff6b6b'</span>);
+            roller.<span class="function">get</span>(<span class="string">'--dm-primary'</span>);
+
+            <span class="comment">// Export options</span>
+            roller.<span class="function">download</span>(<span class="string">'my-theme'</span>);
+            roller.<span class="function">copyToClipboard</span>();
+            roller.<span class="function">saveToStorage</span>();
+
+            <span class="comment">// Reset to defaults</span>
+            roller.<span class="function">reset</span>();
+        </div>
+
+        <h3 class="mt-6">Features</h3>
+        <ul class="list-disc ml-5 text-secondary">
+            <li>Live preview of all changes</li>
+            <li>Colour picker for all colour variables</li>
+            <li>Sliders for sizing and spacing</li>
+            <li>Preset theme loading</li>
+            <li>Light/Dark mode toggle</li>
+            <li>Download CSS file</li>
+            <li>Copy CSS to clipboard</li>
+            <li>Save to browser storage</li>
+        </ul>
+
+        <h3 class="mt-6">Categories</h3>
+        <ul class="list-disc ml-5 text-secondary">
+            <li><strong>Colours:</strong> Brand, status, backgrounds, text, borders</li>
+            <li><strong>Typography:</strong> Font families, sizes</li>
+            <li><strong>Spacing:</strong> Spacing scale values</li>
+            <li><strong>Borders:</strong> Border radius options</li>
+            <li><strong>Transitions:</strong> Animation durations</li>
+            <li><strong>States:</strong> Interactive state styles</li>
+        </ul>
+    </div>
+</div>

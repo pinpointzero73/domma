@@ -1,0 +1,14 @@
+# Demos and pages upgraded by hand: showcase.mjs --force never overwrites these.
+# One per line - a demo id (showcase/<page>/<slug>) or a page (pages/showcase/<page>.md).
+pages/showcase/models.md
+showcase/models/live-binding
+showcase/models/event-console
+showcase/models/user-model
+showcase/models/mini-cart
+showcase/models/user-manager
+showcase/elements/card/loading-data-into-generated-cards
+showcase/elements/tabs/dynamic-content-loading
+pages/showcase/elements/card.md
+pages/showcase/elements/tabs.md
+showcase/elements/badge/wrapper-api-backwards-compatible
+showcase/elements/loader/wrapper-api-backwards-compatible

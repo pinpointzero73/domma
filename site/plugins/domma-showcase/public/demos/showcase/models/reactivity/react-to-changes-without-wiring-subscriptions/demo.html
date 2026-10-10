@@ -1,0 +1,24 @@
+<div class="col-5">
+    <label class="form-label" for="rx-user">Username (tracked)</label>
+    <input type="text" class="form-input mb-3" id="rx-user" value="alice">
+
+    <label class="form-label" for="rx-theme">Theme (tracked)</label>
+    <select class="form-select mb-3" id="rx-theme">
+        <option value="light">light</option>
+        <option value="dark">dark</option>
+    </select>
+
+    <label class="form-label" for="rx-secret">Session id (read untracked)</label>
+    <input type="text" class="form-input mb-3" id="rx-secret" value="abc123">
+
+    <button type="button" class="btn btn-danger btn-sm" id="rx-stop">Stop effect</button>
+    <button type="button" class="btn btn-outline btn-sm" id="rx-clear-log">Clear log</button>
+</div>
+<div class="col-7">
+    <div class="rx-log" id="rx-effect-log"></div>
+    <p class="text-sm mt-2">
+        <strong>Session id</strong> is read by the same effect, on the same line as the others - and
+        editing it never re-runs anything, because it is read inside <code>M.untracked()</code>.
+        Press <strong>Stop effect</strong> and the log goes quiet for good.
+    </p>
+</div>

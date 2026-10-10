@@ -1,0 +1,90 @@
+/* Domma Showcase - demo styles from public/showcase/effects/butterflies, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/butterflies/"] .nav-link {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            text-decoration: none;
+            color: var(--dm-primary);
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .nav-link:hover {
+            background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2));
+            transform: translateY(-2px);
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .butterfly-container {
+            position: relative;
+            min-height: 320px;
+            background: linear-gradient(180deg, #dff1ff 0%, #eafbe7 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .butterfly-container-label {
+            position: relative;
+            z-index: 10;
+            color: rgba(30, 50, 40, 0.85);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .status-badge.stopped {
+            background: rgba(107, 114, 128, 0.15);
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .palette-swatches {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .palette-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            text-transform: capitalize;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .palette-stripes {
+            display: flex;
+            gap: 2px;
+            height: 16px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/butterflies/"] .palette-stripes span {
+            flex: 1;
+            display: block;
+        }

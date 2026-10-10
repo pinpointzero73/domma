@@ -1,0 +1,28 @@
+<div class="demo-scroll-container" id="tutorial-container" style="height: 400px; overflow-y: auto; border: 1px solid var(--dm-color-border, #e0e0e0); border-radius: 0.5rem; position: relative;">
+    <div style="min-height: 1500px; padding: 1.5rem;">
+        <h3 class="text-2xl font-semibold mb-4">Implementation Guide</h3>
+        <p class="mb-6 text-gray-600">Scroll down to see the custom back to top button with callbacks tracking visibility state...</p>
+        <div class="mt-200">
+            <h4>Understanding Back to Top</h4>
+            <p>The back to top button provides a quick way to return to the page start without manually scrolling.</p>
+        </div>
+        <div class="mt-200">
+            <h4>When to Use</h4>
+            <p>Best for long-form content, documentation pages, blog articles, and dashboards with extensive data.</p>
+        </div>
+        <div class="mt-200">
+            <h4>Customization Options</h4>
+            <p>Configure appearance threshold, animation duration, positioning, and event callbacks to match your design.</p>
+        </div>
+        <div class="mt-200">
+            <h4>User Experience</h4>
+            <p>The button automatically shows when scrolling past the threshold and hides when near the top of the page.</p>
+        </div>
+    </div>
+    <button type="button" id="tutorial-back-to-top" class="btn btn-primary back-to-top-btn">
+        <span class="text-2xl">↑</span>
+    </button>
+</div>
+<div id="tutorial-status" class="mt-3 p-3 bg-surface rounded text-center">
+    <p class="text-muted text-sm">Button status: <span id="button-status">Hidden</span></p>
+</div>

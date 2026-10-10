@@ -1,0 +1,36 @@
+<div class="flex gap-6 flex-wrap items-start">
+    <ul id="single-select-list" class="list-group" style="min-width: 220px; max-width: 260px;">
+        <li class="list-group-item list-group-item-action">
+            <span class="list-group-item-icon"><span data-icon="bar-chart"></span></span>
+            <span class="list-group-item-content">
+                <span class="list-group-item-heading">Overview</span>
+            </span>
+        </li>
+        <li class="list-group-item list-group-item-action">
+            <span class="list-group-item-icon"><span data-icon="trending-up"></span></span>
+            <span class="list-group-item-content">
+                <span class="list-group-item-heading">Analytics</span>
+            </span>
+        </li>
+        <li class="list-group-item list-group-item-action">
+            <span class="list-group-item-icon"><span data-icon="file-text"></span></span>
+            <span class="list-group-item-content">
+                <span class="list-group-item-heading">Reports</span>
+            </span>
+        </li>
+        <li class="list-group-item list-group-item-action disabled">
+            <span class="list-group-item-icon"><span data-icon="lock"></span></span>
+            <span class="list-group-item-content">
+                <span class="list-group-item-heading">Billing (disabled)</span>
+            </span>
+        </li>
+    </ul>
+    <div style="flex: 1; min-width: 180px;">
+        <p class="text-sm text-muted mb-2">Selected item:</p>
+        <div id="single-select-output" class="demo-output">None selected</div>
+        <div class="flex gap-2 flex-wrap mt-3">
+            <button type="button" id="single-select-btn" class="btn btn-sm btn-primary">Select Analytics</button>
+            <button type="button" id="single-deselect-btn" class="btn btn-sm btn-outline">Deselect All</button>
+        </div>
+    </div>
+</div>

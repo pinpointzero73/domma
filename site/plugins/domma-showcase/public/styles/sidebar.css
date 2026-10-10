@@ -1,0 +1,33 @@
+/* Domma Showcase - demo styles from public/showcase/sidebar, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/sidebar/"] .demo-container {
+            position: relative;
+            min-height: 400px;
+            border: 2px dashed var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            overflow: hidden;
+        }
+
+        .showcase-demo[data-demo^="showcase/sidebar/"] .demo-content {
+            padding: 2rem;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .showcase-demo[data-demo^="showcase/sidebar/"] .demo-content.with-sidebar {
+            margin-left: 250px;
+        }
+
+        @media (max-width: 768px) {
+            .showcase-demo[data-demo^="showcase/sidebar/"] .demo-content.with-sidebar {
+                margin-left: 0;
+            }
+        }
+
+        .showcase-demo[data-demo^="showcase/sidebar/"] .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }

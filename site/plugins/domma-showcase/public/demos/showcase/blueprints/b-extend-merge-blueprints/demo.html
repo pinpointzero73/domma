@@ -1,0 +1,24 @@
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+        <pre class="code-block language-javascript">const base = {
+            name: { type: 'string' },
+            email: { type: 'email' }
+            };
+
+            const extended = {
+            email: { required: true },
+            age: { type: 'number' }
+            };
+
+            const result = B.extend(base, extended);
+            // { name: {...}, email: {required: true}, age: {...} }
+        </pre>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary mb-2" id="extend-demo">Run Example</button>
+        <div class="result-pane" id="extend-result" style="display: none;">
+            <h5>Result:</h5>
+            <pre id="extend-result-code"></pre>
+        </div>
+    </div>
+</div>

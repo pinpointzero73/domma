@@ -1,0 +1,39 @@
+/* Domma Showcase - demo styles from public/showcase/effects/ripple, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/ripple/"] .demo-box {
+            padding: 2rem;
+            margin: 1rem 0;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1));
+            border: 2px solid rgba(13, 110, 253, 0.3);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .ripple-target {
+            padding: 1.5rem 2.5rem;
+            display: inline-block;
+            margin: 0.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .ripple-btn-primary { background: var(--dm-primary); color: white; }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .ripple-btn-success { background: var(--dm-success); color: white; }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .ripple-btn-danger { background: var(--dm-danger); color: white; }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .ripple-btn-dark { background: #1a1a2e; color: white; }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .ripple-card {
+            padding: 2rem;
+            background: var(--dm-card-bg, #fff);
+            border: 1px solid var(--dm-border-color, #dee2e6);
+            border-radius: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .nav-link {
+            padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 4px;
+            background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1)); text-decoration: none;
+            color: var(--dm-primary); display: inline-block; transition: all 0.2s ease;
+        }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .nav-link:hover { background: var(--dm-primary-t20, rgba(13, 110, 253, 0.2)); transform: translateY(-2px); }

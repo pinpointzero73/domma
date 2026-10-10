@@ -1,0 +1,38 @@
+/* Domma Showcase - demo styles from public/showcase/effects/filters, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/effects/filters/"] .filter-demo {
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+          color: white;
+          padding: 2rem;
+          border-radius: 8px;
+          text-align: center;
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 1rem 0;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/filters/"] .image-demo {
+          width: 100%;
+          height: 200px;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%233b82f6" width="400" height="200"/><circle fill="%2310b981" cx="100" cy="100" r="50"/><circle fill="%23f59e0b" cx="200" cy="100" r="50"/><circle fill="%23ef4444" cx="300" cy="100" r="50"/></svg>') center/cover;
+          border-radius: 8px;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/filters/"] .backdrop-demo {
+          position: relative;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%233b82f6" width="400" height="200"/><circle fill="%2310b981" cx="100" cy="100" r="50"/><circle fill="%23f59e0b" cx="200" cy="100" r="50"/><circle fill="%23ef4444" cx="300" cy="100" r="50"/></svg>') center/cover;
+          height: 200px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/filters/"] .backdrop-overlay {
+          padding: 2rem;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          font-weight: 600;
+      }

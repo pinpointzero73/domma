@@ -1,0 +1,20 @@
+<p class="text-sm text-muted mb-2">Fixed (stays at top of viewport):</p>
+<div class="code-block language-javascript mb-3">
+    <pre><code>
+            Domma.elements.navbar('#nav', {
+            position: 'fixed',  // Always at top of viewport
+            brand: { text: 'App' },
+            items: [...]
+            });
+    </code></pre>
+</div>
+<p class="text-sm text-muted mb-2">Sticky (scrolls normally until reaching top):</p>
+<div class="code-block language-javascript">
+    <pre><code>
+            Domma.elements.navbar('#nav', {
+            position: 'sticky',  // Sticks when scrolled to top
+            brand: { text: 'App' },
+            items: [...]
+            });
+    </code></pre>
+</div>

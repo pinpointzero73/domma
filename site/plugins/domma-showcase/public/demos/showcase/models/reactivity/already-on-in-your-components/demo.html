@@ -1,0 +1,13 @@
+<div class="col-6">
+    <div id="rx-component-host" class="mb-3"></div>
+    <button type="button" class="btn btn-primary btn-sm" id="rx-add">Add item</button>
+    <button type="button" class="btn btn-outline btn-sm" id="rx-discount">Toggle discount</button>
+    <button type="button" class="btn btn-outline btn-sm" id="rx-touch">Touch unrelated field</button>
+</div>
+<div class="col-6">
+    <div class="rx-log" id="rx-component-log"></div>
+    <p class="text-sm mt-2">
+        <strong>Touch unrelated field</strong> writes a real value to the component's model - and
+        costs neither a computed re-evaluation nor a render. Nothing in the definition says so.
+    </p>
+</div>

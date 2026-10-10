@@ -1,0 +1,15 @@
+<div class="flex gap-6 flex-wrap items-start">
+    <div class="demo-target-label" style="padding-top: 0.5rem;">
+        <domma-number-badge id="wc-demo" count="5" variant="primary">
+            <button type="button" class="btn btn-outline"><span data-icon="star"></span></button>
+        </domma-number-badge>
+        <span class="demo-label">Web component target</span>
+    </div>
+    <div class="flex gap-2 flex-wrap items-start" style="padding-top: 0.5rem;">
+        <button type="button" class="btn btn-sm btn-primary" data-wc-action="increment">+ Increment</button>
+        <button type="button" class="btn btn-sm btn-outline" data-wc-action="decrement">− Decrement</button>
+        <button type="button" class="btn btn-sm btn-outline" data-wc-action="setVariant" data-arg="success">Success</button>
+        <button type="button" class="btn btn-sm btn-outline" data-wc-action="setVariant" data-arg="danger">Danger</button>
+        <button type="button" class="btn btn-sm btn-outline" data-wc-action="setCount" data-arg="0">Clear</button>
+    </div>
+</div>

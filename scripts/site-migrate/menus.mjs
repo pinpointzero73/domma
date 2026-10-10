@@ -38,6 +38,7 @@ function newUrl(url) {
 /** One old nav item to a CMS menu item (or null). Sub-items stay under `items`. */
 function item(it) {
     if (it.divider) return {type: 'separator'};
+    if (it.type === 'theme-switcher') return it;
     // The cookie banner's "settings" link becomes the cookie policy page; other '#' placeholders
     // (Terms of Service, which never existed) are left out.
     if (it.url === '#') {
@@ -93,8 +94,11 @@ const footerGroups = (footer.columns || footer.sections || []).map(c => ({text: 
 // was not used by any of them. Showcase pages' sidebars were their own contents (headings), which
 // the CMS's With Sidebar layout already does - so there is no separate showcase menu.
 void navPublic;
+// The theme switcher sits in the main menu (a rail on the right), after the links.
+// Home first: the rail has no brand link of its own to click.
+navShowcase.items = [{text: 'Home', url: '/', icon: 'home'}, ...navShowcase.items, {type: 'theme-switcher'}];
 const menus = [
-    menu('main', 'Main navigation', 'The old site\'s navbar (nav-showcase.json), as dropdowns', navShowcase.items, {variant: 'dark', position: 'sticky'}),
+    menu('main', 'Main navigation', 'The old site\'s navbar (nav-showcase.json), as dropdowns', navShowcase.items, {variant: 'dark', position: 'sticky', orientation: 'vertical', side: 'right'}),
     menu('footer', 'Footer', 'From footer-landing.json', footerGroups),
 ];
 
@@ -102,6 +106,6 @@ fs.mkdirSync(OUT, {recursive: true});
 for (const m of menus) fs.writeFileSync(path.join(OUT, `${m.slug}.json`), JSON.stringify(m, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT, 'menu-locations.json'), JSON.stringify({navbar: 'main', 'footer-primary': 'footer'}, null, 2) + '\n');
 
-const count = (items) => items.reduce((n, i) => n + (i.type === 'separator' ? 0 : 1) + (i.items ? count(i.items) : 0), 0);
+const count = (items) => items.reduce((n, i) => n + (i.type === 'separator' || i.type === 'theme-switcher' ? 0 : 1) + (i.items ? count(i.items) : 0), 0);
 for (const m of menus) console.log(`${m.slug}: ${count(m.items)} links`);
 console.log(`left out (dropped pages): ${dropped.length ? [...new Set(dropped)].join(', ') : 'none'}`);
