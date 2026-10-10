@@ -2,5 +2,6 @@
     <span>👤</span> User Menu
 </button>
 <div id="tutorial-result" class="mt-4 p-3 bg-surface rounded">
-    <p class="text-muted text-sm">Select an option from the dropdown</p>
+    <p class="text-muted text-sm" data-if="!action.value">Select an option from the dropdown</p>
+    <p class="text-primary text-sm" data-if="action.value">✓ Action selected: <strong data-bind-text="action.value"></strong></p>
 </div>

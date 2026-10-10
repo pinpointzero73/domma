@@ -3,6 +3,10 @@
  */
 export function mount(root) {
         // Example 8: Documentation Site
+    // The content panel reads these observables (data-bind-text in demo.html)
+    const section = M.observable('Modal Component');
+    const blurb = M.observable('Complete documentation for the Modal element...');
+    const handle = M.applyBindings({section, blurb}, root.querySelector('#docs-content'));
     const docsBreadcrumbs = E.breadcrumbs(root.querySelector('#docs-breadcrumbs'), {
             items: [
                 {text: 'Documentation', url: '#'},
@@ -18,10 +22,9 @@ export function mount(root) {
                 newItems[newItems.length - 1].active = true;
                 docsBreadcrumbs.setItems(newItems);
 
-                $(root).find('#docs-content').html(`
-                    <h5>Current Section: ${item.text}</h5>
-                    <p class="text-sm">Documentation for ${item.text}...</p>
-                `);
+                section.value = item.text;
+                blurb.value = `Documentation for ${item.text}...`;
             }
         });
+    return () => handle.dispose();
 }

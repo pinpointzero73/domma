@@ -14,16 +14,17 @@ export function mount(root) {
             {value: 'in', label: '\ud83c\uddee\ud83c\uddf3 India'},
             {value: 'br', label: '\ud83c\udde7\ud83c\uddf7 Brazil'}
         ];
-        // Tutorial
-    E.autocomplete(root.querySelector('#tutorial-autocomplete'), {
-            data: countries,
-            minChars: 1,
-            highlightMatches: true,
-            onSelect: (country) => {
-                $(root).find('#tutorial-result')[0].innerHTML = `
-                    <p class="text-sm"><strong>Selected:</strong> ${country.label}</p>
-                    <p class="text-sm"><strong>Country Code:</strong> ${country.value}</p>
-                `;
-            }
-        });
+    // Tutorial - the chosen country is an observable; #tutorial-result binds to it
+    const selected = M.observable(null);
+    const handle = M.applyBindings({selected}, root);
+    const ac = E.autocomplete(root.querySelector('#tutorial-autocomplete'), {
+        data: countries,
+        minChars: 1,
+        highlightMatches: true,
+        onSelect: (country) => { selected.value = country; }
+    });
+    return () => {
+        handle.dispose();
+        ac?.destroy?.();
+    };
 }

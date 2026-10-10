@@ -1,4 +1,4 @@
 <input type="text" id="tutorial-pillbox" placeholder="Add recipients..." class="pillbox-input-style">
 <div id="tutorial-result" class="mt-4 p-3 bg-surface rounded">
-    <p class="pillbox-p-text-sm text-muted">0 recipient(s) selected</p>
+    <p class="pillbox-p-text-sm" data-bind-class="changed.value ? '' : 'text-muted'"><span data-bind-text="count.value">0</span> recipient(s) selected</p>
 </div>

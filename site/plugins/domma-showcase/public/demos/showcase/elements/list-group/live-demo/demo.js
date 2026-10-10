@@ -11,19 +11,22 @@ export function mount(root) {
           { title: 'Notifications', body: 'Choose how and when you receive email, SMS, and push alerts.' },
           { title: 'Privacy',       body: 'Control data sharing, visibility settings, and download your data.' },
         ];
+    // The panel shows whichever entry this observable holds (data-bind-text in demo.html)
+    const panel = M.observable(settingsPanels[0]);
+    const handle = M.applyBindings({panel}, root.querySelector('#tutorial-settings-panel'));
     const tutorialLg = E.listGroup(root.querySelector('#tutorial-settings-nav'), {
           selectable: true,
           onChange: (selected) => {
             if (!selected.length) return;
             const index = tutorialLg.getItems().indexOf(selected[0]);
             const p = settingsPanels[index];
-            if (p) {
-              $(root).find('#tutorial-settings-panel').html(
-                `<h4 class="font-semibold mb-2">${_.escape(p.title)}</h4><p class="text-muted">${_.escape(p.body)}</p>`
-              );
-            }
+            if (p) panel.value = p;
           }
         });
         // Pre-select General on load
     tutorialLg.select(0);
+    return () => {
+        handle.dispose();
+        tutorialLg?.destroy?.();
+    };
 }

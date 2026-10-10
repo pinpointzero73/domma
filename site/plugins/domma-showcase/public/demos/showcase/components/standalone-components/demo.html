@@ -58,7 +58,10 @@ EXAMPLE 1: Counter Demo
                 </div>
                 <h4 class="font-semibold mb-2">Lifecycle Log</h4>
                 <div class="lifecycle-log" id="counter-log">
-                    <p class="text-muted">Waiting for events…</p>
+                    <p class="text-muted" data-if="entries.value.length === 0">Waiting for events…</p>
+                    <div data-each="entries.value key=id">
+                        <p><span class="log-time" data-bind-text="time"></span><span data-bind-class="'log-' + type" data-bind-text="msg"></span></p>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-7">

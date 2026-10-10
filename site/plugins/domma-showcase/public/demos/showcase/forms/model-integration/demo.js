@@ -56,7 +56,7 @@ export function mount(root) {
             };
             // Log function for outputs
     function logToOutput(selector, message) {
-              const output = $(selector);
+              const output = $(root).find(selector);
               if (output.length === 0) {
                 console.warn('Output element not found:', selector);
                 return;
@@ -67,6 +67,11 @@ export function mount(root) {
                 output.scrollTop(output[0].scrollHeight);
               }
             }
+            // The card is in demo.html behind data-if; keep the wrapper node, since
+            // data-if detaches it (and puts the same node back) when the card is hidden.
+    const wrapper = $(root).find('#model-form-wrapper')[0];
+    const shown = M.observable(false);
+    const handle = M.applyBindings({shown}, root);
             // Model Integration
     let userModel = null;
     $(root).find('#create-model-form').on('click', () => {
@@ -97,18 +102,8 @@ export function mount(root) {
                   }
                 });
 
-                // Wrap form in a card
-                $(root).find('#model-form-container').html(`
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Model Integration Form</h4>
-                            <small class="text-muted">Changes automatically sync to localStorage</small>
-                        </div>
-                        <div class="card-body" id="model-form-wrapper">
-                        </div>
-                    </div>
-                `);
-                form.renderTo('#model-form-wrapper');
+                form.renderTo(wrapper);
+                shown.value = true;
                 logToOutput('#model-output', 'Model form created with persistence. Data will be saved to localStorage.');
               } catch (error) {
                 logToOutput('#model-output', 'Error: ' + error.message);
@@ -131,4 +126,5 @@ export function mount(root) {
                 logToOutput('#model-output', 'Storage cleared manually.');
               }
             });
+    return () => handle.dispose();
 }

@@ -1,1 +1,60 @@
-<div id="reference-tabs"></div>
+<div id="reference-tabs">
+    <div class="tabs">
+        <ul class="tab-list">
+            <li class="tab-item active">Blueprint Methods</li>
+            <li class="tab-item">Model Methods</li>
+            <li class="tab-item">Form Methods</li>
+            <li class="tab-item">Event Methods</li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-panel active">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <code class="badge badge-primary">M.extend()</code>
+                    <code class="badge badge-primary">M.pick()</code>
+                    <code class="badge badge-primary">M.omit()</code>
+                    <code class="badge badge-primary">M.types.string</code>
+                    <code class="badge badge-primary">M.types.number</code>
+                    <code class="badge badge-primary">M.types.email</code>
+                </div>
+                <p class="mt-3">See <a href="../blueprints/">Blueprints Showcase</a> for complete reference.</p>
+            </div>
+            <div class="tab-panel" style="display:none;">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <code class="badge badge-success">M.create()</code>
+                    <code class="badge badge-success">model.get()</code>
+                    <code class="badge badge-success">model.set()</code>
+                    <code class="badge badge-success">model.validate()</code>
+                    <code class="badge badge-success">M.bind()</code>
+                    <code class="badge badge-success">model.save()</code>
+                    <code class="badge badge-success">model.load()</code>
+                    <code class="badge badge-success">model.toJSON()</code>
+                    <code class="badge badge-success">model.reset()</code>
+                </div>
+                <p class="mt-3">See <a href="../models/">Models Showcase</a> for complete reference.</p>
+            </div>
+            <div class="tab-panel" style="display:none;">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <code class="badge badge-info">F.create()</code>
+                    <code class="badge badge-info">F.crud()</code>
+                    <code class="badge badge-info">F.modal()</code>
+                    <code class="badge badge-info">F.wizard()</code>
+                    <code class="badge badge-info">form.getData()</code>
+                    <code class="badge badge-info">form.setData()</code>
+                    <code class="badge badge-info">form.validate()</code>
+                    <code class="badge badge-info">form.reset()</code>
+                </div>
+                <p class="mt-3">See <a href="../forms/">Forms Showcase</a> for complete reference.</p>
+            </div>
+            <div class="tab-panel" style="display:none;">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <code class="badge badge-warning">M.subscribe()</code>
+                    <code class="badge badge-warning">M.publish()</code>
+                    <code class="badge badge-warning">M.unsubscribe()</code>
+                    <code class="badge badge-warning">M.once()</code>
+                    <code class="badge badge-warning">model.onChange()</code>
+                </div>
+                <p class="mt-3">See <a href="../models/">Models Showcase</a> for Pub/Sub examples.</p>
+            </div>
+        </div>
+    </div>
+</div>

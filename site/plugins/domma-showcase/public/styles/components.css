@@ -39,6 +39,9 @@
         }
 
         .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log p { margin: 0; padding: 0.1rem 0; }
+        .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log .log-mount   { color: #86efac; }
+        .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log .log-update  { color: #fde68a; }
+        .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log .log-unmount { color: #fca5a5; }
         .showcase-demo[data-demo^="showcase/components/"] .lifecycle-log .log-time    { color: #94a3b8; margin-right: 0.5rem; }
 
         .showcase-demo[data-demo^="showcase/components/"] .component-demo-wrapper {

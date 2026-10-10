@@ -1,4 +1,8 @@
 <input type="text" id="tutorial-autocomplete" placeholder="Search countries..." class="autocomplete-input-style">
 <div id="tutorial-result" class="mt-4 p-3 bg-surface rounded">
-    <p class="text-sm text-muted">Select a country to see the result</p>
+    <p class="text-sm text-muted" data-if="!selected.value">Select a country to see the result</p>
+    <div data-if="selected.value">
+        <p class="text-sm"><strong>Selected:</strong> <span data-bind-text="selected.value && selected.value.label"></span></p>
+        <p class="text-sm"><strong>Country Code:</strong> <span data-bind-text="selected.value && selected.value.value"></span></p>
+    </div>
 </div>

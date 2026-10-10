@@ -1,7 +1,17 @@
 <button type="button" id="tutorial-load-btn" class="btn btn-primary">Load Data</button>
 <div id="tutorial-container" class="mt-4 p-4 bg-surface rounded border">
-    <p class="text-center text-muted" id="tutorial-placeholder">
+    <p class="text-center text-muted" id="tutorial-placeholder" data-if="status.value === 'idle'">
         Click "Load Data" to fetch content
     </p>
-    <div id="tutorial-result" class="hidden"></div>
+    <div id="tutorial-result" data-if="status.value === 'done'">
+        <h4>Data Loaded Successfully!</h4>
+        <p class="text-muted">Fetched at: <span data-bind-text="fetchedAt.value"></span></p>
+        <pre class="mt-2 p-3 bg-dark text-white rounded">
+    {
+      "users": 42,
+      "posts": 128,
+      "comments": 356
+    }
+    </pre>
+    </div>
 </div>

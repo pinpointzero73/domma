@@ -1,2 +1,5 @@
 <button type="button" class="btn btn-primary" id="demo-promise-form">Get User Input</button>
-<div id="promise-result-3" class="mt-2"></div>
+<div id="promise-result-3" class="mt-2">
+    <span class="text-success" data-if="outcome.value === 'submitted'">✓ Submitted: <span data-bind-text="user.value.name"></span> (<span data-bind-text="user.value.email"></span>)</span>
+    <span class="text-secondary" data-if="outcome.value === 'cancelled'">Form submission cancelled</span>
+</div>

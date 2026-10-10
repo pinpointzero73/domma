@@ -2,12 +2,16 @@
  * React to changes without wiring subscriptions - from public/showcase/models/reactivity.
  */
 export function mount(root) {
-    function logTo(selector, message) {
-            const time = D().format('HH:mm:ss');
-            $(selector).prepend(
-                `<div><span class="rx-log-time">[${time}]</span> ${message}</div>`
-            );
+    // The log is a bound list (data-each in demo.html): newest first, so prepend.
+    // peek() reads it without tracking - logTo runs inside effects, and a tracked
+    // read of the log there would make the effect depend on its own output.
+    const log = M.observable([]);
+    let seq = 0;
+    function logTo(entry) {
+            const row = {id: ++seq, time: `[${D().format('HH:mm:ss')}]`, ...entry};
+            log.value = [row, ...log.peek()];
         }
+    const handle = M.applyBindings({log}, root);
         // ══════════════════════════════════════════════════════════════════════
         // 2. Effects
         // ══════════════════════════════════════════════════════════════════════
@@ -20,7 +24,7 @@ export function mount(root) {
             const theme = prefs.get('theme');
             const session = M.untracked(() => prefs.get('sessionId'));
 
-            logTo('#rx-effect-log', `effect ran - user=<strong>${user}</strong> theme=<strong>${theme}</strong> session=${session}`);
+            logTo({kind: 'ran', user, theme, session});
         });
     $(root).find('#rx-user').on('input', function () {
             prefs.set('username', $(this).val());
@@ -30,15 +34,19 @@ export function mount(root) {
         });
     $(root).find('#rx-secret').on('input', function () {
             prefs.set('sessionId', $(this).val());
-            logTo('#rx-effect-log', '<em>sessionId changed - untracked, no re-run</em>');
+            logTo({kind: 'session'});
         });
     $(root).find('#rx-stop').on('click', function () {
             stopEffect();
-            logTo('#rx-effect-log', '<strong>effect stopped</strong>');
+            logTo({kind: 'stopped'});
             $(this).prop('disabled', true);
             E.toast('Effect unsubscribed', {type: 'warning'});
         });
     $(root).find('#rx-clear-log').on('click', function () {
-            $(root).find('#rx-effect-log').html('');
+            log.value = [];
         });
+    return () => {
+        stopEffect();
+        handle.dispose();
+    };
 }

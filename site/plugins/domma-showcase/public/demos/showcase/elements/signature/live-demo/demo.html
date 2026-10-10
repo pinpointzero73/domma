@@ -1,6 +1,9 @@
 <div id="sig-overview" style="max-width: 560px;"></div>
 <div class="flex gap-3 mt-3 flex-wrap">
-    <button type="button" id="overview-export-btn" class="btn btn-primary btn-sm">Export PNG</button>
-    <button type="button" id="overview-isEmpty-btn" class="btn btn-outline btn-sm">isEmpty()</button>
+    <button type="button" id="overview-export-btn" class="btn btn-primary btn-sm" data-on-click="exportPng">Export PNG</button>
+    <button type="button" id="overview-isEmpty-btn" class="btn btn-outline btn-sm" data-on-click="checkEmpty">isEmpty()</button>
 </div>
-<div id="overview-output" class="sig-output">Interact with the pad above, then click a button.</div>
+<div id="overview-output" class="sig-output">
+    <img data-if="image.value" data-bind-src="image.value" alt="Exported signature" style="max-height:80px;background:#fff;color:var(--dm-gray-900);border-radius:4px;padding:4px;">
+    <span data-if="!image.value" data-bind-text="message.value">Interact with the pad above, then click a button.</span>
+</div>

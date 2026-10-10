@@ -58,7 +58,6 @@ export function mount(root) {
                 renderTree();
                 const message = from.node.label + ' moved ' + zone + ' ' + to.node.label;
                 $(root).find('#demo-tree-status').text(message);
-                log('Tree: ' + message);
             }
         });
     $(root).find('#demo-tree-reset').on('click', () => {

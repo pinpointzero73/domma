@@ -1,2 +1,4 @@
 <input type="text" id="clear-on-select" placeholder="Add tags..." class="autocomplete-input-style">
-<div id="selected-tags" class="mt-3 flex flex-wrap gap-2"></div>
+<div id="selected-tags" class="mt-3 flex flex-wrap gap-2" data-each="selectedTags.value key=name">
+    <span class="badge"><span data-bind-text="name"></span> <button type="button" class="ml-1 bg-none border-none cursor-pointer" data-on-click="$root.removeTag($data)" aria-label="Remove tag">&times;</button></span>
+</div>

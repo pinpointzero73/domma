@@ -9,6 +9,20 @@
  */
 const figures = [...document.querySelectorAll('figure.showcase-demo[data-demo]')];
 
+// A demo that registers a component registers it again when it is reset, and the browser
+// refuses a second definition of a custom element. The first one stays, so a repeat is
+// skipped here rather than in every demo's code. (A Domma follow-up: Domma.component
+// could do this itself.)
+if (window.Domma && typeof Domma.component === 'function' && !Domma.component.__showcaseOnce) {
+    const register = Domma.component;
+    Domma.component = function (name, definition) {
+        const tag = String(name).includes('-') ? name : `domma-${name}`;
+        if (customElements.get(tag)) return undefined;
+        return register.call(this, name, definition);
+    };
+    Object.assign(Domma.component, register, {__showcaseOnce: true});
+}
+
 if (figures.length && typeof $ !== 'undefined') {
     const state = new Map();   // figure -> {html, teardown}
 

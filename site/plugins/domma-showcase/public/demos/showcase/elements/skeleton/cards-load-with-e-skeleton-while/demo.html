@@ -1,5 +1,13 @@
-<button id="demo-cards-load" class="btn btn-primary btn-sm" type="button">
+<button id="demo-cards-load" class="btn btn-primary btn-sm" type="button" data-on-click="load" data-bind-disabled="busy.value">
     <span data-icon="refresh-cw"></span> Load
 </button>
-<span id="demo-cards-status" class="text-sm text-gray-600" aria-live="polite"></span>
-<div id="demo-cards" class="sx-sk-grid mb-4"></div>
+<span id="demo-cards-status" class="text-sm text-gray-600" aria-live="polite" data-bind-text="status.value"></span>
+<div id="demo-cards" class="sx-sk-grid mb-4" data-each="posts.value key=title">
+    <div class="card">
+        <div class="sx-sk-cover"></div>
+        <div class="card-body">
+            <h3 class="card-title" data-bind-text="title"></h3>
+            <p class="m-0" data-bind-text="text"></p>
+        </div>
+    </div>
+</div>

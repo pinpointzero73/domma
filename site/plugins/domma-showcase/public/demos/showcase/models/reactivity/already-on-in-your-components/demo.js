@@ -2,12 +2,16 @@
  * Already on in your components - from public/showcase/models/reactivity.
  */
 export function mount(root) {
-    function logTo(selector, message) {
-            const time = D().format('HH:mm:ss');
-            $(selector).prepend(
-                `<div><span class="rx-log-time">[${time}]</span> ${message}</div>`
-            );
+    // The log is a bound list (data-each in demo.html): newest first, so prepend.
+    // peek() reads it without tracking - logTo runs inside effects, and a tracked
+    // read of the log there would make the effect depend on its own output.
+    const log = M.observable([]);
+    let seq = 0;
+    function logTo(entry) {
+            const row = {id: ++seq, time: `[${D().format('HH:mm:ss')}]`, ...entry};
+            log.value = [row, ...log.peek()];
         }
+    const handle = M.applyBindings({log}, root);
         // ══════════════════════════════════════════════════════════════════════
         // 1. Tracked Computeds
         // ══════════════════════════════════════════════════════════════════════
@@ -77,15 +81,14 @@ export function mount(root) {
 
                 $(root).find('#rx-touch').on('click', () => {
                     this.set({note: `touched at ${D().format('HH:mm:ss')}`});
-                    logTo('#rx-component-log',
-                        `<em>wrote 'note' - no computed re-run, no render (still ${labelEvals})</em>`);
+                    logTo({kind: 'touch', evals: labelEvals});
                 });
             },
 
             onUpdated() {
-                logTo('#rx-component-log',
-                    `render - label body has run <strong>${labelEvals}</strong> time(s)`);
+                logTo({kind: 'render', evals: labelEvals});
             }
         });
     $(root).find('#rx-component-host').append(document.createElement('rx-order-summary'));
+    return () => handle.dispose();
 }

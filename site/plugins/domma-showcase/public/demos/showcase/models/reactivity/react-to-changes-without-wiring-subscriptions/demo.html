@@ -15,7 +15,9 @@
     <button type="button" class="btn btn-outline btn-sm" id="rx-clear-log">Clear log</button>
 </div>
 <div class="col-7">
-    <div class="rx-log" id="rx-effect-log"></div>
+    <div class="rx-log" id="rx-effect-log" data-each="log.value key=id">
+        <div><span class="rx-log-time" data-bind-text="time"></span> <span data-bind-hidden="kind !== 'ran'">effect ran - user=<strong data-bind-text="user"></strong> theme=<strong data-bind-text="theme"></strong> session=<span data-bind-text="session"></span></span><em data-bind-hidden="kind !== 'session'">sessionId changed - untracked, no re-run</em><strong data-bind-hidden="kind !== 'stopped'">effect stopped</strong></div>
+    </div>
     <p class="text-sm mt-2">
         <strong>Session id</strong> is read by the same effect, on the same line as the others - and
         editing it never re-runs anything, because it is read inside <code>M.untracked()</code>.

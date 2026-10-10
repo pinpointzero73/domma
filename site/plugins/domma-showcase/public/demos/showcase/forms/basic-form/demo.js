@@ -56,7 +56,7 @@ export function mount(root) {
             };
             // Log function for outputs
     function logToOutput(selector, message) {
-              const output = $(selector);
+              const output = $(root).find(selector);
               if (output.length === 0) {
                 console.warn('Output element not found:', selector);
                 return;
@@ -67,6 +67,11 @@ export function mount(root) {
                 output.scrollTop(output[0].scrollHeight);
               }
             }
+            // The card is in demo.html behind data-if; keep the wrapper node, since
+            // data-if detaches it (and puts the same node back) when the card is hidden.
+    const wrapper = $(root).find('#basic-form-wrapper')[0];
+    const shown = M.observable(false);
+    const handle = M.applyBindings({shown}, root);
             // Basic Form Generation
     $(root).find('#generate-basic-form').on('click', () => {
               try {
@@ -81,24 +86,17 @@ export function mount(root) {
                   }
                 });
 
-                // Wrap form in a card
-                $(root).find('#basic-form-container').html(`
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Generated Basic Form</h4>
-                        </div>
-                        <div class="card-body" id="basic-form-wrapper">
-                        </div>
-                    </div>
-                `);
-                form.renderTo('#basic-form-wrapper');
+                form.renderTo(wrapper);
+                shown.value = true;
                 logToOutput('#basic-form-output', 'Form generated successfully!');
               } catch (error) {
                 logToOutput('#basic-form-output', 'Error: ' + error.message);
               }
             });
     $(root).find('#clear-basic-form').on('click', () => {
-              $(root).find('#basic-form-container').empty();
+              shown.value = false;
+              $(wrapper).empty();
               $(root).find('#basic-form-output').text('Cleared. Click "Generate Form" to create a new form...');
             });
+    return () => handle.dispose();
 }

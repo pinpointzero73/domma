@@ -4,21 +4,22 @@
 export function mount(root) {
         // ── Collapsible example cards ────────────────────────────────────────────
     ['card-counter', 'card-user-card', 'card-router', 'card-sfc', 'card-api'].forEach(id => {
-            E.card(`#${id}`, { collapsible: true });
+            E.card(root.querySelector(`#${id}`), { collapsible: true });
         });
-        // ── Lifecycle log helper ────────────────────────────────────────────────
-    function makeLogger($log) {
-            return function log(msg, type = 'update') {
-                const time = D().format('HH:mm:ss');
-                // Remove placeholder text on first log
-                if ($log.find('.text-muted').length) $log.text('');
-                $log.append(
-                    `<p><span class="log-time">${time}</span><span class="log-${type}">${msg}</span></p>`
-                );
-                $log.scrollTop($log[0].scrollHeight);
-            };
+        // ── Lifecycle log (bound list) ──────────────────────────────────────────
+    // Each entry is a row in an observable list; #counter-log renders it with
+    // data-each, so the log is data rather than appended HTML strings.
+    const $log = $(root).find('#counter-log');
+    const entries = M.observable([]);
+    let seq = 0;
+    let scrollFrame = 0;
+    const logHandle = M.applyBindings({entries}, $log[0]);
+    function counterLog(msg, type = 'update') {
+            entries.value = [...entries.value, {id: ++seq, time: D().format('HH:mm:ss'), msg, type}];
+            // Keep the newest entry in view once the list has rendered
+            cancelAnimationFrame(scrollFrame);
+            scrollFrame = requestAnimationFrame(() => $log.scrollTop($log[0].scrollHeight));
         }
-    const counterLog = makeLogger($(root).find('#counter-log'));
         // ── Example 1: Counter ──────────────────────────────────────────────────
     Domma.component('counter-demo', {
             template: `
@@ -224,7 +225,7 @@ export function mount(root) {
             `
         });
         // ── User Card controls ──────────────────────────────────────────────────
-    const userCardEl = $('user-card-demo')[0];
+    const userCardEl = root.querySelector('user-card-demo');
     let avatarVisible = true;
     $(root).find('#btn-user-42').on('click', () => {
             userCardEl.setAttribute('user-id', '42');
@@ -240,4 +241,8 @@ export function mount(root) {
                 userCardEl.removeAttribute('show-avatar');
             }
         });
+    return () => {
+        cancelAnimationFrame(scrollFrame);
+        logHandle.dispose();
+    };
 }

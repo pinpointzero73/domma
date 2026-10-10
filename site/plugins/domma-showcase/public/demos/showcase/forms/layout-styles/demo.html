@@ -16,4 +16,11 @@
         Clear
     </button>
 </div>
-<div id="layout-form-container"></div>
+<div id="layout-form-container">
+    <div class="card mt-4" data-if="shown.value">
+        <div class="card-header">
+            <h4 class="card-title mb-0"><span data-bind-text="layoutType.value"></span> Layout Demo</h4>
+        </div>
+        <div class="card-body" id="layout-form-wrapper"></div>
+    </div>
+</div>

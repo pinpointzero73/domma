@@ -4,7 +4,7 @@
     <button type="button" class="btn btn-secondary" id="change-layout">Toggle Layout</button>
 </div>
 <div class="mt-3">
-    <div class="alert alert-info" id="click-output" style="display: none;">
-        Click on timeline items to see event handling in action!
+    <div class="alert alert-info" id="click-output" data-if="clicked.value">
+        <strong>Clicked:</strong> <span data-bind-text="clicked.value">Click on timeline items to see event handling in action!</span>
     </div>
 </div>

@@ -54,25 +54,23 @@ export function mount(root) {
               role: 'user',
               newsletter: true
             };
-            // Helper function to render layout forms with card wrapper
-    function renderLayoutForm(form, layoutType) {
-              $(root).find('#layout-form-container').html(`
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">${layoutType} Layout Demo</h4>
-                    </div>
-                    <div class="card-body" id="layout-form-wrapper">
-                    </div>
-                </div>
-            `);
-              form.renderTo('#layout-form-wrapper');
+            // The card is in demo.html behind data-if, its title bound to layoutType.
+            // Keep the wrapper node: data-if detaches it (and puts the same node back).
+    const wrapper = $(root).find('#layout-form-wrapper')[0];
+    const shown = M.observable(false);
+    const layoutType = M.observable('');
+    const handle = M.applyBindings({shown, layoutType}, root);
+            // Helper function to render layout forms into the card
+    function renderLayoutForm(form, type) {
+              form.renderTo(wrapper);
+              layoutType.value = type;
+              shown.value = true;
             }
             // Form Layouts
     $(root).find('#layout-stacked').on('click', () => {
               try {
                 const form = Domma.forms.create(userBlueprint, sampleData, {
-                  layout: 'grid',
-                  columns: 2
+                  layout: 'stacked'
                 });
                 renderLayoutForm(form, 'Stacked');
               } catch (error) {
@@ -112,6 +110,8 @@ export function mount(root) {
               }
             });
     $(root).find('#clear-layout-form').on('click', () => {
-              $(root).find('#layout-form-container').empty();
+              shown.value = false;
+              $(wrapper).empty();
             });
+    return () => handle.dispose();
 }

@@ -12,5 +12,13 @@
         Clear Storage
     </button>
 </div>
-<div id="model-form-container"></div>
+<div id="model-form-container">
+    <div class="card mt-4" data-if="shown.value">
+        <div class="card-header">
+            <h4 class="card-title mb-0">Model Integration Form</h4>
+                <small class="text-muted">Changes automatically sync to localStorage</small>
+        </div>
+        <div class="card-body" id="model-form-wrapper"></div>
+    </div>
+</div>
 <div class="forms-output" id="model-output">Model changes and persistence will be logged here...</div>

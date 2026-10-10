@@ -8,7 +8,7 @@ export function mount(root) {
         });
     function updatePicker() {
             const code = $(root).find('#country-picker').val();
-            FL.inject('#picker-flag', code, {size: 40, shape: 'rounded', border: true, position: 'replace'});
+            FL.inject(root.querySelector('#picker-flag'), code, {size: 40, shape: 'rounded', border: true, position: 'replace'});
             $(root).find('#picker-name').text(FL.name(code));
             $(root).find('#picker-code').text(code.toUpperCase());
         }

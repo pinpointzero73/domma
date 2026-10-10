@@ -5,7 +5,9 @@
     <button type="button" class="btn btn-outline btn-sm" id="rx-touch">Touch unrelated field</button>
 </div>
 <div class="col-6">
-    <div class="rx-log" id="rx-component-log"></div>
+    <div class="rx-log" id="rx-component-log" data-each="log.value key=id">
+        <div><span class="rx-log-time" data-bind-text="time"></span> <span data-bind-hidden="kind !== 'render'">render - label body has run <strong data-bind-text="evals"></strong> time(s)</span><em data-bind-hidden="kind !== 'touch'">wrote 'note' - no computed re-run, no render (still <span data-bind-text="evals"></span>)</em></div>
+    </div>
     <p class="text-sm mt-2">
         <strong>Touch unrelated field</strong> writes a real value to the component's model - and
         costs neither a computed re-evaluation nor a render. Nothing in the definition says so.

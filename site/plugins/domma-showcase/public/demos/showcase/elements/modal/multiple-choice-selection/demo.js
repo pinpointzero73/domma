@@ -2,9 +2,12 @@
  * Example 2: Multiple Choice Selection - from public/showcase/elements/modal.
  */
 export function mount(root) {
-        // Multiple choice
+        // Multiple choice - the chosen size is an observable the result line binds to
+    const size = M.observable('');
+    const sizeLabel = M.computed(() => size.value.toUpperCase());
+    const handle = M.applyBindings({size, sizeLabel}, root.querySelector('#promise-result-2'));
     $(root).find('#demo-promise-choice').on('click', async () => {
-          const size = await E.showModal({
+          const choice = await E.showModal({
             title: 'Select Size',
             content: '<p>Choose your preferred size:</p>',
             buttons: [
@@ -15,8 +18,8 @@ export function mount(root) {
             ]
           });
 
-          const resultDiv = $(root).find('#promise-result-2');
-          resultDiv.html(`<span class="text-success">✓ Selected: <strong>${size.toUpperCase()}</strong></span>`);
-          console.log('Selected size:', size);
+          size.value = choice;
+          console.log('Selected size:', choice);
         });
+    return () => handle.dispose();
 }

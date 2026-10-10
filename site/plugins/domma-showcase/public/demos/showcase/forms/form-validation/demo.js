@@ -4,7 +4,7 @@
 export function mount(root) {
             // Log function for outputs
     function logToOutput(selector, message) {
-              const output = $(selector);
+              const output = $(root).find(selector);
               if (output.length === 0) {
                 console.warn('Output element not found:', selector);
                 return;
@@ -103,6 +103,11 @@ export function mount(root) {
                 }
               }
             };
+            // The card is in demo.html behind data-if; keep the wrapper node, since
+            // data-if detaches it (and puts the same node back) when the card is hidden.
+    const wrapper = $(root).find('#validation-form-wrapper')[0];
+    const shown = M.observable(false);
+    const handle = M.applyBindings({shown}, root);
     $(root).find('#generate-validation-form').on('click', () => {
               try {
                 const form = Domma.forms.create(validationBlueprint, {}, {
@@ -117,24 +122,17 @@ export function mount(root) {
                   }
                 });
 
-                // Wrap form in a card
-                $(root).find('#validation-form-container').html(`
-                    <div class="card mt-4">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Interactive Validation Form</h4>
-                        </div>
-                        <div class="card-body" id="validation-form-wrapper">
-                        </div>
-                    </div>
-                `);
-                form.renderTo('#validation-form-wrapper');
+                form.renderTo(wrapper);
+                shown.value = true;
                 logToOutput('#validation-output', 'Validation form generated. Try entering invalid data to see validation in action.');
               } catch (error) {
                 logToOutput('#validation-output', 'Error: ' + error.message);
               }
             });
     $(root).find('#clear-validation-form').on('click', () => {
-              $(root).find('#validation-form-container').empty();
+              shown.value = false;
+              $(wrapper).empty();
               $(root).find('#validation-output').text('Cleared. Click "Generate Validation Form" to create a new form...');
             });
+    return () => handle.dispose();
 }

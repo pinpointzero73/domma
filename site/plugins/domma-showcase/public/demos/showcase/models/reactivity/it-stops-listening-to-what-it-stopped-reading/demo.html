@@ -12,7 +12,9 @@
     <input type="number" class="form-input mb-3" id="rx-y" value="100">
 </div>
 <div class="col-6">
-    <div class="rx-log" id="rx-branch-log"></div>
+    <div class="rx-log" id="rx-branch-log" data-each="log.value key=id">
+        <div><span class="rx-log-time" data-bind-text="time"></span> re-ran - mode=<strong data-bind-text="mode"></strong>, value=<strong data-bind-text="val"></strong></div>
+    </div>
     <p class="text-sm mt-2">
         In <strong>Read X</strong> mode, editing Y produces nothing - not a filtered-out run, no run
         at all. Switch modes and the roles swap immediately.
