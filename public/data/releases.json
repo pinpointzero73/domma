@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.8",
+      "title": "Factory modals show their content and buttons",
+      "description": "Modals made with `createModal()` / `showModal()` show their HTML content and buttons again.",
+      "date": "2026-10-10"
+    },
+    {
       "year": "v0.51.7",
       "title": "Your own classes on context menu items",
       "description": "Context menu items take their own CSS classes through a new `className` option.",
@@ -481,5 +487,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.7"
+  "latestVersion": "v0.51.8"
 }

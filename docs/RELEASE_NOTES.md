@@ -1,3 +1,12 @@
+### v0.51.8 - Factory modals show their content and buttons (2026-10-10)
+
+**`E.createModal()` and `E.showModal()` work again.** Since the modal factory moved onto the `<domma-modal>` component, a modal made from options printed its HTML `content` as text and drew no buttons, so `showModal()`'s promise could never settle from a button. Content now goes in as markup (sanitised when DOMPurify is loaded) and the buttons are drawn.
+
+- `content` is HTML again, shown through the component's body slot - in the page, so your styles and lookups reach it.
+- `buttons` are drawn, `onButtonClick` fires, and `showModal()` resolves with the button's id.
+- Any Domma web component now keeps options set on it before it is added to the page, rather than replacing them with its defaults.
+- The modal container is made again if something removed it from the page.
+
 ### v0.51.7 - Your own classes on context menu items (2026-10-09)
 
 **A context menu item can carry its own CSS classes.** Give an item `className` - a string of names or an array - and they are added to its button beside `dm-context-menu-item`, so one item can be styled from your own CSS. The menu-level `className` option already did the same for the whole panel.
