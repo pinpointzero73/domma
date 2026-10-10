@@ -574,13 +574,6 @@
     "keywords": ["miniapp", "application", "full", "demo", "complete"]
   },
   {
-    "title": "My Garage",
-    "description": "Vehicle management MiniApp with full CRUD, filtering, and stats",
-    "category": "MiniApps",
-    "url": "miniapps/garage/index.html",
-    "keywords": ["garage", "vehicle", "car", "management", "crud", "miniapp"]
-  },
-  {
     "title": "Domma Docs",
     "description": "Documentation viewer MiniApp built with Domma's router and components",
     "category": "MiniApps",
@@ -600,20 +593,6 @@
     "category": "Resources",
     "url": "about/index.html",
     "keywords": ["about", "team", "project", "history", "company"]
-  },
-  {
-    "title": "Blog",
-    "description": "Articles, tutorials, and updates about Domma development",
-    "category": "Resources",
-    "url": "blog/index.html",
-    "keywords": ["blog", "article", "tutorial", "news", "update"]
-  },
-  {
-    "title": "Feedback",
-    "description": "Send feedback, report bugs, or suggest new features for Domma",
-    "category": "Resources",
-    "url": "feedback/index.html",
-    "keywords": ["feedback", "bug", "feature", "suggest", "report", "contact"]
   },
   {
     "title": "FAQs",

@@ -22,10 +22,6 @@
         "attributes": {
           "data-cookie-consent-open": "true"
         }
-      },
-      {
-        "text": "Blog",
-        "url": "blog/index.html"
       }
     ]
   }

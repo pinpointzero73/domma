@@ -603,11 +603,6 @@
           "divider": true
         },
         {
-          "text": "My Garage",
-          "url": "miniapps/garage/index.html",
-          "section": "garage"
-        },
-        {
           "text": "Domma Docs",
           "url": "miniapps/docs/index.html",
           "section": "docs"
@@ -681,17 +676,6 @@
           "text": "About Us",
           "url": "about/index.html",
           "section": "about"
-        },
-        {
-          "text": "Blog",
-          "url": "blog/index.html",
-          "section": "blog"
-        },
-        {
-          "text": "Feedback",
-          "url": "feedback/index.html",
-          "section": "feedback",
-          "badge": "New"
         },
         {
           "text": "FAQs",

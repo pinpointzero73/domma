@@ -1,8 +1,8 @@
 # Domma Development Makefile
 # Makes local development builds easier with proper environment settings
 
-.PHONY: help build build-dev build-prod prod core css dev garage garage-prod docs miniapps \
-        clean kill-ports watch-garage rebuild-after-core enliven verify-build \
+.PHONY: help build build-dev build-prod prod core css dev docs miniapps \
+        clean kill-ports rebuild-after-core enliven verify-build \
         test validate check bump release-build preflight release-npm release-gh
 
 VERSION := $(shell node -e "process.stdout.write(require('./package.json').version)")
@@ -18,8 +18,6 @@ help:
 	@echo "  make build-prod     - Build everything once (production mode)"
 	@echo ""
 	@echo "MiniApps:"
-	@echo "  make garage         - Build garage app (development mode)"
-	@echo "  make garage-prod    - Build garage app (production mode)"
 	@echo "  make docs           - Build docs app (development mode)"
 	@echo "  make miniapps       - Build all miniapps (development mode)"
 	@echo ""
@@ -60,7 +58,6 @@ help:
 	@echo "  make clean          - Clean dist and build artifacts"
 	@echo "  make kill-ports     - Kill processes on ports 3000, 3001, 3010"
 	@echo "                        (or specify: make kill-ports PORTS=\"8080 9000\")"
-	@echo "  make watch-garage   - Watch garage app for changes (requires nodemon)"
 	@echo ""
 
 # Development server (watch mode with live reload)
@@ -105,12 +102,6 @@ css:
 	npm run build:css
 
 # MiniApps - Development mode (keeps console.log, uses localhost API)
-garage:
-	NODE_ENV=development npm run build:miniapp:garage
-
-garage-prod:
-	NODE_ENV=production npm run build:miniapp:garage
-
 docs:
 	NODE_ENV=development node scripts/build-miniapp.js docs
 
@@ -123,14 +114,9 @@ clean:
 	rm -rf public/miniapps/*/dist/*.js
 	@echo "✓ Cleaned build artifacts"
 
-# Watch mode (requires nodemon: npm install -g nodemon)
-watch-garage:
-	@echo "Watching garage app for changes..."
-	@nodemon -w public/miniapps/garage/src -e js -x "make garage"
-
 # Quick rebuild after Domma core changes
-rebuild-after-core: core garage
-	@echo "✓ Rebuilt Domma core and garage app"
+rebuild-after-core: core docs
+	@echo "✓ Rebuilt Domma core and the docs app"
 
 # Kill processes on development ports
 # Usage: make kill-ports PORTS="3000 3001 3010"

@@ -33,9 +33,7 @@
       "title": "Company",
       "links": [
         { "text": "About Us", "url": "about/index.html" },
-        { "text": "Blog", "url": "blog/index.html" },
-        { "text": "FAQs", "url": "faq/index.html" },
-        { "text": "Feedback", "url": "feedback/index.html" }
+        { "text": "FAQs", "url": "faq/index.html" }
       ]
     },
     {

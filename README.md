@@ -1170,15 +1170,6 @@ Real-world, production-ready applications built with Domma.
 
 🚀 **[Explore All MiniApps](https://dommajs.org/miniapps/)** - Try them live!
 
-### My Garage
-
-Vehicle management system with DVLA integration for UK registration lookups.
-
-- Look up any UK vehicle by registration number
-- Display MOT and tax status
-- Save vehicle history with Domma.storage
-- **Try it:** [My Garage Live](https://dommajs.org/miniapps/garage/)
-
 ### Domma Docs
 
 Powerful document editor with rich text formatting and export capabilities.
@@ -1250,7 +1241,7 @@ npm run validate:showcase     # load all 87 showcase pages in jsdom
 
 ```bash
 npm run build:miniapps              # Build all miniapps
-npm run build:miniapp:garage        # Build specific miniapp
+node scripts/build-miniapp.js docs  # Build one miniapp
 NODE_ENV=production npm run build   # Production build
 ```
 
