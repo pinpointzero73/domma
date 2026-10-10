@@ -1,0 +1,55 @@
+<div class="celebrate-demo">
+    <div class="celebrate-controls">
+        <label class="celebrate-control">Celebration
+            <select class="form-select form-select-sm" data-model="theme.value" data-on-change="themeChanged">
+                <option value="auto">Auto - today's, if any</option>
+                <option value="christmas">🎄 Christmas</option>
+                <option value="halloween">🎃 Halloween</option>
+                <option value="valentines">💕 Valentine's</option>
+                <option value="guy-fawkes">🎆 Guy Fawkes</option>
+                <option value="st-patricks">☘️ St Patrick's</option>
+                <option value="st-andrews">🏴󠁧󠁢󠁳󠁣󠁴󠁿 St Andrew's</option>
+                <option value="st-davids">🏴󠁧󠁢󠁷󠁬󠁳󠁿 St David's</option>
+                <option value="st-georges">🏴󠁧󠁢󠁥󠁮󠁧󠁿 St George's</option>
+            </select>
+        </label>
+        <div class="btn-group btn-group-sm" role="group" aria-label="Intensity">
+            <button type="button" class="btn btn-sm" data-bind-class="intensity.value === 'light' ? 'btn-primary' : 'btn-secondary'" data-on-click="setIntensity('light')">Light</button>
+            <button type="button" class="btn btn-sm" data-bind-class="intensity.value === 'medium' ? 'btn-primary' : 'btn-secondary'" data-on-click="setIntensity('medium')">Medium</button>
+            <button type="button" class="btn btn-sm" data-bind-class="intensity.value === 'heavy' ? 'btn-primary' : 'btn-secondary'" data-on-click="setIntensity('heavy')">Heavy</button>
+        </div>
+        <button type="button" class="btn btn-sm" data-bind-class="running.value ? 'btn-danger' : 'btn-success'" data-on-click="toggle" data-bind-text="running.value ? 'Stop' : 'Start'">Start</button>
+    </div>
+
+    <div class="celebrate-stats">
+        <div class="celebrate-stat"><span data-icon="calendar"></span><div><small>Today</small><strong data-bind-text="today.value">-</strong></div></div>
+        <div class="celebrate-stat"><span data-icon="sparkles"></span><div><small>Showing</small><strong data-bind-text="showing.value">None</strong></div></div>
+        <div class="celebrate-stat"><span data-icon="activity"></span><div><small>Status</small><strong data-bind-class="running.value ? 'text-success' : 'text-danger'" data-bind-text="running.value ? 'Running' : 'Stopped'">Stopped</strong></div></div>
+        <div class="celebrate-stat"><span data-icon="box"></span><div><small>Particles</small><strong data-bind-text="particles.value">0</strong></div></div>
+    </div>
+
+    <div class="card celebrate-traits-card">
+        <div class="card-header flex items-center justify-between">
+            <strong>What appears</strong>
+            <span class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-secondary btn-sm" data-on-click="allTraits(true)">All on</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-on-click="allTraits(false)">All off</button>
+            </span>
+        </div>
+        <div class="card-body">
+            <p class="text-muted" data-if="traits.value.length === 0">Pick a celebration to see what it draws.</p>
+            <div class="celebrate-traits" data-each="traits.value key=name">
+                <label><input type="checkbox" data-bind-checked="enabled" data-on-change="$root.setTrait($data)"> <span data-bind-text="label"></span></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebrate-cards" data-each="themes key=id">
+        <button type="button" class="celebrate-card" data-bind-class="$root.theme.value === id && 'active'" data-on-click="$root.show($data)">
+            <span class="celebrate-emoji" data-bind-text="emoji"></span>
+            <strong data-bind-text="name"></strong>
+            <small class="celebrate-dates" data-bind-text="dates"></small>
+            <small class="celebrate-draws" data-bind-text="draws"></small>
+        </button>
+    </div>
+</div>

@@ -5,6 +5,9 @@
  *                         typed tagline, and the module tiles grouped Core /
  *                         Data / UI / Tools, read from the Modules collection.
  *                         Hovering a tile types its summary into the tagline.
+ *   [dommajs-modules /]   the showcase index: every module as a card - icon,
+ *                         summary, features and a line of code - grouped Core /
+ *                         Data / UI / Tools, from the same collection.
  *   [dommajs-cms-band /]  the Domma CMS band: a typed headline, four counters,
  *                         the calls to action. Its figures are attributes:
  *                         shortcodes, themes, plugins, steps.
@@ -41,7 +44,8 @@ function modules() {
 }
 
 function hero() {
-    const all = modules();
+    // The home page shows the headline modules; the showcase index shows them all.
+    const all = modules().filter(m => m.home !== false);
     const groups = GROUPS.map(g => [g, all.filter(m => m.group === g)]).filter(([, items]) => items.length);
     const tiles = groups.map(([g, items]) => `<div class="djs-feature-group">
 <span class="djs-feature-group-label">${esc(g)}</span>
@@ -62,6 +66,27 @@ function hero() {
 ${tiles}
 </div>
 </section>`;
+}
+
+function moduleCards() {
+    const all = modules();
+    return GROUPS.map(g => [g, all.filter(m => m.group === g)]).filter(([, items]) => items.length).map(([g, items]) => `<section class="djs-modules-group" aria-labelledby="djs-modules-${esc(g.toLowerCase())}">
+<h2 id="djs-modules-${esc(g.toLowerCase())}">${esc(g)}</h2>
+<div class="djs-modules-grid">
+${items.map(m => {
+        const features = String(m.features || '').split('\n').map(f => f.trim()).filter(Boolean);
+        return `<a class="card card-hover djs-module-card" href="${esc(m.url)}">
+<div class="card-body">
+<span class="djs-module-icon" data-icon="${esc(m.icon || 'box')}" data-icon-size="32"></span>
+<h3 class="card-title">${esc(m.name)}</h3>
+<p class="card-text">${esc(m.summary || '')}</p>
+${features.length ? `<ul class="djs-module-features">${features.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}
+</div>
+${m.example ? `<div class="card-footer"><code>${esc(m.example)}</code></div>` : ''}
+</a>`;
+    }).join('\n')}
+</div>
+</section>`).join('\n');
 }
 
 function cmsBand(attrs) {
@@ -89,12 +114,13 @@ ${stats.map(([to, from, label]) => `<div class="djs-cms-stat"><span class="djs-c
 </section>`;
 }
 
-const SLOT_RE = /<div class="djs-slot" data-djs="(hero|cms-band)"((?: data-[a-z]+="[^"]*")*)><\/div>/g;
+const SLOT_RE = /<div class="djs-slot" data-djs="(hero|cms-band|modules)"((?: data-[a-z]+="[^"]*")*)><\/div>/g;
 
 export default async function dommajsSite(fastify, options) {
     const {registerShortcode, registerTransform} = options.hooks;
 
     registerShortcode('dommajs-hero', () => '<div class="djs-slot" data-djs="hero"></div>');
+    registerShortcode('dommajs-modules', () => '<div class="djs-slot" data-djs="modules"></div>');
     registerShortcode('dommajs-cms-band', (attrStr, _body, ctx) => {
         const a = ctx.parseShortcodeAttrs(attrStr);
         const data = ['shortcodes', 'themes', 'plugins', 'steps']
@@ -106,6 +132,7 @@ export default async function dommajsSite(fastify, options) {
         if (typeof html !== 'string' || !html.includes('djs-slot')) return html;
         return html.replace(SLOT_RE, (_m, kind, dataStr) => {
             if (kind === 'hero') return hero();
+            if (kind === 'modules') return moduleCards();
             const attrs = Object.fromEntries([...dataStr.matchAll(/data-([a-z]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
             return cmsBand(attrs);
         });

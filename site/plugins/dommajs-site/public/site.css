@@ -162,6 +162,21 @@
 
 .djs-feature-label { font-size: 0.875rem; opacity: 0.9; color: var(--dm-text-secondary); }
 
+/* ---- Showcase index: the module cards ----------------------------------------- */
+.djs-modules-group { margin: 0 0 3rem; }
+.djs-modules-group > h2 { margin: 0 0 1.25rem; }
+.djs-modules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
+.djs-module-card { display: flex; flex-direction: column; color: inherit; text-decoration: none; }
+.djs-module-card:hover { color: inherit; }
+.djs-module-card .card-body { flex: 1; }
+.djs-module-icon { display: inline-flex; margin-bottom: 0.75rem; color: var(--dm-primary); }
+.djs-module-card .card-title { margin: 0 0 0.5rem; }
+.djs-module-card .card-text { color: var(--dm-text-secondary); }
+.djs-module-features { margin: 0.75rem 0 0; padding: 0; list-style: none; }
+.djs-module-features li { padding: 0.2rem 0; font-size: 0.875rem; color: var(--dm-text-muted); }
+.djs-module-features li::before { content: '\2713'; margin-right: 0.5rem; color: var(--dm-primary); }
+.djs-module-card .card-footer code { font-size: 0.8rem; white-space: pre-wrap; word-break: break-word; }
+
 /* ---- Home: the Domma CMS band ------------------------------------------------- */
 /* Lifted out of the body column by site.js, like the hero: full width. */
 .site-main > .djs-cms-band { grid-column: 1 / -1; margin-bottom: 0; }
@@ -271,3 +286,53 @@
 }
 html.dm-reduced-motion .djs-hero-logo,
 html.dm-reduced-motion .djs-feature:hover { animation: none; }
+
+/* ---- Seasonal celebrations: the sparkle disc (site.js), above the search button ---- */
+.djs-celebrate {
+    position: fixed;
+    right: 24px;
+    bottom: 96px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+.djs-celebrate-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--dm-border);
+    border-radius: 9999px;
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    transition: transform .2s ease, background .2s ease;
+}
+.djs-celebrate-toggle:hover { transform: scale(1.06); background: var(--dm-hover-bg, var(--dm-surface-raised)); }
+.djs-celebrate-toggle.active { color: var(--dm-primary); border-color: var(--dm-primary); }
+.djs-celebrate-levels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s;
+}
+.djs-celebrate:hover .djs-celebrate-levels,
+.djs-celebrate:focus-within .djs-celebrate-levels { opacity: 1; visibility: visible; transform: none; }
+.djs-celebrate-levels button {
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--dm-border);
+    border-radius: 4px;
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+.djs-celebrate-levels button.active { background: var(--dm-primary); border-color: var(--dm-primary); color: var(--dm-text-inverse); }

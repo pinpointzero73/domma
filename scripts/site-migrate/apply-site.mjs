@@ -17,13 +17,15 @@
  *   - plugins/<name>/     every site plugin under site/plugins/ (the showcase), enabled
  *   - collections         scripts/site-migrate/collections/<slug>/: schema.json always; data.json
  *                         only when the site has none yet (or with --reseed), so entries edited
- *                         in the admin are not overwritten
+ *                         in the admin are not overwritten (--reseed refuses when the site's
+ *                         entries are not the ones last installed from git; --force overrides)
  *
  * The site reads these at boot: restart it afterwards (its manager restarts a
  * site when its process is ended).
  *
  * Usage: node scripts/site-migrate/apply-site.mjs <site-dir> [--dry] [--reseed] [--theme] [--menus]
  */
+import {execFileSync} from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -160,7 +162,19 @@ for (const name of fs.existsSync(SITE_PLUGINS) ? fs.readdirSync(SITE_PLUGINS) : 
 for (const slug of fs.existsSync(path.join(SM, 'collections')) ? fs.readdirSync(path.join(SM, 'collections')) : []) {
     const src = path.join(SM, 'collections', slug);
     const dest = path.join(SITE, 'content', 'collections', slug);
-    const files = ['schema.json', ...((RESEED || !fs.existsSync(path.join(dest, 'data.json'))) ? ['data.json'] : [])];
+    // --reseed replaces entries only when the site's are still the ones last installed from git
+    // (HEAD's copy): entries edited in the admin are never overwritten without --force.
+    let reseed = RESEED;
+    if (RESEED && fs.existsSync(path.join(dest, 'data.json')) && !process.argv.includes('--force')) {
+        let installed = null;
+        try { installed = execFileSync('git', ['show', `HEAD:scripts/site-migrate/collections/${slug}/data.json`], {cwd: ROOT, encoding: 'utf8'}); } catch { /* not in git yet */ }
+        const same = (a, b) => { try { return JSON.stringify(JSON.parse(a)) === JSON.stringify(JSON.parse(b)); } catch { return false; } };
+        if (!installed || !same(installed, fs.readFileSync(path.join(dest, 'data.json'), 'utf8'))) {
+            console.error(`Not reseeding ${slug}: the site's entries differ from those last installed (edited in the admin?). --force to replace them.`);
+            reseed = false;
+        }
+    }
+    const files = ['schema.json', ...((reseed || !fs.existsSync(path.join(dest, 'data.json'))) ? ['data.json'] : [])];
     mirror(src, dest, files.filter(f => fs.existsSync(path.join(src, f))));
 }
 

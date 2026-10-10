@@ -7,7 +7,10 @@
       "url": "/showcase/dom",
       "icon": "dollar-sign",
       "summary": "jQuery-compatible DOM manipulation: 90+ chainable methods, events and effects.",
-      "order": 1
+      "order": 1,
+      "features": "90+ methods\nTraversal & manipulation\nEvents & animations\nCSS & attributes",
+      "example": "$('.selector').addClass('active')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -24,7 +27,10 @@
       "url": "/showcase/utils",
       "icon": "tool",
       "summary": "120+ Lodash-compatible utilities for arrays, objects, strings and functions.",
-      "order": 2
+      "order": 2,
+      "features": "120+ utilities\nArray & collection methods\nObject manipulation\nString & function helpers",
+      "example": "_.groupBy(users, 'role')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -41,7 +47,10 @@
       "url": "/showcase/config",
       "icon": "settings",
       "summary": "Declarative setup: wire components, events and state from one object.",
-      "order": 3
+      "order": 3,
+      "features": "JSON-based setup\nAuto component init\nRuntime updates\nLifecycle management",
+      "example": "$.setup({ '#modal': { component: 'modal' } })",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -58,7 +67,10 @@
       "url": "/showcase/storage",
       "icon": "save",
       "summary": "localStorage with automatic JSON, namespaced keys and graceful fallbacks.",
-      "order": 4
+      "order": 4,
+      "features": "Auto JSON serialisation\nPrefixed keys\nModel persistence\nGraceful fallbacks",
+      "example": "S.set('user', { name: 'Alice' })",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -75,7 +87,8 @@
       "url": "/showcase/http",
       "icon": "globe",
       "summary": "A promise-based HTTP client with JSON handling, interceptors and retries.",
-      "order": 5
+      "order": 5,
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -92,7 +105,10 @@
       "url": "/showcase/router",
       "icon": "map",
       "summary": "Hash-based client-side routing with views, lifecycle hooks and middleware.",
-      "order": 6
+      "order": 6,
+      "features": "Hash-based routing (#/path)\nDynamic route parameters\nView lifecycle hooks\nExternal template files",
+      "example": "R.navigate('/user/:id')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -109,7 +125,8 @@
       "url": "/showcase/integrations",
       "icon": "box",
       "summary": "Domma alongside other libraries and frameworks.",
-      "order": 7
+      "order": 7,
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -126,7 +143,8 @@
       "url": "/showcase/components",
       "icon": "component",
       "summary": "Reusable units of UI with their own state, template and teardown.",
-      "order": 8
+      "order": 8,
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -143,7 +161,10 @@
       "url": "/showcase/dates",
       "icon": "calendar",
       "summary": "Moment-style dates: parse, format, compare and calculate.",
-      "order": 9
+      "order": 9,
+      "features": "Chainable API\nFormatting & parsing\nRelative time (fromNow)\nComparison & diff",
+      "example": "D().add(7, 'days').format('MMM D')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -160,7 +181,10 @@
       "url": "/showcase/models",
       "icon": "database",
       "summary": "Reactive models with validation, computed values, effects and DOM bindings.",
-      "order": 10
+      "order": 10,
+      "features": "Pub/Sub events\nReactive data binding\nBlueprint validation\nTwo-way DOM binding",
+      "example": "M.bind(model, 'name', '#input')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -177,7 +201,10 @@
       "url": "/showcase/forms",
       "icon": "document-add",
       "summary": "Forms generated from a blueprint, with validation, wizards and CRUD.",
-      "order": 11
+      "order": 11,
+      "features": "Blueprint-driven generation\nAutomatic validation\nModal & wizard support\nComplete CRUD helper",
+      "example": "Domma.forms.create(blueprint, data, options)",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -194,7 +221,10 @@
       "url": "/showcase/tables",
       "icon": "grid",
       "summary": "Data tables with sorting, filtering, pagination and export.",
-      "order": 12
+      "order": 12,
+      "features": "Sorting & filtering\nPagination\nRow selection\nCSV/JSON export",
+      "example": "Domma.tables.create('#grid', opts)",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -211,7 +241,10 @@
       "url": "/showcase/elements",
       "icon": "layout",
       "summary": "Thirty UI components - modals, tabs, popovers, sortable lists and more.",
-      "order": 13
+      "order": 13,
+      "features": "Modals & tooltips\nTabs & accordions\nCards with effects\nConfig integration",
+      "example": "Domma.elements.modal('#dialog')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -228,7 +261,10 @@
       "url": "/showcase/icons",
       "icon": "image",
       "summary": "200+ SVG icons in 15 categories, from a data-icon attribute.",
-      "order": 14
+      "order": 14,
+      "features": "100+ icons in 8 categories\nRender, inject, or scan\nSize & colour options\nCustom icon registration",
+      "example": "Domma.icons.render('search')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -245,7 +281,10 @@
       "url": "/showcase/flags",
       "icon": "flag",
       "summary": "Nation flags as inline SVG, by country code.",
-      "order": 15
+      "order": 15,
+      "features": "50+ flags across 5 regions\nRect, rounded, square & circle\nRender, inject, or scan\nCustom flag registration",
+      "example": "FL.render('gb', { shape: 'circle' })",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -262,7 +301,10 @@
       "url": "/showcase/themes",
       "icon": "sun",
       "summary": "14 themes, each light and dark, switched live.",
-      "order": 16
+      "order": 16,
+      "features": "Light & dark themes\nOcean, forest, sunset variants\nCSS-only or JS API\nSystem preference detection",
+      "example": "Domma.theme.set('dark')",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -279,7 +321,10 @@
       "url": "/showcase/effects",
       "icon": "zap",
       "summary": "Typewriter, reveal, ripple, confetti and more, with reduced-motion respected.",
-      "order": 17
+      "order": 17,
+      "features": "Glow effects\nFireworks animations\nShadow utilities\nPure CSS implementation",
+      "example": "class=\"glow-primary firework-on-hover\"",
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -296,7 +341,8 @@
       "url": "/showcase/theme-roller",
       "icon": "palette",
       "summary": "Design a theme visually and export it.",
-      "order": 18
+      "order": 18,
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -313,7 +359,8 @@
       "url": "/showcase/page-roller",
       "icon": "box",
       "summary": "Build a page from components, visually.",
-      "order": 19
+      "order": 19,
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -330,7 +377,8 @@
       "url": "/showcase/elements/editor",
       "icon": "edit",
       "summary": "A rich-text editor with export.",
-      "order": 20
+      "order": 20,
+      "home": true
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",
@@ -347,7 +395,228 @@
       "url": "/showcase/print-to-pdf",
       "icon": "download",
       "summary": "Print and PDF export for any part of a page.",
-      "order": 21
+      "order": 21,
+      "home": true
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "d6f59cef-9176-59a9-92e0-704843f36be5",
+    "data": {
+      "name": "Blueprints",
+      "group": "Data",
+      "url": "/showcase/blueprints",
+      "icon": "layers",
+      "summary": "Unified schema system - define once, use everywhere for validation, forms, models, and CRUD.",
+      "features": "Single source of truth\nForm generation\nModel validation\nBlueprint composition",
+      "example": "M.create(blueprint) \u2192 Domma.forms.create(blueprint)",
+      "home": false,
+      "order": 22
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "5209c27d-10fb-5239-9fd9-3e8868f73d1a",
+    "data": {
+      "name": "Reactivity",
+      "group": "Data",
+      "url": "/showcase/models/reactivity",
+      "icon": "zap",
+      "summary": "Dependency tracking - a write re-runs exactly the work that depends on it.\n                        Also published on its own as domma-reactive.",
+      "features": "Observables and computed values\nEffects, batched onto one flush\nUsable without Domma",
+      "example": "M.computed(() => price.value * qty.value)",
+      "home": false,
+      "order": 23
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "baf7d48c-8bf3-5af9-9297-6f8acffbe4c2",
+    "data": {
+      "name": "Bindings",
+      "group": "Data",
+      "url": "/showcase/models/bindings",
+      "icon": "link",
+      "summary": "Declarative bindings between markup and data, in a component template or on\n                        a page you already have.",
+      "features": "data-bind-*, data-model,\n                            data-on-*\nKeyed lists that keep their DOM\nCSP-safe - no eval",
+      "example": "M.applyBindings(model, '#app')",
+      "home": false,
+      "order": 24
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "6e63ac5c-31b5-58d7-9695-5ba96760da71",
+    "data": {
+      "name": "Dot notation",
+      "group": "Data",
+      "url": "/showcase/models/dot-notation",
+      "icon": "git-branch",
+      "summary": "Read and write nested model fields with dot paths: user.address.city.",
+      "features": "",
+      "example": "",
+      "home": false,
+      "order": 25
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "1eba4991-f4d3-5a5d-bb41-cf6f957cbd4e",
+    "data": {
+      "name": "Grid",
+      "group": "UI",
+      "url": "/showcase/grid",
+      "icon": "grid",
+      "summary": "12-column flexbox grid with mobile-first stacking, plus CSS Grid utilities.",
+      "features": "",
+      "example": "",
+      "home": false,
+      "order": 26
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "219aee66-8259-538a-99f5-33f12854e86c",
+    "data": {
+      "name": "Opacity & Translucency",
+      "group": "UI",
+      "url": "/showcase/css-utilities",
+      "icon": "droplet",
+      "summary": "Full opacity scale plus semantic translucency classes and a frosted glass variant.",
+      "features": "13-step opacity scale (0-100)\nSemantic translucent utilities\nFrosted glass effect\nHover variants with transitions",
+      "example": "class=\"translucent-glass\"",
+      "home": false,
+      "order": 27
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "a9a40dc7-c2fd-5bfe-820f-700055285689",
+    "data": {
+      "name": "Accessibility & Text",
+      "group": "UI",
+      "url": "/showcase/css-utilities/accessibility-text",
+      "icon": "type",
+      "summary": "Screen-reader-only text, skip links, line clamping, whole-card links and a divider with a word in it.",
+      "features": ".sr-only / .visually-hidden and .skip-link\n.line-clamp-1 to -5\n.stretched-link\n.divider-text",
+      "example": "class=\"sr-only\"",
+      "home": false,
+      "order": 28
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "422910ff-c841-5f9c-87c3-04ab93a4112f",
+    "data": {
+      "name": "Sidebar",
+      "group": "UI",
+      "url": "/showcase/sidebar",
+      "icon": "sidebar",
+      "summary": "JSON-configured navigation sidebar: unlimited nesting, mobile drawer, theme variants.",
+      "features": "",
+      "example": "",
+      "home": false,
+      "order": 29
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "dcaf0075-a48a-5dc3-bc86-10fd3a2f09df",
+    "data": {
+      "name": "Footer",
+      "group": "UI",
+      "url": "/showcase/footer",
+      "icon": "layout",
+      "summary": "Responsive footer in three layouts - simple, columns, minimal - with theme variants.",
+      "features": "",
+      "example": "",
+      "home": false,
+      "order": 30
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "8cdcaf01-ce94-598c-997f-6f856bdb821c",
+    "data": {
+      "name": "Schema Builder",
+      "group": "Tools",
+      "url": "/showcase/schema-builder",
+      "icon": "tool",
+      "summary": "Build blueprints visually: drag-and-drop fields, test validation, export JS, JSON or TypeScript.",
+      "features": "",
+      "example": "",
+      "home": false,
+      "order": 31
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "5b3479f0-208f-5829-8ef6-7329bf69c458",
+    "data": {
+      "name": "Reference",
+      "group": "Core",
+      "url": "/showcase/reference",
+      "icon": "book-open",
+      "summary": "The whole API on one page: a cheat sheet for every namespace.",
+      "features": "",
+      "example": "",
+      "home": false,
+      "order": 32
     },
     "meta": {
       "createdAt": "2026-10-10T00:00:00.000Z",

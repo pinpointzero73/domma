@@ -64,6 +64,43 @@ function item(it) {
     return out;
 }
 
+// An icon for every item of the main menu, by its label (Domma's icon set). Items missing
+// here are listed when the script runs, so a new page is noticed.
+const ICONS = {
+    'Home': 'home', 'QuickStart': 'rocket', 'Overview': 'compass', 'SPA': 'window', 'MPA': 'layers',
+    'Kickstart Builder': 'package', 'Core': 'cpu', 'Config': 'settings', 'DOM': 'dollar-sign', 'Utils': 'tool',
+    'Storage': 'save', 'HTTP': 'globe', 'Router': 'map', 'Components': 'component', 'Integrations': 'link',
+    'Data': 'database', 'Blueprints': 'file-code', 'Dates': 'calendar', 'Models': 'box', 'Reactivity': 'zap',
+    'Bindings': 'link-2', 'Tables': 'columns', 'UI': 'layout', 'Alarm': 'bell', 'Back to Top': 'arrow-up',
+    'Cookie Consent': 'shield-check', 'Desktop Notification': 'notification', 'Loader': 'spinner',
+    'Skeleton': 'list', 'Timer': 'stopwatch', 'Toast': 'message-square', 'Grid': 'grid',
+    'Accessibility & Text': 'type', 'Icons': 'image', 'Flags': 'flag', 'Themes': 'palette', 'Forms': 'document-text',
+    'Elements': 'grid', 'Accordion': 'chevrons-down', 'Autocomplete': 'search', 'Avatar': 'user', 'Badge': 'badge',
+    'Breadcrumbs': 'chevrons-right', 'Button Group': 'sliders', 'Card': 'square', 'Carousel': 'images',
+    'Chooser': 'check-square', 'Context Menu': 'mouse-pointer', 'Dialog': 'message-circle', 'Dropdown': 'chevron-down',
+    'Editor': 'edit', 'Footer': 'panel-bottom', 'Hero': 'panel-top', 'List Group': 'list-bullet', 'Modal': 'window',
+    'Navbar': 'menu', 'Pillbox': 'tags', 'Popover': 'chat', 'Progression': 'trending-up', 'Signature': 'feather',
+    'Sidebar': 'sidebar', 'Slideover': 'panel-right', 'Sortable': 'grip-vertical', 'Tabs': 'folder', 'Timeline': 'git-branch',
+    'Tooltip': 'info', 'TreeView': 'tree', 'Effects': 'sparkles', 'Ambient': 'cloud', 'Animations': 'play-circle',
+    'Filters': 'filter', 'Fireworks': 'party-popper', 'Glow': 'sun', 'Gradients': 'droplets', 'Shadows': 'moon',
+    'JavaScript': 'code', 'Breathe': 'activity', 'Counter': 'hash', 'Pulse': 'heartbeat', 'Reveal': 'eye',
+    'Ripple': 'droplet', 'Scramble': 'type', 'Shake': 'move', 'Scribe': 'edit-3', 'Twinkle': 'star',
+    'Ticker Tape': 'gift', 'Butterflies': 'feather', 'Strobe': 'lightning', 'Celebrations': 'party-popper',
+    'Tools': 'tool', 'Theme Roller': 'palette', 'Page Roller': 'layout', 'Schema Builder': 'database',
+    'Form Generation': 'document-add', 'Print to PDF': 'printer', 'API Reference': 'book-open',
+    'Domma CMS': 'external-link', 'Resources': 'book', 'Download': 'download', 'About Us': 'info',
+    'FAQs': 'help-circle', 'Privacy Policy': 'shield', 'Cookie policy': 'shield-check',
+};
+const noIcon = new Set();
+function addIcons(items) {
+    for (const it of items) {
+        if (it.type) continue;
+        if (!it.icon) { if (ICONS[it.text]) it.icon = ICONS[it.text]; else noIcon.add(it.text); }
+        if (it.items) addIcons(it.items);
+    }
+    return items;
+}
+
 /** No separator first, last or twice in a row. */
 function tidy(items) {
     const out = [];
@@ -102,10 +139,16 @@ const menus = [
     menu('footer', 'Footer', 'From footer-landing.json', footerGroups),
 ];
 
+// Celebrations was one of the dropped examples; it is a showcase page now, under Effects.
+const effectsMenu = menus[0].items.find(i => i.text === 'Effects');
+if (effectsMenu && !effectsMenu.items.some(i => i.text === 'Celebrations')) effectsMenu.items.push({text: 'Celebrations', url: '/showcase/effects/celebrations'});
+addIcons(menus[0].items);
+
 fs.mkdirSync(OUT, {recursive: true});
 for (const m of menus) fs.writeFileSync(path.join(OUT, `${m.slug}.json`), JSON.stringify(m, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT, 'menu-locations.json'), JSON.stringify({navbar: 'main', 'footer-primary': 'footer'}, null, 2) + '\n');
 
 const count = (items) => items.reduce((n, i) => n + (i.type === 'separator' || i.type === 'theme-switcher' ? 0 : 1) + (i.items ? count(i.items) : 0), 0);
 for (const m of menus) console.log(`${m.slug}: ${count(m.items)} links`);
+if (noIcon.size) console.log(`main items with no icon: ${[...noIcon].join(', ')}`);
 console.log(`left out (dropped pages): ${dropped.length ? [...new Set(dropped)].join(', ') : 'none'}`);

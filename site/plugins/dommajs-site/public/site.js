@@ -39,6 +39,50 @@
         fx.twinkle(null, {count: 150, minSize: 1, maxSize: 3, twinkleSpeed: 0.003, colour: 'rgba(255, 240, 200, 1)', zIndex: 1});
     }
 
+    // ---- Seasonal celebrations -----------------------------------------------------
+    // In season (Halloween, Christmas, the patron saints' days...), a sparkle disc turns the
+    // celebration on and off and picks how much of it; the choice is remembered. Out of season
+    // there is no disc. The domma-celebrate build is in public/vendor/celebrate.
+    import('/plugins/dommajs-site/public/vendor/celebrate/domma-celebrate.esm.js').then(({Celebrations, isCelebrationSeason}) => {
+        if (!isCelebrationSeason()) return;
+        const store = window.Domma && Domma.storage;
+        const get = (k, d) => (store ? store.get(k, d) : d);
+        const set = (k, v) => store && store.set(k, v);
+        const wrap = document.createElement('div');
+        wrap.className = 'djs-celebrate';
+        wrap.innerHTML = `<button type="button" class="djs-celebrate-toggle" aria-pressed="false" aria-label="Celebration effects" data-tooltip="Celebration effects"><span data-icon="sparkles"></span></button>
+<div class="djs-celebrate-levels" role="group" aria-label="How much">${['light', 'medium', 'heavy'].map(l => `<button type="button" data-intensity="${l}">${l[0].toUpperCase() + l.slice(1)}</button>`).join('')}</div>`;
+        document.body.appendChild(wrap);
+        if (window.Domma && Domma.icons) Domma.icons.scan(wrap);
+        const toggle = wrap.querySelector('.djs-celebrate-toggle');
+        let effect = null;
+        const markLevel = () => wrap.querySelectorAll('[data-intensity]').forEach(b => b.classList.toggle('active', b.dataset.intensity === get('celebrations-intensity', 'medium')));
+        const on = () => {
+            effect = new Celebrations({theme: 'auto', intensity: get('celebrations-intensity', 'medium'), enabled: false, traits: get('celebrations-traits', {})});
+            effect.init().then(started => {
+                if (!started) return;
+                effect.start();
+                toggle.classList.add('active');
+                toggle.setAttribute('aria-pressed', 'true');
+                set('celebrations-enabled', true);
+            });
+        };
+        const off = () => {
+            if (effect) { effect.pause(); effect.destroy(); effect = null; }
+            toggle.classList.remove('active');
+            toggle.setAttribute('aria-pressed', 'false');
+            set('celebrations-enabled', false);
+        };
+        toggle.addEventListener('click', () => (toggle.classList.contains('active') ? off() : on()));
+        wrap.querySelectorAll('[data-intensity]').forEach(b => b.addEventListener('click', () => {
+            set('celebrations-intensity', b.dataset.intensity);
+            if (effect) effect.setIntensity(b.dataset.intensity);
+            markLevel();
+        }));
+        markLevel();
+        if (get('celebrations-enabled', false) && !reduced) on();
+    }).catch(err => console.warn('[dommajs] celebrations did not load:', err?.message || err));
+
     // ---- Home: the hero's tagline ------------------------------------------------
     const tagline = document.getElementById('djs-tagline');
     if (tagline) {

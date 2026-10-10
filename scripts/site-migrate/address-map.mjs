@@ -92,6 +92,7 @@ const clean = (file) => (file === 'index.html' ? '/' : `/${file.replace(/(\/inde
 
 function decide(file) {
     const [top, ...rest] = file.split('/');
+    if (file === 'examples/celebrations/index.html') return {action: 'keep', new: '/showcase/effects/celebrations', note: 'Now a showcase page'};
     if (top === 'examples') return {action: 'drop', new: '/showcase', note: 'Examples dropped - the showcase covers the same ground'};
     if (top === 'miniapps') {
         if (file === 'miniapps/docs/index.html') return {action: 'drop', new: `${CMS}/tools/docs`, note: 'Domma Docs lives on Domma CMS'};

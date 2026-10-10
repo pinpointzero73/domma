@@ -27,3 +27,5 @@ showcase/effects/ticker-tape/demo-full-page-overlay
 showcase/effects/strobe/demo-full-page
 showcase/effects/butterflies/demo-full-page-overlay
 showcase/forms/crud-operations-mock-data
+showcase/effects/celebrations/preview-every-celebration
+pages/showcase/effects/celebrations.md

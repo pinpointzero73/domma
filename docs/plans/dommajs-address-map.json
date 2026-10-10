@@ -334,21 +334,21 @@
   },
   {
     "old": "/examples/celebrations/",
-    "new": "/showcase",
+    "new": "/showcase/effects/celebrations",
     "status": 301,
-    "action": "drop",
+    "action": "keep",
     "file": "examples/celebrations/index.html",
     "title": "Domma Celebrations - Demo & Testing",
-    "note": "Examples dropped - the showcase covers the same ground"
+    "note": "Now a showcase page"
   },
   {
     "old": "/examples/celebrations/index.html",
-    "new": "/showcase",
+    "new": "/showcase/effects/celebrations",
     "status": 301,
-    "action": "drop",
+    "action": "keep",
     "file": "examples/celebrations/index.html",
     "title": "Domma Celebrations - Demo & Testing",
-    "note": "Examples dropped - the showcase covers the same ground"
+    "note": "Now a showcase page"
   },
   {
     "old": "/examples/contacts/",

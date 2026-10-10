@@ -1,7 +1,7 @@
 {
   "slug": "modules",
   "title": "Modules",
-  "description": "Every Domma module, grouped as on the home page. Feeds the home page tiles and the showcase index.",
+  "description": "Every showcase page, grouped. Feeds the home page tiles (those marked Show on the home page) and the showcase index.",
   "fields": [
     {
       "name": "name",
@@ -36,6 +36,22 @@
       "name": "summary",
       "label": "Summary",
       "type": "textarea"
+    },
+    {
+      "name": "features",
+      "label": "Features (one per line)",
+      "type": "textarea"
+    },
+    {
+      "name": "example",
+      "label": "Example (one line of code)",
+      "type": "text"
+    },
+    {
+      "name": "home",
+      "label": "Show on the home page",
+      "type": "boolean",
+      "default": true
     },
     {
       "name": "order",

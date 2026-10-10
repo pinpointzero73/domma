@@ -36,8 +36,8 @@ old,new,status,action,title,file,note
 /examples/calculator/,/showcase,301,drop,Calculator - Domma Examples,examples/calculator/index.html,Examples dropped - the showcase covers the same ground
 /examples/calculator/index.html,/showcase,301,drop,Calculator - Domma Examples,examples/calculator/index.html,Examples dropped - the showcase covers the same ground
 /examples/calculator/template.html,/showcase,301,drop,,examples/calculator/template.html,Examples dropped - the showcase covers the same ground
-/examples/celebrations/,/showcase,301,drop,Domma Celebrations - Demo & Testing,examples/celebrations/index.html,Examples dropped - the showcase covers the same ground
-/examples/celebrations/index.html,/showcase,301,drop,Domma Celebrations - Demo & Testing,examples/celebrations/index.html,Examples dropped - the showcase covers the same ground
+/examples/celebrations/,/showcase/effects/celebrations,301,keep,Domma Celebrations - Demo & Testing,examples/celebrations/index.html,Now a showcase page
+/examples/celebrations/index.html,/showcase/effects/celebrations,301,keep,Domma Celebrations - Demo & Testing,examples/celebrations/index.html,Now a showcase page
 /examples/contacts/,/showcase,301,drop,Contact Management - Domma Examples,examples/contacts/index.html,Examples dropped - the showcase covers the same ground
 /examples/contacts/index.html,/showcase,301,drop,Contact Management - Domma Examples,examples/contacts/index.html,Examples dropped - the showcase covers the same ground
 /examples/contacts/template.html,/showcase,301,drop,,examples/contacts/template.html,Examples dropped - the showcase covers the same ground
