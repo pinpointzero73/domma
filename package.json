@@ -62,7 +62,6 @@
         "copy:themes": "node scripts/copy-theme-css.js",
         "build:miniapps": "node scripts/build-miniapp.js && node scripts/copy-miniapps.js",
         "build:miniapp:garage": "node scripts/build-miniapp.js garage",
-        "build:miniapp:address": "node scripts/build-miniapp.js address",
         "watch:miniapps": "node scripts/watch-miniapps.js",
         "generate:bundles": "node scripts/generate-bundles.js",
         "generate:themes": "node scripts/generate-admin-themes.js",

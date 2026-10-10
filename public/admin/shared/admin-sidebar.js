@@ -13,7 +13,6 @@ const AdminSidebar = {
         { text: 'Feedback', url: '/admin/feedback/index.html', icon: 'message-square', section: 'feedback', roles: ['admin'], badge: null },
         { text: 'Blog', url: '/admin/blog/index.html', icon: 'file-text', section: 'blog', roles: ['admin', 'editor'], badge: null },
         // MiniApp Management
-        { text: 'Address Lookup', url: '/admin/address-lookup/index.html', icon: 'map-pin', section: 'address-lookup', roles: ['admin'], badge: null },
         // Admin self-management
         { text: 'My Settings', url: '/admin/settings/index.html', icon: 'settings', section: 'settings', roles: ['admin'], badge: null },
         { text: 'My Privileges', url: '/admin/privileges/index.html', icon: 'key', section: 'privileges', roles: ['admin'], badge: null },

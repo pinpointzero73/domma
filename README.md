@@ -1189,22 +1189,6 @@ Powerful document editor with rich text formatting and export capabilities.
 - Auto-save with Domma.storage
 - **Try it:** [Domma Docs Live](https://dommajs.org/miniapps/docs/)
 
-### Address Lookup
-
-UK postcode and address finder.
-
-- Search by postcode, pick from the matching addresses
-- Results cached client-side with Domma.storage
-- **Try it:** [Address Lookup Live](https://dommajs.org/miniapps/address/)
-
-### Nexus
-
-Contact management and collaboration platform.
-
-- Contact tracking and organisation
-- Team collaboration tools
-- **Try it:** [Nexus Live](https://dommajs.org/miniapps/nexus/)
-
 ## Documentation
 
 ### For Claude Code Development

@@ -11,7 +11,6 @@ patterns and serve as reference implementations for common application types.
 
 - **Docs** - Document editor with rich text, version history, and folder management
 - **Garage** - Vehicle management system with DVLA API integration
-- **Nexus** - Contact manager with offline sync (in development)
 
 ## Directory Structure
 
@@ -56,19 +55,6 @@ garage/
 ├── index.html
 ├── src/
 │   └── app.js              # GarageApp class (878 lines)
-└── dist/
-    └── app.min.js
-```
-
-**Blueprint-Driven Approach (Nexus):**
-
-```
-nexus/
-├── index.html
-├── src/
-│   ├── app.js              # NexusApp class (458 lines)
-│   ├── storage.js          # NexusStorage with offline sync
-│   └── blueprints.js          # Form blueprints (Forma-style)
 └── dist/
     └── app.min.js
 ```
