@@ -913,15 +913,11 @@ function loadCelebrate() {
                 // Calculate levels up correctly: for /miniapps/garage/, pathParts = ['miniapps', 'garage']
                 // We need 2 levels up (../../) to reach root, so use pathParts.length directly
                 const levelsUp = pathParts.length;
-                const adminPath = levelsUp > 0 ? '../'.repeat(levelsUp) + 'admin/index.html' : 'admin/index.html';
 
                 // Add existing nav items from config (only navigation items, not Login/Logout)
                 if (config.items && config.items.length > 0) {
                     navItems.push(...config.items);
                 }
-
-                // Prepare actions for the right side
-                const loginPath = '/login/index.html';
 
                 Domma.elements.navbar('#main-navbar', {
                     brand: {text: config.brand?.text || 'Domma', url: config.brand?.url || '/'},
@@ -943,44 +939,6 @@ function loadCelebrate() {
               ${config.brand?.showVersion ? `<span class="header-version">v${data.version}</span>` : ''}
             </span>
           `, {safe: false});
-                }
-
-                // Add user name and role badge next to brand if logged in
-                if ($brandContainer.length && user) {
-                    const userName = user.name || user.email.split('@')[0];
-                    const userRole = user.role || 'guest';
-
-                    // Determine badge colour based on role
-                    const roleBadgeClass = {
-                        admin: 'badge-danger',
-                        subscriber: 'badge-primary',
-                        guest: 'badge-secondary'
-                    }[userRole] || 'badge-secondary';
-
-                    // Create clickable link for admin users, span for others
-                    const isAdmin = userRole === 'admin';
-                    const userInfoEl = document.createElement(isAdmin ? 'a' : 'span');
-                    userInfoEl.className = 'navbar-user-info';
-
-                    // Set href for admin users
-                    if (isAdmin) {
-                        userInfoEl.href = adminPath;
-                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; cursor: pointer;';
-                    } else {
-                        userInfoEl.style.cssText = 'margin-left: 1rem; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem;';
-                    }
-
-                    const nameSpan = document.createElement('span');
-                    nameSpan.textContent = `Hello, ${userName}`;
-
-                    const badge = document.createElement('span');
-                    badge.className = `badge ${roleBadgeClass}`;
-                    badge.style.cssText = 'text-transform: capitalize; font-size: 0.75rem;';
-                    badge.textContent = userRole;
-
-                    userInfoEl.appendChild(nameSpan);
-                    userInfoEl.appendChild(badge);
-                    $brandContainer.get(0).appendChild(userInfoEl);
                 }
 
                 // Add "What's New?" pill (visible to all visitors)
@@ -1025,9 +983,6 @@ function loadCelebrate() {
 
                     // Legacy fallback: if no config.actions, build from old structure
                     if (actions.length === 0) {
-                        // Always add auth action (Login/Register/Logout)
-                        actions.push({ type: 'auth', loginUrl: loginPath });
-
                         // Add theme selector if configured in legacy structure
                         if (presetConfig.theme && presetConfig.theme.variantSelector) {
                             const position = presetConfig.theme.position === 'fixed-right' ? 'fixed-right' : 'inline';

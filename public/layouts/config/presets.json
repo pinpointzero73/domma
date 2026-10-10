@@ -11,7 +11,6 @@
       "variant": null,
       "actions": [
         { "type": "search" },
-        { "type": "auth", "loginUrl": "login/index.html" },
         { "type": "theme-selector", "position": "inline" }
       ]
     },
@@ -55,7 +54,6 @@
           "variant": null,
           "actions": [
             { "type": "search" },
-            { "type": "auth", "loginUrl": "../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
         },
@@ -92,7 +90,6 @@
           "variant": null,
           "actions": [
             { "type": "search" },
-            { "type": "auth", "loginUrl": "../../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
         },
@@ -137,7 +134,6 @@
           "variant": null,
           "actions": [
             { "type": "search" },
-            { "type": "auth", "loginUrl": "../../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
         },
@@ -183,7 +179,6 @@
           "variant": null,
           "actions": [
             { "type": "search" },
-            { "type": "auth", "loginUrl": "../../../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
         },
@@ -231,7 +226,6 @@
           "variant": null,
           "actions": [
             { "type": "search" },
-            { "type": "auth", "loginUrl": "../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
         },
@@ -267,7 +261,6 @@
           "variant": null,
           "actions": [
             { "type": "search" },
-            { "type": "auth", "loginUrl": "../../login/index.html" },
             { "type": "theme-selector", "position": "inline" }
           ]
         },
@@ -315,7 +308,6 @@
       "variant": null,
       "actions": [
         { "type": "search" },
-        { "type": "auth", "loginUrl": "../login/index.html" },
         { "type": "theme-selector", "position": "inline" }
       ]
     },
@@ -355,38 +347,6 @@
     },
     "features": []
   },
-  "admin": {
-    "navbar": {
-      "type": "flat",
-      "brand": {
-        "text": "Domma Admin",
-        "url": "/admin/index.html",
-        "showVersion": false
-      },
-      "items": [
-        { "text": "Dashboard", "url": "/admin/index.html", "page": "admin" },
-        { "text": "Back to Site", "url": "/index.html", "page": "home" }
-      ],
-      "variant": "dark",
-      "actions": [
-        { "type": "search" },
-        { "type": "auth", "loginUrl": "/login/index.html" },
-        { "type": "theme-selector", "position": "inline" }
-      ]
-    },
-    "footer": null,
-    "sidebar": {
-      "enabled": false
-    },
-    "theme": {
-      "variantSelector": true,
-      "position": "fixed-right"
-    },
-    "breadcrumbs": {
-      "enabled": false
-    },
-    "features": []
-  },
   "celebrations-demo": {
     "navbar": {
       "type": "dropdowns",
@@ -399,7 +359,6 @@
       "variant": null,
       "actions": [
         { "type": "search" },
-        { "type": "auth", "loginUrl": "../../login/index.html" },
         { "type": "theme-selector", "position": "inline" }
       ]
     },
