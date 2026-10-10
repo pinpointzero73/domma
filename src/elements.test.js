@@ -40,6 +40,19 @@ describe('Domma.elements - UI Components', () => {
       expect(modal.isOpen()).toBe(false);
     });
 
+    it('createModal() shows HTML content as markup, in the page where it can be styled and read', () => {
+      const modal = Domma.elements.createModal({
+        title: 'Details',
+        content: '<p class="intro">Hello</p><input type="text" id="factory-field" value="x">'
+      });
+      const el = modal.element;
+      expect(el.querySelector('p.intro').textContent).toBe('Hello');
+      expect(document.getElementById('factory-field').value).toBe('x');
+      expect(el.shadowRoot.querySelector('.modal-body').textContent).not.toContain('<p');
+      expect(el.shadowRoot.querySelector('.modal-body slot')).not.toBeNull();
+      modal.remove();
+    });
+
     it('createModal() should return a new modal instance', () => {
       const modal = Domma.elements.createModal({title: 'Test Modal'});
       expect(modal).not.toBeNull();
@@ -48,7 +61,7 @@ describe('Domma.elements - UI Components', () => {
       modal.remove();
     });
 
-    it.skip('createModal() should handle custom buttons and onButtonClick callback', async () => {
+    it('createModal() should handle custom buttons and onButtonClick callback', async () => {
       const onButtonClickSpy = vi.fn();
       const modal = Domma.elements.createModal({
         title: 'Confirm',
@@ -58,7 +71,8 @@ describe('Domma.elements - UI Components', () => {
       });
 
       modal.open();
-      const okButton = document.querySelector('[data-button-id="ok"]');
+      // The footer is drawn inside the <domma-modal> element's shadow root.
+      const okButton = modal.element.shadowRoot.querySelector('[data-button-id="ok"]');
       expect(okButton).not.toBeNull();
       okButton.click();
 
@@ -67,7 +81,7 @@ describe('Domma.elements - UI Components', () => {
       modal.remove();
     });
 
-    it.skip('showModal() should return a promise that resolves with button ID', async () => {
+    it('showModal() should return a promise that resolves with button ID', async () => {
       const promise = Domma.elements.showModal({
         title: 'Test Promise',
         buttons: [{id: 'ok', text: 'OK'}],
@@ -76,7 +90,7 @@ describe('Domma.elements - UI Components', () => {
 
       await vi.advanceTimersByTimeAsync(50);
 
-      const okBtn = document.querySelector('[data-button-id="ok"]');
+      const okBtn = [...document.querySelectorAll('domma-modal')].pop().shadowRoot.querySelector('[data-button-id="ok"]');
       expect(okBtn).not.toBeNull();
       okBtn.click();
 

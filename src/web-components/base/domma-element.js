@@ -25,7 +25,9 @@ export class DommaElement extends HTMLElement {
      */
     connectedCallback() {
         if (!this._initialised) {
-            this._options = this._mergeOptions();
+            // Options set on the element before it was added to the page (a factory setting
+            // `buttons`, say) are kept over the defaults and attributes, not thrown away.
+            this._options = {...this._mergeOptions(), ...this._options};
             this._onBeforeMount?.();
             this._injectStyles();
             this._render();

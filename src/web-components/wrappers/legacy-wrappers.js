@@ -851,7 +851,8 @@ export class ModalFactoryWrapper {
     };
 
     static _ensureContainer() {
-        if (!this._container) {
+        // A container something removed from the page (a view swapped out) is made again.
+        if (!this._container || !this._container.isConnected) {
             this._container = document.createElement('div');
             this._container.className = 'dm-dialog-container';
             this._container.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1040;';
@@ -876,7 +877,14 @@ export class ModalFactoryWrapper {
         // Apply options as attributes
         if (opts.size) webComponent.setAttribute('size', opts.size);
         if (opts.title) webComponent.setAttribute('title', opts.title);
-        if (opts.content) webComponent.setAttribute('content', opts.content);
+        // Content is HTML, as it always was for createModal(). It goes in as the element's own
+        // children, which <domma-modal> shows through its body slot - the `content` attribute
+        // is written as plain text, which printed the markup. Sanitised when DOMPurify is
+        // loaded, the way Domma treats HTML elsewhere.
+        if (opts.content) {
+            const purify = typeof window !== 'undefined' ? window.DOMPurify : null;
+            webComponent.innerHTML = purify?.sanitize ? purify.sanitize(opts.content) : opts.content;
+        }
         if (opts.backdrop !== undefined) webComponent.setAttribute('backdrop', String(opts.backdrop));
         if (opts.backdropClose !== undefined) webComponent.setAttribute('backdrop-close', String(opts.backdropClose));
         if (opts.keyboard !== undefined) webComponent.setAttribute('keyboard', String(opts.keyboard));
@@ -886,12 +894,6 @@ export class ModalFactoryWrapper {
         if (opts.className) webComponent.setAttribute('class-name', opts.className);
         if (opts.closeButton !== undefined) webComponent.setAttribute('close-button', String(opts.closeButton));
 
-        // Handle buttons array
-        if (opts.buttons && opts.buttons.length > 0) {
-            webComponent._options = webComponent._options || {};
-            webComponent._options.buttons = opts.buttons;
-            webComponent._options.footerClass = opts.footerClass;
-        }
 
         // Handle callbacks via events
         if (opts.onOpen) {
@@ -904,6 +906,13 @@ export class ModalFactoryWrapper {
             webComponent.addEventListener('buttonclick', (e) => {
                 opts.onButtonClick(e.detail.buttonId, modalAPI);
             });
+        }
+
+        // Handle buttons array (kept by the element when it is connected - see DommaElement)
+        if (opts.buttons && opts.buttons.length > 0) {
+            webComponent._options = webComponent._options || {};
+            webComponent._options.buttons = opts.buttons;
+            webComponent._options.footerClass = opts.footerClass;
         }
 
         // Append to container
