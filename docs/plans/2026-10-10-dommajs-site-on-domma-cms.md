@@ -161,6 +161,39 @@ Each phase ends with a check before the next starts.
    sidebar. **Domma follow-up:** in domma-reactive, `options.methods` are not reachable from inside
    a `data-each` row (`edit($data)` "did not resolve to a function"); they should be.
 
+   **Done 2026-10-10 - all 91 pages, 770 demos.** `node scripts/site-migrate/check-site.cjs --reset`
+   (the browser check: every page under `pages/`, every demo mounts, no console error, and every
+   demo reset through its right-click menu tears down and mounts again) passes with nothing to
+   report. The jsdom harness was not ported: a real browser against the real site checks more.
+   - The converter learned, page by page: shared helpers and data copied into every demo that uses
+     them; adjacent blocks merged into one demo; a demo whose element the script targets keeps it;
+     helpers, components and custom bindings follow the markup that uses them; `getElementById`
+     and bare id strings count; `window.x = function` becomes a local function; relative pictures
+     are copied into the plugin, placeholder-service ones become SVG files; CSS the old pages
+     injected from script is kept (`demo-styles.mjs`). What it cannot place is dead code or the old
+     page's own furniture (a section accordion, a breakpoint badge, a clock with no markup).
+   - Hand upgrades are listed in `scripts/site-migrate/hand-upgraded.txt`, which `--force` never
+     overwrites: teardowns for every interval, subscription, page-wide effect and listener; 25
+     demos moved from HTML strings to bindings (3 kept on purpose - see the commit); bugs fixed on
+     the way (a dozen, from never-working buttons to page-wide lookups).
+   - The showcase index (`/showcase`) is drawn from the Modules collection, which now covers every
+     showcase page (`[dommajs-modules /]`); the home page and its CMS band are rebuilt to match the
+     old one (`[dommajs-hero /]`, `[dommajs-cms-band /]`) in the `dommajs-site` plugin, which also
+     gives every hero its blobs and the page its stars, and brings back the seasonal celebrations
+     disc. Celebrations is a showcase page now (the example page was the only one worth keeping).
+   - Layout (asked for): the main menu is a vertical rail on the right with an icon on every item,
+     Home first and the theme switcher last (Domma CMS 1.6.11's new menu item); the contents list
+     is on the left; heroes run the full width at half the old height.
+   - `apply-site.mjs` writes the theme and menus only for a new site (`--theme`, `--menus` to force)
+     and `--reseed` refuses when the site's entries are not the ones last installed - so nothing
+     edited in the admin is overwritten.
+
+   **Domma bugs found:** factory modals (`E.createModal` / `E.showModal`) showed their HTML as text
+   and drew no buttons - fixed in domma PR #32 (not yet released; the showcase's form-in-a-modal demo
+   uses `F.modal` meanwhile, and the other seven factory-modal demos will work once it is). Also
+   `Domma.component()` throws if a name is registered twice (a demo reset does that); the showcase
+   script skips the repeat for now - Domma could do it itself.
+
 4. **Collections.** Releases (imported from `releases.json`) and API reference (Modules is done).
    Change `scripts/release*` so a release adds its changelog entry through the CMS API (a project-scoped
    API token). *Check: the changelog page matches today's; a dry-run release writes one entry.*
