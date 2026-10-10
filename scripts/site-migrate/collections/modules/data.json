@@ -1,0 +1,359 @@
+[
+  {
+    "id": "1a9afae9-42b0-5b48-b0cf-c2993eaa77da",
+    "data": {
+      "name": "DOM",
+      "group": "Core",
+      "url": "/showcase/dom",
+      "icon": "dollar-sign",
+      "summary": "jQuery-compatible DOM manipulation: 90+ chainable methods, events and effects.",
+      "order": 1
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "278d30c7-db62-5fe6-be35-883efc1e9a56",
+    "data": {
+      "name": "Utils",
+      "group": "Core",
+      "url": "/showcase/utils",
+      "icon": "tool",
+      "summary": "120+ Lodash-compatible utilities for arrays, objects, strings and functions.",
+      "order": 2
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "df86a66f-d805-5a8d-be6e-75ebabee1e94",
+    "data": {
+      "name": "Config",
+      "group": "Core",
+      "url": "/showcase/config",
+      "icon": "settings",
+      "summary": "Declarative setup: wire components, events and state from one object.",
+      "order": 3
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "959c0f54-baed-59e9-982f-919822e9450c",
+    "data": {
+      "name": "Storage",
+      "group": "Core",
+      "url": "/showcase/storage",
+      "icon": "save",
+      "summary": "localStorage with automatic JSON, namespaced keys and graceful fallbacks.",
+      "order": 4
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "27579a91-8a30-5715-b447-a4872461ab28",
+    "data": {
+      "name": "HTTP",
+      "group": "Core",
+      "url": "/showcase/http",
+      "icon": "globe",
+      "summary": "A promise-based HTTP client with JSON handling, interceptors and retries.",
+      "order": 5
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "1beca460-7d61-5b2f-bb90-ca6b174a4356",
+    "data": {
+      "name": "Router",
+      "group": "Core",
+      "url": "/showcase/router",
+      "icon": "map",
+      "summary": "Hash-based client-side routing with views, lifecycle hooks and middleware.",
+      "order": 6
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "7cae286d-d69a-5398-bc99-0037bcbe1762",
+    "data": {
+      "name": "Integrations",
+      "group": "Core",
+      "url": "/showcase/integrations",
+      "icon": "box",
+      "summary": "Domma alongside other libraries and frameworks.",
+      "order": 7
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "c9db4058-3b1b-5af5-b2f5-3283f3a514a4",
+    "data": {
+      "name": "Components",
+      "group": "Core",
+      "url": "/showcase/components",
+      "icon": "component",
+      "summary": "Reusable units of UI with their own state, template and teardown.",
+      "order": 8
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "0cc6fe47-19ec-542f-b1dc-2aa7efd5207b",
+    "data": {
+      "name": "Dates",
+      "group": "Data",
+      "url": "/showcase/dates",
+      "icon": "calendar",
+      "summary": "Moment-style dates: parse, format, compare and calculate.",
+      "order": 9
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "f1d34bb2-8b5a-5414-ae3e-7bd2761ef787",
+    "data": {
+      "name": "Models",
+      "group": "Data",
+      "url": "/showcase/models",
+      "icon": "database",
+      "summary": "Reactive models with validation, computed values, effects and DOM bindings.",
+      "order": 10
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "951bec82-4af6-5177-882f-94bb319592ed",
+    "data": {
+      "name": "Forms",
+      "group": "Data",
+      "url": "/showcase/forms",
+      "icon": "document-add",
+      "summary": "Forms generated from a blueprint, with validation, wizards and CRUD.",
+      "order": 11
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "47bbf20b-1445-5efc-a40b-eb9a54530ca7",
+    "data": {
+      "name": "Tables",
+      "group": "Data",
+      "url": "/showcase/tables",
+      "icon": "grid",
+      "summary": "Data tables with sorting, filtering, pagination and export.",
+      "order": 12
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "022960df-8a60-563f-aed8-35a72fc39148",
+    "data": {
+      "name": "Elements",
+      "group": "UI",
+      "url": "/showcase/elements",
+      "icon": "layout",
+      "summary": "Thirty UI components - modals, tabs, popovers, sortable lists and more.",
+      "order": 13
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "a6b30a83-c586-57e7-964c-f48e528f0cb2",
+    "data": {
+      "name": "Icons",
+      "group": "UI",
+      "url": "/showcase/icons",
+      "icon": "image",
+      "summary": "200+ SVG icons in 15 categories, from a data-icon attribute.",
+      "order": 14
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "432f6106-2cc2-5c5f-9eb0-6659fb3a51e9",
+    "data": {
+      "name": "Flags",
+      "group": "UI",
+      "url": "/showcase/flags",
+      "icon": "flag",
+      "summary": "Nation flags as inline SVG, by country code.",
+      "order": 15
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "16aae764-7123-558d-a9fc-ac230c567508",
+    "data": {
+      "name": "Themes",
+      "group": "UI",
+      "url": "/showcase/themes",
+      "icon": "sun",
+      "summary": "14 themes, each light and dark, switched live.",
+      "order": 16
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "68984df4-333a-58f6-b1bd-9a40e5311378",
+    "data": {
+      "name": "Effects",
+      "group": "UI",
+      "url": "/showcase/effects",
+      "icon": "zap",
+      "summary": "Typewriter, reveal, ripple, confetti and more, with reduced-motion respected.",
+      "order": 17
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "9f6b6118-7031-51e4-b0de-8b89ab977374",
+    "data": {
+      "name": "Theme Roller",
+      "group": "Tools",
+      "url": "/showcase/theme-roller",
+      "icon": "palette",
+      "summary": "Design a theme visually and export it.",
+      "order": 18
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "0c5e2d23-c278-588a-ab21-ae94342c5839",
+    "data": {
+      "name": "Page Roller",
+      "group": "Tools",
+      "url": "/showcase/page-roller",
+      "icon": "box",
+      "summary": "Build a page from components, visually.",
+      "order": 19
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "5c2f747f-0f16-581d-b97e-65502a43eb3b",
+    "data": {
+      "name": "Editor",
+      "group": "Tools",
+      "url": "/showcase/elements/editor",
+      "icon": "edit",
+      "summary": "A rich-text editor with export.",
+      "order": 20
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "2acfeb76-06c0-5214-9fe1-97e910f0368d",
+    "data": {
+      "name": "Print PDF",
+      "group": "Tools",
+      "url": "/showcase/print-to-pdf",
+      "icon": "download",
+      "summary": "Print and PDF export for any part of a page.",
+      "order": 21
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  }
+]

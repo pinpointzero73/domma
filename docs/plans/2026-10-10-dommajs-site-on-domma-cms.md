@@ -38,7 +38,7 @@ what the CMS already does, and the site itself becomes the best demonstration of
 | Showcase sidebar (`nav-showcase.json`) | A `showcase` menu, bound to the showcase pages through a Showcase **project**, so it shows only there. |
 | Showcase pages | Pages of prose plus `[showcase-demo]` shortcodes (see below). |
 | Changelog (`releases.json`) | A **Releases** collection, shown with `[collection display="timeline"]`. The release script adds an entry through the CMS API instead of rewriting a JSON file. |
-| `features.json`, `carousel-slides.json` | **Features** and **Slides** collections, shown with `display="block"` / `display="carousel"`. |
+| `features.json` | The **Modules** collection, shown with `display="block"` (done in phase 2). `carousel-slides.json` is not carried over: its carousel was commented out. |
 | API reference tables in the showcase | An **API reference** collection (module, name, signature, description, since, example) shown as `[collection display="table"]` - so the public right-click menu gives readers filter, search, sort, group-by and export on the reference for free. |
 | Site search (`search-index.json`) | Core site search. |
 | Sitemap, robots, canonical tags | Core SEO. |
@@ -105,19 +105,35 @@ Each phase ends with a check before the next starts.
    (charcoal-dark, Roboto, light/dark switcher) and the Showcase project (`/showcase`), and is
    safe to re-run. Checked on desktop and mobile: renders, no console errors.
 
-   **Gap found:** the CMS's *With Sidebar* layout builds its sidebar from the page's headings (a
-   table of contents); it cannot show a menu. The showcase needs its section menu down the side,
-   so phase 3 adds a `sidebar` menu slot to Domma CMS, bindable like the others (here: bound to the
-   Showcase project), with the heading contents kept as the fallback when no menu is bound.
+   **Correction (phase 2):** there is no sidebar gap. On the old site every layout's navbar was
+   the dropdown menu (`nav-showcase.json`; `nav-public.json` was unused), and showcase pages'
+   sidebars were generated from the page's own sections - which is what the CMS's *With Sidebar*
+   layout already does. So `main` is now the dropdown menu and there is no separate showcase menu.
 
 2. **Prose pages.** Home, about, FAQ, quickstart, privacy, cookies - converted and tidied, heroes as
    blocks. *Check: side by side with the live site.*
+   **Done 2026-10-10.** Home, about, FAQ, QuickStart (hub, SPA, MPA), privacy and cookies are
+   rewritten as Markdown with shortcodes in `scripts/site-migrate/pages/` and installed by
+   `apply-site.mjs`, along with `blocks/` (the `module-tile` block), `media/` (the logo),
+   `custom.css` (site styles - the CMS reads it at boot, so restart after changing it) and
+   `collections/` (a **Modules** collection: the 21 module tiles on the home page, grouped Core /
+   Data / UI / Tools, reusable by the showcase index). Each page was checked in a browser on desktop
+   and phone: renders, no unrendered shortcodes, no console errors. Facts brought up to date: the
+   bundle is about 175 KB gzipped (not ~260 KB), 14 themes each light and dark, and the scaffolds'
+   real layout (`frontend/pages/`, views with `templateUrl`). The home page's slide carousel was
+   commented out on the live site, so there is no Slides collection. The SPA QuickStart's live
+   router demo becomes a `[showcase-demo]` in phase 3; for now it links to the Router showcase.
+   **For review:** the privacy and cookie pages are carried over with only the passages about
+   accounts, the privacy dashboard and the removed API taken out, and Google Fonts and jsDelivr
+   named as the third parties the new site loads; the legal wording is otherwise unchanged and
+   should be checked against what the new site actually does (CMS analytics, consent banner).
+
 3. **Showcase plugin and converter.** Build both, run the 3 pilots, review, fix, then all 67 pages. Hand-
    convert the flagged demos to bindings. *Check: every demo mounts with no console error, and the
    converter report is empty.* Port the existing showcase page harness (`src/showcase-pages.test.js`,
    which loads every page against the built bundle and asserts it rendered and logged nothing; its
    baseline is empty) so it runs against the new site's pages, with the same empty baseline.
-4. **Collections.** Releases (imported from `releases.json`), Features, Slides, API reference.
+4. **Collections.** Releases (imported from `releases.json`) and API reference (Modules is done).
    Change `scripts/release*` so a release adds its changelog entry through the CMS API (a project-scoped
    API token). *Check: the changelog page matches today's; a dry-run release writes one entry.*
 5. **Downloads.** The two builders as plugin files; the files they serve come from the Domma release

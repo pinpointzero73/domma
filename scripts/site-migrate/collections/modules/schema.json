@@ -1,0 +1,67 @@
+{
+  "slug": "modules",
+  "title": "Modules",
+  "description": "Every Domma module, grouped as on the home page. Feeds the home page tiles and the showcase index.",
+  "fields": [
+    {
+      "name": "name",
+      "label": "Name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "group",
+      "label": "Group",
+      "type": "select",
+      "required": true,
+      "options": [
+        "Core",
+        "Data",
+        "UI",
+        "Tools"
+      ]
+    },
+    {
+      "name": "url",
+      "label": "Showcase page",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "icon",
+      "label": "Icon",
+      "type": "text"
+    },
+    {
+      "name": "summary",
+      "label": "Summary",
+      "type": "textarea"
+    },
+    {
+      "name": "order",
+      "label": "Order",
+      "type": "number"
+    }
+  ],
+  "api": {
+    "create": {
+      "enabled": false,
+      "access": "admin"
+    },
+    "read": {
+      "enabled": true,
+      "access": "public"
+    },
+    "update": {
+      "enabled": false,
+      "access": "admin"
+    },
+    "delete": {
+      "enabled": false,
+      "access": "admin"
+    }
+  },
+  "storage": {
+    "adapter": "file"
+  }
+}

@@ -1,0 +1,21 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Domma Logo - Abstract Geometric D -->
+    <!-- Uses currentColor for theme adaptability -->
+
+    <!-- Left vertical bar -->
+    <path d="M12 8 L12 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Top horizontal connector -->
+    <path d="M12 8 L24 8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Bottom horizontal connector -->
+    <path d="M12 40 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Right curved portion - three geometric segments -->
+    <path d="M24 8 L36 16" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M36 16 L36 32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <path d="M36 32 L24 40" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Center accent dot - suggests dynamism -->
+    <circle cx="24" cy="24" r="3" fill="currentColor"/>
+</svg>

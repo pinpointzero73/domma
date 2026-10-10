@@ -1,0 +1,21 @@
+/* dommajs.org - site styles (installed as content/custom.css by scripts/site-migrate/apply-site.mjs) */
+
+/* The Domma logo, in the theme's text colour: the SVG uses currentColor, which an <img> cannot inherit. */
+.domma-logo {
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    background-color: currentColor;
+    -webkit-mask: url(/media/domma-icon.svg) center / contain no-repeat;
+    mask: url(/media/domma-icon.svg) center / contain no-repeat;
+}
+
+/* Module tiles (home page): several to a row on small screens too - one per row is a long scroll. */
+@media (max-width: 767px) {
+    .dm-collection-blocks:has(> [data-block="module-tile"]),
+    .dm-collection-blocks:has([data-block="module-tile"]) {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: .5rem !important;
+    }
+    .module-tile { min-height: 5rem; padding: .75rem .25rem; }
+}

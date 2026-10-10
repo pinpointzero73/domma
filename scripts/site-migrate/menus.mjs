@@ -4,7 +4,7 @@
  * navigation, as Domma CMS menus.
  *
  * Reads public/layouts/config/{nav-public,nav-showcase,footer-landing}.json and
- * writes config/menus/<slug>.json files for the new site into
+ * writes config/menus/<slug>.json files (main, footer) for the new site into
  * scripts/site-migrate/out/menus/, plus menu-locations.json. Every link goes
  * through the phase 0 address map (docs/plans/dommajs-address-map.json):
  * dropped pages are left out, merged ones point at cms.dommajs.org, and kept
@@ -89,9 +89,12 @@ const footer = read('footer-landing.json');
 const footerGroups = (footer.columns || footer.sections || []).map(c => ({text: c.title, links: c.links || []}))
     .map(g => ({text: g.text, items: g.links}));
 
+// Every layout on the old site used nav-showcase.json as its navbar (dropdowns); nav-public.json
+// was not used by any of them. Showcase pages' sidebars were their own contents (headings), which
+// the CMS's With Sidebar layout already does - so there is no separate showcase menu.
+void navPublic;
 const menus = [
-    menu('main', 'Main navigation', 'From the old site\'s nav-public.json', navPublic.items, {variant: 'dark', position: 'sticky'}),
-    menu('showcase', 'Showcase', 'The showcase sidebar, from nav-showcase.json. Bound to the Showcase project.', navShowcase.items, {orientation: 'vertical', side: 'left'}),
+    menu('main', 'Main navigation', 'The old site\'s navbar (nav-showcase.json), as dropdowns', navShowcase.items, {variant: 'dark', position: 'sticky'}),
     menu('footer', 'Footer', 'From footer-landing.json', footerGroups),
 ];
 
