@@ -1,0 +1,17 @@
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <label class="form-label" for="bound-input">Type your name (two-way)</label>
+        <input type="text" id="bound-input" class="form-input" placeholder="Type here…" data-model="name.value">
+        <p class="text-sm text-muted mt-2">The input and both displays read the same value. Change it anywhere and every
+            part of the page that uses it follows.</p>
+    </div>
+    <div>
+        <span class="form-label">Live display (one-way)</span>
+        <div class="models-bound-display" data-bind-text="name.value">Guest</div>
+        <div class="mt-3 text-center">
+            <span class="text-sm text-muted">Formatted:</span>
+            <div class="text-primary font-semibold" data-bind-text="greeting.value">Hello, Guest!</div>
+        </div>
+        <button type="button" class="btn btn-sm btn-ghost mt-3" data-on-click="reset">Reset</button>
+    </div>
+</div>

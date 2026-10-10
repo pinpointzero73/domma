@@ -12,6 +12,7 @@
  *   - content/blocks/     every block under scripts/site-migrate/blocks/
  *   - content/media/      every file under scripts/site-migrate/media/
  *   - content/custom.css  scripts/site-migrate/custom.css (site-wide styles)
+ *   - plugins/<name>/     every site plugin under site/plugins/ (the showcase), enabled
  *   - collections         scripts/site-migrate/collections/<slug>/: schema.json always; data.json
  *                         only when the site has none yet (or with --reseed), so entries edited
  *                         in the admin are not overwritten
@@ -119,6 +120,15 @@ const SM = path.join(ROOT, 'scripts', 'site-migrate');
 mirror(path.join(SM, 'blocks'), path.join(SITE, 'content', 'blocks'), allFiles(path.join(SM, 'blocks')));
 mirror(path.join(SM, 'media'), path.join(SITE, 'content', 'media'), allFiles(path.join(SM, 'media')));
 mirror(SM, path.join(SITE, 'content'), ['custom.css']);
+
+// ---- Site plugins (site/plugins/<name>/) - mirrored in, then enabled ------------
+const SITE_PLUGINS = path.join(ROOT, 'site', 'plugins');
+for (const name of fs.existsSync(SITE_PLUGINS) ? fs.readdirSync(SITE_PLUGINS) : []) {
+    mirror(path.join(SITE_PLUGINS, name), path.join(SITE, 'plugins', name), allFiles(path.join(SITE_PLUGINS, name)));
+    const pluginsFile = path.join(SITE, 'config', 'plugins.json');
+    const plugins = readJson(pluginsFile);
+    if (plugins[name]?.enabled !== true) write(pluginsFile, {...plugins, [name]: {...(plugins[name] || {}), enabled: true}});
+}
 for (const slug of fs.existsSync(path.join(SM, 'collections')) ? fs.readdirSync(path.join(SM, 'collections')) : []) {
     const src = path.join(SM, 'collections', slug);
     const dest = path.join(SITE, 'content', 'collections', slug);

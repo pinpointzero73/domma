@@ -1,0 +1,43 @@
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <div class="form-group">
+            <label class="form-label" for="model-name">Name (required)</label>
+            <input type="text" id="model-name" class="form-input" placeholder="Enter a name" data-model="draft.name.value">
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="model-email">Email (required, must contain @)</label>
+            <input type="email" id="model-email" class="form-input" placeholder="Enter an email" data-model="draft.email.value">
+            <div class="models-validation-error" data-bind-text="errors.value.email || ''"></div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="model-age">Age (0-150)</label>
+            <input type="number" id="model-age" class="form-input" placeholder="Enter an age" min="0" max="150" data-model="draft.age.value">
+            <div class="models-validation-error" data-bind-text="errors.value.age || ''"></div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="model-role">Role</label>
+            <select id="model-role" class="form-select" data-model="draft.role.value">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+                <option value="guest">Guest</option>
+            </select>
+        </div>
+        <button type="button" class="btn btn-primary" data-on-click="validate">Validate the model</button>
+    </div>
+    <div>
+        <h5 class="font-semibold mb-2">Model state</h5>
+        <div class="models-model-display">
+            <div class="models-model-field"><span>name:</span> <span data-bind-text="state.name || '-'">-</span></div>
+            <div class="models-model-field"><span>email:</span> <span data-bind-text="state.email || '-'">-</span></div>
+            <div class="models-model-field"><span>age:</span> <span data-bind-text="state.age === undefined || state.age === null ? '-' : state.age">-</span></div>
+            <div class="models-model-field"><span>role:</span> <span data-bind-text="state.role || '-'">-</span></div>
+        </div>
+        <h5 class="font-semibold mt-4 mb-2">Change log</h5>
+        <div class="models-event-log" role="log" aria-live="polite">
+            <div class="text-muted" data-if="log.value.length === 0">Changes appear here.</div>
+            <div data-each="log.value key=id">
+                <div><span class="models-event-log-timestamp" data-bind-text="time"></span> <span data-bind-class="tone" data-bind-text="text"></span></div>
+            </div>
+        </div>
+    </div>
+</div>

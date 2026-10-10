@@ -1,0 +1,30 @@
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 500px;">
+    <div class="card card-accent-danger card-hover">
+        <div class="card-body" style="display: flex; align-items: flex-start; gap: 12px;">
+            <span data-icon="alert-circle" style="color: var(--dm-danger); flex-shrink: 0; margin-top: 2px;"></span>
+            <div>
+                <strong>Critical: Database connection lost</strong>
+                <p class="card-text mb-0 text-sm">The primary database is unreachable. Failover
+                    initiated.</p>
+            </div>
+        </div>
+    </div>
+    <div class="card card-accent-warning card-hover">
+        <div class="card-body" style="display: flex; align-items: flex-start; gap: 12px;">
+            <span data-icon="alert-triangle" style="color: var(--dm-warning); flex-shrink: 0; margin-top: 2px;"></span>
+            <div>
+                <strong>Warning: High memory usage</strong>
+                <p class="card-text mb-0 text-sm">Server memory at 87%. Consider scaling up.</p>
+            </div>
+        </div>
+    </div>
+    <div class="card card-accent-success card-hover">
+        <div class="card-body" style="display: flex; align-items: flex-start; gap: 12px;">
+            <span data-icon="check-circle" style="color: var(--dm-success); flex-shrink: 0; margin-top: 2px;"></span>
+            <div>
+                <strong>Deploy succeeded</strong>
+                <p class="card-text mb-0 text-sm">Version 2.4.1 is live across all regions.</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="grid grid-cols-3 gap-4 mb-4" data-each="products key=name">
+    <div class="card">
+        <div class="card-body text-center">
+            <h5 class="font-semibold" data-bind-text="name"></h5>
+            <p class="text-muted" data-bind-text="priceText"></p>
+            <button type="button" class="btn btn-primary btn-sm" data-on-click="$root.add($data)">Add to cart</button>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="flex justify-between items-center mb-3">
+            <h5 class="font-semibold">Shopping cart (<span data-bind-text="items.value.length">0</span> items)</h5>
+            <button type="button" class="btn btn-outline btn-sm" data-on-click="clear" data-bind-disabled="items.value.length === 0">Clear cart</button>
+        </div>
+        <p class="text-muted" data-if="items.value.length === 0">The cart is empty.</p>
+        <div class="mb-3" data-each="items.value key=id">
+            <div class="flex justify-between items-center py-2 border-b">
+                <span data-bind-text="name"></span>
+                <span>
+                    <span class="mr-2" data-bind-text="priceText"></span>
+                    <button type="button" class="btn btn-danger btn-sm" data-on-click="$root.remove($data)" aria-label="Remove">×</button>
+                </span>
+            </div>
+        </div>
+        <div class="flex justify-between items-center border-t pt-3">
+            <span class="font-semibold">Total:</span>
+            <span class="text-xl font-bold text-primary" data-bind-text="totalText.value">£0.00</span>
+        </div>
+    </div>
+</div>

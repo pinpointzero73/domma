@@ -1,0 +1,13 @@
+{
+  "name": "domma-showcase",
+  "displayName": "Domma Showcase",
+  "version": "0.1.0",
+  "description": "Live Domma demos with their source: [showcase-demo id=\"…\"] places a demo, read from files in git, with its HTML, JS and CSS beside it.",
+  "author": "DCBW-IT",
+  "date": "2026-10-10",
+  "icon": "layers",
+  "inject": {
+    "head": "public/inject-head.html",
+    "bodyEnd": "public/inject-body.html"
+  }
+}

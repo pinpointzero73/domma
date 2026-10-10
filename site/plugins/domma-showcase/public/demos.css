@@ -1,0 +1,127 @@
+/* Domma Showcase - demo styles carried over from public/showcase/css/domma-showcase.css
+ * by scripts/site-migrate/demo-styles.mjs: only rules for classes the demos use. Do not edit;
+ * re-run the script, or move a rule into a demo's own demo.css. */
+.tutorial-result-tabs {
+    font-size: var(--dm-font-size-base);
+    color: var(--dm-text-muted);
+}
+
+.models-method-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--dm-space-2);
+}
+
+.models-method-item {
+    font-family: var(--dm-font-mono);
+    font-size: var(--dm-font-size-sm);
+    padding: var(--dm-space-2);
+    background: var(--dm-hover-bg);
+    border-radius: var(--dm-radius-sm);
+    color: var(--dm-text);
+}
+
+.models-event-log {
+    background: var(--dm-gray-900);
+    color: var(--dm-success);
+    padding: var(--dm-space-3);
+    border-radius: var(--dm-radius-md);
+    font-family: var(--dm-font-mono);
+    font-size: var(--dm-font-size-sm);
+    height: 150px;
+    overflow-y: auto;
+}
+
+.models-model-display {
+    background: var(--dm-surface-raised, var(--dm-surface));
+    border: 2px solid var(--dm-border);
+    color: var(--dm-text);
+    border-radius: var(--dm-radius-md);
+    padding: var(--dm-space-4);
+}
+
+.models-model-field {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--dm-space-2) 0;
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.models-model-field:last-child {
+    border-bottom: none;
+}
+
+.models-validation-error {
+    color: var(--dm-danger);
+    font-size: var(--dm-font-size-sm);
+    margin-top: var(--dm-space-1);
+}
+
+.models-bound-display {
+    font-size: var(--dm-font-size-2xl);
+    font-weight: 700;
+    color: var(--dm-primary);
+    padding: var(--dm-space-4);
+    background: var(--dm-surface-raised, var(--dm-surface));
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    text-align: center;
+}
+
+.models-user-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.models-user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--dm-space-2) var(--dm-space-3);
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-sm);
+    margin-bottom: var(--dm-space-2);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+}
+
+.models-user-item:hover {
+    background: var(--dm-hover-bg);
+    color: var(--dm-text);
+}
+
+.models-user-info {
+    flex: 1;
+}
+
+.models-user-name {
+    font-weight: 600;
+}
+
+.models-user-meta {
+    font-size: var(--dm-font-size-sm);
+    color: var(--dm-text-secondary);
+}
+
+.models-user-actions {
+    display: flex;
+    gap: var(--dm-space-1);
+}
+
+.models-status-badge {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    font-size: var(--dm-font-size-xs);
+    margin-left: var(--dm-space-2);
+}
+
+.models-status-active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--dm-success);
+}
+
+.models-status-inactive {
+    background: var(--dm-gray-200);
+    color: var(--dm-gray-600);
+}

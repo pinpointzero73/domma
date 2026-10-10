@@ -133,6 +133,34 @@ Each phase ends with a check before the next starts.
    converter report is empty.* Port the existing showcase page harness (`src/showcase-pages.test.js`,
    which loads every page against the built bundle and asserts it rendered and logged nothing; its
    baseline is empty) so it runs against the new site's pages, with the same empty baseline.
+   **Pilots done 2026-10-10** (`elements/card`, `elements/tabs`, `models`: 40 demos). What exists:
+   - `site/plugins/domma-showcase/` - the plugin (installed and enabled by `apply-site.mjs`). The
+     `[showcase-demo]` shortcode leaves a placeholder; a `markdown:afterParse` transform swaps in the
+     demo after sanitising, with HTML/JS/CSS source tabs read from the same files. `showcase.js`
+     mounts each demo (`mount(root) -> teardown`), isolates failures, and adds the right-click menu
+     (copy HTML / JS, reset, open on its own - `/api/plugins/domma-showcase/demo?id=…`).
+   - `scripts/site-migrate/showcase.mjs <page…>` - the converter. Demos are found by class *and* by
+     what the page script touches; the script is split per demo with acorn (declarations follow
+     their users); markup is re-indented by depth. It never overwrites a demo or page that exists.
+   - `scripts/site-migrate/demo-styles.mjs` - 19 of the old sheet's 305 rules, the ones for classes
+     the demos use (including classes built in bindings), never Domma's own.
+
+   **Upgrading as we go** is part of the conversion. Automatic: the `E.` alias, toasts instead of
+   `alert()`, selectors scoped to the demo, `<li>` tabs as buttons with tab roles, typed buttons.
+   By hand, for every demo the converter flags (page-wide listeners, event subscriptions, timers,
+   HTML built from strings): bindings (`data-model`, `data-bind-*`, `data-each`, `data-on-*`), a
+   teardown for anything that outlives the demo, skeletons instead of "Loading…", British spelling
+   and £. Each upgraded demo is driven in a headless browser before it counts as done. Patterns
+   that work: bind a Model through `model.tracked()`; put list-row handlers on the data object
+   (`$root.edit($data)`); show `set()`'s thrown validation message rather than binding straight to
+   a validated field.
+
+   **Found and fixed in Domma CMS (1.6.9):** the *With Sidebar* layout had never worked (empty
+   contents, content squeezed to 10px). It now lists the page's sections, keeps its column, sticks
+   below the navbar and marks the section being read - the "floating" upgrade of the old fixed
+   sidebar. **Domma follow-up:** in domma-reactive, `options.methods` are not reachable from inside
+   a `data-each` row (`edit($data)` "did not resolve to a function"); they should be.
+
 4. **Collections.** Releases (imported from `releases.json`) and API reference (Modules is done).
    Change `scripts/release*` so a release adds its changelog entry through the CMS API (a project-scoped
    API token). *Check: the changelog page matches today's; a dry-run release writes one entry.*

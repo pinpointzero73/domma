@@ -1,0 +1,21 @@
+/* Domma Showcase - a live demo with its source. */
+.showcase-demo {
+    margin: 1.25rem 0 2rem;
+    border: 1px solid var(--dm-border, rgba(255, 255, 255, .1));
+    border-radius: var(--dm-radius-lg, 12px);
+    overflow: hidden;
+}
+.showcase-demo-title {
+    padding: .6rem 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--dm-border, rgba(255, 255, 255, .1));
+}
+.showcase-demo-stage {
+    padding: 1.5rem;
+    background: color-mix(in srgb, var(--dm-surface, #1e293b) 60%, transparent);
+}
+.showcase-demo-code { border-top: 1px solid var(--dm-border, rgba(255, 255, 255, .1)); }
+.showcase-demo-code .tab-list { padding: 0 .75rem; }
+.showcase-demo-code pre { margin: 0; border-radius: 0; max-height: 28rem; overflow: auto; }
+.showcase-demo-error { margin-top: 1rem; color: var(--dm-danger, #ef4444); }
+.showcase-demo--missing { padding: 1rem; color: var(--dm-danger, #ef4444); }

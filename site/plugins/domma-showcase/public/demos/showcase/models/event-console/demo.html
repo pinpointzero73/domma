@@ -1,0 +1,24 @@
+<div class="grid grid-cols-2 gap-4 mb-4">
+    <div>
+        <label class="form-label" for="event-name">Event name</label>
+        <input type="text" id="event-name" class="form-input mb-3" data-model="eventName.value" placeholder="my:event">
+        <label class="form-label" for="event-data">Data (JSON, or plain text)</label>
+        <input type="text" id="event-data" class="form-input mb-3" data-model="eventData.value">
+        <div class="flex gap-2 flex-wrap">
+            <button type="button" class="btn btn-primary btn-sm" data-on-click="subscribe">Subscribe</button>
+            <button type="button" class="btn btn-success btn-sm" data-on-click="publish">Publish</button>
+            <button type="button" class="btn btn-danger btn-sm" data-on-click="unsubscribe">Unsubscribe</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-on-click="clear">Clear log</button>
+        </div>
+        <p class="text-sm text-muted mt-2">Subscribed to: <span data-bind-text="subscribedText.value">nothing yet</span></p>
+    </div>
+    <div class="models-event-log" role="log" aria-live="polite">
+        <div class="text-muted" data-if="log.value.length === 0">The event log appears here.</div>
+        <div data-each="log.value key=id">
+            <div>
+                <span class="models-event-log-timestamp" data-bind-text="time"></span>
+                <span data-bind-class="tone" data-bind-text="text"></span>
+            </div>
+        </div>
+    </div>
+</div>

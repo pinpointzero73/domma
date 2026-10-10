@@ -1,0 +1,59 @@
+<div class="grid grid-cols-2 gap-4">
+    <form data-on-submit="save">
+        <h5 class="font-semibold mb-2" data-bind-text="state.editing !== null ? 'Edit user' : 'Add a user'">Add a user</h5>
+        <div class="form-group">
+            <label class="form-label" for="um-name">Name (required)</label>
+            <input type="text" id="um-name" class="form-input" placeholder="Enter a name" data-model="state.name">
+            <div class="models-validation-error" data-bind-text="state.errors.name || ''"></div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="um-email">Email (required)</label>
+            <input type="email" id="um-email" class="form-input" placeholder="Enter an email" data-model="state.email">
+            <div class="models-validation-error" data-bind-text="state.errors.email || ''"></div>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="um-role">Role</label>
+            <select id="um-role" class="form-select" data-model="state.role">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="um-status">Status</label>
+            <select id="um-status" class="form-select" data-model="state.status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary" data-bind-text="state.editing !== null ? 'Update user' : 'Add user'">Add user</button>
+            <button type="button" class="btn btn-secondary" data-if="state.editing !== null" data-on-click="cancel">Cancel</button>
+        </div>
+    </form>
+
+    <div>
+        <div class="flex justify-between items-center mb-2">
+            <h5 class="font-semibold">Users (<span data-bind-text="state.users.length">0</span>)</h5>
+            <button type="button" class="btn btn-outline btn-sm" data-on-click="copy" data-bind-disabled="state.users.length === 0">Copy as JSON</button>
+        </div>
+        <div class="models-user-list">
+            <p class="text-muted" data-if="state.users.length === 0">No users yet. Add one with the form.</p>
+            <div data-each="state.users key=uid">
+                <div class="models-user-item">
+                    <div class="models-user-info">
+                        <div class="models-user-name" data-bind-text="name"></div>
+                        <div class="models-user-meta">
+                            <span data-bind-text="email + ' · ' + role"></span>
+                            <span class="models-status-badge" data-bind-class="'models-status-' + status" data-bind-text="status"></span>
+                        </div>
+                    </div>
+                    <div class="models-user-actions">
+                        <button type="button" class="btn btn-outline btn-sm" data-on-click="$root.edit($data)">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm" data-on-click="$root.remove($data)">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
