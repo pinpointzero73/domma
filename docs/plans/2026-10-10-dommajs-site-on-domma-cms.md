@@ -200,6 +200,18 @@ Each phase ends with a check before the next starts.
 5. **Downloads.** The two builders as plugin files; the files they serve come from the Domma release
    (npm package or the build output), copied into the plugin by the release step. *Check: a bundle and a
    kickstart download and open.*
+   **Done 2026-10-11 (differently, and better).** No release-step change was needed: every Domma
+   release already attaches its whole `dist` to GitHub, and the repository is public. The
+   `domma-downloads` site plugin fetches the latest release itself - on start, every six hours, ten
+   minutes after a failure - into its `data/` (the source at the tag, the dist unpacked into it, and
+   the release's own `scripts/build-kickstart-files.js` run over them), and keeps two releases.
+   The page (`/download`, `[domma-downloads /]`) offers Kickstart (zipped in the browser from the
+   release's manifest), the core library, presets, CSS and extras with real sizes, and a **custom
+   bundle builder that really builds**: the release's generator and rollup set-up on the server,
+   the exact tool versions it names installed once, the result zipped with its CSS and a README and
+   cached per selection (one build at a time; ten new builds an hour per visitor). All bindings.
+   Note: Domma's `bundle-metadata.json` sizes are years stale (it says Essentials is ~180 KB; it is
+   611 KB), so the page shows built sizes, never estimates - the metadata wants refreshing in Domma.
 6. **CMS docs.** Merge the 13 pages into cms.dommajs.org; redirect each old address there. *Check: no
    page lost, every redirect answers 301.*
 7. **SEO and redirects.** Redirect rules for every old address (from the phase 0 map), titles and
