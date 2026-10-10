@@ -29,3 +29,4 @@ id_rsa*
 
 # Local working notes - never committed
 *.local.md
+scripts/site-migrate/out/
