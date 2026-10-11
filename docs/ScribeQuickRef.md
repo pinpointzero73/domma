@@ -31,7 +31,7 @@ const scribe = Domma.effects.scribe(selector, {
   // Cursor
   cursor: true,           // show cursor - default: true
   cursorChar: '|',        // cursor character - default: '|'
-  cursorBlink: true,      // smooth fade in/out - default: true
+  cursorBlink: true,      // blink while idle; steady while typing/deleting - default: true
   cursorType: 'caret',    // 'caret', 'block', 'underline' - default: 'caret'
 
   // Looping
@@ -67,7 +67,7 @@ Domma.effects.scribe('.element', {
   actions: [{ render: 'Hello World!' }]
 });
 ```
-- Renders text one character at a time
+- Renders text one grapheme at a time, keeping emoji and combined accents intact
 - `undoRender: 5` deletes 5 characters
 - Best for traditional typewriter effects
 
@@ -136,13 +136,13 @@ Domma.effects.scribe('.element', {
 ```javascript
 const scribe = Domma.effects.scribe('.element', options);
 
-tw.pause();      // Pause animation
-tw.resume();     // Resume animation
-tw.stop();       // Stop animation (marks as complete)
-tw.restart();    // Restart from beginning
-tw.destroy();    // Clean up and remove effect
-tw.isRunning();  // Check if running (boolean)
-tw.isPaused();   // Check if paused (boolean)
+scribe.pause();      // Pause animation
+scribe.resume();     // Resume animation
+scribe.stop();       // Stop animation (marks as complete)
+scribe.restart();    // Restart from beginning
+scribe.destroy();    // Clean up and remove effect
+scribe.isRunning();  // Check if running (boolean)
+scribe.isPaused();   // Check if paused (boolean)
 ```
 
 ## Real-World Examples
@@ -300,15 +300,15 @@ These classes are automatically applied by the scribe effect:
 
 | Class | Purpose |
 |-------|---------|
-| `.dm-tw-cursor` | Base cursor span with smooth fade animation, baseline alignment, and optimized font smoothing |
-| `.dm-tw-cursor-caret` | Thin vertical line cursor (default) |
-| `.dm-tw-cursor-block` | Solid block cursor with minimal padding (0.04em) for refined appearance |
-| `.dm-tw-cursor-underline` | Underline cursor style |
-| `.dm-tw-cursor-no-blink` | Non-blinking cursor |
-| `.dm-tw-char` | Character wrapper with GPU acceleration and baseline alignment |
-| `.dm-tw-char-fade` | Fade entrance effect |
-| `.dm-tw-char-bounce` | Bounce entrance effect |
-| `.dm-tw-char-glow` | Glow entrance effect |
+| `.dm-scribe-cursor` | Base cursor span with smooth fade animation, baseline alignment, and optimized font smoothing |
+| `.dm-scribe-cursor-caret` | Thin vertical line cursor (default) |
+| `.dm-scribe-cursor-block` | Solid block cursor with minimal padding (0.04em) for refined appearance |
+| `.dm-scribe-cursor-underline` | Underline cursor style |
+| `.dm-scribe-cursor-no-blink` | Non-blinking cursor |
+| `.dm-scribe-char` | Character wrapper with GPU acceleration and baseline alignment |
+| `.dm-scribe-fade` | Fade entrance effect |
+| `.dm-scribe-bounce` | Bounce entrance effect |
+| `.dm-scribe-glow` | Glow entrance effect |
 
 ## Config Engine Usage
 
@@ -355,12 +355,18 @@ $.setup({
    - Lower speed = more frequent DOM updates
    - Use `respectMotionPreference: true` for accessibility
    - Call `destroy()` when effect is no longer needed
-   - Animations use GPU-accelerated properties (transform, opacity)
-   - Characters use `will-change` and `backface-visibility` for smoothness
-   - Cursor uses smooth fade with `ease-in-out` timing
+   - Fade uses opacity, bounce uses font-relative movement, and glow uses a brief text shadow
+   - Animation classes are removed once each entrance finishes
+   - Cursor stays visible during typing and deletion, then blinks while idle
 
-6. **Accessibility**
-   - The effect respects `prefers-reduced-motion` by default
+6. **Playback**
+   - Pause/resume continues the current render, deletion, or remaining wait without repeating text
+   - `autoStart: false` waits for `resume()`
+   - Loops retain the final phrase during `loopDelay`, then clear and replay
+   - Entrance effects inherit the surrounding font weight and release animation styles when finished
+
+7. **Accessibility**
+   - The effect respects `prefers-reduced-motion` by default and displays the first render phrase without animation
    - Screen readers will read the final text
    - Ensure final text is meaningful without animation
 
@@ -397,7 +403,7 @@ $.setup({
 **Cursor not showing:**
 - Set `cursor: true` in options
 - Check if cursor element exists in DOM
-- Verify CSS is loaded (`dm-tw-cursor` class)
+- Verify CSS is loaded (`dm-scribe-cursor` class)
 
 **Loop not working:**
 - Set `loop: true` or `loop: N` (number)

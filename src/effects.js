@@ -519,403 +519,230 @@ export function scribe(selector, options = {}) {
     return null;
   }
 
-  // Respect motion preferences - return no-op control object
+  // A static first phrase remains readable when motion is disabled.
   if (opts.respectMotionPreference &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    console.log('[Domma.effects.scribe] Disabled due to prefers-reduced-motion');
-    return {
-      pause: () => {},
-      resume: () => {},
-      stop: () => {},
-      restart: () => {},
-      destroy: () => {},
-      isRunning: () => false,
-      isPaused: () => false
-    };
+    const firstRender = opts.actions.find(action => action.render !== undefined);
+    if (firstRender) elements.forEach(el => { el.textContent = String(firstRender.render); });
+    return noopControl();
   }
 
-  // State for each element
-  const elementStates = elements.map(el => ({
-    element: el,
-    unitSpans: [],
-    cursorSpan: null,
-    currentAction: 0,
-    charTimerId: null,
-    waitTimerId: null,
-    paused: false,
-    loopCount: 0,
-    lastRenderStart: 0
+  const segmenter = typeof Intl.Segmenter === 'function'
+    ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+  function splitText(text) {
+    if (opts.mode === 'word') return text.match(/\s*\S+\s*|\s+/g) || [];
+    if (opts.mode === 'sentence') return text.match(/[^.!?]*[.!?]+\s*|[^.!?]+$/g) || [];
+    return segmenter ? Array.from(segmenter.segment(text), part => part.segment) : Array.from(text);
+  }
+
+  const states = elements.map(element => ({
+    element, spans: [], cursor: null, action: 0, task: null,
+    frame: null, lastTime: null, elapsed: 0, loops: 0, lastRenderStart: 0,
+    started: false, paused: false, stopped: false, destroyed: false, hoverPaused: false, hoverHandlers: null
   }));
 
-  // Track hover handlers
-  const hoverHandlers = new Map();
+  function setCursorActive(state, active) {
+    state.cursor?.classList.toggle('dm-scribe-cursor-active', active);
+  }
 
-  // Initialize cursors
-  elementStates.forEach(state => {
-    if (opts.cursor) {
-      state.cursorSpan = document.createElement('span');
+  function clearText(state) {
+    state.spans.forEach(span => span.remove());
+    state.spans = [];
+    state.lastRenderStart = 0;
+  }
 
-      // Base cursor classes
-      let cursorClasses = ['dm-scribe-cursor'];
-
-      // Add cursor type class
-      if (opts.cursorType === 'block') {
-        cursorClasses.push('dm-scribe-cursor-block');
-      } else if (opts.cursorType === 'underline') {
-        cursorClasses.push('dm-scribe-cursor-underline');
-      } else {
-        cursorClasses.push('dm-scribe-cursor-caret');
-      }
-
-      // Add no-blink class if needed
-      if (!opts.cursorBlink) {
-        cursorClasses.push('dm-scribe-cursor-no-blink');
-      }
-
-      state.cursorSpan.className = cursorClasses.join(' ');
-      // Underline cursor uses border-bottom, so no text content needed
-      state.cursorSpan.textContent = opts.cursorType === 'underline' ? '\u00A0' : opts.cursorChar;
-      state.element.appendChild(state.cursorSpan);
+  function schedule(state) {
+    if (state.frame === null && state.started && !state.paused && !state.stopped && !state.destroyed) {
+      state.frame = requestAnimationFrame(time => tick(state, time));
     }
-  });
+  }
 
-  // Process action queue
-  async function processActions(state) {
-    if (state.paused) return;
-
-    if (state.currentAction >= opts.actions.length) {
-      // Queue complete - handle looping
-      if (opts.loop === true || (typeof opts.loop === 'number' && state.loopCount < opts.loop - 1)) {
-        state.loopCount++;
-        if (opts.onLoop) opts.onLoop(state.loopCount);
-
-        // Clear element content (keep cursor)
-        state.unitSpans.forEach(span => span.remove());
-        state.unitSpans = [];
-        state.lastRenderStart = 0;
-        state.currentAction = 0;
-
-        // Delay before restart
-        state.waitTimerId = setTimeout(() => {
-          if (!state.paused) processActions(state);
-        }, opts.loopDelay);
+  function prepareTask(state) {
+    if (state.action >= opts.actions.length) {
+      setCursorActive(state, false);
+      if (opts.loop === true || (typeof opts.loop === 'number' && state.loops < opts.loop - 1)) {
+        state.task = { type: 'loop', duration: Math.max(0, opts.loopDelay) };
       } else {
-        // Complete
-        if (opts.onComplete) opts.onComplete();
+        state.stopped = true;
+        setCursorActive(state, false);
+        opts.onComplete?.();
       }
       return;
     }
-
-    const action = opts.actions[state.currentAction];
-
+    const action = opts.actions[state.action];
     if (action.render !== undefined) {
-      await handleRender(state, action);
-    } else if (action.wait !== undefined) {
-      await handleWait(state, action);
+      state.lastRenderStart = state.spans.length;
+      state.task = { type: 'render', text: String(action.render), units: splitText(String(action.render)),
+        index: 0, effect: action.effect || 'none', duration: Math.max(0, opts.speed) };
     } else if (action.undoRender !== undefined) {
-      await handleUndoRender(state, action);
-    }
-
-    state.currentAction++;
-    processActions(state);
-  }
-
-  // Split text into units based on mode
-  function splitTextByMode(text, mode) {
-    if (mode === 'word') {
-      // Split on word boundaries, keeping whitespace attached to preceding word
-      return text.match(/(\S+\s*)/g) || [];
-    } else if (mode === 'sentence') {
-      // Split on sentence endings, keeping punctuation and whitespace
-      const sentences = text.match(/([^.!?]*[.!?]+\s*)/g) || [];
-      // If text doesn't end with sentence punctuation, add remainder as final sentence
-      const lastSentence = sentences.join('');
-      if (lastSentence.length < text.length) {
-        sentences.push(text.substring(lastSentence.length));
-      }
-      return sentences;
+      let count = 0;
+      if (action.undoRender === true) count = state.spans.length - state.lastRenderStart;
+      else if (action.undoRender === 'all') count = state.spans.length;
+      else if (Number.isFinite(action.undoRender)) count = Math.floor(action.undoRender);
+      state.task = { type: 'undo', count: Math.max(0, Math.min(count, state.spans.length)),
+        deleted: [], duration: Math.max(0, opts.deleteSpeed) };
     } else {
-      // Typewriter mode - split into individual characters
-      return text.split('');
+      state.task = { type: 'wait', duration: Math.max(0, parseWait(action.wait)) };
+    }
+    setCursorActive(state, state.task.type === 'render' || state.task.type === 'undo');
+  }
+
+  function finishTask(state) {
+    const task = state.task;
+    state.task = null;
+    if (task.type === 'loop') {
+      clearText(state);
+      state.action = 0;
+      state.loops++;
+      opts.onLoop?.(state.loops);
+    } else {
+      state.action++;
+      if (task.type === 'render') opts.onRender?.(task.text);
+      if (task.type === 'undo') opts.onUndoRender?.(task.deleted.reverse().join(''));
     }
   }
 
-  // Get CSS class name based on mode
-  function getUnitClassName(mode) {
-    if (mode === 'word') return 'dm-scribe-word';
-    if (mode === 'sentence') return 'dm-scribe-sentence';
-    return 'dm-scribe-char';
+  function appendUnit(state, task) {
+    const unit = task.units[task.index++];
+    const span = document.createElement('span');
+    span.className = opts.mode === 'word' ? 'dm-scribe-word'
+      : opts.mode === 'sentence' ? 'dm-scribe-sentence' : 'dm-scribe-char';
+    span.textContent = unit;
+    // Inline whitespace preserves explicit newlines between animated units.
+    if (/^\s+$/.test(unit)) span.classList.add('dm-scribe-space');
+    if (['fade', 'bounce', 'glow'].includes(task.effect)) {
+      const effectClass = `dm-scribe-${task.effect}`;
+      span.classList.add(effectClass);
+      if (opts.mode === 'sentence' && task.effect === 'bounce') span.classList.add('dm-scribe-transform-unit');
+      // Release animation layers once the entrance settles.
+      span.addEventListener('animationend', () => span.classList.remove(effectClass), { once: true });
+    }
+    state.element.insertBefore(span, state.cursor);
+    state.spans.push(span);
+    opts.onCharacter?.(unit, state.spans.length - 1);
   }
 
-  // Handle render action
-  function handleRender(state, action) {
-    return new Promise(resolve => {
-      const text = String(action.render);
-      const effect = action.effect || 'none';
-      const units = splitTextByMode(text, opts.mode);
-      const unitClassName = getUnitClassName(opts.mode);
-
-      state.lastRenderStart = state.unitSpans.length;
-      let unitIndex = 0;
-      let lastFrameTime = performance.now();
-
-      function typeUnit(currentTime) {
-        if (state.paused) return;
-
-        if (unitIndex >= units.length) {
-          if (opts.onRender) opts.onRender(text);
-          resolve();
-          return;
-        }
-
-        // Throttle to desired speed using RAF for smoother timing
-        const elapsed = currentTime - lastFrameTime;
-        if (elapsed < opts.speed) {
-          state.charTimerId = requestAnimationFrame(typeUnit);
-          return;
-        }
-
-        lastFrameTime = currentTime;
-
-        const unit = units[unitIndex];
-        const span = document.createElement('span');
-        span.className = unitClassName;
-        span.textContent = unit;
-
-        // Apply entrance effect
-        if (effect === 'fade') {
-          span.classList.add('dm-scribe-fade');
-        } else if (effect === 'bounce') {
-          span.classList.add('dm-scribe-bounce');
-        } else if (effect === 'glow') {
-          span.classList.add('dm-scribe-glow');
-        }
-
-        // Use DocumentFragment for smoother insertion
-        const fragment = document.createDocumentFragment();
-        fragment.appendChild(span);
-
-        // Insert before cursor
-        if (state.cursorSpan) {
-          state.element.insertBefore(fragment, state.cursorSpan);
-        } else {
-          state.element.appendChild(fragment);
-        }
-
-        state.unitSpans.push(span);
-
-        if (opts.onCharacter) {
-          opts.onCharacter(unit, state.unitSpans.length - 1);
-        }
-
-        unitIndex++;
-        state.charTimerId = requestAnimationFrame(typeUnit);
+  function tick(state, time) {
+    state.frame = null;
+    if (state.paused || state.stopped || state.destroyed) return;
+    // Keep fractional frame time for accurate pacing, but avoid a burst after a hidden tab.
+    if (state.lastTime !== null) state.elapsed += Math.min(time - state.lastTime, 64);
+    state.lastTime = time;
+    // Bound zero-duration scripts so an infinite loop cannot block the browser.
+    let steps = 0;
+    while (steps++ < 100 && !state.paused && !state.stopped && !state.destroyed) {
+      if (!state.task) prepareTask(state);
+      if (state.stopped || state.paused || state.destroyed) break;
+      const task = state.task;
+      const complete = (task.type === 'render' && task.index >= task.units.length)
+        || (task.type === 'undo' && task.deleted.length >= task.count);
+      if (complete) {
+        finishTask(state);
+        continue;
       }
-
-      state.charTimerId = requestAnimationFrame(typeUnit);
-    });
+      if (state.elapsed < task.duration) break;
+      state.elapsed -= task.duration;
+      if (task.type === 'render') appendUnit(state, task);
+      else if (task.type === 'undo') {
+        const span = state.spans.pop();
+        task.deleted.push(span.textContent);
+        span.remove();
+      } else finishTask(state);
+    }
+    schedule(state);
   }
 
-  // Handle wait action
-  function handleWait(state, action) {
-    return new Promise(resolve => {
-      const duration = parseWait(action.wait);
-      state.waitTimerId = setTimeout(() => {
-        if (!state.paused) resolve();
-      }, duration);
-    });
+  function pauseState(state) {
+    if (state.destroyed || state.stopped) return;
+    state.paused = true;
+    if (state.frame !== null) cancelAnimationFrame(state.frame);
+    state.frame = null;
+    state.lastTime = null;
+    state.spans.forEach(span => { span.style.animationPlayState = 'paused'; });
+    setCursorActive(state, false);
   }
 
-  // Handle undoRender action
-  function handleUndoRender(state, action) {
-    return new Promise(resolve => {
-      let unitsToDelete = 0;
-      const undoValue = action.undoRender;
-
-      if (undoValue === true) {
-        // Delete all from last render
-        unitsToDelete = state.unitSpans.length - state.lastRenderStart;
-      } else if (undoValue === 'all') {
-        // Delete everything
-        unitsToDelete = state.unitSpans.length;
-      } else if (typeof undoValue === 'number') {
-        // Delete specific count
-        unitsToDelete = Math.min(undoValue, state.unitSpans.length);
-      }
-
-      if (unitsToDelete === 0) {
-        resolve();
-        return;
-      }
-
-      const deletedUnits = [];
-      let deleted = 0;
-      let lastFrameTime = performance.now();
-
-      function deleteUnit(currentTime) {
-        if (state.paused) return;
-
-        if (deleted >= unitsToDelete) {
-          const deletedText = deletedUnits.reverse().join('');
-          if (opts.onUndoRender) opts.onUndoRender(deletedText);
-          resolve();
-          return;
-        }
-
-        // Throttle to desired delete speed using RAF
-        const elapsed = currentTime - lastFrameTime;
-        if (elapsed < opts.deleteSpeed) {
-          state.charTimerId = requestAnimationFrame(deleteUnit);
-          return;
-        }
-
-        lastFrameTime = currentTime;
-
-        if (state.unitSpans.length > 0) {
-          const span = state.unitSpans.pop();
-          deletedUnits.push(span.textContent);
-          span.remove();
-        }
-
-        deleted++;
-        state.charTimerId = requestAnimationFrame(deleteUnit);
-      }
-
-      state.charTimerId = requestAnimationFrame(deleteUnit);
-    });
+  function resumeState(state) {
+    if (state.destroyed || state.stopped || (state.started && !state.paused)) return;
+    const firstStart = !state.started;
+    state.started = true;
+    state.paused = false;
+    state.lastTime = null;
+    state.spans.forEach(span => { span.style.animationPlayState = ''; });
+    setCursorActive(state, state.task?.type === 'render' || state.task?.type === 'undo');
+    if (firstStart) opts.onStart?.();
+    schedule(state);
   }
 
-  // Start all elements
-  elementStates.forEach(state => {
+  states.forEach(state => {
+    if (opts.cursor) {
+      const cursor = document.createElement('span');
+      const type = ['block', 'underline'].includes(opts.cursorType) ? opts.cursorType : 'caret';
+      cursor.className = `dm-scribe-cursor dm-scribe-cursor-${type}`;
+      if (!opts.cursorBlink) cursor.classList.add('dm-scribe-cursor-no-blink');
+      cursor.textContent = type === 'underline' ? '\u00A0' : opts.cursorChar;
+      cursor.setAttribute('aria-hidden', 'true');
+      state.cursor = cursor;
+      state.element.appendChild(cursor);
+    }
     if (opts.pauseOnHover) {
-      const mouseEnterHandler = () => {
-        state.paused = true;
-        if (state.charTimerId) cancelAnimationFrame(state.charTimerId);
-        if (state.waitTimerId) clearTimeout(state.waitTimerId);
+      state.hoverHandlers = {
+        enter: () => {
+          if (!state.started || state.paused || state.stopped) return;
+          state.hoverPaused = true;
+          pauseState(state);
+        },
+        leave: () => {
+          if (!state.hoverPaused) return;
+          state.hoverPaused = false;
+          resumeState(state);
+        }
       };
-      const mouseLeaveHandler = () => {
-        state.paused = false;
-        processActions(state);
-      };
-
-      state.element.addEventListener('mouseenter', mouseEnterHandler);
-      state.element.addEventListener('mouseleave', mouseLeaveHandler);
-
-      hoverHandlers.set(state.element, { mouseEnterHandler, mouseLeaveHandler });
+      state.element.addEventListener('mouseenter', state.hoverHandlers.enter);
+      state.element.addEventListener('mouseleave', state.hoverHandlers.leave);
     }
-
-    if (opts.autoStart) {
-      processActions(state);
-    }
+    if (opts.autoStart) resumeState(state);
   });
 
-  // Call onStart callback
-  if (opts.onStart) {
-    opts.onStart();
-  }
-
-  // Return control object
   return {
-    /**
-     * Pause the scribe animation
-     */
-    pause() {
-      elementStates.forEach(state => {
-        state.paused = true;
-        if (state.charTimerId) cancelAnimationFrame(state.charTimerId);
-        if (state.waitTimerId) clearTimeout(state.waitTimerId);
-      });
-    },
-
-    /**
-     * Resume the scribe animation
-     */
-    resume() {
-      elementStates.forEach(state => {
-        state.paused = false;
-        processActions(state);
-      });
-    },
-
-    /**
-     * Stop the scribe animation
-     */
+    pause() { states.forEach(state => { state.hoverPaused = false; pauseState(state); }); },
+    resume() { states.forEach(resumeState); },
     stop() {
-      elementStates.forEach(state => {
-        state.paused = true;
-        state.currentAction = opts.actions.length; // Mark as complete
-        if (state.charTimerId) cancelAnimationFrame(state.charTimerId);
-        if (state.waitTimerId) clearTimeout(state.waitTimerId);
-      });
-    },
-
-    /**
-     * Restart the scribe animation from the beginning
-     */
-    restart() {
-      elementStates.forEach(state => {
-        // Clear all timers
-        if (state.charTimerId) cancelAnimationFrame(state.charTimerId);
-        if (state.waitTimerId) clearTimeout(state.waitTimerId);
-
-        // Clear content
-        state.unitSpans.forEach(span => span.remove());
-        state.unitSpans = [];
-        state.currentAction = 0;
-        state.loopCount = 0;
-        state.lastRenderStart = 0;
+      states.forEach(state => {
+        pauseState(state);
         state.paused = false;
-
-        // Restart
-        processActions(state);
+        state.stopped = true;
+        state.spans.forEach(span => {
+          span.classList.remove('dm-scribe-fade', 'dm-scribe-bounce', 'dm-scribe-glow');
+          span.style.animationPlayState = '';
+        });
+        setCursorActive(state, false);
       });
     },
-
-    /**
-     * Destroy the scribe animation and clean up
-     */
+    restart() {
+      states.forEach(state => {
+        if (state.destroyed) return;
+        pauseState(state);
+        clearText(state);
+        Object.assign(state, { action: 0, task: null, elapsed: 0, lastTime: null,
+          loops: 0, stopped: false, started: false });
+        resumeState(state);
+      });
+    },
     destroy() {
-      elementStates.forEach(state => {
-        // Clear timers
-        if (state.charTimerId) cancelAnimationFrame(state.charTimerId);
-        if (state.waitTimerId) clearTimeout(state.waitTimerId);
-
-        // Remove all unit spans
-        state.unitSpans.forEach(span => span.remove());
-
-        // Remove cursor
-        if (state.cursorSpan) {
-          state.cursorSpan.remove();
-        }
-
-        // Remove hover handlers
-        if (hoverHandlers.has(state.element)) {
-          const handlers = hoverHandlers.get(state.element);
-          state.element.removeEventListener('mouseenter', handlers.mouseEnterHandler);
-          state.element.removeEventListener('mouseleave', handlers.mouseLeaveHandler);
-          hoverHandlers.delete(state.element);
+      states.forEach(state => {
+        pauseState(state);
+        state.destroyed = true;
+        clearText(state);
+        state.cursor?.remove();
+        if (state.hoverHandlers) {
+          state.element.removeEventListener('mouseenter', state.hoverHandlers.enter);
+          state.element.removeEventListener('mouseleave', state.hoverHandlers.leave);
         }
       });
     },
-
-    /**
-     * Check if animation is running
-     * @returns {boolean}
-     */
-    isRunning() {
-      if (elementStates.length === 0) return false;
-      const state = elementStates[0];
-      return !state.paused && state.currentAction < opts.actions.length;
-    },
-
-    /**
-     * Check if animation is paused
-     * @returns {boolean}
-     */
-    isPaused() {
-      if (elementStates.length === 0) return false;
-      return elementStates[0].paused;
-    }
+    isRunning() { return states.some(state => state.started && !state.paused && !state.stopped && !state.destroyed); },
+    isPaused() { return states.some(state => state.paused && !state.destroyed); }
   };
 }
 
