@@ -38,13 +38,13 @@ const CMS_DOCS = {
     'auth': '/features/users-and-security',
     'blocks': '/features/components-blocks',
     'collections': '/features/collections',
-    'configuration': null,          // no counterpart yet - a new page there
+    'configuration': '/features/configuration',
     'data-pro': '/features/collections',
     'forms': '/features/forms',
     'getting-started': '/get-started',
-    'media': null,                  // no counterpart yet - a new page there
+    'media': '/features/media',
     'pages': '/features/page-editor',
-    'plugins': '/plugins',
+    'plugins': '/features/marketplace',   // /plugins itself redirects to /tools; the old page was about building them
     'tutorials': '/tutorials',
 };
 

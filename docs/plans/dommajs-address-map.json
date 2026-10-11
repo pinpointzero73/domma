@@ -109,21 +109,21 @@
   },
   {
     "old": "/cms/configuration/",
-    "new": "https://cms.dommajs.org/features",
+    "new": "https://cms.dommajs.org/features/configuration",
     "status": 301,
     "action": "merge",
     "file": "cms/configuration/index.html",
     "title": "Configuration - Domma CMS",
-    "note": "New page needed on cms.dommajs.org for \"configuration\"; redirect to /features until then"
+    "note": "Merge into the existing page there"
   },
   {
     "old": "/cms/configuration/index.html",
-    "new": "https://cms.dommajs.org/features",
+    "new": "https://cms.dommajs.org/features/configuration",
     "status": 301,
     "action": "merge",
     "file": "cms/configuration/index.html",
     "title": "Configuration - Domma CMS",
-    "note": "New page needed on cms.dommajs.org for \"configuration\"; redirect to /features until then"
+    "note": "Merge into the existing page there"
   },
   {
     "old": "/cms/data-pro/",
@@ -199,21 +199,21 @@
   },
   {
     "old": "/cms/media/",
-    "new": "https://cms.dommajs.org/features",
+    "new": "https://cms.dommajs.org/features/media",
     "status": 301,
     "action": "merge",
     "file": "cms/media/index.html",
     "title": "Media Management - Domma CMS",
-    "note": "New page needed on cms.dommajs.org for \"media\"; redirect to /features until then"
+    "note": "Merge into the existing page there"
   },
   {
     "old": "/cms/media/index.html",
-    "new": "https://cms.dommajs.org/features",
+    "new": "https://cms.dommajs.org/features/media",
     "status": 301,
     "action": "merge",
     "file": "cms/media/index.html",
     "title": "Media Management - Domma CMS",
-    "note": "New page needed on cms.dommajs.org for \"media\"; redirect to /features until then"
+    "note": "Merge into the existing page there"
   },
   {
     "old": "/cms/pages/",
@@ -235,7 +235,7 @@
   },
   {
     "old": "/cms/plugins/",
-    "new": "https://cms.dommajs.org/plugins",
+    "new": "https://cms.dommajs.org/features/marketplace",
     "status": 301,
     "action": "merge",
     "file": "cms/plugins/index.html",
@@ -244,7 +244,7 @@
   },
   {
     "old": "/cms/plugins/index.html",
-    "new": "https://cms.dommajs.org/plugins",
+    "new": "https://cms.dommajs.org/features/marketplace",
     "status": 301,
     "action": "merge",
     "file": "cms/plugins/index.html",

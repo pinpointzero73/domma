@@ -11,8 +11,8 @@ old,new,status,action,title,file,note
 /cms/blocks/index.html,https://cms.dommajs.org/features/components-blocks,301,merge,Blocks - Domma CMS,cms/blocks/index.html,Merge into the existing page there
 /cms/collections/,https://cms.dommajs.org/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
 /cms/collections/index.html,https://cms.dommajs.org/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
-/cms/configuration/,https://cms.dommajs.org/features,301,merge,Configuration - Domma CMS,cms/configuration/index.html,"New page needed on cms.dommajs.org for ""configuration""; redirect to /features until then"
-/cms/configuration/index.html,https://cms.dommajs.org/features,301,merge,Configuration - Domma CMS,cms/configuration/index.html,"New page needed on cms.dommajs.org for ""configuration""; redirect to /features until then"
+/cms/configuration/,https://cms.dommajs.org/features/configuration,301,merge,Configuration - Domma CMS,cms/configuration/index.html,Merge into the existing page there
+/cms/configuration/index.html,https://cms.dommajs.org/features/configuration,301,merge,Configuration - Domma CMS,cms/configuration/index.html,Merge into the existing page there
 /cms/data-pro/,https://cms.dommajs.org/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
 /cms/data-pro/index.html,https://cms.dommajs.org/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
 /cms/forms/,https://cms.dommajs.org/features/forms,301,merge,Forms - Domma CMS,cms/forms/index.html,Merge into the existing page there
@@ -21,12 +21,12 @@ old,new,status,action,title,file,note
 /cms/getting-started/index.html,https://cms.dommajs.org/get-started,301,merge,Getting Started - Domma CMS,cms/getting-started/index.html,Merge into the existing page there
 /cms/,https://cms.dommajs.org/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
 /cms/index.html,https://cms.dommajs.org/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
-/cms/media/,https://cms.dommajs.org/features,301,merge,Media Management - Domma CMS,cms/media/index.html,"New page needed on cms.dommajs.org for ""media""; redirect to /features until then"
-/cms/media/index.html,https://cms.dommajs.org/features,301,merge,Media Management - Domma CMS,cms/media/index.html,"New page needed on cms.dommajs.org for ""media""; redirect to /features until then"
+/cms/media/,https://cms.dommajs.org/features/media,301,merge,Media Management - Domma CMS,cms/media/index.html,Merge into the existing page there
+/cms/media/index.html,https://cms.dommajs.org/features/media,301,merge,Media Management - Domma CMS,cms/media/index.html,Merge into the existing page there
 /cms/pages/,https://cms.dommajs.org/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
 /cms/pages/index.html,https://cms.dommajs.org/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
-/cms/plugins/,https://cms.dommajs.org/plugins,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
-/cms/plugins/index.html,https://cms.dommajs.org/plugins,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
+/cms/plugins/,https://cms.dommajs.org/features/marketplace,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
+/cms/plugins/index.html,https://cms.dommajs.org/features/marketplace,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
 /cms/tutorials/,https://cms.dommajs.org/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
 /cms/tutorials/index.html,https://cms.dommajs.org/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
 /cookie-policy/,/cookie-policy,200,keep,Cookie Policy - Domma,cookie-policy/index.html,Prose page (served as is)

@@ -227,6 +227,15 @@ Each phase ends with a check before the next starts.
    611 KB), so the page shows built sizes, never estimates - the metadata wants refreshing in Domma.
 6. **CMS docs.** Merge the 13 pages into cms.dommajs.org; redirect each old address there. *Check: no
    page lost, every redirect answers 301.*
+   **Done 2026-10-11.** The 13 old pages were checked against cms.dommajs.org and the current engine:
+   most of what they said is out of date (roles, file paths, config keys, Pro set-up, API shapes) and
+   was left behind. What is still true and was missing went into features/forms, collections, admin,
+   users-and-security, components-blocks, page-editor and marketplace; two new pages,
+   features/configuration and features/media, replace the old Configuration and Media; the features
+   hub links both. `/cms/plugins/` now goes to /features/marketplace (cms.dommajs.org's /plugins is
+   itself a redirect to /tools). Content changes are in the dcms-domma-cms-site repo. The redirects
+   themselves answer once dommajs.org is cut over (phase 7 imports the map). Not carried over: a short
+   contact-form tutorial and an Actions tutorial would fill the only gaps the old Tutorials page showed.
 7. **SEO and redirects.** Redirect rules for every old address (from the phase 0 map), titles and
    descriptions, sitemap, search. *Check: a crawl of the old sitemap gets 200 or one 301 for every URL.*
 8. **Review** on dommajs.sites.dommajs.org.
