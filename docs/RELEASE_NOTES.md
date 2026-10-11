@@ -1,3 +1,9 @@
+### v0.51.9 - Smoother Scribe playback (2026-10-11)
+
+- Scribe now keeps accurate typing and deletion timing, resumes interrupted renders and waits without repeating text, and preserves emoji and combined accents as whole characters.
+- Entrance effects animate transformable units, inherit surrounding typography, and release their animation styles after settling. The cursor stays visible while typing or deleting, and loops hold the final phrase during their delay.
+- Reduced motion displays a readable static phrase. Hover cannot start a manually started Scribe or resume a manual pause.
+
 ### v0.51.8 - Factory modals show their content and buttons (2026-10-10)
 
 **`E.createModal()` and `E.showModal()` work again.** Since the modal factory moved onto the `<domma-modal>` component, a modal made from options printed its HTML `content` as text and drew no buttons, so `showModal()`'s promise could never settle from a button. Content now goes in as markup (sanitised when DOMPurify is loaded) and the buttons are drawn.

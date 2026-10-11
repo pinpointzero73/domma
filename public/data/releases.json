@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.9",
+      "title": "Smoother Scribe playback",
+      "description": "<p>Smoother Scribe animations, reliable pause and resume, and intact emoji.</p>",
+      "date": "2026-10-11"
+    },
+    {
       "year": "v0.51.8",
       "title": "Factory modals show their content and buttons",
       "description": "Modals made with `createModal()` / `showModal()` show their HTML content and buttons again.",
@@ -487,5 +493,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.8"
+  "latestVersion": "v0.51.9"
 }
