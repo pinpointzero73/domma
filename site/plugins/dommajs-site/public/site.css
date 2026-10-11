@@ -32,7 +32,7 @@
 
 .djs-hero-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);   /* minmax: a long word must not widen the column past the screen */
     gap: 2rem;
     max-width: 1200px;
     width: 100%;
@@ -86,6 +86,10 @@
     line-height: 1.6;
     color: var(--dm-text-secondary);
 }
+
+/* Scribe draws each character as an inline-block, so a line can break inside a word
+   ("Ja/vaScript" on a phone). The tagline only fades its letters in, which works inline. */
+.djs-tagline .dm-scribe-char { display: inline; }
 
 .djs-hero-cta { text-align: right; }
 
@@ -273,7 +277,10 @@
 .djs-cms-band-tagline .sep { margin: 0 0.5rem; opacity: 0.7; }
 
 @media (max-width: 768px) {
-    .djs-hero-name { font-size: 3.25rem; }
+    /* As specific as the rule it overrides (.djs-hero .djs-hero-name), or it never applies. */
+    .djs-hero .djs-hero-name { font-size: clamp(2.5rem, 13vw, 3.25rem); }
+    .djs-hero-brand { gap: 1rem; }
+    .djs-hero-logo { width: 64px; height: auto; }
     .djs-hero-cta { text-align: left; }
     .djs-cms-band { padding: 3.5rem 0; margin: 2rem 0; }
     .djs-cms-band-stats { grid-template-columns: repeat(2, 1fr); max-width: 380px; }
