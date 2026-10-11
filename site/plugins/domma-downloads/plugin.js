@@ -12,6 +12,7 @@
  *
  * Routes (under /api/plugins/domma-downloads):
  *   GET  /info              the release: version, modules, css, presets, files, themes
+ *   GET  /version           just {version, notes} - the site shows it in its menu and footer
  *   GET  /file?p=<path>     a file of the release: dist/..., or download/... (Kickstart)
  *   POST /build {modules}   build (or reuse) a custom bundle -> {url, modules, cached}
  *   GET  /bundle?b=<id>     a built bundle's zip
@@ -110,6 +111,14 @@ export default async function dommaDownloads(fastify, options) {
         const meta = builder.metadata(rel);
         reply.header('Cache-Control', 'public, max-age=300');
         return {version: rel.version, modules: meta.modules, css: meta.css, presets: meta.presets, files: fileList(rel), themes: themes(rel)};
+    });
+
+    // Just the version, for the site's own use (the rail shows it): small and cacheable.
+    fastify.get('/version', async (request, reply) => {
+        const rel = releases.current();
+        if (!rel) return reply.code(503).send({error: 'Not fetched yet'});
+        reply.header('Cache-Control', 'public, max-age=600');
+        return {version: rel.version, notes: `https://github.com/pinpointzero73/domma/releases/tag/v${rel.version}`};
     });
 
     fastify.get('/file', async (request, reply) => {
