@@ -1,6 +1,6 @@
 ---
 title: DommaJS - Dynamic Object Manipulation & Modeling API
-description: Domma is a lightweight, zero-dependency JavaScript framework - jQuery-style DOM, Lodash-style utilities, Moment-style dates, reactive models and 30 UI components in one file.
+description: A lightweight, zero-dependency JavaScript framework - jQuery-style DOM, Lodash-style utilities, Moment-style dates, reactive models and 30 UI components.
 layout: landing
 status: published
 sortOrder: 0

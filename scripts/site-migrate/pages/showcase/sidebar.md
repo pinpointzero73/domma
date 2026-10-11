@@ -1,6 +1,6 @@
 ---
 title: Sidebar Component
-description: "JSON-configurable navigation sidebar with unlimited depth nesting, mobile toggle, and theme variants. Perfect for admin panels, documentation sites, and applications with complex navigation."
+description: "A navigation sidebar from JSON: unlimited nesting, a mobile toggle and theme variants, for admin panels, docs and complex apps."
 layout: with-sidebar
 status: published
 sortOrder: 50

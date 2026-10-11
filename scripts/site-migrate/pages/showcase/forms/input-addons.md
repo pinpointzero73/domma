@@ -1,12 +1,12 @@
 ---
 title: Input Addons
-description: ""
+description: "Icons and text joined to the start or end of a field - a magnifier, a currency sign, a unit - with formConfig.prefix and suffix or E.inputGroup()."
 layout: with-sidebar
 status: published
 sortOrder: 50
 ---
 
-[hero title="Input Addons" tagline="" align="center"][/hero]
+[hero title="Input Addons" tagline="Icons and text joined to a field, sharing its border, focus ring and error colours" align="center"][/hero]
 
 ## Overview
 

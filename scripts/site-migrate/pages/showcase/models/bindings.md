@@ -1,6 +1,6 @@
 ---
 title: Template Bindings
-description: "Say in the markup which piece of data each part of the page shows. Domma updates exactly those parts, and leaves the rest of the DOM - and everything the visitor was doing in it - alone."
+description: "Say in the markup which data each part of the page shows. Domma updates exactly those parts and leaves the rest of the DOM alone."
 layout: with-sidebar
 status: published
 sortOrder: 50

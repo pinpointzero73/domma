@@ -1,6 +1,6 @@
 ---
 title: Footer Component
-description: "Flexible, responsive footer with three layout modes (simple, columns, minimal) and theme variants. Perfect for completing your page layout with branding, links, and social media."
+description: "A responsive footer in three layouts - simple, columns and minimal - with theme variants, for branding, links and social media."
 layout: with-sidebar
 status: published
 sortOrder: 50

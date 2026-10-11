@@ -238,6 +238,15 @@ Each phase ends with a check before the next starts.
    contact-form tutorial and an Actions tutorial would fill the only gaps the old Tutorials page showed.
 7. **SEO and redirects.** Redirect rules for every old address (from the phase 0 map), titles and
    descriptions, sitemap, search. *Check: a crawl of the old sitemap gets 200 or one 301 for every URL.*
+   **Done 2026-10-11.** `scripts/site-migrate/redirects.mjs <site>` turns every 301 and 410 row of the
+   map into an SEO > Redirects rule (168), each checked by the engine's own `checkRule()`; existing rules
+   are kept and a re-run adds nothing. `/admin/` and `/api/` cannot be redirected - the CMS owns them.
+   `scripts/site-migrate/crawl-old.mjs [--base=…]` is the check: all 245 old addresses answer as the map
+   says (200, one 301 to a 200, or 410), no chains. Every page has a title and a description (none
+   duplicated, none over 165 characters); the sitemap lists all 103 pages and each answers 200; site
+   search finds them. **For cut-over (phase 9):** set Site Settings > Site URL to `https://dommajs.org` -
+   until then the sitemap and robots.txt name the host that was asked, over http - then re-run
+   `crawl-old.mjs --base=https://dommajs.org`.
 8. **Review** on dommajs.sites.dommajs.org.
 9. **Cut-over.** Point the dommajs.org vhost at the manager like the other fleet sites (as
    `sites.dommajs.org` already is). Keep `public/` and the old vhost file for a quick switch back; remove
