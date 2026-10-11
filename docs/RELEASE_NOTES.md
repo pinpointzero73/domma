@@ -1,3 +1,7 @@
+### v0.51.10 - The centred timeline fits a phone (2026-10-11)
+
+- The centred progression timeline (`layout: 'centered'`) stacks on phones. Below 769px each item is now one column - its marker, then its content at full width beside the line - instead of the five-column desktop grid, which squeezed the content into two narrow side columns and pushed the markers off-screen. Wider screens are unchanged.
+
 ### v0.51.9 - Smoother Scribe playback (2026-10-11)
 
 - Scribe now keeps accurate typing and deletion timing, resumes interrupted renders and waits without repeating text, and preserves emoji and combined accents as whole characters.
