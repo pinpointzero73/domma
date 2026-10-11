@@ -350,4 +350,5 @@ html.dm-reduced-motion .djs-feature:hover { animation: none; }
 #site-navbar .navbar-brand .djs-version:hover { color: var(--dm-primary); }
 body.dm-vnav-collapsed #site-navbar .navbar-brand .djs-version { display: none; }
 .djs-version-footer { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--dm-text-muted); }
+.cms-footer-bottom .djs-version-footer { margin: 0; }
 .djs-version-footer a { color: inherit; }

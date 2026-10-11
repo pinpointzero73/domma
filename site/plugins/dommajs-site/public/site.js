@@ -52,7 +52,8 @@
             });
             const brand = document.querySelector('#site-navbar .navbar-brand');
             if (brand && !brand.querySelector('.djs-version')) brand.appendChild(link('djs-version'));
-            const footer = document.querySelector('#site-footer .footer-inner');
+            // The columns footer's bottom bar, else the one-row footer.
+            const footer = document.querySelector('#site-footer .cms-footer-bottom') || document.querySelector('#site-footer .footer-inner');
             if (footer && !footer.querySelector('.djs-version-footer')) {
                 const p = document.createElement('p');
                 p.className = 'djs-version-footer';
