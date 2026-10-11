@@ -366,3 +366,6 @@ body.dm-vnav-collapsed #site-navbar .navbar-brand .djs-version { display: none; 
 .djs-api-table td:nth-child(1) { white-space: nowrap; color: var(--dm-primary); }
 .djs-api-table td:nth-child(3) { min-width: 14rem; }
 .djs-api-table td:nth-child(4) { white-space: pre-wrap; word-break: break-word; min-width: 15rem; font-size: 0.8rem; }
+
+/* ---- Changelog (/changelog): long file paths in old release notes wrap on a phone ---- */
+.dm-progression-content code { overflow-wrap: anywhere; }
