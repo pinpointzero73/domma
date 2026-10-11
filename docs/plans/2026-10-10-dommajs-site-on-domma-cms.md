@@ -248,6 +248,13 @@ Each phase ends with a check before the next starts.
    until then the sitemap and robots.txt name the host that was asked, over http - then re-run
    `crawl-old.mjs --base=https://dommajs.org`.
 8. **Review** on dommajs.sites.dommajs.org.
+   **Pre-review done 2026-10-11** (the review itself is the owner's): `check-site.cjs --reset` - 103 pages,
+   770 demos, all clean; `check-links.mjs --external` - every link resolves (npm answers bots 403);
+   demo links re-pointed (`demo-links.mjs`, 128 links), five wrong or empty prose links fixed; one `h1`
+   per page except demos that show heroes; the home hero fixed on phones. The changelog's centred
+   timeline needs domma PR #35 (released, re-pinned and rolled) to stack on phones. Found, not fixed
+   (Scribe is in hand elsewhere): character-mode Scribe draws each letter as an inline-block, so text
+   wraps mid-word - the dommajs tagline works round it in its own CSS.
 9. **Cut-over.** Point the dommajs.org vhost at the manager like the other fleet sites (as
    `sites.dommajs.org` already is). Keep `public/` and the old vhost file for a quick switch back; remove
    them after a few weeks without problems. *Check: the phase 7 crawl again, on the live domain.*
