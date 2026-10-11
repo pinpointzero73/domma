@@ -16,14 +16,14 @@ The effects module provides reusable animation utilities for adding visual polis
 
 ### Available Effects
 
-- **[breathe()](/showcase/effects/javascript/breathe)** - Sinusoidal vertical floating animation
-- **[pulse()](/showcase/effects/javascript/pulse)** - Grow-and-shrink scale animation
-- **[scribe()](/showcase/effects/javascript/scribe)** - Character-by-character text animation with action queue
-- **[reveal()](/showcase/effects/javascript/reveal)** - Scroll-triggered entrance animations (fade, slide, zoom, flip)
-- **[scramble()](/showcase/effects/javascript/scramble)** - Text cipher/decode animation with multiple reveal orders
-- **[counter()](/showcase/effects/javascript/counter)** - Animated number counting with easing and formatting
-- **[ripple()](/showcase/effects/javascript/ripple)** - Material Design click ripple effect
-- **[shake()](/showcase/effects/javascript/shake)** - Attention/error shake animation
+- **[breathe()](/showcase/effects/breathe)** - Sinusoidal vertical floating animation
+- **[pulse()](/showcase/effects/pulse)** - Grow-and-shrink scale animation
+- **[scribe()](/showcase/effects/scribe)** - Character-by-character text animation with action queue
+- **[reveal()](/showcase/effects/reveal)** - Scroll-triggered entrance animations (fade, slide, zoom, flip)
+- **[scramble()](/showcase/effects/scramble)** - Text cipher/decode animation with multiple reveal orders
+- **[counter()](/showcase/effects/counter)** - Animated number counting with easing and formatting
+- **[ripple()](/showcase/effects/ripple)** - Material Design click ripple effect
+- **[shake()](/showcase/effects/shake)** - Attention/error shake animation
 
 ### Features
 

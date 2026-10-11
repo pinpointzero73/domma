@@ -837,7 +837,7 @@ Override these CSS variables to customise Card appearance and match your design 
 }
 ```
 
-[]()[Full CSS Customisation Cheat-Sheet →](/showcase/elements/css-customisation)
+[Full CSS Customisation Cheat-Sheet →](/showcase/elements/css-customisation)
 
 ## Related Elements
 

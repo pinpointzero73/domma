@@ -632,7 +632,7 @@ Override these CSS variables to customise Button Group appearance and match your
 }
 ```
 
-[]()[Full CSS Customisation Cheat-Sheet →](/showcase/elements/css-customisation)
+[Full CSS Customisation Cheat-Sheet →](/showcase/elements/css-customisation)
 
 ## Related Elements
 

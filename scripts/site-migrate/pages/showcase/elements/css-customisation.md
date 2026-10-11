@@ -611,7 +611,7 @@ Domma ships with 10+ built-in themes (charcoal, ocean, forest, sunset, etc.), bu
 </body>
 ```
 
-For advanced theme creation with light/dark variants and automatic switching, see the [Theme Roller](/showcase/elements/theme-roller) tool.
+For advanced theme creation with light/dark variants and automatic switching, see the [Theme Roller](/showcase/theme-roller) tool.
 
 ## Related Resources
 
