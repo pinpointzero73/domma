@@ -17,6 +17,10 @@
  *   POST /build {modules}   build (or reuse) a custom bundle -> {url, modules, cached}
  *   GET  /bundle?b=<id>     a built bundle's zip
  *
+ * Each sync also adds the release's changelog entry to the Releases collection
+ * (lib/changelog.js), which the /changelog page shows - so a release needs no
+ * step here and no API token.
+ *
  * The page markup is public/template.html, swapped in after the page is
  * sanitised (as the showcase does) because it carries form controls and
  * bindings; public/downloads.js drives it with domma-reactive.
@@ -26,6 +30,8 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {Releases} from './lib/release.js';
 import {Builder} from './lib/builder.js';
+import {RELEASES_SLUG, importChangelog} from './lib/changelog.js';
+import {createEntry, listEntries} from '../../server/services/collections.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DATA = path.join(HERE, 'data');
@@ -85,7 +91,22 @@ export default async function dommaDownloads(fastify, options) {
 
     // A failed sync (GitHub unreachable) tries again in ten minutes rather than waiting six hours.
     let retry = null;
-    const sync = () => releases.sync().catch(err => {
+    const changelog = {
+        list: async () => (await listEntries(RELEASES_SLUG, {limit: 0})).entries || [],
+        create: (data) => createEntry(RELEASES_SLUG, data, {source: 'plugin'})
+    };
+    const addChangelog = async () => {
+        const rel = releases.current();
+        if (!rel) return;
+        try {
+            const added = await importChangelog(rel, changelog);
+            if (added.length) log.info?.(`[domma-downloads] changelog: added ${added.join(', ')}`);
+        } catch (err) {
+            // No Releases collection (the site was not set up with it) is not this plugin's failure.
+            log.warn?.(`[domma-downloads] changelog not updated: ${err.message}`);
+        }
+    };
+    const sync = () => releases.sync().then(addChangelog, err => {
         log.warn?.(`[domma-downloads] sync failed: ${err.message}`);
         clearTimeout(retry);
         retry = setTimeout(sync, 10 * 60 * 1000);

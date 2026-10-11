@@ -1,7 +1,7 @@
 {
   "name": "domma-downloads",
   "displayName": "Domma Downloads",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "The dommajs.org downloads page ([domma-downloads /]): Kickstart, the core library, presets, CSS and a custom bundle builder - from the latest Domma release, fetched by itself.",
   "author": "DCBW-IT",
   "date": "2026-10-11",

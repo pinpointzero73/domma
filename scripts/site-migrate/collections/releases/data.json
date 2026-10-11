@@ -1,0 +1,1314 @@
+[
+  {
+    "id": "963bd087-f2de-3a23-bf78-8763cd8f1577",
+    "data": {
+      "version": "v0.51.9",
+      "title": "Smoother Scribe playback",
+      "summary": "<p>Smoother Scribe animations, reliable pause and resume, and intact emoji.</p>",
+      "date": "2026-10-11",
+      "sequence": 51009
+    },
+    "meta": {
+      "createdAt": "2026-10-11T00:00:00.000Z",
+      "updatedAt": "2026-10-11T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "f5f96aa1-5be9-dfb1-35b5-2a83d5608aee",
+    "data": {
+      "version": "v0.51.8",
+      "title": "Factory modals show their content and buttons",
+      "summary": "Modals made with `createModal()` / `showModal()` show their HTML content and buttons again.",
+      "date": "2026-10-10",
+      "sequence": 51008
+    },
+    "meta": {
+      "createdAt": "2026-10-10T00:00:00.000Z",
+      "updatedAt": "2026-10-10T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "3e78e9e0-4b21-0397-1691-a91ec9fbd252",
+    "data": {
+      "version": "v0.51.7",
+      "title": "Your own classes on context menu items",
+      "summary": "Context menu items take their own CSS classes through a new `className` option.",
+      "date": "2026-10-09",
+      "sequence": 51007
+    },
+    "meta": {
+      "createdAt": "2026-10-09T00:00:00.000Z",
+      "updatedAt": "2026-10-09T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "d2fa959e-9f95-350d-4ac1-aecc64024e5e",
+    "data": {
+      "version": "v0.51.6",
+      "title": "Paper in motion and seasonal characters",
+      "summary": "<p>Curled ticker tape with shaded folds and consistent motion, plus illustrated Bonfire Night decorations, leprechauns, bagpiper, knight, dragons and Cupid.</p>",
+      "date": "2026-10-01",
+      "sequence": 51006
+    },
+    "meta": {
+      "createdAt": "2026-10-01T00:00:00.000Z",
+      "updatedAt": "2026-10-01T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "287bdc7a-2ee8-7952-4a6b-f44a8b001e43",
+    "data": {
+      "version": "v0.51.5",
+      "title": "Seasonal Illustrations And Butterflies",
+      "summary": "<p>Butterflies now have tapered wings, fine veins and markings, antennae and a gentler illustrated finish.</p>",
+      "date": "2026-10-01",
+      "sequence": 51005
+    },
+    "meta": {
+      "createdAt": "2026-10-01T00:00:00.000Z",
+      "updatedAt": "2026-10-01T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "168a0591-9a74-4f7c-7f64-a000bd915376",
+    "data": {
+      "version": "v0.51.4",
+      "title": "A Snowman To Match",
+      "summary": "<p>The Christmas snowman now matches the illustrated trees, wreaths, robins, elves, sleigh and train, with shaded snow, a knitted scarf and a holly-trimmed top hat.</p>",
+      "date": "2026-09-30",
+      "sequence": 51004
+    },
+    "meta": {
+      "createdAt": "2026-09-30T00:00:00.000Z",
+      "updatedAt": "2026-09-30T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "329634ea-fea4-9364-8c51-cc1162bc9d75",
+    "data": {
+      "version": "v0.51.3",
+      "title": "Christmas Characters And Mischief",
+      "summary": "<p>Christmas gets illustrated trees, wreaths, robins, elves, Santa's sleigh and a vintage express. Two optional naughty elves add a little mischief; both are off by default.</p>",
+      "date": "2026-09-30",
+      "sequence": 51003
+    },
+    "meta": {
+      "createdAt": "2026-09-30T00:00:00.000Z",
+      "updatedAt": "2026-09-30T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "d8ab564b-46e1-7e49-04fb-f93a965ae6b4",
+    "data": {
+      "version": "v0.51.2",
+      "title": "Subtle Card Hover",
+      "summary": "<p>Cards and boxes change only their border colour on hover, transitioning smoothly from their existing colour to the active theme colour.</p>",
+      "date": "2026-09-29",
+      "sequence": 51002
+    },
+    "meta": {
+      "createdAt": "2026-09-29T00:00:00.000Z",
+      "updatedAt": "2026-09-29T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "f754a384-12bf-9a5b-42b4-876e15bf101c",
+    "data": {
+      "version": "v0.51.1",
+      "title": "Quiet Card Highlights",
+      "summary": "<p>Cards and boxes respond to hover with a subtle outline in the active theme colour instead of lifting off the page.</p>",
+      "date": "2026-09-29",
+      "sequence": 51001
+    },
+    "meta": {
+      "createdAt": "2026-09-29T00:00:00.000Z",
+      "updatedAt": "2026-09-29T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "41a99a2c-7ac4-3c71-8a2f-3668376160b0",
+    "data": {
+      "version": "v0.51.0",
+      "title": "Lists Without the Boilerplate",
+      "summary": "<p>Built-in array helpers for binding expressions: <code>len</code>, <code>includes</code>, <code>count</code>, <code>where</code>, <code>sortBy</code> and more - no computed needed to ask whether a list is empty or how many rows are done.</p>",
+      "date": "2026-09-29",
+      "sequence": 51000
+    },
+    "meta": {
+      "createdAt": "2026-09-29T00:00:00.000Z",
+      "updatedAt": "2026-09-29T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "4561234e-862f-84ad-107a-3c600336329c",
+    "data": {
+      "version": "v0.50.3",
+      "title": "Readable Everywhere",
+      "summary": "<p><strong>Readable everywhere.</strong> A contrast sweep moves buttons, heroes, footers and form controls onto the theme's own text colours, so text stays readable on every theme, light and dark.</p>",
+      "date": "2026-09-28",
+      "sequence": 50003
+    },
+    "meta": {
+      "createdAt": "2026-09-28T00:00:00.000Z",
+      "updatedAt": "2026-09-28T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "493083f9-7718-f9a5-1a63-35ba7e65bb16",
+    "data": {
+      "version": "v0.50.2",
+      "title": "One Clear Warning",
+      "summary": "<p><strong>One clear warning.</strong> Domma Reactive 1.2.1 names every binding an unkeyed list dropped in a single message, and points at <code>key=</code> - the fix that makes them bind.</p>",
+      "date": "2026-09-28",
+      "sequence": 50002
+    },
+    "meta": {
+      "createdAt": "2026-09-28T00:00:00.000Z",
+      "updatedAt": "2026-09-28T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "b1366596-b789-b983-cd6d-6df2414565fc",
+    "data": {
+      "version": "v0.50.1",
+      "title": "Safer Bindings",
+      "summary": "<p><strong>Accordions open again.</strong> Accordions whose answer sits inside a body and content pair - the markup Domma CMS renders - now open to the right panel instead of an empty one.</p>\n<p><strong>Safer bindings.</strong> Domma Reactive 1.2 warns and hides content when a binding is handed an observable instead of its value, and expressions accept object and array literals.</p>",
+      "date": "2026-09-28",
+      "sequence": 50001
+    },
+    "meta": {
+      "createdAt": "2026-09-28T00:00:00.000Z",
+      "updatedAt": "2026-09-28T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "1a04505f-192c-0704-f85c-52adb3b9f3d3",
+    "data": {
+      "version": "v0.50.0",
+      "title": "Faces and Fine Print",
+      "summary": "<p><strong>Avatars.</strong> <code>E.avatar()</code> shows a person as their picture or their initials, in a colour that stays the same wherever their name appears and readable on every theme; <code>E.avatarGroup()</code> stacks a team with a \"+N\" that lists the rest.</p>\n<p>Plus accessibility and text utilities: <code>.sr-only</code>, a ready-made <code>.skip-link</code>, <code>.line-clamp-*</code>, <code>.stretched-link</code> for whole-card links and <code>.divider-text</code>.</p>",
+      "date": "2026-09-28",
+      "sequence": 50000
+    },
+    "meta": {
+      "createdAt": "2026-09-28T00:00:00.000Z",
+      "updatedAt": "2026-09-28T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "3d8b2263-61f2-d2a5-4dec-1c1a71f8bd32",
+    "data": {
+      "version": "v0.49.0",
+      "title": "Popovers",
+      "summary": "<p><strong>Popovers.</strong> <code>E.popover()</code> anchors a panel with a title, text or a small form to a trigger - opened by click, hover or focus, flipped and shifted to stay on screen, with focus moving in and back out for keyboard users. <code>data-popover</code> markup and <code>E.popover.scan()</code> do the same without script.</p>",
+      "date": "2026-09-27",
+      "sequence": 49000
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "0027b997-3691-bfdd-33fd-7af4977e742a",
+    "data": {
+      "version": "v0.48.0",
+      "title": "Skeletons and Access",
+      "summary": "<p><strong>Skeleton loaders.</strong> Shimmering, theme-aware placeholders shaped like the content on its way: CSS shapes for plain HTML, <code>E.skeleton()</code> for text, card, list and table layouts, <code>E.skeleton.while()</code> to show one until a promise settles, and <code>loadingSkeleton</code> rows for the DataTable.</p>\n<p>Plus an accessibility sweep: Modal, Tabs, Accordion, Toast and Table add their own ARIA roles and\nkeyboard support, and 31 theme contrast failures are fixed.</p>",
+      "date": "2026-09-27",
+      "sequence": 48000
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "89005edc-86ab-3d45-16af-432b05a4df89",
+    "data": {
+      "version": "v0.47.0",
+      "title": "Fields That Help",
+      "summary": "<p>Four interactive extras for input groups: a show / hide password button, a clear button, a number\nstepper that honours min, max and step, and a live character counter - joined to the field like an\naddon, keyboard reachable and screen-reader friendly.</p>\n<p>The same keys work in a blueprint's <code>formConfig</code> and in <code>E.inputGroup()</code>:\n<code>reveal</code>, <code>clear</code>, <code>stepper</code> and <code>counter</code>.</p>\n<p>Links now read at 5:1 or better on every theme: the 25 whose main colour was too pale set a\nreadable link colour.</p>",
+      "date": "2026-09-27",
+      "sequence": 47000
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "8f54194d-c878-b4a0-aa47-485eb669140a",
+    "data": {
+      "version": "v0.46.1",
+      "title": "Icons For Every Field",
+      "summary": "<p>A Forms icon set: eighteen new icons for the side of a form field - email, name, phone,\naddress, postcode, website, pound, dollar, euro, weight and more - plus a Forms category that\ngathers every icon suited to a field.</p>",
+      "date": "2026-09-27",
+      "sequence": 46001
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "7d386b88-93b1-8f45-a67c-73434aeb09d4",
+    "data": {
+      "version": "v0.46.0",
+      "title": "Addons That Join",
+      "summary": "<p>Input addons now join the field they belong to: <code>formConfig.prefix</code> and <code>suffix</code> draw as one Bootstrap-style group with a shared border, sized to what they hold, in the theme's own colours - and they work on selects and textareas too.</p>\n<p>New <code>E.inputGroup(selector, {prefix, suffix})</code> does the same for an input already on the page, with <code>update()</code> and <code>destroy()</code>.</p>",
+      "date": "2026-09-27",
+      "sequence": 46000
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "296888c7-57a1-1371-8a29-ec9e3199f126",
+    "data": {
+      "version": "v0.45.0",
+      "title": "Lists That Make Room",
+      "summary": "<p><strong><code>E.sortable(selector, options)</code> is drag-to-reorder for the children of one container</strong>, by mouse, touch and keyboard. In live mode the other items slide out of the way while you drag; with <code>nest: true</code> nothing moves until the drop, a marker shows whether the item lands before, after or into another, and <code>onDrop</code> hands you the move to update your data and re-render - which the component then animates, matching every item by its key. That is what makes it suit trees, and the Domma CMS menu editor now uses it.</p><p><strong>An order that sticks.</strong> <code>persist</code> remembers the order through Domma storage and puts it back on the next visit. Alt+Arrow moves the focused item, Esc cancels a drag, a handle drags at once on touch while a whole item needs a short press-and-hold so the list still scrolls, and reduced motion skips every glide.</p>",
+      "date": "2026-09-27",
+      "sequence": 45000
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "2c0f7fd4-d119-b699-2673-8c21db24bd98",
+    "data": {
+      "version": "v0.44.9",
+      "title": "Installs Without The Dev Server",
+      "summary": "<p><strong>Installing domma-js no longer installs a development web server.</strong> <code>live-server</code> was an optional dependency, so every project using domma-js pulled it in with about 180 more packages; it is now a dev dependency only, and <code>domma-js serve</code> still offers to install it when first run.</p>",
+      "date": "2026-09-27",
+      "sequence": 44009
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "30a7adf8-ed75-502d-e61c-910a015e7448",
+    "data": {
+      "version": "v0.44.8",
+      "title": "Sidebars That Wear The Theme",
+      "summary": "<p><strong>Every left-hand menu now takes its colours from the active theme.</strong> A new <code>theme</code> sidebar variant follows the theme's <code>--dm-sidebar-*</code> tokens, light or dark, and the showcase, admin and miniapp sidebars all use it.</p>\n<p>The Admin themes' dark sidebars get washes that show, <code>sunset-dark</code> and <code>grayve-dark</code> selections are readable again, and the What's New pill stops pulsing once you have seen the latest release.</p>",
+      "date": "2026-09-27",
+      "sequence": 44008
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "3842659d-4ea6-5ce2-1f01-3eb1cdabd260",
+    "data": {
+      "version": "v0.44.7",
+      "title": "domma-reactive 1.1.1",
+      "summary": "<p>Domma is now built against domma-reactive 1.1.1.</p>",
+      "date": "2026-09-27",
+      "sequence": 44007
+    },
+    "meta": {
+      "createdAt": "2026-09-27T00:00:00.000Z",
+      "updatedAt": "2026-09-27T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "1f4884d7-ebd2-4da7-69cd-035090a9fed7",
+    "data": {
+      "version": "v0.44.6",
+      "title": "Corporate Presence and High-Visibility Admin Slate",
+      "summary": "<p><strong>Five new themes arrive in Domma: Corporate (light and dark) and Admin Slate (steel, indigo, teal).</strong> Corporate introduces an executive navy aesthetic tailored for business dashboards and reporting, while Admin Slate expands the administrative theme matrix to 3&times;3 with a balanced mid-tone finish designed for high visibility and long work sessions.</p>\n<p><strong>Full tooling support:</strong> all five themes are integrated into the Theme Roller, Kickstart builder, TypeScript declarations, and showcase previews with verified WCAG contrast compliance.</p>",
+      "date": "2026-09-26",
+      "sequence": 44006
+    },
+    "meta": {
+      "createdAt": "2026-09-26T00:00:00.000Z",
+      "updatedAt": "2026-09-26T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "57475242-1be2-94d3-4846-ac0478180e71",
+    "data": {
+      "version": "v0.44.5",
+      "title": "Menus You Can See Your Way Through",
+      "summary": "<p><strong>Context-menu items now highlight on hover in every theme.</strong> The old wash matched the menu surface in every dark theme, so it was invisible; it is now mixed from the theme's text colour, a submenu's parent stays highlighted while the submenu is open, and <code>--dm-ctx-hover</code> overrides it.</p>",
+      "date": "2026-09-26",
+      "sequence": 44005
+    },
+    "meta": {
+      "createdAt": "2026-09-26T00:00:00.000Z",
+      "updatedAt": "2026-09-26T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "41d6830d-a1b3-190a-e211-aa2f078bbf88",
+    "data": {
+      "version": "v0.44.4",
+      "title": "Built On A Typed Core",
+      "summary": "<p><strong>No change in behaviour.</strong> Domma is now built against domma-reactive 1.1.0, whose only change is that the standalone package ships TypeScript declarations. Domma inlines the engine, so its own API is untouched and nothing needs changing when upgrading.</p>",
+      "date": "2026-09-25",
+      "sequence": 44004
+    },
+    "meta": {
+      "createdAt": "2026-09-25T00:00:00.000Z",
+      "updatedAt": "2026-09-25T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "eda811fe-6a0d-4499-7163-40b651db2851",
+    "data": {
+      "version": "v0.44.3",
+      "title": "Readers That Hear Every Change",
+      "summary": "<p><strong>A computed value could stop updating some of its readers.</strong> A computed reading another computed and the source that one was built from refreshed the inner one early, so when the change reached it the inner computed looked unchanged and its other readers kept the old value.</p><p><strong>domma-reactive 1.0.2 remembers the early refresh</strong> and reports it, so every binding, effect and computed that reads it updates. No code changes are needed.</p>",
+      "date": "2026-09-24",
+      "sequence": 44003
+    },
+    "meta": {
+      "createdAt": "2026-09-24T00:00:00.000Z",
+      "updatedAt": "2026-09-24T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "e05565a7-d74d-67c8-a82c-f8085944c6e3",
+    "data": {
+      "version": "v0.44.2",
+      "title": "Submenus That Let Go",
+      "summary": "<p><strong>A context-menu submenu could stay on screen for good.</strong> Hovering another item left an open submenu under the pointer, and opening a second submenu orphaned the first in the document, where not even closing the menu could remove it.</p><p><strong>Each menu now closes its own submenu.</strong> Hovering an item, or opening a submenu, closes from the menu's own depth rather than the one below it, so a sibling's panel is always closed before its slot is reused. Nested submenus are unaffected.</p>",
+      "date": "2026-09-24",
+      "sequence": 44002
+    },
+    "meta": {
+      "createdAt": "2026-09-24T00:00:00.000Z",
+      "updatedAt": "2026-09-24T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "978a3ca1-e78c-9f98-24e0-0668fa8b1ba5",
+    "data": {
+      "version": "v0.44.1",
+      "title": "Pills That Look Like Pills",
+      "summary": "<p><strong>Pillbox pills were never styled.</strong> The stylesheet styled <code>.dm-pillbox-pill</code>, <code>.dm-pillbox-remove</code> and <code>.dm-pillbox-message</code>; the script emits <code>.dm-pill</code>, <code>.dm-pill-remove</code> and <code>.dm-pillbox-empty</code>, the names the showcase has always documented. Each pill arrived as bare text beside a grey browser button.</p><p><strong>The rules now match the markup</strong>, including the size variants, a <code>:focus-within</code> focus ring, an unbulleted options list and a disabled state.</p><p><strong>The colours follow the theme.</strong> The <code>--dm-pill-*</code> and <code>--dm-pillbox-*</code> defaults are fallbacks in the rules rather than <code>:root</code> declarations, so they resolve against the theme on <code>&lt;body&gt;</code>; pills default to <code>--dm-primary-light</code>, which every theme defines.</p>",
+      "date": "2026-09-23",
+      "sequence": 44001
+    },
+    "meta": {
+      "createdAt": "2026-09-23T00:00:00.000Z",
+      "updatedAt": "2026-09-23T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "378cdbfc-6ddf-e9c9-0c5c-f071539f2c6c",
+    "data": {
+      "version": "v0.43.0",
+      "title": "The Node You Never Held",
+      "summary": "<p><strong><code>$('#list').append($row)</code> did not put <code>$row</code> in the page.</strong> It put a copy there. Every insertion method went through one helper that returned <code>cloneNode(true)</code> of whatever it was handed, so the node you built, held a reference to and bound handlers on was never the node the visitor saw. The markup was right, nothing threw, and the only symptom was that your listeners stopped existing.</p><p><strong>One helper, five methods.</strong> <code>_getNodes()</code> backed <code>append()</code>, <code>prepend()</code>, <code>after()</code>, <code>before()</code> and <code>replaceWith()</code>, and <code>appendTo()</code> and friends through them. <code>cloneNode</code> copies attributes and descendants; it copies neither listeners nor properties. So a handler bound before the insert fired on a detached node nobody could click, and <code>prop('checked', true)</code> was dropped while <code>attr('checked')</code> survived - the two quietly disagreeing depending on which you happened to use. <code>$el[0]</code> kept pointing at the original for the rest of its life, so the element that actually landed in the document could only be reached by querying for it again. An existing node is now <strong>moved</strong>, which is what jQuery does and what the call site assumes.</p><p><strong>Except when a node has to be in two places.</strong> <code>$('.card').append($badge)</code> has three targets and one badge. The extras are still clones; the original goes to the <strong>last</strong> target, as in jQuery. Those clones carry no listeners and cannot: Domma records delegated handlers on the element but not direct ones, so there is nothing to re-bind. Inserting into several targets at once still wants a delegated handler on a container. A markup string is unaffected - it was always parsed fresh per target.</p><p><strong>The celebrations are their own package now.</strong> The eight seasonal themes move to <a href=\"https://www.npmjs.com/package/domma-celebrate\">domma-celebrate</a>, so a site with no Domma in it can use them; 14,700 lines leave <code>public/layouts/js/modules/celebrations/</code> and nothing in the npm package changes. The build is code-split - the engine is 31 KB and each theme is a chunk fetched only when it is in season, rather than all eight arriving in December and in July alike. Every decoration is individually configurable: snow but no steam train, pumpkins but no witches, half as many trees, via <code>traits: { train: false, tree: 0.5 }</code> or <code>setTrait()</code> at runtime. <code>public/layouts/js/modules/celebrations/</code> and <code>templates/celebrations-toggle.html</code> are gone, which matters only if you copied the layout preset system by hand.</p><p><strong>How it was found:</strong> the celebrations demo grew per-trait checkboxes, and they ticked and did nothing. <em>All on</em> and <em>All off</em> worked, because those are static buttons bound by id and were never cloned - which is what made it look like a celebrations bug for as long as it did.</p><p><strong>Not caught by anything:</strong> no test failed, and none of the four validators can see this. There are nine tests now, six of which fail against the previous implementation, and 605 pass overall including the 85-page showcase harness.</p><p><strong>Context menus, and the nesting problem underneath them.</strong> <code>E.contextMenu(selector, options)</code> binds a right-click menu to a container and, by delegation, to everything inside it. <code>match: 'tr[data-id]'</code> picks the row and hands it to your items, so one binding covers a whole table - including rows rendered after the menu was declared, which a per-element binding loses on the next repaint.</p><p><strong>Menus nest without overriding each other.</strong> Bind one inside another and the inner one shadows its parent for the region it covers; everywhere else the parent still answers. By default the parent's items are appended beneath the child's, so an entry menu inside a page menu offers both. A menu declines rather than swallowing a click it has nothing for - <code>enabled</code> false, an <code>exclude</code> match, a <code>match</code> that finds nothing - and the walk continues outward to the next menu up. Nothing claims it, and the browser's own menu opens untouched, as it does on Shift+right-click.</p><p><strong>One document listener, not one per instance.</strong> That is the point rather than an optimisation: an instance owning its own listener makes the winner depend on which script registered first, so a menu can shadow its own parent purely on bundle order - intermittently, and differently in dev and production. Resolution is a walk outward from the event target, so DOM depth decides and load order cannot. Two of the 37 tests assert the same nesting with the outer menu registered first and then registered last. Nothing calls <code>stopPropagation()</code>, which would silence every other <code>contextmenu</code> listener on the page.</p><p><strong>Reachable without a mouse.</strong> Right-click has no keyboard equivalent, so <code>Shift</code>+<code>F10</code> and the <code>Menu</code> key open the menu against the focused element, then arrows, typeahead, <code>Enter</code> and <code>Esc</code>. Submenus nest to any depth, and a long press opens the same menu on touch. Building it turned up <code>color: var(--dm-danger)</code> on <code>--dm-surface</code> at <strong>1.02:1</strong> on admin-smooth-steel - \"Delete\" in red would have been invisible on every mid-tone theme. <code>validate:contrast</code> caught it before it shipped.</p><p><strong>A region can refuse to be taken over.</strong> Depth deciding is wrong for a component that owns its region - a data grid with its own filter panel, an editor, a canvas - because any application menu bound inside it wins by being deeper. <code>exclusive: true</code> inverts the rule for that one menu: once it encloses the click and accepts it, nothing bound deeper is offered the gesture. It is not a veto, since an exclusive menu that declines steps aside completely. Declaring it on the menu being protected is the point - a guard on every menu that might collide protects nothing the first time a registration path forgets one.</p><p><strong>Colour, surface and motion are configurable.</strong> <code>accent</code> (a preset key or any CSS colour), <code>surface</code>, <code>radius</code>, <code>shadow</code>, <code>opacity</code> and <code>density</code>, plus <code>transition</code> (scale/fade/slide/none), <code>easing</code> and <code>animationDuration</code>. Every one is a custom property with the theme token as its fallback, so a menu given no styling follows the active theme and only what you pass is overridden. Two carry a deliberate restriction: the accent tints the border and the hover wash but never the label, because a named colour cannot be guaranteed readable against whatever surface the menu lands on; and <code>opacity</code> mixes the background with transparent rather than fading the element, which would take the text down with it.</p>",
+      "date": "2026-09-05",
+      "sequence": 43000
+    },
+    "meta": {
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "7fe3ab9a-cd9c-c36c-01cb-9db4c6115aa7",
+    "data": {
+      "version": "v0.42.0",
+      "title": "The Menu That Closed On The Way To Itself",
+      "summary": "<p><strong>Every menu in Domma is separated from the thing that opens it.</strong> The dropdown renders on <code>document.body</code>, so <code>offset</code> px of page always sits between the two; the navbar's panel hangs 4px below its toggle. That gap is the bug: leaving the trigger looks exactly like leaving for good, so both components guessed, and both guessed wrong most of the time.</p><p><strong>A gap you can only cross by accident.</strong> The dropdown bridged it with a 12px transparent CSS strip above the menu. Straight down, it worked. Diagonally, with an <code>offset</code> above 12px, or with the menu placed above or beside its trigger, the pointer went round the strip and the menu shut - whether it survived came down to how fast you moved. The pointer is now tested against three regions: the trigger, the menu, and the corridor spanning the gap. That is geometry rather than guesswork, so it holds for any offset, any angle of approach, and a menu flipped to the other side. The navbar had the same bug one level up, and its grace period is now an option, <code>hoverCloseDelay</code>, defaulting to 250ms.</p><p><strong>A click that meant nothing.</strong> A navbar toggle did a plain <code>classList.toggle('open')</code>, which the next mousemove reconciled straight back when <code>appearOnHover</code> was on - so clicking a menu to keep it open did nothing visible. A click now <em>pins</em> the dropdown; a second click, or one anywhere outside, releases it. A toggle also left its siblings open, so two navbar menus could sit on screen at once.</p><p><strong>Four more, found alongside.</strong> The dropdown trigger called <code>stopPropagation()</code>, which killed every <em>other</em> dropdown's outside-click handler, so opening a second menu left the first hanging open. <code>close()</code> left the node live and clickable for the whole fade, so re-opening inside that window stacked a second node on top with its own listeners. <code>position: 'left-start'</code> and <code>'right-start'</code> silently fell through to bottom - the showcase's own Left and Right buttons were wrong; all eight side/alignment combinations work now, and a menu that would open off screen flips or clamps. And a hover dropdown had no click path, so it could not be opened on a touch device at all.</p><p><strong>One default moved.</strong> <code>Navbar.collapseAt</code> was 768 while <code>elements.css</code> switches the bar to its desktop layout at 993. Between the two the JS believed it was on desktop while the stylesheet was already showing the mobile drawer. The default is now 993; pass <code>collapseAt</code> explicitly if you have restyled the breakpoint.</p><p><strong>Also:</strong> Esc closes a dropdown, the trigger carries <code>aria-haspopup</code> and a tracked <code>aria-expanded</code>, and per-item click listeners are no longer re-registered on every render and never released. New options: <code>hoverOpenDelay</code>, <code>hoverCloseDelay</code>, <code>closeOnEscape</code>, <code>closeOthers</code>, <code>flip</code>. None of this failed a test, because there were no dropdown tests - there are ten now, plus three for the navbar; eight of the ten fail against the old implementation.</p>",
+      "date": "2026-08-22",
+      "sequence": 42000
+    },
+    "meta": {
+      "createdAt": "2026-08-22T00:00:00.000Z",
+      "updatedAt": "2026-08-22T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "8fe15074-b65b-ff4d-1253-2b94711ce4cd",
+    "data": {
+      "version": "v0.41.0",
+      "title": "The Brand That Was Never There",
+      "summary": "<p><strong>A navbar with <code>variant: dark</code> rendered its brand at 1.00 contrast on every dark theme.</strong> Same colour as the bar it sat on - not dim, not low-contrast, absent. CSS only; no API changes.</p><p><strong>One mistake, four rules.</strong> <code>.navbar-dark</code> painted the bar from <code>--dm-background</code> and its text from <code>--dm-text-inverse</code>. In a dark theme both resolve to the theme's darkest slate, so the two are the same colour; <code>.navbar-light</code> failed the mirror way in light themes, a white bar with white text. <code>--dm-text-inverse</code> means <em>text that contrasts against <code>--dm-text</code></em>, so in a dark theme it is dark - it reads like the right name at the call site and is the wrong one, which is why the same mistake is in three more places.</p><p><code>.card-primary .card-body</code> took <code>--dm-primary-text</code>, the foreground for text drawn <em>on</em> a primary fill. The header and footer set that fill; the body does not, it sits on the card surface. 1.19 on every dark theme. <code>.navbar-link.active</code> took <code>--dm-primary</code> as its text colour, and primary is a mid-tone in the silver, charcoal and lemon families - against the navbar surface it measured as low as <strong>1.72</strong>. The <code>.navbar-dark .navbar-dropdown-*</code> overrides replaced the panel text with a fixed grey and the hover with <code>--dm-text-inverse</code> over 30% white: <strong>2.56</strong> and <strong>1.00</strong> in every light theme. They only ever re-stated the <code>--dm-surface</code> background the base rules already set, so they are deleted rather than rewritten - and the divider among them was painted <code>--dm-surface</code>, the panel's own colour, so it had been invisible since the day it was written.</p><p><strong>The variants are now relative to the theme, not absolute.</strong> Every theme already ships the pair meant for this: <code>--dm-navbar-bg</code> and <code>--dm-navbar-text</code>. The variants become tint modifiers on that surface - <code>dark</code> sits a shade below the theme's navbar, <code>light</code> a shade above. They stay visually distinct, they follow the theme, and neither can collide with its own foreground. Measured with computed styles in headless Chrome across 26 themes and three variants: navbar and card worst case <strong>1.00 to 5.00</strong>, dropdown worst case <strong>1.00 to 9.57</strong>, everything clear of the 4.5 AA threshold.</p><p><strong>Two visible changes to live sites.</strong> The active link loses its pill background: a <code>--dm-primary</code> tint shifts the bar <em>toward</em> the text in themes where primary is light, costing about two points of contrast on the tightest combination, a dark theme with <code>.navbar-light</code>. The affordance is now the primary underline plus the weight, which means the active state can never read worse than the brand beside it. Dropdown panels under a <code>.navbar-dark</code> bar follow the theme now instead of being fixed grey on a surface that was already correct.</p><p><strong>Not fixed:</strong> <code>validate:theme</code> caught none of this. It looks for a fixed background inheriting themed text, and cannot see two <em>themed</em> tokens that happen to resolve to the same value. The validator that would have caught all four does not exist yet.</p>",
+      "date": "2026-08-22",
+      "sequence": 41000
+    },
+    "meta": {
+      "createdAt": "2026-08-22T00:00:00.000Z",
+      "updatedAt": "2026-08-22T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "cf510ca8-8b68-6bfb-f36d-4104d77a19d6",
+    "data": {
+      "version": "v0.40.0",
+      "title": "Two Levels Up",
+      "summary": "<p><strong>The inlined binding engine moves from 0.5.1 to 1.0.0, and brings two context names with it.</strong> No new Domma API of its own; nothing that already worked has changed.</p><p><strong><code>$parents</code></strong> is the whole ancestor chain, nearest first. <code>$parent</code> is one step out, and until now it was the only step there was - from inside a list inside a list, <strong>two levels up could not be reached at all</strong>: a bare name is the item, <code>$parent</code> is the group, and the root was simply unreachable. <code>$parents[0]</code> is <code>$parent</code> and <code>$parents[1]</code> reads a grandparent with no <code>$data</code> in sight. It is built only if a template asks for it, by walking the chain on first read, so a list that never mentions the name pays nothing for it.</p><p><strong><code>$parentContext</code></strong> is the enclosing <em>context</em> rather than its data - the one name here that is a context. It exists because ancestor data cannot answer <em>which row of the outer list am I in?</em>: position lives on the context, not on the item, so no amount of <code>$parents</code> reaches it. <code>$parentContext.$index</code> answers it, and nothing could before. <code>$parent</code> stays data and not a context, because making it one would mean writing <code>$parent.$data.name</code> everywhere.</p><p><strong>A list inside a list is <code>{{#each}}</code>, not a second <code>data-each</code>.</strong> Always true, and it never said anything. <code>data-each</code> is the <code>applyBindings</code> spelling and the compiler discovers lists from <code>{{#each}}</code> only - and a list's item template <em>is</em> compiled markup. So a nested <code>data-each</code> was left exactly as written: its body rendered <strong>once</strong>, as ordinary markup, with every binding in it resolving against the <strong>outer</strong> item. It looks close enough to working to survive review, which is how it survived. Activation now warns, quotes the expression back and names the form to write instead.</p><p>Also arriving with the pin: a binding write to a <strong>frozen</strong> target warns and skips instead of throwing. It was reachable long before either name existed - <code>data-model</code> against a frozen view model has always landed there - and a binding that throws takes the page down with it, which is the one thing this layer promises never to do.</p><p><strong>Known limitation - <code>$parentContext.$index</code> does not survive a reorder.</strong> Appending to the outer list is fine, and so is anything that leaves existing positions alone. <em>Moving</em> an outer row is not: a sort, a reverse or a prepend relocates the DOM correctly and leaves every inner item reading the position its group used to be in. Ancestor data is correct throughout; it is only the enclosing position, and only after a move. It is documented next to the feature rather than left to be discovered, and the showcase demo appends rather than reorders for exactly that reason.</p><p><strong>Internal:</strong> <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> moves from 0.5.1 to 1.0.0 - the same code as 0.8.0 with a promise attached: thirty-three exported names are the public API, the binding spellings are settled, and a breaking change needs a major version. 961 tests there, up from 793. Components and slots are <em>not</em> part of this: Domma has its own web-component factory and never imports <code>registerComponent</code>, so that half of the package is tree-shaken out rather than bundled and dormant. 579 tests here, up from 577.</p>",
+      "date": "2026-08-21",
+      "sequence": 40000
+    },
+    "meta": {
+      "createdAt": "2026-08-21T00:00:00.000Z",
+      "updatedAt": "2026-08-21T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "302fc308-4085-5013-7e51-90b32393b540",
+    "data": {
+      "version": "v0.39.2",
+      "title": "Carousels With Words In",
+      "summary": "<p><strong>A carousel whose slides are text rather than pictures did not appear at all.</strong> One CSS rule; no API changes.</p><p><code>.carousel-slide-content</code> was unconditionally <code>position: absolute</code> - it is the caption overlay for a slide's background image. That works when the slide carries an <code>&lt;img&gt;</code>. When it does not, the caption was the slide's only child, so nothing was left in flow: the slide computed to 0px tall, the track and the carousel with it, and the component rendered as a gap. Arrows, indicators and transitions were all working the whole time, on an element with no height.</p><p>Slide content now sits in flow by default, and the overlay is stated as the enhancement for <code>.carousel-slide:has(&gt; img)</code>. In-flow content is also padded clear of the arrows and indicator dots.</p>",
+      "date": "2026-08-21",
+      "sequence": 39002
+    },
+    "meta": {
+      "createdAt": "2026-08-21T00:00:00.000Z",
+      "updatedAt": "2026-08-21T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "da46cbef-e764-a730-69c1-10b891cca390",
+    "data": {
+      "version": "v0.39.1",
+      "title": "Options You Can Actually Tap",
+      "summary": "<p><strong>Forma's option groups get a real appearance, and the chooser stops squeezing itself onto phones.</strong> Two visual fixes and one spacing fix; no API changes.</p><p><strong>Radio and checkbox groups are styled.</strong> <code>type: 'radio'</code> and <code>type: 'checkbox-group'</code> rendered bare browser controls: the inputs carried no class at all, and there was no CSS anywhere for <code>.domma-radio-group</code> or <code>.domma-checkbox-group</code>. They now use <code>.form-check-input</code> - the same custom control <code>.form-check</code> has always had - and each option is a selectable tile: the whole label is the hit area, the checked state tints from <code>--dm-primary</code>, and the group wraps with <code>repeat(auto-fit, minmax(12rem, 1fr))</code>, dropping to one column below 480px.</p><p><strong>The card chooser steps down on narrow screens.</strong> <code>.picker-options</code> used <code>repeat(var(--picker-cols, 3), 1fr)</code> at every width, so a three-across grid stayed three-across on a 360px phone. The chooser now sets <code>--picker-cols-md</code> and <code>--picker-cols-sm</code> when it builds, both capped at the configured count, and steps down at 720px and 460px. A chooser configured with one or two columns is never widened.</p><p>Dialog footers also give the confirm button room to breathe.</p>",
+      "date": "2026-08-21",
+      "sequence": 39001
+    },
+    "meta": {
+      "createdAt": "2026-08-21T00:00:00.000Z",
+      "updatedAt": "2026-08-21T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "059fb766-22e8-954e-9da8-40a864376a89",
+    "data": {
+      "version": "v0.39.0",
+      "title": "Six Ways In",
+      "summary": "<p><strong>Six new binding attributes and two new reactive powers</strong>, all of them things you previously had to write yourself. Nothing that already worked has changed.</p><p><strong><code>data-options</code></strong> fills a <code>&lt;select&gt;</code> from a collection, with <code>data-options-text</code>, <code>data-options-value</code> and <code>data-options-caption</code>. A <code>data-each</code> over <code>&lt;option&gt;</code> produces the same markup - what it does not produce is the <strong>selection</strong>, and that is the whole difficulty: rebuilding a select's options resets it, and the selection lives on the select rather than on any option, so a keyed list has nothing to preserve it with. Option values need not be strings: when the resolved value is an object or a number, the real value is kept alongside the option and <code>data-model</code> reads back <em>that</em>, not <code>\"[object Object]\"</code>. And a value the model asked for while no option carried it is remembered and applied by the rebuild that brings it - so attribute order does not matter, and neither does a collection that arrives from an <code>H.get()</code> long afterwards.</p><p><strong><code>data-focus</code></strong> is two-way between a value and focus - how a model puts the caret in the field it has just revealed without reaching for a DOM node, and how it knows where the user is without a listener. Unlike <code>data-model</code>, an expression it cannot write through is not fatal: focus still follows the value and only the write-back warns.</p><p><strong><code>data-bind-style-&lt;property&gt;</code> and <code>data-bind-style</code></strong> set one CSS property or a whole object of them. Two spellings because a binding expression has no object literal and will not grow one - parsing <code>{…}</code> safely is most of the way to the <code>eval</code> that Domma's Content Security Policy story depends on avoiding. Ownership follows the <code>class</code> rule, so a static <code>style=</code> attribute survives; a falsy value removes the property, and <code>0</code> is kept, because <code>opacity: 0</code> is a real value.</p><p><strong>Virtual bindings</strong> - <code>&lt;!-- dm if: x --&gt;</code> … <code>&lt;!-- /dm --&gt;</code>, plus <code>each</code> and <code>text</code>. A binding attribute needs an element to sit on, and sometimes there is none to spare: a run of <code>&lt;li&gt;</code>s, three <code>&lt;td&gt;</code>s in a row. Wrapping them in a <code>&lt;div&gt;</code> changes the layout, and inside a table it is not even valid HTML a browser will keep.</p><p><strong><code>M.observable(x).extend({…})</code></strong> layers behaviour onto an observable after it exists: <code>rateLimit</code>, <code>throttle</code> and <code>notify: 'always'</code>, with <code>M.registerExtender()</code> opening the same registry to you. <strong>The write is never delayed, only the announcement</strong> - worth stating plainly, because the obvious implementation of a throttle defers the write, and then every read between the write and the notification gives you a value that is already out of date.</p><p><strong><code>M.computed({read, write})</code></strong> is a computed you can write through, which is what lets <code>data-model=\"fahrenheit.value\"</code> bind a derived value. Assigning to one with no <code>write</code> now warns and names it, rather than storing into the read cache where the next recompute would silently drop it. <strong><code>M.observableArray()</code></strong> gains <code>indexOf()</code>, <code>replace()</code> and <code>destroy()</code> / <code>destroyAll()</code>, the last of which <em>marks</em> an item rather than removing it - for servers that delete on a flag in the payload.</p><p><strong>Internal:</strong> <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> moves to 0.5.1 - 793 tests there, up from 679, and a step-by-step tutorial whose every listing is under test. All six bindings arrive with the pin, since the handler registry populates itself at import; what needed Domma code was the other two, reachable in the package and not through <code>M</code>. 577 tests here, up from 571.</p>",
+      "date": "2026-08-09",
+      "sequence": 39000
+    },
+    "meta": {
+      "createdAt": "2026-08-09T00:00:00.000Z",
+      "updatedAt": "2026-08-09T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "d2ff0079-b022-67ae-ed21-683095793285",
+    "data": {
+      "version": "v0.38.0",
+      "title": "One Adapter",
+      "summary": "<p><strong>No new API.</strong> This release is the seam between Domma and the binding engine, made single - plus a limitation found by measuring rather than assuming, and now written down.</p><p><strong>One binding adapter, shared.</strong> The engine resolves every expression against <em>one</em> object and writes back through that same object. Getting either half wrong fails <strong>silently</strong>: a read-only snapshot swallows every <code>data-model</code> write - the control looks right, because what you see while typing is your own keystrokes - and an object carrying no functions resolves no <code>data-on-*</code> handler while every other binding on the same element works perfectly. Both shipped, and were fixed in v0.37.0; but the fix then existed <em>twice</em>, in two slightly different shapes. It is now once, in <code>src/binding-source.js</code>, with the failure modes documented where the code is rather than in two comment blocks that drift apart.</p><p><strong>Writing to a nested path does not notify the model.</strong> <code>data-model=\"profile.city\"</code>, where <code>profile</code> is a Model field holding an object, reads correctly and the write lands - but it mutates that object in place, so the field's observable never fires: the model is not told, and no other binding on that path updates. This was found while measuring whether <code>M.bind()</code>'s <code>parse</code> option could be retired. It cannot - <code>parse</code> is currently the only way to write a nested path and have the model notice, because it clones the field and returns a genuinely new value. The behaviour is now documented and pinned by a test, so that fixing it forces the documentation to move with it.</p><p><strong>Internal:</strong> <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> moves to 0.4.2 - every published artefact now carries a version banner kept through minification, so a bundle is no longer anonymous and a stale <code>dist/</code> cannot be published as a fresh one. 571 tests, up from 570.</p>",
+      "date": "2026-08-06",
+      "sequence": 38000
+    },
+    "meta": {
+      "createdAt": "2026-08-06T00:00:00.000Z",
+      "updatedAt": "2026-08-06T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "7946bcbe-6d72-7653-37ac-e982882a0eba",
+    "data": {
+      "version": "v0.37.0",
+      "title": "The Binding Layer, Reachable",
+      "summary": "<p><strong><code>domma.min.js</code> has inlined the whole binding engine since v0.34.0, and almost none of it was reachable.</strong> Domma imported ten names from <code>domma-reactive</code> and re-exported nearly none, so the only route to a binding was a template inside <code>Domma.component()</code> - no way to bind server-rendered markup, and no way to register a custom binding. The evidence: across all 86 showcase pages there were <em>zero</em> live uses of <code>data-bind-*</code>, <code>data-model</code>, <code>data-each</code> or <code>data-if</code> outside a component, because outside a component there was no way to use them.</p><p><strong><code>M.applyBindings(data, root, options)</code></strong> activates every binding attribute under a root on markup that already exists - server-rendered, hand-written, whatever - in place, with no build step and no second source of truth for the markup. Pass a <strong>Model</strong> and it is converted to <code>model.tracked()</code>, the read-tracked write-through view, so a <code>data-model</code> write lands in the model with validation, change notification and persistence intact rather than in a snapshot. Handlers arrive as <code>options.methods</code>, since a Model holds data and not behaviour.</p><p><strong><code>M.registerBinding()</code> and <code>M.registerHelper()</code></strong> extend the vocabulary. The first is not a side door - all eight built-ins are registered through that same function, so anything a built-in can do a custom binding can do. The second exists because an expression deliberately cannot call a method on your data: <code>data-bind-text=\"upper(name)\"</code> is the supported way to shape a value in markup. Deliberately <em>not</em> exposed: <code>compile()</code> and <code>renderTemplate()</code>, because Domma already has <code>_.render</code> and the two diverge - publishing both would be a trap.</p><p><strong>Fixed - <code>data-on-*</code> and <code>data-model</code> in a component template.</strong> Methods live on the component context and were never merged into the template's data, so every event binding logged \"did not resolve to a function\" while every other binding on the same element worked. And <code>data-model</code> wrote back into a fresh plain snapshot, so the control looked right - what you see while typing is your own keystrokes - but the model never changed. Both were in the adapter between Domma and the engine; reads worked throughout, which is exactly why they survived.</p><p><strong>Internal:</strong> the showcase conventions sweep, 186 vanilla-JS call sites across 43 pages down to zero, plus <code>npm run validate:conventions</code> to keep it there. Three of the five are not straight swaps, which is why it was done by hand. <code>$(window)</code> is deliberately not flagged - it is an empty collection, so a mechanical sweep would have silently disabled every window listener on the site. <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> moves to 0.4.1. 570 tests, up from 542.</p>",
+      "date": "2026-08-06",
+      "sequence": 37000
+    },
+    "meta": {
+      "createdAt": "2026-08-06T00:00:00.000Z",
+      "updatedAt": "2026-08-06T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "406b398b-8390-9111-1c2b-0da8a1509892",
+    "data": {
+      "version": "v0.36.0",
+      "title": "Thirteen Broken Pages",
+      "summary": "<p><strong>A browser-level test harness for the showcase, and the thirteen broken pages it found on its first run.</strong> There was no such coverage before: the unit suite exercises <code>src/</code> modules in isolation and cannot see a page that renders wrong, so the failure mode was invisible - no error, no failing test, just a page that was broken for every visitor.</p><p><strong><code>$('#el')[0]</code> works.</strong> <code>DommaCollection</code> exposed <code>.elements</code> and <code>.get(i)</code> but no numeric index properties, so the most-typed thing in jQuery returned <code>undefined</code> - silently, until something dereferenced it. The DOM showcase documents <code>$('.items')[0]</code> as the same as <code>get(0)</code>, and 65 call sites across the repository use the form. The collection is now array-like, so <code>Array.from()</code> works; it is still not iterable.</p><p><strong><code>Domma.init()</code> has never existed</strong>, and calling it threw. On the CSS-utilities showcase it sat at the top of the page's only script, so everything below it died - that page's reference table rendered nothing at all. Four separate documents told you to call it. Domma self-initialises when the bundle loads; the only startup call a page needs is <code>Domma.icons.scan()</code>.</p><p><strong>Also fixed:</strong> Pillbox was handed a <code>&lt;select&gt;</code> and a <code>&lt;div&gt;</code> on two showcases; the timeline showcase called its own deprecated alias six times on a page headed \"Component Deprecated\"; sidebar push mode targeted a <code>.main-content</code> that did not exist; and <code>theme: 'light'</code> is not a theme name. <strong>Added:</strong> four icons that pages were already using and that silently rendered nothing - <code>alert-triangle</code>, <code>sidebar</code>, <code>window</code> and <code>gem</code>.</p><p><strong>Internal:</strong> <code>npm run validate:showcase</code> loads all 85 pages into jsdom against the built bundle and asserts each rendered and logged nothing. The baseline is empty - every page passes in strict mode, so any finding is a failure. Built as the prerequisite for the showcase conventions sweep: 191 violations across 54 pages, which is not something to rewrite without a harness.</p>",
+      "date": "2026-08-05",
+      "sequence": 36000
+    },
+    "meta": {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "0d03c633-5626-f393-7f5f-d3ff3c37f22d",
+    "data": {
+      "version": "v0.35.0",
+      "title": "A List's Rows Can Act on the List",
+      "summary": "<p><strong>One new Domma API: <code>M.computed().value</code></strong> - the same read as <code>get()</code>. <code>M.observable()</code> has always been read through <code>.value</code>, while <code>M.computed()</code> offered only <code>get()</code>, so the two halves of the same idea disagreed about how you read them. It also made a computed unreadable from a template expression, where a method cannot be called: <code>{{total.get()}}</code> does not parse, and never will, because a call inside a render is a side effect.</p><p><strong><code>M.observableArray().remove()</code> now takes a value or a test.</strong> <code>rows.remove(row)</code> matches by identity as before; <code>rows.remove(r =&gt; r.id &gt; 2)</code> removes everything the test accepts. A function used to be compared against each item by identity, never matched, and removed nothing without a word.</p><p><strong>Fixed - <code>&amp;&amp;</code> broke a binding inside a keyed block.</strong> A keyed block's body is captured by serialising DOM back to HTML, which escapes every <code>&amp;</code> it writes, so <code>data-bind-class=\"done &amp;&amp; 'struck'\"</code> - the documented idiom - came back out as an entity and failed to parse. Attribute values read as expressions are now decoded in a single pass, so <code>&amp;amp;lt;</code> cannot double-decode.</p><p><strong>Fixed - a row could not reach the list that owns it.</strong> Inside a list <code>$data</code> is the item, so <code>$parent.remove($data)</code> was the only way to name the parent, and it did not parse. <code>data-on-*</code> may now call a method on your data. The restriction is scoped rather than lifted: only the event binding may do it, and the evaluator still refuses to perform a method call, so <code>{{ }}</code>, <code>data-if</code> and <code>data-bind-*</code> remain reads with no side effects.</p><p><strong>Internal:</strong> <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> moves to 0.4.0 - keyed reconciliation, instance lifecycle and <code>applyBindings()</code>, plus the fixes above. 676 tests, every new guarantee mutation-tested.</p>",
+      "date": "2026-08-05",
+      "sequence": 35000
+    },
+    "meta": {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "5e1dcb09-f3eb-4823-b56a-d91ca54949f4",
+    "data": {
+      "version": "v0.34.0",
+      "title": "CSP-Safe Expressions & a Binding Registry",
+      "summary": "<p><strong>No Domma API changes.</strong> Everything here arrives through the pinned <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> 0.3.0, which Rollup still inlines - <code>domma.min.js</code> remains a single self-contained file.</p><p><strong>A CSP-safe expression evaluator.</strong> Tokeniser, Pratt parser, AST walker and helper registry, supporting property paths, indexing, comparison, logical operators, ternaries, arithmetic and literals. <strong>No <code>eval</code> and no <code>Function</code> constructor anywhere</strong> - in the source or in any built bundle. Knockout evaluates bindings with the <code>Function</code> constructor, which fails under <code>script-src 'self'</code> without <code>unsafe-eval</code>; Domma's expressions work under a strict CSP. Property access through <code>__proto__</code>, <code>constructor</code> or <code>prototype</code> is refused in every form, including a computed key whose value is only <code>'__proto__'</code> at runtime.</p><p><strong>A binding registry</strong> with <code>registerBinding()</code> and four behaviour bindings: <code>data-on-*</code> for events, <code>data-bind-*</code> for properties and attributes, <code>data-model</code> for two-way binding, and <code>data-if</code>, which removes the element rather than hiding it. The four existing mustache kinds now register through the same public API, so a custom binding is not a second-class citizen. There is deliberately no <code>data-bind-html</code>.</p><p><strong>Fixed:</strong> seven rules painted with variables defined nowhere, so those backgrounds were simply absent. <strong>Added:</strong> two repository validators (<code>npm run validate</code>) that catch dead CSS classes and unreadable theme contrast - both failure modes that produce no error and no failing test, just markup that renders wrong.</p>",
+      "date": "2026-08-05",
+      "sequence": 34000
+    },
+    "meta": {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "fd59d8ba-22a6-6404-ac67-ed8767e2c817",
+    "data": {
+      "version": "v0.33.1",
+      "title": "Millisecond Waits",
+      "summary": "<p><strong>A <code>'300ms'</code> wait ran for five minutes.</strong> <code>parseWait()</code> in the scribe effect tested <code>endsWith('s')</code> before <code>endsWith('ms')</code> - and because <code>'ms'</code> also ends with <code>'s'</code>, the millisecond branch was unreachable. Every millisecond-suffixed wait was multiplied by 1000, so a scribe sequence with a <code>{wait: '300ms'}</code> step appeared to stop after the first render.</p><p>Seconds (<code>'2s'</code>) and raw numbers were unaffected, which is why it went unnoticed - the workaround was to pass milliseconds as a number. This was reported in the v0.25.2 notes as queued for a future patch and has been present ever since.</p><p><strong>Internal:</strong> the helper was closure-local inside <code>scribe()</code> and therefore impossible to test. It is now a module-scope export, matching <code>resolvePalette</code>, pinned by tests that fail if the branch ordering is restored. The public <code>Domma.effects</code> surface is unchanged.</p>",
+      "date": "2026-08-05",
+      "sequence": 33001
+    },
+    "meta": {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "b30875f3-b58e-27cc-225f-defdeeb99eff",
+    "data": {
+      "version": "v0.33.0",
+      "title": "Working Scaffolds & a Real Reactivity Showcase",
+      "summary": "<p><strong>Fixed - every scaffolded project rendered unstyled.</strong> The kickstart templates were written in Bootstrap class names while Domma ships Tailwind-style utilities, so <strong>143 class usages across 14 files resolved to nothing</strong>. Anyone who ran <code>npx domma init</code> got a project that looked broken on first load. Two components were dead rather than merely unstyled: the contact FAQ and docs pages used Bootstrap's collapse markup, and Bootstrap JS is never loaded - while <code>contact.js</code> and <code>docs.js</code> already called <code>Domma.elements.accordion()</code> and <code>.tabs()</code> against markup they could not recognise. Both work now.</p><p><strong>The Reactivity showcase is a showcase, not a reference.</strong> It had six sections, every one named after a mechanism and opening by explaining it - no statement of the problem, no benefit, no guidance on when not to use it. Now twelve sections named for outcomes, demonstration before explanation, opening with the code you stop writing, and a <em>When not to reach for it</em> section that shows the traps running live. Prose grew from 506 to 4,118 words; all 26 interactive demos preserved. See the <a href=\"../showcase/models/reactivity.html\">Reactivity showcase</a>.</p><p><strong>New:</strong> Try-it panes - editable code with live output on any showcase page - plus the <code>.list-none</code> and <code>.no-underline</code> utilities.</p><p><strong>Internal:</strong> the template compiler moved into <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a> 0.2.0, completing the extraction milestone that had shipped half-done.</p>",
+      "date": "2026-08-05",
+      "sequence": 33000
+    },
+    "meta": {
+      "createdAt": "2026-08-05T00:00:00.000Z",
+      "updatedAt": "2026-08-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "c6823134-b84d-fdf6-f03e-63abe3c850f1",
+    "data": {
+      "version": "v0.32.0",
+      "title": "Observables, Badges & Readable Buttons",
+      "summary": "<p><strong>New:</strong> <code>M.observable()</code> and <code>M.observableArray()</code> - the reactive primitives beneath Models are now reachable from Domma. Use <code>M.create()</code> when you want a schema, validation and persistence; use an observable when you want one tracked value and nothing else. Both are the same functions published standalone as <a href=\"https://www.npmjs.com/package/domma-reactive\">domma-reactive</a>.</p><p><strong>Fixed - components stopped updating.</strong> <code>onUpdated()</code> never fired for components whose templates contain no <code>{{ }}</code> bindings, so anything rendering its content imperatively rendered once and then went silent - the model updated and persisted, but the DOM was never told and nothing was thrown. This affected the todo, notes, contacts and markdown examples. Introduced in v0.30.0. Writes made from <code>onUpdated</code> must now converge on a value that compares equal, or the watcher re-triggers indefinitely.</p><p><strong>Fixed - unreadable controls.</strong> Outline buttons used a transparent background with a <code>color-mix()</code> blend, so their contrast depended on whatever sat behind them and the label could land on its own background. Eighteen showcase rules set a background from a variable no theme overrides, with no text colour at all. <code>.table-responsive</code> was used in fourteen places and defined nowhere. The Reactivity showcase used <code>.form-control</code> and <code>.col-md-*</code>, neither of which exists in Domma.</p><p><strong>Known issue:</strong> <code>onUpdated</code> still does not fire for fields absent from <code>data()</code> - declare every field you intend to change.</p>",
+      "date": "2026-08-04",
+      "sequence": 32000
+    },
+    "meta": {
+      "createdAt": "2026-08-04T00:00:00.000Z",
+      "updatedAt": "2026-08-04T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "d4b8e6ea-6c92-4b15-c875-7c4fc921e1c1",
+    "data": {
+      "version": "v0.25.2",
+      "title": "Homepage - Domma CMS Point-of-Sale Band",
+      "summary": "<p><strong>Site Update:</strong> A new full-bleed point-of-sale section on the Domma JS homepage, sitting between the feature grid and the Examples section, pitching <a href=\"https://cms.dommajs.org/\"><strong>Domma CMS</strong></a> without leaving the page. The section doubles as a working showcase of the effects library - six different Domma effects fire in choreographed sequence as it scrolls into view.</p><p><strong>What's in the band:</strong></p><ul><li><strong>Looping headline</strong> - the <code>Domma.effects.scribe</code> typewriter cycles four pitches: <em>'Want Domma JS power in a CMS?'</em>, <em>'Meet Domma CMS.'</em>, <em>'Markdown-first. Zero build step.'</em>, and <em>'Self-hosted. Open. Ridiculously fast.'</em> - typing, holding, erasing and retyping in an infinite loop with a blinking cursor.</li><li><strong>Stat tiles with stagger-in + counter cascade</strong> - four key numbers (27 shortcodes, 28 themes, 6 free plugins, 0 build steps) zoom-stagger into view, then <code>Domma.effects.counter</code> ticks each value up. The 'Build steps' tile counts <em>down</em> from 60 → 0 for dramatic effect.</li><li><strong>Animated CTAs</strong> - primary <em>Get Started Free</em> sits clean and bold; secondary <em>See Features</em> uses <code>Domma.effects.pulse</code> for a gentle attention pull.</li><li><strong>Pastel ticker-tape burst</strong> - <code>Domma.effects.tickerTape</code> fires a one-shot confetti burst (40 strips, pastel palette) scoped to the band when it reveals.</li><li><strong>Float-blob ambient backdrop</strong> - both the band and the splash hero now use <code>.bg-ambient-float-blobs</code> for slowly-drifting indigo/blue radial gradients.</li></ul><p><strong>Effects choreographed:</strong> <code>reveal</code> → <code>scribe</code> (looping) → <code>counter</code> (cascade) → <code>tickerTape</code> (burst) → <code>pulse</code> - all triggered by a single <code>IntersectionObserver</code> with a <code>requestAnimationFrame</code> fallback for elements already in the viewport on initial load.</p><p><strong>Accessibility note:</strong> Because this section <em>is</em> the pitch, its effects override <code>prefers-reduced-motion</code> via <code>respectMotionPreference: false</code>. The rest of the homepage still respects the user's motion toggle.</p><p><strong>Known issue surfaced:</strong> The work uncovered an ordering bug in <code>parseWait</code> inside <code>src/effects.js</code> - <code>endsWith('s')</code> is checked before <code>endsWith('ms')</code>, so any millisecond-suffixed wait string is multiplied by 1000 (a <code>'300ms'</code> wait becomes 5 minutes). Worked around in the homepage by passing numeric milliseconds; fix queued for a future patch release.</p>",
+      "date": "2026-05-20",
+      "sequence": 25002
+    },
+    "meta": {
+      "createdAt": "2026-05-20T00:00:00.000Z",
+      "updatedAt": "2026-05-20T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "82b8245e-0f74-ccbf-29eb-72bedd957f6c",
+    "data": {
+      "version": "v0.25.1",
+      "title": "Carousel - Crossfade Mode, Custom Easing & Demo Gradients",
+      "summary": "<p><strong>Enhancement Release:</strong> The <strong>Carousel</strong> element gains a third transition mode and a fully configurable easing curve, with a small library of decorative demo gradients added to the showcase styling layer.</p><p><strong>New transition mode - <code>animation: 'crossfade'</code>:</strong> Outgoing and incoming slides transition opacity <em>at the same time</em>, briefly overlapping mid-transition. Cinematic and soft, ideal for hero imagery and feature reels where the existing <code>'fade'</code> (clean swap) reads too abruptly. The outgoing slide remains <code>position: relative</code> for the duration of the overlap so the container holds its height - no mid-transition layout reflow. After the transition completes the incoming slide is promoted to the height-keeper role on a single <code>setTimeout</code>, with destroy-time cleanup.</p><p><strong>New option - <code>animationEasing</code>:</strong> Any CSS timing function is now accepted (<code>'ease'</code>, <code>'linear'</code>, <code>'ease-in-out'</code>, <code>'cubic-bezier(...)'</code>, etc.) and is threaded into both the fade/crossfade opacity transition and the slide-mode track <code>transform</code> transition. Default remains <code>'ease'</code> - fully backwards-compatible.</p><p><strong>Showcase rebuild:</strong> A dedicated <strong>Transitions</strong> section on the Carousel showcase page now demonstrates fade, crossfade, and a bouncy <code>cubic-bezier</code> easing example with autoplay + hover-pause, so the effects play themselves the moment the section comes into view.</p><p><strong>Demo Gradient Palette:</strong> Nine reusable decorative gradients added to <code>domma-showcase.css</code> under the <code>.demo-gradient-*</code> namespace, organised by mood - <strong>aurora</strong> (vivid high-saturation), <strong>dusk</strong> (cinematic atmospheric), <strong>pop</strong> (bright energetic). Showcase-internal, not part of the framework's public CSS API.</p><p><strong>Documentation:</strong> PHPStorm typings (<code>CarouselOptions.animation</code> widened to <code>'slide' | 'fade' | 'crossfade'</code>, <code>animationEasing?: string</code> added); <code>src/CLAUDE.md</code> module reference updated with transition mode descriptions; <code>ELEMENTS.md</code> gains a Transition Modes table and a Demo Gradient Palette reference.</p><p><strong>Quick start:</strong></p><p><code>Domma.elements.carousel('#hero', { animation: 'crossfade', animationDuration: 1400, animationEasing: 'ease-in-out' });</code></p>",
+      "date": "2026-05-16",
+      "sequence": 25001
+    },
+    "meta": {
+      "createdAt": "2026-05-16T00:00:00.000Z",
+      "updatedAt": "2026-05-16T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "ee182726-1442-79c8-939d-50c695de8d2a",
+    "data": {
+      "version": "v0.25.0",
+      "title": "Chooser - Visual Option-Picker for Forms",
+      "summary": "<p><strong>Feature Release:</strong> A new <strong>Chooser</strong> form input - Domma's 25th UI component - replacing the visual weight of native radio buttons and checkboxes when a choice deserves richer presentation. Cards or chips, single or multi-select, all four combinations driven by one unified API.</p><p><strong>The four-way matrix:</strong></p><ul><li><strong>Card · single-select</strong> - Pricing-plan style; rich tiles with icon, label, description, and corner badge</li><li><strong>Card · multi-select</strong> - Feature picker with checkbox semantics inside the same card layout</li><li><strong>Chip · single-select</strong> - Compact pill row for terse choices</li><li><strong>Chip · multi-select</strong> - Tag picker with full keyboard support</li></ul><p><strong>Per-option metadata:</strong></p><ul><li><code>icon</code> - any Domma icon name; renders inline</li><li><code>description</code> - sub-text under the label (card + comfortable density only)</li><li><code>tooltip</code> - hover hint via <code>data-tooltip</code></li><li><code>badge: { text, type }</code> - corner badge in any of five semantic colours, reusing the existing <code>.badge-*</code> classes</li><li><code>recommended: true</code> - success-coloured border ring for the highlighted option</li><li><code>disabled: true</code> - muted, non-interactive, skipped by keyboard navigation</li></ul><p><strong>Visual polish - six top-level options:</strong></p><ul><li><code>accent</code> - selected highlight colour; semantic name (<code>primary</code>, <code>success</code>, <code>info</code>, <code>warning</code>, <code>danger</code>) or any CSS colour string</li><li><code>accentStyle</code> - five distinct treatments: <code>border</code> (default), <code>solid</code> (filled tile), <code>glow</code> (transparent border + glowing ring), <code>overlay</code> (heavier translucent fill), <code>underline</code> (thick coloured bottom border)</li><li><code>glow</code> + <code>glowColour</code> - soft outer glow on the selected option, optional colour override</li><li><code>shadow</code> - <code>none</code> / <code>sm</code> / <code>md</code> / <code>lg</code> / <code>xl</code> applied to every option</li><li><code>shadowColour</code> - optional shadow tint</li></ul><p><strong>Theme awareness:</strong> Semantic colours map to existing Domma CSS variables and retint live across all 26 themes × light/dark variants. Custom hex/rgb values become inline CSS custom properties on the chooser root, so they remain consistent across the four matrix combinations.</p><p><strong>Form integration:</strong> Use <code>type: 'chooser'</code> in any <code>F.create()</code> blueprint and the form pipeline handles validation, model binding, and submission automatically. Required validation treats an empty array as empty for multi-select. Hidden native <code>&lt;input type=\"radio|checkbox\"&gt;</code> elements are emitted when <code>name</code> is set so the value is captured by <code>FormData</code> even with JS disabled.</p><p><strong>Accessibility:</strong> <code>role=\"radiogroup\"</code> for single-select with arrow-key navigation; <code>role=\"group\"</code> for multi-select with Tab + Space; <code>aria-checked</code> reflects state; disabled options skipped by keyboard; respects <code>prefers-reduced-motion</code>.</p><p><strong>CMS Page Editor integration:</strong> The page-roller's form-section editor gains a draggable <strong>Add Chooser</strong> palette tile. Clicking it opens a slideover with a structured editor - field-level inputs, chooser-level toggles, full options editor with add/remove/reorder, six visual-option fields (accent, accent style, glow, glow colour, shadow, shadow colour), and a <strong>live preview pane</strong> that updates as you type. Save writes back into the <code>formFields</code> JSON textarea (still the canonical store). Click any rendered chooser tile in the canvas to re-open the slideover pre-populated for editing.</p><p><strong>Showcase:</strong> Comprehensive page at <code>/showcase/elements/chooser/</code> covering all four matrix combinations, density and columns demos, every per-option flag (with all five badge types), accent colour and accent style galleries, glow and shadow variants, in-form integration, standalone usage, and a long-form tutorial with three real-world patterns (pricing plan, tag picker, theme picker) plus a gotchas section.</p><p><strong>Documentation:</strong> Full API reference in <code>docs/API.md</code>; blueprint shape and validation in <code>docs/Blueprints.md</code>; feature section with theme-awareness notes in <code>docs/DommaDocumentation.md</code>; PHPStorm typings include <code>ChooserOptions</code>, <code>ChooserOption</code>, <code>ChooserBadge</code>, <code>ChooserInstance</code>, and <code>ChooserSemanticColour</code>.</p><p><strong>Quick start:</strong></p><p><code>Domma.elements.chooser('#host', { variant: 'card', options: [&hellip;] });</code> - standalone.</p><p><code>F.create({ plan: { type: 'chooser', variant: 'card', options: [&hellip;] } }).renderTo('#form');</code> - inside a blueprint-driven form.</p>",
+      "date": "2026-05-09",
+      "sequence": 25000
+    },
+    "meta": {
+      "createdAt": "2026-05-09T00:00:00.000Z",
+      "updatedAt": "2026-05-09T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "a3c78d13-076f-a239-4b1c-02e2d4590066",
+    "data": {
+      "version": "v0.24.0",
+      "title": "Ticker Tape - Confetti-Parade Effect",
+      "summary": "<p><strong>Feature Release:</strong> A new canvas-based <strong>ticker tape</strong> effect joins the <code>Domma.effects</code> family - colourful rectangular strips drop from the top of a container (or the entire viewport), sway, rotate, and gently fade before reaching the bottom. Reminiscent of a ticker-tape parade, perfect for celebration moments.</p><p><strong>What it does:</strong></p><ul><li><strong>Two modes</strong> - Pass <code>null</code> for a fixed full-page overlay, or a selector for a container-scoped effect; the canvas reflows automatically via <code>ResizeObserver</code></li><li><strong>Theme-aware palettes</strong> - The default <code>palette: 'theme'</code> reads <code>--dm-primary</code>, <code>--dm-success</code>, <code>--dm-warning</code>, <code>--dm-danger</code>, and <code>--dm-info</code> from the active Domma theme, so the same call adapts to whichever theme is loaded</li><li><strong>10 named palettes</strong> - <code>rainbow</code>, <code>festive</code>, <code>gold</code>, <code>silver</code>, <code>pastel</code>, <code>mono</code>, <code>sunset</code>, <code>ocean</code>, <code>forest</code>, and <code>bridal</code>; supply your own array of CSS colour strings for branded confetti</li><li><strong>Continuous or one-shot</strong> - The default mode maintains a steady stream up to <code>density</code> strips on screen; <code>burst: true</code> drops a single batch (<code>burstCount</code> strips) and lets the effect end naturally - ideal for form-success or achievement-unlocked moments</li><li><strong>Tunable physics</strong> - <code>speed</code>, <code>sway</code>, <code>rotationSpeed</code>, strip width / height ranges, and <code>fadeStart</code> (where in the fall fade begins) all adjustable</li><li><strong>Standard control surface</strong> - Returns the same <code>{ pause, resume, stop, restart, destroy, isRunning, isPaused }</code> object as every other <code>Domma.effects</code> method; honours <code>prefers-reduced-motion</code> by default</li><li><strong>Showcase</strong> - Dedicated page at <code>/showcase/effects/ticker-tape.html</code> with five demos: theme-aware container, palette picker (live swap), physics customisation sliders, one-shot burst, and full-page overlay</li><li><strong>Documentation</strong> - Full API reference in <code>docs/API.md</code>; PHPStorm typings updated; new <code>party-popper</code> icon added to the seasonal set</li></ul><p><strong>Quick start:</strong></p><p><code>Domma.effects.tickerTape(null);</code> - full-page parade in the active theme's colours.</p><p><code>Domma.effects.tickerTape('#stage', { burst: true, palette: 'gold' });</code> - celebration burst on demand.</p>",
+      "date": "2026-04-22",
+      "sequence": 24000
+    },
+    "meta": {
+      "createdAt": "2026-04-22T00:00:00.000Z",
+      "updatedAt": "2026-04-22T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "2be82e3b-88b7-2473-1cc4-fa7f7b22163b",
+    "data": {
+      "version": "v0.23.0",
+      "title": "Signature - Canvas Handwriting Pad",
+      "summary": "<p><strong>Feature Release:</strong> A full-featured <strong>Signature</strong> element - Domma's 24th UI component - providing a canvas-based handwriting pad for capturing signatures in forms, contracts, and consent flows.</p><p><strong>Input &amp; Drawing:</strong></p><ul><li><strong>Pointer Events API</strong> - Unified mouse, touch, and stylus input; pressure-sensitive line width on stylus devices with graceful fallback for mouse and touch</li><li><strong>Smooth Bézier curves</strong> - Midpoint quadratic Bézier algorithm prevents jagged strokes; variable lineWidth per segment from pressure data</li><li><strong>Normalised co-ordinates</strong> - Stroke points stored as 0-1 fractions so a <code>ResizeObserver</code> can reflow all strokes correctly when the container is resized</li></ul><p><strong>Undo / Redo &amp; Export:</strong></p><ul><li><strong>Full stroke history</strong> - <code>sig.undo()</code> / <code>sig.redo()</code> operate stroke-by-stroke; <code>sig.clear()</code> is itself undoable; <code>sig.clear(true)</code> for a silent, irreversible wipe</li><li><strong>PNG export</strong> - <code>sig.toBase64('png')</code> returns a canvas data URL</li><li><strong>SVG export</strong> - <code>sig.toBase64('svg')</code> rebuilds paths from stored strokes using the same Bézier algorithm as SVG <code>M</code>, <code>Q</code>, <code>L</code> path commands; output is visually identical to the canvas render</li></ul><p><strong>Toolbar &amp; Type Fallback:</strong></p><ul><li><strong>Configurable toolbar</strong> - Colour swatches, pen-width dot buttons, undo, redo, and clear; driven by <code>colours</code> and <code>widths</code> options; hideable with <code>toolbar: false</code></li><li><strong>Type fallback</strong> - <code>typeFallback: true</code> adds a Draw / Type toggle in the toolbar; Type mode renders cursive-font text to the canvas via <code>fillText()</code> so <code>toBase64()</code> still returns an image; <code>isEmpty()</code> correctly reflects typed content</li></ul><p><strong>Form Integration &amp; Config:</strong></p><ul><li><strong>Hidden input</strong> - Auto-populated with the base64 value after each stroke; the component works inside any <code>&lt;form&gt;</code> for native submission</li><li><strong>Blueprint support</strong> - Use <code>type: 'signature'</code> in an <code>F.create()</code> blueprint; the form builder initialises the pad and syncs the model automatically</li><li><strong>Config Engine</strong> - <code>signature</code> added to the component map for declarative <code>$.setup()</code> initialisation</li></ul><p><strong>Accessibility:</strong> <code>role=\"application\"</code> on the container, <code>aria-pressed</code> on all toolbar buttons, <code>aria-live=\"polite\"</code> status bar, <code>tabindex=\"0\"</code> on the canvas, and <code>respectMotionPreference</code> support.</p><p><strong>Showcase:</strong> Dedicated page at <code>/showcase/elements/signature/</code> with 13 sections including a live demo, pen options, export formats, undo/redo, type fallback, disabled state, form integration, config engine, contract-signing tutorial, and full API reference.</p>",
+      "date": "2026-03-23",
+      "sequence": 23000
+    },
+    "meta": {
+      "createdAt": "2026-03-23T00:00:00.000Z",
+      "updatedAt": "2026-03-23T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "f48c05f9-00df-7e9c-09f8-e5cdf4843117",
+    "data": {
+      "version": "v0.22.0",
+      "title": "List Group - Numbered, Horizontal & Selectable Lists",
+      "summary": "<p><strong>Feature Release:</strong> A full-featured <strong>List Group</strong> element - Domma's 23rd UI component - providing polished, consistent list styling for settings panels, navigation menus, notification feeds, and content lists.</p><p><strong>CSS Classes:</strong></p><ul><li><strong>Base</strong> - <code>.list-group</code> container with <code>.list-group-item</code> items; active, disabled, and <code>.list-group-item-action</code> states with hover/focus styling; sub-element helper classes for rich layouts: <code>.list-group-item-icon</code>, <code>.list-group-item-content</code>, <code>.list-group-item-heading</code>, <code>.list-group-item-text</code>, <code>.list-group-item-trailing</code></li><li><strong>Variants</strong> - <code>.list-group-flush</code> strips outer borders and radius for embedding inside cards; <code>.list-group-sm</code> and <code>.list-group-lg</code> adjust padding and font size; 6 semantic colour variants (<code>-primary</code>, <code>-secondary</code>, <code>-success</code>, <code>-danger</code>, <code>-warning</code>, <code>-info</code>) apply a left-border accent with a tinted background</li><li><strong>Numbered</strong> - <code>.list-group-numbered</code> on an <code>&lt;ol&gt;</code> element prepends auto-incrementing counters via CSS - no JavaScript needed</li><li><strong>Horizontal</strong> - <code>.list-group-horizontal</code> arranges items side-by-side; responsive variants <code>-sm</code> (576 px), <code>-md</code> (768 px), <code>-lg</code> (992 px), <code>-xl</code> (1200 px) switch to horizontal only above the given breakpoint</li></ul><p><strong>JavaScript API:</strong> <code>E.listGroup(selector, options)</code> enables selectable lists with single or multi-select, roving tabindex keyboard navigation (Arrow keys, Home/End, Enter/Space), and full ARIA semantics (<code>role=\"listbox\"</code>, <code>aria-selected</code>, <code>aria-disabled</code>, <code>aria-multiselectable</code>). Public methods: <code>select(i)</code>, <code>deselect(i)</code>, <code>toggle(i)</code>, <code>selectAll()</code>, <code>deselectAll()</code>, <code>getSelected()</code>, <code>isSelected(i)</code>, <code>enable(i)</code>, <code>disable(i)</code>, <code>getItems()</code>, <code>refresh()</code>, <code>destroy()</code>. Callbacks: <code>onChange</code>, <code>onSelect</code>, <code>onDeselect</code>.</p><p><strong>Config Engine:</strong> <code>listGroup</code> added to the supported component map for declarative <code>$.setup()</code> initialisation.</p><p><strong>Showcase:</strong> Dedicated page at <code>/showcase/elements/list-group/</code> with demos covering all CSS variants, numbered lists, horizontal layouts, interactive JS API (selection, multi-select, keyboard navigation), a settings-panel tutorial, API reference tables, and a CSS customisation guide. Linked from the Elements overview page and the Elements dropdown navigation.</p>",
+      "date": "2026-03-19",
+      "sequence": 22000
+    },
+    "meta": {
+      "createdAt": "2026-03-19T00:00:00.000Z",
+      "updatedAt": "2026-03-19T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "dbf7f65b-7bab-a788-73a0-b219e5067ece",
+    "data": {
+      "version": "v0.21.0",
+      "title": "Number Badge - Notification Counters & Presence Dots",
+      "summary": "<p><strong>Feature Release:</strong> A new <strong>Number Badge</strong> component extends Domma's badge system with positioned notification counters and presence indicators, available as CSS classes, a JavaScript API, and a <code>&lt;domma-number-badge&gt;</code> web component.</p><p><strong>CSS Classes:</strong></p><ul><li><strong><code>.badge-number</code></strong> - Standalone circular badge for single digits, expanding to a pill for multi-digit numbers via <code>min-width</code></li><li><strong><code>.badge-dot</code></strong> - Small 8px circular presence indicator (no text)</li><li><strong><code>.badge-counter-wrapper</code> / <code>.badge-counter</code></strong> - Wrapper + absolute-positioned counter that overlaps the top-right corner of any element with a border ring</li><li><strong>8 colour variants</strong> - <code>-primary</code>, <code>-secondary</code>, <code>-success</code>, <code>-danger</code>, <code>-warning</code>, <code>-info</code>, <code>-light</code>, <code>-dark</code> for all three class families</li><li><strong><code>.badge-pulse</code></strong> - Reuses the existing pulse keyframe animation for urgent counters</li></ul><p><strong>JavaScript API:</strong> <code>E.numberBadge(selector, options)</code> wraps the target element in a <code>&lt;domma-number-badge&gt;</code> web component and returns a chainable instance with <code>increment()</code>, <code>decrement()</code>, <code>setCount()</code>, <code>setVariant()</code>, <code>setDot()</code>, <code>setPulse()</code>, and <code>remove()</code>. The badge auto-hides when count reaches zero in non-dot mode, and adds <code>aria-live=\"polite\"</code> and <code>role=\"status\"</code> for screen reader announcements.</p><p><strong>Web Component <code>&lt;domma-number-badge&gt;</code>:</strong> Shadow DOM custom element with a <code>&lt;slot&gt;</code> for child content. Observed attributes: <code>count</code>, <code>variant</code>, <code>dot</code>, <code>pulse</code>, <code>border-color</code>. Full programmatic API mirrors the JS wrapper.</p><p><strong>Config Engine:</strong> <code>numberBadge</code> added to the supported component map for declarative <code>$.setup()</code> configuration.</p><p><strong>Showcase:</strong> Dedicated page at <code>/showcase/elements/number-badge/</code> with CSS-only variant grids, interactive JS API demo (increment / decrement / dot / pulse / variant controls), web component examples, real-world patterns (mock navbar, inbox unread counts, online user presence list), API reference tables, and CSS customisation guide.</p>",
+      "date": "2026-03-18",
+      "sequence": 21000
+    },
+    "meta": {
+      "createdAt": "2026-03-18T00:00:00.000Z",
+      "updatedAt": "2026-03-18T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "6808aea6-5dc0-798d-0529-5ddc00e68f2f",
+    "data": {
+      "version": "v0.20.2",
+      "title": "Opacity Scale & Translucent Utilities",
+      "summary": "<p><strong>Enhancement Release:</strong> A complete opacity scale and a set of semantic translucency utilities have been added to <code>domma.css</code>, replacing the four sparse <code>.opacity-*</code> classes that previously existed.</p><p><strong>Full Opacity Scale:</strong> 13 utility classes cover the complete range in steps of 10, with additional quarter-stop values - <code>.opacity-0</code>, <code>.opacity-10</code>, <code>.opacity-20</code>, <code>.opacity-25</code>, <code>.opacity-30</code>, <code>.opacity-40</code>, <code>.opacity-50</code>, <code>.opacity-60</code>, <code>.opacity-70</code>, <code>.opacity-75</code>, <code>.opacity-80</code>, <code>.opacity-90</code>, <code>.opacity-100</code>.</p><p><strong>Semantic Translucent Utilities:</strong></p><ul><li><code>.translucent-light</code> - Subtle transparency (<code>opacity: 0.85</code>); ideal for watermarks and overlays</li><li><code>.translucent</code> - Standard transparency (<code>opacity: 0.70</code>); for modal panels and frosted overlays</li><li><code>.translucent-heavy</code> - Strong transparency (<code>opacity: 0.50</code>); for ghost elements</li></ul><p>All three classes include <code>transition: opacity var(--dm-transition-normal)</code> so state changes animate without extra CSS.</p><p><strong>Frosted Glass:</strong> <code>.translucent-glass</code> applies a semi-transparent white background (<code>rgba(255,255,255,0.75)</code>) combined with <code>backdrop-filter: blur(8px)</code> and its <code>-webkit-</code> prefixed counterpart for broad browser coverage. Falls back gracefully to just the transparent background where <code>backdrop-filter</code> is unsupported.</p><p><strong>Hover Variants:</strong> <code>.translucent-hover</code>, <code>.translucent-light-hover</code>, and <code>.translucent-heavy-hover</code> apply their respective opacity levels only on <code>:hover</code>, with the built-in transition. Useful for image grids and icon buttons.</p><p><strong>CSS Custom Properties:</strong> All translucency values are driven by five new <code>:root</code> variables - <code>--dm-translucent-light</code>, <code>--dm-translucent</code>, <code>--dm-translucent-heavy</code>, <code>--dm-translucent-glass-blur</code>, and <code>--dm-translucent-glass-opacity</code> - making them straightforward to override per-theme.</p><p><strong>Showcase:</strong> New dedicated page at <code>/showcase/css-utilities/</code> with a visual opacity swatch grid, an interactive range-slider demo, translucent card examples, hover-variant demo boxes, a frosted-glass live demo over a coloured gradient, and a full reference table.</p>",
+      "date": "2026-03-17",
+      "sequence": 20002
+    },
+    "meta": {
+      "createdAt": "2026-03-17T00:00:00.000Z",
+      "updatedAt": "2026-03-17T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "a476254c-e99c-7ad1-6f10-298038581e32",
+    "data": {
+      "version": "v0.19.7",
+      "title": "Card Accent Variant - First-Class `.card-accent` Classes",
+      "summary": "<p><strong>Enhancement Release:</strong> The left-border card accent pattern has been promoted from an inline style workaround to a set of first-class CSS classes, covering the five standard semantic colours.</p><p><strong>New CSS Classes:</strong></p><ul><li><code>.card-accent</code> - Primary colour left border (4 px), uses <code>--dm-primary</code></li><li><code>.card-accent-success</code> - Success green left border, uses <code>--dm-success</code></li><li><code>.card-accent-danger</code> - Danger red left border, uses <code>--dm-danger</code></li><li><code>.card-accent-warning</code> - Warning amber left border, uses <code>--dm-warning</code></li><li><code>.card-accent-info</code> - Info sky left border, uses <code>--dm-info</code></li></ul><p><strong>Theme Variable Sweep:</strong> <code>--dm-card-accent</code> added to all 26 theme files as an alias for the primary colour, enabling per-theme accent customisation and supporting the JS <code>color: 'accent'</code> API option.</p><p><strong>Showcase:</strong> Dedicated <em>Card Accent</em> section added to the Elements showcase; inline <code>border-left</code> style on the elements index replaced with the new class.</p><p><strong>Repo Hygiene:</strong> Removed stale backup files (<code>src/css/domma.css.original</code>, <code>public/showcase/css/domma.css.original</code>), stale TODO (<code>public/showcase/elements/CSS_CUSTOMISATION_SECTIONS_TODO.md</code>), empty directories (<code>public/showcase/js/</code>, <code>public/showcase/examples/</code>), and added <code>.superpowers/</code>, <code>firebase-debug.log</code>, and <code>release.json</code> to <code>.gitignore</code>.</p>",
+      "date": "2026-03-17",
+      "sequence": 19007
+    },
+    "meta": {
+      "createdAt": "2026-03-17T00:00:00.000Z",
+      "updatedAt": "2026-03-17T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "cd9cdf99-7103-ea53-4641-ddc3ff182b5a",
+    "data": {
+      "version": "v0.19.6",
+      "title": "Christmas - \"Frosty Morning\" & \"Christmas Eve\" Theme Overhaul",
+      "summary": "<p><strong>Enhancement Release:</strong> Full palette rewrite of both Christmas theme variants - moving from generic white/slate backgrounds to genuinely festive palettes.</p><p><strong>Christmas Theme Overhaul:</strong></p><ul><li><strong>christmas-light (\"Frosty Morning\")</strong> - Ice-blue tinted backgrounds (<code>#F5F8FC</code>) evoking frost on windows, deep pine-green text (<code>#1A2A1E</code>), classic Christmas Red primary (<code>#C41E3A</code>), rich Holly Green secondary (<code>#2D6B3F</code>), and frosty blue-tinted shadows</li><li><strong>christmas-dark (\"Christmas Eve\")</strong> - Deep forest green backgrounds (<code>#0A1A10</code>) replacing generic slate, warm candlelight cream text (<code>#F0ECE4</code>), bright red primary (<code>#E85565</code>) for dark-mode readability, bright holly secondary (<code>#5CB875</code>), and warm firelight-tinted shadows</li></ul><p><strong>Decorative CSS:</strong> Snow-dust radial-gradient dot pattern, red-gold-green gradient card top-borders via <code>border-image</code>, candy-stripe progress bars, and festive syntax highlighting.</p><p><strong>Labels:</strong> Theme Roller and variant dot tooltips now read \"Christmas Day ❄️\" / \"Christmas Eve 🎄\".</p>",
+      "date": "2026-03-16",
+      "sequence": 19006
+    },
+    "meta": {
+      "createdAt": "2026-03-16T00:00:00.000Z",
+      "updatedAt": "2026-03-16T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "e2329404-7d8d-c2e6-e05e-79531ff152d7",
+    "data": {
+      "version": "v0.19.5",
+      "title": "Wedding - Classic Antique Gold Theme Palette",
+      "summary": "<p><strong>Feature Release:</strong> A new <strong>Wedding</strong> theme palette - two variants (Day + Evening) built around antique gold (<code>#C5A55A</code>) and silver tones, bringing the total theme count to 26.</p><p><strong>Wedding Theme:</strong></p><ul><li><strong>wedding-light (Day)</strong> - Warm cream backgrounds (<code>#FFFDF7</code>), antique gold primary (<code>#C5A55A</code>), antique silver secondary (<code>#A8A9AD</code>), dark warm text (<code>#2C2416</code>), warm tan borders (<code>#E8DCC8</code>), and warm gold-tinted shadows</li><li><strong>wedding-dark (Evening)</strong> - Deep midnight navy (<code>#12121F</code>), gold primary with lighter hover (<code>#D4B66A</code>), warm cream text (<code>#F0E8D8</code>), indigo borders (<code>#2A2A40</code>), and subtle gold-glow shadows</li></ul><p><strong>Registered across all surfaces:</strong> Available in the Theme Roller dropdown (Day ☀️ / Evening 🌙), the layout variant dot selector (count 24 → 26), the themes showcase card grid, the Kickstart Builder theme picker, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>).</p>",
+      "date": "2026-03-16",
+      "sequence": 19005
+    },
+    "meta": {
+      "createdAt": "2026-03-16T00:00:00.000Z",
+      "updatedAt": "2026-03-16T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "2948203b-01dd-07b1-4c19-707832a39d98",
+    "data": {
+      "version": "v0.19.4",
+      "title": "Mint - Fresh Spearmint Theme Palette",
+      "summary": "<p><strong>Feature Release:</strong> A new <strong>Mint</strong> theme palette - two variants (light + dark) built around cool spearmint and seafoam green tones, bringing the total theme count to 24.</p><p><strong>Mint Theme:</strong></p><ul><li><strong>mint-light</strong> - Rich eucalyptus primary (<code>#2e9e6e</code>), seafoam secondary (<code>#5b8a7a</code>), white surfaces with a subtle mint-tinted alt background (<code>#f0faf5</code>), near-black forest text (<code>#1a2e25</code>), and soft celadon borders (<code>#c8e6d8</code>)</li><li><strong>mint-dark</strong> - Deep slate-900 backgrounds with a dark mint-tinted surface (<code>#1e3a2f</code>), bright spearmint primary (<code>#6dd5a8</code>) for contrast, mint-tinted text (<code>#d4f5e4</code>), and dark teal borders (<code>#2a4a3a</code>)</li></ul><p><strong>Registered across all surfaces:</strong> Available in the Theme Roller dropdown, the layout variant dot selector (count 22 → 24), the themes showcase card grid, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>).</p>",
+      "date": "2026-03-12",
+      "sequence": 19004
+    },
+    "meta": {
+      "createdAt": "2026-03-12T00:00:00.000Z",
+      "updatedAt": "2026-03-12T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "53b4249f-5ce7-8f0d-d88f-e944bac75234",
+    "data": {
+      "version": "v0.19.3",
+      "title": "Auto-Generated Breadcrumbs in the Layout System",
+      "summary": "<p><strong>Feature Release:</strong> The layout system now auto-generates frosted glass breadcrumb pills, overlaid top-left on hero sections and derived entirely from the page URL - no per-page configuration required.</p><p><strong>Layout System Breadcrumbs:</strong></p><ul><li><strong>Frosted glass pill</strong> - Semi-transparent black backdrop with <code>backdrop-filter: blur(6px)</code> sits at the top-left of every <code>.hero</code> section; falls back to a surface bar below the navbar on pages without a hero</li><li><strong>URL-driven label generation</strong> - Path segments are mapped through a built-in dictionary (<code>dom → DOM</code>, <code>http → HTTP</code>, <code>spa → SPA</code>, <code>theme-roller → Theme Roller</code>, etc.); anything unrecognised is title-cased automatically</li><li><strong>Title extraction</strong> - The last crumb's label is pulled from <code>&lt;title&gt;</code>, stripping common suffixes such as <code>· Domma Showcase</code>, for a precise page name</li><li><strong>Preset-driven</strong> - Enabled via <code>breadcrumbs.enabled: true</code> in <code>presets.json</code>; active for <code>showcase:subpage</code>, <code>showcase:effects</code>, <code>showcase:element</code>, and <code>public</code> presets; off for landing, index, minimal, admin, and demo pages</li><li><strong>Responsive</strong> - Pill shrinks at ≤576px (font-size 0.7 rem, tighter padding)</li><li><strong>Two-layer DOM</strong> - Outer <code>&lt;nav&gt;</code> holds the pill class; inner <code>&lt;div&gt;</code> is the Domma Breadcrumbs target, preserving component class isolation</li></ul><p><strong>Forms Fix:</strong> Checkbox fields no longer render a redundant label element alongside the input; the label is now handled by the checkbox markup itself.</p>",
+      "date": "2026-03-06",
+      "sequence": 19003
+    },
+    "meta": {
+      "createdAt": "2026-03-06T00:00:00.000Z",
+      "updatedAt": "2026-03-06T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "66350274-ede6-0289-c081-280767c78c81",
+    "data": {
+      "version": "v0.19.2",
+      "title": "Forms - Checkbox Label Fix",
+      "summary": "<p><strong>Patch Release:</strong> Corrected label rendering logic in <code>forms.js</code> so that checkbox fields are excluded from the standard label output. Previously, a visible label element was injected alongside the checkbox even when the label was already embedded within the checkbox markup, causing doubled text on checkbox-type fields.</p>",
+      "date": "2026-03-06",
+      "sequence": 19002
+    },
+    "meta": {
+      "createdAt": "2026-03-06T00:00:00.000Z",
+      "updatedAt": "2026-03-06T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "782610e5-441c-26db-ab00-0db20e67d0e7",
+    "data": {
+      "version": "v0.19.1",
+      "title": "Grayve - Slate & Steel Theme Palette",
+      "summary": "<p><strong>Feature Release:</strong> A new <strong>Grayve</strong> theme palette - two variants (light + dark) built around cool slate and steel-grey tones, bringing the total theme count to 22.</p><p><strong>Grayve Theme:</strong></p><ul><li><strong>grayve-light</strong> - Steel-blue primary, light slate surfaces, dark navy text, and soft grey borders; a neutral professional palette suited to data-heavy interfaces</li><li><strong>grayve-dark</strong> - Deep charcoal backgrounds, lighter steel primary for contrast, muted slate borders, and off-white text</li></ul><p><strong>Registered across all surfaces:</strong> Available in the Theme Roller dropdown, the layout variant dot selector (count 20 → 22), the Kickstart Builder theme picker, and the <code>Domma.theme</code> API.</p><p><strong>Breadcrumbs CSS Refactor:</strong> Inline styles previously injected by <code>elements.js</code> at runtime for <code>.dm-breadcrumbs-item</code>, <code>.dm-breadcrumbs-separator</code>, and <code>.dm-breadcrumbs-link</code> were moved to <code>elements.css</code> as static rules. The separator selector was also corrected from <code>.dm-breadcrumb-separator</code> (singular) to <code>.dm-breadcrumbs-separator</code> (plural) for consistency.</p>",
+      "date": "2026-03-05",
+      "sequence": 19001
+    },
+    "meta": {
+      "createdAt": "2026-03-05T00:00:00.000Z",
+      "updatedAt": "2026-03-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "56d1f919-4322-10f4-f87d-41df1650e55e",
+    "data": {
+      "version": "v0.19.0",
+      "title": "Unicorn & Dreamy - Two New Theme Palettes",
+      "summary": "<p><strong>Feature Release:</strong> Two new fully theme-aware colour palettes - <strong>Unicorn</strong> (pink and purple) and <strong>Dreamy</strong> (beige and biscuit) - each with light and dark variants, bringing the total theme count to 20.</p><p><strong>Unicorn Theme:</strong></p><ul><li><strong>unicorn-light</strong> - Amethyst purple primary (<code>#9b59b6</code>), hot pink secondary (<code>#e91e90</code>), white surfaces with soft lavender tint (<code>#faf5fc</code>), dark aubergine text (<code>#2d1b3d</code>), and light purple borders (<code>#e1bee7</code>)</li><li><strong>unicorn-dark</strong> - Deep purple-black backgrounds (<code>#1a0e24</code> / <code>#241432</code>), lighter purple primary (<code>#ce93d8</code>) for contrast, lighter pink secondary (<code>#f48fb1</code>), and muted purple borders (<code>#4a2660</code>)</li></ul><p><strong>Dreamy Theme:</strong></p><ul><li><strong>dreamy-light</strong> - Warm brown primary (<code>#8d6e63</code>), warm cream surfaces (<code>#fffdf9</code> / <code>#f5f0eb</code>), dark chocolate text (<code>#3e2723</code>), and light biscuit borders (<code>#d7ccc8</code>)</li><li><strong>dreamy-dark</strong> - Dark espresso backgrounds (<code>#1c1410</code> / <code>#2a1f1a</code>), lighter taupe primary (<code>#bcaaa4</code>) for contrast, warm off-white text (<code>#efebe9</code>), and dark brown borders (<code>#4e342e</code>)</li></ul><p><strong>Registered across all surfaces:</strong> Both themes are available in the Theme Roller dropdown, the layout variant dot selector, the Kickstart Builder theme picker, and the <code>Domma.theme</code> API (<code>listThemes()</code> / <code>listBases()</code>). The variant dot count in the layout controls is updated from 16 to 20.</p><p><strong>Codebase Cleanup:</strong> Removed six stale backup and <code>.bak</code> files (<code>dom.js.backup-*</code>, <code>elements.js.backup-xss-*</code>, three celebration theme <code>.bak</code> files), the one-off <code>debug-wizard.html</code>, <code>firebase-debug.log</code>, the auto-generated <code>coverage/</code> directory, and the <code>.playwright-mcp/</code> screenshot cache.</p>",
+      "date": "2026-03-04",
+      "sequence": 19000
+    },
+    "meta": {
+      "createdAt": "2026-03-04T00:00:00.000Z",
+      "updatedAt": "2026-03-04T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "a1ea7064-36fe-6bf8-e124-c4949bdcb20d",
+    "data": {
+      "version": "v0.18.1",
+      "title": "Canonical Sweep - SEO, Dead Links & Theme Fixes",
+      "summary": "<p><strong>Maintenance Release:</strong> Resolved Google Search Console's 'duplicate without user-selected canonical' warnings, rebuilt the sitemap from scratch, fixed five dead links across the public site, and corrected theme-awareness in the Blueprint showcase.</p><p><strong>Canonical Tags (119 pages):</strong> New <code>scripts/add-canonical-tags.js</code> inserts <code>&lt;link rel=\"canonical\"&gt;</code> after <code>&lt;/title&gt;</code> in every public HTML page. Root <code>index.html</code> maps to the bare domain URL; subdirectory <code>index.html</code> files use trailing-slash directory URLs; non-index <code>.html</code> files keep their extension. Template fragments (<code>layouts/templates/*</code>, <code>examples/*/template.html</code>) are skipped. The script is idempotent - safe to re-run.</p><p><strong>Sitemap Rebuild:</strong> New <code>scripts/rebuild-sitemap.js</code> walks <code>public/</code> and generates a fresh <code>sitemap.xml</code> from files that actually exist on disk. The previous sitemap contained 30+ phantom URLs; the new one has 101 real entries with priority tiers (1.0 root → 0.8 hubs → 0.7 module pages → 0.6 sub-pages → 0.3 legal). Also idempotent.</p><p><strong>Dead Link Fixes (5):</strong></p><ul><li><strong>effects/javascript.html</strong> - <code>typewriter.html</code> → <code>scribe.html</code> (effect was renamed in v0.14.x)</li><li><strong>elements/timer</strong> - 'Progress Bar' / <code>../progress/</code> → 'Progression' / <code>../progression/</code> (component renamed in v0.14.0)</li><li><strong>miniapps/address</strong> - <code>/docs</code> → <code>/api/</code> (documentation moved)</li><li><strong>nav-showcase.json</strong> - Removed phantom 'Invoicing System' entry (miniapp not yet built)</li><li><strong>download page</strong> - Removed QuickStart Starter card, QuickStart Templates section, and dead <code>quickstart-latest.json</code> <code>fetch()</code> call; all referenced archives are missing</li></ul><p><strong>Blueprint Showcase Theme Fix:</strong> The example areas (result panes, model state panels, blueprint method badges) were referencing non-existent CSS variables (<code>--dm-bg-secondary</code>, <code>--dm-bg-tertiary</code>) that fell back to hardcoded light-mode hex values, making them appear with light grey backgrounds in every dark theme. Fixed to use the correct Domma variables: <code>--dm-surface-raised</code>, <code>--dm-surface</code>, <code>--dm-primary-bg</code>, and <code>--dm-primary</code>. The code block also gained <code>var(--dm-code-bg)</code> so it adapts in dark themes.</p>",
+      "date": "2026-02-25",
+      "sequence": 18001
+    },
+    "meta": {
+      "createdAt": "2026-02-25T00:00:00.000Z",
+      "updatedAt": "2026-02-25T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "9e1a5d65-c6b8-1cf6-fa08-f796e8eb6233",
+    "data": {
+      "version": "v0.18.0",
+      "title": "DommaComponents - Web Components with Shadow DOM",
+      "summary": "<p><strong>Major Release:</strong> Introducing <strong>DommaComponents</strong> - a first-class Web Components system built into the Domma framework. Define reusable, self-contained UI components with Shadow DOM encapsulation, reactive state, lifecycle hooks, and scoped styles, all using a clean declarative API.</p><p><strong>Domma.component() API:</strong></p><ul><li><strong>Custom element registration</strong> - <code>Domma.component('my-widget', { ... })</code> registers a native Web Component</li><li><strong>Shadow DOM encapsulation</strong> - Component markup and styles are fully isolated from the host page</li><li><strong>Reactive data</strong> - <code>data()</code> function defines component state; <code>onUpdated()</code> fires on every change</li><li><strong>Computed properties</strong> - Derived values that update automatically when data changes</li><li><strong>Methods</strong> - Event handler functions with access to <code>this.data</code>, <code>this.root</code>, and all Domma APIs</li><li><strong>Props with validation</strong> - Type-checked, default-valued attributes: <code>props: { initialMode: { type: M.types.string, default: 'basic' } }</code></li><li><strong>Scoped styles</strong> - CSS defined in the <code>style</code> block is injected into the Shadow DOM, invisible to the outside</li><li><strong>External templates</strong> - <code>templateUrl</code> works inside components for substantial markup</li><li><strong>Lifecycle hooks</strong> - <code>onBeforeMount</code>, <code>onMount</code>, <code>onUpdated</code>, <code>onUnmount</code></li></ul><p><strong>Four Example DommaComponents:</strong></p><ul><li><strong>&lt;domma-calculator&gt;</strong> - Scientific calculator with basic/scientific modes, memory functions, angle toggle, and full keyboard support</li><li><strong>&lt;domma-todo&gt;</strong> - Full CRUD task manager with priorities, status tracking, search, and localStorage persistence</li><li><strong>&lt;domma-markdown-editor&gt;</strong> - Real-time markdown editor with live preview pane, syntax helpers, auto-save, and keyboard shortcuts</li><li><strong>&lt;domma-notes&gt;</strong> - Rich note manager with categories, full-text search, overlay editor, and persistent storage</li></ul><p>Each component is a single <code>component.js</code> file with a companion <code>template.html</code>, downloadable from the Examples pages and droppable into any project with a single tag.</p><p><strong>Components Showcase:</strong> New dedicated showcase at <code>/showcase/components/</code> with live demos, API reference, pattern documentation, and a full tutorial covering all component features.</p><p><strong>Splash Page - Examples Row:</strong> Eight example tiles now appear on the landing page above MiniApps, each showing a description via Scribe typewriter animation on hover.</p>",
+      "date": "2026-02-20",
+      "sequence": 18000
+    },
+    "meta": {
+      "createdAt": "2026-02-20T00:00:00.000Z",
+      "updatedAt": "2026-02-20T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "8539f533-decf-36b1-f9f4-30f5566a6891",
+    "data": {
+      "version": "v0.17.0",
+      "title": "Theme Renaissance - Complete Theming Overhaul",
+      "summary": "<p><strong>Major Release:</strong> Complete rebuild of the theming system achieving perfect theme-readiness across all 16 themes with full persistence support.</p><p><strong>Theme Engine Persistence:</strong></p><ul><li><strong>Auto-save/load</strong> - Theme selections now persist across sessions and automatically load on page refresh</li><li><strong>Fixed initialization</strong> - Removed explicit theme parameters that were overriding stored preferences</li><li><strong>Seamless continuity</strong> - Users' theme choices respected throughout the application</li></ul><p><strong>Semantic Variable Migration:</strong></p><ul><li>Replaced ~298 palette variables (<code>--dm-gray-*</code>, <code>--dm-slate-*</code>) with semantic theme variables</li><li>Components now use <code>--dm-text</code>, <code>--dm-surface</code>, <code>--dm-border</code>, <code>--dm-hover-bg</code></li><li>Semantic variables automatically adapt to each theme's color scheme</li></ul><p><strong>Unified Dark Mode Detection:</strong></p><ul><li>Introduced <code>data-mode</code> attribute set by theme engine</li><li>Replaced 78+ inconsistent selectors with unified <code>[data-mode=\"dark\"]</code></li><li>Consistent dark mode styling across entire component library</li></ul><p><strong>Theme File Corrections:</strong></p><ul><li>Fixed ocean-light/ocean-dark and forest-light/forest-dark file content swaps</li><li>Improved contrast in 5 dark themes (charcoal, silver, lemon, christmas, sunset)</li><li>Converted opaque status colors to RGBA tints for better dark theme integration</li></ul><p><strong>Component Enhancements:</strong></p><ul><li><strong>Navbar & Footer:</strong> Dark hover backgrounds (<code>#1e293b</code>) with white text in light mode</li><li><strong>Rounded corners:</strong> Changed hover border-radius from <code>sm</code> to <code>md</code> for more polished appearance</li><li><strong>Visual borders:</strong> Added 1px borders to navbar/footer for clear separation</li><li><strong>Card headers:</strong> Improved dark mode contrast with darker backgrounds</li></ul><p><strong>Bug Fixes:</strong></p><ul><li>Fixed splash hero, login tabs, navbar branding, and cookie consent theming</li><li>Corrected misuse of <code>--dm-text-inverse</code> variable</li><li>All 298+ palette variable references replaced with theme-adaptive semantic variables</li></ul><p><strong>Impact:</strong> Zero text visibility issues. All components work perfectly across all 16 themes with proper contrast and readability.</p>",
+      "date": "2026-02-18",
+      "sequence": 17000
+    },
+    "meta": {
+      "createdAt": "2026-02-18T00:00:00.000Z",
+      "updatedAt": "2026-02-18T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "c2ee5522-7e8d-ab15-6652-734cf75d1d63",
+    "data": {
+      "version": "v0.16.0",
+      "title": "Template Evolution - External Template Loading",
+      "summary": "<p><strong>Major enhancement to the SPA Router:</strong> Views can now load HTML templates from external files using <code>templateUrl</code> and <code>partials</code>, dramatically improving code organisation and maintainability.</p><p><strong>Key Features:</strong></p><ul><li><strong>External Templates</strong> - Reference <code>.html</code> files instead of embedding large HTML strings in JavaScript</li><li><strong>Template Caching</strong> - Templates fetched once and cached per session for optimal performance</li><li><strong>Parallel Partials</strong> - Reusable template sections loaded concurrently</li><li><strong>Mustache Syntax</strong> - Full support for <code>{{variable}}</code>, <code>{{#if}}</code>, <code>{{#each}}</code>, and <code>{{> partial}}</code></li><li><strong>Organised Structure</strong> - Recommended <code>js/views/templates/</code> directory pattern</li></ul><p><strong>Impact:</strong> Views with 400+ lines of inline HTML reduced to ~50 lines of clean JavaScript. HTML files get proper syntax highlighting and editor support, while logic stays separate from presentation.</p><p><strong>Enhanced Kickstart Template:</strong> New Domma projects now include built-in convention enforcement (<code>CLAUDE.md</code>, memory files) for AI-assisted development with Claude Code, Cursor, and similar tools.</p><p><strong>Documentation:</strong> Comprehensive <em>Template Files</em> tutorial added to Router Showcase with 6 detailed sections covering all aspects of external template usage. Router now discoverable from the showcase hub.</p>",
+      "date": "2026-02-15",
+      "sequence": 16000
+    },
+    "meta": {
+      "createdAt": "2026-02-15T00:00:00.000Z",
+      "updatedAt": "2026-02-15T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "774e53ad-5f90-da5a-32c6-0585664bb56e",
+    "data": {
+      "version": "v0.15.0",
+      "title": "Motion Override & Effects Polish",
+      "summary": "<p><strong>Critical Fix:</strong> Resolved issue where <code>reveal()</code> and <code>ripple()</code> effects were disabled by CSS media queries even when JavaScript explicitly set <code>respectMotionPreference: false</code>.</p><p><strong>Solution:</strong> Added <code>data-force-animation</code> attribute system to override CSS <code>@media (prefers-reduced-motion: reduce)</code> queries. Showcase demo pages now display animations correctly regardless of system motion preferences.</p><p><strong>Code Cleanup:</strong> Updated effects showcase pages to use consistent <code>respectMotionPreference: false</code> configuration, removing obsolete variable references across 3 showcase files.</p>",
+      "date": "2026-02-14",
+      "sequence": 15000
+    },
+    "meta": {
+      "createdAt": "2026-02-14T00:00:00.000Z",
+      "updatedAt": "2026-02-14T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "60f83fdc-e378-e01f-f7f3-a68ac81eace5",
+    "data": {
+      "version": "v0.14.5",
+      "title": "Typewriter Effect with Action Queue",
+      "summary": "<p>Introduced <code>Domma.effects.typewriter()</code> with character-by-character text rendering, blinking cursor, and powerful action queue system.</p><p><strong>Features:</strong></p><ul><li>Cursor styles: caret, block, underline</li><li>Action queue: <code>render</code>, <code>wait</code>, <code>undoRender</code> actions</li><li>Per-character entrance effects: fade, bounce, glow</li><li>Partial text deletion and configurable looping</li><li>Full control: pause/resume/restart</li></ul><p><strong>Performance:</strong> GPU acceleration and hardware-accelerated animations for buttery-smooth 60fps rendering. Perfect for hero banners, animated intros, and dynamic text displays.</p>",
+      "date": "2026-02-13",
+      "sequence": 14005
+    },
+    "meta": {
+      "createdAt": "2026-02-13T00:00:00.000Z",
+      "updatedAt": "2026-02-13T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "a9b63a7e-3a75-25d5-8198-ad91cba2df51",
+    "data": {
+      "version": "v0.14.1",
+      "title": "Patron Saint Celebrations & Animation Polish",
+      "summary": "<p>Transformed UK patron saint celebrations with horizontal-drifting flower petals:</p><ul><li><strong>St. David's Day</strong> - Yellow daffodil petals</li><li><strong>St. George's Day</strong> - Red/white rose petals</li><li><strong>St. Andrew's Day</strong> - Purple heather petals</li><li><strong>St. Patrick's Day</strong> - Green clover petals</li></ul><p><strong>Bug Fixes:</strong></p><ul><li>Fixed critical St. David's Day animation freeze caused by canvas state corruption (missing <code>ctx.restore()</code>)</li><li>Replaced harsh X-shaped Saltire sparkles with elegant 4-pointed stars</li><li>Reduced Guy Fawkes Night initial particle spam with gradual spawning (25% start, builds to 100% over 20 seconds)</li></ul><p>All patron saint celebrations now feature realistic flutter animations and gentle vertical bobbing.</p>",
+      "date": "2026-02-09",
+      "sequence": 14001
+    },
+    "meta": {
+      "createdAt": "2026-02-09T00:00:00.000Z",
+      "updatedAt": "2026-02-09T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "b80eb364-4978-79fe-6b41-0c0f02ab4afe",
+    "data": {
+      "version": "v0.14.0",
+      "title": "CSS Architecture & Progression Component",
+      "summary": "<p><strong>Major CSS Restructure:</strong> Proper build process with separation of concerns:</p><ul><li><code>domma.css</code> - Base styles + utilities</li><li><code>grid.css</code> - Layout systems</li><li><code>elements.css</code> - 22 UI components</li></ul><p><strong>New Progression Component:</strong> Unified component with dual modes for event visualisation:</p><ul><li><strong>Timeline mode</strong> - Chronological events</li><li><strong>Roadmap mode</strong> - Status-driven milestones</li><li>5 status states: planned, in-progress, completed, delayed, cancelled</li><li>Interactive tooltips and responsive layouts</li></ul><p>Enhanced celebrations showcase with accurate release timelines. Improved CSS build workflow with <code>src/css</code> source files and <code>npm run build:css</code> automation.</p>",
+      "date": "2026-02-08",
+      "sequence": 14000
+    },
+    "meta": {
+      "createdAt": "2026-02-08T00:00:00.000Z",
+      "updatedAt": "2026-02-08T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "3e01ee91-d21d-e784-4f2d-c5e3f687202a",
+    "data": {
+      "version": "v0.13.4",
+      "title": "Enhanced Celebrations & Particle Fixes",
+      "summary": "<p><strong>Bug Fixes:</strong> Resolved 'Invalid particle values' errors across all celebration themes (Halloween, Guy Fawkes, Christmas, St. Patrick's, St. George's, St. David's, St. Andrew's) by ensuring proper <code>vx</code>, <code>vy</code>, <code>static</code>, <code>x</code>, <code>y</code> initialisations.</p><p><strong>Visual Enhancements:</strong></p><ul><li>Fixed Christmas snow rendering and witch's broomstick orientation</li><li>Implemented dynamic Batman logo display on the moon</li><li>Added procedural fork-lighting for Halloween theme</li><li>Visually overhauled Catherine Wheel for Guy Fawkes theme with fork-lighting for more realistic and dynamic effects</li></ul>",
+      "date": "2026-02-08",
+      "sequence": 13004
+    },
+    "meta": {
+      "createdAt": "2026-02-08T00:00:00.000Z",
+      "updatedAt": "2026-02-08T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "6f7c09f3-9f84-a3da-7ec5-3e2980ff4249",
+    "data": {
+      "version": "v0.13.3",
+      "title": "Polished SPA Templates & Dev Server",
+      "summary": "<p>Redesigned SPA template views with professional layouts matching the QuickStart demo.</p><p><strong>New Development Server:</strong> Added built-in <code>npx domma serve</code> command with:</p><ul><li>Live reload functionality</li><li>Automatic MPA/SPA project detection</li><li>Fixed template CSS paths</li></ul>",
+      "date": "2026-02-05",
+      "sequence": 13003
+    },
+    "meta": {
+      "createdAt": "2026-02-05T00:00:00.000Z",
+      "updatedAt": "2026-02-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "384bd937-0120-af5f-ee4f-562432a14753",
+    "data": {
+      "version": "v0.13.2",
+      "title": "SPA Template Path Fixes",
+      "summary": "<p><strong>Critical Fix:</strong> Fixed broken CSS and JavaScript paths in SPA template that caused white screen errors after <code>npx domma init</code>.</p>",
+      "date": "2026-02-05",
+      "sequence": 13002
+    },
+    "meta": {
+      "createdAt": "2026-02-05T00:00:00.000Z",
+      "updatedAt": "2026-02-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "0c408217-f886-4b89-6f79-9ef70f18ed41",
+    "data": {
+      "version": "v0.13.1",
+      "title": "Development Server with npm Scripts",
+      "summary": "<p>Added npm scripts to generated projects for easier development workflow:</p><ul><li><code>npm start</code></li><li><code>npm run serve</code></li></ul><p>Server auto-prompts after <code>npx domma init</code>.</p>",
+      "date": "2026-02-05",
+      "sequence": 13001
+    },
+    "meta": {
+      "createdAt": "2026-02-05T00:00:00.000Z",
+      "updatedAt": "2026-02-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "30931445-bff3-f029-c3d1-fd13c80348b6",
+    "data": {
+      "version": "v0.13.0",
+      "title": "Built-in Development Server",
+      "summary": "<p>Introduced <code>npx domma serve</code> command with:</p><ul><li>Optional live-server integration</li><li>Automatic MPA/SPA detection</li><li>Custom port support (default: 3096)</li></ul>",
+      "date": "2026-02-05",
+      "sequence": 13000
+    },
+    "meta": {
+      "createdAt": "2026-02-05T00:00:00.000Z",
+      "updatedAt": "2026-02-05T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "dea0fe9f-c9b9-eb32-463f-f23931da2641",
+    "data": {
+      "version": "v0.12.1",
+      "title": "DommaJS Brand Refresh & Bug Fixes",
+      "summary": "<p><strong>Branding:</strong> Rebranded to <strong>DommaJS</strong> across splash page, navbar, and footer.</p><p><strong>Enhancements:</strong> Improved feature card animations with smooth breathing effect.</p><p><strong>Critical Fix:</strong> Fixed <code>backToTop()</code> bug that could destroy page body element when selector parameter was used.</p>",
+      "date": "2026-02-04",
+      "sequence": 12001
+    },
+    "meta": {
+      "createdAt": "2026-02-04T00:00:00.000Z",
+      "updatedAt": "2026-02-04T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "ac750138-9831-b181-01d6-9b3bd569ec89",
+    "data": {
+      "version": "v0.12.0",
+      "title": "SPA Router & Ambient Effects",
+      "summary": "<p><strong>SPA Router:</strong> Hash-based routing system with:</p><ul><li>Middleware support for route guards</li><li>View lifecycle hooks (<code>onEnter</code>, <code>onMount</code>, <code>onLeave</code>)</li><li>Navigation events</li></ul><p><strong>Ambient Effects:</strong> CSS-only ambient background effects (rotating glows, floating blobs, waves) for stunning visual presentations without JavaScript.</p>",
+      "date": "2026-02-04",
+      "sequence": 12000
+    },
+    "meta": {
+      "createdAt": "2026-02-04T00:00:00.000Z",
+      "updatedAt": "2026-02-04T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "215d8051-3a33-dc55-f2fc-afe903956ff9",
+    "data": {
+      "version": "v0.11.1",
+      "title": "Address MiniApp",
+      "summary": "<p>New production MiniApp for UK address lookup with postcode search.</p><p><strong>Features:</strong></p><ul><li>ONS local data integration</li><li>Premium getAddress.io provider support</li><li>Bar charts for analytics</li><li>Star ratings for saved addresses</li></ul>",
+      "date": "2026-02-02",
+      "sequence": 11001
+    },
+    "meta": {
+      "createdAt": "2026-02-02T00:00:00.000Z",
+      "updatedAt": "2026-02-02T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "7200efb1-7ff5-2b66-f9a0-199b937765df",
+    "data": {
+      "version": "v0.11.0",
+      "title": "Schema Builder - Visual Blueprint Designer",
+      "summary": "<p>Build Domma Blueprints visually with drag-and-drop interface.</p><p><strong>Features:</strong></p><ul><li>21 field types</li><li>Live form preview with validation testing</li><li>12-column grid layout support</li><li>Multi-format export: JavaScript, JSON, TypeScript</li></ul>",
+      "date": "2026-01-26",
+      "sequence": 11000
+    },
+    "meta": {
+      "createdAt": "2026-01-26T00:00:00.000Z",
+      "updatedAt": "2026-01-26T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "ba5bf64f-b701-bc8b-9fe5-0ebeaf4e9b56",
+    "data": {
+      "version": "v0.10.1",
+      "title": "Easier Project Setup",
+      "summary": "<p>New CLI tools and setup documentation make getting started faster.</p><p>Run the post-install script to configure your environment automatically.</p>",
+      "date": "2026-01-23",
+      "sequence": 10001
+    },
+    "meta": {
+      "createdAt": "2026-01-23T00:00:00.000Z",
+      "updatedAt": "2026-01-23T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "8611b63b-060b-dfb7-6934-075c0398e105",
+    "data": {
+      "version": "v0.10.0",
+      "title": "Blueprints - Define Once, Use Everywhere",
+      "summary": "<p><strong>Major Release:</strong> Introducing Blueprints for unified data schemas.</p><p>Define your data structure once and use it with:</p><ul><li>Models (reactive data)</li><li>Forms (auto-generation)</li><li>CRUD operations (automatic API integration)</li></ul>",
+      "date": "2026-01-23",
+      "sequence": 10000
+    },
+    "meta": {
+      "createdAt": "2026-01-23T00:00:00.000Z",
+      "updatedAt": "2026-01-23T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "a621271d-dd9f-95f4-8635-4c4b466a4320",
+    "data": {
+      "version": "Jan 22-23",
+      "title": "Build System Updates",
+      "summary": "<p>Updated distribution bundles with improved build process and version consistency across all bundle variants.</p>",
+      "date": "2026-01-22",
+      "sequence": 3
+    },
+    "meta": {
+      "createdAt": "2026-01-22T00:00:00.000Z",
+      "updatedAt": "2026-01-22T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "dc665d54-79d9-e42f-5349-96f01b7db733",
+    "data": {
+      "version": "Jan 21",
+      "title": "CDN Distribution Ready",
+      "summary": "<p>Framework now available via CDN for easier integration.</p><p>Simply include the script tag and start using Domma in your projects.</p>",
+      "date": "2026-01-21",
+      "sequence": 2
+    },
+    "meta": {
+      "createdAt": "2026-01-21T00:00:00.000Z",
+      "updatedAt": "2026-01-21T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  },
+  {
+    "id": "679b671a-23ab-95ea-32da-e6e950c50842",
+    "data": {
+      "version": "v0.9.x",
+      "title": "Foundation Release",
+      "summary": "<p>Core framework with:</p><ul><li>DOM manipulation (jQuery-compatible API)</li><li>Utilities (Lodash-compatible)</li><li>Reactive models</li><li>UI components</li><li>Theming system</li></ul>",
+      "date": "2025-12-01",
+      "sequence": 1
+    },
+    "meta": {
+      "createdAt": "2025-12-01T00:00:00.000Z",
+      "updatedAt": "2025-12-01T00:00:00.000Z",
+      "createdBy": null,
+      "source": "admin"
+    }
+  }
+]

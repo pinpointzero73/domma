@@ -197,6 +197,14 @@ Each phase ends with a check before the next starts.
 4. **Collections.** Releases (imported from `releases.json`) and API reference (Modules is done).
    Change `scripts/release*` so a release adds its changelog entry through the CMS API (a project-scoped
    API token). *Check: the changelog page matches today's; a dry-run release writes one entry.*
+   **Releases done 2026-10-11 (without a token or a release-script change).** The release already
+   writes its website summary into `public/data/releases.json`, and that file ships in the tagged source
+   the `domma-downloads` plugin fetches anyway. After each sync the plugin adds the versions the
+   Releases collection lacks (`lib/changelog.js`); it never touches an existing entry, so admin
+   corrections stay. `scripts/site-migrate/releases.mjs` seeds the collection (82 entries, the early
+   undated notes included) with the same rule. `/changelog` is `[collection display="timeline"]` with
+   the version as the marker, as before. Checked: seeded without v0.51.9, the plugin added it on start.
+   API reference is not started.
 5. **Downloads.** The two builders as plugin files; the files they serve come from the Domma release
    (npm package or the build output), copied into the plugin by the release step. *Check: a bundle and a
    kickstart download and open.*

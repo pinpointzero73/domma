@@ -1,0 +1,34 @@
+{
+  "slug": "releases",
+  "title": "Releases",
+  "description": "Domma's release history - the changelog page. New releases are added by the domma-downloads plugin from each release's own notes; edit an entry here to correct it.",
+  "fields": [
+    {
+      "name": "version",
+      "label": "Version",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "summary",
+      "label": "Summary (Markdown)",
+      "type": "textarea"
+    },
+    {
+      "name": "date",
+      "label": "Date",
+      "type": "date"
+    },
+    {
+      "name": "sequence",
+      "label": "Sort key (major x 1,000,000 + minor x 1,000 + patch)",
+      "type": "number"
+    }
+  ]
+}
