@@ -6827,7 +6827,34 @@ code {
     }
 }
 
+/* Phones: one column - each item's marker, then its content at full width, beside the
+   line at the left. The five-column grid below is for wider screens only; on a phone it
+   squeezed the content into two narrow side columns and pushed the markers off-screen. */
+@media (max-width: 768px) {
+    .dm-progression-centered .dm-progression-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: var(--dm-space-2, 0.5rem);
+        position: relative;
+        z-index: 1;
+    }
+    .dm-progression-centered .dm-progression-item .dm-progression-marker {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: start;
+        margin: 0;
+    }
+    .dm-progression-centered .dm-progression-item .dm-progression-content {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: stretch;
+        margin: 0;
+        max-width: none;
+    }
+}
+
 /* Centered grid: simple 5-column layout */
+@media (min-width: 769px) {
 .dm-progression-centered .dm-progression-item {
     display: grid;
     /* [left content] [left marker] [center gap] [right marker] [right content] */
@@ -6871,6 +6898,7 @@ code {
     justify-self: start;
     align-self: start;
     margin-left: 0; /* Gap handled by column-gap */
+}
 }
 
 /* Horizontal layout */
