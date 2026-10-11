@@ -1,0 +1,64 @@
+{
+  "slug": "api-reference",
+  "title": "API reference",
+  "description": "Every public Domma call: generated from the IDE declarations (public/assets/ide/phpstorm) by scripts/site-migrate/api-reference.mjs, examples from docs/API.md. Shown on /showcase/reference.",
+  "fields": [
+    {
+      "name": "name",
+      "label": "Call",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "module",
+      "label": "Module",
+      "type": "select",
+      "required": true,
+      "options": [
+        "DOM",
+        "Utils",
+        "Dates",
+        "Reactivity",
+        "Models",
+        "Bindings",
+        "Elements",
+        "Effects",
+        "Config",
+        "HTTP",
+        "Storage",
+        "Icons",
+        "Flags",
+        "Themes",
+        "Tables",
+        "Components",
+        "Schema Builder",
+        "Core"
+      ]
+    },
+    {
+      "name": "description",
+      "label": "Description",
+      "type": "textarea"
+    },
+    {
+      "name": "signature",
+      "label": "Signature",
+      "type": "textarea"
+    },
+    {
+      "name": "example",
+      "label": "Example",
+      "type": "textarea"
+    },
+    {
+      "name": "page",
+      "label": "Showcase page",
+      "type": "text"
+    },
+    {
+      "name": "order",
+      "label": "Order",
+      "type": "number"
+    }
+  ]
+}

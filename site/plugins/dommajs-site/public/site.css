@@ -352,3 +352,10 @@ body.dm-vnav-collapsed #site-navbar .navbar-brand .djs-version { display: none; 
 .djs-version-footer { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--dm-text-muted); }
 .cms-footer-bottom .djs-version-footer { margin: 0; }
 .djs-version-footer a { color: inherit; }
+
+/* ---- The API reference table (/showcase/reference): calls and signatures as code ---- */
+.djs-api-table td:nth-child(1),
+.djs-api-table td:nth-child(4) { font-family: var(--dm-font-mono, ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 0.85rem; }
+.djs-api-table td:nth-child(1) { white-space: nowrap; color: var(--dm-primary); }
+.djs-api-table td:nth-child(3) { min-width: 14rem; }
+.djs-api-table td:nth-child(4) { white-space: pre-wrap; word-break: break-word; min-width: 15rem; font-size: 0.8rem; }
