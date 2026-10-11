@@ -145,6 +145,16 @@ if (effectsMenu && !effectsMenu.items.some(i => i.text === 'Celebrations')) effe
 // ...and its own entry straight after Effects as well.
 const effectsAt = menus[0].items.indexOf(effectsMenu);
 if (effectsAt >= 0 && !menus[0].items.some(i => i.text === 'Celebrations')) menus[0].items.splice(effectsAt + 1, 0, {text: 'Celebrations', url: '/showcase/effects/celebrations'});
+// The changelog: its own entry before Resources (the old site had a "What's New?" pill by the
+// brand), and in the footer's Product column after Download.
+const whatsNew = {text: "What's New", url: '/changelog', icon: 'bell'};
+const resourcesAt = menus[0].items.findIndex(i => i.text === 'Resources');
+if (!menus[0].items.some(i => i.url === '/changelog')) menus[0].items.splice(resourcesAt >= 0 ? resourcesAt : menus[0].items.length - 1, 0, {...whatsNew});
+const product = menus[1].items.find(i => i.text === 'Product');
+if (product && !product.items.some(i => i.url === '/changelog')) {
+    const at = product.items.findIndex(i => i.text === 'Download');
+    product.items.splice(at >= 0 ? at + 1 : product.items.length, 0, {text: whatsNew.text, url: whatsNew.url});
+}
 addIcons(menus[0].items);
 
 fs.mkdirSync(OUT, {recursive: true});
