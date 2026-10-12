@@ -1,3 +1,7 @@
+### v0.51.11 - Scribe keeps words together (2026-10-12)
+
+- Scribe wraps between words while preserving per-character entrance effects, partial deletion and playback across render actions. The previous character wrappers allowed lines to break in the middle of a word.
+
 ### v0.51.10 - The centred timeline fits a phone (2026-10-11)
 
 - The centred progression timeline (`layout: 'centered'`) stacks on phones. Below 769px each item is now one column - its marker, then its content at full width beside the line - instead of the five-column desktop grid, which squeezed the content into two narrow side columns and pushed the markers off-screen. Wider screens are unchanged.

@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.51.11",
+      "title": "Scribe keeps words together",
+      "description": "<p>Scribe keeps whole words together when animated text wraps, including bounce effects and narrow containers.</p>",
+      "date": "2026-10-12"
+    },
+    {
       "year": "v0.51.10",
       "title": "The centred timeline fits a phone",
       "description": "The centred timeline now stacks neatly on phones.",
@@ -499,5 +505,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.10"
+  "latestVersion": "v0.51.11"
 }
