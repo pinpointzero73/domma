@@ -7,7 +7,7 @@
  * writes config/menus/<slug>.json files (main, footer) for the new site into
  * scripts/site-migrate/out/menus/, plus menu-locations.json. Every link goes
  * through the phase 0 address map (docs/plans/dommajs-address-map.json):
- * dropped pages are left out, merged ones point at cms.dommajs.org, and kept
+ * dropped pages are left out, merged ones point at domma-cms.com, and kept
  * ones get their new address. `{divider: true}` becomes a separator.
  *
  * Usage: node scripts/site-migrate/menus.mjs
@@ -46,8 +46,8 @@ function item(it) {
         dropped.push(`${it.text} (#)`);
         return null;
     }
-    // The CMS docs moved to cms.dommajs.org: one link there instead of a group of off-site links.
-    if (it.text === 'CMS' && Array.isArray(it.items)) return {text: 'Domma CMS', url: 'https://cms.dommajs.org/features'};
+    // The CMS docs moved to domma-cms.com: one link there instead of a group of off-site links.
+    if (it.text === 'CMS' && Array.isArray(it.items)) return {text: 'Domma CMS', url: 'https://domma-cms.com/features'};
     const out = {text: it.text};
     if (it.url !== undefined) {
         const u = newUrl(it.url);

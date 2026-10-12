@@ -3,32 +3,32 @@ old,new,status,action,title,file,note
 /about/index.html,/about,301,keep,About Us - Domma,about/index.html,Prose page
 /changelog/,/changelog,200,keep,What's New - Domma Changelog,changelog/index.html,Releases collection (served as is)
 /changelog/index.html,/changelog,301,keep,What's New - Domma Changelog,changelog/index.html,Releases collection
-/cms/admin-panel/,https://cms.dommajs.org/features/admin,301,merge,Admin Panel - Domma CMS,cms/admin-panel/index.html,Merge into the existing page there
-/cms/admin-panel/index.html,https://cms.dommajs.org/features/admin,301,merge,Admin Panel - Domma CMS,cms/admin-panel/index.html,Merge into the existing page there
-/cms/auth/,https://cms.dommajs.org/features/users-and-security,301,merge,Authentication & Roles - Domma CMS,cms/auth/index.html,Merge into the existing page there
-/cms/auth/index.html,https://cms.dommajs.org/features/users-and-security,301,merge,Authentication & Roles - Domma CMS,cms/auth/index.html,Merge into the existing page there
-/cms/blocks/,https://cms.dommajs.org/features/components-blocks,301,merge,Blocks - Domma CMS,cms/blocks/index.html,Merge into the existing page there
-/cms/blocks/index.html,https://cms.dommajs.org/features/components-blocks,301,merge,Blocks - Domma CMS,cms/blocks/index.html,Merge into the existing page there
-/cms/collections/,https://cms.dommajs.org/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
-/cms/collections/index.html,https://cms.dommajs.org/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
-/cms/configuration/,https://cms.dommajs.org/features/configuration,301,merge,Configuration - Domma CMS,cms/configuration/index.html,Merge into the existing page there
-/cms/configuration/index.html,https://cms.dommajs.org/features/configuration,301,merge,Configuration - Domma CMS,cms/configuration/index.html,Merge into the existing page there
-/cms/data-pro/,https://cms.dommajs.org/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
-/cms/data-pro/index.html,https://cms.dommajs.org/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
-/cms/forms/,https://cms.dommajs.org/features/forms,301,merge,Forms - Domma CMS,cms/forms/index.html,Merge into the existing page there
-/cms/forms/index.html,https://cms.dommajs.org/features/forms,301,merge,Forms - Domma CMS,cms/forms/index.html,Merge into the existing page there
-/cms/getting-started/,https://cms.dommajs.org/get-started,301,merge,Getting Started - Domma CMS,cms/getting-started/index.html,Merge into the existing page there
-/cms/getting-started/index.html,https://cms.dommajs.org/get-started,301,merge,Getting Started - Domma CMS,cms/getting-started/index.html,Merge into the existing page there
-/cms/,https://cms.dommajs.org/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
-/cms/index.html,https://cms.dommajs.org/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
-/cms/media/,https://cms.dommajs.org/features/media,301,merge,Media Management - Domma CMS,cms/media/index.html,Merge into the existing page there
-/cms/media/index.html,https://cms.dommajs.org/features/media,301,merge,Media Management - Domma CMS,cms/media/index.html,Merge into the existing page there
-/cms/pages/,https://cms.dommajs.org/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
-/cms/pages/index.html,https://cms.dommajs.org/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
-/cms/plugins/,https://cms.dommajs.org/features/marketplace,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
-/cms/plugins/index.html,https://cms.dommajs.org/features/marketplace,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
-/cms/tutorials/,https://cms.dommajs.org/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
-/cms/tutorials/index.html,https://cms.dommajs.org/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
+/cms/admin-panel/,https://domma-cms.com/features/admin,301,merge,Admin Panel - Domma CMS,cms/admin-panel/index.html,Merge into the existing page there
+/cms/admin-panel/index.html,https://domma-cms.com/features/admin,301,merge,Admin Panel - Domma CMS,cms/admin-panel/index.html,Merge into the existing page there
+/cms/auth/,https://domma-cms.com/features/users-and-security,301,merge,Authentication & Roles - Domma CMS,cms/auth/index.html,Merge into the existing page there
+/cms/auth/index.html,https://domma-cms.com/features/users-and-security,301,merge,Authentication & Roles - Domma CMS,cms/auth/index.html,Merge into the existing page there
+/cms/blocks/,https://domma-cms.com/features/components-blocks,301,merge,Blocks - Domma CMS,cms/blocks/index.html,Merge into the existing page there
+/cms/blocks/index.html,https://domma-cms.com/features/components-blocks,301,merge,Blocks - Domma CMS,cms/blocks/index.html,Merge into the existing page there
+/cms/collections/,https://domma-cms.com/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
+/cms/collections/index.html,https://domma-cms.com/features/collections,301,merge,Collections - Domma CMS,cms/collections/index.html,Merge into the existing page there
+/cms/configuration/,https://domma-cms.com/features/configuration,301,merge,Configuration - Domma CMS,cms/configuration/index.html,Merge into the existing page there
+/cms/configuration/index.html,https://domma-cms.com/features/configuration,301,merge,Configuration - Domma CMS,cms/configuration/index.html,Merge into the existing page there
+/cms/data-pro/,https://domma-cms.com/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
+/cms/data-pro/index.html,https://domma-cms.com/features/collections,301,merge,Pro: Views & Actions - Domma CMS,cms/data-pro/index.html,Merge into the existing page there
+/cms/forms/,https://domma-cms.com/features/forms,301,merge,Forms - Domma CMS,cms/forms/index.html,Merge into the existing page there
+/cms/forms/index.html,https://domma-cms.com/features/forms,301,merge,Forms - Domma CMS,cms/forms/index.html,Merge into the existing page there
+/cms/getting-started/,https://domma-cms.com/get-started,301,merge,Getting Started - Domma CMS,cms/getting-started/index.html,Merge into the existing page there
+/cms/getting-started/index.html,https://domma-cms.com/get-started,301,merge,Getting Started - Domma CMS,cms/getting-started/index.html,Merge into the existing page there
+/cms/,https://domma-cms.com/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
+/cms/index.html,https://domma-cms.com/features,301,merge,Domma CMS - Flat-File Content Management,cms/index.html,Merge into the existing page there
+/cms/media/,https://domma-cms.com/features/media,301,merge,Media Management - Domma CMS,cms/media/index.html,Merge into the existing page there
+/cms/media/index.html,https://domma-cms.com/features/media,301,merge,Media Management - Domma CMS,cms/media/index.html,Merge into the existing page there
+/cms/pages/,https://domma-cms.com/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
+/cms/pages/index.html,https://domma-cms.com/features/page-editor,301,merge,Pages & Content - Domma CMS,cms/pages/index.html,Merge into the existing page there
+/cms/plugins/,https://domma-cms.com/features/marketplace,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
+/cms/plugins/index.html,https://domma-cms.com/features/marketplace,301,merge,Plugins - Domma CMS,cms/plugins/index.html,Merge into the existing page there
+/cms/tutorials/,https://domma-cms.com/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
+/cms/tutorials/index.html,https://domma-cms.com/tutorials,301,merge,Tutorials - Domma CMS,cms/tutorials/index.html,Merge into the existing page there
 /cookie-policy/,/cookie-policy,200,keep,Cookie Policy - Domma,cookie-policy/index.html,Prose page (served as is)
 /cookie-policy/index.html,/cookie-policy,301,keep,Cookie Policy - Domma,cookie-policy/index.html,Prose page
 /download/,/download,200,keep,Download - Domma,download/index.html,Page; the builders become plugin files (served as is)
@@ -60,11 +60,11 @@ old,new,status,action,title,file,note
 /faq/index.html,/faq,301,keep,FAQs - Domma,faq/index.html,Prose page
 /,/,200,keep,DommaJS - Dynamic Object Manipulation & Modeling API,index.html,Prose page (served as is)
 /index.html,/,301,keep,DommaJS - Dynamic Object Manipulation & Modeling API,index.html,Prose page
-/miniapps/docs/,https://cms.dommajs.org/tools/docs,301,drop,Domma Docs - Document Editor,miniapps/docs/index.html,Domma Docs lives on Domma CMS
-/miniapps/docs/index.html,https://cms.dommajs.org/tools/docs,301,drop,Domma Docs - Document Editor,miniapps/docs/index.html,Domma Docs lives on Domma CMS
+/miniapps/docs/,https://domma-cms.com/tools/docs,301,drop,Domma Docs - Document Editor,miniapps/docs/index.html,Domma Docs lives on Domma CMS
+/miniapps/docs/index.html,https://domma-cms.com/tools/docs,301,drop,Domma Docs - Document Editor,miniapps/docs/index.html,Domma Docs lives on Domma CMS
 /miniapps/docs/test.html,,410,drop,Docs Test,miniapps/docs/test.html,Test page
-/miniapps/,https://cms.dommajs.org/tools,301,drop,MiniApps - Domma Framework,miniapps/index.html,Mini-apps live on Domma CMS
-/miniapps/index.html,https://cms.dommajs.org/tools,301,drop,MiniApps - Domma Framework,miniapps/index.html,Mini-apps live on Domma CMS
+/miniapps/,https://domma-cms.com/tools,301,drop,MiniApps - Domma Framework,miniapps/index.html,Mini-apps live on Domma CMS
+/miniapps/index.html,https://domma-cms.com/tools,301,drop,MiniApps - Domma Framework,miniapps/index.html,Mini-apps live on Domma CMS
 /privacy-policy/,/privacy-policy,200,keep,Privacy Policy - Domma,privacy-policy/index.html,Prose page (served as is)
 /privacy-policy/index.html,/privacy-policy,301,keep,Privacy Policy - Domma,privacy-policy/index.html,Prose page
 /quickstart/,/quickstart,200,keep,Domma QuickStart - Up and Running in 30 Seconds,quickstart/index.html,Prose page (served as is)
@@ -246,5 +246,5 @@ old,new,status,action,title,file,note
 /miniapps/address/index.html,,410,removed,,,Address Lookup app
 /miniapps/nexus/,,410,removed,,,Nexus app (never launched)
 /miniapps/nexus/index.html,,410,removed,,,Nexus app (never launched)
-/miniapps/garage/,https://cms.dommajs.org/tools/garage,301,removed,,,My Garage - lives on as a Domma CMS Tool
-/miniapps/garage/index.html,https://cms.dommajs.org/tools/garage,301,removed,,,My Garage - lives on as a Domma CMS Tool
+/miniapps/garage/,https://domma-cms.com/tools/garage,301,removed,,,My Garage - lives on as a Domma CMS Tool
+/miniapps/garage/index.html,https://domma-cms.com/tools/garage,301,removed,,,My Garage - lives on as a Domma CMS Tool

@@ -106,8 +106,8 @@ function cmsBand(attrs) {
 ${stats.map(([to, from, label]) => `<div class="djs-cms-stat"><span class="djs-cms-stat-number" data-from="${from}" data-target="${to}">${to}</span><span class="djs-cms-stat-label">${esc(label)}</span></div>`).join('\n')}
 </div>
 <div class="djs-cms-band-cta">
-<a href="https://cms.dommajs.org/" class="btn btn-primary btn-lg glow-primary" target="_blank" rel="noopener">Get Started Free &rarr;</a>
-<a href="https://cms.dommajs.org/features" class="btn btn-outline btn-lg" id="djs-cms-band-cta-secondary" target="_blank" rel="noopener">See Features</a>
+<a href="https://domma-cms.com/" class="btn btn-primary btn-lg glow-primary" target="_blank" rel="noopener">Get Started Free &rarr;</a>
+<a href="https://domma-cms.com/features" class="btn btn-outline btn-lg" id="djs-cms-band-cta-secondary" target="_blank" rel="noopener">See Features</a>
 </div>
 <p class="djs-cms-band-tagline">Built on Domma <span class="sep">&middot;</span> Self-hosted <span class="sep">&middot;</span> Free to try</p>
 </div>

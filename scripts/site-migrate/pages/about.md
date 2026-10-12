@@ -46,4 +46,4 @@ Use it with your existing CSS framework, or go completely headless.
 Domma is developed and maintained by DCBW-IT, a team that enjoys making tools that keep web development quick,
 accessible and enjoyable. We're committed to keeping Domma stable, well documented and steadily improving.
 
-Domma is also what [Domma CMS](https://cms.dommajs.org) is built from - this site runs on it.
+Domma is also what [Domma CMS](https://domma-cms.com) is built from - this site runs on it.

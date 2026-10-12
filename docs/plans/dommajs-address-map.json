@@ -37,7 +37,7 @@
   },
   {
     "old": "/cms/admin-panel/",
-    "new": "https://cms.dommajs.org/features/admin",
+    "new": "https://domma-cms.com/features/admin",
     "status": 301,
     "action": "merge",
     "file": "cms/admin-panel/index.html",
@@ -46,7 +46,7 @@
   },
   {
     "old": "/cms/admin-panel/index.html",
-    "new": "https://cms.dommajs.org/features/admin",
+    "new": "https://domma-cms.com/features/admin",
     "status": 301,
     "action": "merge",
     "file": "cms/admin-panel/index.html",
@@ -55,7 +55,7 @@
   },
   {
     "old": "/cms/auth/",
-    "new": "https://cms.dommajs.org/features/users-and-security",
+    "new": "https://domma-cms.com/features/users-and-security",
     "status": 301,
     "action": "merge",
     "file": "cms/auth/index.html",
@@ -64,7 +64,7 @@
   },
   {
     "old": "/cms/auth/index.html",
-    "new": "https://cms.dommajs.org/features/users-and-security",
+    "new": "https://domma-cms.com/features/users-and-security",
     "status": 301,
     "action": "merge",
     "file": "cms/auth/index.html",
@@ -73,7 +73,7 @@
   },
   {
     "old": "/cms/blocks/",
-    "new": "https://cms.dommajs.org/features/components-blocks",
+    "new": "https://domma-cms.com/features/components-blocks",
     "status": 301,
     "action": "merge",
     "file": "cms/blocks/index.html",
@@ -82,7 +82,7 @@
   },
   {
     "old": "/cms/blocks/index.html",
-    "new": "https://cms.dommajs.org/features/components-blocks",
+    "new": "https://domma-cms.com/features/components-blocks",
     "status": 301,
     "action": "merge",
     "file": "cms/blocks/index.html",
@@ -91,7 +91,7 @@
   },
   {
     "old": "/cms/collections/",
-    "new": "https://cms.dommajs.org/features/collections",
+    "new": "https://domma-cms.com/features/collections",
     "status": 301,
     "action": "merge",
     "file": "cms/collections/index.html",
@@ -100,7 +100,7 @@
   },
   {
     "old": "/cms/collections/index.html",
-    "new": "https://cms.dommajs.org/features/collections",
+    "new": "https://domma-cms.com/features/collections",
     "status": 301,
     "action": "merge",
     "file": "cms/collections/index.html",
@@ -109,7 +109,7 @@
   },
   {
     "old": "/cms/configuration/",
-    "new": "https://cms.dommajs.org/features/configuration",
+    "new": "https://domma-cms.com/features/configuration",
     "status": 301,
     "action": "merge",
     "file": "cms/configuration/index.html",
@@ -118,7 +118,7 @@
   },
   {
     "old": "/cms/configuration/index.html",
-    "new": "https://cms.dommajs.org/features/configuration",
+    "new": "https://domma-cms.com/features/configuration",
     "status": 301,
     "action": "merge",
     "file": "cms/configuration/index.html",
@@ -127,7 +127,7 @@
   },
   {
     "old": "/cms/data-pro/",
-    "new": "https://cms.dommajs.org/features/collections",
+    "new": "https://domma-cms.com/features/collections",
     "status": 301,
     "action": "merge",
     "file": "cms/data-pro/index.html",
@@ -136,7 +136,7 @@
   },
   {
     "old": "/cms/data-pro/index.html",
-    "new": "https://cms.dommajs.org/features/collections",
+    "new": "https://domma-cms.com/features/collections",
     "status": 301,
     "action": "merge",
     "file": "cms/data-pro/index.html",
@@ -145,7 +145,7 @@
   },
   {
     "old": "/cms/forms/",
-    "new": "https://cms.dommajs.org/features/forms",
+    "new": "https://domma-cms.com/features/forms",
     "status": 301,
     "action": "merge",
     "file": "cms/forms/index.html",
@@ -154,7 +154,7 @@
   },
   {
     "old": "/cms/forms/index.html",
-    "new": "https://cms.dommajs.org/features/forms",
+    "new": "https://domma-cms.com/features/forms",
     "status": 301,
     "action": "merge",
     "file": "cms/forms/index.html",
@@ -163,7 +163,7 @@
   },
   {
     "old": "/cms/getting-started/",
-    "new": "https://cms.dommajs.org/get-started",
+    "new": "https://domma-cms.com/get-started",
     "status": 301,
     "action": "merge",
     "file": "cms/getting-started/index.html",
@@ -172,7 +172,7 @@
   },
   {
     "old": "/cms/getting-started/index.html",
-    "new": "https://cms.dommajs.org/get-started",
+    "new": "https://domma-cms.com/get-started",
     "status": 301,
     "action": "merge",
     "file": "cms/getting-started/index.html",
@@ -181,7 +181,7 @@
   },
   {
     "old": "/cms/",
-    "new": "https://cms.dommajs.org/features",
+    "new": "https://domma-cms.com/features",
     "status": 301,
     "action": "merge",
     "file": "cms/index.html",
@@ -190,7 +190,7 @@
   },
   {
     "old": "/cms/index.html",
-    "new": "https://cms.dommajs.org/features",
+    "new": "https://domma-cms.com/features",
     "status": 301,
     "action": "merge",
     "file": "cms/index.html",
@@ -199,7 +199,7 @@
   },
   {
     "old": "/cms/media/",
-    "new": "https://cms.dommajs.org/features/media",
+    "new": "https://domma-cms.com/features/media",
     "status": 301,
     "action": "merge",
     "file": "cms/media/index.html",
@@ -208,7 +208,7 @@
   },
   {
     "old": "/cms/media/index.html",
-    "new": "https://cms.dommajs.org/features/media",
+    "new": "https://domma-cms.com/features/media",
     "status": 301,
     "action": "merge",
     "file": "cms/media/index.html",
@@ -217,7 +217,7 @@
   },
   {
     "old": "/cms/pages/",
-    "new": "https://cms.dommajs.org/features/page-editor",
+    "new": "https://domma-cms.com/features/page-editor",
     "status": 301,
     "action": "merge",
     "file": "cms/pages/index.html",
@@ -226,7 +226,7 @@
   },
   {
     "old": "/cms/pages/index.html",
-    "new": "https://cms.dommajs.org/features/page-editor",
+    "new": "https://domma-cms.com/features/page-editor",
     "status": 301,
     "action": "merge",
     "file": "cms/pages/index.html",
@@ -235,7 +235,7 @@
   },
   {
     "old": "/cms/plugins/",
-    "new": "https://cms.dommajs.org/features/marketplace",
+    "new": "https://domma-cms.com/features/marketplace",
     "status": 301,
     "action": "merge",
     "file": "cms/plugins/index.html",
@@ -244,7 +244,7 @@
   },
   {
     "old": "/cms/plugins/index.html",
-    "new": "https://cms.dommajs.org/features/marketplace",
+    "new": "https://domma-cms.com/features/marketplace",
     "status": 301,
     "action": "merge",
     "file": "cms/plugins/index.html",
@@ -253,7 +253,7 @@
   },
   {
     "old": "/cms/tutorials/",
-    "new": "https://cms.dommajs.org/tutorials",
+    "new": "https://domma-cms.com/tutorials",
     "status": 301,
     "action": "merge",
     "file": "cms/tutorials/index.html",
@@ -262,7 +262,7 @@
   },
   {
     "old": "/cms/tutorials/index.html",
-    "new": "https://cms.dommajs.org/tutorials",
+    "new": "https://domma-cms.com/tutorials",
     "status": 301,
     "action": "merge",
     "file": "cms/tutorials/index.html",
@@ -550,7 +550,7 @@
   },
   {
     "old": "/miniapps/docs/",
-    "new": "https://cms.dommajs.org/tools/docs",
+    "new": "https://domma-cms.com/tools/docs",
     "status": 301,
     "action": "drop",
     "file": "miniapps/docs/index.html",
@@ -559,7 +559,7 @@
   },
   {
     "old": "/miniapps/docs/index.html",
-    "new": "https://cms.dommajs.org/tools/docs",
+    "new": "https://domma-cms.com/tools/docs",
     "status": 301,
     "action": "drop",
     "file": "miniapps/docs/index.html",
@@ -577,7 +577,7 @@
   },
   {
     "old": "/miniapps/",
-    "new": "https://cms.dommajs.org/tools",
+    "new": "https://domma-cms.com/tools",
     "status": 301,
     "action": "drop",
     "file": "miniapps/index.html",
@@ -586,7 +586,7 @@
   },
   {
     "old": "/miniapps/index.html",
-    "new": "https://cms.dommajs.org/tools",
+    "new": "https://domma-cms.com/tools",
     "status": 301,
     "action": "drop",
     "file": "miniapps/index.html",
@@ -2224,7 +2224,7 @@
   },
   {
     "old": "/miniapps/garage/",
-    "new": "https://cms.dommajs.org/tools/garage",
+    "new": "https://domma-cms.com/tools/garage",
     "status": 301,
     "action": "removed",
     "file": "",
@@ -2233,7 +2233,7 @@
   },
   {
     "old": "/miniapps/garage/index.html",
-    "new": "https://cms.dommajs.org/tools/garage",
+    "new": "https://domma-cms.com/tools/garage",
     "status": 301,
     "action": "removed",
     "file": "",

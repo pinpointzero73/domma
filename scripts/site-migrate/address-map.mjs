@@ -10,7 +10,7 @@
  *
  * Actions:
  *   keep    - the page moves to the new site at `new`
- *   merge   - the content joins a page on cms.dommajs.org; the old address redirects there
+ *   merge   - the content joins a page on domma-cms.com; the old address redirects there
  *   drop    - not carried over; redirects to `new` when there is a sensible home, else 410
  *   removed - already gone (2026-10-10); 410, or a redirect where something replaced it
  *
@@ -26,12 +26,12 @@ import {fileURLToPath} from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const PUBLIC = path.join(ROOT, 'public');
 const OUT = path.join(ROOT, 'docs', 'plans');
-const CMS = 'https://cms.dommajs.org';
+const CMS = 'https://domma-cms.com';   // cms.dommajs.org redirects there
 
 /** Not pages: build output, generated downloads, layout partials. */
 const SKIP = [/^dist\//, /^download\/kickstart-files\//, /^layouts\//, /node_modules\//];
 
-/** The 13 Domma CMS docs pages and their home on cms.dommajs.org. */
+/** The 13 Domma CMS docs pages and their home on domma-cms.com. */
 const CMS_DOCS = {
     '': '/features',
     'admin-panel': '/features/admin',
@@ -103,7 +103,7 @@ function decide(file) {
         const key = rest.length > 1 ? rest[0] : '';
         const target = CMS_DOCS[key];
         return target === null
-            ? {action: 'merge', new: `${CMS}/features`, note: `New page needed on cms.dommajs.org for "${key}"; redirect to /features until then`}
+            ? {action: 'merge', new: `${CMS}/features`, note: `New page needed on domma-cms.com for "${key}"; redirect to /features until then`}
             : {action: 'merge', new: `${CMS}${target}`, note: 'Merge into the existing page there'};
     }
     if (top === 'showcase') return {action: 'keep', new: clean(file), note: 'Showcase: prose + [showcase-demo]'};

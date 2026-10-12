@@ -236,6 +236,8 @@ Each phase ends with a check before the next starts.
    itself a redirect to /tools). Content changes are in the dcms-domma-cms-site repo. The redirects
    themselves answer once dommajs.org is cut over (phase 7 imports the map). Not carried over: a short
    contact-form tutorial and an Actions tutorial would fill the only gaps the old Tutorials page showed.
+   **2026-10-12:** cms.dommajs.org now redirects to domma-cms.com, so the map, the site's redirects,
+   its menu, the About page and the home page's Domma CMS buttons point at domma-cms.com directly (one hop).
 7. **SEO and redirects.** Redirect rules for every old address (from the phase 0 map), titles and
    descriptions, sitemap, search. *Check: a crawl of the old sitemap gets 200 or one 301 for every URL.*
    **Done 2026-10-11.** `scripts/site-migrate/redirects.mjs <site>` turns every 301 and 410 row of the
