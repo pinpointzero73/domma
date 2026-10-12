@@ -87,10 +87,6 @@
     color: var(--dm-text-secondary);
 }
 
-/* Scribe draws each character as an inline-block, so a line can break inside a word
-   ("Ja/vaScript" on a phone). The tagline only fades its letters in, which works inline. */
-.djs-tagline .dm-scribe-char { display: inline; }
-
 .djs-hero-cta { text-align: right; }
 
 .djs-cta {
