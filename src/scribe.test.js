@@ -80,6 +80,25 @@ describe('Scribe playback', () => {
     control = scribe(el, { mode: 'word', speed: 0, actions: [{ render: '  Hello world  ' }] });
     frame(); expect(text()).toBe('  Hello world  ');
   });
+  it('keeps typewriter words together across render actions and partial undo', () => {
+    control = scribe(el, { speed: 0, deleteSpeed: 0, actions: [
+      { render: 'Hello wo', effect: 'bounce' }, { render: 'rld' },
+      { undoRender: 3 }, { render: 'rk' }
+    ] });
+    frame();
+    expect(text()).toBe('Hello work');
+    expect(Array.from(el.querySelectorAll('.dm-scribe-word-group'), group => group.textContent))
+      .toEqual(['Hello', 'work']);
+    expect(el.querySelector('.dm-scribe-space').parentElement).toBe(el);
+    control.restart(); frame();
+    expect(el.querySelectorAll('.dm-scribe-word-group')).toHaveLength(2);
+  });
+  it('removes empty word groups when deleting all characters', () => {
+    control = scribe(el, { speed: 0, deleteSpeed: 0,
+      actions: [{ render: 'Hello world' }, { undoRender: 'all' }] });
+    frame();
+    expect(el.querySelectorAll('.dm-scribe-word-group')).toHaveLength(0);
+  });
   it('shows a readable static phrase with reduced motion', () => {
     window.matchMedia = vi.fn(() => ({ matches: true }));
     control = scribe(el, { loop: true, actions: [{ render: 'Readable' }, { undoRender: 'all' }] });

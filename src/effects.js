@@ -545,8 +545,14 @@ export function scribe(selector, options = {}) {
     state.cursor?.classList.toggle('dm-scribe-cursor-active', active);
   }
 
+  function removeUnit(span) {
+    const parent = span.parentElement;
+    span.remove();
+    if (parent?.classList.contains('dm-scribe-word-group') && !parent.childNodes.length) parent.remove();
+  }
+
   function clearText(state) {
-    state.spans.forEach(span => span.remove());
+    state.spans.forEach(removeUnit);
     state.spans = [];
     state.lastRenderStart = 0;
   }
@@ -617,7 +623,18 @@ export function scribe(selector, options = {}) {
       // Release animation layers once the entrance settles.
       span.addEventListener('animationend', () => span.classList.remove(effectClass), { once: true });
     }
-    state.element.insertBefore(span, state.cursor);
+    if (opts.mode === 'typewriter' && !/^\s+$/.test(unit)) {
+      const previous = state.spans.at(-1);
+      let group = previous?.parentElement;
+      if (!group?.classList.contains('dm-scribe-word-group')) {
+        group = document.createElement('span');
+        group.className = 'dm-scribe-word-group';
+        state.element.insertBefore(group, state.cursor);
+      }
+      group.appendChild(span);
+    } else {
+      state.element.insertBefore(span, state.cursor);
+    }
     state.spans.push(span);
     opts.onCharacter?.(unit, state.spans.length - 1);
   }
@@ -646,7 +663,7 @@ export function scribe(selector, options = {}) {
       else if (task.type === 'undo') {
         const span = state.spans.pop();
         task.deleted.push(span.textContent);
-        span.remove();
+        removeUnit(span);
       } else finishTask(state);
     }
     schedule(state);
