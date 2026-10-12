@@ -258,6 +258,16 @@ Each phase ends with a check before the next starts.
 9. **Cut-over.** Point the dommajs.org vhost at the manager like the other fleet sites (as
    `sites.dommajs.org` already is). Keep `public/` and the old vhost file for a quick switch back; remove
    them after a few weeks without problems. *Check: the phase 7 crawl again, on the live domain.*
+   **Done 2026-10-12.** The manager's dommajs site has `dommajs.org` and `www.dommajs.org` (primary
+   `dommajs.org`; `dommajs.sites.dommajs.org` kept); its Site URL is `https://dommajs.org`. The vhost
+   (`/etc/apache2/sites-enabled/dommajs.org.conf` - a file of its own, not a link to sites-available)
+   proxies to the manager on 127.0.0.1:8192, keeps `.well-known`, awstats and cgi-bin on Apache, sends
+   http, www and mail to `https://dommajs.org`, and keeps the webmail/admin redirects. The old one is
+   `dommajs.org.conf.bak-pre-cms-20261012` beside it (switch back: copy it over and reload);
+   `public/` is untouched. Checked on the live domain: all 245 old addresses as the map says, all 103
+   sitemap pages 200, key pages and their demos clean in a browser. **Remove after a few weeks without
+   problems:** the backup vhost and the old static site in `public/` (and the `/api` proxy to :3000 that
+   only the sites-available copy still names).
 
 ## Release in step
 
