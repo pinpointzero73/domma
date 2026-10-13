@@ -156,7 +156,7 @@ export class DommaModal extends DommaElement {
                 gap: 0.5rem;
                 padding: 1rem 1.5rem;
                 border-top: 1px solid var(--dm-border, #e5e7eb);
-                background: var(--dm-surface-subtle, #f9fafb);
+                background: var(--dm-surface-secondary, var(--dm-surface, #f9fafb)); /* --dm-surface-subtle is in no theme: dark themes got a white footer */
             }
 
             .modal-backdrop {
