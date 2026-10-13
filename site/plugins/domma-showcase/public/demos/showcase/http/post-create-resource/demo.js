@@ -15,7 +15,7 @@ export function mount(root) {
         output.addClass('loading').text('Creating...');
 
         try {
-          const result = await Domma.http.post('https://jsonplaceholder.typicode.com/posts', {
+          const result = await Domma.http.post('/api/plugins/domma-showcase/examples/posts', {
             title: title,
             body: body,
             userId: 1

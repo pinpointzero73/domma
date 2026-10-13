@@ -8,7 +8,7 @@ export function mount(root) {
         output.addClass('loading').text('Requesting invalid resource...');
 
         try {
-          await Domma.http.get('https://jsonplaceholder.typicode.com/posts/99999');
+          await Domma.http.get('/api/plugins/domma-showcase/examples/posts/99999');
           output.removeClass('loading').text('Unexpected success');
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Caught error:\n' + err.message);

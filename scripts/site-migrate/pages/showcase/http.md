@@ -41,15 +41,17 @@ The `config` parameter accepts any valid [fetch options](https://developer.mozil
 }
 ```
 
+The live demos use example records. POST, PUT, PATCH and DELETE responses are simulated.
+
 ## GET Fetch Data
 
-Fetch posts from JSONPlaceholder API:
+Fetch posts from the example API:
 
 [showcase-demo id="showcase/http/get-fetch-data" title="GET Fetch Data" /]
 
 ## POST Create Resource
 
-Create a new post (simulated with JSONPlaceholder):
+Create a new post using example data:
 
 [showcase-demo id="showcase/http/post-create-resource" title="POST Create Resource" /]
 

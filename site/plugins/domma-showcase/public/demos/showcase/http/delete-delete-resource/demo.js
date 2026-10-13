@@ -12,7 +12,7 @@ export function mount(root) {
         output.addClass('loading').text('Deleting...');
 
         try {
-          const result = await Domma.http.delete('https://jsonplaceholder.typicode.com/posts/1');
+          const result = await Domma.http.delete('/api/plugins/domma-showcase/examples/posts/1');
           output.removeClass('loading error').text(formatJson(result) + '\n\n// Post deleted successfully');
           E.toast('Post deleted successfully!', {type: 'success'});
         } catch (err) {

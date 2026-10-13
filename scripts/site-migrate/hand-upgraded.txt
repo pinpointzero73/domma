@@ -97,3 +97,5 @@ pages/showcase/elements.md
 pages/showcase/footer.md
 pages/showcase/sidebar.md
 pages/showcase/theme-roller.md
+
+pages/showcase/http.md

@@ -12,7 +12,7 @@ export function mount(root) {
         output.addClass('loading').text('Updating...');
 
         try {
-          const result = await Domma.http.put('https://jsonplaceholder.typicode.com/posts/1', {
+          const result = await Domma.http.put('/api/plugins/domma-showcase/examples/posts/1', {
             id: 1,
             title: 'Updated Title',
             body: 'This post has been updated.',
