@@ -35,6 +35,13 @@
     background: var(--dm-surface);
 }
 
+.controls-print-to-pdf {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
 .api-table-accordion {
     width: 100%;
     border-collapse: collapse;
@@ -229,30 +236,6 @@
 .tooltip-input-width-150 {
     width: 150px;
 }
-.feature-item-config {
-    text-align: center;
-    padding: var(--dm-space-4);
-    background: var(--dm-card-bg);
-    border: 1px solid var(--dm-card-border);
-    border-radius: var(--dm-radius-md);
-    transition: var(--dm-transition-base);
-}
-
-.feature-item-config:hover {
-    box-shadow: var(--dm-shadow-md);
-    transform: translateY(-2px);
-}
-
-.feature-icon-config {
-    width: 3rem;
-    height: 3rem;
-    margin: 0 auto 1rem;
-    color: var(--dm-primary);
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 .demo-col-grid {
     background: var(--dm-surface-raised, var(--dm-surface));
@@ -286,8 +269,17 @@
     min-height: 120px;
 }
 
+.grid-bg-gray-100 {
+    background: var(--dm-gray-100);
+    color: var(--dm-slate-900);
+}
+
 .grid-padding-half {
     padding: 0.5rem;
+}
+
+.grid-min-height-150 {
+    min-height: 150px;
 }
 
 .grid-height-100 {
@@ -325,6 +317,18 @@
 
 .http-response-area.error {
     color: var(--dm-danger);
+}
+
+.http-demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--dm-space-4);
+}
+
+@media (max-width: 768px) {
+    .http-demo-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .icons-tab-list {
@@ -389,6 +393,12 @@
     font-size: 4rem;
     margin-bottom: 1rem;
     opacity: 0.3;
+}
+
+.icons-usage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 
 .icons-usage-card {
@@ -553,6 +563,13 @@
     color: var(--dm-gray-600);
 }
 
+.page-roller-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
 .page-roller-feature-card {
     background: var(--dm-surface);
     border: 1px solid var(--dm-border);
@@ -635,6 +652,12 @@
 .storage-stat-label {
     font-size: var(--dm-font-size-sm);
     color: var(--dm-text-secondary);
+}
+
+.themes-component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
 }
 
 .themes-preview-card {

@@ -1,29 +1,30 @@
-<div class="themes-preview-card">
-    <h3>CSS Only</h3>
-    <div class="themes-code-block language-html">
-        <span class="comment">&lt;!-- Include themes CSS --&gt;</span>
-        &lt;<span class="keyword">link</span> <span class="function">rel</span>=<span class="string">"stylesheet"</span> <span class="function">href</span>=<span class="string">"domma-themes.css"</span>&gt;
+<div class="themes-component-grid"><div class="themes-preview-card">
+        <h3>CSS Only</h3>
+        <div class="themes-code-block language-html">
+            <span class="comment">&lt;!-- Include themes CSS --&gt;</span>
+            &lt;<span class="keyword">link</span> <span class="function">rel</span>=<span class="string">"stylesheet"</span> <span class="function">href</span>=<span class="string">"domma-themes.css"</span>&gt;
 
-        <span class="comment">&lt;!-- Apply via class --&gt;</span>
-        &lt;<span class="keyword">body</span> <span class="function">class</span>=<span class="string">"dm-theme-grayve-dark"</span>&gt;
+            <span class="comment">&lt;!-- Apply via class --&gt;</span>
+            &lt;<span class="keyword">body</span> <span class="function">class</span>=<span class="string">"dm-theme-grayve-dark"</span>&gt;
+        </div>
     </div>
-</div>
 
-<div class="themes-preview-card">
-    <h3>JavaScript API</h3>
-    <div class="themes-code-block language-javascript">
-        <span class="comment">// Initialise with a theme</span>
-        Domma.theme.<span class="function">init</span>({
-        theme: <span class="string">'grayve-dark'</span>,
-        autoDetect: <span class="keyword">true</span>
-        });
+    <div class="themes-preview-card">
+        <h3>JavaScript API</h3>
+        <div class="themes-code-block language-javascript">
+            <span class="comment">// Initialise with a theme</span>
+            Domma.theme.<span class="function">init</span>({
+            theme: <span class="string">'grayve-dark'</span>,
+            autoDetect: <span class="keyword">true</span>
+            });
 
-        <span class="comment">// Switch at runtime</span>
-        Domma.theme.<span class="function">set</span>(<span class="string">'ocean-light'</span>);
+            <span class="comment">// Switch at runtime</span>
+            Domma.theme.<span class="function">set</span>(<span class="string">'ocean-light'</span>);
 
-        <span class="comment">// Query current state</span>
-        Domma.theme.<span class="function">get</span>();      <span class="comment">// 'grayve-dark'</span>
-        Domma.theme.<span class="function">getBase</span>(); <span class="comment">// 'grayve'</span>
-        Domma.theme.<span class="function">isDark</span>(); <span class="comment">// true</span>
+            <span class="comment">// Query current state</span>
+            Domma.theme.<span class="function">get</span>();      <span class="comment">// 'grayve-dark'</span>
+            Domma.theme.<span class="function">getBase</span>(); <span class="comment">// 'grayve'</span>
+            Domma.theme.<span class="function">isDark</span>(); <span class="comment">// true</span>
+        </div>
     </div>
 </div>

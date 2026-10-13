@@ -1,7 +1,14 @@
 /* Domma Showcase - demo styles from public/showcase/effects/shadows, by scripts/site-migrate/demo-styles.mjs:
  * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
  * into a demo's own demo.css. */
-.showcase-demo[data-demo^="showcase/effects/shadows/"] .shadow-box {
+.showcase-demo[data-demo^="showcase/effects/shadows/"] .shadow-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 2rem;
+          margin: 2rem 0;
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/shadows/"] .shadow-box {
           background: var(--dm-surface, #fff);
           padding: 2rem;
           border-radius: 8px;

@@ -1,54 +1,55 @@
-<div class="card">
-    <div class="card-body">
-        <h3 class="card-title">JavaScript API</h3>
-        <div class="code-block language-javascript">
-            <span class="comment">// Create a Page Roller instance</span>
-            const builder = Domma.elements.pageRoller('#container', {
-            theme: 'light',
-            themeVariant: 'ocean',
-            useGrid: true,
-            splitView: true
-            });
+<div class="grid grid-cols-2 gap-4"><div class="card">
+        <div class="card-body">
+            <h3 class="card-title">JavaScript API</h3>
+            <div class="code-block language-javascript">
+                <span class="comment">// Create a Page Roller instance</span>
+                const builder = Domma.elements.pageRoller('#container', {
+                theme: 'light',
+                themeVariant: 'ocean',
+                useGrid: true,
+                splitView: true
+                });
 
-            <span class="comment">// Add sections programmatically</span>
-            builder.addSection('hero');
-            builder.addSection('cardGrid');
-            builder.addSection('footer');
+                <span class="comment">// Add sections programmatically</span>
+                builder.addSection('hero');
+                builder.addSection('cardGrid');
+                builder.addSection('footer');
 
-            <span class="comment">// Export HTML</span>
-            const html = builder.exportHTML();
-            builder.download('my-page');
-            builder.copyToClipboard();
+                <span class="comment">// Export HTML</span>
+                const html = builder.exportHTML();
+                builder.download('my-page');
+                builder.copyToClipboard();
 
-            <span class="comment">// Save/Load templates</span>
-            builder.saveTemplate('My Landing Page');
-            builder.loadTemplate('My Landing Page');
-            builder.listTemplates(); <span class="comment">// ['My Landing Page', ...]</span>
+                <span class="comment">// Save/Load templates</span>
+                builder.saveTemplate('My Landing Page');
+                builder.loadTemplate('My Landing Page');
+                builder.listTemplates(); <span class="comment">// ['My Landing Page', ...]</span>
+            </div>
         </div>
     </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <h3 class="card-title">Section Methods</h3>
-        <div class="code-block language-javascript">
-            <span class="comment">// Get/Set sections</span>
-            builder.getSections();
-            builder.getSection(0);
-            builder.updateSection(0, { title: 'New Title' });
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Section Methods</h3>
+            <div class="code-block language-javascript">
+                <span class="comment">// Get/Set sections</span>
+                builder.getSections();
+                builder.getSection(0);
+                builder.updateSection(0, { title: 'New Title' });
 
-            <span class="comment">// Move/Remove sections</span>
-            builder.moveSection(2, 0);
-            builder.removeSection(1);
+                <span class="comment">// Move/Remove sections</span>
+                builder.moveSection(2, 0);
+                builder.removeSection(1);
 
-            <span class="comment">// Theme configuration</span>
-            builder.setTheme('dark', 'forest');
-            builder.setGridEnabled(true);
-            builder.getPageConfig();
+                <span class="comment">// Theme configuration</span>
+                builder.setTheme('dark', 'forest');
+                builder.setGridEnabled(true);
+                builder.getPageConfig();
 
-            <span class="comment">// Lifecycle</span>
-            builder.newPage();
-            builder.refreshPreview();
-            builder.destroy();
+                <span class="comment">// Lifecycle</span>
+                builder.newPage();
+                builder.refreshPreview();
+                builder.destroy();
+            </div>
         </div>
     </div>
 </div>

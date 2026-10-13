@@ -1,7 +1,21 @@
 /* Domma Showcase - demo styles from public/showcase/effects/ambient, by scripts/site-migrate/demo-styles.mjs:
  * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
  * into a demo's own demo.css. */
-.showcase-demo[data-demo^="showcase/effects/ambient/"] .modifier-demo {
+.showcase-demo[data-demo^="showcase/effects/ambient/"] .effect-demo {
+          height: 300px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.5rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          margin-bottom: 1.5rem;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .showcase-demo[data-demo^="showcase/effects/ambient/"] .modifier-demo {
           height: 200px;
           border-radius: 8px;
           display: flex;

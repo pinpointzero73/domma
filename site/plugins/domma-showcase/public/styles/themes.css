@@ -1,7 +1,20 @@
 /* Domma Showcase - demo styles from public/showcase/themes, by scripts/site-migrate/demo-styles.mjs:
  * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
  * into a demo's own demo.css. */
-.showcase-demo[data-demo^="showcase/themes/"] .theme-pair {
+.showcase-demo[data-demo^="showcase/themes/"] .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .showcase-demo[data-demo^="showcase/themes/"] .theme-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 560px) {
+            .showcase-demo[data-demo^="showcase/themes/"] .theme-grid { grid-template-columns: 1fr; }
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .theme-pair {
             display: grid;
             grid-template-columns: 1fr 1fr;
             border: 2px solid var(--dm-border);
@@ -76,6 +89,21 @@
             color: var(--dm-text-muted);
             margin-top: 1px;
         }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--dm-surface);
+            border-bottom: 1px solid var(--dm-border);
+            padding: 0.75rem 1rem;
+            margin: 0 -1rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
         .showcase-demo[data-demo^="showcase/themes/"] .audit-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
         .showcase-demo[data-demo^="showcase/themes/"] .audit-toggle {
             display: flex; align-items: center; gap: 0.4rem;
@@ -108,6 +136,12 @@
             font-family: monospace; z-index: 10;
             pointer-events: none; white-space: nowrap;
         }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 0.75rem;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem; }
         .showcase-demo[data-demo^="showcase/themes/"] .audit-label {
             font-size: 0.75rem; font-weight: 600;
             color: var(--dm-text-secondary);
@@ -121,12 +155,43 @@
             border: 1px solid var(--dm-border);
             margin-bottom: 0.75rem;
         }
+        .showcase-demo[data-demo^="showcase/themes/"] .audit-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .branding-strip {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .branding-strip > div {
+            padding: 0.85rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+        }
         .showcase-demo[data-demo^="showcase/themes/"] .swatch-primary   { background: var(--dm-primary);   color: var(--dm-primary-text,   #fff); }
         .showcase-demo[data-demo^="showcase/themes/"] .swatch-secondary { background: var(--dm-secondary); color: var(--dm-secondary-text, #fff); }
         .showcase-demo[data-demo^="showcase/themes/"] .swatch-success   { background: var(--dm-success);   color: var(--dm-success-text,   #fff); }
         .showcase-demo[data-demo^="showcase/themes/"] .swatch-warning   { background: var(--dm-warning);   color: var(--dm-warning-text,   #fff); }
         .showcase-demo[data-demo^="showcase/themes/"] .swatch-danger    { background: var(--dm-danger);    color: var(--dm-danger-text,    #fff); }
         .showcase-demo[data-demo^="showcase/themes/"] .swatch-info      { background: var(--dm-info);      color: var(--dm-info-text,      #fff); }
+        .showcase-demo[data-demo^="showcase/themes/"] .surface-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .showcase-demo[data-demo^="showcase/themes/"] .surface-strip > div {
+            padding: 1rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border: 1px solid var(--dm-border);
+        }
         .showcase-demo[data-demo^="showcase/themes/"] .surf-bg      { background: var(--dm-background);   color: var(--dm-text); }
         .showcase-demo[data-demo^="showcase/themes/"] .surf-surface { background: var(--dm-surface);      color: var(--dm-text); }
         .showcase-demo[data-demo^="showcase/themes/"] .surf-alt     { background: var(--dm-surface-alt);  color: var(--dm-text); }

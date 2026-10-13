@@ -1,19 +1,20 @@
-<div>
-    <pre class="code-block language-javascript mb-4">try {
-        const data = await Domma.http.get(
-        'https://jsonplaceholder.typicode.com/posts/999'
-        );
-        } catch (error) {
-        console.error('Request failed:', error.message);
-        // "HTTP Error: 404"
-        }
-    </pre>
-    <button type="button" class="btn btn-outline" id="demo-error">
-        <span data-icon="alert-triangle" data-icon-size="16"></span>
-        Trigger 404 Error
-    </button>
-</div>
-<div>
-    <label class="form-label">Response:</label>
-    <div class="http-response-area" id="error-response">Click to trigger an error...</div>
+<div class="http-demo-grid"><div>
+        <pre class="code-block language-javascript mb-4">try {
+            const data = await Domma.http.get(
+            'https://jsonplaceholder.typicode.com/posts/999'
+            );
+            } catch (error) {
+            console.error('Request failed:', error.message);
+            // "HTTP Error: 404"
+            }
+        </pre>
+        <button type="button" class="btn btn-outline" id="demo-error">
+            <span data-icon="alert-triangle" data-icon-size="16"></span>
+            Trigger 404 Error
+        </button>
+    </div>
+    <div>
+        <label class="form-label">Response:</label>
+        <div class="http-response-area" id="error-response">Click to trigger an error...</div>
+    </div>
 </div>

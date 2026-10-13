@@ -38,7 +38,7 @@ export function mount(root) {
                     <div id="demo-form-container"></div>
                 `;
 
-                blueprintContent.html(DOMPurify.sanitize(html, {safe: false}));
+                blueprintContent.html(html);
 
                 // Small delay to ensure DOM is ready
                 setTimeout(() => {
@@ -99,7 +99,7 @@ export function mount(root) {
     </pre>
                 `;
 
-                blueprintContent.html(DOMPurify.sanitize(html, {safe: false}));
+                blueprintContent.html(html);
                 window.demoModel = demoModel;
             } else if (view === 'table') {
                 // Build HTML with container
@@ -109,7 +109,7 @@ export function mount(root) {
                     <div id="demo-table-container"></div>
                 `;
 
-                blueprintContent.html(DOMPurify.sanitize(html, {safe: false}));
+                blueprintContent.html(html);
 
                 // Small delay to ensure DOM is ready
                 setTimeout(() => {

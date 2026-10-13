@@ -24,12 +24,14 @@
  * been worked on by hand); --force does.
  *
  * Usage: node scripts/site-migrate/showcase.mjs <page> [<page> …] [--force] [--dry]
+ * --restore-layouts restores missing layout frames in existing demos without regenerating their code.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {JSDOM} from 'jsdom';
 import * as acorn from 'acorn';
+import postcss from 'postcss';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OLD = path.join(ROOT, 'public', 'showcase');
@@ -39,6 +41,7 @@ const DEMOS_OUT = path.join(ROOT, 'site', 'plugins', 'domma-showcase', 'public',
 const ASSETS_OUT = path.join(ROOT, 'site', 'plugins', 'domma-showcase', 'public', 'assets');
 const ASSETS_URL = '/plugins/domma-showcase/public/assets';
 const FORCE = process.argv.includes('--force');
+const RESTORE_LAYOUTS = process.argv.includes('--restore-layouts');
 // Upgraded by hand since conversion: never regenerated, even with --force.
 const HAND = new Set(fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), 'hand-upgraded.txt'), 'utf8')
     .split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#')));
@@ -130,6 +133,19 @@ function convertPage(page) {
     currentPage = page;
     const file = fs.existsSync(path.join(OLD, page, 'index.html')) ? path.join(OLD, page, 'index.html') : path.join(OLD, `${page}.html`);
     const doc = new JSDOM(fs.readFileSync(file, 'utf8')).window.document;
+    // The outer row/grid is part of the demo. Removing it leaves columns and
+    // feature cards stacked even though their own styles are still present.
+    const frames = new Set(['row', 'grid', 'flex', 'card']);
+    const css = fs.readFileSync(path.join(OLD, 'css', 'domma-showcase.css'), 'utf8')
+        + [...doc.querySelectorAll('style')].map(el => el.textContent).join('\n');
+    postcss.parse(css).walkRules(rule => {
+        if (!rule.nodes.some(decl => decl.type === 'decl' && (decl.prop === 'display' && /^(inline-)?(grid|flex)$/.test(decl.value) || decl.prop === 'grid-template-columns'))) return;
+        for (const selector of rule.selector.split(',')) {
+            const match = /^\.([\w-]+)$/.exec(selector.trim());
+            if (match) frames.add(match[1]);
+        }
+    });
+    const hasFrame = el => [...el.classList].some(name => frames.has(name));
     const report = {page, demos: 0, unplaced: [], handlers: [], externalScripts: [], skipped: [], upgrade: []};
 
     const title = text(doc.querySelector('.hero-title') || doc.querySelector('h1') || doc.querySelector('title'));
@@ -385,14 +401,26 @@ function convertPage(page) {
     const markdown = front.join('\n') + '\n' + hero + '\n' + md.join('\n\n').replace(/\n{3,}/g, '\n\n') + '\n';
     const writes = [];
     const keepPage = HAND.has(`pages/showcase/${page}.md`) || (!FORCE && fs.existsSync(pageFile));
-    if (!keepPage) writes.push([pageFile, markdown]); else report.skipped.push(path.relative(ROOT, pageFile));
+    if (!keepPage && !RESTORE_LAYOUTS) writes.push([pageFile, markdown]); else report.skipped.push(path.relative(ROOT, pageFile));
     for (const d of demos) {
         const dir = path.join(DEMOS_OUT, page, d.slug);
+        if (RESTORE_LAYOUTS) {
+            const demoFile = path.join(dir, 'demo.html');
+            if (HAND.has(d.id) || d.parts || !hasFrame(d.el) || !fs.existsSync(demoFile)) continue;
+            const current = fs.readFileSync(demoFile, 'utf8');
+            const fragment = new JSDOM(current).window.document.body;
+            // An existing frame (including a hand-written responsive grid) wins.
+            if (fragment.children.length === 1 && hasFrame(fragment.firstElementChild)) continue;
+            const wrapper = d.el.cloneNode(false);
+            wrapper.innerHTML = '\n' + current.trim() + '\n';
+            writes.push([demoFile, reindent(normaliseLayoutClasses(wrapper.outerHTML)) + '\n']);
+            continue;
+        }
         if (HAND.has(`showcase/${page}/${d.slug}`) || (!FORCE && fs.existsSync(dir))) { report.skipped.push(path.relative(ROOT, dir)); continue; }
         // When the script targets the demo element itself (an empty <div id="form-x"> a form is
         // rendered into), the element is part of the demo, not just what is inside it.
         const self = (el) => touchedIds.has(el.id) || (!DEMO_CLASS.test(el.className || '') && [...el.classList].some(c => touchedClasses.has(c)));
-        const html = (d.parts || [d.el]).map(el => (self(el) ? el.outerHTML : el.innerHTML).replace(/^\n+|\s+$/g, '')).join('\n');
+        const html = (d.parts || [d.el]).map(el => (self(el) || hasFrame(el) ? el.outerHTML : el.innerHTML).replace(/^\n+|\s+$/g, '')).join('\n');
         writes.push([path.join(dir, 'demo.html'), reindent(upgradeHtml(html)) + '\n']);
         const js = perDemo.get(d.id).sort((a, b) => a.index - b.index).map(x => x.src);
         if (d.handlers.length) {
@@ -440,8 +468,15 @@ function convertPage(page) {
  * The automatic part of the upgrade: the short alias, a toast instead of alert(),
  * and selectors found inside the demo rather than the whole page.
  */
+function normaliseLayoutClasses(text) {
+    return text
+        .replace(/\b(sm|md|lg|xl):grid-cols-(\d+)\b/g, 'grid-cols-$1-$2')
+        .replace(/\bcol-lg-(\d+)\s+col-md-\d+\b/g, 'col-$1')
+        .replace(/\bcol-(?:sm|md|lg|xl)-(\d+)\b/g, 'col-$1');
+}
+
 function upgrade(js) {
-    return js
+    return normaliseLayoutClasses(js)
         // A page global the old inline handlers called becomes a function of the demo's own.
         .replace(/^(\s*)window\.(\w+)\s*=\s*(async\s+)?function\s*\(/gm, '$1$3function $2(')
         .replace(/\bDomma\.elements\./g, 'E.')
@@ -456,7 +491,7 @@ function upgrade(js) {
  * get an explicit type.
  */
 function upgradeHtml(html) {
-    return html
+    return normaliseLayoutClasses(html)
         .replace(/<ul(\s+[^>]*class="[^"]*\btab-list\b[^"]*"[^>]*)>([\s\S]*?)<\/ul>/g, (_m, attrs, inner) =>
             `<div${attrs} role="tablist">${inner.replace(/<li(\s+[^>]*class="[^"]*\btab-item\b[^"]*"[^>]*)>([\s\S]*?)<\/li>/g, '<button type="button"$1 role="tab">$2</button>')}</div>`)
         .replace(/<div(\s+[^>]*class="[^"]*\btab-panel\b[^"]*")(?![^>]*role=)/g, '<div$1 role="tabpanel"')

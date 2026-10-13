@@ -58,3 +58,10 @@ showcase/integrations/quick-integration-reference
 showcase/models/reactivity/already-on-in-your-components
 showcase/models/reactivity/it-stops-listening-to-what-it-stopped-reading
 showcase/models/reactivity/react-to-changes-without-wiring-subscriptions
+
+# Showcase layout and component descriptions (2026-10-13)
+showcase/config/why-config-engine
+pages/showcase/config.md
+pages/showcase/config/all-components.md
+showcase/blueprints/blueprint-examples
+showcase/integrations/use-everywhere
