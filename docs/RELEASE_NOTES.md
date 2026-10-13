@@ -1,3 +1,7 @@
+### v0.51.13 - Modal footer follows the theme (2026-10-13)
+
+The `<domma-modal>` footer used `--dm-surface-subtle`, a token no theme defines, so it fell back to white and showed a white bar in dark themes. It now uses `--dm-surface-secondary`, which every theme sets.
+
 ### v0.51.12 - Attribute values in reactive lists read as typed (2026-10-13)
 
 Bundles domma-reactive 1.3.1: a placeholder inside an ordinary attribute of a `data-each` row (`title="{{name}}"`, `aria-label="Actions for {{title}}"`, `data-*`) is no longer escaped twice, so a name with `&`, `<` or quotes shows as typed in tooltips, screen-reader labels and data attributes.
