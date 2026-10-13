@@ -12,7 +12,7 @@ export function mount(root) {
           output.removeClass('loading').text('Unexpected success');
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Caught error:\n' + err.message);
-          E.toast.error('Request failed: ' + err.message);
+          E.toast('Request failed: ' + err.message, {type: 'error'});
         }
       });
 }

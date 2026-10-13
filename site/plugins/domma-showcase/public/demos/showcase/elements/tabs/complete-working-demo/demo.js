@@ -6,7 +6,7 @@ export function mount(root) {
     const tutorialTabs = E.tabs(root.querySelector('#tutorial-tabs'), {
             activeIndex: 0,
             animation: true,
-            onChange: (index) => {
+            onChange: ({index}) => {
                 const tabs = ['Overview', 'Features', 'Reviews'];
                 $(root).find('#tutorial-result').text(`Now viewing: ${tabs[index]}`);
             }

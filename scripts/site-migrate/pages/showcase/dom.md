@@ -23,7 +23,7 @@ $(document.body)
 $(element)
 
 // HTML string
-$('Content')
+$('<div class="new">Content</div>')
 
 // Collection from NodeList
 $($('p'))
@@ -32,16 +32,6 @@ $($('p'))
 ### Try It
 
 [showcase-demo id="showcase/dom/try-it" title="Try It" /]
-
-Item 1
-
-Item 2
-
-Item 3
-
-Item 4
-
-[showcase-demo id="showcase/dom/try-it-2" title="Try It" /]
 
 ## Context Parameter
 
@@ -340,8 +330,6 @@ scroll()
 
 resize()
 
-load()
-
 ```javascript
 // Basic event binding
 $('#btn').on('click', function(e) {
@@ -480,15 +468,11 @@ Iterate and work with element collections.
 
 each()
 
-map()
-
 get()
 
 index()
 
 toArray()
-
-slice()
 
 length
 

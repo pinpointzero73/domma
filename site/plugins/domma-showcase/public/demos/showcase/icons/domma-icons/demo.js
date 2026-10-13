@@ -23,6 +23,7 @@ export function mount(root) {
             status: {name: 'Status', description: 'Indicators, alerts, and state icons'},
             transport: {name: 'Transport', description: 'Vehicle icons'},
             ui: {name: 'UI', description: 'Core user interface elements - buttons, menus, controls'},
+            forms: {name: 'Forms', description: 'Input fields, validation, and form controls'},
             weather: {name: 'Weather', description: 'Weather conditions, sun, clouds, rain, and meteorology'}
         };
         // Track tabs instance
@@ -57,7 +58,7 @@ export function mount(root) {
                 const activeClass = firstCategory ? ' active' : '';
 
                 // Tab navigation item
-                navHtml += `<button class="icons-tab-item${activeClass}" data-tab="${key}">${meta.name} (${icons.length})</button>`;
+                navHtml += `<button type="button" class="tab-item icons-tab-item${activeClass}" role="tab" data-tab="${key}">${meta.name} (${icons.length})</button>`;
 
                 // Tab panel content
                 panelsHtml += `
@@ -107,10 +108,10 @@ export function mount(root) {
     function copyToClipboard(name) {
             const text = `data-icon="${name}"`;
             navigator.clipboard.writeText(text).then(() => {
-                E.toast.success(`Copied: ${name}`, {
+                E.toast(`Copied: ${name}`, {...({
                     position: 'bottom-center',
                     duration: 2000
-                });
+                }), type: 'success'});
             });
         }
         // Search handler with debounce

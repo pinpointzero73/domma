@@ -32,6 +32,7 @@ import {fileURLToPath} from 'node:url';
 import {JSDOM} from 'jsdom';
 import * as acorn from 'acorn';
 import postcss from 'postcss';
+import {normaliseToastCalls} from './showcase-script-fixes.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OLD = path.join(ROOT, 'public', 'showcase');
@@ -476,7 +477,7 @@ function normaliseLayoutClasses(text) {
 }
 
 function upgrade(js) {
-    return normaliseLayoutClasses(js)
+    return normaliseToastCalls(normaliseLayoutClasses(js))
         // A page global the old inline handlers called becomes a function of the demo's own.
         .replace(/^(\s*)window\.(\w+)\s*=\s*(async\s+)?function\s*\(/gm, '$1$3function $2(')
         .replace(/\bDomma\.elements\./g, 'E.')

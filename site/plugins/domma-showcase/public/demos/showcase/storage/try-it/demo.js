@@ -2,6 +2,7 @@
  * Try It - from public/showcase/storage.
  */
 export function mount(root) {
+    const pageRoot = $(root).closest('.sx-showcase').get(0) || root;
         // ============================================
         // Basic Storage Demo
         // ============================================
@@ -49,12 +50,12 @@ export function mount(root) {
         }, {}, {persist: 'demo-prefs'});
     function updatePrefsDisplay() {
             const data = prefsModel.toJSON();
-            $(root).find('#prefs-state').text(JSON.stringify(data, null, 2));
+            $(pageRoot).find('#prefs-state').text(JSON.stringify(data, null, 2));
 
             // Update form inputs to match model
-            $(root).find('#pref-theme').val(data.theme);
-            $(root).find('#pref-fontsize').val(data.fontSize);
-            $(root).find('#pref-notifications').val(String(data.notifications));
+            $(pageRoot).find('#pref-theme').val(data.theme);
+            $(pageRoot).find('#pref-fontsize').val(data.fontSize);
+            $(pageRoot).find('#pref-notifications').val(String(data.notifications));
         }
         // ============================================
         // Storage Inspector
@@ -72,12 +73,12 @@ export function mount(root) {
             const available = S.isAvailable();
 
             // Update stats
-            $(root).find('#stat-keys').text(keys.length);
-            $(root).find('#stat-size').text(formatBytes(totalSize));
-            $(root).find('#stat-available').text(available ? 'Yes' : 'No');
+            $(pageRoot).find('#stat-keys').text(keys.length);
+            $(pageRoot).find('#stat-size').text(formatBytes(totalSize));
+            $(pageRoot).find('#stat-available').text(available ? 'Yes' : 'No');
 
             // Update inspector
-            const $inspector = $(root).find('#storage-inspector');
+            const $inspector = $(pageRoot).find('#storage-inspector');
 
             if (keys.length === 0) {
                 $inspector.html('<p class="text-muted">No data stored</p>');

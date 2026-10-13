@@ -21,7 +21,7 @@ export function mount(root) {
             userId: 1
           });
           output.removeClass('loading error').text(formatJson(result));
-          E.toast.success('Post created successfully!');
+          E.toast('Post created successfully!', {type: 'success'});
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Error: ' + err.message);
         }

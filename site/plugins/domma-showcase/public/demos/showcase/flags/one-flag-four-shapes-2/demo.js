@@ -47,7 +47,7 @@ export function mount(root) {
         }
     function copy(code) {
             navigator.clipboard.writeText(`data-flag="${code}"`).then(() => {
-                E.toast.success(`Copied: ${code}`, {position: 'bottom-center', duration: 1800});
+                E.toast(`Copied: ${code}`, {type: 'success', position: 'bottom-center', duration: 1800});
             });
         }
         // Controls

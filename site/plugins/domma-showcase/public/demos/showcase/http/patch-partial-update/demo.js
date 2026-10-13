@@ -17,7 +17,7 @@ export function mount(root) {
             title: title
           });
           output.removeClass('loading error').text(formatJson(result));
-          E.toast.success('Post patched successfully! Only title field was updated.');
+          E.toast('Post patched successfully! Only title field was updated.', {type: 'success'});
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Error: ' + err.message);
         }

@@ -5,7 +5,7 @@ export function mount(root) {
     $(root).find('#selector-btn').on('click', function () {
         const selector = $(root).find('#selector-input').val();
         try {
-            const $els = $(selector);
+            const $els = $(root).find(selector);
             $(root).find('#selector-result').text(`Found ${$els.length} element(s) matching "${selector}"`);
             // Highlight selected elements briefly
             $els.addClass('bg-warning');

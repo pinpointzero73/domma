@@ -51,7 +51,7 @@ export function readDemo(id) {
  * in public/vendor/ from Domma's build - and the flags, which the CMS serves.
  */
 const BUNDLES = [
-    ['tools', /\bE\.(editor|pageRoller|schemaBuilder|themeRoller|printToPdf)\b|\bDomma\.(tools|themeRoller|pageRoller|editor)\b/],
+    ['tools', /\bE\.(editor|pageRoller|schemaBuilder|themeRoller|printToPDF|printToPdf)\b|\bDomma\.(tools|themeRoller|pageRoller|editor)\b/],
     ['flags', /\bFL\.|\bDomma\.flags\b/],
 ];
 const needs = (js) => BUNDLES.filter(([, re]) => js && re.test(js)).map(([name]) => name);
