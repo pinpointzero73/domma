@@ -7,6 +7,8 @@
  * on its own: one that fails logs a warning and says so, and the rest of the
  * page carries on. Right-click a demo for copy, reset and open-on-its-own.
  */
+import {presentPage, enhanceCode, codeText} from './presentation.js?v=910e437e72d3';
+
 const figures = [...document.querySelectorAll('figure.showcase-demo[data-demo]')];
 
 // A demo that registers a component registers it again when it is reset, and the browser
@@ -23,8 +25,51 @@ if (window.Domma && typeof Domma.component === 'function' && !Domma.component.__
     Object.assign(Domma.component, register, {__showcaseOnce: true});
 }
 
-if (figures.length && typeof $ !== 'undefined') {
+if (typeof $ !== 'undefined' && (figures.length || /^\/showcase(?:\/|$)/.test(location.pathname))) {
+    const host = $('.page-body').get(0) || document.body;
+    const codeHost = document.body;
+    presentPage(host);
     const state = new Map();   // figure -> {html, teardown}
+
+    const syntaxReady = import('/dist/domma/domma-syntax.min.js').then(() => {
+        const syntax = Domma.syntax;
+        // Samples get one visible toolbar from enhanceCode, including dynamic outputs.
+        syntax.configure({selector: ':not(*)'});
+        syntax.register('json', [
+            {type: 'string', pattern: /"(?:\\.|[^"\\])*"/g},
+            {type: 'boolean', pattern: /\b(true|false|null)\b/g},
+            {type: 'number', pattern: /-?\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b/g},
+            {type: 'punctuation', pattern: /[{}[\]:,]/g}
+        ]);
+        syntax.register('bash', [
+            {type: 'comment', pattern: /#.*/g},
+            {type: 'string', pattern: /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g},
+            {type: 'keyword', pattern: /\b(npm|npx|node|make|git|curl|cd|export|echo|sudo)\b/g},
+            {type: 'attr-name', pattern: /--?[a-z][\w-]*/gi},
+            {type: 'number', pattern: /\b\d+\b/g}
+        ]);
+        syntax.register('markdown', [
+            {type: 'keyword', pattern: /^#{1,6}\s+.*$/gm},
+            {type: 'tag-open', pattern: /\[\/?[a-z][\w-]*/gi},
+            {type: 'string', pattern: /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g},
+            {type: 'property', pattern: /[\w-]+(?==)/g},
+            {type: 'punctuation', pattern: /[\[\]]/g}
+        ]);
+        return syntax;
+    }).catch(err => {
+        console.warn('[showcase] syntax highlighting did not load:', err);
+        return {isLanguageSupported: () => false};
+    });
+    syntaxReady.then(syntax => {
+        let queued = false;
+        const scan = () => { queued = false; enhanceCode(codeHost, syntax, copy); };
+        scan();
+        new MutationObserver(() => {
+            if (queued) return;
+            queued = true;
+            requestAnimationFrame(scan);
+        }).observe(codeHost, {childList: true, characterData: true, subtree: true});
+    }).catch(err => console.warn('[showcase] syntax highlighting did not load:', err));
 
     async function mount(fig) {
         const stage = fig.querySelector('.showcase-demo-stage');
@@ -37,6 +82,7 @@ if (figures.length && typeof $ !== 'undefined') {
             const mod = await import(fig.dataset.module);
             const teardown = await mod.mount?.(stage, {figure: fig});
             s.teardown = typeof teardown === 'function' ? teardown : null;
+            syntaxReady.then(syntax => enhanceCode(codeHost, syntax, copy));
         } catch (err) {
             console.warn(`[showcase] demo "${fig.dataset.demo}" did not load: ${err?.message || err}`, err);
             $(stage).append('<p class="showcase-demo-error" role="alert">This demo did not load.</p>');
@@ -57,8 +103,10 @@ if (figures.length && typeof $ !== 'undefined') {
         try {
             await _.copyToClipboard(text);
             E.toast(`${what} copied.`, {type: 'success'});
+            return true;
         } catch {
             E.toast(`Could not copy the ${what}.`, {type: 'error'});
+            return false;
         }
     }
 
@@ -84,11 +132,23 @@ if (figures.length && typeof $ !== 'undefined') {
         ready.then(() => mount(fig));
     }
 
-    const host = document.querySelector('.page-body') || document.body;
-    E.contextMenu(host, {
-        match: 'figure.showcase-demo[data-demo]',
+    E.contextMenu(codeHost, {
+        match: 'pre, figure.showcase-demo[data-demo]',
+        exclude: '[contenteditable="true"],.CodeMirror,.monaco-editor',
         cursor: 'glyph',
-        items: (fig) => [
+        items: (fig) => fig.tagName === 'PRE' ? [
+            {header: 'Code sample'},
+            {label: 'Copy code', icon: 'copy', action: () => copy(codeText(fig), 'Code')},
+            {label: 'Select all code', icon: 'code', action: () => {
+                const range = document.createRange();
+                range.selectNodeContents($(fig).children('code').get(0) || fig);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }},
+            {label: fig.classList.contains('sx-code-wrap') ? 'Disable line wrapping' : 'Wrap long lines', icon: 'list', action: () => $(fig).toggleClass('sx-code-wrap')},
+            {label: fig.classList.contains('sx-code-expanded') ? 'Collapse code' : 'Expand code', icon: 'code', action: () => $(fig).toggleClass('sx-code-expanded')}
+        ] : [
             {header: `Demo: ${fig.dataset.demo}`},
             {label: 'Copy HTML', icon: 'copy', action: () => copy(source(fig, 'html'), 'HTML'), disabled: !source(fig, 'html')},
             {label: 'Copy JS', icon: 'copy', action: () => copy(source(fig, 'javascript'), 'JS'), disabled: !source(fig, 'javascript')},

@@ -164,7 +164,6 @@ export function mount(root) {
             }
         });
     $(root).find('#clear-filters').on('click', function () {
-            $(root).find('#table-search').val('');
             $(root).find('#role-filter').val('');
             table.clearFilters();
         });

@@ -12,14 +12,14 @@ export function mount(root) {
         output.addClass('loading').text('Updating...');
 
         try {
-          const result = await Domma.http.put('https://jsonplaceholder.typicode.com/posts/1', {
+          const result = await Domma.http.put('/api/plugins/domma-showcase/examples/posts/1', {
             id: 1,
             title: 'Updated Title',
             body: 'This post has been updated.',
             userId: 1
           });
           output.removeClass('loading error').text(formatJson(result));
-          E.toast.success('Post updated successfully!');
+          E.toast('Post updated successfully!', {type: 'success'});
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Error: ' + err.message);
         }

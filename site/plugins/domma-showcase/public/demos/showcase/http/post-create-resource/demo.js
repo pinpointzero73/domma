@@ -15,13 +15,13 @@ export function mount(root) {
         output.addClass('loading').text('Creating...');
 
         try {
-          const result = await Domma.http.post('https://jsonplaceholder.typicode.com/posts', {
+          const result = await Domma.http.post('/api/plugins/domma-showcase/examples/posts', {
             title: title,
             body: body,
             userId: 1
           });
           output.removeClass('loading error').text(formatJson(result));
-          E.toast.success('Post created successfully!');
+          E.toast('Post created successfully!', {type: 'success'});
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Error: ' + err.message);
         }

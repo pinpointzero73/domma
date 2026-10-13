@@ -54,19 +54,11 @@ nth()
 
 pull()
 
-pullAll()
-
 pullAt()
-
-remove()
 
 reverse()
 
 slice()
-
-sortedIndex()
-
-sortedUniq()
 
 tail()
 
@@ -74,15 +66,11 @@ take()
 
 takeRight()
 
-takeWhile()
-
 union()
 
 uniq()
 
 uniqBy()
-
-unzip()
 
 without()
 
@@ -146,8 +134,6 @@ forEach()
 groupBy()
 
 includes()
-
-invokeMap()
 
 keyBy()
 
@@ -233,11 +219,7 @@ get()
 
 has()
 
-hasIn()
-
 invert()
-
-invoke()
 
 keys()
 
@@ -247,8 +229,6 @@ mapValues()
 
 merge()
 
-mergeWith()
-
 omit()
 
 omitBy()
@@ -257,17 +237,11 @@ pick()
 
 pickBy()
 
-result()
-
 set()
 
 toPairs()
 
-transform()
-
 unset()
-
-update()
 
 values()
 
@@ -341,12 +315,6 @@ partial()
 
 partialRight()
 
-rearg()
-
-rest()
-
-spread()
-
 throttle()
 
 unary()
@@ -398,13 +366,9 @@ camelCase()
 
 capitalize()
 
-deburr()
-
 endsWith()
 
 escape()
-
-escapeRegExp()
 
 kebabCase()
 
@@ -576,13 +540,7 @@ clone()
 
 cloneDeep()
 
-conformsTo()
-
 eq()
-
-gt()
-
-gte()
 
 isArray()
 
@@ -590,23 +548,15 @@ isBoolean()
 
 isDate()
 
-isElement()
-
 isEmpty()
 
 isEqual()
-
-isEqualWith()
-
-isError()
 
 isFinite()
 
 isFunction()
 
 isInteger()
-
-isLength()
 
 isMatch()
 
@@ -629,10 +579,6 @@ isString()
 isSymbol()
 
 isUndefined()
-
-lt()
-
-lte()
 
 castArray()
 
@@ -1105,63 +1051,11 @@ const byDept = _.flow([
 
 General utility functions.
 
-attempt()
-
-cond()
-
-conforms()
-
-constant()
-
-defaultTo()
-
 flow()
-
-flowRight()
-
-identity()
-
-iteratee()
-
-matches()
-
-matchesProperty()
-
-method()
-
-methodOf()
-
-noop()
-
-nthArg()
-
-over()
-
-overEvery()
-
-overSome()
-
-property()
-
-propertyOf()
 
 range()
 
-rangeRight()
-
-stubArray()
-
-stubFalse()
-
-stubObject()
-
-stubString()
-
-stubTrue()
-
 times()
-
-toPath()
 
 uniqueId()
 
@@ -1178,9 +1072,11 @@ _.uniqueId('user_')      // 'user_2'
 // Run function N times
 _.times(3, i => i * 2)   // [0, 2, 4]
 
-// Default values
-_.defaultTo(null, 10)    // 10
-_.defaultTo(1, 10)       // 1
+// Default values using supported type checks
+const withDefault = (value, fallback) =>
+    _.isNil(value) || _.isNaN(value) ? fallback : value;
+withDefault(null, 10)    // 10
+withDefault(1, 10)       // 1
 
 // Function composition
 const addOne = x => x + 1;
@@ -1189,14 +1085,11 @@ const composed = _.flow([addOne, double]);
 composed(5)              // 12 (5+1=6, 6*2=12)
 
 // Property accessor
-const getName = _.property('name');
+const getName = (value) => _.get(value, 'name');
 getName({ name: 'Alice' })  // 'Alice'
 
-// Identity
-_.identity('hello')      // 'hello'
-
-// Noop
-_.noop()                 // undefined (do nothing)
+// Run a callback a set number of times
+_.times(3, index => index + 1)  // [1, 2, 3]
 ```
 
 [showcase-demo id="showcase/utils/try-it-8" title="Try It" /]

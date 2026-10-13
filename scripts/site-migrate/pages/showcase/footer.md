@@ -8,6 +8,8 @@ sortOrder: 50
 
 [hero title="Footer Component" tagline="Flexible, responsive footer with three layout modes (simple, columns, minimal) and theme variants. Perfect for completing your page layout with branding, links, and social media." align="center"][/hero]
 
+## Features
+
 [showcase-demo id="showcase/footer/features" title="Features" /]
 
 Add a footer to your page in three simple steps
@@ -57,13 +59,23 @@ Domma.elements.footer('#site-footer', {
 
 > **Note:** The footer component will automatically generate all HTML structure, styling, and layout. You only need to provide the empty container element and configuration options.
 
+## Simple Layout
+
 [showcase-demo id="showcase/footer/simple-layout" title="Simple Layout" /]
+
+## Columns Layout
 
 [showcase-demo id="showcase/footer/columns-layout" title="Columns Layout" /]
 
+## Minimal Layout
+
 [showcase-demo id="showcase/footer/minimal-layout" title="Minimal Layout" /]
 
+## Dark Theme Variant
+
 [showcase-demo id="showcase/footer/dark-theme-variant" title="Dark Theme Variant" /]
+
+## API Reference
 
 [showcase-demo id="showcase/footer/api-reference" title="API Reference" /]
 

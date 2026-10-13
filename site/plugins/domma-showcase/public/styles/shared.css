@@ -331,6 +331,68 @@
     }
 }
 
+.icons-search-wrapper {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+}
+
+.icons-search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    padding-left: 2.5rem;
+    font-size: var(--dm-text-base);
+    border: 2px solid var(--dm-border);
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-background);
+    color: var(--dm-text);
+    transition: border-color var(--dm-transition-fast);
+}
+
+.icons-search-input:focus {
+    outline: none;
+    border-color: var(--dm-primary);
+}
+
+.icons-search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dm-text-muted);
+    pointer-events: none;
+}
+
+.icons-size-controls {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--dm-hover-bg);
+    padding: 0.25rem;
+    border-radius: var(--dm-radius-full);
+    color: var(--dm-text);
+}
+
+.icons-size-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--dm-radius-full);
+    background: transparent;
+    color: var(--dm-text-muted);
+    cursor: pointer;
+    transition: all var(--dm-transition-fast);
+    font-size: var(--dm-text-sm);
+    font-weight: 500;
+}
+
+.icons-size-btn:hover {
+    color: var(--dm-text);
+}
+
+.icons-size-btn.active {
+    background: var(--dm-primary);
+    color: var(--dm-primary-text, var(--dm-white));
+}
+
 .icons-tab-list {
     display: flex;
     flex-wrap: wrap;
@@ -412,29 +474,6 @@
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 1rem;
-}
-
-.icons-code-block {
-    background: var(--dm-gray-900);
-    color: var(--dm-gray-100);
-    border-radius: var(--dm-radius-lg);
-    padding: 1rem;
-    font-family: var(--dm-font-mono);
-    font-size: var(--dm-text-sm);
-    overflow-x: auto;
-    line-height: 1.5;
-}
-
-.icons-code-block .comment {
-    color: var(--dm-gray-500);
-}
-
-.icons-code-block .string {
-    color: #c3e88d;
-}
-
-.icons-code-block .function {
-    color: #82aaff;
 }
 
 .icons-category-description {

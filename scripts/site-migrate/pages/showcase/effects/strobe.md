@@ -68,8 +68,6 @@ Configure the beams from scratch, then press **Apply**.
 
 With flicker on, setting the Hz above 5 logs a console warning - the value is never clamped, so keep it low for safety.
 
-[showcase-demo id="showcase/effects/strobe/demo-build-your-own-2" title="Demo: Build Your Own" /]
-
 ## Demo: Full-Page
 
 Pass `null` as the selector to light the entire viewport. This affects the **whole page** - it uses the preset selected in the Preset Picker above (or `club` by default), so use the Stop button to end it. It never autoplays and never stops on its own here.

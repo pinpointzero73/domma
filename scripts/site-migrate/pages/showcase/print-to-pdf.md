@@ -35,8 +35,6 @@ printer.print();
 
 [showcase-demo id="showcase/print-to-pdf/basic-print-example" title="Basic Print Example" /]
 
-[showcase-demo id="showcase/print-to-pdf/sample-document" title="Sample Document" /]
-
 ## API Reference
 
 [table striped="true"]

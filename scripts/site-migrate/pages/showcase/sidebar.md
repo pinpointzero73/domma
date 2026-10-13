@@ -8,6 +8,8 @@ sortOrder: 50
 
 [hero title="Sidebar Component" tagline="JSON-configurable navigation sidebar with unlimited depth nesting, mobile toggle, and theme variants. Perfect for admin panels, documentation sites, and applications with complex navigation." align="center"][/hero]
 
+## Features
+
 [showcase-demo id="showcase/sidebar/features" title="Features" /]
 
 Add a sidebar to your page in three simple steps
@@ -53,15 +55,27 @@ Domma.elements.sidebar('#my-sidebar', {
 
 > **Note:** The sidebar component will automatically generate all HTML structure, styling, and interactivity. You only need to provide the empty container element and configuration options.
 
+## Basic Example
+
 [showcase-demo id="showcase/sidebar/basic-example" title="Basic Example" /]
+
+## Nested Menus
 
 [showcase-demo id="showcase/sidebar/nested-menus" title="Nested Menus" /]
 
+## Navigation with Badges
+
 [showcase-demo id="showcase/sidebar/navigation-with-badges" title="Navigation with Badges" /]
+
+## Light Theme Variant
 
 [showcase-demo id="showcase/sidebar/light-theme-variant" title="Light Theme Variant" /]
 
+## State Persistence
+
 [showcase-demo id="showcase/sidebar/state-persistence" title="State Persistence" /]
+
+## API Reference
 
 [showcase-demo id="showcase/sidebar/api-reference" title="API Reference" /]
 

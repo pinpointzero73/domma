@@ -12,7 +12,7 @@ export function mount(root) {
         output.addClass('loading').text('Loading...');
 
         try {
-          const posts = await Domma.http.get('https://jsonplaceholder.typicode.com/posts?_limit=3');
+          const posts = await Domma.http.get('/api/plugins/domma-showcase/examples/posts?_limit=3');
           output.removeClass('loading error').text(formatJson(posts));
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Error: ' + err.message);

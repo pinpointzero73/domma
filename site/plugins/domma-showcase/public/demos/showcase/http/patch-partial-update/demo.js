@@ -13,11 +13,11 @@ export function mount(root) {
         output.addClass('loading').text('Patching...');
 
         try {
-          const result = await Domma.http.patch('https://jsonplaceholder.typicode.com/posts/1', {
+          const result = await Domma.http.patch('/api/plugins/domma-showcase/examples/posts/1', {
             title: title
           });
           output.removeClass('loading error').text(formatJson(result));
-          E.toast.success('Post patched successfully! Only title field was updated.');
+          E.toast('Post patched successfully! Only title field was updated.', {type: 'success'});
         } catch (err) {
           output.removeClass('loading').addClass('error').text('Error: ' + err.message);
         }

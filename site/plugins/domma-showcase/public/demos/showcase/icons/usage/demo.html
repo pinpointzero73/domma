@@ -1,31 +1,25 @@
-<div class="icons-usage-grid"><div class="icons-usage-card">
+<div class="icons-usage-grid">
+    <div class="icons-usage-card">
         <h3>HTML Data Attributes</h3>
-        <div class="code-block icons-code-block language-javascript">
-            <span class="comment"><!-- Basic usage --></span>
-            <span data-icon="check"></span>
+        <pre><code class="language-html">&lt;!-- Basic usage --&gt;
+&lt;span data-icon=&quot;check&quot;&gt;&lt;/span&gt;
 
-            <span class="comment"><!-- With size --></span>
-            <span data-icon="user" data-icon-size="32"></span>
-
-            <span class="comment"><!-- Scan and render --></span>
-            Domma.icons.scan();
-        </div>
+&lt;!-- With size --&gt;
+&lt;span data-icon=&quot;user&quot; data-icon-size=&quot;32&quot;&gt;&lt;/span&gt;</code></pre>
     </div>
-
     <div class="icons-usage-card">
         <h3>JavaScript API</h3>
-        <div class="code-block icons-code-block language-javascript">
-            <span class="comment">// Render to element</span>
-            Domma.icons.render('heart', element);
+        <pre><code class="language-javascript">// Scan and render data-icon attributes
+I.scan();
 
-            <span class="comment">// Get SVG HTML string</span>
-            const svg = Domma.icons.html('star', {
-            size: 24,
-            class: 'my-icon'
-            });
+// Create an SVG element
+const icon = I.render(&#x27;heart&#x27;, {size: 24});
+$(&#x27;#icon-target&#x27;).append(icon);
 
-            <span class="comment">// List all categories</span>
-            Domma.icons.listCategories();
-        </div>
+// Get an SVG HTML string
+const svg = I.html(&#x27;star&#x27;, {size: 24, class: &#x27;my-icon&#x27;});
+
+// List the available categories
+I.listCategories();</code></pre>
     </div>
 </div>

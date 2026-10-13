@@ -165,9 +165,8 @@ d.hour(9)
 // Get native Date object
 d.toDate()      // Returns Date instance
 
-// Get as object
-d.toObject()
-// { year: 2025, month: 11, date: 25, ... }
+// Read selected date parts
+const parts = { year: d.year(), month: d.month(), date: d.date() };
 ```
 
 [showcase-demo id="showcase/dates/current-date-components" title="Current Date Components" /]
@@ -177,10 +176,6 @@ d.toObject()
 Display human-readable relative time strings.
 
 fromNow()
-
-from()
-
-toNow()
 
 to()
 
@@ -194,11 +189,11 @@ D().add(1, 'week').fromNow()          // 'in 7 days'
 // Time from another date
 const past = D('2025-01-01');
 const future = D('2025-12-31');
-past.from(future)                      // '12 months ago'
-future.from(past)                      // 'in 12 months'
+past.fromNow(future)                      // '12 months ago'
+future.fromNow(past)                      // 'in 12 months'
 
 // Time to now/another date
-D().add(2, 'weeks').toNow()            // 'in 2 weeks'
+D().add(2, 'weeks').fromNow()            // 'in 2 weeks'
 past.to(future)                        // 'in 12 months'
 ```
 
@@ -213,10 +208,6 @@ isBefore()
 isAfter()
 
 isSame()
-
-isSameOrBefore()
-
-isSameOrAfter()
 
 isBetween()
 
@@ -303,8 +294,6 @@ toISOString()
 
 toDate()
 
-toObject()
-
 unix()
 
 valueOf()
@@ -355,19 +344,11 @@ isAfter()
 
 isSame()
 
-isSameOrBefore()
-
-isSameOrAfter()
-
 isBetween()
 
 diff()
 
 fromNow()
-
-from()
-
-toNow()
 
 to()
 

@@ -24,4 +24,9 @@ export function mount(root) {
             respectMotionPreference: false
           });
         });
+    $(root).find('#stop-2').on('click', () => {
+        ctrl2?.destroy();
+        ctrl2 = null;
+    });
+    return () => ctrl2?.destroy();
 }

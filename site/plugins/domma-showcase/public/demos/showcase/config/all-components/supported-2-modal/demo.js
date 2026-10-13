@@ -2,6 +2,7 @@
  * Supported 2. modal - from public/showcase/config/all-components.
  */
 export function mount(root) {
+    const pageRoot = $(root).closest('.sx-showcase').get(0) || root;
     $.setup({
       // 1. Card
       '.demo-card': {
@@ -97,7 +98,7 @@ export function mount(root) {
           activeClass: 'active',
           onChange: (value) => {
             const labels = ['Left', 'Center', 'Right', 'Justify'];
-            $(root).find('#btngroup-result').text(labels[value]);
+            $(pageRoot).find('#btngroup-result').text(labels[value]);
           }
         }
       },
@@ -106,7 +107,7 @@ export function mount(root) {
       '#show-loader-btn': {
         events: {
           click: () => {
-            const loader = E.loader(root.querySelector('#demo-loader-container'), {
+            const loader = E.loader($(pageRoot).find('#demo-loader-container').get(0), {
               type: 'spinner',
               overlay: true,
               text: 'Loading...'

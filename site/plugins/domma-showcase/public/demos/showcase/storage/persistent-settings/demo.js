@@ -2,6 +2,7 @@
  * Persistent Settings - from public/showcase/storage.
  */
 export function mount(root) {
+    const pageRoot = $(root).closest('.sx-showcase').get(0) || root;
         // ============================================
         // Model Persistence Demo
         // ============================================
@@ -66,12 +67,12 @@ export function mount(root) {
             const available = S.isAvailable();
 
             // Update stats
-            $(root).find('#stat-keys').text(keys.length);
-            $(root).find('#stat-size').text(formatBytes(totalSize));
-            $(root).find('#stat-available').text(available ? 'Yes' : 'No');
+            $(pageRoot).find('#stat-keys').text(keys.length);
+            $(pageRoot).find('#stat-size').text(formatBytes(totalSize));
+            $(pageRoot).find('#stat-available').text(available ? 'Yes' : 'No');
 
             // Update inspector
-            const $inspector = $(root).find('#storage-inspector');
+            const $inspector = $(pageRoot).find('#storage-inspector');
 
             if (keys.length === 0) {
                 $inspector.html('<p class="text-muted">No data stored</p>');

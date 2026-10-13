@@ -51,7 +51,7 @@ export function readDemo(id) {
  * in public/vendor/ from Domma's build - and the flags, which the CMS serves.
  */
 const BUNDLES = [
-    ['tools', /\bE\.(editor|pageRoller|schemaBuilder|themeRoller|printToPdf)\b|\bDomma\.(tools|themeRoller|pageRoller|editor)\b/],
+    ['tools', /\bE\.(editor|pageRoller|schemaBuilder|themeRoller|printToPDF|printToPdf)\b|\bDomma\.(tools|themeRoller|pageRoller|editor)\b/],
     ['flags', /\bFL\.|\bDomma\.flags\b/],
 ];
 const needs = (js) => BUNDLES.filter(([, re]) => js && re.test(js)).map(([name]) => name);
@@ -115,6 +115,30 @@ export default async function dommaShowcase(fastify, options) {
         });
         return demoStyles(first) + out;
     });
+
+    // Public example data for the HTTP demos. Mutation responses are simulated.
+    // The showcase works within the site's CSP and never changes site records.
+    const examplePosts = [
+        {id: 1, userId: 1, title: 'Getting started with Domma', body: 'A sample post for the HTTP Client showcase.'},
+        {id: 2, userId: 1, title: 'Building a component', body: 'Use the response to explore requests and JSON data.'},
+        {id: 3, userId: 2, title: 'Working with data', body: 'These records are examples for the live demonstrations.'}
+    ];
+    fastify.get('/examples/posts', async () => examplePosts);
+    fastify.get('/examples/posts/:id', async (request, reply) => {
+        const post = examplePosts.find(item => item.id === Number(request.params.id));
+        return post || reply.code(404).send({error: 'Example post not found.'});
+    });
+    const exampleBody = request => {
+        const data = {};
+        if (request.body?.title !== undefined) data.title = String(request.body.title);
+        if (request.body?.body !== undefined) data.body = String(request.body.body);
+        if (request.body?.userId !== undefined) data.userId = Number(request.body.userId);
+        return data;
+    };
+    fastify.post('/examples/posts', async (request, reply) => reply.code(201).send({title: '', body: '', userId: 1, ...exampleBody(request), id: 101}));
+    fastify.put('/examples/posts/:id', async request => ({title: '', body: '', userId: 1, ...exampleBody(request), id: Number(request.params.id)}));
+    fastify.patch('/examples/posts/:id', async request => ({...examplePosts[0], ...exampleBody(request), id: Number(request.params.id)}));
+    fastify.delete('/examples/posts/:id', async () => ({}));
 
     // One demo on a page of its own - for linking, and the "Open on its own" menu item.
     fastify.get('/demo', async (request, reply) => {

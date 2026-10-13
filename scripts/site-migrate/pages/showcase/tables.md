@@ -114,16 +114,12 @@ table.sort('age', 'desc');
 
 // Multi-column sort
 table.sortMultiple([
-    { key: 'department', direction: 'asc' },
-    { key: 'name', direction: 'asc' }
+    { column: 'department', direction: 'asc' },
+    { column: 'name', direction: 'asc' }
 ]);
 
 // Clear sorting
 table.clearSort();
-
-// Get current sort state
-const sortState = table.getSortState();
-// { column: 'name', direction: 'asc' }
 
 // Listen for sort events
 table.on('sort', (column, direction) => {
@@ -257,11 +253,12 @@ table.setData(newDataArray);
 const currentData = table.getData();
 
 // Get original data
-const originalData = table.getData(true);
+const originalData = table.getOriginalData();
 
 // Add rows
-table.addRow({ id: 100, name: 'New User', ... });
-table.addRows([{ ... }, { ... }]);
+table.addRow({ id: 100, name: 'New User' });
+[{ id: 101, name: 'Maya' }, { id: 102, name: 'Alex' }]
+    .forEach(row => table.addRow(row));
 
 // Update row
 table.updateRow(0, { name: 'Updated Name' });
@@ -269,10 +266,10 @@ table.updateRow(0, newRowData, true);  // Replace entire row
 
 // Remove rows
 table.removeRow(0);
-table.removeRows([0, 1, 2]);
+[2, 1, 0].forEach(index => table.removeRow(index));
 
 // Clear all data
-table.clear();
+table.setData([]);
 
 // Refresh table (re-render)
 table.refresh();
@@ -723,15 +720,9 @@ getData()
 
 addRow()
 
-addRows()
-
 updateRow()
 
 removeRow()
-
-removeRows()
-
-clear()
 
 refresh()
 
@@ -743,8 +734,6 @@ sortMultiple()
 
 clearSort()
 
-getSortState()
-
 ### Filtering Methods
 
 search()
@@ -754,8 +743,6 @@ filter()
 filterBy()
 
 clearFilters()
-
-getFilters()
 
 ### Pagination Methods
 
@@ -786,8 +773,6 @@ deselectAll()
 toggleSelect()
 
 getSelected()
-
-getSelectedIndices()
 
 ### Column Methods
 
@@ -820,8 +805,6 @@ copyToClipboard()
 on()
 
 off()
-
-once()
 
 ### Static Methods
 

@@ -1,2 +1,20 @@
+<div class="flex flex-wrap items-center gap-3 mb-4 sx-gallery-controls">
+            <input type="text" class="flag-search-input form-input" id="search" placeholder="Search by name or code…" aria-label="Search flags">
+            <div class="flex gap-2 items-center">
+                <label class="text-sm opacity-75">Shape</label>
+                <select id="shape" class="form-select" style="width:auto" aria-label="Flag shape">
+                    <option value="rect">Rectangular</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="square">Square</option>
+                    <option value="circle">Circle</option>
+                </select>
+                <label class="text-sm opacity-75 ml-2">Size</label>
+                <select id="size" class="form-select" style="width:auto" aria-label="Flag size">
+                    <option value="32">32</option>
+                    <option value="48" selected="">48</option>
+                    <option value="64">64</option>
+                </select>
+            </div>
+        </div>
 <div id="gallery"></div>
 <div class="flag-no-results" id="no-results" style="display:none">No flags match your search.</div>
