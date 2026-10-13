@@ -1600,7 +1600,7 @@ code, pre {
     width: var(--dm-fw-explosion-size);
     height: var(--dm-fw-explosion-size);
     transform: translateX(-50%);
-    opacity: 0;
+    opacity: 1;
     animation-delay: 1s; /* Wait for launch */
 }
 
@@ -1708,7 +1708,7 @@ code, pre {
     0 20px 3px 1px var(--dm-fw-color-7),
     0 -20px 0 0 var(--dm-fw-color-8),
     0 -20px 3px 1px var(--dm-fw-color-8);
-    animation: dm-firework-sparkle var(--dm-fw-duration) ease-out forwards;
+    animation: dm-fw-sparkle var(--dm-fw-duration) ease-out forwards;
     animation-delay: var(--dm-fw-delay);
     opacity: 0;
 }
@@ -1725,7 +1725,7 @@ code, pre {
     -15px 15px 4px 2px rgba(243, 156, 18, 0.5),
     15px 15px 0 0 var(--dm-fw-color-7),
     15px 15px 4px 2px rgba(253, 121, 168, 0.5);
-    animation: dm-firework-sparkle-alt var(--dm-fw-duration) ease-out forwards;
+    animation: dm-fw-sparkle var(--dm-fw-duration) ease-out forwards;
     animation-delay: calc(var(--dm-fw-delay) + 0.2s);
     opacity: 0;
 }
@@ -1740,7 +1740,7 @@ code, pre {
     0 10px 2px 0 rgba(255, 235, 59, 0.6),
     0 15px 2px 0 rgba(255, 235, 59, 0.4),
     0 20px 2px 0 rgba(255, 235, 59, 0.2);
-    animation: dm-firework-launch var(--dm-fw-duration) ease-out forwards;
+    animation: dm-fw-launch var(--dm-fw-duration) ease-out forwards;
     animation-delay: var(--dm-fw-delay);
 }
 
@@ -1849,13 +1849,18 @@ code, pre {
 
 /* Continuous animation */
 .firework-continuous::before,
-.firework-continuous::after {
+.firework-continuous::after,
+.firework-continuous .firework-launch,
+.firework-continuous .firework-particles::before,
+.firework-continuous .firework-particles::after {
     animation-iteration-count: infinite;
 }
 
 /* Trigger on hover */
 .firework-on-hover {
     position: relative;
+    pointer-events: auto;
+    --dm-fw-size: var(--dm-fw-particle-size);
 }
 
 .firework-on-hover::before,
@@ -1889,7 +1894,7 @@ code, pre {
     -35px 35px 0 0 var(--dm-fw-color-7),
     -50px 0 0 0 var(--dm-fw-color-8),
     -35px -35px 0 0 var(--dm-fw-color-1);
-    animation: dm-firework-burst 1.5s ease-out forwards;
+    animation: dm-fw-explode 1.5s ease-out forwards;
 }
 
 .firework-on-hover:hover::after {
@@ -1902,7 +1907,7 @@ code, pre {
     -40px 15px 0 0 var(--dm-fw-color-4),
     -40px -15px 0 0 var(--dm-fw-color-6),
     -15px -40px 0 0 var(--dm-fw-color-8);
-    animation: dm-firework-burst-secondary 1.5s ease-out forwards;
+    animation: dm-fw-explode-secondary 1.5s ease-out forwards;
 }
 
 /* Keyframe Animations */
