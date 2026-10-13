@@ -31,6 +31,9 @@
             cursor: pointer;
             user-select: none;
         }
+        .showcase-demo[data-demo^="showcase/effects/ripple/"] .effect-controls {
+            display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; margin: 1rem 0;
+        }
         .showcase-demo[data-demo^="showcase/effects/ripple/"] .nav-link {
             padding: 0.5rem 1rem; margin: 0.25rem; border-radius: 4px;
             background: var(--dm-primary-t10, rgba(13, 110, 253, 0.1)); text-decoration: none;

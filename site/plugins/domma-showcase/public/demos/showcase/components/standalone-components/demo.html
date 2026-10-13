@@ -11,15 +11,15 @@
             for derived values, and <strong>lifecycle hooks</strong> for side effects.
             Each component is a real Custom Element backed by Shadow DOM.</p>
         <div class="row g-3">
-            <div class="col-md-4">
+            <div class="col-4">
                 <div class="badge badge-primary mb-2">Shadow DOM</div>
                 <p class="text-sm mb-0">True style encapsulation - component CSS never leaks out, theme variables still flow in.</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-4">
                 <div class="badge badge-success mb-2">Surgical Updates</div>
                 <p class="text-sm mb-0">Simple <code>{{field}}</code> bindings update only that text node. Block changes (<code>{{#if}}</code>) trigger targeted re-renders.</p>
             </div>
-            <div class="col-md-4">
+            <div class="col-4">
                 <div class="badge badge-warning mb-2">Zero Build Step</div>
                 <p class="text-sm mb-0">JS object definition works at runtime. Optional <code>.domma</code> SFC format for build pipelines.</p>
             </div>
@@ -44,7 +44,7 @@ EXAMPLE 1: Counter Demo
             the colour badge re-renders when the condition flips.
         </p>
         <div class="row g-4">
-            <div class="col-lg-5">
+            <div class="col-5">
                 <div class="component-demo-wrapper mb-4">
                     <div class="component-demo-header">
                         <span class="demo-dot red"></span>
@@ -64,7 +64,7 @@ EXAMPLE 1: Counter Demo
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
+            <div class="col-7">
                 <div class="code-file-tab">counter-demo.js</div>
                 <pre class="code-block code-block-scroll" style="font-size: 0.78rem; line-height: 1.5;"><code>Domma.component('counter-demo', {
 
@@ -144,7 +144,7 @@ EXAMPLE 2: User Card with Props
             <code>initials</code> property.
         </p>
         <div class="row g-4">
-            <div class="col-lg-4">
+            <div class="col-4">
                 <div class="component-demo-wrapper mb-4">
                     <div class="component-demo-header">
                         <span class="demo-dot red"></span>
@@ -162,7 +162,7 @@ EXAMPLE 2: User Card with Props
                     <button type="button" class="btn btn-sm btn-outline" id="btn-toggle-avatar">Toggle Avatar</button>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-8">
                 <div class="code-file-tab">user-card-demo.js</div>
                 <pre class="code-block code-block-scroll" style="font-size: 0.76rem; line-height: 1.5;"><code>Domma.component('user-card-demo', {
 
@@ -283,7 +283,7 @@ EXAMPLE 4: .domma Single-File Format
             <code>.vue</code> format). The filename becomes the tag name.
         </p>
         <div class="row g-4">
-            <div class="col-md-6">
+            <div class="col-6">
                 <div class="code-file-tab">components/user-card.domma</div>
                 <pre class="code-block" style="font-size: 0.78rem;"><code>&lt;template&gt;
                         &lt;div class="card"&gt;
@@ -326,7 +326,7 @@ EXAMPLE 4: .domma Single-File Format
                         .role   { color: #6b7280; font-size: .875rem; margin: 0; }
                         &lt;/style&gt;</code></pre>
             </div>
-            <div class="col-md-6">
+            <div class="col-6">
                 <div class="code-file-tab">rollup.config.js</div>
                 <pre class="code-block mb-4" style="font-size: 0.78rem;"><code>import { dommaPlugin } from './src/plugins/rollup-plugin-domma.js';
 

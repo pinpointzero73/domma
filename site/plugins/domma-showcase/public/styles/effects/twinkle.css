@@ -1,7 +1,16 @@
 /* Domma Showcase - demo styles from public/showcase/effects/twinkle, by scripts/site-migrate/demo-styles.mjs:
  * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
  * into a demo's own demo.css. */
-.showcase-demo[data-demo^="showcase/effects/twinkle/"] .nav-link {
+.showcase-demo[data-demo^="showcase/effects/twinkle/"] .effect-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/effects/twinkle/"] .nav-link {
             padding: 0.5rem 1rem;
             margin: 0.25rem;
             border-radius: 4px;

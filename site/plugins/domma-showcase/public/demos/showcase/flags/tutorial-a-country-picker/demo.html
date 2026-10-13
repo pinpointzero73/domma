@@ -1,33 +1,35 @@
-<div class="col-md-5">
-    <div class="card">
-        <div class="card-body">
-            <label class="d-block mb-2 font-semibold">Choose a country</label>
-            <select id="country-picker" class="dm-select w-full"></select>
-            <div class="d-flex align-items-center gap-3 mt-4">
-                <span id="picker-flag"></span>
-                <div>
-                    <div id="picker-name" class="font-semibold"></div>
-                    <code id="picker-code" class="text-sm opacity-65"></code>
+<div class="row">
+    <div class="col-5">
+        <div class="card">
+            <div class="card-body">
+                <label class="d-block mb-2 font-semibold">Choose a country</label>
+                <select id="country-picker" class="dm-select w-full"></select>
+                <div class="d-flex align-items-center gap-3 mt-4">
+                    <span id="picker-flag"></span>
+                    <div>
+                        <div id="picker-name" class="font-semibold"></div>
+                        <code id="picker-code" class="text-sm opacity-65"></code>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="col-md-7">
-    <pre class="code-block language-javascript"><code>// Build options from the registry, sorted by name
-            const codes = _.sortBy(FL.list(), c =&gt; FL.name(c));
-            codes.forEach(code =&gt; {
-            $('#country-picker').append(
-            `&lt;option value="${code}"&gt;${FL.name(code)}&lt;/option&gt;`
-            );
-            });
+    <div class="col-7">
+        <pre class="code-block language-javascript"><code>// Build options from the registry, sorted by name
+                const codes = _.sortBy(FL.list(), c =&gt; FL.name(c));
+                codes.forEach(code =&gt; {
+                $('#country-picker').append(
+                `&lt;option value="${code}"&gt;${FL.name(code)}&lt;/option&gt;`
+                );
+                });
 
-            // React to selection
-            $('#country-picker').on('change', function () {
-            const code = $(this).val();
-            FL.inject('#picker-flag', code,
-            { size: 40, shape: 'rounded', border: true, position: 'replace' });
-            $('#picker-name').text(FL.name(code));
-            $('#picker-code').text(code.toUpperCase());
-            });</code></pre>
+                // React to selection
+                $('#country-picker').on('change', function () {
+                const code = $(this).val();
+                FL.inject('#picker-flag', code,
+                { size: 40, shape: 'rounded', border: true, position: 'replace' });
+                $('#picker-name').text(FL.name(code));
+                $('#picker-code').text(code.toUpperCase());
+                });</code></pre>
+    </div>
 </div>

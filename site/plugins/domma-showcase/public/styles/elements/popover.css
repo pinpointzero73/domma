@@ -1,7 +1,26 @@
 /* Domma Showcase - demo styles from public/showcase/elements/popover, by scripts/site-migrate/demo-styles.mjs:
  * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
  * into a demo's own demo.css. */
-.showcase-demo[data-demo^="showcase/elements/popover/"] .sx-pop-help {
+.showcase-demo[data-demo^="showcase/elements/popover/"] .sx-pop-stage {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+            max-width: 36rem;
+            margin: 0 auto;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/popover/"] .sx-pop-stage .btn {
+            width: 100%;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/popover/"] .sx-pop-edges {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/popover/"] .sx-pop-help {
             display: inline-flex;
             align-items: center;
             justify-content: center;

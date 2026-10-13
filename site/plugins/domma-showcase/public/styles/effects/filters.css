@@ -12,6 +12,13 @@
           margin: 1rem 0;
       }
 
+      .showcase-demo[data-demo^="showcase/effects/filters/"] .filter-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1.5rem;
+          margin: 2rem 0;
+      }
+
       .showcase-demo[data-demo^="showcase/effects/filters/"] .image-demo {
           width: 100%;
           height: 200px;

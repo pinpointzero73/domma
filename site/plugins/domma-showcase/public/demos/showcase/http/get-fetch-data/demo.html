@@ -1,21 +1,22 @@
-<div>
-    <pre class="code-block language-javascript mb-4">// Fetch a single post
-        const post = await Domma.http.get(
-        'https://jsonplaceholder.typicode.com/posts/1'
-        );
-        console.log(post.title);
+<div class="http-demo-grid"><div>
+        <pre class="code-block language-javascript mb-4">// Fetch a single post
+            const post = await Domma.http.get(
+            'https://jsonplaceholder.typicode.com/posts/1'
+            );
+            console.log(post.title);
 
-        // Fetch multiple posts
-        const posts = await Domma.http.get(
-        'https://jsonplaceholder.typicode.com/posts?_limit=3'
-        );
-    </pre>
-    <button type="button" class="btn btn-primary" id="demo-get">
-        <span data-icon="download" data-icon-size="16"></span>
-        Fetch Posts
-    </button>
-</div>
-<div>
-    <label class="form-label">Response:</label>
-    <div class="http-response-area" id="get-response">Click "Fetch Posts" to see the response...</div>
+            // Fetch multiple posts
+            const posts = await Domma.http.get(
+            'https://jsonplaceholder.typicode.com/posts?_limit=3'
+            );
+        </pre>
+        <button type="button" class="btn btn-primary" id="demo-get">
+            <span data-icon="download" data-icon-size="16"></span>
+            Fetch Posts
+        </button>
+    </div>
+    <div>
+        <label class="form-label">Response:</label>
+        <div class="http-response-area" id="get-response">Click "Fetch Posts" to see the response...</div>
+    </div>
 </div>

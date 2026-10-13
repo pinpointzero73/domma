@@ -39,37 +39,120 @@ $.setup({
 
 ### Supported Components (16 total)
 
-card
+[grid cols="2" gap="3" class="config-component-list"]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]card[/badge]
 
-modal
+Content containers with hover and click behaviour.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]modal[/badge]
 
-tabs
+Overlays for focused tasks and dialogs.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]tabs[/badge]
 
-accordion
+Switch between panels without leaving the page.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]accordion[/badge]
 
-tooltip
+Expand and collapse groups of content.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]tooltip[/badge]
 
-carousel
+Small hints beside controls or links.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]carousel[/badge]
 
-dropdown
+Browse a sequence of slides or images.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]dropdown[/badge]
 
-badge
+Open menus and choose from a list.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]badge[/badge]
 
-backToTop
+Highlight a status, label or count.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]backToTop[/badge]
 
-buttonGroup
+Return to the top of a long page.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]buttonGroup[/badge]
 
-loader
+Keep related actions or toggles together.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]loader[/badge]
 
-breadcrumbs
+Show progress while content is loading.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]breadcrumbs[/badge]
 
-navbar
+Show the path to the current page.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]navbar[/badge]
 
-notification
+Build the main site navigation.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]notification[/badge]
 
-timer
+Show desktop notifications with permission.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]timer[/badge]
 
-alarm
+Count down and act when time runs out.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]alarm[/badge]
+
+Schedule a notification for a set time.
+[/box]
+[/col]
+[/grid]
 
 [→ View complete component reference with live demos](/showcase/config/all-components)
 

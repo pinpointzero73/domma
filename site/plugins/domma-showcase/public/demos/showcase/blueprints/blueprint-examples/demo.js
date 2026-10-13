@@ -194,19 +194,19 @@ export function mount(root) {
         { label: 'User Profile (Grid)', value: 'userProfile' }
     ];
     // Build tabs HTML structure
-    let tabsHTML = '<div class="tabs"><div class="tabs-nav">';
+    let tabsHTML = '<div class="tabs"><div class="tab-list" role="tablist">';
     tabItems.forEach((item, index) => {
-        tabsHTML += `<button class="tab-item${index === 0 ? ' active' : ''}" data-tab="${item.value}">${item.label}</button>`;
+        tabsHTML += `<button type="button" class="tab-item${index === 0 ? ' active' : ''}" role="tab" data-tab="${item.value}">${item.label}</button>`;
     });
     tabsHTML += '</div><div class="tabs-content">';
     tabItems.forEach((item, index) => {
-        tabsHTML += `<div class="tab-panel" data-panel="${item.value}" id="tab-${item.value}"></div>`;
+        tabsHTML += `<div class="tab-panel${index === 0 ? ' active' : ''}" role="tabpanel" data-panel="${item.value}" id="tab-${item.value}"></div>`;
     });
     tabsHTML += '</div></div>';
     // Sanitize and insert HTML
-    $(root).find('#blueprint-tabs').html(DOMPurify.sanitize(tabsHTML), {safe: false});
+    $(root).find('#blueprint-tabs').html(tabsHTML);
     // NOW initialize the tabs component
-    const tabsInstance = E.tabs('#blueprint-tabs .tabs', {
+    const tabsInstance = E.tabs($(root).find('#blueprint-tabs .tabs').get(0), {
         animation: true,
         onChange: (e) => {
             const exampleKey = tabItems[e.index].value;
@@ -215,7 +215,7 @@ export function mount(root) {
     });
     function showBlueprintExample(key) {
         const blueprint = blueprints[key];
-        const container = $(`#tab-${key}`);
+        const container = $(root).find(`#tab-${key}`);
 
         // Escape JSON for safe HTML insertion
         const blueprintCode = JSON.stringify(blueprint, null, 2)
@@ -226,7 +226,7 @@ export function mount(root) {
             .replace(/'/g, '&#039;');
 
         const html = `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 grid-cols-md-2 gap-4">
                 <div>
                     <h4 class="font-semibold mb-2">Blueprint Code</h4>
                     <pre class="blueprint-code">${blueprintCode}</pre>
@@ -238,7 +238,7 @@ export function mount(root) {
             </div>
         `;
 
-        container.html(DOMPurify.sanitize(html), {safe: false});
+        container.html(html);
 
         // Generate and render form - ONE-STEP API
         // Use grid layout for product and userProfile examples
@@ -261,4 +261,5 @@ export function mount(root) {
     }
     // Show first example
     showBlueprintExample('contact');
+    return () => tabsInstance.destroy();
 }

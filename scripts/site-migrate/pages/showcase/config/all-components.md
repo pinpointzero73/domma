@@ -12,57 +12,188 @@ sortOrder: 50
 
 **Supported Components (16):** Can be configured via `$.setup()`
 
-card
+[grid cols="2" gap="3" class="config-component-list"]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]card[/badge]
 
-modal
+Content containers with hover and click behaviour.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]modal[/badge]
 
-tabs
+Overlays for focused tasks and dialogs.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]tabs[/badge]
 
-accordion
+Switch between panels without leaving the page.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]accordion[/badge]
 
-tooltip
+Expand and collapse groups of content.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]tooltip[/badge]
 
-carousel
+Small hints beside controls or links.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]carousel[/badge]
 
-dropdown
+Browse a sequence of slides or images.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]dropdown[/badge]
 
-badge
+Open menus and choose from a list.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]badge[/badge]
 
-backToTop
+Highlight a status, label or count.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]backToTop[/badge]
 
-buttonGroup
+Return to the top of a long page.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]buttonGroup[/badge]
 
-loader
+Keep related actions or toggles together.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]loader[/badge]
 
-breadcrumbs
+Show progress while content is loading.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]breadcrumbs[/badge]
 
-navbar
+Show the path to the current page.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]navbar[/badge]
 
-notification
+Build the main site navigation.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]notification[/badge]
 
-timer
+Show desktop notifications with permission.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]timer[/badge]
 
-alarm
+Count down and act when time runs out.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="primary" pill]alarm[/badge]
+
+Schedule a notification for a set time.
+[/box]
+[/col]
+[/grid]
 
 **Not Supported (9):** Must use direct initialisation
 
-autocomplete
+[grid cols="2" gap="3" class="config-component-list"]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]autocomplete[/badge]
 
-pillbox
+Suggest matching values while typing.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]pillbox[/badge]
 
-toast
+Select and manage multiple tagged values.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]toast[/badge]
 
-dialog
+Show a brief success, warning or error message.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]dialog[/badge]
 
-treeView
+Ask for confirmation or a short response.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]treeView[/badge]
 
-hero
+Browse nested items in a hierarchy.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]hero[/badge]
 
-themeRoller
+Introduce a page with a prominent heading.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]themeRoller[/badge]
 
-pageRoller
+Explore and customise theme colours.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]pageRoller[/badge]
 
-editor
+Build a page from reusable sections.
+[/box]
+[/col]
+[col]
+[box padding="compact" rounded="sm" hover="off" class="h-full"]
+[badge variant="secondary" pill]editor[/badge]
+
+Write and format rich text content.
+[/box]
+[/col]
+[/grid]
 
 ## Supported 1. card
 

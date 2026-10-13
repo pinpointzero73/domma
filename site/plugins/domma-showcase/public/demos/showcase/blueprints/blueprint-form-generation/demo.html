@@ -1,43 +1,44 @@
-<div>
-    <h4 class="font-semibold mb-2">Blueprint Definition</h4>
-    <pre class="code-block language-javascript">const contactBlueprint = {
-        name: {
-        type: 'string',
-        required: true,
-        minLength: 2,
-        label: 'Full Name'
-        },
-        email: {
-        type: 'email',
-        required: true,
-        label: 'Email'
-        },
-        message: {
-        type: 'textarea',
-        required: true,
-        minLength: 10,
-        rows: 4,
-        label: 'Message'
-        }
-        };
+<div class="grid grid-cols-1 grid-cols-md-2 gap-4"><div>
+        <h4 class="font-semibold mb-2">Blueprint Definition</h4>
+        <pre class="code-block language-javascript">const contactBlueprint = {
+            name: {
+            type: 'string',
+            required: true,
+            minLength: 2,
+            label: 'Full Name'
+            },
+            email: {
+            type: 'email',
+            required: true,
+            label: 'Email'
+            },
+            message: {
+            type: 'textarea',
+            required: true,
+            minLength: 10,
+            rows: 4,
+            label: 'Message'
+            }
+            };
 
-        // Generate and render form (one-step)
-        F.render(
-        '#contact-form',    // selector
-        contactBlueprint,   // schema
-        {},                 // initial data
-        {                   // options
-        layout: 'stacked',
-        onSubmit: (data) =&gt; {
-        console.log(data);
-        }
-        }
-        );
-    </pre>
-</div>
-<div>
-    <h4 class="font-semibold mb-2">Generated Form</h4>
-    <div class="result-pane">
-        <div id="contact-form"></div>
+            // Generate and render form (one-step)
+            F.render(
+            '#contact-form',    // selector
+            contactBlueprint,   // schema
+            {},                 // initial data
+            {                   // options
+            layout: 'stacked',
+            onSubmit: (data) =&gt; {
+            console.log(data);
+            }
+            }
+            );
+        </pre>
+    </div>
+    <div>
+        <h4 class="font-semibold mb-2">Generated Form</h4>
+        <div class="result-pane">
+            <div id="contact-form"></div>
+        </div>
     </div>
 </div>
