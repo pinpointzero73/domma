@@ -4139,6 +4139,8 @@ class Carousel extends Component {
         animation: 'slide',          // 'slide' | 'fade' | 'crossfade'
         animationDuration: 500,
         animationEasing: 'ease',     // any CSS timing function ('ease', 'linear', 'ease-in-out', 'cubic-bezier(...)', etc.)
+        heightMode: 'crop',          // 'crop' (shortest image) | 'average' (shortest + tallest) / 2
+        height: null,                // optional fixed viewport height in pixels
         showArrows: true,
         showIndicators: true,
         slideSelector: '.carousel-slide, [data-slide]',
@@ -4194,6 +4196,8 @@ class Carousel extends Component {
             this._track.style.transition = `transform ${opts.animationDuration}ms ${opts.animationEasing}`;
         }
 
+        this._initHeight();
+
         // Create arrows
         if (opts.showArrows) {
             this._createArrows();
@@ -4225,6 +4229,60 @@ class Carousel extends Component {
 
         // Initial state
         this._updateState();
+    }
+
+    _initHeight() {
+        // Only leading slide images determine the viewport. Images in captions
+        // and block content keep their normal sizing; text-only carousels stay in flow.
+        this._images = Array.from(this._slides, slide => slide.querySelector(':scope > img')).filter(Boolean);
+        this._originalHeight = this.element.style.getPropertyValue('--dm-carousel-height');
+        this._originalHeightPriority = this.element.style.getPropertyPriority('--dm-carousel-height');
+        this._wasSized = this.element.classList.contains('carousel-sized');
+        const resize = () => this._sizeSlides();
+        for (const image of this._images) {
+            this._addEventListener(image, 'load', resize);
+            this._addEventListener(image, 'error', resize);
+        }
+        if (typeof ResizeObserver !== 'undefined') {
+            this._heightObserver = new ResizeObserver(resize);
+            this._heightObserver.observe(this.element);
+        } else {
+            this._addEventListener(window, 'resize', resize);
+        }
+        resize();
+    }
+
+    _sizeSlides() {
+        const width = this.element.clientWidth;
+        const fixed = Number(this.options.height);
+        let height = fixed > 0 && Number.isFinite(fixed) ? fixed : 0;
+        if (!height) {
+            const heights = this._images
+                .filter(image => image.naturalWidth > 0 && image.naturalHeight > 0)
+                .map(image => width * image.naturalHeight / image.naturalWidth);
+            if (!heights.length || !width) return;
+            const min = Math.min(...heights);
+            height = this.options.heightMode === 'average' ? (min + Math.max(...heights)) / 2 : min;
+            // A mixed carousel must leave enough room for its text-only slides.
+            for (const slide of this._slides) {
+                if (!slide.querySelector(':scope > img')) {
+                    const original = slide.style.height;
+                    slide.style.height = 'auto';
+                    height = Math.max(height, slide.scrollHeight);
+                    slide.style.height = original;
+                }
+            }
+        }
+        const value = `${height}px`;
+        // Avoid triggering another ResizeObserver delivery with an unchanged size.
+        if (this.element.style.getPropertyValue('--dm-carousel-height') !== value) {
+            this.element.style.setProperty('--dm-carousel-height', value);
+        }
+        this.element.classList.add('carousel-sized');
+    }
+
+    _applyOptions() {
+        if (this._images) this._sizeSlides();
     }
 
     _createArrows() {
@@ -4471,6 +4529,15 @@ class Carousel extends Component {
     destroy() {
         super.destroy();
         this._stopAutoplay();
+        this._heightObserver?.disconnect();
+        if (this.element && this._images) {
+            if (!this._wasSized) this.element.classList.remove('carousel-sized');
+            if (this._originalHeight) {
+                this.element.style.setProperty('--dm-carousel-height', this._originalHeight, this._originalHeightPriority);
+            } else {
+                this.element.style.removeProperty('--dm-carousel-height');
+            }
+        }
         if (this._crossfadeSwapTimer) {
             clearTimeout(this._crossfadeSwapTimer);
             this._crossfadeSwapTimer = null;

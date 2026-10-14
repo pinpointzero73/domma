@@ -507,8 +507,12 @@ export interface CarouselOptions {
     pauseOnHover?: boolean;
     /** Loop back to start */
     loop?: boolean;
-    /** Animation type: 'slide' or 'fade' */
-    animation?: 'slide' | 'fade';
+    /** Animation type */
+    animation?: 'slide' | 'fade' | 'crossfade';
+    /** Use the shortest scaled image height, or the midpoint of shortest and tallest */
+    heightMode?: 'crop' | 'average';
+    /** Optional fixed viewport height in pixels */
+    height?: number;
     /** Animation duration in ms */
     animationDuration?: number;
     /** Show navigation arrows */
