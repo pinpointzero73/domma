@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.52.0",
+      "title": "Consistent carousel image heights",
+      "description": "<p>Carousel images fill one consistent viewport from the top. Choose the shortest scaled image, the midpoint of the shortest and tallest, or a fixed height.</p>",
+      "date": "2026-10-14"
+    },
+    {
       "year": "v0.51.14",
       "title": "Fireworks fire again",
       "description": "<p>The CSS fireworks animate again - launch, sparkle and explosion.</p>",
@@ -523,5 +529,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.51.14"
+  "latestVersion": "v0.52.0"
 }

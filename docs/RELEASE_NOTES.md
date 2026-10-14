@@ -1,3 +1,9 @@
+### v0.52.0 - Consistent carousel image heights (2026-10-14)
+
+Image carousels now use one viewport for every slide and crop images from the top. The default uses the shortest image after scaling to the carousel width; `heightMode: 'average'` uses the midpoint of the shortest and tallest scaled images, and `height` sets a fixed pixel height.
+
+Sizing updates when images load and the container resizes, works with slide, fade and crossfade, and leaves text-only carousels in flow. Carousel teardown removes resize observers and image listeners.
+
 ### v0.51.14 - Fireworks fire again (2026-10-13)
 
 The CSS fireworks referred to keyframes that no longer exist (`dm-firework-*` after they were renamed `dm-fw-*`), so the sparkle and launch never animated, and the explosion stayed invisible. Every firework variant now names a real keyframe; a test keeps it that way.
