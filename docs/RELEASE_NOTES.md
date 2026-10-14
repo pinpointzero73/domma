@@ -1,3 +1,7 @@
+### v0.52.1 - Required selects start empty (2026-10-14)
+
+A required select in a Forma form with no value now opens on a "-- Select --" placeholder that cannot be picked again. Before, the browser showed the first option as chosen while the form's value stayed empty, so anyone who wanted that first option left the select alone and the form was refused as incomplete. A select given a value, an optional select and a multiple select are unchanged.
+
 ### v0.52.0 - Consistent carousel image heights (2026-10-14)
 
 Image carousels now use one viewport for every slide and crop images from the top. The default uses the shortest image after scaling to the carousel width; `heightMode: 'average'` uses the midpoint of the shortest and tallest scaled images, and `height` sets a fixed pixel height.

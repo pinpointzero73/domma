@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.52.1",
+      "title": "Required selects start empty",
+      "description": "<p>Required dropdowns in generated forms start on a placeholder, so the first option is never shown as picked when nothing has been chosen.</p>",
+      "date": "2026-10-14"
+    },
+    {
       "year": "v0.52.0",
       "title": "Consistent carousel image heights",
       "description": "<p>Carousel images fill one consistent viewport from the top. Choose the shortest scaled image, the midpoint of the shortest and tallest, or a fixed height.</p>",
@@ -529,5 +535,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.52.0"
+  "latestVersion": "v0.52.1"
 }
