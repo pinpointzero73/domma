@@ -3623,6 +3623,23 @@ code {
     display: block;
 }
 
+/* One viewport for every slide, including fade/crossfade. Images fill it
+   from the top, so different aspect ratios never leave gaps below a photo. */
+.carousel-sized .carousel-track,
+.carousel-sized .carousel-slide {
+    height: var(--dm-carousel-height);
+}
+
+.carousel-sized .carousel-slide {
+    overflow: hidden;
+}
+
+.carousel-sized .carousel-slide > img {
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
 /* Slide content sits IN FLOW by default, so a text-only slide has height.
    It used to be unconditionally absolute - a caption overlay for a background
    image - which meant a slide with no <img> had nothing in flow at all: the
