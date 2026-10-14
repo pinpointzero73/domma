@@ -512,6 +512,12 @@ class Forma {
     // Add empty option if not required
     if (!fieldDef.required) {
       html += `<option value="">-- Select --</option>`;
+    } else if (!attrs.multiple && (currentValue === undefined || currentValue === null || currentValue === '')) {
+      // A required select with nothing chosen yet shows a placeholder that cannot
+      // be picked again. Without it the browser shows the first option as chosen
+      // while the form's value stays empty, so a person who wants that option
+      // never changes the select and the form is refused as incomplete.
+      html += `<option value="" disabled selected>-- Select --</option>`;
     }
 
     const options = fieldDef.options || [];

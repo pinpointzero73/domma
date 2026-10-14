@@ -161,3 +161,31 @@ describe('a date field', () => {
         expect(submitted.when).toBe('2026-09-20');
     });
 });
+
+describe('required select with no value', () => {
+    const SCHEMA = {
+        status: {type: 'select', label: 'Status', required: true, options: [{value: 'a', label: 'A'}, {value: 'b', label: 'B'}]}
+    };
+
+    it('starts on a placeholder, not the first option', () => {
+        F.render(host, SCHEMA, {}, {});
+        const select = form().querySelector('[name="status"]');
+        expect(select.value).toBe('');
+        const first = select.options[0];
+        expect(first.value).toBe('');
+        expect(first.disabled).toBe(true);
+    });
+
+    it('is refused until something is picked', () => {
+        const f = F.create(SCHEMA, {}, {});
+        f.renderTo(host);
+        expect(f.validate()).toBe(false);
+    });
+
+    it('shows a value it was given, with no placeholder', () => {
+        F.render(host, SCHEMA, {status: 'b'}, {});
+        const select = form().querySelector('[name="status"]');
+        expect(select.value).toBe('b');
+        expect([...select.options].some(o => o.value === '')).toBe(false);
+    });
+});
