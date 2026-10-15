@@ -7,6 +7,7 @@ import {DesktopNotification, elements} from './elements.js';
 import {dates} from './dates.js';
 import {tables} from './tables.js';
 import {forms} from './forms.js';
+import {smoothCaret} from './smooth-caret.js';
 import {theme} from './theme.js';
 import {icons} from './icons.js';
 import {storage} from './storage.js';
@@ -101,6 +102,7 @@ Domma.effects = effects;
 Domma.dates = dates;
 Domma.tables = tables;
 Domma.forms = forms;
+Domma.smoothCaret = smoothCaret;
 Domma.theme = theme;
 Domma.icons = icons;
 Domma.storage = storage;
@@ -172,7 +174,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default Domma;
-export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components};
+export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components, smoothCaret};
 
 // Reveal page after Domma is ready
 if (typeof document !== 'undefined') {
