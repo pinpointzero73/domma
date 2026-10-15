@@ -1,3 +1,9 @@
+### v0.52.4 - Twenty celebration scenes and personal sparkler greetings (2026-10-15)
+
+- Update domma-celebrate to 1.4.0 and ship all 20 themes with lazy ESM chunks and bundled font licences.
+- Add New Year, Chinese New Year, Easter, Summer Garden, Winter, Autumn, weather rain, Money Rain, Graduation, Birthday, Anniversary and standalone greetings to the demos and guides.
+- Support custom sparkler messages with names, year substitution, stroke/cursive lettering and gold/silver sparks. Garden bees visit flowers, bunnies hop and butterflies reuse the illustrated meadow flight.
+
 ### v0.52.3 - Dialogs answer only the keys meant for them (2026-10-15)
 
 `E.confirm`, `E.prompt` and `E.alert` no longer act on the key press that opened them. A dialog opened from a keydown handler - Enter on a list row whose action asks "Throw away the changes?" - used to receive that same Enter as it bubbled to the document and answer OK on the user's behalf. A dialog now starts listening only once the opening event has finished, and a held key's auto-repeat is ignored until it is pressed afresh. Enter on a focused dialog button does what that button says (Enter on Cancel used to confirm). New option `danger: true` on `E.confirm` styles OK as a danger button and starts focus on Cancel; the default focus is unchanged.
