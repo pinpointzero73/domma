@@ -1,10 +1,10 @@
 {
   "name": "dommajs-site",
   "displayName": "dommajs.org site",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "dommajs.org's own layout and home page: full-width page heroes with ambient blobs and stars, the home hero and the Domma CMS band ([dommajs-hero /], [dommajs-cms-band /]).",
   "author": "DCBW-IT",
-  "date": "2026-10-10",
+  "date": "2026-10-15",
   "icon": "layout",
   "inject": {
     "head": "public/inject-head.html",
