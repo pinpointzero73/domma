@@ -19,6 +19,9 @@ export const router = {
     _notFoundView: null,
     _middleware: [],
     _transitioning: false,
+    _routing: false,
+    _missedChange: false,
+    _shownPath: null,         // the address whose screen is showing (a not-found one too)
     _transitions: {},
     _initialised: false,
     _templateCache: {},
@@ -217,18 +220,57 @@ export const router = {
         this._views = {};
         this._middleware = [];
         this._currentRoute = null;
+        this._shownPath = null;
+        this._routing = false;
+        this._missedChange = false;
         this._initialised = false;
     },
 
     // Internal: Handle route changes
+    /**
+     * Run the route for the current address. Changes are handled one at a time:
+     * an address change that arrives while one is running (its middleware, the
+     * fade out, the render, the fade in) is remembered, and once the change in
+     * hand is done the router catches up with the address - if it still differs
+     * from what is on screen. Dropping it left the hash on one route and the
+     * screen on another (a link, Back/Forward or a typed address within the
+     * transition).
+     */
     async _handleRouteChange() {
-        if (this._transitioning) return;
+        if (this._routing || this._transitioning) {
+            this._missedChange = true;
+            return;
+        }
+        this._routing = true;
+        try {
+            await this._routeOnce();
+            // Each catch-up is a navigation the user made; a handful is plenty.
+            let i = 0;
+            for (; this._missedChange && i < 5; i++) {
+                this._missedChange = false;
+                const now = window.location.hash.slice(1) || this._defaultRoute;
+                if (this._shownPath === now) break;
+                await this._routeOnce();
+            }
+            // Still changing after that many: start again, rather than drop the latest.
+            if (this._missedChange && i >= 5) setTimeout(() => this._handleRouteChange(), 0);
+        } finally {
+            this._routing = false;
+            this._missedChange = false;
+        }
+    },
 
+    // Internal: one route change for the current address (see _handleRouteChange).
+    async _routeOnce() {
         const hash = window.location.hash.slice(1) || this._defaultRoute;
         const {route, params} = this._matchRoute(hash);
 
         if (!route) {
-            return this._renderNotFound(hash);
+            const result = await this._renderNotFound(hash);
+            // A not-found override may load more routes and ask again (Domma CMS does, for plugins):
+            // only an address that still matches nothing is the one on screen.
+            if (!this._matchRoute(hash).route) this._shownPath = hash;
+            return result;
         }
 
         const from = this._currentRoute;
@@ -264,6 +306,7 @@ export const router = {
         await this._renderView(route.view, params);
 
         this._currentRoute = to;
+        this._shownPath = hash;
 
         // Publish after change event
         if (typeof window !== 'undefined' && window.M) {
