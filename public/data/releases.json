@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.52.3",
+      "title": "Dialogs answer only the keys meant for them",
+      "description": "<p>Dialogs no longer answer themselves when opened with the Enter key, Escape closes only the top-most dialog or slideover, and <code>danger: true</code> makes a confirm start on Cancel.</p>",
+      "date": "2026-10-15"
+    },
+    {
       "year": "v0.52.2",
       "title": "The screen follows the address",
       "description": "<p>The router keeps up with fast navigation: a link, Back or Forward pressed while a screen is still changing now shows the right screen instead of leaving the old one.</p>",
@@ -541,5 +547,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.52.2"
+  "latestVersion": "v0.52.3"
 }
