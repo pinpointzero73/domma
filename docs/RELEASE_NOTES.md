@@ -1,3 +1,10 @@
+### v0.53.0 - Smooth typing across forms and editors (2026-10-15)
+
+- Add `Domma.smoothCaret` for text inputs, textareas and rich-text editors. A short caret glide follows typing and keyboard movement while the browser keeps ownership of text, selection, undo and composition.
+- `install()` enhances fields on focus, including dynamically rendered wizard steps, dialogs and text inputs inside Web Components. It retains only the focused automatic instance and cleans up when a field blurs or is removed.
+- Share Automatic, Smooth and Native preferences across editing surfaces in the same browser. Automatic follows reduced motion; explicit Smooth enables the glide. Forced-colour mode keeps the native caret.
+- Keep password fields, read-only fields and controls whose browsers do not expose text selection (such as email and number inputs) native. Single-line input positioning accounts for vertical centring and horizontal scrolling.
+
 ### v0.52.4 - Twenty celebration scenes and personal sparkler greetings (2026-10-15)
 
 - Update domma-celebrate to 1.4.0 and ship all 20 themes with lazy ESM chunks and bundled font licences.
