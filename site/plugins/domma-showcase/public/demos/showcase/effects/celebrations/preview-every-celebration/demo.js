@@ -2,10 +2,10 @@
  * Preview every celebration - from public/examples/celebrations, rebuilt on bindings.
  *
  * The celebrations are the domma-celebrate package; this site serves its build from
- * the dommajs-site plugin. A preview runs whatever the date, and even for a visitor
+ * the installed Domma JS package. A preview runs whatever the date, and even for a visitor
  * who asked for less motion - they came here to see it.
  */
-const CELEBRATE = '/plugins/dommajs-site/public/vendor/celebrate/domma-celebrate.esm.js';
+const CELEBRATE = '/dist/domma/celebrate/domma-celebrate.esm.js?v=1.4.0';
 
 const THEMES = [
     {id: 'winter', emoji: '❄️', name: 'Winter', dates: 'Dec-Feb, after specific holidays', draws: 'Snowflakes, frosted pines, snowdrifts, icicles and winter stars'},

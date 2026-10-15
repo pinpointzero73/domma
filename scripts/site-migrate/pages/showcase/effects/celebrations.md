@@ -1,12 +1,12 @@
 ---
 title: Celebrations
-description: "Seasonal celebrations for any site - Christmas, Halloween, Valentine's, Guy Fawkes and the four patron saints' days - from the domma-celebrate package."
+description: "Twenty seasonal and personal celebration scenes, custom sparkler greetings, gardens and weather effects from domma-celebrate."
 layout: with-sidebar
 status: published
 sortOrder: 50
 ---
 
-[hero title="Celebrations" tagline="Year-round seasonal effects - fourteen celebrations, each with traits you can switch off or thin out." align="center"][/hero]
+[hero title="Celebrations" tagline="Year-round seasonal effects - twenty celebrations, each with traits you can switch off or thin out." align="center"][/hero]
 
 ## Preview
 
@@ -67,6 +67,12 @@ celebrations.getTraits();   // what this theme can switch
 [table striped="true"]
 | Theme | Draws | Dates |
 | --- | --- | --- |
+| `autumn` | Falling leaves, acorns and mushrooms | Sep-Nov, after specific holidays |
+| `graduation` | Tossed caps, diplomas and your sparkler greeting | Manual only |
+| `birthday` | Cake, balloons, confetti and your sparkler greeting | Manual only |
+| `anniversary` | Rings, hearts and your sparkler greeting | Manual only |
+| `greeting` | Standalone sparkler lettering | Manual only |
+| `money-rain` | Fluttering illustrated banknotes | Manual only |
 | `winter` | Snow, frosted pines, drifts, icicles and stars | Dec-Feb, after specific holidays |
 | `make-it-rain` | Falling water and ground splashes | Manual only |
 | `chinese-new-year` | A Chinese dragon, lanterns, fireworks, confetti and a sparkler greeting | Seven days from Chinese New Year |
@@ -104,3 +110,17 @@ The same package works on any site from one script tag - it mounts the canvas an
 With `theme: 'auto'` it reads today's date, finds the celebration in season and starts it - or does nothing (`getCurrentTheme()` is `null`) when there is none.
 
 Custom sparkler messages use `message`, with `sparkler: {style: "cursive", colour: "silver", year: 2027}`. Choose `graduation`, `birthday`, `anniversary` or `greeting`, or replace a holiday greeting. `autumn` adds leaves, acorns and mushrooms. Banknotes use `money-rain`; weather uses `make-it-rain`.
+
+
+### Write your own message
+
+```javascript
+const greeting = new Celebrations({
+    theme: 'graduation',
+    message: 'Congratulations, Chloé! Class of {year}',
+    sparkler: {style: 'cursive', colour: 'silver', year: 2027}
+});
+await greeting.init();
+```
+
+Messages accept up to 120 characters, including Latin accents and punctuation. Both lettering styles work in gold and silver. Omit `theme` for lettering alone. The optional `greeting: 'best-wishes'` preset writes Best wishes for the selected year; Chinese New Year writes 新年快乐 by default.
