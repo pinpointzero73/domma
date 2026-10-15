@@ -19,6 +19,7 @@ export * from './http';
 export * from './theme';
 export * from './icons';
 export * from './flags';
+export * from './smooth-caret';
 
 // Import types for the main Domma object
 import {dom, DommaCollection} from './dom';
@@ -33,6 +34,7 @@ import {Http, http} from './http';
 import {Theme, theme} from './theme';
 import {Icons, icons} from './icons';
 import {Flags} from './flags';
+import {SmoothCaret} from './smooth-caret';
 
 // ============================================
 // Main Domma Interface
@@ -67,6 +69,9 @@ export interface DommaStatic {
 
     /** UI components */
     elements: Elements;
+
+    /** Smooth caret enhancement for editable text controls. */
+    smoothCaret: SmoothCaret;
 
     /** DataTable functionality */
     tables: Tables;
