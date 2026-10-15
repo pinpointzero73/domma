@@ -1,4 +1,8 @@
-# 
+# Dialogs answer only the keys meant for them
+
+`E.confirm`, `E.prompt` and `E.alert` no longer act on the key press that opened them. A dialog opened from a keydown handler - Enter on a list row whose action asks "Throw away the changes?" - used to receive that same Enter as it bubbled to the document and answer OK on the user's behalf. A dialog now starts listening only once the opening event has finished, and a held key's auto-repeat is ignored until it is pressed afresh. Enter on a focused dialog button does what that button says (Enter on Cancel used to confirm). New option `danger: true` on `E.confirm` styles OK as a danger button and starts focus on Cancel; the default focus is unchanged.
+
+Escape now closes only the top-most layer. A confirm or prompt opened over a slideover takes the Escape for itself, so the slideover stays open behind it (a dialog with `keyboard: false` still keeps Escape from the layers beneath). With slideovers stacked, one Escape closes the top one only; a top slideover with `closeOnEscape: false` keeps the ones beneath open too. A top slideover opened with `keyboard: false` or `closeOnEscape: false` now keeps the panels beneath it open on Escape (before, they closed). A destructive confirm (`danger: true`) answers Enter only through a focused button. Clicks are unchanged. A dialog opened after the page body was replaced now appears instead of going into a detached container.
 
 <!-- website -->
-
+<p>Dialogs no longer answer themselves when opened with the Enter key, Escape closes only the top-most dialog or slideover, and <code>danger: true</code> makes a confirm start on Cancel.</p>

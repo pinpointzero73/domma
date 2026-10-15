@@ -5314,6 +5314,17 @@ class BackToTop extends Component {
 
 const Dialog = {
     _container: null,
+    // Open dialogs ({overlay, handler}), oldest first; only the top one answers.
+    _stack: [],
+
+    // The top-most dialog still on the page (a dialog whose overlay was
+    // removed from outside never blocks the ones opened after it).
+    _topHandler() {
+        for (let i = this._stack.length - 1; i >= 0; i--) {
+            if (this._stack[i].overlay.isConnected) return this._stack[i].handler;
+        }
+        return null;
+    },
     _defaults: {
         title: '',
         message: '',
@@ -5326,11 +5337,12 @@ const Dialog = {
         backdrop: true,
         backdropClose: false,
         keyboard: true,
+        danger: false,
         className: ''
     },
 
     _ensureContainer() {
-        if (!this._container) {
+        if (!this._container || !this._container.isConnected) {
             this._container = document.createElement('div');
             this._container.className = 'dm-dialog-container';
             document.body.appendChild(this._container);
@@ -5381,7 +5393,8 @@ const Dialog = {
                 html += `<button type="button" class="btn btn-outline dm-dialog-cancel">${opts.cancelText}</button>`;
             }
 
-            html += `<button type="button" class="btn btn-primary dm-dialog-confirm">${opts.confirmText}</button>`;
+            const confirmVariant = opts.danger ? 'btn-danger' : 'btn-primary';
+            html += `<button type="button" class="btn ${confirmVariant} dm-dialog-confirm">${opts.confirmText}</button>`;
             html += '</div></div>';
 
             dialog.innerHTML = html;
@@ -5393,8 +5406,9 @@ const Dialog = {
             const cancelBtn = dialog.querySelector('.dm-dialog-cancel');
             const input = dialog.querySelector('.dm-dialog-input');
 
-            // Focus management
-            const focusTarget = input || confirmBtn;
+            // Focus management - a destructive confirm starts on Cancel, so a
+            // stray Enter or Space never throws anything away.
+            const focusTarget = input || (opts.danger && cancelBtn) || confirmBtn;
             setTimeout(() => focusTarget?.focus(), 50);
 
             // Select input text if present
@@ -5402,8 +5416,13 @@ const Dialog = {
                 input.select();
             }
 
-            // Cleanup function
+            // Cleanup function - settles once, whichever way the dialog closes
+            let settled = false;
+            let detachKeys = () => {};
             const cleanup = (result) => {
+                if (settled) return;
+                settled = true;
+                detachKeys();
                 if (opts.animation) {
                     overlay.classList.add('dm-dialog-closing');
                     setTimeout(() => {
@@ -5448,21 +5467,71 @@ const Dialog = {
             }
 
             // Keyboard handling
-            if (opts.keyboard) {
-                const handleKeydown = (e) => {
-                    if (e.key === 'Escape') {
-                        handleCancel();
-                        document.removeEventListener('keydown', handleKeydown);
-                    } else if (e.key === 'Enter' && type !== 'prompt') {
-                        handleConfirm();
-                        document.removeEventListener('keydown', handleKeydown);
-                    } else if (e.key === 'Enter' && type === 'prompt' && e.target === input) {
-                        handleConfirm();
-                        document.removeEventListener('keydown', handleKeydown);
+            //
+            // The dialog never acts on the key event that opened it. A dialog
+            // opened from a keydown handler (Enter on a list row whose action
+            // asks "Throw away the changes?") is opened mid-dispatch, and a
+            // document listener added then still receives that same event as
+            // it bubbles - which used to answer OK on the user's behalf. The
+            // listener is therefore attached on the next task, after the
+            // opening event has finished propagating, and a held key's
+            // auto-repeat is ignored until the key is pressed afresh.
+            const freshKeys = new Set();
+            const blockRepeat = (e) => {
+                if (!e.repeat) freshKeys.add(e.key);
+                if ((e.key === 'Enter' || e.key === ' ') && e.repeat && !freshKeys.has(e.key)) {
+                    // Stop a held key activating a dialog button natively.
+                    e.preventDefault();
+                }
+            };
+            dialog.addEventListener('keydown', blockRepeat);
+
+            // The listener runs in the capture phase on window, so it hears
+            // the key before anything beneath the dialog (an open slideover,
+            // a modal, the page) and stops what it answers: Escape on a
+            // confirm over a slideover closes the confirm, not both. Only the
+            // top-most dialog answers; a dialog with keyboard: false answers
+            // nothing but still keeps Escape from the layers beneath it.
+            const consume = (e) => {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            };
+            const handleKeydown = (e) => {
+                if (Dialog._topHandler() !== handleKeydown) return;
+                if (!e.repeat) freshKeys.add(e.key);
+                if (e.key === 'Escape') {
+                    consume(e);
+                    if (opts.keyboard) handleCancel();
+                } else if (e.key === 'Enter' && opts.keyboard) {
+                    // A held Enter from before the dialog opened is not an answer.
+                    if (e.repeat && !freshKeys.has('Enter')) return;
+                    // A focused dialog button answers for itself (Enter on Cancel cancels).
+                    if (typeof e.target?.closest === 'function' && e.target.closest('button') && dialog.contains(e.target)) return;
+                    // A destructive confirm is answered only through a focused
+                    // button; a stray Enter is kept from the page but does nothing.
+                    if (opts.danger && type === 'confirm') {
+                        consume(e);
+                        return;
                     }
-                };
-                document.addEventListener('keydown', handleKeydown);
-            }
+                    if (type !== 'prompt' || e.target === input) {
+                        consume(e);
+                        handleConfirm();
+                    }
+                }
+            };
+            Dialog._stack.push({overlay, handler: handleKeydown});
+            let attached = false;
+            const timer = setTimeout(() => {
+                if (settled) return;
+                attached = true;
+                window.addEventListener('keydown', handleKeydown, true);
+            }, 0);
+            detachKeys = () => {
+                clearTimeout(timer);
+                const i = Dialog._stack.findIndex((d) => d.handler === handleKeydown);
+                if (i !== -1) Dialog._stack.splice(i, 1);
+                if (attached) window.removeEventListener('keydown', handleKeydown, true);
+            };
         });
     },
 
@@ -8746,6 +8815,30 @@ class Pillbox extends Component {
 // ============================================
 
 class Slideover extends Component {
+    /**
+     * Open slideovers, oldest first. Escape closes only the last one: every
+     * open slideover listens on document, so without this one key press
+     * closed the whole stack.
+     */
+    static _stack = [];
+
+    /** The top-most slideover that is still open and on the page. */
+    static _top() {
+        Slideover._prune();
+        return Slideover._stack[Slideover._stack.length - 1] || null;
+    }
+
+    /** Drop slideovers that were closed or taken off the page without close(). */
+    static _prune() {
+        Slideover._stack = Slideover._stack.filter((so) => so._isOpen && so.element && so.element.isConnected);
+    }
+
+    static _removeFromStack(instance) {
+        Slideover._prune();
+        const i = Slideover._stack.lastIndexOf(instance);
+        if (i !== -1) Slideover._stack.splice(i, 1);
+    }
+
     static defaults = {
         position: 'right',
         size: 'lg',
@@ -8920,6 +9013,9 @@ class Slideover extends Component {
         // Handle keyboard events
         this._keydownHandler = (e) => {
             if (this._isOpen && this.options.keyboard && e.key === 'Escape') {
+                // Only the top-most open slideover answers Escape; a top one
+                // with closeOnEscape: false keeps the ones beneath open too.
+                if (Slideover._top() !== this) return;
                 if (this.options.closeOnEscape) {
                     this.close();
                 }
@@ -9017,6 +9113,8 @@ class Slideover extends Component {
         }
 
         this._isOpen = true;
+        Slideover._removeFromStack(this);
+        Slideover._stack.push(this);
 
         // Call onOpen callback after animation
         setTimeout(() => {
@@ -9138,6 +9236,7 @@ class Slideover extends Component {
         if (this._keydownHandler) {
             document.removeEventListener('keydown', this._keydownHandler);
         }
+        Slideover._removeFromStack(this);
 
         // Clean up form if it exists
         if (this._formaForm) {
@@ -9225,6 +9324,7 @@ class Slideover extends Component {
         if (this._keydownHandler) {
             document.removeEventListener('keydown', this._keydownHandler);
         }
+        Slideover._removeFromStack(this);
 
         super.destroy();
     }
