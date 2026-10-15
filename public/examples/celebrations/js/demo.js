@@ -3,7 +3,7 @@
  * Testing interface for celebrations system
  *
  * The celebrations live in their own package, `domma-celebrate`, so that a site
- * with no Domma in it can use the same eight themes. `npm run copy:celebrate`
+ * with no Domma in it can use the same twenty themes. `npm run copy:celebrate`
  * puts its build under `public/dist/celebrate/`.
  */
 

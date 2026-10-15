@@ -15,7 +15,7 @@
 
 import {cpSync, existsSync, readFileSync, rmSync} from 'fs';
 import {createRequire} from 'module';
-import {dirname, join} from 'path';
+import {dirname, join, resolve} from 'path';
 import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -31,6 +31,13 @@ const destDir = join(rootDir, 'public/dist/celebrate');
  * gives the right answer either way.
  */
 function resolvePackageDir() {
+  // Preview a sibling checkout without changing npm's dependency or lockfile.
+  if (process.env.DOMMA_CELEBRATE_SOURCE) {
+    const source = resolve(process.env.DOMMA_CELEBRATE_SOURCE);
+    const manifest = JSON.parse(readFileSync(join(source, 'package.json'), 'utf8'));
+    if (manifest.name !== 'domma-celebrate') throw new Error('DOMMA_CELEBRATE_SOURCE must point to domma-celebrate');
+    return source;
+  }
   try {
     return dirname(require.resolve('domma-celebrate/package.json'));
   } catch {
