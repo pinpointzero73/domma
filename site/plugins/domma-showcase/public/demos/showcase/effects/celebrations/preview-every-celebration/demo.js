@@ -8,7 +8,19 @@
 const CELEBRATE = '/plugins/dommajs-site/public/vendor/celebrate/domma-celebrate.esm.js';
 
 const THEMES = [
-    {id: 'christmas', emoji: '🎄', name: 'Christmas', dates: '1 Dec - 1 Jan', draws: "Snowflakes, Santa's sleigh and reindeer, trees, wreaths, toy trains, robins, elves"},
+    {id: 'winter', emoji: '❄️', name: 'Winter', dates: 'Dec-Feb, after specific holidays', draws: 'Snowflakes, frosted pines, snowdrifts, icicles and winter stars'},
+    {id: 'make-it-rain', emoji: '🌧️', name: 'Make it rain', dates: 'Manual only', draws: 'Falling water and ground splashes'},
+    {id: 'money-rain', emoji: '💸', name: 'Money Rain', dates: 'Manual only', draws: 'Fluttering banknotes'},
+    {id: 'graduation', emoji: '🎓', name: 'Graduation', dates: 'Manual only', draws: 'Tossed caps, diplomas and a sparkler greeting'},
+    {id: 'birthday', emoji: '🎂', name: 'Birthday', dates: 'Manual only', draws: 'Cake, balloons, confetti and a sparkler greeting'},
+    {id: 'anniversary', emoji: '💍', name: 'Anniversary', dates: 'Manual only', draws: 'Rings, hearts and a sparkler greeting'},
+    {id: 'greeting', emoji: '✨', name: 'Greeting', dates: 'Manual only', draws: 'Standalone sparkler lettering'},
+    {id: 'autumn', emoji: '🍂', name: 'Autumn', dates: 'Sep-Nov, after specific holidays', draws: 'Leaves, acorns and mushrooms'},
+    {id: 'chinese-new-year', emoji: '🐉', name: 'Chinese New Year', dates: 'Seven days from lunar New Year', draws: 'Chinese dragon, lanterns, fireworks, confetti and a sparkler greeting'},
+    {id: 'new-year', emoji: '🎉', name: 'New Year', dates: '31 Dec - 2 Jan', draws: 'Confetti, streamers, fireworks, balloons and a midnight clock'},
+    {id: 'easter', emoji: '🐣', name: 'Easter', dates: 'Tuesday before Easter - Easter Monday', draws: 'Blossom, decorated eggs, a bunny, flowers and butterflies'},
+    {id: 'summer-garden', emoji: '🌼', name: 'Summer Garden', dates: '1 Jun - 31 Aug', draws: 'Petals, flowers, butterflies, bumblebees and ladybirds'},
+    {id: 'christmas', emoji: '🎄', name: 'Christmas', dates: '1 Dec - 30 Dec', draws: "Snowflakes, Santa's sleigh and reindeer, trees, wreaths, toy trains, robins, elves"},
     {id: 'halloween', emoji: '🎃', name: 'Halloween', dates: '26-31 Oct', draws: 'Pumpkins, spiders, witches, bats, gravestones, jack-o-lanterns'},
     {id: 'valentines', emoji: '💕', name: "Valentine's Day", dates: '9-14 Feb', draws: 'Hearts, rose petals, cupid, heart garlands, sparkles'},
     {id: 'guy-fawkes', emoji: '🎆', name: 'Guy Fawkes', dates: '1-5 Nov', draws: 'Sparks, rockets, bonfires, Catherine wheels, Roman candles'},

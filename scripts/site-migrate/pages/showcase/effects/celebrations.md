@@ -6,7 +6,7 @@ status: published
 sortOrder: 50
 ---
 
-[hero title="Celebrations" tagline="Year-round seasonal effects - eight celebrations, each with traits you can switch off or thin out." align="center"][/hero]
+[hero title="Celebrations" tagline="Year-round seasonal effects - fourteen celebrations, each with traits you can switch off or thin out." align="center"][/hero]
 
 ## Preview
 
@@ -67,7 +67,13 @@ celebrations.getTraits();   // what this theme can switch
 [table striped="true"]
 | Theme | Draws | Dates |
 | --- | --- | --- |
-| `christmas` | Snowflakes, Santa's sleigh, reindeer, trees, wreaths, robins, toy trains, elves | 1 Dec - 1 Jan |
+| `winter` | Snow, frosted pines, drifts, icicles and stars | Dec-Feb, after specific holidays |
+| `make-it-rain` | Falling water and ground splashes | Manual only |
+| `chinese-new-year` | A Chinese dragon, lanterns, fireworks, confetti and a sparkler greeting | Seven days from Chinese New Year |
+| `new-year` | Confetti, streamers, fireworks, balloons, a midnight clock | 31 Dec - 2 Jan |
+| `easter` | Blossom, eggs, a bunny, flowers, butterflies | Tuesday before Easter - Easter Monday |
+| `summer-garden` | Petals, flowers, butterflies, bees, ladybirds | 1 Jun - 31 Aug (UK summer) |
+| `christmas` | Snowflakes, Santa's sleigh, reindeer, trees, wreaths, robins, toy trains, elves | 1 Dec - 30 Dec |
 | `halloween` | Pumpkins, bats, ghosts, witches, gravestones, spiders | 26-31 Oct |
 | `valentines` | Hearts, rose petals, cupid, love letters | 9-14 Feb |
 | `guy-fawkes` | Fireworks, bonfires, rockets, Catherine wheels, Roman candles | 1-5 Nov |
@@ -96,3 +102,5 @@ The same package works on any site from one script tag - it mounts the canvas an
 ### Automatic detection
 
 With `theme: 'auto'` it reads today's date, finds the celebration in season and starts it - or does nothing (`getCurrentTheme()` is `null`) when there is none.
+
+Custom sparkler messages use `message`, with `sparkler: {style: "cursive", colour: "silver", year: 2027}`. Choose `graduation`, `birthday`, `anniversary` or `greeting`, or replace a holiday greeting. `autumn` adds leaves, acorns and mushrooms. Banknotes use `money-rain`; weather uses `make-it-rain`.

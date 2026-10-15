@@ -25,6 +25,18 @@
         <label>Theme:</label>
         <select id="theme-select" class="form-select form-select-sm">
           <option value="auto">Auto-detect</option>
+          <option value="chinese-new-year">🐉 Chinese New Year</option>
+          <option value="winter">❄️ Winter</option>
+          <option value="make-it-rain">🌧️ Make it rain</option>
+          <option value="money-rain">Money Rain</option>
+          <option value="graduation">Graduation</option>
+          <option value="birthday">Birthday</option>
+          <option value="anniversary">Anniversary</option>
+          <option value="greeting">Custom greeting</option>
+          <option value="autumn">Autumn</option>
+          <option value="new-year">🎉 New Year</option>
+          <option value="easter">🐣 Easter</option>
+          <option value="summer-garden">🌼 Summer Garden</option>
           <option value="christmas">🎄 Christmas</option>
           <option value="halloween">🎃 Halloween</option>
           <option value="valentines">💕 Valentine's</option>
@@ -126,20 +138,32 @@
 <section class="container content-section">
 <!--  <div class="text-center hero-header">-->
 <!--    <h1 class="display-3">Domma Celebrations</h1>-->
-<!--    <p class="lead">Year-round visual effects for 8 celebration themes</p>-->
+<!--    <p class="lead">Year-round visual effects for 14 celebration themes</p>-->
 <!--  </div>-->
 
   <!-- Main Celebrations -->
   <div class="celebration-group">
 <!--    <h2 class="group-title">Main Celebrations</h2>-->
     <div class="grid grid-cols-4 gap-6 celebration-grid">
+      <div class="celebration-card" data-theme="chinese-new-year" data-tooltip="Chinese dragon | Lanterns | Fireworks | Sparkler greeting" data-tooltip-position="top">
+        <div class="celebration-emoji">🐉</div><h3>Chinese New Year</h3><p class="celebration-dates">Seven days from lunar New Year</p><span class="badge badge-info">7 Days</span>
+      </div>
+      <div class="celebration-card" data-theme="new-year" data-tooltip="Confetti | Streamers | Fireworks | Balloons | Midnight clock" data-tooltip-position="top">
+        <div class="celebration-emoji">🎉</div><h3>New Year</h3><p class="celebration-dates">Dec 31 - Jan 2</p><span class="badge badge-info">3 Days</span>
+      </div>
+      <div class="celebration-card" data-theme="easter" data-tooltip="Blossom | Eggs | Bunny | Flowers | Butterflies" data-tooltip-position="top">
+        <div class="celebration-emoji">🐣</div><h3>Easter</h3><p class="celebration-dates">Tuesday before Easter - Easter Monday</p><span class="badge badge-info">7 Days</span>
+      </div>
+      <div class="celebration-card" data-theme="summer-garden" data-tooltip="Petals | Flowers | Butterflies | Bumblebees | Ladybirds" data-tooltip-position="top">
+        <div class="celebration-emoji">🌼</div><h3>Summer Garden</h3><p class="celebration-dates">Jun 1 - Aug 31</p><span class="badge badge-info">UK summer</span>
+      </div>
       <div class="celebration-card" data-theme="christmas"
            data-tooltip="Snowflakes | Santa's sleigh & reindeer | Christmas trees | Wreaths | Toy trains | Robins | Elves"
            data-tooltip-position="top">
         <div class="celebration-emoji">🎄</div>
         <h3>Christmas</h3>
-        <p class="celebration-dates">Dec 1 - Jan 1</p>
-        <span class="badge badge-info">32 Days</span>
+        <p class="celebration-dates">Dec 1-30</p>
+        <span class="badge badge-info">30 Days</span>
       </div>
 
       <div class="celebration-card" data-theme="halloween"
@@ -293,7 +317,7 @@ celebrations.getTraits();</code></pre>
 
       <h3 class="mt-4">Available Themes</h3>
       <ul>
-        <li><strong>christmas</strong> - Snowflakes, Santa's sleigh, reindeer, trees, wreaths, robins, toy trains, elves (Dec 1 - Jan 1)</li>
+        <li><strong>christmas</strong> - Snowflakes, Santa's sleigh, reindeer, trees, wreaths, robins, toy trains, elves (Dec 1-30)</li>
         <li><strong>halloween</strong> - Pumpkins, bats, ghosts, witches, gravestones, spiders (Oct 26-31)</li>
         <li><strong>valentines</strong> - Hearts, rose petals, cupid, love letters (Feb 9-14)</li>
         <li><strong>guy-fawkes</strong> - Fireworks, bonfires, rockets, catherine wheels, roman candles (Nov 1-5)</li>
