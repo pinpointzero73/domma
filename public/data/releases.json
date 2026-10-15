@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.52.4",
+      "title": "Twenty celebration scenes and personal sparkler greetings",
+      "description": "<p>Twenty celebration scenes, custom sparkler messages, cursive gold and silver lettering, garden visitors, real rain and personal occasions.</p>",
+      "date": "2026-10-15"
+    },
+    {
       "year": "v0.52.3",
       "title": "Dialogs answer only the keys meant for them",
       "description": "<p>Dialogs no longer answer themselves when opened with the Enter key, Escape closes only the top-most dialog or slideover, and <code>danger: true</code> makes a confirm start on Cancel.</p>",
@@ -547,5 +553,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.52.3"
+  "latestVersion": "v0.52.4"
 }
