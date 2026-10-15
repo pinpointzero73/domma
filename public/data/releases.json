@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.52.2",
+      "title": "The screen follows the address",
+      "description": "<p>The router keeps up with fast navigation: a link, Back or Forward pressed while a screen is still changing now shows the right screen instead of leaving the old one.</p>",
+      "date": "2026-10-15"
+    },
+    {
       "year": "v0.52.1",
       "title": "Required selects start empty",
       "description": "<p>Required dropdowns in generated forms start on a placeholder, so the first option is never shown as picked when nothing has been chosen.</p>",
@@ -535,5 +541,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.52.1"
+  "latestVersion": "v0.52.2"
 }

@@ -1,3 +1,7 @@
+### v0.52.2 - The screen follows the address (2026-10-15)
+
+The router no longer drops an address change that arrives while a route change is running. A link, Back or Forward, or a typed address within the transition (the middleware, the fade out, the render and the fade in) used to move the hash and leave the old screen showing. Route changes now run one at a time: a change made during one is remembered, and once that one is done the router shows the route the address names - unless the address has come back to the screen already shown. Several changes in one transition land on the last. A change made while middleware is still deciding now waits its turn instead of running alongside.
+
 ### v0.52.1 - Required selects start empty (2026-10-14)
 
 A required select in a Forma form with no value now opens on a "-- Select --" placeholder that cannot be picked again. Before, the browser showed the first option as chosen while the form's value stayed empty, so anyone who wanted that first option left the select alone and the form was refused as incomplete. A select given a value, an optional select and a multiple select are unchanged.
