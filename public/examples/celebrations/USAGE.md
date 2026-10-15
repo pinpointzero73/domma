@@ -1,11 +1,11 @@
 # Domma Celebrations - Usage Guide
 
-Year-round visual celebration effects: eight themes that know their own place in the calendar,
+Year-round visual celebration effects: fourteen themes that know their own place in the calendar,
 drawn on a transparent canvas overlay that never touches your layout.
 
 > **Celebrations are their own package.** They live in
 > [`domma-celebrate`](https://github.com/pinpointzero73/domma-celebrate), extracted from this
-> repository so that a site with no Domma in it can use the same eight themes. Domma ships the
+> repository so that a site with no Domma in it can use the same fourteen themes. Domma ships the
 > build at `dist/celebrate/` and the layout system drives it for you. The package's own README
 > is the full reference; this page covers using it from Domma.
 
@@ -57,7 +57,11 @@ are asked once rather than on every page.
 
 | Celebration | Key | Dates | What you get |
 |---|---|---|---|
-| 🎄 Christmas | `christmas` | 1 Dec – 1 Jan | Crystalline snowflakes, decorated trees, wreaths, snowmen, a north star, Santa's sleigh with reindeer, a steam train, elves, robins, fireworks |
+| 🐉 Chinese New Year | `chinese-new-year` | Seven days from lunar New Year | Chinese dragon, lanterns, fireworks, confetti and a sparkler greeting |
+| 🎉 New Year | `new-year` | 31 Dec - 2 Jan | Confetti, streamers, fireworks, balloons and a midnight clock |
+| 🐣 Easter | `easter` | Tuesday before Easter - Easter Monday | Blossom, decorated eggs, a bunny, flowers and butterflies |
+| 🌼 Summer Garden | `summer-garden` | 1 Jun - 31 Aug (UK summer) | Petals, flowers, butterflies, bumblebees and ladybirds |
+| 🎄 Christmas | `christmas` | 1 Dec - 30 Dec | Crystalline snowflakes, decorated trees, wreaths, snowmen, a north star, Santa's sleigh with reindeer, a steam train, elves, robins, fireworks |
 | 💕 Valentine's Day | `valentines` | 9 – 14 Feb | Hearts, rose petals, kisses, heart garlands, butterflies, envelopes, love letters, Cupid, a heart-shaped moon, a neon sign |
 | 🏴󠁧󠁢󠁷󠁬󠁳󠁿 St David's Day | `st-davids` | 24 Feb – 1 Mar | Daffodil petals, daffodils, leeks, daffodil fields, the Welsh dragon, a harp, the flag |
 | ☘️ St Patrick's Day | `st-patricks` | 12 – 17 Mar | Clover petals, shamrocks, gold coins, pots of gold, a rainbow, leprechauns, a banshee, a green moon |
@@ -294,3 +298,5 @@ run `npm run copy:celebrate` - or `npm run build`, which includes it.
 `domma-celebrate` is MPL-2.0. Created by Darryl Waterhouse & DCBW-IT.
 
 🎄 Happy celebrating! 🎉
+
+Custom sparkler messages use `message`, with `sparkler: {style: "cursive", colour: "silver", year: 2027}`. Choose `graduation`, `birthday`, `anniversary` or `greeting`, or replace a holiday greeting. `autumn` adds leaves, acorns and mushrooms. Banknotes use `money-rain`; weather uses `make-it-rain`.
