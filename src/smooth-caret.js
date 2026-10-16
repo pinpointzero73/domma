@@ -53,9 +53,8 @@ export function attachSmoothCaret(textarea) {
 
     const motion = win.matchMedia('(prefers-reduced-motion: reduce)');
     const contrast = win.matchMedia('(forced-colors: active)');
-    const oldPosition = parent.style.position;
-    const positioned = win.getComputedStyle(parent).position === 'static';
-    if (positioned) parent.style.position = 'relative';
+    let oldPosition = '';
+    let positioned = false;
 
     const mirror = doc.createElement('div');
     mirror.setAttribute('aria-hidden', 'true');
@@ -113,6 +112,14 @@ export function attachSmoothCaret(textarea) {
             || selected || !textarea.getClientRects().length) {
             hide();
             return;
+        }
+        // Editors can attach the caret while their form is still detached.
+        // Computed styles are unavailable then, so establish the containing
+        // block only when the mounted, focused editor is ready to draw.
+        if (!positioned && win.getComputedStyle(parent).position === 'static') {
+            oldPosition = parent.style.position;
+            parent.style.position = 'relative';
+            positioned = true;
         }
         const style = win.getComputedStyle(textarea);
         const rect = textarea.getBoundingClientRect();

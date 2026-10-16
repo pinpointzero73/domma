@@ -52,6 +52,22 @@ describe('smooth caret lifecycle', () => {
         const input = field('password'); input.focus();
         expect(document.querySelectorAll('.dm-smooth-caret-layer')).toHaveLength(0);
     });
+    it('positions a detached editor after mounting and restores its parent on destroy', async () => {
+        browserFeatures();
+        const parent = document.createElement('div');
+        parent.style.position = 'static';
+        const input = document.createElement('textarea');
+        parent.append(input);
+        const caret = attachSmoothCaret(input); handles.push(caret);
+        expect(parent.style.position).toBe('static');
+        document.body.append(parent);
+        vi.spyOn(input, 'getClientRects').mockReturnValue([{}]);
+        input.focus();
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        expect(parent.style.position).toBe('relative');
+        caret.destroy();
+        expect(parent.style.position).toBe('static');
+    });
     it('stores and sanitises the shared preference', () => {
         expect(getCaretPreference()).toBe('auto');
         setCaretPreference('smooth'); expect(getCaretPreference()).toBe('smooth');
