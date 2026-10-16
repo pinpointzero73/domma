@@ -40,6 +40,47 @@
         <div class="celebrate-stat"><span data-icon="box"></span><div><small>Particles</small><strong data-bind-text="particles.value">0</strong></div></div>
     </div>
 
+    <section class="card celebrate-writing-card" aria-labelledby="celebrate-writing-title">
+        <div class="card-header"><strong id="celebrate-writing-title">Sparkler writing examples</strong></div>
+        <div class="card-body">
+            <p class="text-muted">Try connected cursive, a Best wishes greeting, or a message of your own. Choose a celebration above, then apply the lettering to preview it.</p>
+            <div class="celebrate-writing-examples" role="group" aria-label="Writing examples">
+                <button type="button" class="btn btn-secondary btn-sm" data-on-click="useWritingExample('cursive')">Cursive greeting</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-on-click="useWritingExample('best-wishes')">Best wishes</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-on-click="useWritingExample('custom')">Custom message</button>
+            </div>
+            <div class="celebrate-writing-controls">
+                <label>Lettering
+                    <select class="form-select form-select-sm" data-model="sparklerStyle.value">
+                        <option value="stroke">Stroke</option>
+                        <option value="cursive">Cursive</option>
+                    </select>
+                </label>
+                <label>Colour
+                    <select class="form-select form-select-sm" data-model="sparklerColour.value">
+                        <option value="gold">Gold</option>
+                        <option value="silver">Silver</option>
+                    </select>
+                </label>
+                <label>Greeting
+                    <select class="form-select form-select-sm" data-model="sparklerGreeting.value">
+                        <option value="default">Theme greeting</option>
+                        <option value="best-wishes">Best wishes</option>
+                    </select>
+                </label>
+                <label class="celebrate-writing-message">Custom message
+                    <input class="form-control form-control-sm" type="text" maxlength="120" placeholder="Congratulations, Chloé! Class of {year}" data-model="sparklerMessage.value">
+                </label>
+                <label>Year
+                    <input class="form-control form-control-sm" type="number" min="1" max="9999" data-model="sparklerYear.value">
+                </label>
+                <button type="button" class="btn btn-primary btn-sm" data-on-click="applyWriting">Apply writing</button>
+            </div>
+            <p class="text-muted celebrate-writing-help">Leave the custom message empty to use the selected greeting. Use <code>{year}</code> to insert the selected year.</p>
+            <pre class="celebrate-writing-code"><code data-bind-text="writingCode.value"></code></pre>
+        </div>
+    </section>
+
     <div class="card celebrate-traits-card">
         <div class="card-header flex items-center justify-between">
             <strong>What appears</strong>

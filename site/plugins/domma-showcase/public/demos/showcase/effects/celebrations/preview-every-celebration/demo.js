@@ -41,8 +41,29 @@ export async function mount(root) {
     const particles = M.observable(0);
     const today = M.observable(D().format('dddd D MMMM YYYY'));
     const traits = M.observable([]);
+    const sparklerStyle = M.observable('cursive');
+    const sparklerColour = M.observable('gold');
+    const sparklerGreeting = M.observable('default');
+    const sparklerMessage = M.observable('');
+    const sparklerYear = M.observable(new Date().getFullYear());
+    const writingCode = M.observable('');
     let chosenTraits = {};       // kept across celebrations: each theme reads only its own names
     let effect = null;
+
+    function writingOptions() {
+        return {
+            style: sparklerStyle.value,
+            colour: sparklerColour.value,
+            greeting: sparklerGreeting.value,
+            year: Number(sparklerYear.value) || new Date().getFullYear(),
+            ...(sparklerMessage.value.trim() ? {message: sparklerMessage.value.trim()} : {})
+        };
+    }
+
+    function updateWritingCode() {
+        const themeOption = theme.value === 'auto' ? '' : `theme: '${theme.value}',\n    `;
+        writingCode.value = `const celebration = new Celebrations({\n    ${themeOption}sparkler: ${JSON.stringify(writingOptions(), null, 4).replace(/\n/g, '\n    ')}\n});\nawait celebration.init();`;
+    }
 
     const nameOf = (id) => (id && known[id] ? `${known[id].emoji} ${known[id].displayName}` : 'None');
     const refresh = () => {
@@ -55,7 +76,7 @@ export async function mount(root) {
     async function load() {
         effect?.destroy();
         effect = new Celebrations({theme: theme.value, intensity: intensity.value, enabled: false,
-            traits: chosenTraits, respectMotionPreference: false});
+            traits: chosenTraits, sparkler: writingOptions(), respectMotionPreference: false});
         await effect.init();
         if (running.value) effect.start();
         refresh();
@@ -63,9 +84,11 @@ export async function mount(root) {
 
     const state = {
         theme, intensity, running, showing, particles, today, traits, themes: THEMES,
+        sparklerStyle, sparklerColour, sparklerGreeting, sparklerMessage, sparklerYear, writingCode,
         async themeChanged() {
             if (effect) await effect.setTheme(theme.value); else await load();
             refresh();
+            updateWritingCode();
         },
         setIntensity(level) {
             intensity.value = level;
@@ -83,6 +106,20 @@ export async function mount(root) {
             await state.themeChanged();
             if (!running.value) state.toggle();
         },
+        useWritingExample(example) {
+            sparklerStyle.value = example === 'cursive' || example === 'best-wishes' ? 'cursive' : 'stroke';
+            sparklerColour.value = example === 'best-wishes' ? 'silver' : 'gold';
+            sparklerGreeting.value = example === 'best-wishes' ? 'best-wishes' : 'default';
+            sparklerMessage.value = example === 'custom' ? 'Congratulations, Chloé! Class of {year}' : '';
+            updateWritingCode();
+        },
+        async applyWriting() {
+            if (!effect) return;
+            effect.options.sparkler = writingOptions();
+            await effect.setTheme(theme.value);
+            refresh();
+            updateWritingCode();
+        },
         setTrait(trait, event) {
             chosenTraits[trait.name] = event.target.checked;
             effect?.setTrait(trait.name, event.target.checked);
@@ -98,6 +135,7 @@ export async function mount(root) {
     };
 
     const bindings = M.applyBindings(state, root);
+    updateWritingCode();
     await load();
     const ticker = setInterval(() => {
         particles.value = effect?.particles ? effect.particles.length + (effect.specialParticles?.length || 0) : 0;

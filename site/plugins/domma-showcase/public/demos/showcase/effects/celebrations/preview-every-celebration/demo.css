@@ -4,6 +4,13 @@
 .celebrate-stat { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; border: 1px solid var(--dm-border); border-radius: 10px; background: var(--dm-surface-raised); }
 .celebrate-stat small { display: block; color: var(--dm-text-muted); }
 .celebrate-traits-card { margin-bottom: 1rem; }
+.celebrate-writing-card { margin-bottom: 1rem; }
+.celebrate-writing-examples, .celebrate-writing-controls { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; }
+.celebrate-writing-examples { margin-bottom: .9rem; }
+.celebrate-writing-controls label { display: grid; gap: .3rem; min-width: 125px; margin: 0; font-size: .85rem; }
+.celebrate-writing-controls .celebrate-writing-message { flex: 1 1 260px; }
+.celebrate-writing-help { margin: .75rem 0 0; font-size: .85rem; }
+.celebrate-writing-code { margin: .75rem 0 0; max-height: 220px; overflow: auto; }
 .celebrate-traits { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .5rem; }
 .celebrate-traits label { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
 .celebrate-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .75rem; }
