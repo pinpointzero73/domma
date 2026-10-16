@@ -1,3 +1,8 @@
+### v0.53.1 - Keep the email caret in its editor (2026-10-16)
+
+- Fix smooth carets attached before an editor is mounted, including the email compose body. Resolve the caret layer's positioning parent when the focused editor is ready to draw, so the caret stays beside the text instead of at the top of the compose window.
+- Preserve native selection, formatting and scrolling, and restore the parent's original positioning when the caret is removed.
+
 ### v0.53.0 - Smooth typing across forms and editors (2026-10-15)
 
 - Add `Domma.smoothCaret` for text inputs, textareas and rich-text editors. A short caret glide follows typing and keyboard movement while the browser keeps ownership of text, selection, undo and composition.
