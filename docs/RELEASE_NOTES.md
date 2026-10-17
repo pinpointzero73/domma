@@ -1,3 +1,8 @@
+### v0.53.2 - Scribe effects follow speed and delete speed (2026-10-17)
+
+- Stretch a Scribe entrance effect (fade, bounce or glow) to the unit's `speed` when that is slower than the effect's own length, so a slow sentence-by-sentence fade fades in slowly instead of waiting and then snapping in.
+- Fade units that came in with an effect back out over `deleteSpeed` when they are undone; the next action waits for the fade to finish. Pause, restart and stop hold or clear a unit mid-fade, and text without an effect still deletes at once.
+
 ### v0.53.1 - Keep the email caret in its editor (2026-10-16)
 
 - Fix smooth carets attached before an editor is mounted, including the email compose body. Resolve the caret layer's positioning parent when the focused editor is ready to draw, so the caret stays beside the text instead of at the top of the compose window.

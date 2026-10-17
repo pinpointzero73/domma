@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.53.2",
+      "title": "Scribe effects follow speed and delete speed",
+      "description": "<p>Scribe's fade, bounce and glow now follow the typing and delete speeds, fading text out as well as in.</p>",
+      "date": "2026-10-17"
+    },
+    {
       "year": "v0.53.1",
       "title": "Keep the email caret in its editor",
       "description": "<p>Fix the disappearing email-body caret when a rich editor is assembled before its compose window opens.</p>",
@@ -565,5 +571,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.53.1"
+  "latestVersion": "v0.53.2"
 }
