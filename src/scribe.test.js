@@ -93,6 +93,37 @@ describe('Scribe playback', () => {
     control.restart(); frame();
     expect(el.querySelectorAll('.dm-scribe-word-group')).toHaveLength(2);
   });
+  it('stretches the entrance effect to a slower speed and keeps the CSS length for faster ones', () => {
+    control = scribe(el, { mode: 'sentence', speed: 1000, actions: [{ render: 'Hello.', effect: 'fade' }] });
+    frame(); advance(1000);
+    expect(el.querySelector('.dm-scribe-sentence').style.animationDuration).toBe('1000ms');
+    control.destroy();
+    control = scribe(el, { speed: 20, actions: [{ render: 'Hi', effect: 'fade' }] });
+    frame(); advance(20);
+    expect(el.querySelector('.dm-scribe-char').style.animationDuration).toBe('');
+  });
+  it('fades an effect unit out over deleteSpeed before the next action', () => {
+    const undone = vi.fn();
+    control = scribe(el, { mode: 'sentence', speed: 0, deleteSpeed: 800,
+      actions: [{ render: 'Old.', effect: 'fade' }, { undoRender: 'all' }, { render: 'New.', effect: 'fade' }], onUndoRender: undone });
+    frame(); expect(text()).toBe('Old.');
+    advance(800);
+    const leaving = el.querySelector('.dm-scribe-out');
+    expect(leaving?.textContent).toBe('Old.');
+    expect(leaving.style.animationDuration).toBe('800ms');
+    advance(780); expect(text()).toBe('Old.'); expect(undone).not.toHaveBeenCalled();
+    advance(30); expect(text()).toBe('New.'); expect(undone).toHaveBeenCalledWith('Old.');
+  });
+  it('holds a fading unit while paused and clears it on restart', () => {
+    control = scribe(el, { speed: 0, deleteSpeed: 300, actions: [{ render: 'A', effect: 'fade' }, { undoRender: true }] });
+    frame(); advance(300); expect(el.querySelector('.dm-scribe-out')).not.toBeNull();
+    control.pause(); advance(1000); expect(el.querySelector('.dm-scribe-out')).not.toBeNull();
+    control.restart(); expect(el.querySelector('.dm-scribe-out')).toBeNull();
+  });
+  it('deletes units without an effect at once, as before', () => {
+    control = scribe(el, { speed: 0, deleteSpeed: 20, actions: [{ render: 'AB' }, { undoRender: 'all' }] });
+    frame(); advance(20); expect(text()).toBe('A'); expect(el.querySelector('.dm-scribe-out')).toBeNull();
+  });
   it('removes empty word groups when deleting all characters', () => {
     control = scribe(el, { speed: 0, deleteSpeed: 0,
       actions: [{ render: 'Hello world' }, { undoRender: 'all' }] });

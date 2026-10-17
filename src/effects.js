@@ -537,7 +537,7 @@ export function scribe(selector, options = {}) {
 
   const states = elements.map(element => ({
     element, spans: [], cursor: null, action: 0, task: null,
-    frame: null, lastTime: null, elapsed: 0, loops: 0, lastRenderStart: 0,
+    exiting: [], frame: null, lastTime: null, elapsed: 0, loops: 0, lastRenderStart: 0,
     started: false, paused: false, stopped: false, destroyed: false, hoverPaused: false, hoverHandlers: null
   }));
 
@@ -551,9 +551,26 @@ export function scribe(selector, options = {}) {
     if (parent?.classList.contains('dm-scribe-word-group') && !parent.childNodes.length) parent.remove();
   }
 
+  // Entrance lengths from domma.css; a slower speed stretches them to fill the unit's turn.
+  const ENTRANCE_MS = { fade: 220, bounce: 380, glow: 500 };
+  const EXIT_MS = 220;
+
+  // A unit that came in with an effect fades out over its delete turn. The engine
+  // removes it on its own clock, so pause holds it and reduced-motion CSS cannot strand it.
+  function exitUnit(state, span) {
+    span.classList.remove('dm-scribe-fade', 'dm-scribe-bounce', 'dm-scribe-glow');
+    const ms = Math.max(EXIT_MS, opts.deleteSpeed);
+    span.style.animationDuration = `${ms}ms`;
+    span.classList.add('dm-scribe-out');
+    state.exiting.push({ span, left: ms });
+    return ms;
+  }
+
   function clearText(state) {
     state.spans.forEach(removeUnit);
     state.spans = [];
+    state.exiting.forEach(item => removeUnit(item.span));
+    state.exiting = [];
     state.lastRenderStart = 0;
   }
 
@@ -619,6 +636,8 @@ export function scribe(selector, options = {}) {
     if (['fade', 'bounce', 'glow'].includes(task.effect)) {
       const effectClass = `dm-scribe-${task.effect}`;
       span.classList.add(effectClass);
+      span.dmScribeEffect = task.effect;
+      if (opts.speed > ENTRANCE_MS[task.effect]) span.style.animationDuration = `${opts.speed}ms`;
       if (opts.mode === 'sentence' && task.effect === 'bounce') span.classList.add('dm-scribe-transform-unit');
       // Release animation layers once the entrance settles.
       span.addEventListener('animationend', () => span.classList.remove(effectClass), { once: true });
@@ -643,8 +662,15 @@ export function scribe(selector, options = {}) {
     state.frame = null;
     if (state.paused || state.stopped || state.destroyed) return;
     // Keep fractional frame time for accurate pacing, but avoid a burst after a hidden tab.
-    if (state.lastTime !== null) state.elapsed += Math.min(time - state.lastTime, 64);
+    const delta = state.lastTime !== null ? Math.min(time - state.lastTime, 64) : 0;
+    state.elapsed += delta;
     state.lastTime = time;
+    state.exiting = state.exiting.filter(item => {
+      item.left -= delta;
+      if (item.left > 0) return true;
+      removeUnit(item.span);
+      return false;
+    });
     // Bound zero-duration scripts so an infinite loop cannot block the browser.
     let steps = 0;
     while (steps++ < 100 && !state.paused && !state.stopped && !state.destroyed) {
@@ -652,18 +678,24 @@ export function scribe(selector, options = {}) {
       if (state.stopped || state.paused || state.destroyed) break;
       const task = state.task;
       const complete = (task.type === 'render' && task.index >= task.units.length)
-        || (task.type === 'undo' && task.deleted.length >= task.count);
+        || (task.type === 'undo' && task.deleted.length >= task.count && !task.hold);
       if (complete) {
         finishTask(state);
         continue;
       }
-      if (state.elapsed < task.duration) break;
-      state.elapsed -= task.duration;
-      if (task.type === 'render') appendUnit(state, task);
+      // After the last faded unit, the undo holds until that fade has finished.
+      const wait = task.hold || task.duration;
+      if (state.elapsed < wait) break;
+      state.elapsed -= wait;
+      if (task.hold) task.hold = 0;
+      else if (task.type === 'render') appendUnit(state, task);
       else if (task.type === 'undo') {
         const span = state.spans.pop();
         task.deleted.push(span.textContent);
-        removeUnit(span);
+        if (span.dmScribeEffect) {
+          const ms = exitUnit(state, span);
+          if (task.deleted.length >= task.count) task.hold = ms;
+        } else removeUnit(span);
       } else finishTask(state);
     }
     schedule(state);
@@ -676,6 +708,7 @@ export function scribe(selector, options = {}) {
     state.frame = null;
     state.lastTime = null;
     state.spans.forEach(span => { span.style.animationPlayState = 'paused'; });
+    state.exiting.forEach(item => { item.span.style.animationPlayState = 'paused'; });
     setCursorActive(state, false);
   }
 
@@ -686,6 +719,7 @@ export function scribe(selector, options = {}) {
     state.paused = false;
     state.lastTime = null;
     state.spans.forEach(span => { span.style.animationPlayState = ''; });
+    state.exiting.forEach(item => { item.span.style.animationPlayState = ''; });
     setCursorActive(state, state.task?.type === 'render' || state.task?.type === 'undo');
     if (firstStart) opts.onStart?.();
     schedule(state);
@@ -733,6 +767,8 @@ export function scribe(selector, options = {}) {
           span.classList.remove('dm-scribe-fade', 'dm-scribe-bounce', 'dm-scribe-glow');
           span.style.animationPlayState = '';
         });
+        state.exiting.forEach(item => removeUnit(item.span));
+        state.exiting = [];
         setCursorActive(state, false);
       });
     },
