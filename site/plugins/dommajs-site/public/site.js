@@ -67,7 +67,7 @@
     // In season (Halloween, Christmas, the patron saints' days...), a sparkle disc turns the
     // celebration on and off and picks how much of it; the choice is remembered. Out of season
     // there is no disc. The site vendors the standalone ESM build and its lazy chunks.
-    import('/plugins/dommajs-site/public/vendor/celebrate/domma-celebrate.esm.js?v=1.4.0').then(({Celebrations, isCelebrationSeason}) => {
+    import('/plugins/dommajs-site/public/vendor/celebrate/domma-celebrate.esm.js?v=1.5.0').then(({Celebrations, isCelebrationSeason}) => {
         if (!isCelebrationSeason()) return;
         const store = window.Domma && Domma.storage;
         const get = (k, d) => (store ? store.get(k, d) : d);

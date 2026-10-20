@@ -1,3 +1,11 @@
+### v0.53.3 - Seasonal illustration redraws (2026-10-20)
+
+### Celebrations
+
+- Update domma-celebrate to 1.5.0: a redrawn St George's Day castle and 26 seasonal flowers, heritage props, Halloween details and Valentine's keepsakes.
+- Patron Saints' Day background particles start throughout the scene while keeping their gentle drift.
+- Refresh the dommajs.org celebration assets so the live showcase uses the same artwork.
+
 ### v0.53.2 - Scribe effects follow speed and delete speed (2026-10-17)
 
 - Stretch a Scribe entrance effect (fade, bounce or glow) to the unit's `speed` when that is slower than the effect's own length, so a slow sentence-by-sentence fade fades in slowly instead of waiting and then snapping in.
