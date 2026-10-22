@@ -770,8 +770,7 @@ if (document.readyState === 'loading') {
 
 1. **Ensure backend is running** (if using API):
    ```bash
-   cd domma-backend
-   npm start  # Runs on localhost:3000
+   npm start  # in your backend project; localhost:3000
    ```
 
 2. **Open your MiniApp**:

@@ -20,7 +20,6 @@ Unlike typical framework examples or demos, MiniApps are:
 
 **Status**: ✅ Available Now
 **URL**: [/miniapps/garage/](/miniapps/garage/)
-**GitHub**: [darryl-dcbw/domma-garage](https://github.com/darryl-dcbw/domma-garage)
 
 Vehicle management system with DVLA integration for UK registration lookups, MOT/tax checking, and saved vehicles.
 
@@ -46,7 +45,6 @@ Vehicle management system with DVLA integration for UK registration lookups, MOT
 - Node.js/Express backend with PostgreSQL
 - DVLA API integration
 - JWT authentication
-- Available at: [darryl-dcbw/domma-backend](https://github.com/darryl-dcbw/domma-backend)
 
 ---
 
@@ -556,8 +554,7 @@ DELETE /api/resource/:id   - Delete resource
 
 ### Example Backend Setup
 
-See the [domma-backend](https://github.com/darryl-dcbw/domma-backend) repository for a complete reference implementation
-with:
+A complete backend would typically include:
 
 - User authentication with JWT
 - PostgreSQL database with migrations
@@ -615,13 +612,6 @@ Recommended for development:
 
 ## Examples & Resources
 
-### Code Examples
-
-All MiniApp source code is available on GitHub:
-
-- [My Garage](https://github.com/darryl-dcbw/domma-garage) - Complete vehicle management app
-- [Backend API](https://github.com/darryl-dcbw/domma-backend) - Reference backend implementation
-
 ### Documentation
 
 - [Domma Documentation](/docs/DommaDocumentation.md) - Complete framework reference
@@ -647,5 +637,4 @@ See the [LICENCE](../LICENCE) file for details.
 
 ---
 
-**Ready to build?** Start with the [My Garage source code](https://github.com/darryl-dcbw/domma-garage) or create your
-own from scratch using the examples above.
+**Ready to build?** Create your own MiniApp using the examples above.
