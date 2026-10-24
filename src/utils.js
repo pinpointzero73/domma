@@ -1,3 +1,80 @@
+/**
+ * An array, or an object whose values are the items.
+ * @template T
+ * @typedef {T[] | Record<string, T>} Collection
+ */
+
+/**
+ * Called with each item, its index (or key, for an object) and the collection.
+ * @template T, R
+ * @typedef {(value: T, index: number | string, collection: Collection<T>) => R} Iteratee
+ */
+
+/**
+ * @template T
+ * @typedef {(value: T, index: number | string, collection: Collection<T>) => boolean} Predicate
+ */
+
+/**
+ * A function of the item, or the name of one of its properties.
+ * @template T
+ * @typedef {((value: T) => any) | keyof T} PropertyIteratee
+ */
+
+/**
+ * @typedef {object} DebounceOptions
+ * @property {boolean} [leading=false] - Invoke on the leading edge of the timeout
+ * @property {boolean} [trailing=true] - Invoke on the trailing edge of the timeout
+ * @property {number} [maxWait] - Longest time func may be delayed before it is invoked
+ */
+
+/**
+ * @typedef {object} ThrottleOptions
+ * @property {boolean} [leading=true] - Invoke on the leading edge of the timeout
+ * @property {boolean} [trailing=true] - Invoke on the trailing edge of the timeout
+ */
+
+/**
+ * @typedef {object} TruncateOptions
+ * @property {number} [length=30] - Maximum string length, omission included
+ * @property {string} [omission='...'] - Appended to a truncated string
+ * @property {string | RegExp} [separator] - Truncate back to the last match of this
+ */
+
+/**
+ * @typedef {object} TemplateOptions
+ * @property {Record<string, string>} [partials] - Named partial templates, for `{{> name}}`
+ * @property {Record<string, (...args: any[]) => any>} [helpers] - Helper functions, for `{{helperName arg ...}}`
+ */
+
+/**
+ * A debounced (or throttled) function. Until func has run once a call returns undefined;
+ * after that it returns the result of the latest invocation.
+ * @template {(...args: any[]) => any} T
+ * @typedef {((...args: Parameters<T>) => ReturnType<T> | undefined) & {
+ *   cancel: () => void,
+ *   flush: () => ReturnType<T> | undefined
+ * }} DebouncedFunction
+ */
+
+/**
+ * A memoised function; `cache` is keyed by the first argument (or the resolver's result).
+ * @template {(...args: any[]) => any} T
+ * @typedef {((...args: Parameters<T>) => ReturnType<T>) & {cache: Map<any, ReturnType<T>>}} MemoizedFunction
+ */
+
+/**
+ * The wrapper `chain()` returns. Each chainable utility is a method that takes the remaining
+ * arguments and returns the wrapper; `sum`, `mean`, `min`, `max`, `toArray` and `toString` return
+ * their result; `value()` returns the wrapped value.
+ * @typedef {{value: () => any} & {[method: string]: (...args: any[]) => any}} UtilsChain
+ */
+
+/**
+ * The utilities object (`Domma.utils`, `_`).
+ * @typedef {typeof utils} Utils
+ */
+
 export const utils = {
     // ============================================
     // Array Utilities
@@ -5,9 +82,10 @@ export const utils = {
 
     /**
      * Creates an array of elements split into groups of the specified size.
-     * @param {Array} array
-     * @param {number} size
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {number} [size=1]
+     * @returns {T[][]}
      */
     chunk(array, size = 1) {
         if (!array || size < 1) return [];
@@ -20,8 +98,9 @@ export const utils = {
 
     /**
      * Creates an array with all falsy values removed.
-     * @param {Array} array
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @returns {Exclude<T, false | null | 0 | '' | undefined>[]}
      */
     compact(array) {
         return array ? array.filter(Boolean) : [];
@@ -29,9 +108,10 @@ export const utils = {
 
     /**
      * Creates a new array concatenating array with additional arrays/values.
-     * @param {Array} array
-     * @param {...*} values
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {...(T | T[])} values
+     * @returns {T[]}
      */
     concat(array, ...values) {
         return array ? array.concat(...values) : [];
@@ -39,9 +119,10 @@ export const utils = {
 
     /**
      * Creates an array of values not included in the other given arrays.
-     * @param {Array} array
-     * @param {...Array} values
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {...T[]} values
+     * @returns {T[]}
      */
     difference(array, ...values) {
         if (!array) return [];
@@ -51,10 +132,11 @@ export const utils = {
 
     /**
      * Like `difference`, but accepts an iteratee which is invoked for each element of array and values to generate the criterion by which they're compared.
-     * @param {Array} array
-     * @param {Array} values
-     * @param {Function} iteratee
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {T[]} values
+     * @param {(value: T) => any} iteratee
+     * @returns {T[]}
      */
     differenceBy(array, values, iteratee) {
         if (!array) return [];
@@ -64,10 +146,11 @@ export const utils = {
 
     /**
      * Like `difference`, but accepts a comparator which is invoked to compare elements of array to values.
-     * @param {Array} array
-     * @param {Array} values
-     * @param {Function} comparator
-     * @returns {Array}
+     * @template T, U
+     * @param {T[]} array
+     * @param {U[]} values
+     * @param {(a: T, b: U) => boolean} comparator
+     * @returns {T[]}
      */
     differenceWith(array, values, comparator) {
         if (!array) return [];
@@ -78,9 +161,10 @@ export const utils = {
 
     /**
      * Creates a slice of array with n elements dropped from the beginning.
-     * @param {Array} array
-     * @param {number} n
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {number} [n=1]
+     * @returns {T[]}
      */
     drop(array, n = 1) {
         return array ? array.slice(n) : [];
@@ -88,9 +172,10 @@ export const utils = {
 
     /**
      * Creates a slice of array with n elements dropped from the end.
-     * @param {Array} array
-     * @param {number} n
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {number} [n=1]
+     * @returns {T[]}
      */
     dropRight(array, n = 1) {
         if (!array) return [];
@@ -100,9 +185,10 @@ export const utils = {
 
     /**
      * Creates a slice of array excluding elements dropped from the end.
-     * @param {Array} array
-     * @param {Function} predicate
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {(value: T, index: number, array: T[]) => boolean} predicate
+     * @returns {T[]}
      */
     dropRightWhile(array, predicate) {
         if (!array) return [];
@@ -114,9 +200,10 @@ export const utils = {
 
     /**
      * Creates a slice of array excluding elements dropped from the beginning.
-     * @param {Array} array
-     * @param {Function} predicate
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {(value: T, index: number, array: T[]) => boolean} predicate
+     * @returns {T[]}
      */
     dropWhile(array, predicate) {
         if (!array) return [];
@@ -129,8 +216,8 @@ export const utils = {
 
     /**
      * Performs a Same-value-zero comparison between two values to determine if they are equivalent.
-     * @param {*} value
-     * @param {*} other
+     * @param {any} value
+     * @param {any} other
      * @returns {boolean}
      */
     eq(value, other) {
@@ -139,11 +226,12 @@ export const utils = {
 
     /**
      * Fills elements of array with value from start up to end.
-     * @param {Array} array
-     * @param {*} value
-     * @param {number} start
-     * @param {number} end
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {T} value
+     * @param {number} [start=0]
+     * @param {number} [end]
+     * @returns {T[]}
      */
     fill(array, value, start = 0, end) {
         if (!array) return [];
@@ -152,9 +240,10 @@ export const utils = {
 
     /**
      * Returns the index of the first element predicate returns truthy for.
-     * @param {Array} array
-     * @param {Function} predicate
-     * @param {number} fromIndex
+     * @template T
+     * @param {T[]} array
+     * @param {(value: T, index: number, array: T[]) => boolean} predicate
+     * @param {number} [fromIndex=0]
      * @returns {number}
      */
     findIndex(array, predicate, fromIndex = 0) {
@@ -167,9 +256,10 @@ export const utils = {
 
     /**
      * Returns the index of the last element predicate returns truthy for.
-     * @param {Array} array
-     * @param {Function} predicate
-     * @param {number} fromIndex
+     * @template T
+     * @param {T[]} array
+     * @param {(value: T, index: number, array: T[]) => boolean} predicate
+     * @param {number} [fromIndex]
      * @returns {number}
      */
     findLastIndex(array, predicate, fromIndex) {
@@ -183,8 +273,9 @@ export const utils = {
 
     /**
      * Gets the first element of array.
-     * @param {Array} array
-     * @returns {*}
+     * @template T
+     * @param {T[]} array
+     * @returns {T | undefined}
      */
     first(array) {
         return array ? array[0] : undefined;
@@ -192,8 +283,9 @@ export const utils = {
 
     /**
      * Alias for first.
-     * @param {Array} array
-     * @returns {*}
+     * @template T
+     * @param {T[]} array
+     * @returns {T | undefined}
      */
     head(array) {
         return this.first(array);
@@ -201,8 +293,9 @@ export const utils = {
 
     /**
      * Flattens array a single level deep.
-     * @param {Array} array
-     * @returns {Array}
+     * @template T
+     * @param {(T | T[])[]} array
+     * @returns {T[]}
      */
     flatten(array) {
         return array ? array.flat(1) : [];
@@ -210,8 +303,9 @@ export const utils = {
 
     /**
      * Recursively flattens array.
-     * @param {Array} array
-     * @returns {Array}
+     * @template T
+     * @param {any[]} array
+     * @returns {T[]}
      */
     flattenDeep(array) {
         return array ? array.flat(Infinity) : [];
@@ -219,9 +313,10 @@ export const utils = {
 
     /**
      * Flattens array up to depth times.
-     * @param {Array} array
-     * @param {number} depth
-     * @returns {Array}
+     * @template T
+     * @param {any[]} array
+     * @param {number} [depth=1]
+     * @returns {T[]}
      */
     flattenDepth(array, depth = 1) {
         return array ? array.flat(depth) : [];
@@ -229,8 +324,9 @@ export const utils = {
 
     /**
      * Returns an object composed from key-value pairs.
-     * @param {Array} pairs
-     * @returns {Object}
+     * @template T
+     * @param {[PropertyKey, T][]} pairs
+     * @returns {Record<string, T>}
      */
     fromPairs(pairs) {
         return pairs ? Object.fromEntries(pairs) : {};
@@ -238,9 +334,10 @@ export const utils = {
 
     /**
      * Gets the index at which the first occurrence of value is found.
-     * @param {Array} array
-     * @param {*} value
-     * @param {number} fromIndex
+     * @template T
+     * @param {T[]} array
+     * @param {T} value
+     * @param {number} [fromIndex=0]
      * @returns {number}
      */
     indexOf(array, value, fromIndex = 0) {
@@ -249,8 +346,9 @@ export const utils = {
 
     /**
      * Gets all but the last element of array.
-     * @param {Array} array
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @returns {T[]}
      */
     initial(array) {
         return array ? array.slice(0, -1) : [];
@@ -258,8 +356,9 @@ export const utils = {
 
     /**
      * Creates an array of unique values that are included in all given arrays.
-     * @param {...Array} arrays
-     * @returns {Array}
+     * @template T
+     * @param {...T[]} arrays
+     * @returns {T[]}
      */
     intersection(...arrays) {
         if (!arrays.length) return [];
@@ -271,8 +370,8 @@ export const utils = {
 
     /**
      * Converts all elements in array into a string separated by separator.
-     * @param {Array} array
-     * @param {string} separator
+     * @param {any[]} array
+     * @param {string} [separator=',']
      * @returns {string}
      */
     join(array, separator = ',') {
@@ -281,8 +380,9 @@ export const utils = {
 
     /**
      * Gets the last element of array.
-     * @param {Array} array
-     * @returns {*}
+     * @template T
+     * @param {T[]} array
+     * @returns {T | undefined}
      */
     last(array) {
         return array ? array[array.length - 1] : undefined;
@@ -290,9 +390,10 @@ export const utils = {
 
     /**
      * Gets the index at which the last occurrence of value is found.
-     * @param {Array} array
-     * @param {*} value
-     * @param {number} fromIndex
+     * @template T
+     * @param {T[]} array
+     * @param {T} value
+     * @param {number} [fromIndex]
      * @returns {number}
      */
     lastIndexOf(array, value, fromIndex) {
@@ -304,9 +405,10 @@ export const utils = {
 
     /**
      * Gets the element at index n of array.
-     * @param {Array} array
-     * @param {number} n
-     * @returns {*}
+     * @template T
+     * @param {T[]} array
+     * @param {number} [n=0]
+     * @returns {T | undefined}
      */
     nth(array, n = 0) {
         if (!array) return undefined;
@@ -315,9 +417,10 @@ export const utils = {
 
     /**
      * Removes all given values from array.
-     * @param {Array} array
-     * @param {...*} values
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {...T} values
+     * @returns {T[]}
      */
     pull(array, ...values) {
         if (!array) return [];
@@ -330,9 +433,10 @@ export const utils = {
 
     /**
      * Removes elements from array corresponding to indexes.
-     * @param {Array} array
-     * @param {...number} indexes
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {...(number | number[])} indexes
+     * @returns {T[]}
      */
     pullAt(array, ...indexes) {
         if (!array) return [];
@@ -348,8 +452,9 @@ export const utils = {
 
     /**
      * Reverses array so that the first element becomes the last.
-     * @param {Array} array
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @returns {T[]}
      */
     reverse(array) {
         return array ? array.reverse() : [];
@@ -357,10 +462,11 @@ export const utils = {
 
     /**
      * Creates a slice of array from start up to end.
-     * @param {Array} array
-     * @param {number} start
-     * @param {number} end
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {number} [start=0]
+     * @param {number} [end]
+     * @returns {T[]}
      */
     slice(array, start = 0, end) {
         if (!array) return [];
@@ -369,8 +475,9 @@ export const utils = {
 
     /**
      * Gets all but the first element of array.
-     * @param {Array} array
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @returns {T[]}
      */
     tail(array) {
         return array ? array.slice(1) : [];
@@ -378,9 +485,10 @@ export const utils = {
 
     /**
      * Creates a slice of array with n elements taken from the beginning.
-     * @param {Array} array
-     * @param {number} n
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {number} [n=1]
+     * @returns {T[]}
      */
     take(array, n = 1) {
         return array ? array.slice(0, n) : [];
@@ -388,9 +496,10 @@ export const utils = {
 
     /**
      * Creates a slice of array with n elements taken from the end.
-     * @param {Array} array
-     * @param {number} n
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {number} [n=1]
+     * @returns {T[]}
      */
     takeRight(array, n = 1) {
         if (!array) return [];
@@ -400,8 +509,9 @@ export const utils = {
 
     /**
      * Creates an array of unique values, in order, from all given arrays.
-     * @param {...Array} arrays
-     * @returns {Array}
+     * @template T
+     * @param {...T[]} arrays
+     * @returns {T[]}
      */
     union(...arrays) {
         return [...new Set(arrays.flat())];
@@ -409,8 +519,9 @@ export const utils = {
 
     /**
      * Creates a duplicate-free version of an array.
-     * @param {Array} array
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @returns {T[]}
      */
     uniq(array) {
         return array ? [...new Set(array)] : [];
@@ -418,9 +529,10 @@ export const utils = {
 
     /**
      * Creates a duplicate-free version using iteratee.
-     * @param {Array} array
-     * @param {Function} iteratee
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {(value: T) => any} iteratee
+     * @returns {T[]}
      */
     uniqBy(array, iteratee) {
         if (!array) return [];
@@ -435,9 +547,10 @@ export const utils = {
 
     /**
      * Creates an array excluding all given values.
-     * @param {Array} array
-     * @param {...*} values
-     * @returns {Array}
+     * @template T
+     * @param {T[]} array
+     * @param {...T} values
+     * @returns {T[]}
      */
     without(array, ...values) {
         if (!array) return [];
@@ -447,8 +560,9 @@ export const utils = {
 
     /**
      * Creates an array of unique values that is the symmetric difference.
-     * @param {...Array} arrays
-     * @returns {Array}
+     * @template T
+     * @param {...T[]} arrays
+     * @returns {T[]}
      */
     xor(...arrays) {
         if (!arrays.length) return [];
@@ -463,8 +577,9 @@ export const utils = {
 
     /**
      * Creates an array of grouped elements.
-     * @param {...Array} arrays
-     * @returns {Array}
+     * @template T
+     * @param {...T[]} arrays
+     * @returns {(T | undefined)[][]}
      */
     zip(...arrays) {
         if (!arrays.length) return [];
@@ -478,9 +593,10 @@ export const utils = {
 
     /**
      * Creates an object composed from arrays of keys and values.
-     * @param {Array} keys
-     * @param {Array} values
-     * @returns {Object}
+     * @template T
+     * @param {PropertyKey[]} keys
+     * @param {T[]} [values]
+     * @returns {Record<string, T | undefined>}
      */
     zipObject(keys, values) {
         if (!keys) return {};
@@ -492,10 +608,25 @@ export const utils = {
     },
 
     /**
+     * Invoke `iteratee` n times (with the index).
+     * @template T
+     * @overload
+     * @param {number} n
+     * @param {(index: number) => T} iteratee
+     * @returns {T[]}
+     */
+    /**
+     * Without an iteratee: the indexes `0 .. n-1`.
+     * @overload
+     * @param {number} n
+     * @returns {number[]}
+     */
+    /**
      * Invokes the iteratee n times, returning an array of the results.
+     * @template T
      * @param {number} n - The number of times to invoke iteratee
-     * @param {Function} [iteratee] - The function invoked per iteration
-     * @returns {Array} The array of results
+     * @param {(index: number) => T} [iteratee] - The function invoked per iteration
+     * @returns {(T | number)[]} The array of results
      */
     times(n, iteratee) {
         n = Math.floor(n);
@@ -508,11 +639,25 @@ export const utils = {
     },
 
     /**
+     * Numbers from 0 up to, but not including, `end` (counts down for a negative end).
+     * @overload
+     * @param {number} end
+     * @returns {number[]}
+     */
+    /**
+     * Numbers from `start` up to, but not including, `end`.
+     * @overload
+     * @param {number} start
+     * @param {number} end
+     * @param {number} [step]
+     * @returns {number[]}
+     */
+    /**
      * Creates an array of numbers from start up to, but not including, end.
-     * @param {number} [start=0] - The start of the range
-     * @param {number} end - The end of the range (exclusive)
-     * @param {number} [step=1] - The increment value
-     * @returns {Array} The range of numbers
+     * @param {number} start - The start of the range
+     * @param {number} [end] - The end of the range (exclusive)
+     * @param {number} [step] - The increment value
+     * @returns {number[]} The range of numbers
      */
     range(start, end, step) {
         if (end === undefined) {
@@ -551,9 +696,10 @@ export const utils = {
 
     /**
      * Creates an object composed of keys generated from the results of running each element through iteratee.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {(value: T) => PropertyKey} iteratee
+     * @returns {Record<string, number>}
      */
     countBy(collection, iteratee) {
         const result = {};
@@ -566,9 +712,10 @@ export const utils = {
 
     /**
      * Iterates over elements invoking iteratee for each element.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Array|Object}
+     * @template {Collection<any>} C
+     * @param {C} collection
+     * @param {Iteratee<C extends Collection<infer T> ? T : never, unknown>} iteratee
+     * @returns {C}
      */
     each(collection, iteratee) {
         if (Array.isArray(collection)) {
@@ -581,9 +728,10 @@ export const utils = {
 
     /**
      * Alias for each.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Array|Object}
+     * @template {Collection<any>} C
+     * @param {C} collection
+     * @param {Iteratee<C extends Collection<infer T> ? T : never, unknown>} iteratee
+     * @returns {C}
      */
     forEach(collection, iteratee) {
         return this.each(collection, iteratee);
@@ -591,9 +739,10 @@ export const utils = {
 
     /**
      * Iterates over elements in reverse invoking iteratee for each element.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Array|Object}
+     * @template {Collection<any>} C
+     * @param {C} collection
+     * @param {Iteratee<C extends Collection<infer T> ? T : never, unknown>} iteratee
+     * @returns {C}
      */
     eachRight(collection, iteratee) {
         if (Array.isArray(collection)) {
@@ -609,9 +758,10 @@ export const utils = {
 
     /**
      * Alias for eachRight.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Array|Object}
+     * @template {Collection<any>} C
+     * @param {C} collection
+     * @param {Iteratee<C extends Collection<infer T> ? T : never, unknown>} iteratee
+     * @returns {C}
      */
     forEachRight(collection, iteratee) {
         return this.eachRight(collection, iteratee);
@@ -619,8 +769,9 @@ export const utils = {
 
     /**
      * Checks if predicate returns truthy for all elements of collection.
-     * @param {Array|Object} collection
-     * @param {Function} predicate
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {Predicate<T>} predicate
      * @returns {boolean}
      */
     every(collection, predicate) {
@@ -635,9 +786,10 @@ export const utils = {
 
     /**
      * Iterates over elements returning an array of all elements predicate returns truthy for.
-     * @param {Array|Object} collection
-     * @param {Function} predicate
-     * @returns {Array}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {Predicate<T>} predicate
+     * @returns {T[]}
      */
     filter(collection, predicate) {
         if (Array.isArray(collection)) {
@@ -651,9 +803,10 @@ export const utils = {
 
     /**
      * Iterates over elements returning the first element predicate returns truthy for.
-     * @param {Array|Object} collection
-     * @param {Function} predicate
-     * @returns {*}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {Predicate<T>} predicate
+     * @returns {T | undefined}
      */
     find(collection, predicate) {
         if (Array.isArray(collection)) {
@@ -667,9 +820,10 @@ export const utils = {
 
     /**
      * Iterates over elements returning the last element predicate returns truthy for.
-     * @param {Array|Object} collection
-     * @param {Function} predicate
-     * @returns {*}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {Predicate<T>} predicate
+     * @returns {T | undefined}
      */
     findLast(collection, predicate) {
         if (Array.isArray(collection)) {
@@ -685,9 +839,10 @@ export const utils = {
 
     /**
      * Creates a flattened array of values by running each element through iteratee.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Array}
+     * @template T, R
+     * @param {Collection<T>} collection
+     * @param {Iteratee<T, R | R[]>} iteratee
+     * @returns {R[]}
      */
     flatMap(collection, iteratee) {
         return this.map(collection, iteratee).flat(1);
@@ -695,9 +850,10 @@ export const utils = {
 
     /**
      * Recursively flattens the mapped results.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Array}
+     * @template T, R
+     * @param {Collection<T>} collection
+     * @param {Iteratee<T, any>} iteratee
+     * @returns {R[]}
      */
     flatMapDeep(collection, iteratee) {
         return this.map(collection, iteratee).flat(Infinity);
@@ -705,9 +861,10 @@ export const utils = {
 
     /**
      * Creates an object composed of keys generated from the results of running each element through iteratee.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {PropertyIteratee<T>} iteratee
+     * @returns {Record<string, T[]>}
      */
     groupBy(collection, iteratee) {
         const result = {};
@@ -721,9 +878,10 @@ export const utils = {
 
     /**
      * Checks if value is in collection.
-     * @param {Array|Object|string} collection
-     * @param {*} value
-     * @param {number} fromIndex
+     * @template T
+     * @param {Collection<T> | string} collection
+     * @param {T | string} value
+     * @param {number} [fromIndex=0]
      * @returns {boolean}
      */
     includes(collection, value, fromIndex = 0) {
@@ -741,9 +899,10 @@ export const utils = {
 
     /**
      * Creates an object composed of keys generated from the results of running each element through iteratee.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {PropertyIteratee<T>} iteratee
+     * @returns {Record<string, T>}
      */
     keyBy(collection, iteratee) {
         const result = {};
@@ -756,9 +915,10 @@ export const utils = {
 
     /**
      * Creates an array of values by running each element through iteratee.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @returns {Array}
+     * @template T, R
+     * @param {Collection<T>} collection
+     * @param {Iteratee<T, R>} iteratee
+     * @returns {R[]}
      */
     map(collection, iteratee) {
         if (Array.isArray(collection)) {
@@ -772,9 +932,11 @@ export const utils = {
 
     /**
      * Creates an array of elements sorted in ascending order by the results of running each element through iteratee.
-     * @param {Array|Object} collection
-     * @param {Function|string} iteratee
-     * @returns {Array}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {PropertyIteratee<T> | PropertyIteratee<T>[]} iteratees
+     * @param {('asc' | 'desc') | ('asc' | 'desc')[]} [orders]
+     * @returns {T[]}
      */
     orderBy(collection, iteratees, orders) {
         const items = Array.isArray(collection) ? [...collection] : Object.values(collection);
@@ -797,9 +959,10 @@ export const utils = {
 
     /**
      * Creates an array of elements split into two groups.
-     * @param {Array|Object} collection
-     * @param {Function} predicate
-     * @returns {Array}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {Predicate<T>} predicate
+     * @returns {[T[], T[]]}
      */
     partition(collection, predicate) {
         const truthy = [];
@@ -816,10 +979,11 @@ export const utils = {
 
     /**
      * Reduces collection to a value which is the accumulated result of running each element through iteratee.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @param {*} accumulator
-     * @returns {*}
+     * @template T, R
+     * @param {Collection<T>} collection
+     * @param {(accumulator: R, value: T, index: number | string, collection: Collection<T>) => R} iteratee
+     * @param {R} [accumulator]
+     * @returns {R}
      */
     reduce(collection, iteratee, accumulator) {
         if (Array.isArray(collection)) {
@@ -846,10 +1010,11 @@ export const utils = {
 
     /**
      * Reduces collection from right to left.
-     * @param {Array|Object} collection
-     * @param {Function} iteratee
-     * @param {*} accumulator
-     * @returns {*}
+     * @template T, R
+     * @param {Collection<T>} collection
+     * @param {(accumulator: R, value: T, index: number | string, collection: Collection<T>) => R} iteratee
+     * @param {R} [accumulator]
+     * @returns {R}
      */
     reduceRight(collection, iteratee, accumulator) {
         if (Array.isArray(collection)) {
@@ -876,9 +1041,10 @@ export const utils = {
 
     /**
      * The opposite of filter; returns elements predicate does not return truthy for.
-     * @param {Array|Object} collection
-     * @param {Function} predicate
-     * @returns {Array}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {Predicate<T>} predicate
+     * @returns {T[]}
      */
     reject(collection, predicate) {
         return this.filter(collection, (item, index, col) => !predicate(item, index, col));
@@ -886,8 +1052,9 @@ export const utils = {
 
     /**
      * Gets a random element from collection.
-     * @param {Array|Object} collection
-     * @returns {*}
+     * @template T
+     * @param {Collection<T>} collection
+     * @returns {T | undefined}
      */
     sample(collection) {
         const arr = Array.isArray(collection) ? collection : Object.values(collection || {});
@@ -896,9 +1063,10 @@ export const utils = {
 
     /**
      * Gets n random elements from collection.
-     * @param {Array|Object} collection
-     * @param {number} n
-     * @returns {Array}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {number} [n=1]
+     * @returns {T[]}
      */
     sampleSize(collection, n = 1) {
         const arr = this.shuffle(Array.isArray(collection) ? [...collection] : Object.values(collection || {}));
@@ -907,8 +1075,9 @@ export const utils = {
 
     /**
      * Creates a shuffled array using Fisher-Yates shuffle.
-     * @param {Array|Object} collection
-     * @returns {Array}
+     * @template T
+     * @param {Collection<T>} collection
+     * @returns {T[]}
      */
     shuffle(collection) {
         const arr = Array.isArray(collection) ? [...collection] : Object.values(collection || {});
@@ -921,7 +1090,7 @@ export const utils = {
 
     /**
      * Gets the size of collection.
-     * @param {Array|Object|string} collection
+     * @param {Collection<any> | string | null | undefined} collection
      * @returns {number}
      */
     size(collection) {
@@ -937,8 +1106,9 @@ export const utils = {
 
     /**
      * Checks if predicate returns truthy for any element of collection.
-     * @param {Array|Object} collection
-     * @param {Function} predicate
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {Predicate<T>} predicate
      * @returns {boolean}
      */
     some(collection, predicate) {
@@ -953,9 +1123,10 @@ export const utils = {
 
     /**
      * Creates an array of elements sorted by iteratee.
-     * @param {Array|Object} collection
-     * @param {Function|string} iteratee
-     * @returns {Array}
+     * @template T
+     * @param {Collection<T>} collection
+     * @param {PropertyIteratee<T>} iteratee
+     * @returns {T[]}
      */
     sortBy(collection, iteratee) {
         const items = Array.isArray(collection) ? [...collection] : Object.values(collection);
@@ -974,9 +1145,10 @@ export const utils = {
 
     /**
      * Creates a function that invokes func once it's called n or more times.
+     * @template {(...args: any[]) => any} T
      * @param {number} n
-     * @param {Function} func
-     * @returns {Function}
+     * @param {T} func
+     * @returns {(...args: Parameters<T>) => ReturnType<T> | undefined}
      */
     after(n, func) {
         let count = 0;
@@ -989,9 +1161,10 @@ export const utils = {
 
     /**
      * Creates a function that invokes func, with up to n arguments.
-     * @param {Function} func
-     * @param {number} n
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {number} [n=func.length]
+     * @returns {(...args: any[]) => ReturnType<T>}
      */
     ary(func, n = func.length) {
         return function(...args) {
@@ -1001,9 +1174,10 @@ export const utils = {
 
     /**
      * Creates a function that invokes func while it's called less than n times.
+     * @template {(...args: any[]) => any} T
      * @param {number} n
-     * @param {Function} func
-     * @returns {Function}
+     * @param {T} func
+     * @returns {(...args: Parameters<T>) => ReturnType<T> | undefined}
      */
     before(n, func) {
         let count = 0;
@@ -1018,10 +1192,11 @@ export const utils = {
 
     /**
      * Creates a function that invokes func with the this binding of thisArg.
-     * @param {Function} func
-     * @param {*} thisArg
-     * @param {...*} partials
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {any} thisArg
+     * @param {...any} partials
+     * @returns {(...args: any[]) => ReturnType<T>}
      */
     bind(func, thisArg, ...partials) {
         return function(...args) {
@@ -1031,9 +1206,9 @@ export const utils = {
 
     /**
      * Creates a function that accepts arguments of func and returns a function.
-     * @param {Function} func
-     * @param {number} arity
-     * @returns {Function}
+     * @param {(...args: any[]) => any} func
+     * @param {number} [arity=func.length]
+     * @returns {(...args: any[]) => any}
      */
     curry(func, arity = func.length) {
         return function curried(...args) {
@@ -1048,9 +1223,9 @@ export const utils = {
 
     /**
      * Creates a function that accepts arguments of func and returns a function (right to left).
-     * @param {Function} func
-     * @param {number} arity
-     * @returns {Function}
+     * @param {(...args: any[]) => any} func
+     * @param {number} [arity=func.length]
+     * @returns {(...args: any[]) => any}
      */
     curryRight(func, arity = func.length) {
         return function curried(...args) {
@@ -1065,10 +1240,11 @@ export const utils = {
 
     /**
      * Creates a debounced function that delays invoking func until after wait ms.
-     * @param {Function} func
-     * @param {number} wait
-     * @param {Object} options
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {number} [wait=0]
+     * @param {DebounceOptions} [options]
+     * @returns {DebouncedFunction<T>}
      */
     debounce(func, wait = 0, options = {}) {
         let timeoutId;
@@ -1170,9 +1346,10 @@ export const utils = {
 
     /**
      * Defers invoking the func until the current call stack has cleared.
-     * @param {Function} func
-     * @param {...*} args
-     * @returns {number}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {Parameters<T>} args
+     * @returns {ReturnType<typeof setTimeout>}
      */
     defer(func, ...args) {
         return setTimeout(() => func.apply(this, args), 1);
@@ -1180,10 +1357,11 @@ export const utils = {
 
     /**
      * Invokes func after wait milliseconds.
-     * @param {Function} func
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
      * @param {number} wait
-     * @param {...*} args
-     * @returns {number}
+     * @param {Parameters<T>} args
+     * @returns {ReturnType<typeof setTimeout>}
      */
     delay(func, wait, ...args) {
         return setTimeout(() => func.apply(this, args), wait);
@@ -1191,8 +1369,9 @@ export const utils = {
 
     /**
      * Creates a function that invokes func with arguments reversed.
-     * @param {Function} func
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @returns {(...args: any[]) => ReturnType<T>}
      */
     flip(func) {
         return function(...args) {
@@ -1203,8 +1382,8 @@ export const utils = {
     /**
      * Creates a function that performs a left-to-right function composition.
      * The result of each function is passed as the argument to the next.
-     * @param {...Function} funcs - Functions to compose
-     * @returns {Function}
+     * @param {...((...args: any[]) => any)} funcs - Functions to compose
+     * @returns {(...args: any[]) => any}
      * @example
      * const calculate = _.flow(
      *     x => x * 2,
@@ -1235,8 +1414,8 @@ export const utils = {
     /**
      * Creates a function that performs a right-to-left function composition.
      * The result of each function is passed as the argument to the next (in reverse order).
-     * @param {...Function} funcs - Functions to compose
-     * @returns {Function}
+     * @param {...((...args: any[]) => any)} funcs - Functions to compose
+     * @returns {(...args: any[]) => any}
      * @example
      * const calculate = _.compose(
      *     x => x / 3,
@@ -1251,9 +1430,10 @@ export const utils = {
 
     /**
      * Creates a function that memoizes the result of func.
-     * @param {Function} func
-     * @param {Function} resolver
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {(...args: Parameters<T>) => any} [resolver]
+     * @returns {MemoizedFunction<T>}
      */
     memoize(func, resolver) {
         const cache = new Map();
@@ -1272,8 +1452,9 @@ export const utils = {
 
     /**
      * Creates a function that negates the result of the predicate func.
-     * @param {Function} predicate
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} predicate
+     * @returns {(...args: Parameters<T>) => boolean}
      */
     negate(predicate) {
         return function(...args) {
@@ -1283,8 +1464,9 @@ export const utils = {
 
     /**
      * Creates a function that is restricted to invoking func once.
-     * @param {Function} func
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @returns {(...args: Parameters<T>) => ReturnType<T>}
      */
     once(func) {
         return this.before(2, func);
@@ -1292,9 +1474,10 @@ export const utils = {
 
     /**
      * Creates a function that invokes func with partials prepended.
-     * @param {Function} func
-     * @param {...*} partials
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {...any} partials
+     * @returns {(...args: any[]) => ReturnType<T>}
      */
     partial(func, ...partials) {
         return function(...args) {
@@ -1304,9 +1487,10 @@ export const utils = {
 
     /**
      * Creates a function that invokes func with partials appended.
-     * @param {Function} func
-     * @param {...*} partials
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {...any} partials
+     * @returns {(...args: any[]) => ReturnType<T>}
      */
     partialRight(func, ...partials) {
         return function(...args) {
@@ -1316,10 +1500,11 @@ export const utils = {
 
     /**
      * Creates a throttled function that only invokes func at most once per every wait ms.
-     * @param {Function} func
-     * @param {number} wait
-     * @param {Object} options
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @param {number} [wait=0]
+     * @param {ThrottleOptions} [options]
+     * @returns {DebouncedFunction<T>}
      */
     throttle(func, wait = 0, options = {}) {
         const leading = options.leading !== false;
@@ -1333,8 +1518,9 @@ export const utils = {
 
     /**
      * Creates a function that accepts up to one argument.
-     * @param {Function} func
-     * @returns {Function}
+     * @template {(...args: any[]) => any} T
+     * @param {T} func
+     * @returns {(arg: Parameters<T>[0]) => ReturnType<T>}
      */
     unary(func) {
         return this.ary(func, 1);
@@ -1342,9 +1528,10 @@ export const utils = {
 
     /**
      * Creates a function that provides value to wrapper as its first argument.
-     * @param {*} value
-     * @param {Function} wrapper
-     * @returns {Function}
+     * @template T, R
+     * @param {T} value
+     * @param {(value: T, ...args: any[]) => R} wrapper
+     * @returns {(...args: any[]) => R}
      */
     wrap(value, wrapper) {
         return function(...args) {
@@ -1358,9 +1545,10 @@ export const utils = {
 
     /**
      * Assigns own enumerable string keyed properties of source objects to the destination object.
-     * @param {Object} object
-     * @param {...Object} sources
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {...any} sources
+     * @returns {T}
      */
     assign(object, ...sources) {
         return Object.assign(object || {}, ...sources);
@@ -1368,9 +1556,10 @@ export const utils = {
 
     /**
      * Like assign but iterates over own and inherited source properties.
-     * @param {Object} object
-     * @param {...Object} sources
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {...any} sources
+     * @returns {T}
      */
     assignIn(object, ...sources) {
         const target = object || {};
@@ -1386,9 +1575,10 @@ export const utils = {
 
     /**
      * Alias for assignIn.
-     * @param {Object} object
-     * @param {...Object} sources
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {...any} sources
+     * @returns {T}
      */
     extend(object, ...sources) {
         return this.assignIn(object, ...sources);
@@ -1396,9 +1586,10 @@ export const utils = {
 
     /**
      * Creates an array of values corresponding to paths of object.
-     * @param {Object} object
-     * @param {...(string|string[])} paths
-     * @returns {Array}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {...(string | string[])} paths
+     * @returns {any[]}
      */
     at(object, ...paths) {
         const flatPaths = paths.flat();
@@ -1407,8 +1598,9 @@ export const utils = {
 
     /**
      * Creates a shallow clone of value.
-     * @param {*} value
-     * @returns {*}
+     * @template T
+     * @param {T} value
+     * @returns {T}
      */
     clone(value) {
         if (value === null || typeof value !== 'object') {
@@ -1422,8 +1614,9 @@ export const utils = {
 
     /**
      * Creates a deep clone of value.
-     * @param {*} value
-     * @returns {*}
+     * @template T
+     * @param {T} value
+     * @returns {T}
      */
     cloneDeep(value) {
         if (value === null || typeof value !== 'object') {
@@ -1449,9 +1642,10 @@ export const utils = {
 
     /**
      * Assigns own and inherited enumerable string keyed properties of source objects to the destination object for all destination properties that resolve to undefined.
-     * @param {Object} object
-     * @param {...Object} sources
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {...any} sources
+     * @returns {T}
      */
     defaults(object, ...sources) {
         const target = object || {};
@@ -1469,9 +1663,10 @@ export const utils = {
 
     /**
      * Like defaults but recursively assigns default properties.
-     * @param {Object} object
-     * @param {...Object} sources
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {...any} sources
+     * @returns {T}
      */
     defaultsDeep(object, ...sources) {
         const target = object || {};
@@ -1497,8 +1692,9 @@ export const utils = {
 
     /**
      * Creates an array of own enumerable string keyed-value pairs.
-     * @param {Object} object
-     * @returns {Array}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @returns {[string, T[keyof T]][]}
      */
     entries(object) {
         return object ? Object.entries(object) : [];
@@ -1506,8 +1702,9 @@ export const utils = {
 
     /**
      * Alias for entries.
-     * @param {Object} object
-     * @returns {Array}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @returns {[string, T[keyof T]][]}
      */
     toPairs(object) {
         return this.entries(object);
@@ -1515,9 +1712,10 @@ export const utils = {
 
     /**
      * Returns the key of the first element predicate returns truthy for.
-     * @param {Object} object
-     * @param {Function} predicate
-     * @returns {string|undefined}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string, object: T) => boolean} predicate
+     * @returns {string | undefined}
      */
     findKey(object, predicate) {
         if (!object) return undefined;
@@ -1531,9 +1729,10 @@ export const utils = {
 
     /**
      * Returns the key of the last element predicate returns truthy for.
-     * @param {Object} object
-     * @param {Function} predicate
-     * @returns {string|undefined}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string, object: T) => boolean} predicate
+     * @returns {string | undefined}
      */
     findLastKey(object, predicate) {
         if (!object) return undefined;
@@ -1548,9 +1747,10 @@ export const utils = {
 
     /**
      * Iterates over own and inherited enumerable string keyed properties of an object.
-     * @param {Object} object
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string, object: T) => unknown} iteratee - Return `false` to stop
+     * @returns {T}
      */
     forIn(object, iteratee) {
         if (object) {
@@ -1563,9 +1763,10 @@ export const utils = {
 
     /**
      * Iterates over own enumerable string keyed properties of an object.
-     * @param {Object} object
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string, object: T) => unknown} iteratee - Return `false` to stop
+     * @returns {T}
      */
     forOwn(object, iteratee) {
         if (object) {
@@ -1578,10 +1779,11 @@ export const utils = {
 
     /**
      * Gets the value at path of object.
-     * @param {Object} object
-     * @param {string|Array} path
-     * @param {*} defaultValue
-     * @returns {*}
+     * @template [T=any]
+     * @param {any} object
+     * @param {string | PropertyKey[]} path - Dot path (`'a.b[0].c'`) or array of keys
+     * @param {T} [defaultValue]
+     * @returns {T}
      */
     get(object, path, defaultValue) {
         if (!object) return defaultValue;
@@ -1598,8 +1800,8 @@ export const utils = {
 
     /**
      * Checks if path is a direct property of object.
-     * @param {Object} object
-     * @param {string|Array} path
+     * @param {any} object
+     * @param {string | PropertyKey[]} path
      * @returns {boolean}
      */
     has(object, path) {
@@ -1617,8 +1819,9 @@ export const utils = {
 
     /**
      * Creates an object composed of the inverted keys and values of object.
-     * @param {Object} object
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @returns {Record<string, string>}
      */
     invert(object) {
         const result = {};
@@ -1632,9 +1835,10 @@ export const utils = {
 
     /**
      * Like invert but accepts iteratee which is invoked for each element.
-     * @param {Object} object
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T]) => PropertyKey} [iteratee]
+     * @returns {Record<string, string[]>}
      */
     invertBy(object, iteratee = val => val) {
         const result = {};
@@ -1650,8 +1854,9 @@ export const utils = {
 
     /**
      * Creates an array of the own enumerable property names of object.
-     * @param {Object} object
-     * @returns {Array}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @returns {string[]}
      */
     keys(object) {
         return object ? Object.keys(object) : [];
@@ -1659,8 +1864,9 @@ export const utils = {
 
     /**
      * Creates an array of own and inherited enumerable property names.
-     * @param {Object} object
-     * @returns {Array}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @returns {string[]}
      */
     keysIn(object) {
         const result = [];
@@ -1672,9 +1878,10 @@ export const utils = {
 
     /**
      * Creates an object with the same values as object and keys generated by running each own enumerable property through iteratee.
-     * @param {Object} object
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string, object: T) => PropertyKey} iteratee
+     * @returns {Record<string, T[keyof T]>}
      */
     mapKeys(object, iteratee) {
         const result = {};
@@ -1688,9 +1895,10 @@ export const utils = {
 
     /**
      * Creates an object with the same keys as object and values generated by running each own enumerable property through iteratee.
-     * @param {Object} object
-     * @param {Function} iteratee
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T, R
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string, object: T) => R} iteratee
+     * @returns {{[K in keyof T]: R}}
      */
     mapValues(object, iteratee) {
         const result = {};
@@ -1704,9 +1912,10 @@ export const utils = {
 
     /**
      * Recursively merges own and inherited enumerable properties of source objects into the destination object.
-     * @param {Object} object
-     * @param {...Object} sources
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {...any} sources
+     * @returns {T}
      */
     merge(object, ...sources) {
         const target = object || {};
@@ -1732,9 +1941,11 @@ export const utils = {
 
     /**
      * Creates an object composed of the own enumerable properties of object that are not omitted.
-     * @param {Object} object
-     * @param {...(string|string[])} paths
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @template {keyof T} K
+     * @param {T} object
+     * @param {...(K | K[])} paths
+     * @returns {Omit<T, K>}
      */
     omit(object, ...paths) {
         if (!object) return {};
@@ -1750,9 +1961,10 @@ export const utils = {
 
     /**
      * Creates an object composed of the properties predicate doesn't return truthy for.
-     * @param {Object} object
-     * @param {Function} predicate
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string) => boolean} predicate
+     * @returns {Partial<T>}
      */
     omitBy(object, predicate) {
         if (!object) return {};
@@ -1767,9 +1979,11 @@ export const utils = {
 
     /**
      * Creates an object composed of the picked object properties.
-     * @param {Object} object
-     * @param {...(string|string[])} paths
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @template {keyof T} K
+     * @param {T} object
+     * @param {...(K | K[])} paths
+     * @returns {Pick<T, K>}
      */
     pick(object, ...paths) {
         if (!object) return {};
@@ -1785,9 +1999,10 @@ export const utils = {
 
     /**
      * Creates an object composed of the properties predicate returns truthy for.
-     * @param {Object} object
-     * @param {Function} predicate
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {(value: T[keyof T], key: string) => boolean} predicate
+     * @returns {Partial<T>}
      */
     pickBy(object, predicate) {
         if (!object) return {};
@@ -1802,10 +2017,11 @@ export const utils = {
 
     /**
      * Sets the value at path of object.
-     * @param {Object} object
-     * @param {string|Array} path
-     * @param {*} value
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {string | PropertyKey[]} path
+     * @param {any} value
+     * @returns {T}
      */
     set(object, path, value) {
         if (!object) return object;
@@ -1825,8 +2041,8 @@ export const utils = {
 
     /**
      * Removes the property at path of object.
-     * @param {Object} object
-     * @param {string|Array} path
+     * @param {any} object
+     * @param {string | PropertyKey[]} path
      * @returns {boolean}
      */
     unset(object, path) {
@@ -1843,10 +2059,11 @@ export const utils = {
 
     /**
      * Sets the value at path of object if the resolved value is undefined.
-     * @param {Object} object
-     * @param {string|Array} path
-     * @param {*} value
-     * @returns {Object}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @param {string | PropertyKey[]} path
+     * @param {any} value
+     * @returns {T}
      */
     setIfUndefined(object, path, value) {
         if (this.get(object, path) === undefined) {
@@ -1857,8 +2074,9 @@ export const utils = {
 
     /**
      * Creates an array of own enumerable string keyed property values of object.
-     * @param {Object} object
-     * @returns {Array}
+     * @template {Record<PropertyKey, any>} T
+     * @param {T} object
+     * @returns {T[keyof T][]}
      */
     values(object) {
         return object ? Object.values(object) : [];
@@ -1866,8 +2084,8 @@ export const utils = {
 
     /**
      * Creates an array of own and inherited enumerable property values.
-     * @param {Object} object
-     * @returns {Array}
+     * @param {object} object
+     * @returns {any[]}
      */
     valuesIn(object) {
         const result = [];
@@ -1883,8 +2101,8 @@ export const utils = {
 
     /**
      * Checks if value is an Array.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is any[]}
      */
     isArray(value) {
         return Array.isArray(value);
@@ -1892,8 +2110,8 @@ export const utils = {
 
     /**
      * Checks if value is a boolean primitive or object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is boolean | Boolean}
      */
     isBoolean(value) {
         return typeof value === 'boolean' || value instanceof Boolean;
@@ -1901,8 +2119,8 @@ export const utils = {
 
     /**
      * Checks if value is a Date object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is Date}
      */
     isDate(value) {
         return value instanceof Date;
@@ -1910,7 +2128,7 @@ export const utils = {
 
     /**
      * Checks if value is an empty object, collection, map, or set.
-     * @param {*} value
+     * @param {unknown} value
      * @returns {boolean}
      */
     isEmpty(value) {
@@ -1923,8 +2141,8 @@ export const utils = {
 
     /**
      * Performs a deep comparison between two values.
-     * @param {*} value
-     * @param {*} other
+     * @param {any} value
+     * @param {any} other
      * @returns {boolean}
      */
     isEqual(value, other) {
@@ -1949,8 +2167,8 @@ export const utils = {
 
     /**
      * Performs a partial deep comparison to determine if object contains equivalent property values.
-     * @param {Object} object - The object to inspect
-     * @param {Object} source - The object of property values to match
+     * @param {any} object - The object to inspect
+     * @param {any} source - The object of property values to match
      * @returns {boolean} Returns true if object is a match
      */
     isMatch(object, source) {
@@ -1974,8 +2192,8 @@ export const utils = {
 
     /**
      * Checks if value is a finite number.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is number}
      */
     isFinite(value) {
         return Number.isFinite(value);
@@ -1983,8 +2201,8 @@ export const utils = {
 
     /**
      * Checks if value is a Function object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is (...args: any[]) => any}
      */
     isFunction(value) {
         return typeof value === 'function';
@@ -1992,8 +2210,8 @@ export const utils = {
 
     /**
      * Checks if value is an integer.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is number}
      */
     isInteger(value) {
         return Number.isInteger(value);
@@ -2001,7 +2219,7 @@ export const utils = {
 
     /**
      * Checks if value is NaN.
-     * @param {*} value
+     * @param {unknown} value
      * @returns {boolean}
      */
     isNaN(value) {
@@ -2010,8 +2228,8 @@ export const utils = {
 
     /**
      * Checks if value is null or undefined.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is null | undefined}
      */
     isNil(value) {
         return value === null || value === undefined;
@@ -2019,8 +2237,8 @@ export const utils = {
 
     /**
      * Checks if value is null.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is null}
      */
     isNull(value) {
         return value === null;
@@ -2028,8 +2246,8 @@ export const utils = {
 
     /**
      * Checks if value is a number primitive or object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is number | Number}
      */
     isNumber(value) {
         return typeof value === 'number' || value instanceof Number;
@@ -2037,8 +2255,8 @@ export const utils = {
 
     /**
      * Checks if value is the language type of Object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is object}
      */
     isObject(value) {
         return value !== null && typeof value === 'object';
@@ -2046,8 +2264,8 @@ export const utils = {
 
     /**
      * Checks if value is a plain object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is Record<string, any>}
      */
     isPlainObject(value) {
         if (value === null || typeof value !== 'object') return false;
@@ -2057,8 +2275,8 @@ export const utils = {
 
     /**
      * Checks if value is a RegExp object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is RegExp}
      */
     isRegExp(value) {
         return value instanceof RegExp;
@@ -2066,8 +2284,8 @@ export const utils = {
 
     /**
      * Checks if value is a string primitive or object.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is string | String}
      */
     isString(value) {
         return typeof value === 'string' || value instanceof String;
@@ -2075,8 +2293,8 @@ export const utils = {
 
     /**
      * Checks if value is a Symbol primitive.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is symbol}
      */
     isSymbol(value) {
         return typeof value === 'symbol';
@@ -2084,8 +2302,8 @@ export const utils = {
 
     /**
      * Checks if value is undefined.
-     * @param {*} value
-     * @returns {boolean}
+     * @param {unknown} value
+     * @returns {value is undefined}
      */
     isUndefined(value) {
         return value === undefined;
@@ -2097,8 +2315,8 @@ export const utils = {
 
     /**
      * Converts string to an integer of the specified radix.
-     * @param {string} string - The string to convert
-     * @param {number} [radix=10] - The radix to interpret the value
+     * @param {string | number | null | undefined} string - The string to convert
+     * @param {number} [radix] - The radix to interpret the value
      * @returns {number} The converted integer
      */
     parseInt(string, radix) {
@@ -2113,7 +2331,7 @@ export const utils = {
 
     /**
      * Converts value to a number.
-     * @param {*} value - The value to process
+     * @param {any} value - The value to process
      * @returns {number} The number
      */
     toNumber(value) {
@@ -2138,7 +2356,7 @@ export const utils = {
 
     /**
      * Converts value to an integer.
-     * @param {*} value - The value to convert
+     * @param {any} value - The value to convert
      * @returns {number} The converted integer
      */
     toInteger(value) {
@@ -2150,7 +2368,7 @@ export const utils = {
 
     /**
      * Converts value to a finite number.
-     * @param {*} value - The value to convert
+     * @param {any} value - The value to convert
      * @returns {number} The converted number
      */
     toFinite(value) {
@@ -2164,7 +2382,7 @@ export const utils = {
 
     /**
      * Converts value to a safe integer.
-     * @param {*} value - The value to convert
+     * @param {any} value - The value to convert
      * @returns {number} The converted safe integer
      */
     toSafeInteger(value) {
@@ -2177,7 +2395,7 @@ export const utils = {
 
     /**
      * Converts value to a string.
-     * @param {*} value - The value to convert
+     * @param {any} value - The value to convert
      * @returns {string} The converted string
      */
     toString(value) {
@@ -2190,9 +2408,22 @@ export const utils = {
     },
 
     /**
+     * A string becomes its characters.
+     * @overload
+     * @param {string} value
+     * @returns {string[]}
+     */
+    /**
+     * An array, iterable or object becomes an array of its values.
+     * @template T
+     * @overload
+     * @param {T[] | Iterable<T> | Record<string, T> | null | undefined} value
+     * @returns {T[]}
+     */
+    /**
      * Converts value to an array.
-     * @param {*} value - The value to convert
-     * @returns {Array} The converted array
+     * @param {any} value - The value to convert
+     * @returns {any[]} The converted array
      */
     toArray(value) {
         if (!value) return [];
@@ -2209,8 +2440,9 @@ export const utils = {
 
     /**
      * Casts value as an array if it's not one.
-     * @returns {Array} The cast array
-     * @param args
+     * @template T
+     * @param {...(T | T[])} args - Only the first is used
+     * @returns {T[]} The cast array
      */
     castArray(...args) {
         if (!args.length) return [];
@@ -2220,7 +2452,7 @@ export const utils = {
 
     /**
      * Converts value to an integer suitable for use as the length of an array-like object.
-     * @param {*} value - The value to convert
+     * @param {any} value - The value to convert
      * @returns {number} The converted integer
      */
     toLength(value) {
@@ -2233,8 +2465,8 @@ export const utils = {
 
     /**
      * Converts value to a plain object flattening inherited enumerable string keyed properties.
-     * @param {*} value - The value to convert
-     * @returns {Object} The converted plain object
+     * @param {any} value - The value to convert
+     * @returns {Record<string, any>} The converted plain object
      */
     toPlainObject(value) {
         const result = {};
@@ -2261,7 +2493,7 @@ export const utils = {
     /**
      * Computes number rounded up to precision.
      * @param {number} number
-     * @param {number} precision
+     * @param {number} [precision=0]
      * @returns {number}
      */
     ceil(number, precision = 0) {
@@ -2282,7 +2514,7 @@ export const utils = {
     /**
      * Computes number rounded down to precision.
      * @param {number} number
-     * @param {number} precision
+     * @param {number} [precision=0]
      * @returns {number}
      */
     floor(number, precision = 0) {
@@ -2292,8 +2524,8 @@ export const utils = {
 
     /**
      * Computes the maximum value of array.
-     * @param {Array} array
-     * @returns {*}
+     * @param {number[]} array
+     * @returns {number | undefined}
      */
     max(array) {
         return array && array.length ? Math.max(...array) : undefined;
@@ -2301,9 +2533,10 @@ export const utils = {
 
     /**
      * Computes the maximum value of array with iteratee.
-     * @param {Array} array
-     * @param {Function} iteratee
-     * @returns {*}
+     * @template T
+     * @param {T[]} array
+     * @param {PropertyIteratee<T>} iteratee
+     * @returns {T | undefined}
      */
     maxBy(array, iteratee) {
         if (!array || !array.length) return undefined;
@@ -2316,7 +2549,7 @@ export const utils = {
 
     /**
      * Computes the mean of the values in array.
-     * @param {Array} array
+     * @param {number[]} array
      * @returns {number}
      */
     mean(array) {
@@ -2325,8 +2558,9 @@ export const utils = {
 
     /**
      * Computes the mean using iteratee.
-     * @param {Array} array
-     * @param {Function} iteratee
+     * @template T
+     * @param {T[]} array
+     * @param {PropertyIteratee<T>} iteratee
      * @returns {number}
      */
     meanBy(array, iteratee) {
@@ -2335,8 +2569,8 @@ export const utils = {
 
     /**
      * Computes the minimum value of array.
-     * @param {Array} array
-     * @returns {*}
+     * @param {number[]} array
+     * @returns {number | undefined}
      */
     min(array) {
         return array && array.length ? Math.min(...array) : undefined;
@@ -2344,9 +2578,10 @@ export const utils = {
 
     /**
      * Computes the minimum value of array with iteratee.
-     * @param {Array} array
-     * @param {Function} iteratee
-     * @returns {*}
+     * @template T
+     * @param {T[]} array
+     * @param {PropertyIteratee<T>} iteratee
+     * @returns {T | undefined}
      */
     minBy(array, iteratee) {
         if (!array || !array.length) return undefined;
@@ -2370,7 +2605,7 @@ export const utils = {
     /**
      * Computes number rounded to precision.
      * @param {number} number
-     * @param {number} precision
+     * @param {number} [precision=0]
      * @returns {number}
      */
     round(number, precision = 0) {
@@ -2390,7 +2625,7 @@ export const utils = {
 
     /**
      * Computes the sum of the values in array.
-     * @param {Array} array
+     * @param {number[]} array
      * @returns {number}
      */
     sum(array) {
@@ -2399,8 +2634,9 @@ export const utils = {
 
     /**
      * Computes the sum using iteratee.
-     * @param {Array} array
-     * @param {Function} iteratee
+     * @template T
+     * @param {T[]} array
+     * @param {PropertyIteratee<T>} iteratee
      * @returns {number}
      */
     sumBy(array, iteratee) {
@@ -2416,10 +2652,25 @@ export const utils = {
     // ============================================
 
     /**
+     * Clamp to an upper bound only.
+     * @overload
+     * @param {number} number
+     * @param {number} upper
+     * @returns {number}
+     */
+    /**
+     * Clamp to the inclusive lower and upper bounds.
+     * @overload
+     * @param {number} number
+     * @param {number | undefined} lower
+     * @param {number} upper
+     * @returns {number}
+     */
+    /**
      * Clamps number within the inclusive lower and upper bounds.
      * @param {number} number
-     * @param {number} lower
-     * @param {number} upper
+     * @param {number} [lower]
+     * @param {number} [upper]
      * @returns {number}
      */
     clamp(number, lower, upper) {
@@ -2433,10 +2684,25 @@ export const utils = {
     },
 
     /**
-     * Checks if n is between start and up to but not including end.
+     * Is the number in `[0, end)`?
+     * @overload
+     * @param {number} number
+     * @param {number} end
+     * @returns {boolean}
+     */
+    /**
+     * Is the number in `[start, end)` (the bounds are swapped when start > end)?
+     * @overload
      * @param {number} number
      * @param {number} start
      * @param {number} end
+     * @returns {boolean}
+     */
+    /**
+     * Checks if n is between start and up to but not including end.
+     * @param {number} number
+     * @param {number} start
+     * @param {number} [end]
      * @returns {boolean}
      */
     inRange(number, start, end) {
@@ -2451,10 +2717,31 @@ export const utils = {
     },
 
     /**
-     * Produces a random number between the inclusive lower and upper bounds.
-     * @param {number} lower
+     * Between 0 and 1 (a float when `floating`).
+     * @overload
+     * @param {boolean} [floating]
+     * @returns {number}
+     */
+    /**
+     * Between 0 and `upper` when `floating` is given; `random(n)` alone is between `n` and 1 (the bounds are swapped).
+     * @overload
      * @param {number} upper
      * @param {boolean} floating
+     * @returns {number}
+     */
+    /**
+     * Between the inclusive bounds; a float when `floating` or either bound is fractional.
+     * @overload
+     * @param {number} lower
+     * @param {number} [upper]
+     * @param {boolean} [floating]
+     * @returns {number}
+     */
+    /**
+     * Produces a random number between the inclusive lower and upper bounds.
+     * @param {number | boolean} [lower=0]
+     * @param {number | boolean} [upper=1]
+     * @param {boolean} [floating]
      * @returns {number}
      */
     random(lower = 0, upper = 1, floating) {
@@ -2506,7 +2793,7 @@ export const utils = {
      * Checks if string ends with the given target string.
      * @param {string} string
      * @param {string} target
-     * @param {number} position
+     * @param {number} [position]
      * @returns {boolean}
      */
     endsWith(string, target, position) {
@@ -2568,9 +2855,9 @@ export const utils = {
 
     /**
      * Pads string on the left and right sides if it's shorter than length.
-     * @param {string} string
-     * @param {number} length
-     * @param {string} chars
+     * @param {string} [string='']
+     * @param {number} [length=0]
+     * @param {string} [chars=' ']
      * @returns {string}
      */
     pad(string = '', length = 0, chars = ' ') {
@@ -2586,9 +2873,9 @@ export const utils = {
 
     /**
      * Pads string on the right side if it's shorter than length.
-     * @param {string} string
-     * @param {number} length
-     * @param {string} chars
+     * @param {string} [string='']
+     * @param {number} [length=0]
+     * @param {string} [chars=' ']
      * @returns {string}
      */
     padEnd(string = '', length = 0, chars = ' ') {
@@ -2600,9 +2887,9 @@ export const utils = {
 
     /**
      * Pads string on the left side if it's shorter than length.
-     * @param {string} string
-     * @param {number} length
-     * @param {string} chars
+     * @param {string} [string='']
+     * @param {number} [length=0]
+     * @param {string} [chars=' ']
      * @returns {string}
      */
     padStart(string = '', length = 0, chars = ' ') {
@@ -2614,8 +2901,8 @@ export const utils = {
 
     /**
      * Repeats the given string n times.
-     * @param {string} string
-     * @param {number} n
+     * @param {string} [string='']
+     * @param {number} [n=1]
      * @returns {string}
      */
     repeat(string = '', n = 1) {
@@ -2624,9 +2911,9 @@ export const utils = {
 
     /**
      * Replaces matches for pattern in string with replacement.
-     * @param {string} string
-     * @param {string|RegExp} pattern
-     * @param {string} replacement
+     * @param {string} [string='']
+     * @param {string | RegExp} [pattern]
+     * @param {string | ((substring: string, ...args: any[]) => string)} [replacement]
      * @returns {string}
      */
     replace(string = '', pattern, replacement) {
@@ -2645,10 +2932,10 @@ export const utils = {
 
     /**
      * Splits string by separator.
-     * @param {string} string
-     * @param {string|RegExp} separator
-     * @param {number} limit
-     * @returns {Array}
+     * @param {string} [string='']
+     * @param {string | RegExp} [separator]
+     * @param {number} [limit]
+     * @returns {string[]}
      */
     split(string = '', separator, limit) {
         return string.split(separator, limit);
@@ -2670,7 +2957,7 @@ export const utils = {
      * Checks if string starts with the given target string.
      * @param {string} string
      * @param {string} target
-     * @param {number} position
+     * @param {number} [position=0]
      * @returns {boolean}
      */
     startsWith(string, target, position = 0) {
@@ -2698,8 +2985,8 @@ export const utils = {
 
     /**
      * Removes leading and trailing whitespace or specified characters from string.
-     * @param {string} string
-     * @param {string} chars
+     * @param {string} [string='']
+     * @param {string} [chars]
      * @returns {string}
      */
     trim(string = '', chars) {
@@ -2710,8 +2997,8 @@ export const utils = {
 
     /**
      * Removes trailing whitespace or specified characters from string.
-     * @param {string} string
-     * @param {string} chars
+     * @param {string} [string='']
+     * @param {string} [chars]
      * @returns {string}
      */
     trimEnd(string = '', chars) {
@@ -2722,8 +3009,8 @@ export const utils = {
 
     /**
      * Removes leading whitespace or specified characters from string.
-     * @param {string} string
-     * @param {string} chars
+     * @param {string} [string='']
+     * @param {string} [chars]
      * @returns {string}
      */
     trimStart(string = '', chars) {
@@ -2734,8 +3021,8 @@ export const utils = {
 
     /**
      * Truncates string if it's longer than the given maximum string length.
-     * @param {string} string
-     * @param {Object} options
+     * @param {string} [string='']
+     * @param {TruncateOptions} [options]
      * @returns {string}
      */
     truncate(string = '', options = {}) {
@@ -2801,9 +3088,9 @@ export const utils = {
 
     /**
      * Splits string into an array of its words.
-     * @param {string} string
-     * @param {string|RegExp} pattern
-     * @returns {Array}
+     * @param {string} [string='']
+     * @param {string | RegExp} [pattern]
+     * @returns {string[]}
      */
     words(string = '', pattern) {
         if (pattern) {
@@ -2819,7 +3106,7 @@ export const utils = {
      * Supports: %s (string), %d/%i (integer), %f (float), %o (object), %j (JSON), %% (literal %)
      * Also supports width, precision, and flags: %10s, %-10s, %010d, %.2f, %10.2f
      * @param {string} format - The format string
-     * @param {...*} args - Values to substitute
+     * @param {...any} args - Values to substitute
      * @returns {string}
      */
     sprintf(format, ...args) {
@@ -2903,7 +3190,7 @@ export const utils = {
     /**
      * Alias for sprintf - returns formatted string.
      * @param {string} format - The format string
-     * @param {...*} args - Values to substitute
+     * @param {...any} args - Values to substitute
      * @returns {string}
      */
     format(format, ...args) {
@@ -2929,10 +3216,8 @@ export const utils = {
      * - {{> partialName}} - Partial inclusion (if registered)
      *
      * @param {string} template - The template string
-     * @param {Object} [options] - Compilation options
-     * @param {Object} [options.partials] - Named partial templates
-     * @param {Object} [options.helpers] - Custom helper functions
-     * @returns {Function} Compiled template function that accepts data
+     * @param {TemplateOptions} [options] - Compilation options
+     * @returns {(data?: Record<string, any>) => string} Compiled template function that accepts data
      */
     template(template, options = {}) {
         const {partials = {}, helpers = {}} = options;
@@ -3064,8 +3349,8 @@ export const utils = {
     /**
      * Renders a template string with the given data (one-shot).
      * @param {string} template - The template string
-     * @param {Object} data - The data object
-     * @param {Object} [options] - Template options (partials, helpers)
+     * @param {Record<string, any>} data - The data object
+     * @param {TemplateOptions} [options] - Template options (partials, helpers)
      * @returns {string} Rendered output
      */
     render(template, data, options = {}) {
@@ -3109,7 +3394,7 @@ export const utils = {
 
     /**
      * Escape HTML special characters to prevent XSS attacks.
-     * @param {string} str - String to escape
+     * @param {any} str - String to escape
      * @returns {string} Escaped string
      */
     escapeHtml(str) {
@@ -3129,8 +3414,8 @@ export const utils = {
     /**
      * Creates a lodash-style wrapper for explicit chaining.
      * Allows method chaining with .value() to extract the final result.
-     * @param {*} value - The value to wrap
-     * @returns {Object} Chainable wrapper object
+     * @param {any} value - The value to wrap
+     * @returns {UtilsChain} Chainable wrapper object
      * @example
      * _.chain([1, 2, 3, 4])
      *     .map(x => x * 2)
