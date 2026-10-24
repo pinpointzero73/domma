@@ -24,5 +24,23 @@
     `allowOutsideFocus` (`false` | `true` | `'layers'` | function) and `register`; a trap whose containers left the
     page lets go of focus.
 
+### Types generated from the source
+
+*   The TypeScript declarations (`assets/types/`, the package's `types`) are now generated from the JSDoc in `src/`
+    by `npm run build:types` (part of `npm run build`) instead of being written by hand. They cover what they did
+    before and more: the router (`R`), auth (`A`), forms (`F`), effects, blueprint helpers (`B`), web components,
+    every `E.*` factory and its instance, and the Schema Builder. `H.get<T>()` and the other HTTP methods are
+    generic, `$()` events are typed by name (`'click'` gives a `MouseEvent`), and `isDomma()` is a type guard.
+*   Every alias Domma puts on `window` is now declared as a global (`E`, `H`, `I`, `T`, `R`, `A`, `F`, `B` joined
+    `$`, `_`, `M`, `D`, `S`), plus `FL` from domma-flags.
+*   Types now follow the code where the old hand-written ones did not: names and members that never existed are
+    gone (`HttpResponse`, `ThemeChangeEvent`, `BackToTopScrollEvent`, `BackToTopShowEvent`, `H.setDefaults`,
+    `S.setPrefix`, several DataTable methods), and signatures that were wrong are fixed (`T` `filter` / `filterBy`,
+    `PageInfo.page`, `theme.preview(theme)`). Module values such as `utils` or `elements` are type-only exports, since
+    the ES module never exported them at runtime.
+*   The separate hand-kept copy in `public/assets/ide/phpstorm/` is retired; point an IDE at `assets/types/index.d.ts`.
+*   `npm run check:types` (in `make check` and CI) fails when the committed declarations differ from a fresh
+    generation, and type-checks a small consumer under `tsc --strict`. See [docs/Types.md](Types.md).
+
 <!-- website -->
 

@@ -229,6 +229,8 @@ consult that folder's CLAUDE.md for detailed information.
   escaping, Intl formatters, `data-i18n*` + `translate()`, `detect()`
 - [docs/Bindings.md](./docs/Bindings.md) - DOM bindings: `M.applyBindings()`, `data-bind-*`, `data-model`, `data-each`,
   custom bindings and helpers
+- [docs/Types.md](./docs/Types.md) - TypeScript declarations: generated from the JSDoc in `src/`, where to edit,
+  `npm run build:types`, the `check:types` gate
 - [docs/DommaDocumentation.md](./docs/DommaDocumentation.md) - Comprehensive user documentation
 - [docs/GettingStarted.md](./docs/GettingStarted.md) - Quick start guide
 - [README.md](./README.md) - Project overview
@@ -479,8 +481,9 @@ The Downloads page hosts a browser-side zip assembler powered by JSZip + FileSav
 
 - When updating features or adding new ones, the documentation and showcase should be updated in-line
 - Where and whenever possible use Domma in the showcase, documentation and tutorials
-- When making changes to the namespaces/modules ensure that we update the PHPStorm code intelligence files at
-  `public/assets/ide/phpstorm`
+- The TypeScript declarations (`assets/types/`, which IDEs read too) are generated from the JSDoc in `src/`:
+  when a public signature or option changes, update its JSDoc and run `npm run build:types` - see
+  [docs/Types.md](./docs/Types.md). `npm run check:types` (in `make check`) fails on stale output
 - Do not run a server as I am running one
 - Audit your own work and reiterate where possible
 - **British English**: Use British spellings in all new code, comments, and documentation (-ise not -ize, -yse not -yze, -our not -or). Existing code may use American spellings for backwards compatibility.
