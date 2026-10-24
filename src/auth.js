@@ -800,23 +800,36 @@ export class UserInfo extends Component {
     onLogout: null
   };
 
+  /**
+   * @param {string|HTMLElement} selector
+   * @param {Object} [options]
+   */
+  constructor(selector, options = {}) {
+    super(selector, options);
+    this._init();
+  }
+
   _init() {
     if (!this.element) return;
 
     // Render user info
     this.render();
 
-    // Attach logout handler
-    const logoutBtn = this.element.querySelector('.auth-logout-btn');
-    if (logoutBtn) {
-      this._addEventListener(logoutBtn, 'click', () => {
-        this.handleLogout();
-      });
-    }
+    // Delegated: render() replaces the button on every login/logout
+    this._addEventListener(this.element, 'click', (e) => {
+      if (e.target.closest?.('.auth-logout-btn')) this.handleLogout();
+    });
 
-    // Listen for auth changes
-    auth.on('login', () => this.render());
-    auth.on('logout', () => this.render());
+    // Listen for auth changes (removed again in destroy())
+    this._onAuthChange = () => this.render();
+    auth.on('login', this._onAuthChange);
+    auth.on('logout', this._onAuthChange);
+  }
+
+  destroy() {
+    auth.off('login', this._onAuthChange);
+    auth.off('logout', this._onAuthChange);
+    super.destroy();
   }
 
   render() {

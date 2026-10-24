@@ -176,7 +176,13 @@ export class UserInfo extends Component {
         logoutText: string;
         onLogout: any;
     };
+    /**
+     * @param {string|HTMLElement} selector
+     * @param {Object} [options]
+     */
+    constructor(selector: string | HTMLElement, options?: any);
     _init(): void;
+    _onAuthChange: () => void;
     render(): void;
     handleLogout(): void;
 }
