@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Pane - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/split-pane/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the component itself needs is in elements.css. */
+        .sx-split {
+            height: 16rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            overflow: hidden;
+        }
+
+        .sx-split-tall {
+            height: 24rem;
+        }
+
+        .sx-split-pane {
+            padding: var(--dm-space-4);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+        }
+
+        .sx-split-alt {
+            background: var(--dm-background-alt);
+            color: var(--dm-text);
+        }
+
+        .sx-split-code {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.85rem;
+            white-space: pre;
+            margin: 0;
+        }
+
+        .sx-split-frame {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background: var(--dm-surface);
+        }
+
+        .sx-split-nopad {
+            padding: 0;
+        }
+
+        .sx-split-output {
+            font-family: var(--dm-font-mono, monospace);
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Split Pane</div>
+        <div class="hero-subtitle">Resizable panes with draggable, keyboard-operable gutters - side by side or stacked, nested, collapsible and remembered</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Split Pane</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.splitPane()</code> turns the children of a container into panes and puts a gutter between
+                each pair. Drag a gutter, or focus it and use the arrow keys, to share the space differently. It is
+                what editors, mail clients and dashboards with a resizable sidebar are made of.
+            </p>
+            <p class="mb-4">
+                It is plain flexbox: each pane gets a <code>flex-basis</code> worked out from its share, nothing is
+                absolutely positioned, and the container keeps its own size from your CSS. Sizes are percentages
+                of the space the panes share, so the layout scales when the window does.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Two or more panes</strong>, side by side (<code>horizontal</code>) or stacked (<code>vertical</code>)</li>
+                <li><strong>Limits</strong> - <code>minSize</code> / <code>maxSize</code> in px or %, per pane, with <code>snapOffset</code></li>
+                <li><strong>Collapsible</strong> - double-click, a gutter button, Enter, or <code>collapse(i)</code> / <code>expand(i)</code></li>
+                <li><strong>Remembered</strong> - <code>persistKey</code> stores the sizes with <code>S</code> and restores them</li>
+                <li><strong>Nests</strong>, works right to left, and keeps iframes from swallowing a drag</li>
+                <li><strong>Accessible</strong> - gutters are focusable <code>role="separator"</code> elements with live values</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;div id="editor" style="height: 20rem"&gt;
+    &lt;div&gt;Files&lt;/div&gt;
+    &lt;div&gt;Editor&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const split = E.splitPane('#editor', {sizes: [30, 70], minSize: 120});
+split.on('dragend', (sizes) =&gt; console.log(sizes)); // [34.5, 65.5]
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Basic">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Two panes</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Drag the gutter, or Tab to it and press the arrow keys (Shift for bigger steps, Home and End for the
+                limits). Neither pane goes below 120px.
+            </p>
+            <div id="demo-basic" class="sx-split mb-4">
+                <div class="sx-split-pane"><strong>Left</strong><p class="mt-2 mb-0">Sizes: <span id="demo-basic-out" class="sx-split-output">30 / 70</span></p></div>
+                <div class="sx-split-pane sx-split-alt"><strong>Right</strong><p class="mt-2 mb-0">The panes scroll their own content when it does not fit.</p></div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const basic = E.splitPane('#demo-basic', {sizes: [30, 70], minSize: 120});
+basic.on('resize', (sizes) =&gt; $('#demo-basic-out').text(sizes.map(Math.round).join(' / ')));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Nested">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Nested, collapsible and remembered</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Three panes across, the middle one split again top to bottom. The file list collapses (double-click
+                its gutter, use the small button, or focus the gutter and press Enter). The preview is an
+                <code>&lt;iframe&gt;</code>: dragging over it still works, because the panes stop taking pointer
+                events while a drag is on. The sizes are stored under <code>persistKey</code> - reload the page and
+                they come back.
+            </p>
+            <div id="demo-ide" class="sx-split sx-split-tall mb-4">
+                <div class="sx-split-pane sx-split-alt">
+                    <strong>Files</strong>
+                    <ul class="mt-2 mb-0">
+                        <li>index.html</li>
+                        <li>site.css</li>
+                        <li>app.js</li>
+                    </ul>
+                </div>
+                <div id="demo-ide-middle">
+                    <div class="sx-split-pane"><pre class="sx-split-code">const split = E.splitPane('#ide', {
+    sizes: [20, 50, 30],
+    collapsible: [true, false, false]
+});</pre></div>
+                    <div class="sx-split-pane sx-split-alt"><pre class="sx-split-code">$ npm run build
+built in 1.4s</pre></div>
+                </div>
+                <div class="sx-split-pane sx-split-nopad">
+                    <iframe class="sx-split-frame" title="Preview" srcdoc="<p style='font-family: sans-serif; padding: 1rem'>A preview in an iframe.</p>"></iframe>
+                </div>
+            </div>
+            <div class="flex gap-3 flex-wrap mb-4">
+                <button id="demo-ide-toggle" class="btn btn-sm btn-outline" type="button">Collapse files</button>
+                <button id="demo-ide-reset" class="btn btn-sm btn-outline" type="button">Reset sizes</button>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const ide = E.splitPane('#demo-ide', {
+    sizes: [20, 50, 30],
+    minSize: [140, 200, 160],
+    collapsible: [true, false, false],
+    collapseButton: true,
+    persistKey: 'showcase-ide'
+});
+const middle = E.splitPane('#demo-ide-middle', {
+    direction: 'vertical',
+    sizes: [65, 35],
+    minSize: 60,
+    persistKey: 'showcase-ide-middle'
+});
+
+$('#demo-ide-toggle').on('click', () =&gt; ide.isCollapsed(0) ? ide.expand(0) : ide.collapse(0));
+$('#demo-ide-reset').on('click', () =&gt; { ide.setSizes([20, 50, 30]); middle.setSizes([65, 35]); });
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Snapping">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Stacked, with snapping</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>direction: 'vertical'</code> stacks the panes. With <code>snapOffset: 40</code> a pane dragged
+                within 40px of its minimum snaps to it, so a console can be put "away" without pixel hunting.
+            </p>
+            <div id="demo-vertical" class="sx-split mb-4">
+                <div class="sx-split-pane">Results</div>
+                <div class="sx-split-pane sx-split-alt">Console</div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.splitPane('#demo-vertical', {direction: 'vertical', sizes: [70, 30], minSize: 40, snapOffset: 40});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Right to left">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Right to left</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                In a <code>dir="rtl"</code> container the first pane is on the right; dragging and the arrow keys
+                follow what you see.
+            </p>
+            <div id="demo-rtl" class="sx-split mb-4" dir="rtl">
+                <div class="sx-split-pane">الأول - first</div>
+                <div class="sx-split-pane sx-split-alt">الثاني - second</div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.splitPane('#demo-rtl', {sizes: [40, 60]});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Events">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Every event is an <code>onX</code> option, an <code>.on('x')</code> listener and a bubbling
+                <code>dm:split-pane:x</code> DOM event (<code>detail = {instance, args}</code>). Return
+                <code>false</code> from <code>onBeforeDrag</code> to refuse a drag. This log listens to the first
+                demo and the nested one.
+            </p>
+            <ul id="demo-log" class="list-none p-0 text-sm text-gray-600 mb-4">
+                <li>Nothing yet - drag a gutter above.</li>
+            </ul>
+            <table class="table mb-4">
+                <thead><tr><th>Event</th><th>Arguments</th><th>When</th></tr></thead>
+                <tbody>
+                    <tr><td><code>beforedrag</code></td><td><code>(gutterIndex, event)</code></td><td>Pointer down on a gutter; cancelable</td></tr>
+                    <tr><td><code>dragstart</code></td><td><code>(sizes, gutterIndex)</code></td><td>A drag begins</td></tr>
+                    <tr><td><code>drag</code></td><td><code>(sizes, gutterIndex)</code></td><td>Each move that changes the sizes</td></tr>
+                    <tr><td><code>dragend</code></td><td><code>(sizes, gutterIndex)</code></td><td>The pointer is released</td></tr>
+                    <tr><td><code>resize</code></td><td><code>(sizes)</code></td><td>Any change of size - drag, keys, <code>setSizes</code>, collapse</td></tr>
+                    <tr><td><code>collapse</code> / <code>expand</code></td><td><code>(paneIndex)</code></td><td>A pane collapses or opens again</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Keyboard">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Keyboard and screen readers</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Each gutter is a focusable <code>role="separator"</code> with <code>aria-orientation</code>,
+                <code>aria-valuenow</code> (the size of the pane before it, in %), <code>aria-valuemin</code> /
+                <code>aria-valuemax</code> and <code>aria-controls</code> pointing at that pane.
+            </p>
+            <table class="table mb-4">
+                <thead><tr><th>Key</th><th>Does</th></tr></thead>
+                <tbody>
+                    <tr><td><kbd>←</kbd> <kbd>→</kbd> (side by side) / <kbd>↑</kbd> <kbd>↓</kbd> (stacked)</td><td>Move the gutter by <code>step</code> (1%)</td></tr>
+                    <tr><td><kbd>Shift</kbd> + arrow</td><td>Move by <code>largeStep</code> (10%)</td></tr>
+                    <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>The pane before the gutter to its minimum / maximum</td></tr>
+                    <tr><td><kbd>Enter</kbd></td><td>Collapse or expand, when a pane next to the gutter is collapsible</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>direction</code></td><td>string</td><td><code>'horizontal'</code></td><td><code>'horizontal'</code> (side by side) or <code>'vertical'</code> (stacked)</td></tr>
+                    <tr><td><code>sizes</code></td><td>number[]</td><td>equal</td><td>Percentages, one per pane; scaled to add up to 100</td></tr>
+                    <tr><td><code>minSize</code> / <code>maxSize</code></td><td>number | string | array</td><td><code>0</code> / <code>null</code></td><td>px (<code>120</code>) or percent (<code>'20%'</code>); an array sets each pane</td></tr>
+                    <tr><td><code>gutterSize</code></td><td>number</td><td><code>8</code></td><td>Gutter thickness in px</td></tr>
+                    <tr><td><code>snapOffset</code></td><td>number</td><td><code>0</code></td><td>Snap to a limit when dragged within this many px of it</td></tr>
+                    <tr><td><code>collapsible</code></td><td>boolean | boolean[]</td><td><code>false</code></td><td>Which panes the gutter gestures collapse</td></tr>
+                    <tr><td><code>collapsedSize</code></td><td>number | string</td><td><code>0</code></td><td>What a collapsed pane shrinks to</td></tr>
+                    <tr><td><code>collapseButton</code></td><td>boolean</td><td><code>false</code></td><td>A small toggle button in gutters next to a collapsible pane</td></tr>
+                    <tr><td><code>persistKey</code></td><td>string</td><td><code>null</code></td><td>Store sizes and collapse state with <code>S</code> under <code>split-pane:&lt;key&gt;</code></td></tr>
+                    <tr><td><code>cursor</code></td><td>string</td><td><code>col-resize</code> / <code>row-resize</code></td><td>Gutter cursor</td></tr>
+                    <tr><td><code>disabled</code></td><td>boolean</td><td><code>false</code></td><td>No dragging or keys; gutters leave the tab order</td></tr>
+                    <tr><td><code>step</code> / <code>largeStep</code></td><td>number</td><td><code>1</code> / <code>10</code></td><td>Percent per arrow key / Shift+arrow</td></tr>
+                    <tr><td><code>gutterLabel</code></td><td>string</td><td><code>'Resize panes'</code></td><td>The gutters' <code>aria-label</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Methods">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Methods</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>getSizes()</code></td><td>Current sizes, percentages that add up to 100</td></tr>
+                    <tr><td><code>setSizes(sizes)</code></td><td>Set every pane's size (clamped to the limits; expands collapsed panes)</td></tr>
+                    <tr><td><code>collapse(i)</code> / <code>expand(i)</code></td><td>Collapse a pane toward its edge / give it its size back</td></tr>
+                    <tr><td><code>isCollapsed(i)</code></td><td>Whether a pane is collapsed</td></tr>
+                    <tr><td><code>setOptions(opts)</code></td><td>Change <code>disabled</code>, limits, gutter size, cursor, collapsing</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Remove the gutters and listeners and give the panes their own styles back</td></tr>
+                    <tr><td><code>panes</code></td><td>The pane elements</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Theming">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Theming</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Gutters use <code>--dm-border</code>, turning <code>--dm-primary</code> on hover and while dragging,
+                with a focus outline in <code>--dm-primary</code>. The container carries
+                <code>.dm-split-horizontal</code> / <code>.dm-split-vertical</code> and
+                <code>.dm-split-dragging</code> during a drag; collapsed panes carry <code>.dm-split-collapsed</code>.
+            </p>
+            <div class="code-block language-css">
+                <pre><code>
+#editor &gt; .dm-split-gutter { background: transparent; }
+#editor &gt; .dm-split-gutter:hover { background: var(--dm-hover-bg); }
+</code></pre>
+            </div>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(D().format('HH:mm:ss') + ' - ' + message) + '</li>');
+        list.find('li').filter((i) => i >= 8).remove();
+    };
+    const pct = (sizes) => sizes.map(Math.round).join(' / ');
+
+    // ---- Basic -------------------------------------------------------------
+    const basic = E.splitPane('#demo-basic', {sizes: [30, 70], minSize: 120});
+    basic.on('resize', (sizes) => $('#demo-basic-out').text(pct(sizes)));
+    basic.on('dragend', (sizes) => log('Two panes: ' + pct(sizes)));
+
+    // ---- Nested ------------------------------------------------------------
+    const ide = E.splitPane('#demo-ide', {
+        sizes: [20, 50, 30],
+        minSize: [140, 200, 160],
+        collapsible: [true, false, false],
+        collapseButton: true,
+        persistKey: 'showcase-ide'
+    });
+    const middle = E.splitPane('#demo-ide-middle', {
+        direction: 'vertical',
+        sizes: [65, 35],
+        minSize: 60,
+        persistKey: 'showcase-ide-middle'
+    });
+    const toggleLabel = () => $('#demo-ide-toggle').text(ide.isCollapsed(0) ? 'Expand files' : 'Collapse files');
+    toggleLabel();
+    ide.on('collapse', (i) => { log('Collapsed pane ' + i); toggleLabel(); });
+    ide.on('expand', (i) => { log('Expanded pane ' + i); toggleLabel(); });
+    ide.on('dragend', (sizes) => log('Across: ' + pct(sizes)));
+    middle.on('dragend', (sizes) => log('Editor / terminal: ' + pct(sizes)));
+    $('#demo-ide-toggle').on('click', () => (ide.isCollapsed(0) ? ide.expand(0) : ide.collapse(0)));
+    $('#demo-ide-reset').on('click', () => {
+        ide.setSizes([20, 50, 30]);
+        middle.setSizes([65, 35]);
+        toggleLabel();
+        log('Sizes reset');
+    });
+
+    // ---- Snapping and RTL --------------------------------------------------
+    E.splitPane('#demo-vertical', {direction: 'vertical', sizes: [70, 30], minSize: 40, snapOffset: 40});
+    E.splitPane('#demo-rtl', {sizes: [40, 60]});
+</script>
+
+</body>
+</html>

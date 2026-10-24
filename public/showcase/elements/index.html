@@ -715,6 +715,42 @@
               <code>E.popover('#help', { title, content })</code>
             </div>
         </a>
+
+        <!-- Split Pane -->
+    <a href="split-pane/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="columns"></div>
+                <h3 class="card-title">Split Pane</h3>
+        <p class="card-text">Resizable panes with draggable, keyboard-operable gutters.</p>
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+          <li>Side by side or stacked, nested</li>
+          <li>Min / max in px or %, snapping</li>
+          <li>Collapsible and remembered</li>
+          <li>Separators with arrow keys</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+              <code>E.splitPane('#editor', { sizes: [30, 70] })</code>
+            </div>
+        </a>
+
+        <!-- Virtual List -->
+    <a href="virtual-list/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="list"></div>
+                <h3 class="card-title">Virtual List</h3>
+        <p class="card-text">Huge lists that render only the rows in view, with infinite loading.</p>
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+          <li>100,000 rows, a handful in the DOM</li>
+          <li>Fixed or measured heights</li>
+          <li>loadMore with retry</li>
+          <li>Keyboard navigation</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+              <code>E.virtualList('#list', { items, render })</code>
+            </div>
+        </a>
     </div>
   </section>
 </main>

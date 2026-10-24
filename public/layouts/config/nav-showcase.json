@@ -355,6 +355,12 @@
           "badge": "New"
         },
         {
+          "text": "Split Pane",
+          "url": "showcase/elements/split-pane/index.html",
+          "section": "split-pane",
+          "badge": "New"
+        },
+        {
           "text": "Tabs",
           "url": "showcase/elements/tabs/index.html",
           "section": "tabs"
@@ -374,6 +380,12 @@
           "text": "TreeView",
           "url": "showcase/elements/treeview/index.html",
           "section": "treeview"
+        },
+        {
+          "text": "Virtual List",
+          "url": "showcase/elements/virtual-list/index.html",
+          "section": "virtual-list",
+          "badge": "New"
         }
       ]
     },
