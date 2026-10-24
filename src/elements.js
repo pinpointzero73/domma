@@ -31,7 +31,7 @@ import SplitPane, {splitPaneFor} from './components/split-pane.js';
 import VirtualList, {virtualListFor} from './components/virtual-list.js';
 import Dropzone, {dropzoneFor} from './components/dropzone.js';
 import RangeSlider, {rangeSliderFor} from './components/range-slider.js';
-import {resolveAll, resolveElement, reuse} from './components/shared.js';
+import {layerAbove, resolveAll, resolveElement, reuse} from './components/shared.js';
 import {registerComponents as defineTags} from './web-components/index.js';
 
 // ============================================
@@ -1562,6 +1562,7 @@ class Dropdown extends Component {
      */
     _positionMenu() {
         if (!this._menu || !this.element) return;
+        layerAbove(this.element, this._menu);
 
         const opts = this.options;
         const rect = this.element.getBoundingClientRect();
@@ -10422,6 +10423,7 @@ class DatePicker extends Component {
     _position() {
         const panel = this._panel;
         if (!panel) return;
+        layerAbove(this.element, panel);
         const anchor = this.element.getBoundingClientRect();
         const [dx, dy] = this.options.offset;
 

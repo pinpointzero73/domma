@@ -151,3 +151,25 @@ export function reducedMotion() {
         return false;
     }
 }
+
+/**
+ * Lift a popup that lives on <body> above whatever stacking layer its trigger sits in.
+ * A date picker or dropdown opened from inside a slideover (z-index 9999) or a modal
+ * would otherwise draw underneath it, because its own stylesheet z-index (1000-1080)
+ * is only meant to beat ordinary page content. Sets an inline z-index only when the
+ * trigger's layer is higher than the popup's own; clears it otherwise.
+ * @param {Element} trigger - the element the popup belongs to
+ * @param {HTMLElement} popup - the popup, appended to <body>
+ * @returns {void}
+ */
+export function layerAbove(trigger, popup) {
+    if (!trigger || !popup || typeof getComputedStyle === 'undefined') return;
+    popup.style.removeProperty('z-index');
+    const own = parseInt(getComputedStyle(popup).zIndex, 10) || 0;
+    let highest = 0;
+    for (let el = trigger; el && el.nodeType === 1; el = el.parentElement || el.getRootNode?.().host) {
+        const z = parseInt(getComputedStyle(el).zIndex, 10);
+        if (!Number.isNaN(z) && z > highest) highest = z;
+    }
+    if (highest > 0 && highest >= own) popup.style.zIndex = String(highest + 1);
+}

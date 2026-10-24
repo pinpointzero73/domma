@@ -74,6 +74,17 @@ export function reuse(el: Element, name: string, options?: Record<string, any>):
 /** Whether the user asked for less motion. */
 export function reducedMotion(): boolean;
 /**
+ * Lift a popup that lives on <body> above whatever stacking layer its trigger sits in.
+ * A date picker or dropdown opened from inside a slideover (z-index 9999) or a modal
+ * would otherwise draw underneath it, because its own stylesheet z-index (1000-1080)
+ * is only meant to beat ordinary page content. Sets an inline z-index only when the
+ * trigger's layer is higher than the popup's own; clears it otherwise.
+ * @param {Element} trigger - the element the popup belongs to
+ * @param {HTMLElement} popup - the popup, appended to <body>
+ * @returns {void}
+ */
+export function layerAbove(trigger: Element, popup: HTMLElement): void;
+/**
  * What a component accepts as its host: a CSS selector, an element, or a Domma/jQuery-like
  * collection (its first element is used).
  */
