@@ -90,6 +90,7 @@ class Forma {
   constructor(schema, data = {}, options = {}) {
     this.schema = schema;
     this.data = {...data};
+    this._startData = {...data};
     this.options = {...Forma.defaults, ...options};
     this.model = null;
     this.errors = {};
@@ -815,6 +816,29 @@ class Forma {
   }
 
   /**
+   * Put every field back to the value the form started with (its data, else the schema
+   * default): the model, the native inputs, and the slider / dropzone / chooser controls.
+   * A `[data-action="reset"]` button inside the form calls it.
+   * @returns {this}
+   */
+  reset() {
+    if (this.formElement && typeof this.formElement.reset === 'function') this.formElement.reset();
+    if (this.model) this.model.reset();
+    else this.data = {...this._startData};
+    for (const [name, slider] of Object.entries(this._sliders || {})) {
+      const v = this._initialValue(name);
+      if (v !== undefined && v !== null && v !== '') slider.setValue(v, {silent: true});
+    }
+    Object.values(this._dropzones || {}).forEach((dz) => dz.clear());
+    for (const [name, chooser] of Object.entries(this._choosers || {})) {
+      if (typeof chooser.setValue === 'function') chooser.setValue(this._initialValue(name));
+    }
+    Object.keys(this.errors).forEach((name) => this.clearFieldError(name));
+    this.touched.clear();
+    return this;
+  }
+
+  /**
    * Remove the listeners and controls the form's input extras added.
    */
   destroy() {
@@ -1272,8 +1296,39 @@ export const forms = {
             `;
     }
 
+    // The step's live Forma: it owns the step's slider / dropzone / chooser controls,
+    // which hold values the raw inputs cannot (a [low, high] pair, File objects).
+    let stepForm = null;
+
+    function destroyStep() {
+      if (stepForm) stepForm.destroy();
+      stepForm = null;
+    }
+
+    // The step's values: the plain inputs, then whatever the components hold
+    function collectStep(formElement) {
+      const formData = formElement ? getFormData(formElement) : {};
+      if (stepForm) {
+        for (const key of ['_sliders', '_dropzones', '_choosers']) {
+          for (const name of Object.keys(stepForm[key] || {})) {
+            formData[name] = stepForm._getFieldValueByName(name);
+          }
+        }
+      }
+      return formData;
+    }
+
+    // Validate the step with the Forma that holds its controls
+    function validateStep(formElement) {
+      if (!stepForm) return true;
+      stepForm.formElement = formElement;
+      stepForm.setData(stepData);
+      return stepForm.validate();
+    }
+
     function updateWizard() {
-      // Clear existing wizard content
+      // Leaving a step tears its controls down (dropzones guard the document)
+      destroyStep();
       targetElement.innerHTML = renderStep(currentStep);
       wizardElement = targetElement.querySelector(`#${wizardId}`);
       if (!wizardElement) return;
@@ -1281,11 +1336,12 @@ export const forms = {
       // Bind form events for current step
       const formElement = wizardElement.querySelector('form');
       if (formElement) {
-        const currentForm = new Forma(steps[currentStep].fields, stepData, {
+        stepForm = new Forma(steps[currentStep].fields, stepData, {
           ...wizardOptions,
           showSubmitButton: false // Wizard has its own buttons
         });
-        currentForm._bindEvents(formElement);
+        stepForm.formElement = formElement;
+        stepForm._bindEvents(formElement);
       }
 
       // Bind wizard navigation
@@ -1310,24 +1366,12 @@ export const forms = {
         nextBtn.addEventListener('click', (e) => {
           e.preventDefault();
 
-          // Get current form data
-          const formData = getFormData(formElement);
-
-          // Merge current form data
-          Object.assign(stepData, formData);
-
-          // Validate current step with proper form element
-          const currentForm = new Forma(steps[currentStep].fields, stepData, {
-            ...wizardOptions,
-            showSubmitButton: false // Wizard has its own buttons
-          });
-          currentForm.formElement = formElement; // Set form element for proper validation
-          currentForm.setData(stepData);
-
-          const isValid = currentForm.validate();
+          Object.assign(stepData, collectStep(formElement));
+          const currentForm = stepForm;
+          const isValid = validateStep(formElement);
 
           if (wizardOptions.onValidation) {
-            wizardOptions.onValidation(isValid, currentForm.errors || [], currentStep);
+            wizardOptions.onValidation(isValid, currentForm?.errors || [], currentStep);
           }
 
           if (!isValid) {
@@ -1348,24 +1392,12 @@ export const forms = {
         submitBtn.addEventListener('click', async (e) => {
           e.preventDefault();
 
-          // Get final form data
-          const formData = getFormData(formElement);
-
-          // Merge final form data
-          Object.assign(stepData, formData);
-
-          // Validate final step with proper form element
-          const currentForm = new Forma(steps[currentStep].fields, stepData, {
-            ...wizardOptions,
-            showSubmitButton: false // Wizard has its own buttons
-          });
-          currentForm.formElement = formElement; // Set form element for proper validation
-          currentForm.setData(stepData);
-
-          const isValid = currentForm.validate();
+          Object.assign(stepData, collectStep(formElement));
+          const currentForm = stepForm;
+          const isValid = validateStep(formElement);
 
           if (wizardOptions.onValidation) {
-            wizardOptions.onValidation(isValid, currentForm.errors || [], currentStep);
+            wizardOptions.onValidation(isValid, currentForm?.errors || [], currentStep);
           }
 
           if (!isValid) {
@@ -1426,18 +1458,15 @@ export const forms = {
       },
       validate: () => {
         const formElement = wizardElement?.querySelector('form');
-        if (formElement) {
-          const currentForm = new Forma(steps[currentStep].fields, stepData, {
-            ...wizardOptions,
-            showSubmitButton: false
-          });
-          currentForm.formElement = formElement;
-          currentForm.setData(stepData);
-          return currentForm.validate();
-        }
-        return true;
+        return formElement ? validateStep(formElement) : true;
       },
-      getElement: () => wizardElement
+      getElement: () => wizardElement,
+      /** Tear down the current step's controls and remove the wizard. */
+      destroy: () => {
+        destroyStep();
+        wizardElement?.remove();
+        wizardElement = null;
+      }
     };
   },
 

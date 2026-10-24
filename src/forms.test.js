@@ -189,3 +189,75 @@ describe('required select with no value', () => {
         expect([...select.options].some(o => o.value === '')).toBe(false);
     });
 });
+
+// ── The wizard and the component field types ─────────────────────────────────
+//
+// A wizard step used to read its values off the raw inputs, so a two-thumb
+// slider collapsed to its last input and a dropzone's files became "" - and the
+// step's Forma (and its components) was never destroyed, so each step left a
+// dropzone's document drag guard behind.
+
+describe('wizard with slider and dropzone fields', () => {
+    const steps = () => [
+        {title: 'One', fields: {
+            p: {type: 'slider', min: 0, max: 100, default: [10, 90], formConfig: {range: true}},
+            f: {type: 'dropzone'}
+        }},
+        {title: 'Two', fields: {note: {type: T.string, label: 'Note'}}}
+    ];
+    const E = Domma.elements;
+
+    it('submits the pair and the files the components hold', async () => {
+        let submitted = null;
+        F.wizard(host, {schema: {steps: [steps()[0]]}, onSubmit: (data) => { submitted = data; }});
+        const zone = host.querySelector('[data-dropzone-field="f"]');
+        const pdf = new File(['x'], 'a.pdf');
+        E.get(zone, 'dropzone').addFiles([pdf]);
+        host.querySelector('.wizard-submit').click();
+        await Promise.resolve();
+        expect(submitted.p).toEqual([10, 90]);
+        expect(submitted.f).toEqual([pdf]);
+    });
+
+    it('destroys a step\'s components when the step is left and when the wizard is destroyed', async () => {
+        const {_guardState} = await import('./components/dropzone.js');
+        const before = _guardState().zones;
+        const wiz = F.wizard(host, {schema: {steps: steps()}});
+        const zone = host.querySelector('[data-dropzone-field="f"]');
+        const dz = E.get(zone, 'dropzone');
+        expect(_guardState().zones).toBe(before + 1);
+        host.querySelector('.wizard-next').click();
+        expect(wiz.getCurrentStep()).toBe(1);
+        expect(_guardState().zones).toBe(before);
+        expect(E._instances.has(zone)).toBe(false);
+        expect(dz._entries).toBeNull();
+        expect(wiz.getStepData().p).toEqual([10, 90]);
+        wiz.prevStep();
+        expect(_guardState().zones).toBe(before + 1);
+        wiz.destroy();
+        expect(_guardState().zones).toBe(before);
+        expect(host.querySelector('.wizard')).toBeNull();
+    });
+});
+
+describe('Forma reset()', () => {
+    it('a [data-action="reset"] button puts the fields back to their starting values', () => {
+        const f = F.create({
+            name: {type: T.string, label: 'Name', default: 'Ann'},
+            vol: {type: 'slider', min: 0, max: 10, default: 4}
+        }, {}, {});
+        f.renderTo(host);
+        const input = form().querySelector('[name="name"]');
+        input.value = 'Bob';
+        input.dispatchEvent(new Event('change', {bubbles: true}));
+        Domma.elements.get(form().querySelector('[data-slider-field="vol"]'), 'range-slider').setValue(9);
+        expect(f.getData()).toMatchObject({name: 'Bob', vol: 9});
+        const btn = document.createElement('button');
+        btn.setAttribute('data-action', 'reset');
+        form().appendChild(btn);
+        expect(() => btn.click()).not.toThrow();
+        expect(f.getData()).toMatchObject({name: 'Ann', vol: 4});
+        expect(input.value).toBe('Ann');
+        expect(f._getFieldValueByName('vol')).toBe(4);
+    });
+});
