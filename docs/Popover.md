@@ -184,7 +184,10 @@ Esc pressed inside the panel reaches the focused control first: an autocomplete 
 panel that handles Esc itself (and calls `preventDefault()`) keeps the popover open.
 
 The panel is always the next thing in the tab order after its trigger, even though it lives at the
-end of `<body>`. With `trapFocus: true` Tab cycles inside the panel instead.
+end of `<body>`. With `trapFocus: true` Tab cycles inside the panel instead (a focus trap holds it
+while focus is in the panel, pausing any trap round the trigger, and lets go when focus leaves or the
+popover closes). Inside a modal, slideover or dialog, "the next element after the trigger" is the next
+stop in that overlay's focus trap, wrapping round it, never the page behind.
 
 ARIA, set and restored by the component:
 

@@ -83,6 +83,10 @@ export interface ModalOptions {
     animationDuration?: number;
     /** Show close button */
     closeButton?: boolean;
+    /** Keep Tab inside while open (default true; false without a backdrop unless given) */
+    trapFocus?: boolean;
+    /** Put focus back where it was on close (default true) */
+    returnFocus?: boolean;
     /** Callback before opening */
     onOpen?: (modal: ModalInstance) => void;
     /** Callback after open animation completes */
@@ -308,7 +312,7 @@ export interface PopoverOptions {
     ariaLabel?: string | null;
     /** Move focus into the panel on open; null = for click popovers */
     autoFocus?: boolean | null;
-    /** Tab cycles inside the panel instead of leaving it (default: false) */
+    /** Tab cycles inside the panel instead of leaving it, with a focus trap while focus is in it (default: false) */
     trapFocus?: boolean;
     /** Hover delays in ms (default: {show: 80, hide: 120}) */
     delay?: number | {show?: number; hide?: number};
@@ -1717,6 +1721,10 @@ export interface FocusTrapOptions {
     clickOutsideDeactivates?: boolean | ((e: MouseEvent) => boolean);
     /** Let clicks outside through (default false: they are blocked) */
     allowOutsideClick?: boolean | ((e: MouseEvent) => boolean);
+    /** Let focus stay outside: true, 'layers' (floating layers such as toasts and popovers, never the page or a trap beneath), or a function (default false) */
+    allowOutsideFocus?: boolean | 'layers' | ((el: Element, e: Event | null) => boolean);
+    /** false: keep the trap out of E.get(container) (default true) */
+    register?: boolean;
     /** Set `inert` on everything outside the containers while active (default false) */
     inert?: boolean;
     /** Walk open shadow roots (default true) */

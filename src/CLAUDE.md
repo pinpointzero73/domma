@@ -897,10 +897,22 @@ src/
 - [Bundles Guide](./bundles/CLAUDE.md) - Custom bundle creation
 - [Showcase Development](../public/showcase/CLAUDE.md) - Creating showcase examples
 - **Focus trap** (`components/focus-trap.js`, `E.focusTrap(containers, opts)`, componentName `focus-trap`): a
-  module-level stack - activating pauses the trap on top, deactivating unpauses it. Tabbables are looked up per Tab
-  press (`tabbables()` walks open shadow roots in render order, slots by their assigned elements), Tab is always
-  handled by the trap (`preventDefault` then focus), focusin outside pulls focus back. `inert: true` marks siblings
-  up to <body> and removes only what it marked (also on pause). Not yet used by modal/slideover/popover.
+  module-level stack - activating pauses the trap on top, deactivating unpauses it (a non-top trap going hands its
+  return target to the trap above). Tabbables are looked up per Tab press (`tabbables()` walks open shadow roots in
+  render order, slots by their assigned elements). Tab is handled in a **bubble listener on window** (capture on
+  document only notes it), so a handler that `preventDefault`s Tab on the way (textarea indent, grid cells, the
+  popover's own Tab steering) wins - keep it that way, the CMS editors rely on it. focusin outside pulls focus
+  back unless `allowOutsideFocus` allows it; `'layers'` (`layerOf()`: fixed ancestor, absolute or newly added
+  `<body>` child, `[data-focus-trap-allow]`; never another trap's containers) is what overlays pass. A trap
+  whose containers are all disconnected deactivates itself on the next event. `register: false` keeps the trap
+  out of the component registry - every overlay-owned trap passes it, or `E.get(el)` returns the trap.
+  `inert: true` marks siblings up to <body> and removes only what it marked (also on pause).
+- **Overlay focus traps**: Modal (`_startTrap` in open, deactivate in close - it returns focus there, the
+  after-animation `_restoreFocus` is only the fallback for `trapFocus: false`), Slideover (same; adds
+  `tabindex="-1"` to the panel and focuses it), Dialog (trap made BEFORE the input's `select()`, which focuses in
+  Chrome and would become the return target), Popover (`trapFocus: true` only: activated on panel focusin,
+  released on focusout/hide before focus goes back to the trigger, `allowOutsideFocus: true`). All use
+  `escapeDeactivates: false` and `allowOutsideClick: true`; no backdrop = no trap unless `trapFocus` is passed.
 - **Command palette** (`components/command-palette.js`, `E.commandPalette(opts)`, componentName `command-palette`):
   factory-made overlay on <body>; rows are built with createElement/textContent (highlights are spans), never
   innerHTML. Uses a FocusTrap (`allowOutsideClick`, returnFocus) for Tab; Escape/arrows/Enter are handled on the

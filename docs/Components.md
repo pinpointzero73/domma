@@ -547,13 +547,45 @@ trap.deactivate();    // focus goes back to what had it before
 - **Options**: `initialFocus` (selector | element | function | `false`), `fallbackFocus`, `returnFocus` (`true` |
   `false` | element | selector), `escapeDeactivates` (default `false` - the overlay that owns the trap decides),
   `clickOutsideDeactivates`, `allowOutsideClick` (clicks outside are blocked by default; each of the three may be a
-  function of the event), `inert` (`inert` on everything outside while active; only what it set is undone),
-  `shadow`, `onActivate` / `onDeactivate` / `onPause` / `onUnpause`.
+  function of the event), `allowOutsideFocus` (below), `inert` (`inert` on everything outside while active; only
+  what it set is undone), `shadow`, `register` (`false` keeps `E.get(container)` on the component that owns the
+  trap), `onActivate` / `onDeactivate` / `onPause` / `onUnpause`.
+- **Tab is decided last.** The trap moves focus as the Tab key bubbles up to `window`, so a handler on the way
+  that used the key (a textarea that indents, a grid moving between cells) calls `preventDefault()` and the trap
+  leaves it alone. A Tab stopped before `window` without being used still wraps.
+- **Focus outside** is brought back unless `allowOutsideFocus` lets it stay: `false` (default), `true`, a function
+  `(element, event) => boolean`, or `'layers'`. `'layers'` - what Domma's overlays use - lets focus into a
+  floating layer: an element with `position: fixed` (or inside one), an absolutely positioned child of `<body>`, a
+  child of `<body>` added while the trap is on top, or anything inside `[data-focus-trap-allow]` (the toast
+  container carries it). Never into a trap beneath. Tab inside such a layer moves through it, and off either end
+  comes back as if the layer sat just after what had focus before it. The rule is exported as `layerOf()`.
+- **A trap whose containers leave the page lets go** (deactivates without returning focus) rather than hold focus
+  nowhere. Focus leaving the end of an iframe (whose keys the page never hears) wraps by where it landed.
 - **Methods**: `activate(opts)`, `deactivate({returnFocus})`, `pause()`, `unpause()`, `updateContainers([...])`,
   `isActive()`, `isPaused()`, `tabbables()`, `destroy()`.
 - **Traps stack.** Activating a trap pauses the one on top; deactivating it unpauses that one.
-  `E.focusTrap.top()` is the one listening.
+  `E.focusTrap.top()` is the one listening. A trap deactivated while a newer one is on top moves no focus, and
+  a trap above that would have returned focus into it returns it to where the lower one would have instead.
 - Events `dm:focus-trap:activate|deactivate|pause|unpause` are dispatched on the first container.
+
+### Overlays that trap focus
+
+| Overlay | Trapped | Options | First focus | On close |
+|---|---|---|---|---|
+| `E.modal` | while open; not with `backdrop: false` unless `trapFocus: true` | `trapFocus`, `returnFocus` (both default `true`) | the dialog frame (as before) | back to what had focus (now at once, not after the animation) |
+| `E.slideover` | while open; not with `backdrop: false` unless `trapFocus: true` | `trapFocus`, `returnFocus` | the panel (`tabindex="-1"` added), unless focus is already inside | back to what had focus |
+| `E.alert` / `confirm` / `prompt` | until answered | `trapFocus`, `returnFocus` | as before (input, Cancel for `danger`, else OK) | back to what had focus |
+| `E.popover` | only with `trapFocus: true`, while focus is in the panel | `trapFocus` (default `false`) | as before | the trigger, as before |
+
+- The modal's cycle runs through its shadow chrome and the slotted content in the order they show: X, body
+  content, footer buttons.
+- Escape and the close controls stay with the overlay and call `close()` by name, so a guard patched onto
+  `close` still runs; `destroy()` removes the trap. `inert` is never set.
+- Floating panels opened from an overlay (toasts, popovers, context menus, date pickers, autocomplete lists) keep
+  focus through `allowOutsideFocus: 'layers'`, and clicks outside are let through (`allowOutsideClick`), so the
+  backdrop, toasts and menus work as before.
+- A non-modal popover inside an overlay keeps its own Tab handling; Tab off its end goes to the next stop in the
+  overlay's trap (wrapping), not the page behind.
 
 ## Command palette - `E.commandPalette(options)`
 
