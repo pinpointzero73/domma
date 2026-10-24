@@ -628,6 +628,160 @@ export interface BackToTopInstance extends ComponentInstance {
 // Elements Module
 // ============================================
 
+// ============================================
+// Focus trap
+// ============================================
+
+type FocusTarget = string | HTMLElement;
+
+export interface FocusTrapOptions {
+    /** Where focus goes on activate: a selector, an element, a function returning one, or false to leave it. Default: focus already inside stays, else the first tabbable, else the container. */
+    initialFocus?: FocusTarget | (() => HTMLElement | null) | false;
+    /** Where focus goes when nothing is tabbable (default: the first container, given tabindex="-1") */
+    fallbackFocus?: FocusTarget | (() => HTMLElement | null);
+    /** true (default): back to what had focus before activate(); or an element / selector; false: nowhere */
+    returnFocus?: boolean | FocusTarget;
+    /** Escape deactivates (default false - the owning overlay decides) */
+    escapeDeactivates?: boolean | ((e: KeyboardEvent) => boolean);
+    /** A press outside deactivates (default false) */
+    clickOutsideDeactivates?: boolean | ((e: MouseEvent) => boolean);
+    /** Let clicks outside through (default false: they are blocked) */
+    allowOutsideClick?: boolean | ((e: MouseEvent) => boolean);
+    /** Set `inert` on everything outside the containers while active (default false) */
+    inert?: boolean;
+    /** Walk open shadow roots (default true) */
+    shadow?: boolean;
+    preventScroll?: boolean;
+    onActivate?: (trap: FocusTrapInstance) => void;
+    onDeactivate?: (trap: FocusTrapInstance) => void;
+    onPause?: (trap: FocusTrapInstance) => void;
+    onUnpause?: (trap: FocusTrapInstance) => void;
+}
+
+export interface FocusTrapInstance extends ComponentInstance {
+    /** Start trapping; pauses the trap that was on top */
+    activate(opts?: {initialFocus?: FocusTrapOptions['initialFocus']}): this;
+    /** Stop trapping; unpauses the trap beneath */
+    deactivate(opts?: {returnFocus?: boolean | FocusTarget}): this;
+    pause(): this;
+    unpause(opts?: {focus?: boolean}): this;
+    updateContainers(containers: FocusTarget | FocusTarget[]): this;
+    containers(): HTMLElement[];
+    isActive(): boolean;
+    isPaused(): boolean;
+    /** The tabbable elements in the containers right now, in Tab order */
+    tabbables(): HTMLElement[];
+    destroy(): void;
+}
+
+export interface FocusTrapFactory {
+    (containers: FocusTarget | FocusTarget[], options?: FocusTrapOptions): FocusTrapInstance | null;
+    /** What Tab would reach in some containers, in order */
+    tabbables(containers: HTMLElement | HTMLElement[], opts?: {shadow?: boolean}): HTMLElement[];
+    /** The trap that currently listens */
+    top(): FocusTrapInstance | null;
+}
+
+// ============================================
+// Command palette
+// ============================================
+
+export interface PaletteCommand {
+    id?: string;
+    title: string;
+    subtitle?: string;
+    /** Heading the command is listed under */
+    group?: string;
+    /** Domma icon name */
+    icon?: string;
+    /** More words that find it */
+    keywords?: string[];
+    /** Shown as a hint, e.g. 'mod+s' (mod = Cmd on a Mac, Ctrl elsewhere) */
+    shortcut?: string;
+    /** Followed when run (http(s), mailto, tel or relative only) */
+    href?: string;
+    /** '_blank' opens href in a new tab */
+    target?: string;
+    action?: (command: PaletteCommand, palette: CommandPaletteInstance, event?: Event) => void;
+    disabled?: boolean;
+    hidden?: boolean;
+    /** Running it leaves the palette open */
+    keepOpen?: boolean;
+    /** A nested page: a list, or a function returning one (called once on entering) */
+    children?: PaletteCommand[] | ((command: PaletteCommand, ctx: {signal?: AbortSignal, palette: CommandPaletteInstance}) => Promise<PaletteCommand[]> | PaletteCommand[]);
+    /** Placeholder for the box while this command's page is open */
+    placeholder?: string;
+    [key: string]: any;
+}
+
+export interface CommandPaletteOptions {
+    commands?: PaletteCommand[];
+    /** Search elsewhere: debounced, the previous request aborted through `signal` */
+    source?: (query: string, ctx: {signal?: AbortSignal, palette: CommandPaletteInstance}) => Promise<PaletteCommand[]> | PaletteCommand[];
+    /** ms (default 150) */
+    debounce?: number;
+    /** 'mod+k' (default), several, or false */
+    hotkey?: string | string[] | false;
+    placeholder?: string;
+    /** Accessible name of the dialog and list (default 'Command palette') */
+    label?: string;
+    maxResults?: number;
+    /** Storage (S) key for recent commands; null (default) = off */
+    recentKey?: string | null;
+    recentLimit?: number;
+    recentLabel?: string;
+    sourceGroup?: string | null;
+    emptyText?: string;
+    loadingText?: string;
+    /** While a nested page's async children load (default 'Loading…') */
+    pageLoadingText?: string;
+    errorText?: string;
+    backLabel?: string;
+    /** Key hints under the list (default true) */
+    footer?: boolean;
+    resultsText?: (count: number) => string;
+    /** Replaces the default navigation for href commands */
+    navigate?: (href: string, ctx: {newTab: boolean, command: PaletteCommand}) => void;
+    animationDuration?: number;
+    className?: string;
+    /** Force Mac (true) or other (false) key names; default detects */
+    mac?: boolean;
+    onBeforeOpen?: (palette: CommandPaletteInstance) => boolean | void;
+    onOpen?: (palette: CommandPaletteInstance) => void;
+    onBeforeClose?: (palette: CommandPaletteInstance) => boolean | void;
+    onClose?: (palette: CommandPaletteInstance) => void;
+    onQuery?: (query: string, palette: CommandPaletteInstance) => void;
+    onBeforeSelect?: (command: PaletteCommand, palette: CommandPaletteInstance) => boolean | void;
+    onSelect?: (command: PaletteCommand, palette: CommandPaletteInstance) => void;
+    onRun?: (command: PaletteCommand, palette: CommandPaletteInstance) => void;
+}
+
+export interface CommandPaletteInstance extends ComponentInstance {
+    open(query?: string): this;
+    close(): this;
+    toggle(query?: string): this;
+    isOpen(): boolean;
+    show(query?: string): this;
+    hide(): this;
+    isVisible(): boolean;
+    setCommands(list: PaletteCommand[]): this;
+    addCommands(list: PaletteCommand | PaletteCommand[]): this;
+    removeCommand(id: string): this;
+    getCommands(): PaletteCommand[];
+    /** Up one nested page; false at the top */
+    back(): boolean;
+    query(): string;
+    recent(): string[];
+    clearRecent(): this;
+    destroy(): void;
+}
+
+export interface CommandPaletteFactory {
+    (options?: CommandPaletteOptions): CommandPaletteInstance;
+    formatShortcut(combo: string, mac?: boolean): string[];
+    fuzzyMatch(query: string, text: string): {score: number, indices: number[]} | null;
+}
+
 export interface Elements {
     /** Create a Card component */
     card(selector: string | HTMLElement, options?: CardOptions): CardInstance;
@@ -662,6 +816,12 @@ export interface Elements {
 
     /** Toast notification system */
     toast: ToastStatic;
+
+    /** Keep Tab and focus inside containers while active */
+    focusTrap: FocusTrapFactory;
+
+    /** A Cmd/Ctrl+K command palette (builds its own overlay) */
+    commandPalette: CommandPaletteFactory;
 
     /** Get the component on an element - factory-made ones too. `name` picks one when an element hosts several. */
     get(selector: string | HTMLElement, name?: string): ComponentInstance | undefined;

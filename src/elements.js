@@ -25,6 +25,8 @@ import Badge, {NumberBadge} from './components/badge.js';
 import Loader from './components/loader.js';
 import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
+import FocusTrap, {tabbables as tabbablesIn} from './components/focus-trap.js';
+import CommandPalette, {formatShortcut, fuzzyMatch} from './components/command-palette.js';
 import {resolveAll, resolveElement, reuse} from './components/shared.js';
 import {registerComponents as defineTags} from './web-components/index.js';
 
@@ -9800,6 +9802,27 @@ export const elements = {
     },
 
     /**
+     * Keep Tab and focus inside one or more containers while active.
+     * @param {string|Element|Element[]} containers
+     * @param {Object} [options]
+     * @returns {FocusTrap|null} null when nothing matched
+     */
+    focusTrap(containers, options = {}) {
+        const instance = new FocusTrap(containers, options);
+        return instance.element ? instance : null;
+    },
+
+    /**
+     * A Cmd/Ctrl+K command palette. Builds its own overlay at the end of <body>.
+     * @param {Object} [options]
+     * @returns {CommandPalette}
+     */
+    commandPalette(options = {}) {
+        // Found by E.get through the component registry, which forgets it on destroy().
+        return new CommandPalette(options);
+    },
+
+    /**
      * The component on an element - including ones made by a factory (`E.slideover({...})`)
      * or another component, which never pass through this object.
      * @param {string|Element} selector
@@ -9877,6 +9900,14 @@ elements.popover.closeAll = Popover.closeAll;
 elements.popover.getInstance = Popover.getInstance;
 elements.popover.open = Popover.openPopovers;
 
+// Focus trap helpers: E.focusTrap.tabbables(containers) lists what Tab would reach.
+elements.focusTrap.tabbables = tabbablesIn;
+elements.focusTrap.top = () => FocusTrap.top();
+
+// Command palette helpers: the shortcut labels and the matcher it uses.
+elements.commandPalette.formatShortcut = formatShortcut;
+elements.commandPalette.fuzzyMatch = fuzzyMatch;
+
 // Every match, as an array: E.buttonGroup.all('.btn-group', opts). The plain factory
 // returns the first instance (with .all() on it).
 elements.buttonGroup.all = (selector, options = {}) => {
@@ -9895,3 +9926,4 @@ elements.listGroup.all = (selector, options = {}) => {
 // Export component classes for direct access to static methods
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};
 export {Popover};
+export {FocusTrap, CommandPalette};
