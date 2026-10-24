@@ -9,6 +9,10 @@
  *   (bubbling, cancelable) with `detail = {instance, args}`.
  * - A `before...` event is cancelable: an `onBeforeX` or `.on()` handler returning false,
  *   or a DOM listener calling preventDefault(), stops the action.
+ * - Overlays: open() / close() / toggle() / isOpen() are the names; show() / hide() /
+ *   isVisible() are permanent aliases that look open/close up by name at call time, so a
+ *   guard patched onto `instance.close` still runs. close() fires a cancelable
+ *   `beforeclose` (open(): `beforeopen`); teardown closes through `_forcedClose()`.
  */
 
 /**
@@ -28,6 +32,16 @@ export function instancesOf(element) {
 }
 
 /**
+ * The kind of an instance: a Component's `static componentName`, or a `componentName`
+ * on a plain handle (skeleton, avatar) that registered itself.
+ * @param {Object} instance
+ * @returns {string|undefined}
+ */
+export function componentNameOf(instance) {
+    return instance?.constructor?.componentName || instance?.componentName;
+}
+
+/**
  * The newest instance on an element, optionally of one component kind.
  * @param {Element} element
  * @param {string} [name] - componentName, e.g. 'slideover'
@@ -36,7 +50,7 @@ export function instancesOf(element) {
 export function instanceOf(element, name) {
     const list = instancesOf(element);
     for (let i = list.length - 1; i >= 0; i--) {
-        if (!name || list[i].constructor.componentName === name) return list[i];
+        if (!name || componentNameOf(list[i]) === name) return list[i];
     }
     return null;
 }
@@ -187,6 +201,33 @@ class Component {
             }
         }
         return this.options[`on${cap(key)}`];
+    }
+
+    /**
+     * close() without the cancelable `beforeclose` - for destroy() and teardown that must
+     * not be refused. Still calls `this.close()` by name, so a patched close runs too.
+     * @param {...*} args - passed to close()
+     * @returns {*} close()'s return value
+     * @protected
+     */
+    _forcedClose(...args) {
+        this._forceClose = true;
+        try {
+            return this.close(...args);
+        } finally {
+            this._forceClose = false;
+        }
+    }
+
+    /**
+     * The cancelable `beforeclose` an overlay's close() asks first. Skipped (true) while
+     * `_forcedClose()` runs.
+     * @param {...*} args - the same arguments onClose gets
+     * @returns {boolean} false when a handler refused
+     * @protected
+     */
+    _mayClose(...args) {
+        return this._forceClose || this._fire('beforeclose', ...args) !== false;
     }
 
     /**

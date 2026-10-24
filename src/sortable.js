@@ -680,6 +680,7 @@ class Sortable extends Component {
             else if (zone === 'after') target.after(d.item);
             return undefined;
         });
+        this._emit('drop', detail);
         this._dispatch('drop', detail);
 
         const settle = () => {

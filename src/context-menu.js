@@ -396,6 +396,7 @@ class ContextMenu extends Component {
         // Callbacks
         onBeforeOpen: null,
         onOpen: null,
+        onBeforeClose: null,    // (ctx) - return false to keep it open
         onClose: null,
         onSelect: null
     };
@@ -520,7 +521,7 @@ class ContextMenu extends Component {
         };
 
         if (!resolveValue(opts.enabled, resolvedTarget, ctx)) return null;
-        if (opts.onBeforeOpen && opts.onBeforeOpen(ctx) === false) return null;
+        if (this._fire('beforeopen', ctx) === false) return null;
 
         return {instance: this, container, target: resolvedTarget, ctx};
     }
@@ -609,7 +610,8 @@ class ContextMenu extends Component {
 
     _openResolved(x, y, hit, items, event, fromKeyboard = false, chain = null) {
         if (active && active !== this) active.close();
-        if (this._isOpen) this.close();
+        // Re-opening in place is not a close anyone can refuse.
+        if (this._isOpen) this._forcedClose();
 
         const opts = this.options;
         this._chain = chain || [hit];
@@ -641,7 +643,7 @@ class ContextMenu extends Component {
             this._bindOpenListeners();
             this._isOpen = true;
             active = this;
-            if (opts.onOpen) opts.onOpen(this._ctx);
+            this._fire('open', this._ctx);
             return;
         }
 
@@ -673,11 +675,12 @@ class ContextMenu extends Component {
         this._menu.focus({preventScroll: true});
         if (fromKeyboard) this._moveFocus(1);
 
-        if (opts.onOpen) opts.onOpen(this._ctx);
+        this._fire('open', this._ctx);
     }
 
     close() {
         if (!this._isOpen) return this;
+        if (!this._mayClose(this._ctx)) return this;
 
         this._closeSubmenus(0);
         this._unbindOpenListeners();
@@ -709,7 +712,7 @@ class ContextMenu extends Component {
         }
         this._restoreFocusTo = null;
 
-        if (opts.onClose) opts.onClose(this._ctx);
+        this._fire('close', this._ctx);
         this._ctx = null;
         return this;
     }
@@ -731,6 +734,17 @@ class ContextMenu extends Component {
     isOpen() {
         return this._isOpen;
     }
+
+    /** Close if open, else open at (x, y) as open() does. */
+    toggle(x, y, target) {
+        return this._isOpen ? this.close() : this.open(x, y, target);
+    }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     setItems(items) {
         this.options.items = items;
@@ -974,7 +988,7 @@ class ContextMenu extends Component {
         const ctx = this._ctx;
         const opts = this.options;
 
-        if (opts.onSelect) opts.onSelect(item, ctx);
+        this._fire('select', item, ctx);
         if (isFn(item.action)) item.action(ctx ? ctx.target : null, ctx);
 
         if (opts.closeOnSelect) this.close();
@@ -1203,7 +1217,7 @@ class ContextMenu extends Component {
     // ---- teardown -------------------------------------------------------
 
     destroy() {
-        this.close();
+        this._forcedClose();
         registry.delete(this);
         clearCursorRule(this._cursorId);
         if (this._node && this._node.getAttribute('data-dm-ctx-cursor') === String(this._cursorId)) {

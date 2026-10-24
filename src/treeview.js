@@ -378,9 +378,7 @@ class TreeView extends Component {
     }
 
     // Call onClick if provided
-    if (typeof this.options.onClick === 'function') {
-      this.options.onClick(nodeId, node, event);
-    }
+    this._fire('click', nodeId, node, event);
 
     const wasSelected = this._selectedNodes.has(nodeId);
 
@@ -416,9 +414,7 @@ class TreeView extends Component {
       return;
     }
 
-    if (typeof this.options.onAction === 'function') {
-      this.options.onAction(action, nodeId, node, event);
-    }
+    this._fire('action', action, nodeId, node, event);
   }
 
   /**
@@ -550,9 +546,7 @@ class TreeView extends Component {
     this._selectedNodes.add(nodeId);
     this.refresh();
 
-    if (!silent && typeof this.options.onSelect === 'function') {
-      this.options.onSelect(nodeId, node, null);
-    }
+    if (!silent) this._fire('select', nodeId, node, null);
 
     return this;
   }
@@ -572,9 +566,7 @@ class TreeView extends Component {
     this._selectedNodes.delete(nodeId);
     this.refresh();
 
-    if (!silent && typeof this.options.onDeselect === 'function') {
-      this.options.onDeselect(nodeId, node, null);
-    }
+    if (!silent) this._fire('deselect', nodeId, node, null);
 
     return this;
   }
@@ -619,11 +611,11 @@ class TreeView extends Component {
     this._selectedNodes.clear();
     this.refresh();
 
-    if (!silent && typeof this.options.onDeselect === 'function') {
+    if (!silent) {
       selectedIds.forEach(id => {
         const node = this._flatMap[id];
         if (node) {
-          this.options.onDeselect(id, node, null);
+          this._fire('deselect', id, node, null);
         }
       });
     }
@@ -675,9 +667,7 @@ class TreeView extends Component {
     this._expandedNodes.add(nodeId);
     this.refresh();
 
-    if (!silent && typeof this.options.onExpand === 'function') {
-      this.options.onExpand(nodeId, node, null);
-    }
+    if (!silent) this._fire('expand', nodeId, node, null);
 
     return this;
   }
@@ -697,9 +687,7 @@ class TreeView extends Component {
     this._expandedNodes.delete(nodeId);
     this.refresh();
 
-    if (!silent && typeof this.options.onCollapse === 'function') {
-      this.options.onCollapse(nodeId, node, null);
-    }
+    if (!silent) this._fire('collapse', nodeId, node, null);
 
     return this;
   }

@@ -5,7 +5,7 @@
  * Note: ThemeRoller, QuickRoller, and Editor are in the separate tools bundle (domma-tools.min.js)
  */
 
-import Component, {instanceOf} from './component.js';
+import Component, {instanceOf, register, unregister} from './component.js';
 import TreeView from './treeview.js';
 import ContextMenu from './context-menu.js';
 import Sortable from './sortable.js';
@@ -31,6 +31,49 @@ import {
 } from './web-components/wrappers/legacy-wrappers.js';
 
 let timelineWarned = false;
+const groupWarned = new Set();
+
+/**
+ * E.buttonGroup / E.listGroup used to return an array when the selector matched more than
+ * one element. They return the first instance now, with a non-enumerable all() for the
+ * list. Until 1.0 the old array shape still answers on the instance - [i], length,
+ * forEach, map and iteration - and each of those warns once.
+ * @param {Object[]} instances - one per matched element, in document order
+ * @param {string} name - the factory name, for the warning
+ * @returns {Object|Object[]} the first instance; an empty array (as before) when nothing matched
+ */
+function firstOfMatches(instances, name) {
+    if (!instances.length) return instances;
+    const first = instances[0];
+    const list = instances.slice();
+    Object.defineProperty(first, 'all', {value: () => list.slice(), configurable: true, writable: true});
+    if (list.length < 2) return first;
+
+    const warn = (what) => {
+        const key = `${name}:${what}`;
+        if (groupWarned.has(key) || loadOption('deprecationWarnings', true) === false || typeof console === 'undefined') return;
+        groupWarned.add(key);
+        console.warn(`Domma: E.${name}() matched ${list.length} elements and returns the first instance; using it as an array (${what}) is deprecated and stops working at 1.0. Use .all() or E.${name}.all().`);
+    };
+    list.forEach((instance, i) => Object.defineProperty(first, i, {
+        get() { warn('[index]'); return instance; },
+        configurable: true
+    }));
+    Object.defineProperty(first, 'length', {get() { warn('length'); return list.length; }, configurable: true});
+    for (const method of ['forEach', 'map']) {
+        Object.defineProperty(first, method, {
+            value(...args) { warn(method); return list[method](...args); },
+            configurable: true,
+            writable: true
+        });
+    }
+    Object.defineProperty(first, Symbol.iterator, {
+        value() { warn('iteration'); return list[Symbol.iterator](); },
+        configurable: true,
+        writable: true
+    });
+    return first;
+}
 
 // ============================================
 // Tabs Component
@@ -102,9 +145,7 @@ class Tabs extends Component {
 
         this._updateState();
 
-        if (opts.onChange) {
-            opts.onChange({index, oldIndex, tab: this._tabs[index], panel: this._panels[index]});
-        }
+        this._fire('change', {index, oldIndex, tab: this._tabs[index], panel: this._panels[index]});
 
         return this;
     }
@@ -290,9 +331,7 @@ class Accordion extends Component {
             this._open(index);
         }
 
-        if (opts.onChange) {
-            opts.onChange({index, isOpen: !isActive, header, content});
-        }
+        this._fire('change', {index, isOpen: !isActive, header, content});
 
         return this;
     }
@@ -555,9 +594,7 @@ class ListGroup extends Component {
                     el.setAttribute('aria-selected', 'false');
                 }
                 const i = this._items.indexOf(el);
-                if (this.options.onDeselect) {
-                    this.options.onDeselect(el, i, event);
-                }
+                this._fire('deselect', el, i, event);
             });
 
             if (!isSelected) {
@@ -565,17 +602,15 @@ class ListGroup extends Component {
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'true');
                 }
-                if (this.options.onSelect) {
-                    this.options.onSelect(item, index, event);
-                }
+                this._fire('select', item, index, event);
             } else {
                 // Item was already selected - deselect it and fire callbacks
                 item.classList.remove(this.options.activeClass);
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'false');
                 }
-                if (this.options.onDeselect) this.options.onDeselect(item, index, event);
-                if (this.options.onChange) this.options.onChange(this.getSelected(), event);
+                this._fire('deselect', item, index, event);
+                this._fire('change', this.getSelected(), event);
                 return;
             }
         } else {
@@ -585,23 +620,17 @@ class ListGroup extends Component {
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'false');
                 }
-                if (this.options.onDeselect) {
-                    this.options.onDeselect(item, index, event);
-                }
+                this._fire('deselect', item, index, event);
             } else {
                 item.classList.add(this.options.activeClass);
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'true');
                 }
-                if (this.options.onSelect) {
-                    this.options.onSelect(item, index, event);
-                }
+                this._fire('select', item, index, event);
             }
         }
 
-        if (this.options.onChange) {
-            this.options.onChange(this.getSelected(), event);
-        }
+        this._fire('change', this.getSelected(), event);
     }
 
     _updateAriaSelected() {
@@ -634,7 +663,7 @@ class ListGroup extends Component {
                 if (el.classList.contains(this.options.activeClass)) {
                     el.classList.remove(this.options.activeClass);
                     if (this.options.selectable) el.setAttribute('aria-selected', 'false');
-                    if (this.options.onDeselect) this.options.onDeselect(el, i, null);
+                    this._fire('deselect', el, i, null);
                 }
             });
         }
@@ -642,8 +671,8 @@ class ListGroup extends Component {
         item.classList.add(this.options.activeClass);
         if (this.options.selectable) item.setAttribute('aria-selected', 'true');
 
-        if (this.options.onSelect) this.options.onSelect(item, index, null);
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('select', item, index, null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -660,8 +689,8 @@ class ListGroup extends Component {
         item.classList.remove(this.options.activeClass);
         if (this.options.selectable) item.setAttribute('aria-selected', 'false');
 
-        if (this.options.onDeselect) this.options.onDeselect(item, index, null);
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('deselect', item, index, null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -692,11 +721,11 @@ class ListGroup extends Component {
             if (!item.classList.contains(this.options.disabledClass)) {
                 item.classList.add(this.options.activeClass);
                 if (this.options.selectable) item.setAttribute('aria-selected', 'true');
-                if (this.options.onSelect) this.options.onSelect(item, index, null);
+                this._fire('select', item, index, null);
             }
         });
 
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -710,11 +739,11 @@ class ListGroup extends Component {
             if (item.classList.contains(this.options.activeClass)) {
                 item.classList.remove(this.options.activeClass);
                 if (this.options.selectable) item.setAttribute('aria-selected', 'false');
-                if (this.options.onDeselect) this.options.onDeselect(item, index, null);
+                this._fire('deselect', item, index, null);
             }
         });
 
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -860,7 +889,9 @@ class Dropdown extends Component {
         model: null,
         modelKey: null,
         itemTemplate: null,
+        onBeforeOpen: null,         // return false to keep it closed
         onOpen: null,
+        onBeforeClose: null,        // return false to keep it open
         onClose: null,
         onSelect: null
     };
@@ -975,6 +1006,8 @@ class Dropdown extends Component {
         clearTimeout(this._hoverCloseTimer);
         this._hoverOpenTimer = this._hoverCloseTimer = null;
 
+        if (!this._isOpen && this._fire('beforeopen', this) === false) return this;
+
         // A close that has not finished fading still owns a live menu node.
         // Reclaim it rather than stacking a fresh one on top of it: re-opening
         // inside the animation window used to leave orphaned menus in the DOM,
@@ -995,7 +1028,7 @@ class Dropdown extends Component {
             });
         }
 
-        if (opts.onOpen) opts.onOpen(this);
+        this._fire('open', this);
 
         if (this._menu) {
             // Reused node - refresh it, since setItems() may have run while closed.
@@ -1022,6 +1055,7 @@ class Dropdown extends Component {
         this._hoverOpenTimer = this._hoverCloseTimer = null;
 
         if (!this._isOpen) return this;
+        if (!this._mayClose(this)) return this;
 
         const opts = this.options;
         const duration = opts.animation ? opts.animationDuration : 0;
@@ -1048,7 +1082,7 @@ class Dropdown extends Component {
             }, duration);
         }
 
-        if (opts.onClose) opts.onClose(this);
+        this._fire('close', this);
 
         return this;
     }
@@ -1056,6 +1090,12 @@ class Dropdown extends Component {
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     // ---- hover ----------------------------------------------------------
 
@@ -1282,9 +1322,7 @@ class Dropdown extends Component {
 
         this._selectedValue = value;
 
-        if (opts.onSelect) {
-            opts.onSelect({item, index, value}, this);
-        }
+        this._fire('select', {item, index, value}, this);
 
         // Update model if bound
         if (opts.model && opts.modelKey && typeof opts.model.set === 'function') {
@@ -1832,9 +1870,7 @@ class Timer extends Component {
         this._updateDisplay();
 
         // Call onTick callback
-        if (this.options.onTick) {
-            this.options.onTick(this._remaining);
-        }
+        this._fire('tick', this._remaining);
 
         // Check if complete
         if (this._remaining === 0) {
@@ -1867,9 +1903,7 @@ class Timer extends Component {
         }
 
         // Call onComplete callback
-        if (this.options.onComplete) {
-            this.options.onComplete();
-        }
+        this._fire('complete');
     }
 
     /**
@@ -1894,9 +1928,7 @@ class Timer extends Component {
         }
 
         // Call onStart callback
-        if (this.options.onStart) {
-            this.options.onStart();
-        }
+        this._fire('start');
 
         return this;
     }
@@ -1926,9 +1958,7 @@ class Timer extends Component {
         }
 
         // Call onPause callback
-        if (this.options.onPause) {
-            this.options.onPause();
-        }
+        this._fire('pause');
 
         return this;
     }
@@ -1951,9 +1981,7 @@ class Timer extends Component {
         }
 
         // Call onReset callback
-        if (this.options.onReset) {
-            this.options.onReset();
-        }
+        this._fire('reset');
 
         return this;
     }
@@ -2388,11 +2416,12 @@ class Alarm {
     }
 
     /**
-     * Remove an alarm by ID
+     * Remove an alarm by ID. remove(id) is a permanent alias - removeAlarm is the name,
+     * because remove() means "take this component away" elsewhere and destroy() does that here.
      * @param {string} id - Alarm ID
      * @returns {boolean} True if removed
      */
-    remove(id) {
+    removeAlarm(id) {
         const index = this._alarms.findIndex(a => a.id === id);
         if (index === -1) return false;
 
@@ -2404,6 +2433,11 @@ class Alarm {
         }
 
         return true;
+    }
+
+    /** Alias of removeAlarm(id), looked up by name at call time. */
+    remove(id) {
+        return this.removeAlarm(id);
     }
 
     /**
@@ -2939,9 +2973,7 @@ class Carousel extends Component {
             this._isAnimating = false;
         }, opts.animationDuration);
 
-        if (opts.onChange) {
-            opts.onChange({index, oldIndex, slide: this._slides[index]});
-        }
+        this._fire('change', {index, oldIndex, slide: this._slides[index]});
 
         return this;
     }
@@ -3084,7 +3116,7 @@ class CookieConsent extends Component {
 
         // Auto show if needed
         if (this.options.autoShow && !this._hasConsented()) {
-            this.show();
+            this.open();
         }
 
         // Setup reopen triggers
@@ -3109,9 +3141,7 @@ class CookieConsent extends Component {
                     });
 
                     // Notify about version mismatch
-                    if (this.options.onVersionMismatch) {
-                        this.options.onVersionMismatch(stored.version, this.options.consentVersion);
-                    }
+                    this._fire('versionmismatch', stored.version, this.options.consentVersion);
 
                     return;
                 }
@@ -3149,6 +3179,9 @@ class CookieConsent extends Component {
     _createUI() {
         // Create main container
         this.element = document.createElement('div');
+        // Made here rather than passed to the constructor, so register it for E.get() here too.
+        this.element._dommaComponent = this;
+        register(this.element, this);
         this.element.className = `dm-cookie-consent dm-cookie-consent-${this.options.position} dm-cookie-consent-${this.options.layout} dm-cookie-consent-${this.options.theme}`;
         this.element.setAttribute('role', 'dialog');
         this.element.setAttribute('aria-label', 'Cookie consent');
@@ -3276,7 +3309,7 @@ class CookieConsent extends Component {
             if (backdrop) {
                 backdrop.addEventListener('click', () => {
                     if (!this.options.requireExplicitConsent) {
-                        this.hide();
+                        this.close();
                     }
                 });
             }
@@ -3318,13 +3351,13 @@ class CookieConsent extends Component {
             const trigger = e.target.closest(this.options.reopenSelector);
             if (trigger) {
                 e.preventDefault();
-                this.show();
+                this.open();
             }
         });
     }
 
-    show() {
-        if (this._isVisible) return;
+    open() {
+        if (this._isVisible) return this;
 
         this.element.style.display = '';
 
@@ -3341,10 +3374,12 @@ class CookieConsent extends Component {
         if (this.options.onShow) {
             this.options.onShow.call(this);
         }
+        this._emit('show');
+        return this;
     }
 
-    hide() {
-        if (!this._isVisible) return;
+    close() {
+        if (!this._isVisible) return this;
 
         const cleanup = () => {
             this.element.style.display = 'none';
@@ -3353,6 +3388,7 @@ class CookieConsent extends Component {
             if (this.options.onHide) {
                 this.options.onHide.call(this);
             }
+            this._emit('hide');
         };
 
         if (this.options.animation) {
@@ -3362,7 +3398,22 @@ class CookieConsent extends Component {
             this.element.classList.remove('dm-cookie-consent-visible');
             cleanup();
         }
+        return this;
     }
+
+    toggle() {
+        return this.isOpen() ? this.close() : this.open();
+    }
+
+    isOpen() {
+        return this._isVisible;
+    }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     accept() {
         // Accept all categories
@@ -3376,13 +3427,15 @@ class CookieConsent extends Component {
         if (this.options.onAccept) {
             this.options.onAccept.call(this, this._preferences);
         }
+        this._emit('accept', this._preferences);
 
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
 
         if (this.options.hideAfterAction) {
-            this.hide();
+            this.close();
         }
     }
 
@@ -3398,13 +3451,15 @@ class CookieConsent extends Component {
         if (this.options.onReject) {
             this.options.onReject.call(this);
         }
+        this._emit('reject');
 
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
 
         if (this.options.hideAfterAction) {
-            this.hide();
+            this.close();
         }
     }
 
@@ -3430,6 +3485,7 @@ class CookieConsent extends Component {
         if (this.options.onCustomize) {
             this.options.onCustomize.call(this, this._preferences);
         }
+        this._emit('customize', this._preferences);
     }
 
     hideCustomize() {
@@ -3463,13 +3519,15 @@ class CookieConsent extends Component {
         if (this.options.onAccept) {
             this.options.onAccept.call(this, this._preferences);
         }
+        this._emit('accept', this._preferences);
 
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
 
         if (this.options.hideAfterAction) {
-            this.hide();
+            this.close();
         }
     }
 
@@ -3502,11 +3560,15 @@ class CookieConsent extends Component {
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
     }
 
     destroy() {
-        this.hide();
+        this.close();
         this.hideCustomize();
+        super.destroy();
+        // The factory keeps one per page; a destroyed one must not be handed out again.
+        if (elements._instances.get('cookieConsent') === this) elements._instances.delete('cookieConsent');
 
         if (this.element) {
             this.element.remove();
@@ -3839,9 +3901,7 @@ class ButtonGroup extends Component {
             btn.classList.toggle(this.options.activeClass);
         }
 
-        if (this.options.onChange) {
-            this.options.onChange(this.getValue(), index, btn);
-        }
+        this._fire('change', this.getValue(), index, btn);
     }
 
     /**
@@ -3912,9 +3972,7 @@ class ButtonGroup extends Component {
     selectAll() {
         if (this.options.mode === 'multiple') {
             this.buttons.forEach(btn => btn.classList.add(this.options.activeClass));
-            if (this.options.onChange) {
-                this.options.onChange(this.getValue(), -1, null);
-            }
+            this._fire('change', this.getValue(), -1, null);
         }
         return this;
     }
@@ -3925,9 +3983,7 @@ class ButtonGroup extends Component {
      */
     deselectAll() {
         this.buttons.forEach(btn => btn.classList.remove(this.options.activeClass));
-        if (this.options.onChange) {
-            this.options.onChange(this.getValue(), -1, null);
-        }
+        this._fire('change', this.getValue(), -1, null);
         return this;
     }
 }
@@ -4019,10 +4075,8 @@ class Breadcrumbs extends Component {
             const link = e.target.closest('.dm-breadcrumbs-link');
             if (link) {
                 const index = parseInt(link.dataset.index, 10);
-                if (this.options.onChange) {
-                    e.preventDefault();
-                    this.options.onChange(this.options.items[index], index, e);
-                }
+                if (this.options.onChange) e.preventDefault();
+                this._fire('change', this.options.items[index], index, e);
             }
         });
     }
@@ -4248,10 +4302,8 @@ class Navbar extends Component {
             const link = e.target.closest('.navbar-link:not(.navbar-dropdown-toggle)');
             if (link) {
                 const index = parseInt(link.dataset.index, 10);
-                if (this.options.onItemClick) {
-                    e.preventDefault();
-                    this.options.onItemClick(this.options.items[index], index, e);
-                }
+                if (this.options.onItemClick) e.preventDefault();
+                this._fire('itemclick', this.options.items[index], index, e);
                 // Collapse on mobile after click
                 if (window.innerWidth < this.options.collapseAt) {
                     this.collapse();
@@ -4260,8 +4312,8 @@ class Navbar extends Component {
 
             // Dropdown item clicks (resolved by data-path, any depth)
             const dropdownItem = e.target.closest('.navbar-dropdown-item');
-            if (dropdownItem && this.options.onItemClick) {
-                e.preventDefault();
+            if (dropdownItem) {
+                if (this.options.onItemClick) e.preventDefault();
                 const path = dropdownItem.dataset.path;
                 const parts = path
                     ? path.split('.').map(n => parseInt(n, 10))
@@ -4271,7 +4323,7 @@ class Navbar extends Component {
                 const subIndex = parts[parts.length - 1];
                 const item = parent.items[subIndex];
                 const parentItem = parent.items === this.options.items ? null : parent;
-                this.options.onItemClick(item, subIndex, e, parentItem);
+                this._fire('itemclick', item, subIndex, e, parentItem);
             }
         });
 
@@ -4514,6 +4566,8 @@ class Sidebar extends Component {
         persistCollapsed: false,    // Save collapsed state to localStorage
         persistCollapseKey: null,   // localStorage key for collapsed state
         onItemClick: null,          // Click callback (item, index, event)
+        onBeforeOpen: null,         // return false to keep it closed
+        onBeforeClose: null,        // return false to keep it open
         onToggle: null,             // Toggle callback (isOpen)
         onExpand: null,             // Submenu expand callback (item, depth)
         onCollapse: null            // Submenu collapse callback (item, depth)
@@ -4753,9 +4807,7 @@ class Sidebar extends Component {
                     this.setActive(item.section);
                 }
 
-                if (this.options.onItemClick) {
-                    this.options.onItemClick(item, path, e);
-                }
+                this._fire('itemclick', item, path, e);
 
                 // Close sidebar on mobile after click
                 if (window.innerWidth < this.options.collapseAt) {
@@ -4806,17 +4858,13 @@ class Sidebar extends Component {
             this._collapseSubmenu(itemElement, submenu);
             this._expandedItems.delete(path);
 
-            if (this.options.onCollapse) {
-                this.options.onCollapse(item, depth);
-            }
+            this._fire('collapse', item, depth);
         } else {
             // Expand
             this._expandSubmenu(itemElement, submenu);
             this._expandedItems.add(path);
 
-            if (this.options.onExpand) {
-                this.options.onExpand(item, depth);
-            }
+            this._fire('expand', item, depth);
         }
 
         this._saveExpandedState();
@@ -5015,6 +5063,7 @@ class Sidebar extends Component {
 
     open() {
         if (this._isOpen) return this;
+        if (this._fire('beforeopen') === false) return this;
 
         this._isOpen = true;
         this.element.classList.add('open');
@@ -5031,15 +5080,14 @@ class Sidebar extends Component {
         // Apply push to content element
         this._applyPush();
 
-        if (this.options.onToggle) {
-            this.options.onToggle(true);
-        }
+        this._fire('toggle', true);
 
         return this;
     }
 
     close() {
         if (!this._isOpen) return this;
+        if (!this._mayClose()) return this;
 
         this._isOpen = false;
         this.element.classList.remove('open');
@@ -5053,9 +5101,7 @@ class Sidebar extends Component {
         // Remove push from content element
         this._removePush();
 
-        if (this.options.onToggle) {
-            this.options.onToggle(false);
-        }
+        this._fire('toggle', false);
 
         return this;
     }
@@ -5067,6 +5113,12 @@ class Sidebar extends Component {
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     collapse() {
         if (!this.options.collapsibleDesktop || this._isCollapsed) return this;
@@ -5081,9 +5133,7 @@ class Sidebar extends Component {
         // Remove content push
         this._removePush();
 
-        if (this.options.onCollapse) {
-            this.options.onCollapse();
-        }
+        this._fire('collapse');
 
         return this;
     }
@@ -5105,9 +5155,7 @@ class Sidebar extends Component {
         const collapseIcon = this.options.position === 'right' ? 'chevron-right' : 'chevron-left';
         this._updateToggleIcon(collapseIcon);
 
-        if (this.options.onExpand) {
-            this.options.onExpand();
-        }
+        this._fire('expand');
 
         return this;
     }
@@ -5161,14 +5209,6 @@ class Sidebar extends Component {
                 window.Domma.icons.scan(this._toggle);
             }
         }
-    }
-
-    destroy() {
-        // Clean up floating toggle
-        this._removeFloatingToggle();
-
-        // Call parent destroy
-        super.destroy();
     }
 
     toggleCollapse() {
@@ -5259,6 +5299,9 @@ class Sidebar extends Component {
         }
 
         this._removeOverlay();
+        // Clean up floating toggle (a second destroy() above this one used to do it,
+        // and was shadowed by this one)
+        this._removeFloatingToggle();
         super.destroy();
     }
 }
@@ -5534,7 +5577,9 @@ class Autocomplete extends Component {
         clearOnSelect: false,
         onSelect: null,
         onChange: null,
+        onBeforeOpen: null,
         onOpen: null,
+        onBeforeClose: null,
         onClose: null,
         onFilter: null
     };
@@ -5673,9 +5718,7 @@ class Autocomplete extends Component {
         }
 
         // Trigger onChange callback
-        if (this.options.onChange) {
-            this.options.onChange(value, e);
-        }
+        this._fire('change', value, e);
 
         // Check minimum characters
         if (value.length < this.options.minChars) {
@@ -5763,9 +5806,7 @@ class Autocomplete extends Component {
         }
 
         // Trigger onFilter callback
-        if (this.options.onFilter) {
-            results = this.options.onFilter(results, query) || results;
-        }
+        results = this._fire('filter', results, query) || results;
 
         this._filteredData = results;
         this._renderResults(query);
@@ -5881,9 +5922,7 @@ class Autocomplete extends Component {
         this.element.value = value;
 
         // Trigger onSelect callback
-        if (this.options.onSelect) {
-            this.options.onSelect(item, {target: this.element});
-        }
+        this._fire('select', item, {target: this.element});
 
         // Clear on select if option enabled
         if (this.options.clearOnSelect) {
@@ -5943,30 +5982,28 @@ class Autocomplete extends Component {
 
     open() {
         if (this._isOpen) return this;
+        if (this._fire('beforeopen') === false) return this;
 
         this._isOpen = true;
         this._dropdown.style.display = 'block';
         this.element.setAttribute('aria-expanded', 'true');
         this._updatePosition();
 
-        if (this.options.onOpen) {
-            this.options.onOpen();
-        }
+        this._fire('open');
 
         return this;
     }
 
     close() {
         if (!this._isOpen) return this;
+        if (!this._mayClose()) return this;
 
         this._isOpen = false;
         this._dropdown.style.display = 'none';
         this.element.setAttribute('aria-expanded', 'false');
         this._activeIndex = -1;
 
-        if (this.options.onClose) {
-            this.options.onClose();
-        }
+        this._fire('close');
 
         return this;
     }
@@ -5978,6 +6015,12 @@ class Autocomplete extends Component {
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     setValue(value) {
         this.element.value = value;
@@ -6013,7 +6056,7 @@ class Autocomplete extends Component {
     }
 
     destroy() {
-        this.close();
+        this._forcedClose();
         if (this._dropdown && this._dropdown.parentNode) {
             this._dropdown.parentNode.removeChild(this._dropdown);
         }
@@ -6052,6 +6095,10 @@ class Pillbox extends Component {
         maxItemsMessage: 'Maximum {max} items allowed',
         duplicateMessage: 'Item already exists',
         noResultsMessage: 'No results found',
+        onBeforeOpen: null,
+        onOpen: null,
+        onBeforeClose: null,
+        onClose: null,
         onAdd: null,
         onRemove: null,
         onChange: null,
@@ -6395,27 +6442,21 @@ class Pillbox extends Component {
         // Validate
         const error = this._validate(text);
         if (error) {
-            if (this.options.onValidationError) {
-                this.options.onValidationError(error, text);
-            }
+            this._fire('validationerror', error, text);
             return;
         }
 
         this._addPill(text, text);
         this._input.value = '';
 
-        if (this.options.onCreate) {
-            this.options.onCreate(text);
-        }
+        this._fire('create', text);
     }
 
     _addPill(value, label) {
         // Validate
         const error = this._validate(value);
         if (error) {
-            if (this.options.onValidationError) {
-                this.options.onValidationError(error, value);
-            }
+            this._fire('validationerror', error, value);
             return;
         }
 
@@ -6462,9 +6503,7 @@ class Pillbox extends Component {
         }
 
         // Trigger onAdd
-        if (this.options.onAdd) {
-            this.options.onAdd(value, pill);
-        }
+        this._fire('add', value, pill);
 
         // Trigger onChange
         this._triggerChange();
@@ -6493,9 +6532,7 @@ class Pillbox extends Component {
         }
 
         // Trigger onRemove
-        if (this.options.onRemove) {
-            this.options.onRemove(value, pillElement);
-        }
+        this._fire('remove', value, pillElement);
 
         // Trigger onChange
         this._triggerChange();
@@ -6504,9 +6541,7 @@ class Pillbox extends Component {
     _validate(value) {
         // Check max items
         if (this.options.maxItems && this._pills.length >= this.options.maxItems) {
-            if (this.options.onMaxReached) {
-                this.options.onMaxReached();
-            }
+            this._fire('maxreached');
             return this.options.maxItemsMessage.replace('{max}', this.options.maxItems);
         }
 
@@ -6547,37 +6582,49 @@ class Pillbox extends Component {
         }
 
         // Trigger onChange callback
-        if (this.options.onChange) {
-            this.options.onChange(values);
-        }
+        this._fire('change', values);
     }
 
     // Public methods
 
     open() {
         if (!this._dropdown || this._isOpen) return this;
+        if (this._fire('beforeopen') === false) return this;
 
         this._isOpen = true;
         this._dropdown.style.display = 'block';
         this._input.setAttribute('aria-expanded', 'true');
 
+        this._fire('open');
         return this;
     }
 
     close() {
         if (!this._dropdown || !this._isOpen) return this;
+        if (!this._mayClose()) return this;
 
         this._isOpen = false;
         this._dropdown.style.display = 'none';
         this._input.setAttribute('aria-expanded', 'false');
         this._activeIndex = -1;
 
+        this._fire('close');
         return this;
+    }
+
+    toggle() {
+        return this._isOpen ? this.close() : this.open();
     }
 
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     getValue() {
         return this._pills.map(p => p.value);
@@ -6658,7 +6705,7 @@ class Pillbox extends Component {
     }
 
     destroy() {
-        this.close();
+        this._forcedClose();
         if (this._wrapper && this._wrapper.parentNode) {
             this._wrapper.parentNode.removeChild(this._wrapper);
         }
@@ -6719,7 +6766,9 @@ class Slideover extends Component {
         bodyClass: '',
         footerClass: '',
         customSizes: {},
+        onBeforeOpen: null,     // return false to keep it closed
         onOpen: null,
+        onBeforeClose: null,    // return false to keep it open
         onClose: null,
         onClosed: null
     };
@@ -6915,7 +6964,8 @@ class Slideover extends Component {
         if (!this._backdrop) return;
         this._backdrop.style.display = 'block';
         requestAnimationFrame(() => {
-            this._backdrop.style.opacity = '1';
+            // destroy() in the same frame takes the backdrop away
+            if (this._backdrop) this._backdrop.style.opacity = '1';
         });
     }
 
@@ -6948,6 +6998,7 @@ class Slideover extends Component {
 
         const el = this.element;
         if (!el) return this;
+        if (this._fire('beforeopen', this) === false) return this;
 
         // Create backdrop if needed
         if (this.options.backdrop && !this._backdrop) {
@@ -6981,9 +7032,7 @@ class Slideover extends Component {
 
         // Call onOpen callback after animation
         setTimeout(() => {
-            if (this.options.onOpen) {
-                this.options.onOpen(this);
-            }
+            this._fire('open', this);
             // Create form if schema exists and form hasn't been created yet
             this._createForm();
         }, this.options.animationDuration);
@@ -7078,11 +7127,10 @@ class Slideover extends Component {
 
         const el = this.element;
         if (!el) return this;
+        if (!this._mayClose(this)) return this;
 
         // Call onClose callback
-        if (this.options.onClose) {
-            this.options.onClose(this);
-        }
+        this._fire('close', this);
 
         // Hide slideover with animation
         this._applyPosition(); // Reset to closed position
@@ -7124,9 +7172,7 @@ class Slideover extends Component {
             this._isOpen = false;
 
             // Call onClosed callback
-            if (this.options.onClosed) {
-                this.options.onClosed(this);
-            }
+            this._fire('closed', this);
         }, this.options.animationDuration);
 
         return this;
@@ -7139,6 +7185,12 @@ class Slideover extends Component {
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     setTitle(title) {
         const titleEl = this.element.querySelector('.dm-slideover-header .dm-slideover-title');
@@ -7175,7 +7227,7 @@ class Slideover extends Component {
     }
 
     destroy() {
-        this.close();
+        this._forcedClose();
 
         // Remove backdrop
         if (this._backdrop) {
@@ -7489,9 +7541,7 @@ class Progression extends Component {
             if (itemEl) {
                 const index = parseInt(itemEl.getAttribute('data-index'), 10);
                 const item = this.options.items[index];
-                if (item && this.options.onItemClick) {
-                    this.options.onItemClick(item, index, itemEl);
-                }
+                if (item) this._fire('itemclick', item, index, itemEl);
             }
         });
 
@@ -7688,9 +7738,7 @@ class Progression extends Component {
             const oldStatus = this.options.items[index].status;
             this.options.items[index].status = status;
 
-            if (this.options.onStatusChange) {
-                this.options.onStatusChange(this.options.items[index], oldStatus, status);
-            }
+            this._fire('statuschange', this.options.items[index], oldStatus, status);
 
             this._renderItems();
             if (this.options.animation) {
@@ -7972,7 +8020,7 @@ class Signature extends Component {
         };
         this._undoneStrokes = [];
         this._updateState();
-        if (typeof this.options.onBegin === 'function') this.options.onBegin(this._currentStroke);
+        this._fire('begin', this._currentStroke);
     }
 
     _onPointerMove(e) {
@@ -7996,8 +8044,8 @@ class Signature extends Component {
         this._redraw();
         this._updateState();
         this._updateHiddenInput();
-        if (typeof this.options.onEnd === 'function' && stroke) this.options.onEnd(stroke);
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        if (stroke) this._fire('end', stroke);
+        this._fire('change', this._hiddenInput.value);
     }
 
     _getPoint(e) {
@@ -8142,7 +8190,7 @@ class Signature extends Component {
             ctx.restore();
         }
         this._updateHiddenInput();
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        this._fire('change', this._hiddenInput.value);
     }
 
     _updateHiddenInput() {
@@ -8213,8 +8261,8 @@ class Signature extends Component {
         if (this._hiddenInput) this._hiddenInput.value = '';
         if (!silent) {
             if (this._statusEl) this._statusEl.textContent = 'Signature cleared';
-            if (typeof this.options.onClear === 'function') this.options.onClear();
-            if (typeof this.options.onChange === 'function') this.options.onChange('');
+            this._fire('clear');
+            this._fire('change', '');
         }
     }
 
@@ -8227,7 +8275,7 @@ class Signature extends Component {
         this._redraw();
         this._updateState();
         this._updateHiddenInput();
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        this._fire('change', this._hiddenInput.value);
     }
 
     /**
@@ -8239,7 +8287,7 @@ class Signature extends Component {
         this._redraw();
         this._updateState();
         this._updateHiddenInput();
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        this._fire('change', this._hiddenInput.value);
     }
 
     /**
@@ -8422,7 +8470,9 @@ class DatePicker extends Component {
         weekNumbers: false,
         placeholder: null,
         onChange: null,
+        onBeforeOpen: null,        // return false to keep it closed
         onOpen: null,
+        onBeforeClose: null,       // return false to keep it open
         onClose: null
     };
 
@@ -8519,9 +8569,7 @@ class DatePicker extends Component {
                 this.element.dispatchEvent(new Event('change', {bubbles: true}));
                 this._suppress = false;
             }
-            if (typeof this.options.onChange === 'function') {
-                this.options.onChange(this.getValue(), this.getDate(), this);
-            }
+            this._fire('change', this.getValue(), this.getDate(), this);
         }
         return this;
     }
@@ -8828,6 +8876,7 @@ class DatePicker extends Component {
     /** @returns {this} */
     open() {
         if (this._isOpen || this.options.inline || this.element.disabled) return this;
+        if (this._fire('beforeopen', this) === false) return this;
 
         if (DatePicker._open && DatePicker._open !== this) DatePicker._open.close();
 
@@ -8859,7 +8908,7 @@ class DatePicker extends Component {
         window.addEventListener('resize', this._onReposition);
         window.addEventListener('scroll', this._onReposition, true);
 
-        if (typeof this.options.onOpen === 'function') this.options.onOpen(this);
+        this._fire('open', this);
         return this;
     }
 
@@ -8869,6 +8918,7 @@ class DatePicker extends Component {
      */
     close({focus = false} = {}) {
         if (!this._isOpen || this.options.inline) return this;
+        if (!this._mayClose(this)) return this;
 
         document.removeEventListener('mousedown', this._onOutside, true);
         window.removeEventListener('resize', this._onReposition);
@@ -8880,7 +8930,7 @@ class DatePicker extends Component {
         this.element.setAttribute('aria-expanded', 'false');
         if (focus) this.element.focus();
 
-        if (typeof this.options.onClose === 'function') this.options.onClose(this);
+        this._fire('close', this);
         return this;
     }
 
@@ -8888,6 +8938,17 @@ class DatePicker extends Component {
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
+
+    /** @returns {boolean} */
+    isOpen() {
+        return this._isOpen;
+    }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     _position() {
         const panel = this._panel;
@@ -8976,7 +9037,7 @@ class DatePicker extends Component {
     // ---- lifecycle ------------------------------------------------------
 
     destroy() {
-        this.close();
+        this._forcedClose();
         this._panel?.remove();
         this._panel = null;
         super.destroy();
@@ -9126,7 +9187,7 @@ export const elements = {
             instances.push(instance);
         }
 
-        return instances.length === 1 ? instances[0] : instances;
+        return firstOfMatches(instances, 'buttonGroup');
     },
 
     loader(selector, options = {}) {
@@ -9241,8 +9302,9 @@ export const elements = {
         return new DesktopNotification(options);
     },
 
-    // Convenience method for quick notifications
+    // Convenience method for quick notifications: notify(title, options) or notify({title, ...})
     notify(title, options = {}) {
+        if (title && typeof title === 'object') return DesktopNotification.notify(title.title, {...title, ...options});
         return DesktopNotification.notify(title, options);
     },
 
@@ -9335,7 +9397,18 @@ export const elements = {
             : selector;
         if (!host) {
             console.warn('[Domma.elements.chooser] host not found:', selector);
-            return null;
+            // An inert chooser, so a missing host does not become a TypeError further on
+            // (it used to return null).
+            const none = options.multiple ? [] : null;
+            return {
+                _root: null,
+                element: null,
+                getValue() { return none; },
+                setValue() {},
+                disable() {},
+                enable() {},
+                destroy() {}
+            };
         }
 
         const cfg = {
@@ -9564,8 +9637,10 @@ export const elements = {
         host.appendChild(root);
         rerender();
 
-        return {
+        const api = {
             _root: root,
+            /** The chooser's root (`.domma-chooser`), the same node as `_root`. */
+            get element() { return root; },
             getValue() { return value; },
             setValue(v) { setValueInternal(v, false); },
             disable() {
@@ -9574,8 +9649,17 @@ export const elements = {
             enable() {
                 root.querySelectorAll('.picker-option').forEach((el) => el.classList.remove('is-disabled'));
             },
-            destroy() { root.remove(); }
+            destroy() {
+                root.remove();
+                unregister(host, api);
+                unregister(root, api);
+            }
         };
+        // So E.get(host) / E.get(host, 'chooser') finds it, like any component.
+        Object.defineProperty(api, 'componentName', {value: 'chooser'});
+        register(host, api);
+        register(root, api);
+        return api;
     },
 
     /**
@@ -9718,7 +9802,7 @@ export const elements = {
             instances.push(instance);
         }
 
-        return instances.length === 1 ? instances[0] : instances;
+        return firstOfMatches(instances, 'listGroup');
     },
 
     timeline(selector, options = {}) {
@@ -9845,6 +9929,17 @@ elements.popover.scan = (root) => Popover.scan(root, (el, opts) => elements.popo
 elements.popover.closeAll = Popover.closeAll;
 elements.popover.getInstance = Popover.getInstance;
 elements.popover.open = Popover.openPopovers;
+
+// Every match, as an array: E.buttonGroup.all('.btn-group', opts). The plain factory
+// returns the first instance (with .all() on it).
+elements.buttonGroup.all = (selector, options = {}) => {
+    const result = elements.buttonGroup(selector, options);
+    return Array.isArray(result) ? result : result.all();
+};
+elements.listGroup.all = (selector, options = {}) => {
+    const result = elements.listGroup(selector, options);
+    return Array.isArray(result) ? result : result.all();
+};
 
 // Export component classes for direct access to static methods
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};

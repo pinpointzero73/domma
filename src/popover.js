@@ -29,7 +29,7 @@
  * pointer, focus leaving), bound on the first open and removed with the last.
  */
 
-import Component from './component.js';
+import Component, {instanceOf} from './component.js';
 import sanitizeModule from './sanitize.js';
 
 const SIDES = ['top', 'bottom', 'left', 'right'];
@@ -388,6 +388,13 @@ class Popover extends Component {
     toggle(opts = {}) {
         return this._open ? this.hide(opts) : this.show(opts);
     }
+
+    // Aliases, so a popover answers the overlay names every other overlay uses
+    // (open/close/isOpen). They look show/hide up by name at call time. A popover's
+    // cancelable phases stay `show` and `hide` (onShow / onHide returning false).
+    open(...args) { return this.show(...args); }
+    close(...args) { return this.hide(...args); }
+    isVisible() { return this.isOpen(); }
 
     /** Replace the content. Same types as the `content` option. */
     setContent(content) {
@@ -1120,10 +1127,10 @@ class Popover extends Component {
         }
     }
 
-    /** The popover bound to a trigger, if any. */
+    /** The popover bound to a trigger, if any - the same answer as E.get(trigger, 'popover'). */
     static getInstance(trigger) {
         const el = resolveElement(trigger);
-        return el ? byTrigger.get(el) || null : null;
+        return el ? instanceOf(el, 'popover') || null : null;
     }
 
     /** The open popovers, oldest first. */
