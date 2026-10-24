@@ -234,7 +234,12 @@ export class RangeSlider extends Component {
                 name: el.getAttribute('name'),
                 hidden: el.hidden,
                 tabindex: el.getAttribute('tabindex'),
-                ariaHidden: el.getAttribute('aria-hidden')
+                ariaHidden: el.getAttribute('aria-hidden'),
+                // _syncInputAttrs writes these; the attribute (or its absence) is what came in
+                min: el.getAttribute('min'),
+                max: el.getAttribute('max'),
+                step: el.getAttribute('step'),
+                disabled: el.getAttribute('disabled')
             };
         }
         const names = Array.isArray(o.names) ? o.names : [];
@@ -793,13 +798,17 @@ export class RangeSlider extends Component {
             else el.setAttribute('name', this._restore.name);
             if (this._restore.tabindex === null) el.removeAttribute('tabindex');
             else el.setAttribute('tabindex', this._restore.tabindex);
-            if (this._restore.ariaHidden === null) el.removeAttribute('aria-hidden');
-            else el.setAttribute('aria-hidden', this._restore.ariaHidden);
+            for (const attr of ['aria-hidden', 'min', 'max', 'step', 'disabled']) {
+                const value = this._restore[attr === 'aria-hidden' ? 'ariaHidden' : attr];
+                if (value === null) el.removeAttribute(attr);
+                else el.setAttribute(attr, value);
+            }
         }
         this._inputs = null;
         this._values = null;
         this._thumbs = [];
         super.destroy();
+        this._onDestroy?.();
     }
 }
 

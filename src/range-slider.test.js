@@ -379,6 +379,27 @@ describe('E.rangeSlider - state and forms', () => {
         expect(instanceOf(input, 'range-slider')).toBeNull();
     });
 
+    it('destroy() leaves E.get and E._instances, so a destroyed slider is never handed back', () => {
+        document.body.innerHTML = '<input id="r" type="range">';
+        const s = E.rangeSlider('#r');
+        expect(E.get('#r')).toBe(s);
+        s.destroy();
+        expect(E._instances.has($1('#r'))).toBe(false);
+        expect(E.get('#r')).toBeUndefined();
+    });
+
+    it('destroy() restores min, max, step and disabled on the caller\'s input', () => {
+        document.body.innerHTML = '<input id="a" type="range"><input id="b" type="range" min="2" max="8" step="2" disabled>';
+        E.rangeSlider('#a', {min: 10, max: 50, step: 5, disabled: true}).destroy();
+        const a = $1('#a');
+        for (const attr of ['min', 'max', 'step', 'disabled']) expect(a.hasAttribute(attr)).toBe(false);
+        expect(a.disabled).toBe(false);
+        E.rangeSlider('#b', {min: 0, max: 100, step: 0}).destroy();
+        const b = $1('#b');
+        expect([b.getAttribute('min'), b.getAttribute('max'), b.getAttribute('step')]).toEqual(['2', '8', '2']);
+        expect(b.disabled).toBe(true);
+    });
+
     it('destroy() removes inputs it made in a container', () => {
         document.body.innerHTML = '<div id="c"></div>';
         const s = E.rangeSlider('#c', {range: true});
