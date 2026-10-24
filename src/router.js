@@ -6,6 +6,13 @@
  * @alias R (window.R / Domma.router)
  */
 
+// Its own modules, not window.$ / window.M / window._ / window.I - those may be jQuery or
+// Lodash, or absent, under DommaOptions.globals and Domma.noConflict().
+import {dom} from './dom.js';
+import {models} from './models.js';
+import {icons} from './icons.js';
+import {utils} from './utils.js';
+
 /**
  * Router module for hash-based single-page applications
  * Provides client-side routing with transitions, lifecycle hooks, and middleware
@@ -74,18 +81,19 @@ export const router = {
             duration: 200
         };
 
-        // Listen for hash changes
-        window.addEventListener('hashchange', () => this._handleRouteChange());
+        // Listen for hash changes. The handler is kept so destroy() can remove it, and it
+        // looks _handleRouteChange up at event time, so a wrapper installed on the router
+        // (Domma CMS installs one) is the one that runs.
+        this._onHashChange = () => this._runRouteChange();
+        window.addEventListener('hashchange', this._onHashChange);
 
         // Handle initial route
-        this._handleRouteChange();
+        this._runRouteChange();
 
         this._initialised = true;
 
         // Publish router ready event
-        if (typeof window !== 'undefined' && window.M) {
-            window.M.publish('router:ready', {router: this});
-        }
+        models.publish('router:ready', {router: this});
 
         return this;
     },
@@ -215,7 +223,10 @@ export const router = {
      * R.destroy();
      */
     destroy() {
-        window.removeEventListener('hashchange', this._handleRouteChange);
+        if (this._onHashChange) {
+            window.removeEventListener('hashchange', this._onHashChange);
+            this._onHashChange = null;
+        }
         this._routes = [];
         this._views = {};
         this._middleware = [];
@@ -224,6 +235,21 @@ export const router = {
         this._routing = false;
         this._missedChange = false;
         this._initialised = false;
+    },
+
+    // Internal: run a route change from an event, so a failure is reported, never an unhandled rejection.
+    _runRouteChange() {
+        const result = this._handleRouteChange();
+        if (result && typeof result.catch === 'function') {
+            result.catch(error => this._reportError(error, window.location.hash.slice(1) || this._defaultRoute));
+        }
+        return result;
+    },
+
+    // Internal: log a routing failure and publish router:error.
+    _reportError(error, route, view) {
+        console.error(`[Domma Router] Error on ${route}:`, error);
+        models.publish('router:error', {error, route, view});
     },
 
     // Internal: Handle route changes
@@ -274,27 +300,33 @@ export const router = {
         }
 
         const from = this._currentRoute;
-        const to = {...route, params, path: hash};
+        const to = {...route, params, query: this._parseQuery(hash), path: hash};
 
         // Run middleware
         const allowed = await this._runMiddleware(to, from);
-        if (!allowed) return;
+        if (allowed !== true) {
+            if (allowed && typeof allowed.redirect === 'string') {
+                // next('/somewhere'): go there instead, in place of the refused entry.
+                window.location.replace(`#${allowed.redirect}`);
+            } else {
+                this._restoreAddress(hash);
+            }
+            return;
+        }
 
         // Run onLeave hook
         if (from?.onLeave) {
             const result = await from.onLeave();
-            if (result === false) return;
+            if (result === false) { this._restoreAddress(hash); return; }
         }
 
         // Publish before change event
-        if (typeof window !== 'undefined' && window.M) {
-            window.M.publish('router:beforeChange', {from, to});
-        }
+        models.publish('router:beforeChange', {from, to});
 
         // Run onEnter hook
         if (route.onEnter) {
-            const result = await route.onEnter(params);
-            if (result === false) return;
+            const result = await route.onEnter(params, to);
+            if (result === false) { this._restoreAddress(hash); return; }
         }
 
         // Update document title
@@ -309,13 +341,57 @@ export const router = {
         this._shownPath = hash;
 
         // Publish after change event
-        if (typeof window !== 'undefined' && window.M) {
-            window.M.publish('router:afterChange', {from, to});
+        models.publish('router:afterChange', {from, to});
+    },
+
+    /**
+     * A refused change (a guard that did not call next(), onLeave/onEnter returning
+     * false) leaves the screen where it was, so the address goes back to it -
+     * replaceState, which fires no hashchange, so nothing routes a second time.
+     * Not when the address has moved on meanwhile (a guard that navigated elsewhere,
+     * or restored it itself).
+     */
+    _restoreAddress(attempted) {
+        const shown = this._shownPath;
+        if (shown === null || shown === undefined || shown === attempted) return;
+        const now = window.location.hash.slice(1) || this._defaultRoute;
+        if (now !== attempted) return;
+        if (window.history && typeof window.history.replaceState === 'function') {
+            window.history.replaceState(window.history.state, '', `#${shown}`);
         }
     },
 
-    // Internal: Match route with params
+    // Internal: the path part of an address ('/search?q=x' -> '/search').
+    _stripQuery(path) {
+        const s = String(path);
+        const q = s.indexOf('?');
+        return q === -1 ? s : s.slice(0, q);
+    },
+
+    // Internal: the query of an address as an object ('/s?q=a%20b&f' -> {q: 'a b', f: ''}).
+    _parseQuery(path) {
+        const s = String(path);
+        const q = s.indexOf('?');
+        if (q === -1) return {};
+        try {
+            return Object.fromEntries(new URLSearchParams(s.slice(q + 1)));
+        } catch {
+            return {};
+        }
+    },
+
+    // Internal: decodeURIComponent that keeps the raw text when it is malformed.
+    _decode(segment) {
+        try {
+            return decodeURIComponent(segment);
+        } catch {
+            return segment;
+        }
+    },
+
+    // Internal: Match route with params (a query string is not part of the match)
     _matchRoute(path) {
+        path = this._stripQuery(path);
         for (const route of this._routes) {
             const params = this._extractParams(route.path, path);
             if (params !== null) {
@@ -338,8 +414,8 @@ export const router = {
 
         for (let i = 0; i < patternParts.length; i++) {
             if (patternParts[i].startsWith(':')) {
-                params[patternParts[i].slice(1)] = pathParts[i];
-            } else if (patternParts[i] !== pathParts[i]) {
+                params[patternParts[i].slice(1)] = this._decode(pathParts[i]);
+            } else if (patternParts[i] !== pathParts[i] && patternParts[i] !== this._decode(pathParts[i])) {
                 return null;
             }
         }
@@ -348,11 +424,14 @@ export const router = {
     },
 
     // Internal: Run middleware chain
+    // true = carry on, false = refused, {redirect} = next('/path') asked to go elsewhere.
     async _runMiddleware(to, from) {
         for (const middleware of this._middleware) {
             let nextCalled = false;
-            const next = () => {
+            let redirect = null;
+            const next = (target) => {
                 nextCalled = true;
+                if (typeof target === 'string') redirect = target;
             };
 
             await middleware(to, from, next);
@@ -360,46 +439,56 @@ export const router = {
             if (!nextCalled) {
                 return false;
             }
+            if (redirect !== null) {
+                return {redirect};
+            }
         }
         return true;
     },
 
     // Internal: Render a view with transitions
+    // A failure (a template or partial that will not load, a throwing render or onMount)
+    // is logged and published as router:error, the container is shown again, and the
+    // router is left free for the next change - it never stays mid-transition.
     async _renderView(viewName, params) {
         this._transitioning = true;
+        try {
+            const view = this._views[viewName];
+            if (!view) {
+                console.error(`[Domma Router] View "${viewName}" not found`);
+                return;
+            }
 
-        const view = this._views[viewName];
-        if (!view) {
-            console.error(`[Domma Router] View "${viewName}" not found`);
+            const $container = dom(this._container);
+
+            // Fade out current content
+            await new Promise(resolve => {
+                $container.fadeOut(this._transitions.duration, resolve);
+            });
+
+            // Render new content
+            await this._renderContent(view, params, $container);
+
+            // Fade in new content
+            await new Promise(resolve => {
+                $container.fadeIn(this._transitions.duration, resolve);
+            });
+        } catch (error) {
+            this._showContainer();
+            this._reportError(error, window.location.hash.slice(1) || this._defaultRoute, viewName);
+        } finally {
             this._transitioning = false;
-            return;
         }
+    },
 
-        // Get jQuery wrapper if available
-        const $ = typeof window !== 'undefined' && window.$ ? window.$ : null;
-        if (!$) {
-            console.error('[Domma Router] jQuery/Domma $ not found. Cannot animate transitions.');
-            this._renderViewStatic(view, params);
-            this._transitioning = false;
-            return;
+    // Internal: undo a fade-out left half done by a failed render.
+    _showContainer() {
+        const el = this._container && (this._container[0] || this._container);
+        if (el && el.style) {
+            el.style.display = '';
+            el.style.opacity = '';
+            el.style.transition = '';
         }
-
-        const $container = $(this._container);
-
-        // Fade out current content
-        await new Promise(resolve => {
-            $container.fadeOut(this._transitions.duration, resolve);
-        });
-
-        // Render new content
-        await this._renderContent(view, params, $container);
-
-        // Fade in new content
-        await new Promise(resolve => {
-            $container.fadeIn(this._transitions.duration, resolve);
-        });
-
-        this._transitioning = false;
     },
 
     // Internal: Load template from URL with caching
@@ -493,9 +582,7 @@ export const router = {
             $container.html(html, {safe: false});
 
             // Scan for icons
-            if (typeof window !== 'undefined' && window.I) {
-                window.I.scan(this._container);
-            }
+            icons.scan(this._container);
 
             // Call onMount lifecycle hook
             if (view.onMount && typeof view.onMount === 'function') {
@@ -506,96 +593,23 @@ export const router = {
             html = await view(params);
             $container.html(html, {safe: false});
 
-            if (typeof window !== 'undefined' && window.I) {
-                window.I.scan(this._container);
-            }
+            icons.scan(this._container);
         } else if (typeof view === 'string') {
             // View is a template string
             html = this._renderTemplate(view, params);
             $container.html(html, {safe: false});
 
-            if (typeof window !== 'undefined' && window.I) {
-                window.I.scan(this._container);
-            }
+            icons.scan(this._container);
         }
     },
 
     // Internal: Render template using Domma template engine
     _renderTemplate(template, params, partials = {}) {
-        if (typeof window !== 'undefined' && window._ && typeof window._.render === 'function') {
-            return window._.render(template, params || {}, { partials });
+        if (typeof utils.render === 'function') {
+            return utils.render(template, params || {}, { partials });
         }
         // Fallback: simple replacement
         return template.replace(/\{\{(\w+)\}\}/g, (match, key) => params[key] || '');
-    },
-
-    // Internal: Static render (no animations) - uses trusted application templates
-    async _renderViewStatic(view, params) {
-        // ── Component-based routes (no animation path) ──────────────────────
-        if (typeof view === 'object' && view.component && !Array.isArray(view)) {
-            const tagName     = view.component;
-            const containerEl = this._container[0] || this._container;
-            const resolvedProps = typeof view.props === 'function'
-                ? view.props(params)
-                : (view.props || {});
-            const el = document.createElement(tagName);
-            for (const [key, val] of Object.entries(resolvedProps)) {
-                const attr = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-                if (val === true || val === '') {
-                    el.setAttribute(attr, '');
-                } else if (val !== false && val !== null && val !== undefined) {
-                    el.setAttribute(attr, typeof val === 'object' ? JSON.stringify(val) : String(val));
-                }
-            }
-            while (containerEl.firstChild) containerEl.removeChild(containerEl.firstChild);
-            containerEl.appendChild(el);
-            if (typeof view.onMount === 'function') view.onMount(this._container);
-            if (typeof window !== 'undefined' && window.I) window.I.scan(containerEl);
-            return;
-        }
-
-        let html;
-
-        if (typeof view === 'object' && !Array.isArray(view)) {
-            let template = view.template;
-
-            // Load template from URL if templateUrl specified
-            if (!template && view.templateUrl) {
-                template = await this._loadTemplate(view.templateUrl);
-            }
-
-            // Load partials from URLs if specified
-            let partials = {};
-            if (view.partials) {
-                const entries = Object.entries(view.partials);
-                const loaded = await Promise.all(
-                    entries.map(([name, url]) => this._loadTemplate(url).then(t => [name, t]))
-                );
-                partials = Object.fromEntries(loaded);
-            }
-
-            if (typeof template === 'function') {
-                html = await template(params);
-            } else if (typeof template === 'string') {
-                html = this._renderTemplate(template, params, partials);
-            }
-            // Safe: html is from application-controlled templates, not user input
-            this._container.innerHTML = html;
-
-            if (view.onMount && typeof view.onMount === 'function') {
-                view.onMount(this._container);
-            }
-        } else if (typeof view === 'function') {
-            html = await view(params);
-            this._container.innerHTML = html;
-        } else if (typeof view === 'string') {
-            html = this._renderTemplate(view, params);
-            this._container.innerHTML = html;
-        }
-
-        if (typeof window !== 'undefined' && window.I) {
-            window.I.scan(this._container);
-        }
     },
 
     // Internal: Render 404 view - uses DOM methods to safely handle user-controlled path

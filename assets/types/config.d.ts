@@ -28,8 +28,8 @@ export interface EventAction {
     log?: string;
 }
 
-export type EventHandler = (event: Event, $el: DommaCollection) => void;
-export type EventActions = EventHandler | EventAction | (EventHandler | EventAction)[];
+export type ConfigEventHandler = (event: Event, $el: DommaCollection) => void;
+export type EventActions = ConfigEventHandler | EventAction | (ConfigEventHandler | EventAction)[];
 
 export interface SelectorConfig {
     /** Component type to initialise */

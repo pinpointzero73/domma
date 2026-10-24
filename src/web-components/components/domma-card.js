@@ -3,6 +3,7 @@
  * Card container with hover effects and collapsible functionality
  */
 
+import { sanitise } from '../../sanitize.js';
 import { DommaElement, getThemeVariables } from '../base/domma-element.js';
 
 export class DommaCard extends DommaElement {
@@ -370,7 +371,7 @@ export class DommaCard extends DommaElement {
         return this;
     }
 
-    setContent(content) {
+    setContent(content, options = {}) {
         // Find or create card body in light DOM (slotted content)
         let bodySlot = this.querySelector('[slot="body"]');
 
@@ -382,10 +383,8 @@ export class DommaCard extends DommaElement {
             this.appendChild(bodySlot);
         }
 
-        // XSS Protection: Sanitize HTML using DOMPurify wrapper (Domma.sanitize.sanitize)
-        const sanitizedContent = (typeof Domma !== 'undefined' && Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
-            ? Domma.sanitize.sanitize(content)
-            : content;
+        // XSS Protection: sanitised like $().html() - DOMPurify, or escaped without it. {safe: false} opts out.
+        const sanitizedContent = options.safe === false ? content : sanitise(content);
         bodySlot.innerHTML = sanitizedContent;
 
         // Scan for icons if available
@@ -419,6 +418,6 @@ export class DommaCard extends DommaElement {
     }
 }
 
-if (!customElements.get('domma-card')) {
+if (typeof customElements !== 'undefined' && !customElements.get('domma-card')) {
     customElements.define('domma-card', DommaCard);
 }

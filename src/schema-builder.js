@@ -4,6 +4,7 @@
  */
 
 import Component from './component.js';
+import {escapeHtml} from './escape.js';
 
 // ============================================
 // Field Type Registry
@@ -1320,10 +1321,8 @@ class SchemaBuilder extends Component {
     }
 
     _escapeHtml(str) {
-        if (!str) return '';
-        const div = document.createElement('div');
-        div.textContent = str.toString();
-        return div.innerHTML;
+
+        return escapeHtml(str);
     }
 
     destroy() {

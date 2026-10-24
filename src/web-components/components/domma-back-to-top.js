@@ -294,6 +294,6 @@ export class DommaBackToTop extends DommaElement {
 }
 
 // Register component
-if (!customElements.get('domma-back-to-top')) {
+if (typeof customElements !== 'undefined' && !customElements.get('domma-back-to-top')) {
     customElements.define('domma-back-to-top', DommaBackToTop);
 }

@@ -281,6 +281,6 @@ export class DommaToast extends DommaElement {
     isVisible() { return this._isVisible; }
 }
 
-if (!customElements.get('domma-toast')) {
+if (typeof customElements !== 'undefined' && !customElements.get('domma-toast')) {
     customElements.define('domma-toast', DommaToast);
 }

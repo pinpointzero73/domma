@@ -23,7 +23,8 @@ export interface ThemeChangeEvent {
 }
 
 export type ThemeChangeCallback = (event: ThemeChangeEvent) => void;
-export type UnsubscribeFn = () => void;
+import type {UnsubscribeFn} from './models';
+export type {UnsubscribeFn};
 
 export interface ThemeOptions {
     /** Initial theme mode */

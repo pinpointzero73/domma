@@ -1,4 +1,4 @@
-import {dom} from './dom.js';
+import {dom, isDomma} from './dom.js';
 import {http} from './http.js';
 import {utils} from './utils.js';
 import {configEngine} from './config.js';
@@ -17,15 +17,16 @@ import effects from './effects.js';
 import sanitizeModule from './sanitize.js';
 import {components, createComponent} from './component-factory.js';
 
-// Register Web Components (Badge, Tooltip, Loader, BackToTop)
-import {registerComponents} from './web-components/index.js';
-registerComponents();
+// Importing registers the Web Components (Badge, Tooltip, Loader, BackToTop, ...)
+import './web-components/index.js';
+import {installGlobals, loadOption} from './globals.js';
 
-// Cloaking - hide page immediately to prevent FOUC
-let cloakEnabled = true;
-if (typeof document !== 'undefined' && document.body) {
+// Cloaking - hide page immediately to prevent FOUC. `window.DommaOptions = {cloak: false}`
+// before Domma loads turns it off before it can apply; `Domma.setup({cloak: false})` is too late for that.
+let cloakEnabled = loadOption('cloak', true) !== false;
+if (cloakEnabled && typeof document !== 'undefined' && document.body) {
     document.body.classList.add('dm-cloaked');
-} else if (typeof document !== 'undefined') {
+} else if (cloakEnabled && typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
         if (cloakEnabled) {
             document.body.classList.add('dm-cloaked');
@@ -155,29 +156,16 @@ Domma.T = T;
 Domma.R = R;
 Domma.B = B;
 
-// Expose globally if needed
-if (typeof window !== 'undefined') {
-    window.Domma = Domma;
-    window.$ = $;
-    window._ = _;
-    window.M = M;
-    window.D = D;
-    window.S = S;
-    window.A = A;
-    window.F = F;
-    window.H = H;
-    window.E = E;
-    window.I = I;
-    window.T = T;
-    window.R = R;
-    window.B = B;
-}
+Domma.isDomma = isDomma;
+
+// Expose globally - see globals.js for `DommaOptions.globals` and `Domma.noConflict()`
+installGlobals(Domma, {$, _, M, D, S, A, F, H, E, I, T, R, B});
 
 export default Domma;
 export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components, smoothCaret};
 
 // Reveal page after Domma is ready
-if (typeof document !== 'undefined') {
+if (typeof document !== 'undefined' && typeof window !== 'undefined') {
     const reveal = () => {
         if (cloakEnabled && document.body.classList.contains('dm-cloaked')) {
             document.body.classList.add('dm-ready');

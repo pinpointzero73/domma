@@ -2,7 +2,11 @@
  * Base class for all Domma Web Components
  * Provides common functionality: options handling, theming, event management
  */
-export class DommaElement extends HTMLElement {
+// Outside a browser (SSR, Node, tests without a DOM) there is no HTMLElement; an empty base
+// keeps the import from throwing, and registerComponents() has no customElements to define into.
+const ElementBase = typeof HTMLElement === 'undefined' ? class {} : HTMLElement;
+
+export class DommaElement extends ElementBase {
     static defaults = {};
 
     // Observed attributes - override in subclasses

@@ -75,20 +75,6 @@ const extensionsBanner = `/*!
  * Requires: domma.min.js
  */`;
 
-const obfuscatorOptions = {
-    compact: true,
-    controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.75,
-    deadCodeInjection: false,
-    debugProtection: false,
-    disableConsoleOutput: false,
-    identifierNamesGenerator: 'hexadecimal',
-    renameGlobals: false,
-    selfDefending: false,
-    stringArray: true,
-    stringArrayThreshold: 0.75
-};
-
 const commonPlugins = [
     resolve(),
     dommaPlugin(),  // Transform .domma single-file components
@@ -117,7 +103,7 @@ const bundleConfigs = presetBundles.map(preset => ({
             file: `public/dist/domma-${preset.name}.min.js`,
             format: 'umd',
             name: 'Domma',
-            sourcemap: false,
+            sourcemap: true,
             banner: `/*!
  * Domma ${preset.description} v${pkg.version}
  * Dynamic Object Manipulation & Modeling API
@@ -129,7 +115,7 @@ const bundleConfigs = presetBundles.map(preset => ({
         {
             file: `public/dist/domma-${preset.name}.esm.js`,
             format: 'es',
-            sourcemap: false,
+            sourcemap: true,
             banner: `/*!
  * Domma ${preset.description} v${pkg.version}
  * Dynamic Object Manipulation & Modeling API
@@ -151,13 +137,13 @@ export default [
                 file: 'public/dist/domma.min.js',
                 format: 'umd',
                 name: 'Domma',
-                sourcemap: false,
+                sourcemap: true,
                 banner
             },
             {
                 file: 'public/dist/domma.esm.js',
                 format: 'es',
-                sourcemap: false,
+                sourcemap: true,
                 banner
             }
         ],
@@ -171,13 +157,13 @@ export default [
                 file: 'public/dist/domma-tools.min.js',
                 format: 'umd',
                 name: 'DommaTools',
-                sourcemap: false,
+                sourcemap: true,
                 banner: toolsBanner
             },
             {
                 file: 'public/dist/domma-tools.esm.js',
                 format: 'es',
-                sourcemap: false,
+                sourcemap: true,
                 banner: toolsBanner
             }
         ],
@@ -191,13 +177,13 @@ export default [
                 file: 'public/dist/domma-syntax.min.js',
                 format: 'umd',
                 name: 'DommaSyntax',
-                sourcemap: false,
+                sourcemap: true,
                 banner: syntaxBanner
             },
             {
                 file: 'public/dist/domma-syntax.esm.js',
                 format: 'es',
-                sourcemap: false,
+                sourcemap: true,
                 banner: syntaxBanner
             }
         ],
@@ -211,13 +197,13 @@ export default [
                 file: 'public/dist/domma-flags.min.js',
                 format: 'umd',
                 name: 'DommaFlags',
-                sourcemap: false,
+                sourcemap: true,
                 banner: flagsBanner
             },
             {
                 file: 'public/dist/domma-flags.esm.js',
                 format: 'es',
-                sourcemap: false,
+                sourcemap: true,
                 banner: flagsBanner
             }
         ],
@@ -231,13 +217,13 @@ export default [
                 file: 'public/dist/domma-editor-extensions.min.js',
                 format: 'umd',
                 name: 'DommaEditorExtensions',
-                sourcemap: false,
+                sourcemap: true,
                 banner: extensionsBanner
             },
             {
                 file: 'public/dist/domma-editor-extensions.esm.js',
                 format: 'es',
-                sourcemap: false,
+                sourcemap: true,
                 banner: extensionsBanner
             }
         ],

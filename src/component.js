@@ -10,16 +10,65 @@ class Component {
             : selector;
         this.options = {...this.constructor.defaults, ...options};
         this._eventHandlers = [];
+        this._listeners = {};
 
         if (this.element) {
             this.element._dommaComponent = this;
         }
     }
 
+    /**
+     * Listen for a component event (fired through _emit).
+     * @param {string} event - Event name, e.g. 'open'
+     * @param {Function} handler - Called with the event detail
+     * @returns {this}
+     */
     on(event, handler) {
-        if (this.options[event] && typeof this.options[event] === 'function') {
-            this.options[event](handler);
+        if (typeof handler === 'function') {
+            (this._listeners[event] ||= []).push(handler);
         }
+        return this;
+    }
+
+    /**
+     * Stop listening. Without a handler, removes every listener for the event.
+     * @param {string} event
+     * @param {Function} [handler]
+     * @returns {this}
+     */
+    off(event, handler) {
+        if (!this._listeners[event]) return this;
+        this._listeners[event] = handler
+            ? this._listeners[event].filter(h => h !== handler)
+            : [];
+        return this;
+    }
+
+    /**
+     * Call the .on() listeners for an event. Components with their own _emit call this from it.
+     * @param {string} event
+     * @param {*} [detail]
+     * @protected
+     */
+    _notify(event, detail) {
+        for (const handler of [...(this._listeners?.[event] || [])]) {
+            handler.call(this, detail);
+        }
+    }
+
+    /**
+     * Fire an event to .on() listeners and as a bubbling `dm:<event>` DOM event on the element.
+     * @param {string} event
+     * @param {*} [detail]
+     * @returns {boolean} false if a DOM listener called preventDefault()
+     * @protected
+     */
+    _emit(event, detail) {
+        this._notify(event, detail);
+        if (!this.element || typeof CustomEvent === 'undefined') return true;
+        return this.element.dispatchEvent(new CustomEvent(`dm:${event}`, {
+            bubbles: true, cancelable: true, detail
+        }));
     }
 
     /**
@@ -48,6 +97,7 @@ class Component {
             element.removeEventListener(event, handler);
         }
         this._eventHandlers = [];
+        this._listeners = {};
         if (this.element) {
             delete this.element._dommaComponent;
         }

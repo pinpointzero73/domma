@@ -44,10 +44,9 @@ export const auth = {
 
     // Auto-verify token if present
     if (this.config.autoCheck && this.token) {
-      this._verifyToken().catch(() => {
-        // Token invalid, clear it
-        this._clearToken();
-        this.emit('tokenExpired', null);
+      this._verifyToken().catch((error) => {
+        // _verifyToken has already cleared a refused token; an outage keeps it.
+        if (this._isTokenRejection(error)) this.emit('tokenExpired', null);
       });
     }
 
@@ -243,8 +242,10 @@ export const auth = {
         silent: true  // Don't log 401 errors - expected when user not logged in
       });
 
-      if (!response.success || !response.user) {
-        throw new Error('Token verification failed');
+      if (!response || !response.success || !response.user) {
+        const refused = new Error('Token verification failed');
+        refused.tokenRejected = true;
+        throw refused;
       }
 
       this.user = response.user;
@@ -252,11 +253,26 @@ export const auth = {
 
       return this.user;
     } catch (error) {
-      // Token invalid
-      this._clearToken();
-      this._clearUser();
+      // Only the server refusing the token ends the session. A network error or
+      // a 5xx says nothing about the token, so it is kept for the next check.
+      if (this._isTokenRejection(error)) {
+        error.tokenRejected = true;
+        this._clearToken();
+        this._clearUser();
+      }
       throw error;
     }
+  },
+
+  /**
+   * Whether a verification error means the server refused the token
+   * (401/403, or an answer saying it is not valid) - not an outage.
+   * @param {Error} error
+   * @returns {boolean}
+   * @private
+   */
+  _isTokenRejection(error) {
+    return !!error && (error.tokenRejected === true || error.status === 401 || error.status === 403);
   },
 
   /**

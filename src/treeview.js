@@ -14,6 +14,7 @@
  */
 
 import Component from './component.js';
+import {escapeHtml} from './escape.js';
 
 class TreeView extends Component {
   static defaults = {
@@ -294,7 +295,7 @@ class TreeView extends Component {
     let html = '';
 
     if (this.options.showIcons && icon) {
-      html += `<span class="dm-treeview-icon" data-icon="${icon}" ${color ? `style="color: ${color};"` : ''}></span>`;
+      html += `<span class="dm-treeview-icon" data-icon="${this._escapeHtml(icon)}" ${color ? `style="color: ${this._escapeHtml(color)};"` : ''}></span>`;
     }
 
     html += `<span class="dm-treeview-label">${this._escapeHtml(label)}</span>`;
@@ -437,9 +438,7 @@ class TreeView extends Component {
    * @returns {string} Escaped text
    */
   _escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    return escapeHtml(text);
   }
 
   // ===========================================

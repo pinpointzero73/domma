@@ -4,6 +4,8 @@
  * Migrates from light/dark + variants to single theme names (e.g., 'ocean-dark', 'forest-light')
  */
 
+import {loadOption} from './globals.js';
+
 const STORAGE_KEY = 'domma-theme';
 const STORAGE_VARIANT_KEY = 'domma-theme-variant'; // Legacy key for migration
 const CLASS_PREFIX = 'dm-theme-';
@@ -533,8 +535,8 @@ class ThemeEngine {
 // Create singleton instance
 const themeEngine = new ThemeEngine();
 
-// Auto-initialize on DOM ready (with defaults)
-if (typeof document !== 'undefined') {
+// Auto-initialize on DOM ready (with defaults) unless `window.DommaOptions = {theme: false}`
+if (typeof document !== 'undefined' && loadOption('theme', true) !== false) {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             if (!themeEngine._initialised) {

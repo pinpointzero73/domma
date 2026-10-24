@@ -3,6 +3,7 @@
  * Maintain backwards compatibility with existing API
  */
 
+import { sanitise } from '../../sanitize.js';
 import { DommaBadge } from '../components/domma-badge.js';
 import { DommaNumberBadge } from '../components/domma-number-badge.js';
 import { DommaTooltip } from '../components/domma-tooltip.js';
@@ -1065,10 +1066,8 @@ export function createCardWrapper(selector, options = {}) {
         const body = document.createElement('div');
         body.setAttribute('slot', 'body');
         body.className = 'card-body';
-        // Use Domma sanitization if available
-        const sanitizedContent = (typeof Domma !== 'undefined' && Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
-            ? Domma.sanitize.sanitize(options.content)
-            : options.content;
+        // Sanitised like $().html(); {safe: false} for trusted markup
+        const sanitizedContent = options.safe === false ? options.content : sanitise(options.content);
         body.innerHTML = sanitizedContent;
         webComponent.appendChild(body);
     }
@@ -1125,8 +1124,8 @@ export function createCardWrapper(selector, options = {}) {
             return this;
         },
 
-        setContent(content) {
-            webComponent.setContent(content);
+        setContent(content, options) {
+            webComponent.setContent(content, options);
             return this;
         },
 

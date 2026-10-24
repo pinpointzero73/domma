@@ -923,6 +923,7 @@ class Sortable extends Component {
     _emit(name, detail) {
         const cb = this.options[`on${name[0].toUpperCase()}${name.slice(1)}`];
         if (isFn(cb)) cb(detail);
+        this._notify(name, detail);
         this._dispatch(name, detail);
     }
 

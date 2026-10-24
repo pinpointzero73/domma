@@ -467,6 +467,6 @@ export class DommaModal extends DommaElement {
     }
 }
 
-if (!customElements.get('domma-modal')) {
+if (typeof customElements !== 'undefined' && !customElements.get('domma-modal')) {
     customElements.define('domma-modal', DommaModal);
 }

@@ -250,6 +250,17 @@ onEnter(params) {
 }
 ```
 
+- Params are URL-decoded (`#/user/J%C3%BCrgen` -> `'Jürgen'`; a malformed escape is kept raw).
+- A query string is not part of the match: `#/search?q=x` matches `/search`. The parsed query is
+  `to.query` (`{q: 'x'}`) in middleware, `R.current().query`, and `onEnter(params, to)`'s second
+  argument. `to.path` is still the whole address, query included.
+- A refused change (a guard that never calls `next()`, `onLeave`/`onEnter` returning `false`) puts
+  the previous address back with `history.replaceState` (no second route), unless the guard has
+  navigated elsewhere. `next('/login')` redirects (replacing the refused entry).
+- A view that fails to render (a 404 `templateUrl`/partial, a throwing render or `onMount`) is logged
+  and published as `router:error` `{error, route, view}`; the container is shown again and the next
+  change routes normally.
+
 **Middleware (Route Guards):**
 
 ```javascript
@@ -617,6 +628,16 @@ $.reset();              // Reset all configurations
 ### http.js - Fetch-based HTTP client
 
 `Domma.http.get()`, `.post()`, `.put()`, `.delete()` - all return promises resolving to JSON.
+
+- No body (204/205/304, `head()`, an empty body) resolves to `null`; a non-JSON content type
+  resolves to the text; an unlabelled body is JSON when it parses.
+- FormData, URLSearchParams, Blob, ArrayBuffer/typed arrays and streams are sent as they are (no
+  JSON Content-Type). Falsy bodies (`0`, `false`, `''`) are sent; only `null`/`undefined` are not.
+  A caller's own Content-Type is kept.
+- `delete(url, {data})` sends a body only when `data` is given.
+- `credentials` defaults to `'same-origin'`; pass `'include'` for cookies on a cross-origin API.
+- `timeout: ms` aborts with a `TimeoutError`, composed with any `signal` the caller passes.
+- Errors keep their message and carry `status`, `statusText` and the parsed `body`.
 
 ### storage.js - localStorage wrapper
 
