@@ -148,7 +148,7 @@ export function layerOf(target, since) {
  * button - or the first, when none is - takes part, as the browser does.
  * @param {Element|Element[]} containers
  * @param {{shadow?: boolean}} [opts] - shadow: false skips shadow roots
- * @returns {Element[]}
+ * @returns {HTMLElement[]}
  */
 export function tabbables(containers, opts = {}) {
     const all = flatten(containers, opts.shadow !== false).filter(canTab);
@@ -170,6 +170,40 @@ export function tabbables(containers, opts = {}) {
     return [...positive, ...kept.filter(el => el.tabIndex <= 0)];
 }
 
+/**
+ * A container or element: a CSS selector or the element itself.
+ * @typedef {string|HTMLElement} FocusTarget
+ */
+
+/**
+ * @typedef {object} FocusTrapOptions
+ * @property {FocusTarget|(() => HTMLElement|null)|false} [initialFocus] Where focus goes on activate: a selector, an element, a function returning one, or false to leave it. Default: focus already inside stays, else the first tabbable, else the container.
+ * @property {FocusTarget|(() => HTMLElement|null)} [fallbackFocus] Where focus goes when nothing is tabbable (default: the first container, given tabindex="-1")
+ * @property {boolean|FocusTarget} [returnFocus] true (default): back to what had focus before activate(); or an element / selector; false: nowhere
+ * @property {boolean|((e: KeyboardEvent) => boolean)} [escapeDeactivates] Escape deactivates (default false - the owning overlay decides)
+ * @property {boolean|((e: MouseEvent) => boolean)} [clickOutsideDeactivates] A press outside deactivates (default false)
+ * @property {boolean|((e: MouseEvent) => boolean)} [allowOutsideClick] Let clicks outside through (default false: they are blocked)
+ * @property {boolean|'layers'|((el: Element, e: Event|null) => boolean)} [allowOutsideFocus] Let focus stay outside: true, 'layers' (floating layers such as toasts and popovers, never the page or a trap beneath), or a function (default false)
+ * @property {boolean} [register] false: keep the trap out of E.get(container) (default true)
+ * @property {boolean} [inert] Set `inert` on everything outside the containers while active (default false)
+ * @property {boolean} [shadow] Walk open shadow roots (default true)
+ * @property {boolean} [preventScroll] Focus without scrolling (default true)
+ * @property {((trap: FocusTrapInstance) => void)|null} [onActivate]
+ * @property {((trap: FocusTrapInstance) => void)|null} [onDeactivate]
+ * @property {((trap: FocusTrapInstance) => void)|null} [onPause]
+ * @property {((trap: FocusTrapInstance) => void)|null} [onUnpause]
+ */
+
+/** @typedef {FocusTrap} FocusTrapInstance */
+
+/**
+ * `E.focusTrap(containers, options)` - null when nothing matched - with its helpers.
+ * @typedef {((containers: FocusTarget|FocusTarget[], options?: FocusTrapOptions) => FocusTrapInstance|null) & {
+ *   tabbables: (containers: Element|Element[], opts?: {shadow?: boolean}) => HTMLElement[],
+ *   top: () => FocusTrapInstance|null
+ * }} FocusTrapFactory
+ */
+
 /** An option that may be a value or a function of the event. */
 function decide(option, event) {
     return typeof option === 'function' ? !!option(event) : !!option;
@@ -178,6 +212,7 @@ function decide(option, event) {
 export class FocusTrap extends Component {
     static componentName = 'focus-trap';
 
+    /** @type {FocusTrapOptions} */
     static defaults = {
         initialFocus: undefined,        // selector | element | () => element | false (leave focus alone)
         fallbackFocus: undefined,       // where focus goes when nothing is tabbable (default: the container)
@@ -197,8 +232,8 @@ export class FocusTrap extends Component {
     };
 
     /**
-     * @param {string|Element|Element[]} containers - one container, or several
-     * @param {Object} [options]
+     * @param {FocusTarget|Element|Array<FocusTarget|Element>} containers - one container, or several
+     * @param {FocusTrapOptions} [options]
      */
     constructor(containers, options = {}) {
         const list = FocusTrap._resolve(containers);
@@ -227,6 +262,11 @@ export class FocusTrap extends Component {
         this._onClick = this._onClick.bind(this);
     }
 
+    /**
+     * @param {FocusTarget|Element|Array<FocusTarget|Element>} containers
+     * @returns {HTMLElement[]}
+     * @protected
+     */
     static _resolve(containers) {
         if (Array.isArray(containers)) {
             return containers.map(c => resolveElement(c)).filter(Boolean);
@@ -236,7 +276,10 @@ export class FocusTrap extends Component {
         return one ? [one] : [];
     }
 
-    /** The trap that currently listens: the newest active one. */
+    /**
+     * The trap that currently listens: the newest active one.
+     * @returns {FocusTrap|null}
+     */
     static top() {
         return stack[stack.length - 1] || null;
     }
@@ -245,7 +288,7 @@ export class FocusTrap extends Component {
 
     /**
      * Start trapping. Pauses the trap that was on top, if any, and moves focus in.
-     * @param {{initialFocus?: *}} [opts] - overrides the option for this activation
+     * @param {{initialFocus?: FocusTrapOptions['initialFocus']}} [opts] - overrides the option for this activation
      * @returns {this}
      */
     activate(opts = {}) {
@@ -269,7 +312,7 @@ export class FocusTrap extends Component {
 
     /**
      * Stop trapping. Unpauses the trap beneath, and returns focus unless told not to.
-     * @param {{returnFocus?: boolean|string|Element}} [opts]
+     * @param {{returnFocus?: boolean|FocusTarget}} [opts]
      * @returns {this}
      */
     deactivate(opts = {}) {
@@ -358,7 +401,7 @@ export class FocusTrap extends Component {
 
     /**
      * Trap a different set of containers (takes effect at the next key press).
-     * @param {Array<string|Element>|string|Element} containers
+     * @param {FocusTarget|Element|Array<FocusTarget|Element>} containers
      * @returns {this}
      */
     updateContainers(containers) {
@@ -377,7 +420,7 @@ export class FocusTrap extends Component {
         return this;
     }
 
-    /** @returns {Element[]} the trapped containers */
+    /** @returns {HTMLElement[]} the trapped containers */
     containers() {
         return this._containers.slice();
     }
@@ -392,11 +435,15 @@ export class FocusTrap extends Component {
         return this._active && this._paused;
     }
 
-    /** The tabbable elements in the containers right now, in Tab order. */
+    /**
+     * The tabbable elements in the containers right now, in Tab order.
+     * @returns {HTMLElement[]}
+     */
     tabbables() {
         return tabbables(this._containers, {shadow: this.options.shadow});
     }
 
+    /** @returns {void} */
     destroy() {
         if (this._destroyed) return;
         this.deactivate({returnFocus: false});
@@ -711,8 +758,8 @@ export class FocusTrap extends Component {
 
 /**
  * A trap round some containers - the small util other components use.
- * @param {string|Element|Element[]} containers
- * @param {Object} [options]
+ * @param {FocusTarget|Element|Array<FocusTarget|Element>} containers
+ * @param {FocusTrapOptions} [options]
  * @returns {FocusTrap}
  */
 export function createFocusTrap(containers, options = {}) {

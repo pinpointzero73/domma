@@ -29,6 +29,40 @@
 
 import Component from './component.js';
 
+/**
+ * One addon slot: an icon (a plain icon name), text (set as text, never
+ * parsed as HTML), or a string, which is shorthand for `{text}`.
+ * `null`, `false` or `''` means no addon.
+ * @typedef {{icon: string}|{text: string|number}|string|number|null|false} InputGroupSlot
+ */
+
+/**
+ * @typedef {object} InputGroupOptions
+ * @property {InputGroupSlot} [prefix] - Addon joined to the start of the input
+ * @property {InputGroupSlot} [suffix] - Addon joined to the end of the input
+ * @property {boolean} [reveal] - Password inputs: show / hide toggle button (aria-pressed, eye / eye-off)
+ * @property {boolean} [clear] - Text-like inputs and textareas: clear button shown while there is a
+ *   value; clearing fires input + change and refocuses the input
+ * @property {boolean} [stepper] - Number inputs: - and + buttons honouring min / max / step, disabled at
+ *   the limits, input + change per step, hold to repeat
+ * @property {boolean|number} [counter] - Text-like inputs and textareas: live "12 / 200" counter after the group
+ *   (aria-live polite, added to aria-describedby). `true` reads maxLength;
+ *   a number is the limit. `.is-warning` from 90%, `.is-over` past it
+ * @property {{reveal?: string, clear?: string, decrease?: string, increase?: string}} [labels] - Accessible names for the buttons
+ */
+
+/**
+ * The extras' elements, present only for the extras in use.
+ * @typedef {object} InputGroupExtras
+ * @property {HTMLButtonElement} [reveal]
+ * @property {HTMLButtonElement} [clear]
+ * @property {HTMLButtonElement} [decrease]
+ * @property {HTMLButtonElement} [increase]
+ * @property {HTMLElement} [counter]
+ */
+
+/** @typedef {InputGroup} InputGroupInstance */
+
 const WRAPPER = 'input-group-icon';
 const ICON_NAME = /^[a-z0-9-]+$/i;
 const CLEARABLE = /^(text|search|email|url|tel|password|number|date|datetime-local|time|month|week)$/;
@@ -119,12 +153,18 @@ class InputGroup extends Component {
         }
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The input (or textarea / select), or a selector for it
+     * @param {InputGroupOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this.options.labels = {...InputGroup.defaults.labels, ...(options.labels || {})};
+        /** The bound input (or textarea / select). @type {HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement|null} */
         this.input = this.element;
         this._extraHandlers = [];
         this._timers = {};
+        /** The extras' elements (reveal, clear, decrease, increase, counter). @type {InputGroupExtras} */
         this.extras = {};
         if (!this.input) return;
 
@@ -132,6 +172,7 @@ class InputGroup extends Component {
         const parent = this.input.parentElement;
         this._ownsWrapper = !(parent && parent.classList.contains(WRAPPER));
         if (this._ownsWrapper) {
+            /** The `.input-group-icon` wrapper; null after destroy(). @type {HTMLElement|null} */
             this.wrapper = document.createElement('div');
             this.wrapper.className = WRAPPER;
             this.input.before(this.wrapper);
@@ -148,7 +189,9 @@ class InputGroup extends Component {
 
     /**
      * Change the addons or the extras; `null` removes an addon, `false` an
-     * extra. Returns the instance.
+     * extra; a key left out is kept. Returns the instance.
+     * @param {InputGroupOptions} [opts]
+     * @returns {this}
      */
     update(opts = {}) {
         const {prefix, suffix} = opts;
@@ -174,6 +217,7 @@ class InputGroup extends Component {
     /**
      * Re-read the input: clear-button visibility, stepper limits, counter.
      * Call it after setting `input.value` from code without an input event.
+     * @returns {this}
      */
     refresh() {
         const x = this.extras;
@@ -356,7 +400,11 @@ class InputGroup extends Component {
         this.input.dispatchEvent(new Event('change', {bubbles: true}));
     }
 
-    /** One step in `dir` (-1 / 1), honouring min, max and step. */
+    /**
+     * One step in `dir` (-1 / 1), honouring min, max and step (fires input + change).
+     * @param {1|-1|number} dir - 1 up, -1 down
+     * @returns {this}
+     */
     step(dir) {
         const input = this.input;
         if (!input || input.disabled || input.readOnly) return this;
@@ -432,7 +480,10 @@ class InputGroup extends Component {
         this._syncEdges();
     }
 
-    /** Remove the addons and extras, and the wrapper too if this instance made it. */
+    /**
+     * Remove the addons and extras, and the wrapper too if this instance made it.
+     * @returns {void}
+     */
     destroy() {
         this._teardownExtras();
         if (this.wrapper) {

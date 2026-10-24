@@ -36,6 +36,54 @@
 import Component, {instanceOf} from '../component.js';
 import {fill, flag, num, reducedMotion, uniqueId} from './shared.js';
 
+/**
+ * First and last index, both inclusive (end is -1 for an empty list).
+ * @typedef {object} VirtualListRange
+ * @property {number} start - First index, inclusive
+ * @property {number} end - Last index, inclusive (-1 for an empty list)
+ */
+
+/**
+ * A loading / end / error row: HTML string, a node, or a function returning either.
+ * @typedef {string|Node|((error?: unknown) => string|Node|null)|null} VirtualListTemplate
+ */
+
+/**
+ * @template [T=any]
+ * @typedef {object} VirtualListOptions
+ * @property {T[]|null} [items]
+ * @property {number} [count] - With getItem, instead of items
+ * @property {((index: number) => T)|null} [getItem]
+ * @property {number|'auto'} [itemHeight] - px, or 'auto' to measure each row (default 40)
+ * @property {number} [estimatedItemHeight] - Height assumed for unmeasured rows in 'auto' mode (default 40)
+ * @property {number} [overscan] - Rows rendered beyond each edge (default 4)
+ * @property {((item: T, index: number) => string|Node)|null} [render] - A string is HTML (sanitised unless safe: false); an Element goes in as it is
+ * @property {boolean} [safe] - false: render() strings are inserted unsanitised (default true)
+ * @property {string|((item: T, index: number) => unknown)|null} [keyField] - Property name or function giving each item a stable key (default: the index)
+ * @property {string|null} [label] - aria-label for the list
+ * @property {string} [rowClass] - Extra class on every row
+ * @property {((info: {count: number, page: number}) => Promise<T[]|{items: T[], done?: boolean}>)|null} [loadMore] - Called near the end; resolves to the next items, or {items, done}
+ * @property {number} [threshold] - px from the end at which loadMore is called (default 200)
+ * @property {VirtualListTemplate} [loadingTemplate]
+ * @property {VirtualListTemplate} [endTemplate]
+ * @property {VirtualListTemplate} [errorTemplate] - A [data-vlist-retry] element inside it retries
+ * @property {((range: VirtualListRange) => void)|null} [onRender]
+ * @property {((visible: VirtualListRange) => void)|null} [onScroll]
+ * @property {((info: {count: number, page: number}) => void)|null} [onLoadMore]
+ * @property {((items: T[]) => void)|null} [onLoaded]
+ * @property {(() => void)|null} [onEnd]
+ * @property {((error: unknown) => void)|null} [onError]
+ * @property {((item: T, index: number, event: MouseEvent|KeyboardEvent) => void)|null} [onItemClick]
+ */
+
+/**
+ * @template [T=any]
+ * @typedef {VirtualList<T>} VirtualListInstance
+ */
+
+/**
+ * @template [T=any]
+ */
 export class VirtualList extends Component {
     static componentName = 'virtual-list';
 
@@ -65,6 +113,10 @@ export class VirtualList extends Component {
         onItemClick: null
     };
 
+    /**
+     * @param {string|HTMLElement} element - The scrolling container
+     * @param {VirtualListOptions<T>} [options]
+     */
     constructor(element, options = {}) {
         super(element, options);
         if (!this.element) return;
@@ -195,7 +247,7 @@ export class VirtualList extends Component {
 
     /**
      * The rows at least partly on screen, first and last index inclusive.
-     * @returns {{start: number, end: number}} end is -1 for an empty list
+     * @returns {VirtualListRange} end is -1 for an empty list
      */
     getVisibleRange() {
         const n = this.count;
@@ -605,7 +657,10 @@ export class VirtualList extends Component {
         return this;
     }
 
-    /** Whether loadMore has said there is nothing more. */
+    /**
+     * Whether loadMore has said there is nothing more.
+     * @returns {boolean}
+     */
     isDone() {
         return !!this._load?.done;
     }
@@ -658,7 +713,7 @@ export class VirtualList extends Component {
 
     /**
      * Replace every item. Resets infinite loading (a new list can load more again).
-     * @param {Array} items
+     * @param {T[]} items
      * @returns {this}
      */
     setItems(items) {
@@ -712,7 +767,7 @@ export class VirtualList extends Component {
 
     /**
      * Add items at the end.
-     * @param {Array} items
+     * @param {T[]} items
      * @returns {this}
      */
     append(items) {
@@ -723,7 +778,7 @@ export class VirtualList extends Component {
 
     /**
      * Add items at the start without moving what is on screen.
-     * @param {Array} items
+     * @param {T[]} items
      * @returns {this}
      */
     prepend(items) {
@@ -754,7 +809,7 @@ export class VirtualList extends Component {
 
     /**
      * The index of the item with a key, or -1.
-     * @param {*} key
+     * @param {unknown} key
      * @returns {number}
      */
     indexOfKey(key) {
@@ -768,8 +823,8 @@ export class VirtualList extends Component {
     /**
      * Replace one item. A number is an index; anything else is a key (for numeric keys,
      * pass `list.indexOfKey(key)`).
-     * @param {number|*} indexOrKey
-     * @param {*} item
+     * @param {number|unknown} indexOrKey
+     * @param {T} item
      * @returns {this}
      */
     update(indexOrKey, item) {
@@ -844,7 +899,10 @@ export class VirtualList extends Component {
         return this;
     }
 
-    /** The rendered range, overscan included. @returns {{start: number, end: number}} */
+    /**
+     * The rendered range, overscan included.
+     * @returns {VirtualListRange}
+     */
     getRenderedRange() {
         return {...this._range};
     }
@@ -858,6 +916,11 @@ export class VirtualList extends Component {
         this._render(true);
     }
 
+    /**
+     * Update options at runtime; items / count / getItem replace the data.
+     * @param {VirtualListOptions<T>} [newOptions]
+     * @returns {this}
+     */
     setOptions(newOptions = {}) {
         const data = 'items' in newOptions || 'count' in newOptions || 'getItem' in newOptions;
         this.options = {...this.options, ...newOptions};
@@ -869,7 +932,10 @@ export class VirtualList extends Component {
         return this;
     }
 
-    /** Remove everything the list added and give the container its children back. */
+    /**
+     * Remove everything the list added and give the container its children back.
+     * @returns {void}
+     */
     destroy() {
         if (this._load) this._load.gen += 1;
         if (this._frame) {
@@ -897,7 +963,7 @@ export class VirtualList extends Component {
 /**
  * E.virtualList: one instance per container; calling it again updates the existing one.
  * @param {Element} el
- * @param {Object} options
+ * @param {VirtualListOptions} [options]
  * @returns {VirtualList}
  */
 export function virtualListFor(el, options = {}) {

@@ -21,6 +21,41 @@
  */
 import {register, unregister, instanceOf} from './component.js';
 
+/**
+ * @typedef {'text'|'card'|'list'|'table'|'custom'} SkeletonType
+ */
+
+/**
+ * @typedef {object} SkeletonOptions
+ * @property {SkeletonType} [type] - Shape to draw (default 'text')
+ * @property {number|string|null} [lines] - Lines per paragraph, card or list item (default 3; list 2)
+ * @property {number|string|null} [count] - Paragraphs, cards or list items (default 1; list 3)
+ * @property {number|string} [rows] - Table rows (default 5)
+ * @property {number|string} [columns] - Table columns (default 4)
+ * @property {boolean} [header] - Table header row (default true)
+ * @property {boolean} [avatar] - A circle at the start of each list item (default true)
+ * @property {boolean} [image] - An image block at the top of each card (default true)
+ * @property {boolean} [animate] - false = still tint, no sweep (default true)
+ * @property {string|((options: SkeletonOptions) => string)|null} [template] - Markup for type 'custom', or a function returning it
+ * @property {string} [label] - Screen-reader status text (default 'Loading...')
+ */
+
+/**
+ * The handle E.skeleton() returns.
+ * @typedef {object} SkeletonHandle
+ * @property {HTMLElement} element - The container
+ * @property {SkeletonOptions} options - The resolved options
+ * @property {boolean} active - Whether the skeleton is still showing (read only)
+ * @property {() => HTMLElement} remove - Take the skeleton away and restore the previous children (the same nodes)
+ * @property {(content: string|Node|ArrayLike<Node>|null) => HTMLElement} replace - Take the skeleton away and show content instead: an HTML string (unsanitised) or a node
+ * @property {() => HTMLElement} destroy - Alias of remove()
+ */
+
+/**
+ * `E.skeleton` - the factory with its helpers (`while`, `get`, `remove`, `scan`, `markup`).
+ * @typedef {typeof skeleton} SkeletonStatic
+ */
+
 const ANNOUNCE_DELAY = 100;
 
 const TYPES = new Set(['text', 'card', 'list', 'table', 'custom']);
@@ -70,6 +105,8 @@ function textLines(n, extraClass = '') {
 /**
  * Placeholder markup for one type. Exported for tests and for hosts (such as
  * the DataTable) that want the shapes without the container handling.
+ * @param {SkeletonOptions} [options]
+ * @returns {string}
  */
 export function skeletonMarkup(options = {}) {
     const o = {...DEFAULTS, ...options};
@@ -133,9 +170,12 @@ function optionsFromData(el) {
 /**
  * Fill a container with placeholders.
  *
- * @param {string|Element|Object} target - selector, element or Domma collection
- * @param {Object} [options]
- * @returns {{element: Element, active: boolean, remove: Function, replace: Function, destroy: Function}|null}
+ * Fills the container, marks it aria-busy with a polite "Loading..." status and
+ * returns a handle; null if nothing matched.
+ *
+ * @param {string|Element|ArrayLike<Element>|null} target - selector, element or Domma collection
+ * @param {SkeletonOptions} [options]
+ * @returns {SkeletonHandle|null}
  */
 export function skeleton(target, options = {}) {
     const el = resolveTarget(target);
@@ -236,6 +276,11 @@ export function skeleton(target, options = {}) {
  * once the skeleton is gone, so the caller renders into a clean container;
  * rejects with the promise's error, also with the skeleton gone.
  * `promise` may be a function returning one.
+ * @template T
+ * @param {string|Element|ArrayLike<Element>|null} target
+ * @param {Promise<T>|(() => Promise<T>|T)} promise
+ * @param {SkeletonOptions} [options]
+ * @returns {Promise<T>}
  */
 skeleton.while = async function (target, promise, options = {}) {
     const handle = skeleton(target, options);
@@ -249,13 +294,21 @@ skeleton.while = async function (target, promise, options = {}) {
     }
 };
 
-/** The live handle on a container, if any - the same answer as E.get(target, 'skeleton'). */
+/**
+ * The live handle on a container, if any - the same answer as E.get(target, 'skeleton').
+ * @param {string|Element|ArrayLike<Element>|null} target
+ * @returns {SkeletonHandle|null}
+ */
 skeleton.get = function (target) {
     const el = resolveTarget(target);
     return (el && instanceOf(el, 'skeleton')) || null;
 };
 
-/** Remove the skeleton from a container, restoring its content. */
+/**
+ * Remove the skeleton from a container, restoring its content.
+ * @param {string|Element|ArrayLike<Element>|null} target
+ * @returns {HTMLElement|null}
+ */
 skeleton.remove = function (target) {
     const handle = skeleton.get(target);
     return handle ? handle.remove() : null;
@@ -265,6 +318,8 @@ skeleton.remove = function (target) {
  * Fill every `[data-skeleton]` container under `root` that has no skeleton
  * yet and has not had one removed (`data-skeleton-done`). Options come from
  * `data-skeleton-*` attributes. Returns the handles.
+ * @param {string|Element|Document} [root]
+ * @returns {SkeletonHandle[]}
  */
 skeleton.scan = function (root = document) {
     const scope = resolveTarget(root) || document;

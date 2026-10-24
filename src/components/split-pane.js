@@ -31,6 +31,39 @@ function perPane(value, i, fallback) {
 
 const round = (n) => Math.round(n * 1000) / 1000;
 
+/**
+ * A pane size limit: px as a number, or a percentage string such as '20%'.
+ * @typedef {number|string} SplitPaneSize
+ */
+
+/**
+ * @typedef {object} SplitPaneOptions
+ * @property {'horizontal'|'vertical'} [direction] - 'horizontal' = side by side (default), 'vertical' = stacked
+ * @property {number[]|null} [sizes] - Percentages, one per pane (scaled to add up to 100); equal by default
+ * @property {SplitPaneSize|SplitPaneSize[]} [minSize] - Minimum size, one value or one per pane (default 0)
+ * @property {SplitPaneSize|null|Array<SplitPaneSize|null>} [maxSize] - Maximum size, one value or one per pane (default none)
+ * @property {number} [gutterSize] - Gutter thickness in px (default 8)
+ * @property {number} [snapOffset] - Snap to a limit when dragged within this many px of it (default 0)
+ * @property {boolean|boolean[]} [collapsible] - Which panes the gutter gestures may collapse
+ * @property {SplitPaneSize|SplitPaneSize[]} [collapsedSize] - What a collapsed pane shrinks to (default 0)
+ * @property {boolean} [collapseButton] - A small toggle button in gutters next to a collapsible pane
+ * @property {string|null} [persistKey] - Remember sizes and collapse state with S under 'split-pane:<key>'
+ * @property {string|null} [cursor] - Gutter cursor (default col-resize / row-resize)
+ * @property {boolean} [disabled]
+ * @property {number} [step] - Percent per arrow key (default 1)
+ * @property {number} [largeStep] - Percent per Shift+arrow (default 10)
+ * @property {string} [gutterLabel] - The gutters' aria-label
+ * @property {((gutterIndex: number, event: PointerEvent) => boolean|void)|null} [onBeforeDrag] - Return false to refuse a drag
+ * @property {((sizes: number[], gutterIndex: number) => void)|null} [onDragStart]
+ * @property {((sizes: number[], gutterIndex: number) => void)|null} [onDrag]
+ * @property {((sizes: number[], gutterIndex: number) => void)|null} [onDragEnd]
+ * @property {((sizes: number[]) => void)|null} [onResize] - Any size change: drag, keys, setSizes, collapse
+ * @property {((paneIndex: number) => void)|null} [onCollapse]
+ * @property {((paneIndex: number) => void)|null} [onExpand]
+ */
+
+/** @typedef {SplitPane} SplitPaneInstance */
+
 export class SplitPane extends Component {
     static componentName = 'split-pane';
 
@@ -59,6 +92,10 @@ export class SplitPane extends Component {
         onExpand: null
     };
 
+    /**
+     * @param {string|HTMLElement} element - The container; its element children are the panes
+     * @param {SplitPaneOptions} [options]
+     */
     constructor(element, options = {}) {
         super(element, options);
         if (!this.element) return;
@@ -69,6 +106,7 @@ export class SplitPane extends Component {
         this._addedIds = [];
         this._frame = 0;
         this._containerStyle = this.element.getAttribute('style');
+        /** The pane elements. @type {HTMLElement[]} */
         this.panes = Array.from(this.element.children);
         this._paneStyles = this.panes.map(p => p.getAttribute('style'));
         this._build();
@@ -536,7 +574,10 @@ export class SplitPane extends Component {
         } catch { /* storage full or blocked - sizes simply are not remembered */ }
     }
 
-    /** Remove the gutters and give the panes and container back their own styles. */
+    /**
+     * Remove the gutters and give the panes and container back their own styles.
+     * @returns {void}
+     */
     destroy() {
         if (this._drag) this._onPointerUp({});
         if (this._frame) cancelAnimationFrame(this._frame);
@@ -565,7 +606,7 @@ export class SplitPane extends Component {
 /**
  * E.splitPane: one instance per container; calling it again updates the existing one.
  * @param {Element} el
- * @param {Object} options
+ * @param {SplitPaneOptions} [options]
  * @returns {SplitPane}
  */
 export function splitPaneFor(el, options = {}) {

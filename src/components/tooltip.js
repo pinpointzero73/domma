@@ -39,6 +39,34 @@ function unwatch(tooltip) {
     }
 }
 
+/**
+ * Show / hide delays in ms.
+ * @typedef {object} TooltipDelay
+ * @property {number} [show]
+ * @property {number} [hide]
+ */
+
+/**
+ * @typedef {object} TooltipOptions
+ * @property {string|Node|((target: HTMLElement) => string|Node)} [content] - Tooltip content (falls back to data-tooltip, then title)
+ * @property {import('../elements.js').TooltipPosition} [position='top'] - Position relative to element (flips when there is no room)
+ * @property {import('../elements.js').TooltipPosition} [placement] - Alias of `position`
+ * @property {'hover'|'click'|'focus'|'manual'|(string & {})} [trigger='hover'] - How to trigger; several separated by spaces ('hover focus')
+ * @property {number|TooltipDelay} [delay=0] - Show delay in ms, or {show, hide}
+ * @property {number} [hideDelay=0] - Hide delay in ms
+ * @property {boolean} [animation=true] - Fade in and out
+ * @property {number} [offset=8] - Gap in px between target and bubble
+ * @property {boolean} [html=false] - String content is HTML (sanitised unless `safe: false`), not text
+ * @property {boolean} [safe=true] - Sanitise HTML content
+ * @property {boolean} [visible=false] - Show at once
+ * @property {string} [className] - Extra classes on the bubble
+ * @property {number|string|null} [maxWidth] - Any CSS width; numbers are px
+ * @property {((tooltip: TooltipInstance) => void)|null} [onShow] - When the tooltip shows
+ * @property {((tooltip: TooltipInstance) => void)|null} [onHide] - When the tooltip hides
+ */
+
+/** @typedef {Tooltip} TooltipInstance */
+
 export class Tooltip extends Component {
     static componentName = 'tooltip';
 
@@ -59,6 +87,10 @@ export class Tooltip extends Component {
         onHide: null
     };
 
+    /**
+     * @param {string|Element} element
+     * @param {TooltipOptions} [options]
+     */
     constructor(element, options = {}) {
         super(element, Tooltip.normalise(options));
         if (!this.element) return;
@@ -70,7 +102,11 @@ export class Tooltip extends Component {
         if (flag(this.options.visible)) this.show();
     }
 
-    /** Option aliases the old wrapper accepted. */
+    /**
+     * Option aliases the old wrapper accepted.
+     * @param {TooltipOptions} [options]
+     * @returns {TooltipOptions}
+     */
     static normalise(options = {}) {
         const o = {...options};
         if (o.placement && !o.position) o.position = o.placement;
@@ -199,6 +235,10 @@ export class Tooltip extends Component {
 
     // ---- public API -----------------------------------------------------
 
+    /**
+     * Show the tooltip (after `delay`).
+     * @returns {this}
+     */
     open() {
         this._clear('hide');
         if (this._visible || this._timers.show) return this;
@@ -221,6 +261,11 @@ export class Tooltip extends Component {
         return this;
     }
 
+    /**
+     * Hide the tooltip (after `hideDelay`, unless `immediate`).
+     * @param {{immediate?: boolean}} [opts]
+     * @returns {this}
+     */
     close(opts = {}) {
         this._clear('show');
         if (!this._visible || this._timers.hide) return this;
@@ -243,28 +288,46 @@ export class Tooltip extends Component {
         return this;
     }
 
-    /** Permanent alias of open(), by name. */
+    /**
+     * Permanent alias of open(), by name.
+     * @returns {this}
+     */
     show(...args) {
         return this.open(...args);
     }
 
-    /** Permanent alias of close(), by name. */
+    /**
+     * Permanent alias of close(), by name.
+     * @param {...{immediate?: boolean}} args
+     * @returns {this}
+     */
     hide(...args) {
         return this.close(...args);
     }
 
+    /**
+     * Toggle tooltip visibility.
+     * @returns {this}
+     */
     toggle() {
         return this._visible ? this.close() : this.open();
     }
 
+    /** @returns {boolean} */
     isVisible() {
         return this._visible;
     }
 
+    /** @returns {boolean} */
     isOpen() {
         return this._visible;
     }
 
+    /**
+     * Update tooltip content.
+     * @param {TooltipOptions['content']} content
+     * @returns {this}
+     */
     setContent(content) {
         this.options.content = content;
         this._write();
@@ -272,12 +335,20 @@ export class Tooltip extends Component {
         return this;
     }
 
+    /**
+     * @param {import('../elements.js').TooltipPosition} position
+     * @returns {this}
+     */
     setPosition(position) {
         this.options.position = position;
         if (this._visible) this._place();
         return this;
     }
 
+    /**
+     * @param {TooltipOptions} [newOptions]
+     * @returns {this}
+     */
     setOptions(newOptions = {}) {
         return super.setOptions(Tooltip.normalise(newOptions));
     }
@@ -307,7 +378,7 @@ export class Tooltip extends Component {
 /**
  * E.tooltip: an instance per matched element (an existing one is updated, not doubled).
  * @param {Element[]} elements
- * @param {Object} options
+ * @param {TooltipOptions} [options]
  * @returns {Tooltip[]}
  */
 export function tooltipsFor(elements, options = {}) {

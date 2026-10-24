@@ -174,6 +174,53 @@ function canHostShadow(el) {
     return ok.includes(el.tagName) || el.tagName.includes('-');
 }
 
+/**
+ * A footer button.
+ * @typedef {object} ModalButton
+ * @property {string} [id] - Passed to onButtonClick (default `btn-<index>`)
+ * @property {string} [text='Button'] - Label
+ * @property {string} [variant='secondary'] - Adds `btn-<variant>`
+ * @property {string} [className] - Extra classes
+ * @property {boolean} [close=true] - false keeps the modal open after the click
+ * @property {(modal: ModalInstance, event: MouseEvent) => void} [onClick]
+ */
+
+/**
+ * @typedef {object} ModalOptions
+ * @property {boolean} [backdrop=true] - Show backdrop overlay
+ * @property {boolean} [backdropClose=true] - Close modal when clicking backdrop
+ * @property {boolean} [keyboard=true] - Close modal on Escape key
+ * @property {boolean} [closeOnEscape=true] - Same as `keyboard`; either false keeps Escape from closing
+ * @property {import('../elements.js').AnimationType|false} [animation='fade'] - Animation type
+ * @property {number} [animationDuration=300] - Animation duration in ms
+ * @property {boolean} [closeButton=true] - Show close button
+ * @property {'small'|'sm'|'medium'|'md'|'large'|'lg'|'xl'|'xlarge'|'full'|(string & {})} [size='medium'] - A named size or any CSS width (the factory's default is 'large')
+ * @property {boolean} [centered=true] - Centre vertically (false: near the top)
+ * @property {boolean} [scrollable=false] - Scroll the body inside a capped height
+ * @property {string} [title] - Title text
+ * @property {string|Node} [content] - Body content (factory mode): HTML (sanitised unless `safe: false`) or a Node
+ * @property {string} [footer] - Footer text
+ * @property {ModalButton[]} [buttons] - Footer buttons (the factory's default is one Close button)
+ * @property {boolean} [safe=true] - false: content is trusted HTML (not sanitised)
+ * @property {string} [className] - Extra classes on the dialog
+ * @property {string} [headerClass] - Extra classes on the header
+ * @property {string} [bodyClass] - Extra classes on the body
+ * @property {string} [footerClass] - Extra classes on the footer
+ * @property {boolean} [focus=true] - Focus the dialog on open
+ * @property {boolean} [trapFocus=true] - Keep Tab inside while open (default true; false without a backdrop unless given)
+ * @property {boolean} [returnFocus=true] - Put focus back where it was on close
+ * @property {boolean} [visible=false] - Open at once
+ * @property {((modal: ModalInstance) => void)|null} [onOpen] - When opening starts
+ * @property {((modal: ModalInstance) => void)|null} [onOpened] - After open animation completes
+ * @property {((modal: ModalInstance) => void)|null} [onClose] - When closing starts
+ * @property {((modal: ModalInstance) => void)|null} [onClosed] - After close animation completes
+ * @property {((modal: ModalInstance) => boolean|void)|null} [onBeforeOpen] - Return false to refuse the open
+ * @property {((modal: ModalInstance) => boolean|void)|null} [onBeforeClose] - Return false to refuse the close
+ * @property {((buttonId: string, modal: ModalInstance) => void)|null} [onButtonClick] - A footer button was clicked
+ */
+
+/** @typedef {Modal} ModalInstance */
+
 export class Modal extends Component {
     static componentName = 'modal';
 
@@ -211,8 +258,8 @@ export class Modal extends Component {
     };
 
     /**
-     * @param {string|Element|null} selector - the element to make a modal; null makes one
-     * @param {Object} [options]
+     * @param {import('./shared.js').ComponentTarget} selector - the element to make a modal; null makes one
+     * @param {ModalOptions} [options]
      */
     constructor(selector, options = {}) {
         const given = resolveElement(selector);
@@ -494,6 +541,10 @@ export class Modal extends Component {
 
     // ---- public API -----------------------------------------------------
 
+    /**
+     * Open the modal.
+     * @returns {this}
+     */
     open() {
         if (this._isOpen) return this;
         if (this._fire('beforeOpen', this) === false) return this;
@@ -534,6 +585,10 @@ export class Modal extends Component {
         return this;
     }
 
+    /**
+     * Close the modal (a `beforeclose` handler can refuse).
+     * @returns {this}
+     */
     close() {
         if (!this._isOpen) return this;
         if (!this._mayClose(this)) return this;
@@ -570,24 +625,43 @@ export class Modal extends Component {
         return this;
     }
 
+    /**
+     * Toggle modal visibility.
+     * @returns {this}
+     */
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
 
+    /**
+     * Whether the modal is open.
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isOpen;
     }
 
-    /** Permanent alias: delegates to open() by name, so a replaced open() is honoured. */
+    /**
+     * Permanent alias: delegates to open() by name, so a replaced open() is honoured.
+     * @returns {this}
+     */
     show(...args) {
         return this.open(...args);
     }
 
-    /** Permanent alias: delegates to close() by name. */
+    /**
+     * Permanent alias: delegates to close() by name.
+     * @returns {this}
+     */
     hide(...args) {
         return this.close(...args);
     }
 
+    /**
+     * Replace the title; empty hides it.
+     * @param {string|null} title
+     * @returns {this}
+     */
     setTitle(title) {
         this.options.title = title;
         this._titleEl.textContent = title == null ? '' : String(title);
@@ -599,6 +673,9 @@ export class Modal extends Component {
     /**
      * Replace the body content (the element's children other than a footer slot).
      * A string is HTML, sanitised unless `{safe: false}`; a Node is appended.
+     * @param {string|Node|null} content
+     * @param {{safe?: boolean}} [opts]
+     * @returns {this}
      */
     setContent(content, opts = {}) {
         const keep = Array.from(this.element.querySelectorAll(':scope > [slot]'));
@@ -608,6 +685,11 @@ export class Modal extends Component {
         return this;
     }
 
+    /**
+     * Replace the footer buttons.
+     * @param {ModalButton[]|null} buttons
+     * @returns {this}
+     */
     setButtons(buttons) {
         this.options.buttons = buttons || [];
         this._renderButtons();
@@ -626,6 +708,7 @@ export class Modal extends Component {
      * Tear down. A modal the factory made is removed from the page (after its close
      * animation if it is open); a caller's element is left in place with its own
      * children showing and Domma's classes and attributes taken off.
+     * @returns {void}
      */
     destroy() {
         if (this._destroyed) return;
@@ -659,7 +742,10 @@ export class Modal extends Component {
         for (const name of this._addedAttrs) el.removeAttribute(name);
     }
 
-    /** Permanent alias of destroy(). */
+    /**
+     * Permanent alias of destroy().
+     * @returns {void}
+     */
     remove(...args) {
         return this.destroy(...args);
     }
@@ -687,7 +773,7 @@ function ensureContainer() {
 
 /**
  * A new modal in the shared dialog container.
- * @param {Object} [options]
+ * @param {ModalOptions} [options]
  * @returns {Modal}
  */
 export function createModal(options = {}) {
@@ -701,7 +787,7 @@ export function createModal(options = {}) {
 /**
  * Open a new modal and resolve with the id of the button that closed it
  * (null when it was closed another way - X, backdrop or Escape).
- * @param {Object} [options]
+ * @param {ModalOptions} [options]
  * @returns {Promise<string|null>}
  */
 export function showModal(options = {}) {

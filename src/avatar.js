@@ -28,11 +28,98 @@
 import Popover from './popover.js';
 import {register, unregister, instanceOf} from './component.js';
 
+/** @type {AvatarSize[]} */
 export const AVATAR_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'];
+/** @type {AvatarShape[]} */
 export const AVATAR_SHAPES = ['circle', 'rounded', 'square'];
+/** @type {AvatarStatus[]} */
 export const AVATAR_STATUSES = ['online', 'away', 'busy', 'offline'];
 /** How many `.avatar-tone-*` classes elements.css defines. */
 export const AVATAR_TONES = 8;
+
+/** @typedef {'xs'|'sm'|'md'|'lg'|'xl'} AvatarSize */
+/** @typedef {'circle'|'rounded'|'square'} AvatarShape */
+/** @typedef {'online'|'away'|'busy'|'offline'} AvatarStatus */
+
+/**
+ * @typedef {object} AvatarOptions
+ * @property {string|null} [name] - The person: initials, tone and accessible name come from it
+ * @property {string|null} [src] - Picture URL; falls back to the initials (or icon) if it fails to load
+ * @property {string|null} [alt] - Accessible name when it should differ from name
+ * @property {AvatarSize} [size] - Size (default 'md')
+ * @property {AvatarShape} [shape] - Shape (default 'circle')
+ * @property {AvatarStatus|null} [status] - Status dot; the word goes into the accessible name
+ * @property {Partial<Record<AvatarStatus, string>>|null} [statusLabels] - Words for the statuses in the accessible name, e.g. {busy: 'in a meeting'}
+ * @property {string|null} [icon] - Icon name shown instead of initials ('user' when there is no name)
+ * @property {string|true|null} [title] - Hover text; true = the accessible name
+ * @property {boolean} [ring] - A primary-coloured ring (default false)
+ * @property {number|null} [tone] - 0-7 to choose the tint; default is a hash of the name
+ * @property {boolean} [decorative] - aria-hidden: the name is written next to it (default false)
+ */
+
+/**
+ * The handle E.avatar() returns. `options`, `initials`, `tone` and `label` are read only.
+ * @typedef {object} AvatarHandle
+ * @property {HTMLElement} element - The avatar element
+ * @property {AvatarOptions} options - The options in force
+ * @property {string} initials - The initials drawn ('' when an icon is shown)
+ * @property {number|null} tone - The tone 0-7, or null with nothing to hash
+ * @property {string} label - The accessible name, e.g. 'Jane Smith (online)'
+ * @property {(options?: AvatarOptions) => AvatarHandle} update - Merge options and redraw
+ * @property {() => HTMLElement} destroy - Restore the element's previous children, classes and attributes
+ */
+
+/**
+ * `E.avatar` - the factory with `initials`, `tone`, `get` and `scan`.
+ * @typedef {typeof avatar} AvatarStatic
+ */
+
+/**
+ * One person in an avatar group.
+ * @typedef {object} AvatarPerson
+ * @property {string} [name]
+ * @property {string} [src]
+ * @property {AvatarStatus} [status]
+ * @property {string} [href] - Makes the avatar a link
+ * @property {string} [alt]
+ * @property {string} [icon]
+ * @property {number} [tone]
+ * @property {string|true} [title] - Hover text (default: the accessible name)
+ */
+
+/**
+ * @typedef {object} AvatarGroupOptions
+ * @property {Array<AvatarPerson|string>} [people] - People, or plain names
+ * @property {number|null} [max] - Show this many, then "+N"; null = everyone
+ * @property {AvatarSize} [size] - Size (default 'md')
+ * @property {AvatarShape} [shape] - Shape (default 'circle')
+ * @property {'none'|'sm'|'md'|'lg'|number|string|null} [overlap] - 'none' | 'sm' | 'md' | 'lg', pixels, or any CSS length; null = the stylesheet's 25%
+ * @property {string|null} [label] - Accessible name for the list
+ * @property {Partial<Record<AvatarStatus, string>>|null} [statusLabels]
+ * @property {((hidden: AvatarPerson[], event: MouseEvent) => void)|null} [onMore] - Called when "+N" is pressed, instead of the popover
+ * @property {boolean} [popover] - false: no popover, the hidden names go in the button's title (default true)
+ * @property {((count: number, names: string[]) => string)|null} [moreLabel] - The "+N" button's accessible name (default '3 more: A, B and C')
+ */
+
+/**
+ * The handle E.avatarGroup() returns. Everything but the methods is read only.
+ * @typedef {object} AvatarGroupHandle
+ * @property {HTMLUListElement|HTMLOListElement} element - The <ul>
+ * @property {AvatarGroupOptions} options
+ * @property {AvatarPerson[]} people
+ * @property {AvatarPerson[]} shown - Drawn as avatars
+ * @property {AvatarPerson[]} hidden - Folded into "+N"
+ * @property {HTMLButtonElement|null} more - The "+N" button, or null
+ * @property {import('./popover.js').PopoverInstance|null} popover - The "+N" popover, or null
+ * @property {(options?: AvatarGroupOptions) => AvatarGroupHandle} update
+ * @property {(people: Array<AvatarPerson|string>) => AvatarGroupHandle} setPeople
+ * @property {() => HTMLElement} destroy - Remove everything and restore the host
+ */
+
+/**
+ * `E.avatarGroup` - the factory with `get`.
+ * @typedef {typeof avatarGroup} AvatarGroupStatic
+ */
 
 const OVERLAP = {none: 0, sm: 0.15, md: 0.25, lg: 0.4};
 const ICON_NAME = /^[a-z0-9-]+$/i;
@@ -100,6 +187,8 @@ function firstLetter(word) {
  * Words are split on spaces, dots, underscores, hyphens and plus signs;
  * anything that is not a letter or digit at the start of a word (quotes,
  * brackets, emoji) is skipped, and bracketed notes like "(Admin)" are dropped.
+ * @param {string|null|undefined} name
+ * @returns {string}
  */
 export function avatarInitials(name) {
     if (name == null) return '';
@@ -123,6 +212,8 @@ export function avatarInitials(name) {
  * The tone (0-7) for a name: FNV-1a over the trimmed, lower-cased, single-spaced
  * name. Stable across pages, sessions and machines; case and spacing do not
  * change it, so 'jane smith' and 'Jane  Smith' match.
+ * @param {string} key
+ * @returns {number}
  */
 export function avatarTone(key) {
     const s = String(key ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
@@ -280,13 +371,25 @@ const ATTRS = ['role', 'aria-label', 'aria-hidden', 'title'];
 
 /**
  * Render one avatar.
+ * @overload
+ * @param {string|Element|ArrayLike<Element>|null} target
+ * @param {AvatarOptions} [options]
+ * @returns {AvatarHandle|null}
+ */
+/**
+ * Render one avatar into a detached <span> for you to insert.
+ * @overload
+ * @param {AvatarOptions} options
+ * @returns {AvatarHandle}
+ */
+/**
+ * Render one avatar.
  *
- * @param {string|Element|Object|null} target - selector, element or Domma
+ * @param {string|Element|ArrayLike<Element>|AvatarOptions|null} target - selector, element or Domma
  *   collection that becomes the avatar; null (or an options object in its
  *   place) creates a detached <span> for you to insert.
- * @param {Object} [options] - see DEFAULTS
- * @returns {{element: Element, options: Object, initials: string, tone: number|null,
- *   label: string, update: Function, destroy: Function}|null}
+ * @param {AvatarOptions} [options] - see DEFAULTS
+ * @returns {AvatarHandle|null} null if a selector matched nothing
  */
 export function avatar(target, options = {}) {
     // E.avatar({name: 'Jane'}) - no target, just options
@@ -360,7 +463,11 @@ export function avatar(target, options = {}) {
 avatar.initials = avatarInitials;
 avatar.tone = avatarTone;
 
-/** The live handle on an element, if any - the same answer as E.get(target, 'avatar'). */
+/**
+ * The live handle on an element, if any - the same answer as E.get(target, 'avatar').
+ * @param {string|Element|ArrayLike<Element>} target
+ * @returns {AvatarHandle|null}
+ */
 avatar.get = function (target) {
     const el = resolveTarget(target);
     return (el && instanceOf(el, 'avatar')) || null;
@@ -369,6 +476,8 @@ avatar.get = function (target) {
 /**
  * Turn every `[data-avatar]` under `root` (and `root` itself) into an avatar,
  * once. Options come from `data-avatar-*`. Returns the new handles.
+ * @param {string|Element|Document} [root]
+ * @returns {AvatarHandle[]}
  */
 avatar.scan = function (root = document) {
     const scope = resolveTarget(root) || document;
@@ -465,12 +574,10 @@ function hiddenList(hidden, o) {
 /**
  * Render a stack of avatars with a "+N" overflow bubble.
  *
- * @param {string|Element|Object} target - a <ul>/<ol> to fill, or any element
+ * @param {string|Element|ArrayLike<Element>} target - a <ul>/<ol> to fill, or any element
  *   to put a new <ul> into (its content comes back on destroy())
- * @param {Object} [options] - see GROUP_DEFAULTS
- * @returns {{element: HTMLUListElement, people: Object[], shown: Object[], hidden: Object[],
- *   more: HTMLButtonElement|null, popover: Object|null, update: Function,
- *   setPeople: Function, destroy: Function}|null}
+ * @param {AvatarGroupOptions} [options] - see GROUP_DEFAULTS
+ * @returns {AvatarGroupHandle|null} null if nothing matched
  */
 export function avatarGroup(target, options = {}) {
     const host = resolveTarget(target);
@@ -628,7 +735,11 @@ export function avatarGroup(target, options = {}) {
     return handle;
 }
 
-/** The live group handle on a host element (or its list), if any - the same answer as E.get(target, 'avatar-group'). */
+/**
+ * The live group handle on a host element (or its list), if any - the same answer as E.get(target, 'avatar-group').
+ * @param {string|Element|ArrayLike<Element>} target
+ * @returns {AvatarGroupHandle|null}
+ */
 avatarGroup.get = function (target) {
     const el = resolveTarget(target);
     return (el && instanceOf(el, 'avatar-group')) || null;

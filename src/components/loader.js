@@ -29,6 +29,25 @@ function sizeOf(size) {
     return SIZES[size] || SIZES.medium;
 }
 
+/** @typedef {'spinner'|'dots'|'pulse'|'bars'} LoaderType */
+
+/**
+ * @typedef {object} LoaderOptions
+ * @property {LoaderType} [type='spinner'] - Animation
+ * @property {'small'|'sm'|'medium'|'md'|'large'|'lg'|number} [size='medium'] - Named size or px
+ * @property {string} [color='primary'] - Theme colour name, 'white', 'dark', or any CSS colour
+ * @property {boolean} [overlay=false] - Cover the container with a backdrop
+ * @property {string} [text] - Text under the indicator (also its accessible name)
+ * @property {boolean} [centered=true] - Centre in the container
+ * @property {boolean} [visible=true] - Show at once
+ * @property {boolean} [fullscreen=false] - (fullscreenLoader) the container is shown and hidden with it
+ * @property {string} [label='Loading'] - Accessible name when there is no text
+ * @property {((loader: LoaderInstance) => void)|null} [onShow] - When the loader shows
+ * @property {((loader: LoaderInstance) => void)|null} [onHide] - When the loader hides
+ */
+
+/** @typedef {Loader} LoaderInstance */
+
 export class Loader extends Component {
     static componentName = 'loader';
 
@@ -46,9 +65,14 @@ export class Loader extends Component {
         onHide: null
     };
 
+    /**
+     * @param {import('./shared.js').ComponentTarget} selector - The container
+     * @param {LoaderOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(resolveElement(selector), options);
         if (!this.element) return;
+        /** The `.dm-loader` element. @type {HTMLDivElement} */
         this.indicator = document.createElement('div');
         this.indicator.setAttribute('role', 'status');
         this.indicator.setAttribute('aria-live', 'polite');
@@ -89,6 +113,7 @@ export class Loader extends Component {
         if (flag(this.options.fullscreen)) this.element.style.display = shown ? 'flex' : 'none';
     }
 
+    /** @returns {this} */
     show() {
         const was = this._visible;
         this._visible = true;
@@ -98,6 +123,7 @@ export class Loader extends Component {
         return this;
     }
 
+    /** @returns {this} */
     hide() {
         const was = this._visible;
         this._visible = false;
@@ -106,46 +132,71 @@ export class Loader extends Component {
         return this;
     }
 
-    /** Alias of show(), by name - the overlay verbs every component shares. */
+    /**
+     * Alias of show(), by name - the overlay verbs every component shares.
+     * @returns {this}
+     */
     open(...args) {
         return this.show(...args);
     }
 
-    /** Alias of hide(), by name. */
+    /**
+     * Alias of hide(), by name.
+     * @returns {this}
+     */
     close(...args) {
         return this.hide(...args);
     }
 
+    /** @returns {this} */
     toggle() {
         return this._visible ? this.hide() : this.show();
     }
 
+    /** @returns {boolean} */
     isVisible() {
         return this._visible;
     }
 
+    /** @returns {boolean} */
     isOpen() {
         return this._visible;
     }
 
+    /**
+     * @param {string} text
+     * @returns {this}
+     */
     setText(text) {
         this.options.text = text;
         this._render();
         return this;
     }
 
+    /**
+     * @param {LoaderType} type
+     * @returns {this}
+     */
     setType(type) {
         this.options.type = type;
         this._render();
         return this;
     }
 
+    /**
+     * @param {LoaderOptions['size']} size
+     * @returns {this}
+     */
     setSize(size) {
         this.options.size = size;
         this._render();
         return this;
     }
 
+    /**
+     * @param {string} color
+     * @returns {this}
+     */
     setColor(color) {
         this.options.color = color;
         this._render();
@@ -157,7 +208,10 @@ export class Loader extends Component {
         this._setShown(this._visible);
     }
 
-    /** Remove the indicator; the container stays. */
+    /**
+     * Remove the indicator; the container stays.
+     * @returns {void}
+     */
     destroy() {
         this.indicator?.remove();
         this.element?.classList.remove('dm-loader-host');

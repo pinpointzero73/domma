@@ -56,6 +56,56 @@ function containerFor(position) {
     return box;
 }
 
+/**
+ * An action button in a toast.
+ * @typedef {object} ToastAction
+ * @property {string} [label='OK'] - Button label (`text` is accepted too)
+ * @property {string} [text] - Alias of `label`
+ * @property {(event: MouseEvent, toast: ToastInstance) => void} [onClick] - Click handler
+ * @property {boolean} [closeOnClick=true] - Close toast on click
+ * @property {boolean} [primary] - Primary style
+ */
+
+/**
+ * @typedef {object} ToastOptions
+ * @property {string|Node} [message] - The message (text unless `html: true`)
+ * @property {string} [title] - Toast title
+ * @property {import('../elements.js').ToastType} [type='default'] - Toast type
+ * @property {import('../elements.js').ToastPosition} [position='top-right'] - Toast position
+ * @property {number} [duration=3000] - Auto-dismiss duration in ms (0 = no auto-dismiss)
+ * @property {boolean} [pauseOnHover=true] - Pause countdown on hover
+ * @property {boolean} [showProgress=true] - Show progress bar
+ * @property {'slide'|'fade'|(string & {})} [animation='slide'] - Animation style
+ * @property {number} [animationDuration=300] - Animation duration in ms
+ * @property {boolean} [closable=true] - Show close button
+ * @property {boolean} [html=false] - The message is HTML (sanitised unless `safe: false`)
+ * @property {boolean} [safe=true] - Sanitise HTML message / icon
+ * @property {string|Node|null} [icon] - Icon name (data-icon), HTML string or Node; the typed helpers default to the type's icon
+ * @property {ToastAction[]} [actions] - Action buttons
+ * @property {ToastAction} [action] - One action button (used when `actions` is empty)
+ * @property {number} [maxToasts=5] - Maximum number of toasts on screen; the oldest closes
+ * @property {string} [className] - Extra classes on the toast
+ * @property {((toast: ToastInstance) => void)|null} [onShow] - When the toast shows
+ * @property {((toast: ToastInstance) => void)|null} [onClose] - After the exit animation, just before removal
+ * @property {((toast: ToastInstance) => void)|null} [onPause] - The countdown paused (hover)
+ * @property {((toast: ToastInstance) => void)|null} [onResume] - The countdown resumed
+ * @property {((detail: {action: ToastAction, index: number}, toast: ToastInstance) => void)|null} [onAction] - An action button was clicked
+ */
+
+/** @typedef {Toast} ToastInstance */
+
+/**
+ * E.toast: show a toast, with typed helpers.
+ * @typedef {((message: string|Node|ToastOptions, options?: ToastOptions) => ToastInstance) & {
+ *     show(message: string|Node|ToastOptions, options?: ToastOptions): ToastInstance,
+ *     success(message: string|Node, options?: ToastOptions): ToastInstance,
+ *     error(message: string|Node, options?: ToastOptions): ToastInstance,
+ *     warning(message: string|Node, options?: ToastOptions): ToastInstance,
+ *     info(message: string|Node, options?: ToastOptions): ToastInstance,
+ *     closeAll(): void
+ * }} ToastStatic
+ */
+
 export class Toast extends Component {
     static componentName = 'toast';
 
@@ -83,6 +133,10 @@ export class Toast extends Component {
         onAction: null
     };
 
+    /**
+     * @param {string|Node} [message]
+     * @param {ToastOptions} [options]
+     */
     constructor(message, options = {}) {
         const el = document.createElement('div');
         super(el, options);
@@ -245,7 +299,10 @@ export class Toast extends Component {
 
     // ---- public API -----------------------------------------------------
 
-    /** Put the toast on screen (E.toast() does this). */
+    /**
+     * Put the toast on screen (E.toast() does this).
+     * @returns {this}
+     */
     open() {
         if (this._visible) return this;
         const o = this.options;
@@ -269,6 +326,10 @@ export class Toast extends Component {
         return this;
     }
 
+    /**
+     * Close the toast (removed after the exit animation).
+     * @returns {this}
+     */
     close() {
         if (!this._visible) return this;
         this._visible = false;
@@ -285,34 +346,52 @@ export class Toast extends Component {
         return this;
     }
 
-    /** Permanent alias of open(), by name. */
+    /**
+     * Permanent alias of open(), by name.
+     * @returns {this}
+     */
     show(...args) {
         return this.open(...args);
     }
 
-    /** Permanent alias of close(), by name. */
+    /**
+     * Permanent alias of close(), by name.
+     * @returns {this}
+     */
     hide(...args) {
         return this.close(...args);
     }
 
+    /** @returns {this} */
     toggle() {
         return this._visible ? this.close() : this.open();
     }
 
+    /** @returns {boolean} */
     isVisible() {
         return this._visible;
     }
 
+    /** @returns {boolean} */
     isOpen() {
         return this._visible;
     }
 
+    /**
+     * Update the message.
+     * @param {string|Node} message
+     * @returns {this}
+     */
     setMessage(message) {
         this.options.message = message;
         this._writeMessage();
         return this;
     }
 
+    /**
+     * @param {string} title - Empty hides the title
+     * @returns {this}
+     */
     setTitle(title) {
         this.options.title = title;
         this._titleEl.textContent = title ? String(title) : '';
@@ -320,6 +399,10 @@ export class Toast extends Component {
         return this;
     }
 
+    /**
+     * @param {import('../elements.js').ToastType} type
+     * @returns {this}
+     */
     setType(type) {
         const was = this.options.type || 'default';
         this.options.type = type || 'default';
@@ -331,6 +414,10 @@ export class Toast extends Component {
         return this;
     }
 
+    /**
+     * @param {ToastAction[]|null} actions
+     * @returns {this}
+     */
     setActions(actions) {
         this.options.actions = actions || [];
         this._renderActions();
@@ -343,7 +430,10 @@ export class Toast extends Component {
         if (visible) this.element.classList.add('show');
     }
 
-    /** Remove at once, without the exit animation or the close event. */
+    /**
+     * Remove at once, without the exit animation or the close event.
+     * @returns {void}
+     */
     destroy() {
         clearTimeout(this._timer);
         this._visible = false;
@@ -355,8 +445,8 @@ export class Toast extends Component {
 
 /**
  * Show a toast.
- * @param {string|Node|Object} message - the text (or `{message, ...options}`)
- * @param {Object} [options]
+ * @param {string|Node|ToastOptions} message - the text (or `{message, ...options}`)
+ * @param {ToastOptions} [options]
  * @returns {Toast}
  */
 export function showToast(message, options = {}) {
@@ -373,7 +463,10 @@ const typed = (type) => (message, options = {}) => showToast(message, {
     icon: options.icon ?? typeIcon(type)
 });
 
-/** The E.toast function with its statics. */
+/**
+ * The E.toast function with its statics.
+ * @type {ToastStatic}
+ */
 export const toast = Object.assign(
     (message, options = {}) => showToast(message, options),
     {

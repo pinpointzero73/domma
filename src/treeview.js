@@ -16,6 +16,67 @@
 import Component from './component.js';
 import {escapeHtml} from './escape.js';
 
+/**
+ * A node id: whatever the data's `idKey` holds.
+ * @typedef {string|number} TreeViewNodeId
+ */
+
+/**
+ * A data row. The keys are configurable (`idKey`, `parentKey`, `childrenKey`, `labelKey`,
+ * `iconKey`, `colorKey`); `children` is filled in when a flat array is given.
+ * @typedef {Record<string, any>} TreeViewNode
+ */
+
+/**
+ * The state handed to `renderNode`.
+ * @typedef {object} TreeViewNodeState
+ * @property {boolean} isExpanded
+ * @property {boolean} isSelected
+ * @property {boolean} hasChildren
+ */
+
+/**
+ * An action button drawn on each node.
+ * @typedef {object} TreeViewAction
+ * @property {string} name - Passed to onAction; the button's text when there is no icon
+ * @property {string} [icon] - Icon name
+ * @property {string} [tooltip] - Title and aria-label (default: the name)
+ * @property {(node: TreeViewNode) => boolean} [visible] - Show the button on this node?
+ */
+
+/**
+ * @typedef {object} TreeViewOptions
+ * @property {TreeViewNode[]} [data] - Flat (with parentKey) or hierarchical (with childrenKey) rows
+ * @property {string} [idKey] - Default 'id'
+ * @property {string} [parentKey] - Default 'parent_id'
+ * @property {string} [childrenKey] - Default 'children'
+ * @property {string} [labelKey] - Default 'name'
+ * @property {string} [iconKey] - Default 'icon'
+ * @property {string} [colorKey] - Default 'color'
+ * @property {boolean} [expandedByDefault] - Default true
+ * @property {TreeViewNodeId[]} [expandedNodes] - Ids expanded at the start
+ * @property {boolean} [selectable] - Default true
+ * @property {boolean} [multiSelect] - Default false
+ * @property {TreeViewNodeId[]} [selectedNodes] - Ids selected at the start
+ * @property {((node: TreeViewNode, depth: number, state: TreeViewNodeState) => string)|null} [renderNode] - HTML for a node's content
+ * @property {((node: TreeViewNode) => string|number|null|undefined)|null} [getBadge] - Badge text (HTML), or null for none
+ * @property {((node: TreeViewNode) => string|null|undefined)|null} [getNodeIcon] - Icon name (default: node[iconKey])
+ * @property {((node: TreeViewNode) => string)|null} [getNodeClass] - Extra classes on the node
+ * @property {TreeViewAction[]} [actions] - Action buttons on each node
+ * @property {number} [indentSize] - rem per level (default 1.5)
+ * @property {boolean} [showIcons] - Default true
+ * @property {boolean} [showToggleButtons] - Default true
+ * @property {string} [toggleIcon] - Default 'chevron-down'
+ * @property {((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void)|null} [onSelect]
+ * @property {((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void)|null} [onDeselect]
+ * @property {((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void)|null} [onExpand]
+ * @property {((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void)|null} [onCollapse]
+ * @property {((action: string, nodeId: TreeViewNodeId, node: TreeViewNode, event: MouseEvent) => void)|null} [onAction]
+ * @property {((nodeId: TreeViewNodeId, node: TreeViewNode, event: MouseEvent) => void)|null} [onClick]
+ */
+
+/** @typedef {TreeView} TreeViewInstance */
+
 class TreeView extends Component {
   static componentName = 'tree-view';
 
@@ -60,6 +121,10 @@ class TreeView extends Component {
     onClick: null
   };
 
+  /**
+   * @param {string|HTMLElement} selector - Container element or selector
+   * @param {TreeViewOptions} [options]
+   */
   constructor(selector, options = {}) {
     super(selector, options);
 
@@ -308,7 +373,7 @@ class TreeView extends Component {
   /**
    * Render toggle button
    * @private
-   * @param {string|number} nodeId - Node ID
+   * @param {TreeViewNodeId} nodeId - Node ID
    * @param {boolean} isExpanded - Is node expanded
    * @returns {string} HTML string
    */
@@ -364,7 +429,7 @@ class TreeView extends Component {
   /**
    * Handle node selection
    * @private
-   * @param {string|number} nodeId - Node ID
+   * @param {TreeViewNodeId} nodeId - Node ID
    * @param {Event} event - Click event
    */
   _handleSelect(nodeId, event) {
@@ -405,7 +470,7 @@ class TreeView extends Component {
    * Handle action button click
    * @private
    * @param {string} action - Action name
-   * @param {string|number} nodeId - Node ID
+   * @param {TreeViewNodeId} nodeId - Node ID
    * @param {Event} event - Click event
    */
   _handleAction(action, nodeId, event) {
@@ -445,8 +510,8 @@ class TreeView extends Component {
 
   /**
    * Set tree data
-   * @param {Array} data - Flat or hierarchical array
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNode[]} data - Flat or hierarchical array
+   * @returns {this} This instance for chaining
    */
   setData(data) {
     const {tree, nodeMap} = this._buildTree(data);
@@ -470,7 +535,7 @@ class TreeView extends Component {
 
   /**
    * Get tree data (hierarchical)
-   * @returns {Array} Tree array
+   * @returns {TreeViewNode[]} Tree array
    */
   getData() {
     return this._tree;
@@ -478,7 +543,7 @@ class TreeView extends Component {
 
   /**
    * Get flat data (all nodes)
-   * @returns {Array} Flat array of nodes
+   * @returns {TreeViewNode[]} Flat array of nodes
    */
   getFlatData() {
     return Object.values(this._flatMap);
@@ -486,7 +551,7 @@ class TreeView extends Component {
 
   /**
    * Refresh tree rendering
-   * @returns {TreeView} This instance for chaining
+   * @returns {this} This instance for chaining
    */
   refresh() {
     this._render();
@@ -501,8 +566,8 @@ class TreeView extends Component {
 
   /**
    * Get node by ID
-   * @param {string|number} nodeId - Node ID
-   * @returns {Object|null} Node data or null
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {TreeViewNode|null} Node data or null
    */
   getNode(nodeId) {
     return this._flatMap[nodeId] || null;
@@ -510,9 +575,9 @@ class TreeView extends Component {
 
   /**
    * Update node data
-   * @param {string|number} nodeId - Node ID
-   * @param {Object} changes - Changes to apply
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @param {Partial<TreeViewNode>} changes - Changes to apply
+   * @returns {this} This instance for chaining
    */
   updateNode(nodeId, changes) {
     const node = this._flatMap[nodeId];
@@ -529,9 +594,9 @@ class TreeView extends Component {
 
   /**
    * Select a node
-   * @param {string|number} nodeId - Node ID
-   * @param {boolean} silent - Skip callback if true
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @param {boolean} [silent] - Skip callback if true
+   * @returns {this} This instance for chaining
    */
   select(nodeId, silent = false) {
     if (!this.options.selectable) {
@@ -553,9 +618,9 @@ class TreeView extends Component {
 
   /**
    * Deselect a node
-   * @param {string|number} nodeId - Node ID
-   * @param {boolean} silent - Skip callback if true
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @param {boolean} [silent] - Skip callback if true
+   * @returns {this} This instance for chaining
    */
   deselect(nodeId, silent = false) {
     const node = this._flatMap[nodeId];
@@ -573,8 +638,8 @@ class TreeView extends Component {
 
   /**
    * Toggle node selection
-   * @param {string|number} nodeId - Node ID
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {this} This instance for chaining
    */
   toggleSelect(nodeId) {
     if (this._selectedNodes.has(nodeId)) {
@@ -587,7 +652,7 @@ class TreeView extends Component {
 
   /**
    * Select all nodes
-   * @returns {TreeView} This instance for chaining
+   * @returns {this} This instance for chaining
    */
   selectAll() {
     if (!this.options.multiSelect) {
@@ -603,8 +668,8 @@ class TreeView extends Component {
 
   /**
    * Deselect all nodes
-   * @param {boolean} silent - Skip callbacks if true
-   * @returns {TreeView} This instance for chaining
+   * @param {boolean} [silent] - Skip callbacks if true
+   * @returns {this} This instance for chaining
    */
   deselectAll(silent = false) {
     const selectedIds = Array.from(this._selectedNodes);
@@ -625,7 +690,7 @@ class TreeView extends Component {
 
   /**
    * Get selected node IDs
-   * @returns {Array} Array of selected IDs
+   * @returns {TreeViewNodeId[]} Array of selected IDs
    */
   getSelected() {
     return Array.from(this._selectedNodes);
@@ -633,7 +698,7 @@ class TreeView extends Component {
 
   /**
    * Get selected node objects
-   * @returns {Array} Array of selected nodes
+   * @returns {TreeViewNode[]} Array of selected nodes
    */
   getSelectedNodes() {
     return this.getSelected().map(id => this._flatMap[id]).filter(Boolean);
@@ -641,7 +706,7 @@ class TreeView extends Component {
 
   /**
    * Check if node is selected
-   * @param {string|number} nodeId - Node ID
+   * @param {TreeViewNodeId} nodeId - Node ID
    * @returns {boolean} True if selected
    */
   isSelected(nodeId) {
@@ -654,9 +719,9 @@ class TreeView extends Component {
 
   /**
    * Expand a node
-   * @param {string|number} nodeId - Node ID
-   * @param {boolean} silent - Skip callback if true
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @param {boolean} [silent] - Skip callback if true
+   * @returns {this} This instance for chaining
    */
   expand(nodeId, silent = false) {
     const node = this._flatMap[nodeId];
@@ -674,9 +739,9 @@ class TreeView extends Component {
 
   /**
    * Collapse a node
-   * @param {string|number} nodeId - Node ID
-   * @param {boolean} silent - Skip callback if true
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @param {boolean} [silent] - Skip callback if true
+   * @returns {this} This instance for chaining
    */
   collapse(nodeId, silent = false) {
     const node = this._flatMap[nodeId];
@@ -694,8 +759,8 @@ class TreeView extends Component {
 
   /**
    * Toggle node expansion
-   * @param {string|number} nodeId - Node ID
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {this} This instance for chaining
    */
   toggle(nodeId) {
     if (this._expandedNodes.has(nodeId)) {
@@ -708,7 +773,7 @@ class TreeView extends Component {
 
   /**
    * Expand all nodes
-   * @returns {TreeView} This instance for chaining
+   * @returns {this} This instance for chaining
    */
   expandAll() {
     Object.keys(this._flatMap).forEach(id => {
@@ -724,7 +789,7 @@ class TreeView extends Component {
 
   /**
    * Collapse all nodes
-   * @returns {TreeView} This instance for chaining
+   * @returns {this} This instance for chaining
    */
   collapseAll() {
     this._expandedNodes.clear();
@@ -734,7 +799,7 @@ class TreeView extends Component {
 
   /**
    * Check if node is expanded
-   * @param {string|number} nodeId - Node ID
+   * @param {TreeViewNodeId} nodeId - Node ID
    * @returns {boolean} True if expanded
    */
   isExpanded(nodeId) {
@@ -743,7 +808,7 @@ class TreeView extends Component {
 
   /**
    * Get expanded node IDs
-   * @returns {Array} Array of expanded IDs
+   * @returns {TreeViewNodeId[]} Array of expanded IDs
    */
   getExpanded() {
     return Array.from(this._expandedNodes);
@@ -755,8 +820,8 @@ class TreeView extends Component {
 
   /**
    * Get parent node
-   * @param {string|number} nodeId - Node ID
-   * @returns {Object|null} Parent node or null
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {TreeViewNode|null} Parent node or null
    */
   getParent(nodeId) {
     const node = this._flatMap[nodeId];
@@ -770,8 +835,8 @@ class TreeView extends Component {
 
   /**
    * Get child nodes
-   * @param {string|number} nodeId - Node ID
-   * @returns {Array} Array of child nodes
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {TreeViewNode[]} Array of child nodes
    */
   getChildren(nodeId) {
     const node = this._flatMap[nodeId];
@@ -785,8 +850,8 @@ class TreeView extends Component {
 
   /**
    * Get all ancestors (path to root)
-   * @param {string|number} nodeId - Node ID
-   * @returns {Array} Array of ancestor nodes
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {TreeViewNode[]} Array of ancestor nodes
    */
   getAncestors(nodeId) {
     const ancestors = [];
@@ -802,8 +867,8 @@ class TreeView extends Component {
 
   /**
    * Get all descendants (recursive)
-   * @param {string|number} nodeId - Node ID
-   * @returns {Array} Array of descendant nodes
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {TreeViewNode[]} Array of descendant nodes
    */
   getDescendants(nodeId) {
     const descendants = [];
@@ -820,8 +885,8 @@ class TreeView extends Component {
 
   /**
    * Get sibling nodes
-   * @param {string|number} nodeId - Node ID
-   * @returns {Array} Array of sibling nodes
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @returns {TreeViewNode[]} Array of sibling nodes
    */
   getSiblings(nodeId) {
     const node = this._flatMap[nodeId];
@@ -842,7 +907,7 @@ class TreeView extends Component {
 
   /**
    * Get node depth level
-   * @param {string|number} nodeId - Node ID
+   * @param {TreeViewNodeId} nodeId - Node ID
    * @returns {number} Depth level (0 = root)
    */
   getLevel(nodeId) {
@@ -855,8 +920,8 @@ class TreeView extends Component {
 
   /**
    * Find first node matching predicate
-   * @param {Function} predicate - Test function
-   * @returns {Object|null} First matching node or null
+   * @param {(node: TreeViewNode) => boolean} predicate - Test function
+   * @returns {TreeViewNode|null} First matching node or null
    */
   find(predicate) {
     for (const id in this._flatMap) {
@@ -870,8 +935,8 @@ class TreeView extends Component {
 
   /**
    * Find all nodes matching predicate
-   * @param {Function} predicate - Test function
-   * @returns {Array} Array of matching nodes
+   * @param {(node: TreeViewNode) => boolean} predicate - Test function
+   * @returns {TreeViewNode[]} Array of matching nodes
    */
   filter(predicate) {
     const results = [];
@@ -886,8 +951,8 @@ class TreeView extends Component {
 
   /**
    * Iterate all nodes
-   * @param {Function} callback - Callback function
-   * @returns {TreeView} This instance for chaining
+   * @param {(node: TreeViewNode, id: string) => void} callback - Callback function
+   * @returns {this} This instance for chaining
    */
   forEach(callback) {
     for (const id in this._flatMap) {
@@ -898,9 +963,9 @@ class TreeView extends Component {
 
   /**
    * Scroll node into view
-   * @param {string|number} nodeId - Node ID
-   * @param {Object} options - Scroll options
-   * @returns {TreeView} This instance for chaining
+   * @param {TreeViewNodeId} nodeId - Node ID
+   * @param {{behavior?: ScrollBehavior, block?: ScrollLogicalPosition, inline?: ScrollLogicalPosition}} [options] - Scroll options
+   * @returns {this} This instance for chaining
    */
   scrollToNode(nodeId, options = {}) {
     const nodeEl = this.element.querySelector(`[data-node-id="${nodeId}"]`);

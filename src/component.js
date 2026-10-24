@@ -83,16 +83,35 @@ export function unregister(element, instance) {
 
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
+/**
+ * A component event handler: gets the same arguments as the matching `onX` option.
+ * Returning false from a handler of a `before...` event cancels it.
+ * @typedef {(...args: any[]) => any} ComponentEventHandler
+ */
+
+/**
+ * The instance type every component shares (the Component base class).
+ * @typedef {Component} ComponentInstance
+ */
+
 class Component {
     /** Used in `dm:<componentName>:<event>`. Subclasses set it - class names do not survive minification. */
     static componentName = 'component';
 
+    /**
+     * @param {string|Element|null} [selector] - CSS selector or the host element
+     * @param {Record<string, any>} [options]
+     */
     constructor(selector, options = {}) {
+        /** The DOM element this component is attached to. @type {HTMLElement|null} */
         this.element = typeof selector === 'string'
             ? document.querySelector(selector)
             : selector;
+        /** Component options (defaults merged with what was passed). @type {Record<string, any>} */
         this.options = {...this.constructor.defaults, ...options};
+        /** @protected @type {{element: EventTarget, event: string, handler: EventListenerOrEventListenerObject}[]} */
         this._eventHandlers = [];
+        /** @protected @type {Record<string, ComponentEventHandler[]>} */
         this._listeners = {};
 
         if (this.element) {
@@ -105,7 +124,7 @@ class Component {
      * Listen for a component event. The handler gets the same arguments as the matching
      * `onX` option. Returning false from a handler of a `before...` event cancels it.
      * @param {string} event - Event name, e.g. 'open', 'change', 'beforeclose'
-     * @param {Function} handler
+     * @param {ComponentEventHandler} handler
      * @returns {this}
      */
     on(event, handler) {
@@ -118,7 +137,7 @@ class Component {
     /**
      * Listen once.
      * @param {string} event
-     * @param {Function} handler
+     * @param {ComponentEventHandler} handler
      * @returns {this}
      */
     once(event, handler) {
@@ -134,7 +153,7 @@ class Component {
     /**
      * Stop listening. Without a handler, removes every listener for the event.
      * @param {string} event
-     * @param {Function} [handler]
+     * @param {ComponentEventHandler} [handler]
      * @returns {this}
      */
     off(event, handler) {
@@ -193,7 +212,12 @@ class Component {
         return result === false || !ok ? false : result;
     }
 
-    /** The onX option for a lower-case event name ('beforeclose' -> onBeforeClose). */
+    /**
+     * The onX option for a lower-case event name ('beforeclose' -> onBeforeClose).
+     * @protected
+     * @param {string} key
+     * @returns {*}
+     */
     _optionFor(key) {
         for (const name of Object.keys(this.options)) {
             if (name.length > 2 && name.startsWith('on') && name.slice(2).toLowerCase() === key) {
@@ -232,7 +256,7 @@ class Component {
 
     /**
      * Update component options at runtime
-     * @param {Object} newOptions - New options to merge
+     * @param {Record<string, any>} newOptions - New options to merge
      * @returns {this} The component instance for chaining
      */
     setOptions(newOptions) {
@@ -246,11 +270,22 @@ class Component {
         return this;
     }
 
+    /**
+     * addEventListener that destroy() undoes.
+     * @protected
+     * @param {EventTarget} element
+     * @param {string} event
+     * @param {EventListenerOrEventListenerObject} handler
+     */
     _addEventListener(element, event, handler) {
         element.addEventListener(event, handler);
         this._eventHandlers.push({element, event, handler});
     }
 
+    /**
+     * Destroy the component and clean up its event listeners.
+     * @returns {void}
+     */
     destroy() {
         for (const {element, event, handler} of this._eventHandlers) {
             element.removeEventListener(event, handler);

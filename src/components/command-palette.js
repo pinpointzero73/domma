@@ -69,7 +69,7 @@ export function parseHotkey(combo) {
 /**
  * Whether a keydown matches a parsed hotkey.
  * @param {KeyboardEvent} e
- * @param {Object} hotkey - from parseHotkey
+ * @param {NonNullable<ReturnType<typeof parseHotkey>>} hotkey - from parseHotkey
  * @param {boolean} [mac]
  */
 export function matchesHotkey(e, hotkey, mac = isMac()) {
@@ -252,6 +252,76 @@ export function claimsHotkey(e) {
 /** Only links a browser can follow safely: http(s), mailto, tel, or relative. */
 const safeHref = safeUrl;
 
+/**
+ * The context a `source` or async `children` function gets.
+ * @typedef {{signal?: AbortSignal, palette: CommandPaletteInstance}} PaletteSourceContext
+ */
+
+/**
+ * One command in the palette.
+ * @typedef {object} PaletteCommand
+ * @property {string} [id]
+ * @property {string} title
+ * @property {string} [subtitle]
+ * @property {string} [group] Heading the command is listed under
+ * @property {string} [icon] Domma icon name
+ * @property {string[]} [keywords] More words that find it
+ * @property {string} [shortcut] Shown as a hint, e.g. 'mod+s' (mod = Cmd on a Mac, Ctrl elsewhere)
+ * @property {string} [href] Followed when run (http(s), mailto, tel or relative only)
+ * @property {string} [target] '_blank' opens href in a new tab
+ * @property {(command: PaletteCommand, palette: CommandPaletteInstance, event?: Event) => void} [action]
+ * @property {boolean} [disabled]
+ * @property {boolean} [hidden]
+ * @property {boolean} [keepOpen] Running it leaves the palette open
+ * @property {PaletteCommand[]|((command: PaletteCommand, ctx: PaletteSourceContext) => Promise<PaletteCommand[]>|PaletteCommand[])} [children] A nested page: a list, or a function returning one (called once on entering)
+ * @property {string} [placeholder] Placeholder for the box while this command's page is open
+ */
+
+/**
+ * @typedef {object} CommandPaletteOptions
+ * @property {PaletteCommand[]} [commands]
+ * @property {((query: string, ctx: PaletteSourceContext) => Promise<PaletteCommand[]>|PaletteCommand[])|null} [source] Search elsewhere: debounced, the previous request aborted through `signal`
+ * @property {number} [debounce] ms (default 150)
+ * @property {string|string[]|false} [hotkey] 'mod+k' (default), several, or false
+ * @property {string} [placeholder]
+ * @property {string} [label] Accessible name of the dialog and list (default 'Command palette')
+ * @property {number} [maxResults]
+ * @property {string|null} [recentKey] Storage (S) key for recent commands; null (default) = off
+ * @property {number} [recentLimit]
+ * @property {string} [recentLabel]
+ * @property {string|null} [sourceGroup] Heading for source results without their own group
+ * @property {string} [emptyText]
+ * @property {string} [loadingText]
+ * @property {string} [pageLoadingText] While a nested page's async children load (default 'Loading…')
+ * @property {string} [errorText]
+ * @property {string} [backLabel]
+ * @property {boolean} [footer] Key hints under the list (default true)
+ * @property {(count: number) => string} [resultsText]
+ * @property {((href: string, ctx: {newTab: boolean, command: PaletteCommand}) => void)|null} [navigate] Replaces the default navigation for href commands
+ * @property {number} [animationDuration]
+ * @property {string} [className]
+ * @property {boolean} [mac] Force Mac (true) or other (false) key names; default detects
+ * @property {((palette: CommandPaletteInstance) => boolean|void)|null} [onBeforeOpen]
+ * @property {((palette: CommandPaletteInstance) => void)|null} [onOpen]
+ * @property {((palette: CommandPaletteInstance) => boolean|void)|null} [onBeforeClose]
+ * @property {((palette: CommandPaletteInstance) => void)|null} [onClose]
+ * @property {((query: string, palette: CommandPaletteInstance) => void)|null} [onQuery]
+ * @property {((command: PaletteCommand, palette: CommandPaletteInstance) => boolean|void)|null} [onBeforeSelect]
+ * @property {((command: PaletteCommand, palette: CommandPaletteInstance) => void)|null} [onSelect]
+ * @property {((command: PaletteCommand, palette: CommandPaletteInstance) => void)|null} [onRun]
+ */
+
+/** @typedef {CommandPalette} CommandPaletteInstance */
+
+/**
+ * `E.commandPalette(options)` with its helpers.
+ * @typedef {((options?: CommandPaletteOptions) => CommandPaletteInstance) & {
+ *   formatShortcut: (combo: string, mac?: boolean) => string[],
+ *   fuzzyMatch: (query: string, text: string) => ({score: number, indices: number[]}|null),
+ *   claims: (e: KeyboardEvent) => boolean
+ * }} CommandPaletteFactory
+ */
+
 function isEditable(node) {
     if (!node || node.nodeType !== 1) return false;
     if (node.isContentEditable) return true;
@@ -261,6 +331,7 @@ function isEditable(node) {
 export class CommandPalette extends Component {
     static componentName = 'command-palette';
 
+    /** @type {CommandPaletteOptions} */
     static defaults = {
         commands: [],
         source: null,               // (query, {signal}) => Promise<command[]>
@@ -295,7 +366,7 @@ export class CommandPalette extends Component {
     };
 
     /**
-     * @param {Object} [options]
+     * @param {CommandPaletteOptions} [options]
      */
     constructor(options = {}) {
         super(CommandPalette._makeRoot(), options);
@@ -583,7 +654,15 @@ export class CommandPalette extends Component {
         return this;
     }
 
-    /** @returns {this} */
+    /**
+     * @overload
+     * @param {string} [query]
+     * @returns {this}
+     */
+    /**
+     * @param {...*} args
+     * @returns {this}
+     */
     toggle(...args) {
         return this._isOpen ? this.close() : this.open(...args);
     }
@@ -593,24 +672,44 @@ export class CommandPalette extends Component {
         return this._isOpen;
     }
 
-    /** Permanent alias of open(), looked up by name. */
+    /**
+     * Permanent alias of open(), looked up by name.
+     * @overload
+     * @param {string} [query]
+     * @returns {this}
+     */
+    /**
+     * @param {...*} args
+     * @returns {this}
+     */
     show(...args) {
         return this.open(...args);
     }
 
-    /** Permanent alias of close(), looked up by name. */
+    /**
+     * Permanent alias of close(), looked up by name.
+     * @overload
+     * @returns {this}
+     */
+    /**
+     * @param {...*} args
+     * @returns {this}
+     */
     hide(...args) {
         return this.close(...args);
     }
 
-    /** Permanent alias of isOpen(). */
+    /**
+     * Permanent alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() {
         return this.isOpen();
     }
 
     /**
      * Replace every top-level command.
-     * @param {Object[]} list
+     * @param {PaletteCommand[]} list
      * @returns {this}
      */
     setCommands(list) {
@@ -623,7 +722,7 @@ export class CommandPalette extends Component {
     /**
      * Add top-level commands (one, or a list). A command with the id of one already
      * there replaces it in place.
-     * @param {Object|Object[]} list
+     * @param {PaletteCommand|PaletteCommand[]} list
      * @returns {this}
      */
     addCommands(list) {
@@ -649,7 +748,7 @@ export class CommandPalette extends Component {
         return this;
     }
 
-    /** @returns {Object[]} the top-level commands */
+    /** @returns {PaletteCommand[]} the top-level commands */
     getCommands() {
         return this._commands.slice();
     }
@@ -671,25 +770,35 @@ export class CommandPalette extends Component {
         return true;
     }
 
-    /** The current query. */
+    /**
+     * The current query.
+     * @returns {string}
+     */
     query() {
         return this._query;
     }
 
-    /** The ids of the remembered recent commands, newest first. */
+    /**
+     * The ids of the remembered recent commands, newest first.
+     * @returns {string[]}
+     */
     recent() {
         if (!this.options.recentKey) return [];
         const ids = storage.get(this.options.recentKey, []);
         return Array.isArray(ids) ? ids.map(String) : [];
     }
 
-    /** Forget the remembered recent commands. */
+    /**
+     * Forget the remembered recent commands.
+     * @returns {this}
+     */
     clearRecent() {
         if (this.options.recentKey) storage.remove(this.options.recentKey);
         this._refresh();
         return this;
     }
 
+    /** @returns {void} */
     destroy() {
         if (this._destroyed) return;
         if (this._isOpen) this._forcedClose();
@@ -1164,7 +1273,7 @@ export class CommandPalette extends Component {
 
 /**
  * A new command palette.
- * @param {Object} [options]
+ * @param {CommandPaletteOptions} [options]
  * @returns {CommandPalette}
  */
 export function createCommandPalette(options = {}) {

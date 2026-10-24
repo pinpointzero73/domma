@@ -48,9 +48,47 @@ const nativeValue = (() => {
     };
 })();
 
+/** A number, or [low, high] with `range: true`. @typedef {number|[number, number]} RangeSliderValue */
+
+/**
+ * @typedef {object} RangeSliderMark
+ * @property {number} value
+ * @property {string} [label]
+ */
+
+/**
+ * @typedef {object} RangeSliderOptions
+ * @property {number} [min] Default: the input's min, else 0
+ * @property {number} [max] Default: the input's max, else 100
+ * @property {number|'any'} [step] Default: the input's step, else 1
+ * @property {RangeSliderValue|string|null} [value] A number, or [low, high] / "low,high" with range: true
+ * @property {boolean} [range] Two thumbs; two inputs, sharing `name` unless `names` is given
+ * @property {'horizontal'|'vertical'} [orientation]
+ * @property {boolean|number|number[]} [ticks] true = every step, n = every n units, or the values to draw at
+ * @property {boolean} [tickLabels] Label the ticks (always on for an array)
+ * @property {((value: number, where: 'tick'|'mark'|'tooltip'|'aria') => string)|null} [labels] Formats the value for ticks, marks, the tooltip and aria-valuetext
+ * @property {((value: number, where: 'tick'|'mark'|'tooltip'|'aria') => string)|null} [format] Read when `labels` is not set
+ * @property {'always'|'hover'|'never'} [tooltip] Default 'hover' (also shown on focus and while dragging)
+ * @property {RangeSliderMark[]|null} [marks]
+ * @property {boolean} [disabled]
+ * @property {string|null} [name]
+ * @property {[string, string]|null} [names] [lowName, highName] for range: true
+ * @property {number} [minDistance] range: true - the closest the thumbs may come
+ * @property {boolean|null} [rtl] null = follow the page's direction
+ * @property {string|null} [ariaLabel]
+ * @property {[string, string]|null} [ariaLabels]
+ * @property {string} [className]
+ * @property {((value: RangeSliderValue) => void)|null} [onInput] While dragging, and on each key press
+ * @property {((value: RangeSliderValue) => void)|null} [onChange] When the value is committed
+ * @property {((next: RangeSliderValue, current: RangeSliderValue) => boolean|void)|null} [onBeforeChange] Return false to refuse a move
+ */
+
+/** @typedef {RangeSlider} RangeSliderInstance */
+
 export class RangeSlider extends Component {
     static componentName = 'range-slider';
 
+    /** @type {RangeSliderOptions} */
     static defaults = {
         min: 0,
         max: 100,
@@ -77,8 +115,8 @@ export class RangeSlider extends Component {
     };
 
     /**
-     * @param {Element} element - an <input type="range"> or a container
-     * @param {Object} options
+     * @param {string|Element|null} element - an <input type="range"> or a container
+     * @param {RangeSliderOptions} [options]
      */
     constructor(element, options = {}) {
         super(element, RangeSlider.fromInput(element, options));
@@ -96,7 +134,12 @@ export class RangeSlider extends Component {
         this._bindInputs();
     }
 
-    /** Options not given are read from the input's own attributes, as a plain range input would. */
+    /**
+     * Options not given are read from the input's own attributes, as a plain range input would.
+     * @param {*} element
+     * @param {RangeSliderOptions} [options]
+     * @returns {RangeSliderOptions}
+     */
     static fromInput(element, options = {}) {
         const o = {...options};
         if (!element || element.tagName !== 'INPUT') return o;
@@ -701,7 +744,7 @@ export class RangeSlider extends Component {
 
     /**
      * The value: a number, or [low, high] with `range: true`.
-     * @returns {number|number[]}
+     * @returns {RangeSliderValue}
      */
     getValue() {
         return this._shape(this._values || []);
@@ -710,7 +753,7 @@ export class RangeSlider extends Component {
     /**
      * Set the value. Fires beforechange (cancelable), the inputs' native input and change
      * events, then input and change - unless `{silent: true}`, which only moves it.
-     * @param {number|number[]|string} value - a number, [low, high] or "low,high"
+     * @param {RangeSliderValue|number[]|string} value - a number, [low, high] or "low,high"
      * @param {{silent?: boolean}} [opts]
      * @returns {this}
      */
@@ -779,7 +822,10 @@ export class RangeSlider extends Component {
         this._render();
     }
 
-    /** Remove the drawn slider and inputs it made; the caller's input is shown again. */
+    /**
+     * Remove the drawn slider and inputs it made; the caller's input is shown again.
+     * @returns {void}
+     */
     destroy() {
         if (!this.element) return super.destroy();
         this._timers.forEach(clearTimeout);
@@ -815,7 +861,7 @@ export class RangeSlider extends Component {
 /**
  * E.rangeSlider: one instance per element; a second call updates it.
  * @param {Element} el
- * @param {Object} options
+ * @param {RangeSliderOptions} [options]
  * @returns {RangeSlider}
  */
 export function rangeSliderFor(el, options = {}) {
