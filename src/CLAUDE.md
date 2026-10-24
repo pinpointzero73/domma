@@ -156,10 +156,10 @@ settings.reset(true);      // Reset and clear storage
 Accessed via `Domma.router` or `R`:
 
 - **Initialization**: `init(options)` - Set up router with container, routes, views
-- **Navigation**: `navigate(path, options)`, `back()`, `forward()`, `reload()`
+- **Navigation**: `navigate(path, options)`, `back()`, `forward()`
 - **Registration**: `route(config)`, `view(name, viewDef)`
-- **Middleware**: `use(middleware)`, `clearMiddleware()`
-- **State**: `current()`, `getContainer()`
+- **Middleware**: `use(middleware)`
+- **State**: `current()`; `destroy()` removes the hashchange listener
 
 **Router Configuration:**
 
@@ -197,13 +197,6 @@ export const homeView = {
     'footer': 'js/views/templates/partials/footer.html'
   },
 
-  // Called before rendering (async supported)
-  async onEnter(params) {
-    // Fetch data, validate auth, etc.
-    const data = await H.get('/api/home');
-    return data;  // Can return data to pass to template
-  },
-
   // Called after view is mounted
   onMount($container) {
     // Scan for icons
@@ -216,14 +209,12 @@ export const homeView = {
     $container.find('#my-button').on('click', () => {
       E.toast('Clicked!', {type: 'success'});
     });
-  },
-
-  // Called when leaving view (cleanup)
-  onLeave() {
-    // Remove event listeners, timers, etc.
-    $('#my-button').off('click');
   }
 };
+
+// onEnter / onLeave belong on the ROUTE, not the view - the router only calls the route's:
+// { path: '/', view: 'home', onEnter: async (params, to) => {...}, onLeave: () => {...} }
+// Returning false from either refuses the navigation.
 
 // Alternative: Inline template (use only for simple views <5 lines)
 export const simpleView = {
@@ -314,9 +305,6 @@ R.navigate('/about', {replace: true});
 // History navigation
 R.back();
 R.forward();
-
-// Reload current route
-R.reload();
 
 // Get current route info
 const current = R.current();

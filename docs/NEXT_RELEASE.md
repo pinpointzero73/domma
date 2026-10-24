@@ -42,5 +42,10 @@
 *   `npm run check:types` (in `make check` and CI) fails when the committed declarations differ from a fresh
     generation, and type-checks a small consumer under `tsc --strict`. See [docs/Types.md](Types.md).
 
+### Fixes
+
+- A date picker or dropdown opened from inside a slideover or modal draws above it instead of behind it.
+- `A.createUserInfo()` renders the signed-in user and wires its logout button; it had no constructor, so it never did. The button keeps working after a login or logout re-renders it, and `destroy()` stops listening for auth changes.
+
 <!-- website -->
 
