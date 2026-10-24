@@ -72,6 +72,12 @@ export class FocusTrap extends Component {
     _onPointerDown(e: any): void;
     _onClick(e: any): void;
     /**
+     * Capture phase: an event aimed inside the trap opens a short window in which focus may
+     * leave - until the handlers of this event, and anything they chain with
+     * Promise.then, have run. A Tab never opens it (Tab is the trap's own business).
+     */
+    _onInsideEvent(e: any): void;
+    /**
      * Start trapping. Pauses the trap that was on top, if any, and moves focus in.
      * @param {{initialFocus?: FocusTrapOptions['initialFocus']}} [opts] - overrides the option for this activation
      * @returns {this}
@@ -151,6 +157,7 @@ export class FocusTrap extends Component {
      * before - Shift+Tab to that element, Tab to the one after it.
      */
     _tabInLayer(e: any, layer: any, active: any): void;
+    _scriptTurn: {};
     /**
      * `inert` on every sibling of the containers and of their ancestors, up to <body>, so
      * the rest of the page cannot be reached by anything - pointer, Tab or a screen
@@ -189,6 +196,10 @@ export type FocusTrapOptions = {
      * Let clicks outside through (default false: they are blocked)
      */
     allowOutsideClick?: boolean | ((e: MouseEvent) => boolean);
+    /**
+     * Let a click, key or input handler on something inside the trap move focus outside on purpose - e.g. "Insert" focusing the editor behind a slideover before closing it (default false; the overlays turn it on)
+     */
+    allowScriptFocus?: boolean;
     /**
      * Let focus stay outside: true, 'layers' (floating layers such as toasts and popovers, never the page or a trap beneath), or a function (default false)
      */

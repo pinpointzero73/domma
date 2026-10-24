@@ -359,6 +359,7 @@ export class Modal extends Component {
                 escapeDeactivates: false,           // Escape stays with the modal (close() by name)
                 allowOutsideClick: true,
                 allowOutsideFocus: 'layers',
+                allowScriptFocus: true,
                 register: false
             });
         }

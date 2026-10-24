@@ -396,3 +396,28 @@ describe('review fixes', () => {
         expect(E.focusTrap.tabbables(so.element).map(el => el.id)).toEqual(['so-x', 'ed', 'after-ed']);
     });
 });
+
+describe('a handler inside the overlay may move focus out on purpose', () => {
+    it('"Insert" focusing the editor behind a slideover keeps that focus (the CMS embed builder)', async () => {
+        document.body.insertAdjacentHTML('beforeend', '<textarea id="page-body"></textarea>');
+        const editor = document.getElementById('page-body');
+        const so = Domma.elements.slideover({title: 'Embed', content: '<input id="url"><button id="insert">Insert</button>'});
+        so.open();
+        await new Promise(r => setTimeout(r, 20));
+        so.element.querySelector('#url').focus();
+        let focusedDuringInsert = null;
+        so.element.querySelector('#insert').addEventListener('click', () => {
+            editor.focus();
+            focusedDuringInsert = document.activeElement;
+        });
+        so.element.querySelector('#insert').click(); // a click that does not focus the button (Safari, macOS Firefox)
+        expect(focusedDuringInsert).toBe(editor);
+        await new Promise(r => setTimeout(r, 20));
+        // Later, with no event inside, a stray script focus is still brought back
+        so.element.querySelector('#url').focus();
+        editor.focus();
+        expect(so.element.contains(document.activeElement)).toBe(true);
+        so.destroy();
+        editor.remove();
+    });
+});

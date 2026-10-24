@@ -183,6 +183,7 @@ export function tabbables(containers, opts = {}) {
  * @property {boolean|((e: KeyboardEvent) => boolean)} [escapeDeactivates] Escape deactivates (default false - the owning overlay decides)
  * @property {boolean|((e: MouseEvent) => boolean)} [clickOutsideDeactivates] A press outside deactivates (default false)
  * @property {boolean|((e: MouseEvent) => boolean)} [allowOutsideClick] Let clicks outside through (default false: they are blocked)
+ * @property {boolean} [allowScriptFocus] Let a click, key or input handler on something inside the trap move focus outside on purpose - e.g. "Insert" focusing the editor behind a slideover before closing it (default false; the overlays turn it on)
  * @property {boolean|'layers'|((el: Element, e: Event|null) => boolean)} [allowOutsideFocus] Let focus stay outside: true, 'layers' (floating layers such as toasts and popovers, never the page or a trap beneath), or a function (default false)
  * @property {boolean} [register] false: keep the trap out of E.get(container) (default true)
  * @property {boolean} [inert] Set `inert` on everything outside the containers while active (default false)
@@ -209,6 +210,9 @@ function decide(option, event) {
     return typeof option === 'function' ? !!option(event) : !!option;
 }
 
+/** Events whose handlers may move focus out of a trap with allowScriptFocus. */
+const SCRIPT_EVENTS = ['click', 'keydown', 'input', 'change', 'submit'];
+
 export class FocusTrap extends Component {
     static componentName = 'focus-trap';
 
@@ -221,6 +225,7 @@ export class FocusTrap extends Component {
         clickOutsideDeactivates: false, // boolean | (event) => boolean
         allowOutsideClick: false,       // boolean | (event) => boolean
         allowOutsideFocus: false,       // boolean | 'layers' | (element, event) => boolean
+        allowScriptFocus: false,        // true: a script handling a click/key INSIDE may move focus out
         inert: false,                   // set `inert` on everything outside the containers while active
         shadow: true,                   // walk open shadow roots
         preventScroll: true,
@@ -260,6 +265,7 @@ export class FocusTrap extends Component {
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onPointerDown = this._onPointerDown.bind(this);
         this._onClick = this._onClick.bind(this);
+        this._onInsideEvent = this._onInsideEvent.bind(this);
     }
 
     /**
@@ -472,6 +478,7 @@ export class FocusTrap extends Component {
         document.addEventListener('pointerdown', this._onPointerDown, true);
         document.addEventListener('mousedown', this._onPointerDown, true);
         document.addEventListener('click', this._onClick, true);
+        for (const type of SCRIPT_EVENTS) document.addEventListener(type, this._onInsideEvent, true);
         this._bound = true;
     }
 
@@ -483,6 +490,7 @@ export class FocusTrap extends Component {
         document.removeEventListener('pointerdown', this._onPointerDown, true);
         document.removeEventListener('mousedown', this._onPointerDown, true);
         document.removeEventListener('click', this._onClick, true);
+        for (const type of SCRIPT_EVENTS) document.removeEventListener(type, this._onInsideEvent, true);
         this._bound = false;
     }
 
@@ -691,6 +699,9 @@ export class FocusTrap extends Component {
             this._tabTo(list.length ? (pending.shift ? list[list.length - 1] : list[0]) : this._fallback());
             return;
         }
+        // A handler for a click, key or input inside the trap moved focus out on purpose
+        // (the CMS's "Insert" focuses the editor behind its slideover, inserts, then closes).
+        if (this.options.allowScriptFocus && this._scriptTurn) return;
         // Focus got out (a click elsewhere, a script): bring it back.
         e.stopImmediatePropagation?.();
         const last = this._lastFocused && this._lastFocused.isConnected && this._contains(this._lastFocused)
@@ -717,6 +728,19 @@ export class FocusTrap extends Component {
         if (decide(this.options.allowOutsideClick, e)) return;
         // The press would move focus out; stop it before it does.
         e.preventDefault();
+    }
+
+    /**
+     * Capture phase: an event aimed inside the trap opens a short window in which focus may
+     * leave - until the handlers of this event, and anything they chain with
+     * Promise.then, have run. A Tab never opens it (Tab is the trap's own business).
+     */
+    _onInsideEvent(e) {
+        if (!this.options.allowScriptFocus || !this._eventInside(e)) return;
+        if (e.type === 'keydown' && e.key === 'Tab') return;
+        const turn = {};
+        this._scriptTurn = turn;
+        setTimeout(() => { if (this._scriptTurn === turn) this._scriptTurn = null; }, 0);
     }
 
     _onClick(e) {

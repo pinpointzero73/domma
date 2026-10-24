@@ -4219,6 +4219,7 @@ const Dialog = {
                     escapeDeactivates: false,   // Escape is the dialog's (cancel)
                     allowOutsideClick: true,
                     allowOutsideFocus: 'layers',
+                    allowScriptFocus: true,
                     register: false
                 })
                 : null;
@@ -8212,6 +8213,7 @@ class Slideover extends Component {
                 escapeDeactivates: false,       // Escape stays with the slideover (close() by name)
                 allowOutsideClick: true,        // the backdrop, toasts, popovers
                 allowOutsideFocus: 'layers',
+                allowScriptFocus: true,
                 register: false
             });
         }

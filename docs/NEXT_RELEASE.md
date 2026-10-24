@@ -44,6 +44,8 @@
 
 ### Fixes
 
+- A click, key or input handler inside a modal, slideover or dialog may move focus outside it on purpose - an "Insert" button that focuses the page editor behind its slideover, inserts, then closes keeps working (`allowScriptFocus`, on for the overlays). Focus that escapes any other way is still brought back.
+
 - A date picker or dropdown opened from inside a slideover or modal draws above it instead of behind it.
 - `A.createUserInfo()` renders the signed-in user and wires its logout button; it had no constructor, so it never did. The button keeps working after a login or logout re-renders it, and `destroy()` stops listening for auth changes.
 
