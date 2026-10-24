@@ -1,243 +1,121 @@
 /**
  * Domma - Dynamic Object Manipulation & Modeling API
- * TypeScript Declaration File
+ * TypeScript declarations.
  *
- * A lightweight, zero-dependency JavaScript framework combining
- * jQuery-style DOM manipulation, Lodash utilities, and modern UI components.
+ * Everything under ./generated/ is written by `npm run build:types` from the JSDoc in src/ -
+ * edit the JSDoc there, never the output (`npm run check:types` fails when the two differ).
+ *
+ * This file is the only hand-written part. It holds what JSDoc cannot say:
+ *   1. `Domma` itself. tsc emits the Domma function with the statics src/index.js assigns, but
+ *      `noConflict` is attached inside installGlobals() and `flags` / `FL` by the domma-flags
+ *      bundle, so neither is on it. `DommaStatic` (a @typedef in src/index.js) adds them; the
+ *      default and named `Domma` exports are re-declared with that type here.
+ *   2. Globals: `declare global` for the aliases installGlobals() puts on window (and `FL`,
+ *      which domma-flags adds), and `Window.DommaOptions`.
+ *   3. Which modules' types are public: the `export type *` list below.
+ *   4. `$('.x')[0]`: the DommaCollection constructor assigns `this[i]`, and a JS class cannot
+ *      declare an index signature in JSDoc, so it is added by augmentation.
  */
+import type {DommaStatic} from './generated/src/index.js';
+import type {DommaLoadOptions} from './generated/src/globals.js';
+import type {Flags} from './generated/src/flags.js';
 
-// Re-export all module types
-export * from './dom';
-export * from './utils';
-export * from './dates';
-export * from './models';
-export * from './config';
-export * from './elements';
-export * from './tables';
-export * from './storage';
-export * from './http';
-export * from './theme';
-export * from './icons';
-export * from './flags';
-export * from './smooth-caret';
-export * from './i18n';
+type Exports = typeof import('./generated/src/index.js');
 
-// Import types for the main Domma object
-import {DommaCollection} from './dom';
-import {Utils, utils} from './utils';
-import {Dates, dates, DommaDate} from './dates';
-import {Model, models, Models} from './models';
-import {SelectorConfig, SetupConfig} from './config';
-import {Elements, elements} from './elements';
-import {Tables, tables} from './tables';
-import {Storage, storage} from './storage';
-import {Http, http} from './http';
-import {Theme, theme} from './theme';
-import {Icons, icons} from './icons';
-import {Flags} from './flags';
-import {SmoothCaret} from './smooth-caret';
-import {I18n, I18nTranslateOptions} from './i18n';
-
-// ============================================
-// Main Domma Interface
-// ============================================
-
-export interface DommaStatic {
-    /**
-     * Create a DommaCollection from a selector, element, or collection
-     * @param selector - CSS selector, element, NodeList, or array of elements
-     * @param context - Optional context element or document
-     * @returns DommaCollection instance
-     */
-    (selector: string | HTMLElement | NodeList | HTMLCollection | HTMLElement[] | DommaCollection, context?: Document | HTMLElement): DommaCollection;
-
-    /**
-     * Execute callback when DOM is ready
-     * @param callback - Function to execute when DOM is ready
-     */
-    (callback: () => void): void;
-
-    /** Utility functions (Lodash-compatible) */
-    utils: Utils;
-
-    /** Date manipulation (Moment.js-style) */
-    dates: Dates;
-
-    /** Reactive models & pub/sub */
-    models: Models;
-
-    /** UI components */
-    elements: Elements;
-
-    /** Smooth caret enhancement for editable text controls. */
-    smoothCaret: SmoothCaret;
-
-    /** DataTable functionality */
-    tables: Tables;
-
-    /** localStorage wrapper */
-    storage: Storage;
-
-    /** HTTP client */
-    http: Http;
-
-    /** Theme system */
-    theme: Theme;
-
-    /** Icon library */
-    icons: Icons;
-
-    /** Translations, plurals and Intl formatting */
-    i18n: I18n;
-
-    /** Shortcut for {@link I18n.t} */
-    t(key: string, params?: Record<string, any> | null, options?: I18nTranslateOptions): string;
-
-    /** Nation flags (opt-in module - present when domma-flags is loaded) */
-    flags?: Flags;
-
-    /** Alias for {@link DommaStatic.flags} (opt-in module) */
-    FL?: Flags;
-
-    // ============================================
-    // ConfigEngine Methods ($.setup, $.config, etc.)
-    // ============================================
-
-    /**
-     * Process configuration for selectors
-     * @param config - Configuration object keyed by selector
-     */
-    setup(config: SetupConfig): void;
-
-    /**
-     * Update configuration for a selector
-     * @param selector - CSS selector
-     * @param changes - Changes to merge into existing config
-     * @returns The merged configuration
-     */
-    update(selector: string, changes: Partial<SelectorConfig>): SelectorConfig;
-
-    /**
-     * Retrieve configuration for a selector or all selectors
-     * @param selector - Optional selector to get config for
-     * @returns Configuration object or null if not found
-     */
-    config(): Record<string, SelectorConfig>;
-
-    config(selector: string): SelectorConfig | null;
-
-    /**
-     * Reset/destroy configuration for a selector or all selectors
-     * @param selector - Optional selector to reset
-     */
-    reset(selector?: string): void;
-
-    // ============================================
-    // Static Utilities
-    // ============================================
-
-    /** Check if value is a DommaCollection */
-    isDomma(value: any): value is DommaCollection;
-
-    /** Domma version string */
-    version: string;
-
-    /**
-     * Give `$` and `_` back to whatever owned them before Domma loaded (jQuery, Lodash).
-     * With `deep`, give back every short alias (`window.Domma` stays).
-     * @returns Domma, so `const dm = Domma.noConflict()` keeps a handle
-     */
-    noConflict(deep?: boolean): DommaStatic;
-}
-
-// ============================================
-// Global Declarations
-// ============================================
-
-declare global {
-    /**
-     * Domma - Main entry point
-     * jQuery-compatible DOM selection and manipulation
-     */
-    const Domma: DommaStatic;
-
-    /**
-     * $ - Alias for Domma
-     * jQuery-compatible selector function
-     */
-    const $: DommaStatic;
-
-    /**
-     * _ - Alias for Domma.utils
-     * Lodash-compatible utility functions
-     */
-    const _: Utils;
-
-    /**
-     * M - Alias for Domma.models
-     * Reactive models and pub/sub events
-     */
-    const M: Models;
-
-    /**
-     * D - Alias for Domma.dates
-     * Moment.js-style date manipulation
-     */
-    const D: Dates;
-
-    /**
-     * S - Alias for Domma.storage
-     * localStorage wrapper
-     */
-    const S: Storage;
-}
-
-// ============================================
-// Default Export
-// ============================================
+// The runtime exports of the ES module ($, _, M, D, S, A, F, H, E, I, T, R, B, components, smoothCaret,
+// i18n) and the types declared in src/index.js. `Domma` is re-declared below.
+export * from './generated/src/index.js';
 
 declare const Domma: DommaStatic;
 export default Domma;
+export {Domma};
 
-// Named exports for ES modules - exactly what src/index.js exports
-declare const $: DommaStatic;
-declare const _: Utils;
-declare const M: Models;
-declare const D: Dates;
-declare const S: Storage;
-declare const H: Http;
-declare const E: Elements;
-declare const I: Icons;
-declare const T: Tables;
-declare const smoothCaret: SmoothCaret;
-// Not typed yet: auth, forms, router, blueprint helpers, web-component registry
-declare const A: any;
-declare const F: any;
-declare const R: any;
-declare const B: any;
-declare const components: any;
+// Types (and `typeof` handles) of every public module. Type-only: the ES module's runtime exports are
+// the ones above, so `import {utils} from 'domma-js'` is refused rather than undefined at runtime.
+export type * from './generated/src/dom.js';
+export type * from './generated/src/utils.js';
+export type * from './generated/src/dates.js';
+export type * from './generated/src/models.js';
+export type * from './generated/src/config.js';
+export type * from './generated/src/elements.js';
+export type * from './generated/src/tables.js';
+export type * from './generated/src/storage.js';
+export type * from './generated/src/http.js';
+export type * from './generated/src/theme.js';
+export type * from './generated/src/icons.js';
+export type * from './generated/src/flags.js';
+export type * from './generated/src/smooth-caret.js';
+export type * from './generated/src/i18n.js';
+export type * from './generated/src/globals.js';
+export type * from './generated/src/router.js';
+export type * from './generated/src/auth.js';
+export type * from './generated/src/forms.js';
+export type * from './generated/src/effects.js';
+export type * from './generated/src/component-factory.js';
+export type * from './generated/src/web-components/base/domma-element.js';
+export type * from './generated/src/component.js';
+export type * from './generated/src/popover.js';
+export type * from './generated/src/context-menu.js';
+export type * from './generated/src/sortable.js';
+export type * from './generated/src/skeleton.js';
+export type * from './generated/src/avatar.js';
+export type * from './generated/src/input-group.js';
+export type * from './generated/src/treeview.js';
+export type * from './generated/src/components/card.js';
+export type * from './generated/src/components/modal.js';
+export type * from './generated/src/components/tooltip.js';
+export type * from './generated/src/components/badge.js';
+export type * from './generated/src/components/loader.js';
+export type * from './generated/src/components/back-to-top.js';
+export type * from './generated/src/components/toast.js';
+export type * from './generated/src/components/focus-trap.js';
+export type * from './generated/src/components/command-palette.js';
+export type * from './generated/src/components/split-pane.js';
+export type * from './generated/src/components/virtual-list.js';
+export type * from './generated/src/components/dropzone.js';
+export type * from './generated/src/components/range-slider.js';
 
-export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components, smoothCaret};
-export type {DommaCollection, DommaDate, Model};
-
-/** Options read from `window.DommaOptions` when Domma loads - set it before the script tag. */
-export interface DommaLoadOptions {
-    /** true (default): every alias; 'safe': only aliases nobody else owns; false: window.Domma only */
-    globals?: boolean | 'safe';
-    /** false: never add the `dm-cloaked` class */
-    cloak?: boolean;
-    /** false: don't initialise the theme engine automatically */
-    theme?: boolean;
-    /** false: no console warning when DOMPurify is missing */
-    purifyWarning?: boolean;
-    /** false: no deprecation warnings */
-    deprecationWarnings?: boolean;
-    /** false: no console warning for a missing translation */
-    i18nWarnings?: boolean;
+declare module './generated/src/dom.js' {
+    interface DommaCollection {
+        /** The elements by position - `$('.x')[0]` is `$('.x').get(0)` */
+        [index: number]: HTMLElement;
+    }
 }
 
 declare global {
+    /** Domma - jQuery-style selection plus every module (`Domma.utils`, `Domma.elements`, ...) */
+    const Domma: DommaStatic;
+    /** Alias for Domma */
+    const $: DommaStatic;
+    /** Utilities (Lodash-style) - `Domma.utils` */
+    const _: Exports['_'];
+    /** Reactive models and pub/sub - `Domma.models` */
+    const M: Exports['M'];
+    /** Dates (Moment-style) - `Domma.dates` */
+    const D: Exports['D'];
+    /** localStorage wrapper - `Domma.storage` */
+    const S: Exports['S'];
+    /** Auth helpers - `Domma.auth` */
+    const A: Exports['A'];
+    /** Forms - `Domma.forms` */
+    const F: Exports['F'];
+    /** HTTP client - `Domma.http` */
+    const H: Exports['H'];
+    /** UI components - `Domma.elements` */
+    const E: Exports['E'];
+    /** Icons - `Domma.icons` */
+    const I: Exports['I'];
+    /** Tables - `Domma.tables` */
+    const T: Exports['T'];
+    /** Hash router - `Domma.router` */
+    const R: Exports['R'];
+    /** Blueprint composition - `B.extend`, `B.pick`, `B.omit` */
+    const B: Exports['B'];
+    /** Nation flags - only once the opt-in domma-flags bundle is loaded */
+    const FL: Flags;
+
     interface Window {
+        /** Options read when Domma loads - set before the script tag. */
         DommaOptions?: DommaLoadOptions;
     }
 }
