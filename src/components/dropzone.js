@@ -970,6 +970,7 @@ export class Dropzone extends Component {
         for (const node of this._added) node.remove();
         this._added = [];
         super.destroy();
+        this._onDestroy?.();
     }
 }
 

@@ -9874,6 +9874,10 @@ export const elements = {
         if (!el) return null;
         const instance = dropzoneFor(el, options);
         this._instances.set(el, instance);
+        // So E.get() never hands back a destroyed instance.
+        instance._onDestroy = () => {
+            if (this._instances.get(el) === instance) this._instances.delete(el);
+        };
         return instance;
     },
 
@@ -9888,6 +9892,10 @@ export const elements = {
         if (!el) return null;
         const instance = rangeSliderFor(el, options);
         this._instances.set(el, instance);
+        // So E.get() never hands back a destroyed instance.
+        instance._onDestroy = () => {
+            if (this._instances.get(el) === instance) this._instances.delete(el);
+        };
         return instance;
     },
 

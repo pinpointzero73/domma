@@ -283,6 +283,15 @@ describe('E.dropzone - picker, keyboard, paste, drag', () => {
         expect(_guardState().armed).toBe(false);
     });
 
+    it('destroy() leaves E.get and E._instances, so a destroyed dropzone is never handed back', () => {
+        document.body.innerHTML = '<div id="dz"></div>';
+        const dz = E.dropzone('#dz');
+        expect(E.get('#dz')).toBe(dz);
+        dz.destroy();
+        expect(E._instances.has($1('#dz'))).toBe(false);
+        expect(E.get('#dz')).toBeUndefined();
+    });
+
     it('a non-file drag (text) is left alone', () => {
         document.body.innerHTML = '<div id="dz"></div>';
         const dz = E.dropzone('#dz');
