@@ -75,11 +75,11 @@
  * @property {(selector?: string|HTMLElement|null, options?: import('./components/back-to-top.js').BackToTopOptions) => import('./components/back-to-top.js').BackToTopInstance} backToTop
  *   Create a BackToTop button: a button / link selector is used as the button, anything else adds one
  * @property {{
- *   (selector: string|HTMLElement, options?: ButtonGroupOptions): ButtonGroupInstance,
+ *   (selector: string|HTMLElement, options?: ButtonGroupOptions): (ButtonGroupInstance & {all(): ButtonGroup[]})|null,
  *   all(selector: string|HTMLElement, options?: ButtonGroupOptions): ButtonGroup[]
  * }} buttonGroup
  *   A button group on every match; returns the first (with `all()` for the rest). `E.buttonGroup.all()`
- *   returns them as an array. (A selector that matches nothing returns an empty array.)
+ *   returns them as an array. A selector that matches nothing returns null.
  * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/loader.js').LoaderOptions) => import('./components/loader.js').LoaderInstance|null} loader
  *   Create a Loader on an element (null when nothing matches)
  * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/loader.js').LoaderOptions) => import('./components/loader.js').LoaderInstance|null} showLoader
@@ -145,13 +145,11 @@
  * @property {(selector: string|HTMLElement, options?: ProgressionOptions) => ProgressionInstance} progression
  *   A timeline or roadmap
  * @property {{
- *   (selector: string|HTMLElement, options?: ListGroupOptions): ListGroupInstance,
+ *   (selector: string|HTMLElement, options?: ListGroupOptions): (ListGroupInstance & {all(): ListGroup[]})|null,
  *   all(selector: string|HTMLElement, options?: ListGroupOptions): ListGroup[]
  * }} listGroup
  *   A list group on every match; returns the first (with `all()` for the rest). `E.listGroup.all()`
- *   returns them as an array. (A selector that matches nothing returns an empty array.)
- * @property {(selector: string|HTMLElement, options?: ProgressionOptions) => ProgressionInstance} timeline
- *   Deprecated: `progression(selector, {mode: 'timeline', ...})`
+ *   returns them as an array. A selector that matches nothing returns null.
  * @property {import('./components/toast.js').ToastStatic} toast
  *   Toast notifications: `E.toast(message, options)` plus `.show/.success/.error/.warning/.info/.closeAll`
  * @property {{
@@ -1941,10 +1939,12 @@ export type Elements = {
     backToTop: (selector?: string | HTMLElement | null, options?: import("./components/back-to-top.js").BackToTopOptions) => import("./components/back-to-top.js").BackToTopInstance;
     /**
      *   A button group on every match; returns the first (with `all()` for the rest). `E.buttonGroup.all()`
-     *   returns them as an array. (A selector that matches nothing returns an empty array.)
+     *   returns them as an array. A selector that matches nothing returns null.
      */
     buttonGroup: {
-        (selector: string | HTMLElement, options?: ButtonGroupOptions): ButtonGroupInstance;
+        (selector: string | HTMLElement, options?: ButtonGroupOptions): (ButtonGroupInstance & {
+            all(): ButtonGroup[];
+        }) | null;
         all(selector: string | HTMLElement, options?: ButtonGroupOptions): ButtonGroup[];
     };
     /**
@@ -2079,16 +2079,14 @@ export type Elements = {
     progression: (selector: string | HTMLElement, options?: ProgressionOptions) => ProgressionInstance;
     /**
      *   A list group on every match; returns the first (with `all()` for the rest). `E.listGroup.all()`
-     *   returns them as an array. (A selector that matches nothing returns an empty array.)
+     *   returns them as an array. A selector that matches nothing returns null.
      */
     listGroup: {
-        (selector: string | HTMLElement, options?: ListGroupOptions): ListGroupInstance;
+        (selector: string | HTMLElement, options?: ListGroupOptions): (ListGroupInstance & {
+            all(): ListGroup[];
+        }) | null;
         all(selector: string | HTMLElement, options?: ListGroupOptions): ListGroup[];
     };
-    /**
-     *   Deprecated: `progression(selector, {mode: 'timeline', ...})`
-     */
-    timeline: (selector: string | HTMLElement, options?: ProgressionOptions) => ProgressionInstance;
     /**
      *   Toast notifications: `E.toast(message, options)` plus `.show/.success/.error/.warning/.info/.closeAll`
      */

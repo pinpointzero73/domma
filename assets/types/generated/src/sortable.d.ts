@@ -362,8 +362,7 @@ declare class Sortable extends Component {
     /** Live mode: move elements and slide everything, the slot included, into place. */
     _flipItems(mutate: any): void;
     _save(order: any): void;
-    /** The onX callback, .on() listeners and `dm:sortable:<name>`, then the older `sortable:<name>` (kept until 1.0). */
+    /** The onX callback, then the .on() listeners and `dm:sortable:<name>`. */
     _signal(name: any, detail: any): void;
-    _dispatch(name: any, detail: any): void;
 }
 import Component from './component.js';

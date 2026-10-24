@@ -89,7 +89,7 @@ describe('E.get', () => {
         expect(instanceOf(el)).toBe(other);
     });
 
-    it('popover listeners: .on() and dm:popover:show fire alongside popover:show', () => {
+    it('popover listeners: .on() and dm:popover:show fire; the old popover:show does not', () => {
         document.body.innerHTML = '<button id="pb">Go</button>';
         const pop = E.popover('#pb', {content: 'Hi'});
         const viaOn = vi.fn();
@@ -99,6 +99,6 @@ describe('E.get', () => {
         pop.element.addEventListener('dm:popover:show', viaDm);
         pop.element.addEventListener('popover:show', viaOld);
         pop.show();
-        expect([viaOn, viaDm, viaOld].map(f => f.mock.calls.length)).toEqual([1, 1, 1]);
+        expect([viaOn, viaDm, viaOld].map(f => f.mock.calls.length)).toEqual([1, 1, 0]);
     });
 });

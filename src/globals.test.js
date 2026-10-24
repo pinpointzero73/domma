@@ -172,15 +172,12 @@ describe('Component events', () => {
     });
 });
 
-describe('timeline() deprecation', () => {
-    it('warns once, and not at all with deprecationWarnings: false', () => {
-        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-        document.body.innerHTML = '<div id="t1"></div><div id="t2"></div>';
-        Domma.elements.timeline('#t1', {items: []});
-        Domma.elements.timeline('#t2', {items: []});
-        const timelineWarnings = warn.mock.calls.filter(c => String(c[0]).includes('timeline()'));
-        expect(timelineWarnings.length).toBeLessThanOrEqual(1);
-        warn.mockRestore();
+describe('removed in 0.58', () => {
+    it('timeline(), the theme engine\'s setVariant / toggle / listVariants are gone', () => {
+        expect(Domma.elements.timeline).toBeUndefined();
+        expect(Domma.theme.setVariant).toBeUndefined();
+        expect(Domma.theme.toggle).toBeUndefined();
+        expect(Domma.theme.listVariants).toBeUndefined();
     });
 });
 

@@ -792,7 +792,6 @@ class Sortable extends Component {
             return undefined;
         });
         this._emit('drop', detail);
-        this._dispatch('drop', detail);
 
         const settle = () => {
             if (this._drag !== d) return;
@@ -1034,16 +1033,11 @@ class Sortable extends Component {
         if (key && this._isLive()) storage.set(key, order.filter((k) => k != null));
     }
 
-    /** The onX callback, .on() listeners and `dm:sortable:<name>`, then the older `sortable:<name>` (kept until 1.0). */
+    /** The onX callback, then the .on() listeners and `dm:sortable:<name>`. */
     _signal(name, detail) {
         const cb = this.options[`on${name[0].toUpperCase()}${name.slice(1)}`];
         if (isFn(cb)) cb(detail);
         this._emit(name, detail);
-        this._dispatch(name, detail);
-    }
-
-    _dispatch(name, detail) {
-        this.element?.dispatchEvent(new CustomEvent(`sortable:${name}`, {detail, bubbles: true}));
     }
 }
 

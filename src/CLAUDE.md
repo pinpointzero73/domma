@@ -344,8 +344,8 @@ Accessed via `Domma.elements`:
   `this.close()` by name (consumers patch `instance.close` with "discard changes?" guards). close() starts with
   `if (!this._mayClose(...onCloseArgs)) return this;` (beforeclose), open() with `_fire('beforeopen')`; destroy() and other
   must-close teardown use `this._forcedClose()`, which still calls `this.close()`.
-- A factory returns one object (ButtonGroup/ListGroup: first instance + non-enumerable `all()`; the array shape warns until
-  1.0). Plain handles (skeleton, avatar, avatar group, chooser) set a non-enumerable `componentName` and call
+- A factory returns one object (ButtonGroup/ListGroup/Tooltip: first instance + non-enumerable `all()`, null on no
+  match; not an array). Plain handles (skeleton, avatar, avatar group, chooser) set a non-enumerable `componentName` and call
   `register(el, handle)` / `unregister()` so `E.get` finds them.
 
 - **One implementation per component** (`src/components/`): card, modal, tooltip, badge, numberBadge, toast, loader and
@@ -370,8 +370,8 @@ Accessed via `Domma.elements`:
       by consumers - keep both. `.dm-modal-host.dm-modal-host` in elements.css neutralises the hand-written `.modal` rules on the host
     - Selector markup with `.modal-header/.modal-body/...` children is "authored": no shadow X, body unpadded; its `.modal-close`, `[data-close]`,
       `[data-dismiss="modal"]` close it. `modal-sm/lg/xl` classes or `data-size` set the size
-    - Unprefixed `open` / `close` CustomEvents are dispatched on the element (non-bubbling), exactly once per open/close - deprecated, kept
-      until 1.0 (docs-pro, the mail helper listen for them). X, backdrop (press and release both on it), Escape (top of the open stack only)
+    - No unprefixed `open` / `close` DOM events (removed in 0.58): listen with `modal.on('close', fn)` or `dm:modal:close`.
+      X, backdrop (press and release both on it), Escape (top of the open stack only)
       and footer buttons call `this.close()` dynamically, so a monkeypatched close is honoured
     - Factory (`createModal`, `E.modal({})`): `div.dm-modal` in the shared `.dm-dialog-container` (z 1040), inline z-index 1050 + 10 per open
       modal, default `size: 'large'` and a Close button, `_factoryCreated` getter; `destroy()` removes it. `showModal()` → Promise of the
@@ -382,7 +382,7 @@ Accessed via `Domma.elements`:
   `close()`, `toggle()`, `openAll()`, `closeAll()`
 - **Tooltip** (`components/tooltip.js`): `elements.tooltip(selector, { content, position|placement, trigger, delay (ms or {show, hide}), hideDelay, offset, html, safe, animation, maxWidth, className, visible, onShow, onHide })` →
   `open()`/`show()`, `close()`/`hide()`, `toggle()`, `isVisible()`, `setContent()`, `setPosition()`, `destroy()`
-    - EVERY match of the selector gets an instance; returns the first with a non-enumerable `all()` (`firstOfMatches()` in elements.js: null on no match, the array shape warns until 1.0).
+    - EVERY match of the selector gets an instance; returns the first with a non-enumerable `all()` (`firstOfMatches()` in elements.js: null on no match).
       A second call on the same element updates its instance
     - Nothing wraps the target: a `.domma-tooltip` bubble on body, `position: fixed`, flipped when it does not fit, `aria-describedby` while shown.
       Content falls back to `data-tooltip`, then `title` (removed while active, restored on destroy). Triggers: hover (+ keyboard focus), click,
@@ -583,7 +583,7 @@ Accessed via `Domma.elements`:
     - Roadmap Items: `{ id, title, status, date, description, progress, priority, tags, assignee }`
     - Status Types: `'planned'`, `'in-progress'`, `'completed'`, `'blocked'`, `'cancelled'`
     - Features: Progress bars, status indicators with pulse animations, priority badges, interactive status changes
-    - Backwards Compatible: `elements.timeline()` is an alias for `progression({ mode: 'timeline' })`
+    - `elements.timeline()` was removed in 0.58: use `progression(selector, {mode: 'timeline'})`
 - **ListGroup**: `elements.listGroup(selector, { selectable, multiSelect, keyboard, loop, onChange })` → `select()`, `deselect()`, `toggle()`, `selectAll()`, `deselectAll()`, `getSelected()`, `enable()`, `disable()`, `refresh()`, `destroy()`
     - CSS classes: `.list-group`, `.list-group-item`, `.list-group-flush`, `.list-group-sm`, `.list-group-lg`, `.list-group-item-action`
     - Colour variants: `list-group-item-primary/secondary/success/danger/warning/info`
@@ -599,7 +599,7 @@ Accessed via `Domma.elements`:
     - Live mode (default): siblings slide aside, `onSort({item, from, to, order, previous})`
     - Indicator mode (`nest: true` or `live: false`): marker shows before/after/into; `onDrop({item, target, zone, key, targetKey})` - host updates data and re-renders, the component animates it by `key`
     - `persist`: order saved via `S` under `sortable:<persist>` (live mode); Alt+Arrow keyboard moves; Esc cancels
-    - Events: `sortable:start|move|sort|drop|cancel|end` on the container. See [docs/Sortable.md](../docs/Sortable.md)
+    - Events: `.on('start'|'move'|'sort'|'drop'|'cancel'|'end')` and bubbling `dm:sortable:<name>` on the container (detail `{instance, args: [detail]}`; the old `sortable:<name>` went in 0.58). See [docs/Sortable.md](../docs/Sortable.md)
 - **InputGroup** (`input-group.js`): `elements.inputGroup(selector, { prefix, suffix, reveal, clear, stepper, counter, labels })` → `update({...})`, `refresh()`, `step(dir)`, `destroy()`, `input`, `wrapper`, `extras`
     - Joins an icon or short text to an existing input, Bootstrap-style (one shared border, focus ring round the group)
     - A slot is `{icon}`, `{text}` or a string (shorthand for `{text}`); `null` removes one in `update()`; text is set as text

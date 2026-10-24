@@ -360,10 +360,10 @@ describe('Domma.elements.sortable', () => {
         });
     });
 
-    it('fires sortable:* events on the container', () => {
+    it('fires dm:sortable:* events on the container', () => {
         fakeLayout(root);
         const names = [];
-        ['start', 'sort', 'end'].forEach((n) => root.addEventListener(`sortable:${n}`, () => names.push(n)));
+        ['start', 'sort', 'end'].forEach((n) => root.addEventListener(`dm:sortable:${n}`, () => names.push(n)));
         make('#list');
         drag(root.querySelector('[data-id=a]'), 20, 100);
         expect(names).toEqual(['start', 'sort', 'end']);

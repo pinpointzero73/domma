@@ -50,48 +50,17 @@ import {registerComponents as defineTags} from './web-components/index.js';
 /** @typedef {'none'|'small'|'medium'|'large'} ShadowSize */
 /** @typedef {'bottom-right'|'bottom-left'} BackToTopPosition */
 
-let timelineWarned = false;
-const groupWarned = new Set();
-
 /**
- * E.buttonGroup / E.listGroup used to return an array when the selector matched more than
- * one element. They return the first instance now, with a non-enumerable all() for the
- * list. Until 1.0 the old array shape still answers on the instance - [i], length,
- * forEach, map and iteration - and each of those warns once.
+ * E.tooltip, E.buttonGroup and E.listGroup set up every match and return the first
+ * instance, with a non-enumerable all() for the list.
  * @param {Object[]} instances - one per matched element, in document order
- * @param {string} name - the factory name, for the warning
- * @returns {Object|Object[]} the first instance; an empty array (as before) when nothing matched
+ * @returns {Object|null} the first instance; null when nothing matched
  */
-function firstOfMatches(instances, name) {
-    if (!instances.length) return instances;
+function firstOfMatches(instances) {
+    if (!instances.length) return null;
     const first = instances[0];
     const list = instances.slice();
     Object.defineProperty(first, 'all', {value: () => list.slice(), configurable: true, writable: true});
-    if (list.length < 2) return first;
-
-    const warn = (what) => {
-        const key = `${name}:${what}`;
-        if (groupWarned.has(key) || loadOption('deprecationWarnings', true) === false || typeof console === 'undefined') return;
-        groupWarned.add(key);
-        console.warn(`Domma: E.${name}() matched ${list.length} elements and returns the first instance; using it as an array (${what}) is deprecated and stops working at 1.0. Use .all() or E.${name}.all().`);
-    };
-    list.forEach((instance, i) => Object.defineProperty(first, i, {
-        get() { warn('[index]'); return instance; },
-        configurable: true
-    }));
-    Object.defineProperty(first, 'length', {get() { warn('length'); return list.length; }, configurable: true});
-    for (const method of ['forEach', 'map']) {
-        Object.defineProperty(first, method, {
-            value(...args) { warn(method); return list[method](...args); },
-            configurable: true,
-            writable: true
-        });
-    }
-    Object.defineProperty(first, Symbol.iterator, {
-        value() { warn('iteration'); return list[Symbol.iterator](); },
-        configurable: true,
-        writable: true
-    });
     return first;
 }
 
@@ -10602,11 +10571,11 @@ class DatePicker extends Component {
  * @property {(selector?: string|HTMLElement|null, options?: import('./components/back-to-top.js').BackToTopOptions) => import('./components/back-to-top.js').BackToTopInstance} backToTop
  *   Create a BackToTop button: a button / link selector is used as the button, anything else adds one
  * @property {{
- *   (selector: string|HTMLElement, options?: ButtonGroupOptions): ButtonGroupInstance,
+ *   (selector: string|HTMLElement, options?: ButtonGroupOptions): (ButtonGroupInstance & {all(): ButtonGroup[]})|null,
  *   all(selector: string|HTMLElement, options?: ButtonGroupOptions): ButtonGroup[]
  * }} buttonGroup
  *   A button group on every match; returns the first (with `all()` for the rest). `E.buttonGroup.all()`
- *   returns them as an array. (A selector that matches nothing returns an empty array.)
+ *   returns them as an array. A selector that matches nothing returns null.
  * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/loader.js').LoaderOptions) => import('./components/loader.js').LoaderInstance|null} loader
  *   Create a Loader on an element (null when nothing matches)
  * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/loader.js').LoaderOptions) => import('./components/loader.js').LoaderInstance|null} showLoader
@@ -10672,13 +10641,11 @@ class DatePicker extends Component {
  * @property {(selector: string|HTMLElement, options?: ProgressionOptions) => ProgressionInstance} progression
  *   A timeline or roadmap
  * @property {{
- *   (selector: string|HTMLElement, options?: ListGroupOptions): ListGroupInstance,
+ *   (selector: string|HTMLElement, options?: ListGroupOptions): (ListGroupInstance & {all(): ListGroup[]})|null,
  *   all(selector: string|HTMLElement, options?: ListGroupOptions): ListGroup[]
  * }} listGroup
  *   A list group on every match; returns the first (with `all()` for the rest). `E.listGroup.all()`
- *   returns them as an array. (A selector that matches nothing returns an empty array.)
- * @property {(selector: string|HTMLElement, options?: ProgressionOptions) => ProgressionInstance} timeline
- *   Deprecated: `progression(selector, {mode: 'timeline', ...})`
+ *   returns them as an array. A selector that matches nothing returns null.
  * @property {import('./components/toast.js').ToastStatic} toast
  *   Toast notifications: `E.toast(message, options)` plus `.show/.success/.error/.warning/.info/.closeAll`
  * @property {{
@@ -10771,8 +10738,7 @@ export const elements = {
         // Every match gets a tooltip; the first is returned, with all() for the rest
         const list = tooltipsFor(resolveAll(selector), options);
         for (const instance of list) this._instances.set(instance.element, instance);
-        // null on no match and the array shape (with a warning) until 1.0, as before
-        return list.length ? firstOfMatches(list, 'tooltip') : null;
+        return firstOfMatches(list);
     },
 
     badge(selector, options = {}) {
@@ -10842,7 +10808,7 @@ export const elements = {
             instances.push(instance);
         }
 
-        return firstOfMatches(instances, 'buttonGroup');
+        return firstOfMatches(instances);
     },
 
     loader(selector, options = {}) {
@@ -11437,19 +11403,7 @@ export const elements = {
             instances.push(instance);
         }
 
-        return firstOfMatches(instances, 'listGroup');
-    },
-
-    timeline(selector, options = {}) {
-        // Backwards compatible alias for progression({ mode: 'timeline' })
-        // Warn once; `window.DommaOptions = {deprecationWarnings: false}` silences it
-        if (!timelineWarned && loadOption('deprecationWarnings', true) !== false && typeof console !== 'undefined') {
-            timelineWarned = true;
-            console.warn('Domma: timeline() is deprecated. Use progression({ mode: "timeline" }) instead.');
-        }
-
-        // Use Progression component with timeline mode
-        return this.progression(selector, { mode: 'timeline', ...options });
+        return firstOfMatches(instances);
     },
 
     // E.toast(message, options) plus .show/.success/.error/.warning/.info/.closeAll
@@ -11667,7 +11621,7 @@ elements.commandPalette.claims = claimsHotkey;
 // returns the first instance (with .all() on it).
 elements.buttonGroup.all = (selector, options = {}) => {
     const result = elements.buttonGroup(selector, options);
-    return Array.isArray(result) ? result : result.all();
+    return result ? result.all() : [];
 };
 elements.tooltip.all = (selector, options = {}) => {
     const result = elements.tooltip(selector, options);
@@ -11675,7 +11629,7 @@ elements.tooltip.all = (selector, options = {}) => {
 };
 elements.listGroup.all = (selector, options = {}) => {
     const result = elements.listGroup(selector, options);
-    return Array.isArray(result) ? result : result.all();
+    return result ? result.all() : [];
 };
 
 // Export component classes for direct access to static methods

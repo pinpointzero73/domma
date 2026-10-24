@@ -1220,41 +1220,6 @@ class ThemeRoller {
     }
 
     /**
-     * Load a theme (replaces old preset functionality)
-     * @param {string} themeName - Full theme name like 'ocean-dark'
-     * @returns {ThemeRoller}
-     * @deprecated Use theme dropdown in UI instead
-     */
-    loadPreset(themeName) {
-      console.warn('[ThemeRoller] loadPreset() is deprecated. Use the theme dropdown instead.');
-
-      if (!themeName) {
-        themeName = 'charcoal-dark'; // Default theme
-      }
-
-        // Enable theme engine if it was disabled
-        if (theme.isDisabled()) {
-            theme.enable();
-        }
-
-      // Apply theme
-      theme.set(themeName);
-
-        // Force browser reflow to apply new CSS
-      document.body.offsetHeight;
-
-      // Refresh inputs after short delay
-        setTimeout(() => {
-            this._refreshInputsDelayed();
-        }, 50);
-
-        this._changes = {};
-        this._updatePreview();
-      this._updateThemeDropdown();
-        return this;
-    }
-
-    /**
      * Refresh inputs after delay (for async theme changes)
      * @private
      */

@@ -215,7 +215,7 @@ describe('events: every onX option has a .on() name and a dm:<component>:<event>
         });
     });
 
-    it('sortable: drop reaches .on() and dm:sortable:drop as well as onDrop and sortable:drop', async () => {
+    it('sortable: drop reaches .on() and dm:sortable:drop as well as onDrop; no sortable:drop', async () => {
         const ROW = 40;
         const root = document.createElement('ul');
         root.id = 'so';
@@ -244,7 +244,7 @@ describe('events: every onX option has a .on() name and a dm:<component>:<event>
                 pointer('pointerup', document, 118);
             }
         });
-        expect(legacy).toHaveBeenCalledTimes(1);
+        expect(legacy).not.toHaveBeenCalled();
     });
 
     it('the option keeps its return value: autocomplete onFilter still replaces the results', async () => {
@@ -391,24 +391,23 @@ describe('factory returns', () => {
         window.DommaOptions = {deprecationWarnings: true};
     });
 
-    it('buttonGroup: several matches return the first instance, with all()', async () => {
+    it('buttonGroup: several matches return the first instance, with all(); not an array', async () => {
         const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
         const g = E.buttonGroup('.bg');
         expect(Array.isArray(g)).toBe(false);
         expect(g.element.id).toBe('bg1');
         expect(g.all().map((x) => x.element.id)).toEqual(['bg1', 'bg2', 'bg3']);
         expect(Object.keys(g)).not.toContain('all');
-        expect(Object.keys(g)).not.toContain('0');
+        expect(g[1]).toBeUndefined();
+        expect(g.length).toBeUndefined();
         expect(warn).not.toHaveBeenCalled();
+    });
 
-        expect(g[1].element.id).toBe('bg2');
-        expect(g[2].element.id).toBe('bg3');
-        const indexWarnings = warn.mock.calls.filter((c) => String(c[0]).includes('[index]'));
-        expect(indexWarnings.length).toBe(1);
-        expect(g.length).toBe(3);
-        expect(g.map((x) => x.element.id)).toEqual(['bg1', 'bg2', 'bg3']);
-        expect([...g].length).toBe(3);
-        expect(warn.mock.calls.every((c) => String(c[0]).includes('E.buttonGroup()'))).toBe(true);
+    it('a selector that matches nothing gives null, and all() an empty array', () => {
+        expect(E.buttonGroup('#none')).toBeNull();
+        expect(E.listGroup('#none')).toBeNull();
+        expect(E.buttonGroup.all('#none')).toEqual([]);
+        expect(E.listGroup.all('#none')).toEqual([]);
     });
 
     it('buttonGroup.all / listGroup.all return arrays; a single match has all() too', async () => {

@@ -14,8 +14,7 @@
  * (`returnFocus`). Toasts, popovers and pickers opened from the modal keep focus.
  *
  * Events: open, opened, close, closed, beforeopen, beforeclose (cancelable), buttonclick -
- * each as `onX`, `.on('x')` and `dm:modal:x`. The unprefixed `open` / `close` DOM events
- * are still dispatched on the element, once per open / close (deprecated, until 1.0).
+ * each as `onX`, `.on('x')` and `dm:modal:x`.
  */
 
 import Component from '../component.js';
@@ -534,12 +533,6 @@ export class Modal extends Component {
         return this._host.dataset.animation === 'none' ? 0 : num(this.options.animationDuration, 300);
     }
 
-    /** The deprecated unprefixed DOM event, dispatched on the element only (no bubbling). */
-    _legacyEvent(name) {
-        if (typeof CustomEvent === 'undefined') return;
-        this.element.dispatchEvent(new CustomEvent(name, {bubbles: false, detail: {instance: this}}));
-    }
-
     // ---- public API -----------------------------------------------------
 
     /**
@@ -579,8 +572,6 @@ export class Modal extends Component {
         } else {
             show();
         }
-
-        this._legacyEvent('open');
         this._fire('open', this);
         this._later(() => this._fire('opened', this), this._duration());
         return this;
@@ -606,8 +597,6 @@ export class Modal extends Component {
             this._trap.deactivate({returnFocus: back});
             this._restoreFocus = null;
         }
-
-        this._legacyEvent('close');
         this._fire('close', this);
 
         const finish = () => {

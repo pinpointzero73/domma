@@ -66,12 +66,12 @@ describe('E.modal - shadow root and slotting', () => {
 });
 
 describe('E.modal - events', () => {
-    it('unprefixed open and close fire exactly once per open / close, including via the X', async () => {
+    it('open and close fire exactly once per open / close, including via the X', async () => {
         const modal = E.modal({title: 'T', animation: false});
         const opens = vi.fn();
         const closes = vi.fn();
-        modal.element.addEventListener('open', opens);
-        modal.element.addEventListener('close', closes);
+        modal.on('open', opens);
+        modal.on('close', closes);
 
         modal.open();
         modal.open();
@@ -87,16 +87,30 @@ describe('E.modal - events', () => {
         expect(closes).toHaveBeenCalledTimes(2);
     });
 
-    it('a nested component\'s close does not reach the modal\'s listeners', () => {
+    it('no unprefixed open / close DOM events (removed in 0.58)', () => {
         const modal = E.modal({title: 'T', animation: false});
-        const inner = document.createElement('div');
-        modal.element.appendChild(inner);
-        const closes = vi.fn();
-        modal.element.addEventListener('close', closes);
-        inner.dispatchEvent(new CustomEvent('close', {bubbles: true}));
+        const plain = vi.fn();
+        const prefixed = vi.fn();
+        modal.element.addEventListener('open', plain);
+        modal.element.addEventListener('close', plain);
+        modal.element.addEventListener('dm:modal:close', prefixed);
         modal.open();
         modal.close();
-        expect(closes.mock.calls.filter(([e]) => e.target === modal.element)).toHaveLength(1);
+        expect(plain).not.toHaveBeenCalled();
+        expect(prefixed).toHaveBeenCalledTimes(1);
+    });
+
+    it('a nested modal closing does not count as this one closing', () => {
+        const outer = E.modal({title: 'Outer', animation: false});
+        const inner = E.modal({title: 'Inner', animation: false});
+        const closes = vi.fn();
+        outer.on('close', closes);
+        outer.open();
+        inner.open();
+        inner.close();
+        expect(closes).not.toHaveBeenCalled();
+        outer.close();
+        expect(closes).toHaveBeenCalledTimes(1);
     });
 
     it('dm:modal:* events and onX options fire with the instance; onOpened / onClosed after the animation', async () => {
