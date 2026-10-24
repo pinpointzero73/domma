@@ -74,11 +74,14 @@ export const router = {
             duration: 200
         };
 
-        // Listen for hash changes
-        window.addEventListener('hashchange', () => this._handleRouteChange());
+        // Listen for hash changes. The handler is kept so destroy() can remove it, and it
+        // looks _handleRouteChange up at event time, so a wrapper installed on the router
+        // (Domma CMS installs one) is the one that runs.
+        this._onHashChange = () => this._runRouteChange();
+        window.addEventListener('hashchange', this._onHashChange);
 
         // Handle initial route
-        this._handleRouteChange();
+        this._runRouteChange();
 
         this._initialised = true;
 
@@ -215,7 +218,10 @@ export const router = {
      * R.destroy();
      */
     destroy() {
-        window.removeEventListener('hashchange', this._handleRouteChange);
+        if (this._onHashChange) {
+            window.removeEventListener('hashchange', this._onHashChange);
+            this._onHashChange = null;
+        }
         this._routes = [];
         this._views = {};
         this._middleware = [];
@@ -224,6 +230,23 @@ export const router = {
         this._routing = false;
         this._missedChange = false;
         this._initialised = false;
+    },
+
+    // Internal: run a route change from an event, so a failure is reported, never an unhandled rejection.
+    _runRouteChange() {
+        const result = this._handleRouteChange();
+        if (result && typeof result.catch === 'function') {
+            result.catch(error => this._reportError(error, window.location.hash.slice(1) || this._defaultRoute));
+        }
+        return result;
+    },
+
+    // Internal: log a routing failure and publish router:error.
+    _reportError(error, route, view) {
+        console.error(`[Domma Router] Error on ${route}:`, error);
+        if (typeof window !== 'undefined' && window.M) {
+            window.M.publish('router:error', {error, route, view});
+        }
     },
 
     // Internal: Handle route changes
@@ -274,16 +297,24 @@ export const router = {
         }
 
         const from = this._currentRoute;
-        const to = {...route, params, path: hash};
+        const to = {...route, params, query: this._parseQuery(hash), path: hash};
 
         // Run middleware
         const allowed = await this._runMiddleware(to, from);
-        if (!allowed) return;
+        if (allowed !== true) {
+            if (allowed && typeof allowed.redirect === 'string') {
+                // next('/somewhere'): go there instead, in place of the refused entry.
+                window.location.replace(`#${allowed.redirect}`);
+            } else {
+                this._restoreAddress(hash);
+            }
+            return;
+        }
 
         // Run onLeave hook
         if (from?.onLeave) {
             const result = await from.onLeave();
-            if (result === false) return;
+            if (result === false) { this._restoreAddress(hash); return; }
         }
 
         // Publish before change event
@@ -293,8 +324,8 @@ export const router = {
 
         // Run onEnter hook
         if (route.onEnter) {
-            const result = await route.onEnter(params);
-            if (result === false) return;
+            const result = await route.onEnter(params, to);
+            if (result === false) { this._restoreAddress(hash); return; }
         }
 
         // Update document title
@@ -314,8 +345,54 @@ export const router = {
         }
     },
 
-    // Internal: Match route with params
+    /**
+     * A refused change (a guard that did not call next(), onLeave/onEnter returning
+     * false) leaves the screen where it was, so the address goes back to it -
+     * replaceState, which fires no hashchange, so nothing routes a second time.
+     * Not when the address has moved on meanwhile (a guard that navigated elsewhere,
+     * or restored it itself).
+     */
+    _restoreAddress(attempted) {
+        const shown = this._shownPath;
+        if (shown === null || shown === undefined || shown === attempted) return;
+        const now = window.location.hash.slice(1) || this._defaultRoute;
+        if (now !== attempted) return;
+        if (window.history && typeof window.history.replaceState === 'function') {
+            window.history.replaceState(window.history.state, '', `#${shown}`);
+        }
+    },
+
+    // Internal: the path part of an address ('/search?q=x' -> '/search').
+    _stripQuery(path) {
+        const s = String(path);
+        const q = s.indexOf('?');
+        return q === -1 ? s : s.slice(0, q);
+    },
+
+    // Internal: the query of an address as an object ('/s?q=a%20b&f' -> {q: 'a b', f: ''}).
+    _parseQuery(path) {
+        const s = String(path);
+        const q = s.indexOf('?');
+        if (q === -1) return {};
+        try {
+            return Object.fromEntries(new URLSearchParams(s.slice(q + 1)));
+        } catch {
+            return {};
+        }
+    },
+
+    // Internal: decodeURIComponent that keeps the raw text when it is malformed.
+    _decode(segment) {
+        try {
+            return decodeURIComponent(segment);
+        } catch {
+            return segment;
+        }
+    },
+
+    // Internal: Match route with params (a query string is not part of the match)
     _matchRoute(path) {
+        path = this._stripQuery(path);
         for (const route of this._routes) {
             const params = this._extractParams(route.path, path);
             if (params !== null) {
@@ -338,8 +415,8 @@ export const router = {
 
         for (let i = 0; i < patternParts.length; i++) {
             if (patternParts[i].startsWith(':')) {
-                params[patternParts[i].slice(1)] = pathParts[i];
-            } else if (patternParts[i] !== pathParts[i]) {
+                params[patternParts[i].slice(1)] = this._decode(pathParts[i]);
+            } else if (patternParts[i] !== pathParts[i] && patternParts[i] !== this._decode(pathParts[i])) {
                 return null;
             }
         }
@@ -348,11 +425,14 @@ export const router = {
     },
 
     // Internal: Run middleware chain
+    // true = carry on, false = refused, {redirect} = next('/path') asked to go elsewhere.
     async _runMiddleware(to, from) {
         for (const middleware of this._middleware) {
             let nextCalled = false;
-            const next = () => {
+            let redirect = null;
+            const next = (target) => {
                 nextCalled = true;
+                if (typeof target === 'string') redirect = target;
             };
 
             await middleware(to, from, next);
@@ -360,46 +440,64 @@ export const router = {
             if (!nextCalled) {
                 return false;
             }
+            if (redirect !== null) {
+                return {redirect};
+            }
         }
         return true;
     },
 
     // Internal: Render a view with transitions
+    // A failure (a template or partial that will not load, a throwing render or onMount)
+    // is logged and published as router:error, the container is shown again, and the
+    // router is left free for the next change - it never stays mid-transition.
     async _renderView(viewName, params) {
         this._transitioning = true;
+        try {
+            const view = this._views[viewName];
+            if (!view) {
+                console.error(`[Domma Router] View "${viewName}" not found`);
+                return;
+            }
 
-        const view = this._views[viewName];
-        if (!view) {
-            console.error(`[Domma Router] View "${viewName}" not found`);
+            // Get jQuery wrapper if available
+            const $ = typeof window !== 'undefined' && window.$ ? window.$ : null;
+            if (!$) {
+                console.error('[Domma Router] jQuery/Domma $ not found. Cannot animate transitions.');
+                await this._renderViewStatic(view, params);
+                return;
+            }
+
+            const $container = $(this._container);
+
+            // Fade out current content
+            await new Promise(resolve => {
+                $container.fadeOut(this._transitions.duration, resolve);
+            });
+
+            // Render new content
+            await this._renderContent(view, params, $container);
+
+            // Fade in new content
+            await new Promise(resolve => {
+                $container.fadeIn(this._transitions.duration, resolve);
+            });
+        } catch (error) {
+            this._showContainer();
+            this._reportError(error, window.location.hash.slice(1) || this._defaultRoute, viewName);
+        } finally {
             this._transitioning = false;
-            return;
         }
+    },
 
-        // Get jQuery wrapper if available
-        const $ = typeof window !== 'undefined' && window.$ ? window.$ : null;
-        if (!$) {
-            console.error('[Domma Router] jQuery/Domma $ not found. Cannot animate transitions.');
-            this._renderViewStatic(view, params);
-            this._transitioning = false;
-            return;
+    // Internal: undo a fade-out left half done by a failed render.
+    _showContainer() {
+        const el = this._container && (this._container[0] || this._container);
+        if (el && el.style) {
+            el.style.display = '';
+            el.style.opacity = '';
+            el.style.transition = '';
         }
-
-        const $container = $(this._container);
-
-        // Fade out current content
-        await new Promise(resolve => {
-            $container.fadeOut(this._transitions.duration, resolve);
-        });
-
-        // Render new content
-        await this._renderContent(view, params, $container);
-
-        // Fade in new content
-        await new Promise(resolve => {
-            $container.fadeIn(this._transitions.duration, resolve);
-        });
-
-        this._transitioning = false;
     },
 
     // Internal: Load template from URL with caching
