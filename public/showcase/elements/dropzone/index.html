@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropzone - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/dropzone/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the component itself needs is in elements.css. */
+        .sx-dz-output {
+            margin: 0;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-background-alt);
+            color: var(--dm-text);
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+        }
+
+        .sx-dz-compact {
+            min-height: 0;
+            flex-direction: row;
+            padding: 0.75rem 1rem;
+        }
+
+        .sx-dz-log {
+            margin: 0;
+            padding-left: 1.25rem;
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Dropzone</div>
+        <div class="hero-subtitle">Drop, browse or paste files onto an area - checked, previewed and either submitted with the form or uploaded with progress</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Dropzone</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.dropzone()</code> turns an element into a place to put files. Drag them onto it, click it
+                (or press <kbd>Enter</kbd> / <kbd>Space</kbd>) to open the file picker, or paste copied files into
+                it. Each file is checked against the rules you give, shown in a list with a thumbnail for images,
+                and either kept for the form or uploaded on its own with a progress bar.
+            </p>
+            <p class="mb-4">
+                Underneath there is always a real <code>&lt;input type="file"&gt;</code> - one you wrote, or one the
+                component adds - so the area works inside an ordinary <code>&lt;form&gt;</code>. The input's file
+                list is kept in step with what the area shows, so the form submits exactly those files.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Three ways in</strong> - drag and drop, the file picker, and paste</li>
+                <li><strong>Rules</strong> - <code>accept</code>, <code>maxSize</code>, <code>minSize</code>, <code>maxFiles</code> and a per-file <code>onBeforeAdd</code></li>
+                <li><strong>Forms</strong> - the files submit with the form; no upload code needed</li>
+                <li><strong>Uploads</strong> - one request per file with progress, concurrency, retry and cancel</li>
+                <li><strong>Accessible</strong> - a real button, keyboard operable, adds and refusals announced</li>
+                <li><strong>Safe</strong> - file names are always text, previews are released when files go</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.dropzone('#attachments', {
+    accept: 'image/*,.pdf',
+    maxSize: 5 * 1024 * 1024,      // 5 MB
+    maxFiles: 4,
+    name: 'attachments'
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Basic">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Drop, browse or paste</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Drop a few files here, or tab to the area and press <kbd>Enter</kbd>. Images get a thumbnail;
+                the &times; on a row removes it. Copy an image and paste it while the area has focus.
+            </p>
+            <div id="demo-basic" class="mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const dz = E.dropzone('#demo-basic');
+dz.on('change', (files) => console.log(files.length + ' files'));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Rules">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Accept, size and count</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                This one takes up to three images or PDFs of at most 1 MB each. Anything else is refused with a
+                reason - <code>'type'</code>, <code>'size'</code> or <code>'count'</code> - through
+                <code>onReject</code>, and the refusal is read out to screen readers. The hint under the prompt is
+                written from the rules unless you give <code>labels.hint</code>.
+            </p>
+            <div id="demo-rules" class="mb-4"></div>
+            <ul id="demo-rules-log" class="sx-dz-log mb-4" aria-live="off">
+                <li>Nothing refused yet</li>
+            </ul>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.dropzone('#demo-rules', {
+    accept: ['image/*', '.pdf'],
+    maxSize: 1024 * 1024,
+    maxFiles: 3,
+    onReject: (entry, reason) => console.log(entry.name, reason),
+    // Return false to refuse one file for your own reasons
+    onBeforeAdd: (entry) => !entry.name.startsWith('~')
+});
+</code></pre>
+            </div>
+            <p class="mb-2">
+                <code>accept</code> reads like the input attribute: extensions (<code>.pdf</code>), wildcards
+                (<code>image/*</code>) and exact types (<code>application/json</code>), as a comma list or an
+                array. Without <code>multiple</code> the area holds one file, and a new one replaces it.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Forms">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Inside a form</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Without <code>upload</code>, the files travel with the form. Wrap (or sit next to) your own
+                <code>&lt;input type="file"&gt;</code> and the component uses it - its <code>name</code>,
+                <code>accept</code> and <code>multiple</code> become the defaults. Add files and press Show to see
+                what <code>new FormData(form)</code> holds.
+            </p>
+            <form id="demo-form" class="mb-4">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="demo-form-title">Title</label>
+                    <input id="demo-form-title" class="form-input" name="title" value="Holiday photos">
+                </div>
+                <div id="demo-form-zone" class="mb-3">
+                    <input type="file" name="photos" accept="image/*" multiple>
+                </div>
+                <div class="flex gap-2">
+                    <button class="btn btn-primary" type="submit">Show FormData</button>
+                    <button class="btn btn-outline" type="reset">Reset</button>
+                </div>
+            </form>
+            <pre id="demo-form-output" class="sx-dz-output mb-4">Nothing submitted yet</pre>
+            <div class="code-block language-html">
+                <pre><code>
+&lt;form action="/albums" method="post" enctype="multipart/form-data"&gt;
+    &lt;div id="photos"&gt;
+        &lt;input type="file" name="photos" accept="image/*" multiple&gt;
+    &lt;/div&gt;
+    &lt;button&gt;Save&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+    E.dropzone('#photos');
+&lt;/script&gt;
+</code></pre>
+            </div>
+            <p class="mb-2">
+                The input's <code>FileList</code> is rewritten with a <code>DataTransfer</code> after each add and
+                remove (every current browser). Where that is missing, the form's <code>formdata</code> event adds
+                the files instead, which covers a normal submit and <code>new FormData(form)</code>; code that builds
+                its own request some other way should read <code>dz.getFiles()</code>. A form reset empties the list.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Uploads">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Uploading with progress</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Give <code>upload</code> and each file is sent on its own as <code>multipart/form-data</code>, two
+                at a time by default, with a progress bar. A failed file can be retried; the &times; on a file
+                that is still sending cancels it. This page has no server, so the demo passes a pretend request
+                through <code>upload.xhr</code> - files whose name contains "fail" fail.
+            </p>
+            <div id="demo-upload" class="mb-3"></div>
+            <div class="flex gap-2 mb-4">
+                <button id="demo-upload-cancel" class="btn btn-outline btn-sm" type="button">Cancel all</button>
+                <button id="demo-upload-clear" class="btn btn-ghost btn-sm" type="button">Clear</button>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.dropzone('#demo-upload', {
+    upload: {
+        url: '/api/files',
+        field: 'file',                       // the FormData field name
+        headers: {'X-CSRF-Token': token},    // or (entry) => ({...})
+        data: (entry) => ({folder: 'inbox'}),
+        concurrency: 2,
+        withCredentials: false
+    },
+    autoUpload: true,                        // false: call dz.upload() yourself
+    retry: 1,                                // automatic retries per file
+    onProgress: (entry, percent) => {},
+    onSuccess: (entry, response) => {},      // JSON is parsed for you
+    onError: (entry, error) => {},           // {status, message, response}
+    onComplete: (entries) => {}
+});
+</code></pre>
+            </div>
+            <p class="mb-2">
+                Uploads use <code>XMLHttpRequest</code> rather than <code>H</code>: <code>H</code> is built on
+                <code>fetch()</code>, which reports no upload progress. With <code>upload</code> set, the input is
+                kept empty so a surrounding form does not send the files a second time.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Custom Content">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Your own content and a list elsewhere</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Anything already in the element is kept in place of the default prompt. <code>list</code> sends the
+                file list to another element; <code>disable()</code> / <code>enable()</code> switch it off and on.
+            </p>
+            <div id="demo-custom" class="sx-dz-compact mb-3">
+                <span data-icon="image" aria-hidden="true"></span>
+                <span>Add a profile picture</span>
+            </div>
+            <div id="demo-custom-list" class="mb-3"></div>
+            <button id="demo-custom-toggle" class="btn btn-outline btn-sm mb-4" type="button">Disable</button>
+            <div class="code-block language-javascript">
+                <pre><code>
+const avatar = E.dropzone('#demo-custom', {
+    accept: 'image/*',
+    multiple: false,
+    list: '#demo-custom-list',
+    labels: {added: 'Picture chosen: {name}'}
+});
+avatar.disable();
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Blueprint">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">In an F.create blueprint</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>type: 'dropzone'</code> gives a form field whose value is the array of files.
+                <code>formConfig</code> takes the dropzone's options, and <code>required</code> means at least one file.
+            </p>
+            <div id="demo-blueprint" class="mb-3"></div>
+            <pre id="demo-blueprint-output" class="sx-dz-output mb-4">Submit to see the value</pre>
+            <div class="code-block language-javascript">
+                <pre><code>
+F.render('#demo-blueprint', {
+    subject: {type: 'string', label: 'Subject', required: true},
+    evidence: {
+        type: 'dropzone',
+        label: 'Evidence',
+        required: true,
+        formConfig: {accept: 'image/*,.pdf', maxFiles: 3, maxSize: 2 * 1024 * 1024}
+    }
+}, {}, {onSubmit: (data) => console.log(data.evidence)});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="API">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">API</h2></div>
+        <div class="card-body">
+            <h3 class="text-lg font-semibold mb-3">Methods</h3>
+            <ul class="mb-4">
+                <li><code>getFiles()</code> - the File objects shown; <code>getEntries()</code> - with status, progress and response</li>
+                <li><code>addFiles(fileList)</code>, <code>removeFile(id | entry | file)</code>, <code>clear()</code></li>
+                <li><code>browse()</code> - open the file picker</li>
+                <li><code>upload()</code>, <code>retry(id?)</code>, <code>cancel(id?)</code></li>
+                <li><code>enable()</code>, <code>disable()</code>, <code>isDisabled()</code>, <code>destroy()</code></li>
+            </ul>
+            <h3 class="text-lg font-semibold mb-3">Events</h3>
+            <p class="mb-2">
+                Each is an <code>onX</code> option, an <code>.on('x')</code> listener and a bubbling
+                <code>dm:dropzone:x</code> DOM event. They get the file's entry
+                <code>{id, file, name, size, type, status, progress, response, error}</code>.
+            </p>
+            <ul class="mb-4">
+                <li><code>beforeadd(entry)</code> - return <code>false</code> to refuse it</li>
+                <li><code>add(entry)</code>, <code>remove(entry)</code>, <code>reject(entry, 'type' | 'size' | 'count')</code></li>
+                <li><code>change(files)</code> - after any add or remove</li>
+                <li><code>uploadstart(entry)</code>, <code>progress(entry, percent)</code>, <code>success(entry, response)</code>,
+                    <code>error(entry, error)</code>, <code>complete(entries)</code></li>
+            </ul>
+            <ul id="demo-log" class="sx-dz-log" aria-live="off">
+                <li>Nothing yet - events from every demo on this page appear here</li>
+            </ul>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(D().format('HH:mm:ss') + ' - ' + message) + '</li>');
+        list.find('li').filter((i) => i >= 8).remove();
+    };
+
+    // ---- Basic -----------------------------------------------------------
+    const basic = E.dropzone('#demo-basic');
+    basic.on('change', (files) => log('Basic: ' + files.length + ' file(s)'));
+
+    // ---- Rules -------------------------------------------------------------
+    E.dropzone('#demo-rules', {
+        accept: ['image/*', '.pdf'],
+        maxSize: 1024 * 1024,
+        maxFiles: 3,
+        onBeforeAdd: (entry) => !entry.name.startsWith('~'),
+        onReject: (entry, reason) => {
+            const list = $('#demo-rules-log');
+            list.find('li').filter((i, el) => /^Nothing refused/.test(el.textContent)).remove();
+            list.prepend('<li>' + _.escape(entry.name + ' - ' + reason) + '</li>');
+        }
+    });
+
+    // ---- Forms -------------------------------------------------------------
+    E.dropzone('#demo-form-zone');
+    $('#demo-form').on('submit', (e) => {
+        e.preventDefault();
+        const lines = [];
+        for (const [key, value] of new FormData(e.currentTarget).entries()) {
+            lines.push(key + ' = ' + (typeof value === 'string' ? value : value.name + ' (' + value.size + ' bytes)'));
+        }
+        $('#demo-form-output').text(lines.join('\n') || '(empty)');
+    });
+
+    // ---- Uploads -------------------------------------------------------------
+    // A pretend XMLHttpRequest: reports progress over about two seconds, then answers.
+    class PretendUpload {
+        constructor(entry) {
+            this.entry = entry;
+            this.upload = {listeners: [], addEventListener: (type, fn) => this.upload.listeners.push(fn)};
+            this.listeners = {};
+            this.status = 0;
+            this.responseText = '';
+        }
+        addEventListener(type, fn) { (this.listeners[type] ||= []).push(fn); }
+        open() {}
+        setRequestHeader() {}
+        send() {
+            const total = this.entry.size || 1;
+            let loaded = 0;
+            this.timer = setInterval(() => {
+                loaded = Math.min(total, loaded + total / 10);
+                this.upload.listeners.forEach(fn => fn({lengthComputable: true, loaded, total}));
+                if (loaded < total) return;
+                clearInterval(this.timer);
+                const fails = /fail/i.test(this.entry.name);
+                this.status = fails ? 500 : 200;
+                this.statusText = fails ? 'Server error' : 'OK';
+                this.responseText = JSON.stringify({id: this.entry.id, name: this.entry.name});
+                (this.listeners.load || []).forEach(fn => fn());
+            }, 200);
+        }
+        abort() {
+            clearInterval(this.timer);
+            (this.listeners.abort || []).forEach(fn => fn());
+        }
+    }
+
+    const uploader = E.dropzone('#demo-upload', {
+        upload: {url: '/api/files', xhr: (entry) => new PretendUpload(entry)},
+        onSuccess: (entry) => log('Uploaded ' + entry.name),
+        onError: (entry, error) => log('Failed ' + entry.name + ': ' + error.message),
+        onComplete: (entries) => log('Upload batch finished (' + entries.length + ' files)')
+    });
+    $('#demo-upload-cancel').on('click', () => uploader.cancel());
+    $('#demo-upload-clear').on('click', () => uploader.clear());
+
+    // ---- Custom content -------------------------------------------------------
+    const avatar = E.dropzone('#demo-custom', {
+        accept: 'image/*',
+        multiple: false,
+        list: '#demo-custom-list',
+        labels: {added: 'Picture chosen: {name}'}
+    });
+    $('#demo-custom-toggle').on('click', (e) => {
+        if (avatar.isDisabled()) avatar.enable();
+        else avatar.disable();
+        $(e.currentTarget).text(avatar.isDisabled() ? 'Enable' : 'Disable');
+    });
+
+    // ---- Blueprint -------------------------------------------------------------
+    F.render('#demo-blueprint', {
+        subject: {type: 'string', label: 'Subject', required: true},
+        evidence: {
+            type: 'dropzone',
+            label: 'Evidence',
+            required: true,
+            formConfig: {accept: 'image/*,.pdf', maxFiles: 3, maxSize: 2 * 1024 * 1024}
+        }
+    }, {}, {
+        submitText: 'Send report',
+        onSubmit: (data) => {
+            const files = (data.evidence || []).map(f => f.name).join(', ');
+            $('#demo-blueprint-output').text('subject = ' + data.subject + '\nevidence = [' + files + ']');
+        }
+    });
+
+    // ---- One listener for the whole page ---------------------------------------
+    $('main').on('dm:dropzone:reject', (e) => {
+        const [entry, reason] = e.detail.args;
+        log('Refused ' + entry.name + ' (' + reason + ')');
+    });
+
+    Domma.icons.scan();
+</script>
+
+</body>
+</html>
