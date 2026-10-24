@@ -598,6 +598,7 @@ const palette = E.commandPalette({
   `select(command)`, `run(command)` - `onX`, `.on('x')`, `dm:command-palette:x`.
 - **Look**: the modal's tokens (`--dm-modal-bg`, `--dm-modal-border`, `--dm-modal-backdrop`, `--dm-modal-shadow`),
   the active row `--dm-selected-bg`; full width from the top under 640px; no transition under reduced motion.
+
 ## Split Pane - `E.splitPane(container, options)`
 
 The container's element children become panes; a gutter is inserted between each pair. Layout is flexbox -
@@ -675,6 +676,7 @@ E.virtualList('#feed', {
   `prepend()`, or heights are re-measured.
 - **Not supported**: horizontal lists and sticky group headers. A browser resets the scroll position of an element
   that is moved in the DOM; call `scrollToIndex()` again after moving the container.
+
 ## Dropzone - `E.dropzone(target, options)`
 
 The element becomes a drop / browse / paste area (`role="button"`; click, Enter or Space opens the picker). It uses

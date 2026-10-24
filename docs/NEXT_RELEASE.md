@@ -1,7 +1,4 @@
-# 
-
-<!-- website -->
-
+# New components: dropzone, range slider, command palette, focus trap, split pane, virtual list and translations
 
 ### i18n
 
@@ -22,6 +19,7 @@
     `window.DommaOptions = {i18nWarnings: false}` silences them. Events `change`, `missing`, `loaded`
     via `i18n.on()` and as `dm:i18n:*` on document.
 *   Types in `assets/types/i18n.d.ts`; guide in `docs/I18n.md`; showcase page `showcase/i18n/`.
+
 ### Focus trap
 
 `E.focusTrap(container, options)` keeps Tab, Shift+Tab and stray focus inside one or more containers while it is
@@ -80,3 +78,6 @@ forms, `FormData` and model bindings see it. `F.create` takes `type: 'slider'`.
 E.rangeSlider('#price', {range: true, min: 0, max: 1000, step: 10, value: [100, 600], labels: v => '£' + v});
 ```
 
+<!-- website -->
+
+<p>Seven new pieces built to the 0.55 conventions: a dropzone with upload progress, a single or two-thumb range slider (both also as form blueprint fields), a Cmd/Ctrl+K command palette, a focus trap, resizable split panes, a virtual list that scrolls 100,000 rows with infinite loading, and <code>Domma.i18n</code> translations with plurals, Intl formatting and right-to-left support.</p>

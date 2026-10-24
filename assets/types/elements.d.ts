@@ -964,11 +964,13 @@ export interface Elements {
 
     /** A Cmd/Ctrl+K command palette (builds its own overlay) */
     commandPalette: CommandPaletteFactory;
+
     /** Resizable panes from a container's children; null when nothing matches */
     splitPane(container: string | HTMLElement, options?: SplitPaneOptions): SplitPaneInstance | null;
 
     /** A scrolling list that renders only the visible rows; null when nothing matches */
     virtualList<T = any>(container: string | HTMLElement, options?: VirtualListOptions<T>): VirtualListInstance<T> | null;
+
     /** A file drop / browse / paste area over a real file input. Null when the target matches nothing. */
     dropzone(target: string | HTMLElement, options?: DropzoneOptions): DropzoneInstance | null;
 

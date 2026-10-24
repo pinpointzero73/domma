@@ -9824,6 +9824,9 @@ export const elements = {
     commandPalette(options = {}) {
         // Found by E.get through the component registry, which forgets it on destroy().
         return new CommandPalette(options);
+    },
+
+    /**
      * Resizable panes: the container's element children become panes with draggable,
      * keyboard-operable gutters between them.
      * @param {string|Element} selector - the container
@@ -9839,16 +9842,6 @@ export const elements = {
         instance._onDestroy = () => {
             if (this._instances.get(el) === instance) this._instances.delete(el);
         };
-     * A file drop / browse area on an element, backed by a real <input type="file">.
-     * @param {string|Element} target - the area (wrapping or next to a file input), or the input
-     * @param {Object} [options]
-     * @returns {Dropzone|null} null when the target matches nothing
-     */
-    dropzone(target, options = {}) {
-        const el = resolveElement(target);
-        if (!el) return null;
-        const instance = dropzoneFor(el, options);
-        this._instances.set(el, instance);
         return instance;
     },
 
@@ -9870,6 +9863,21 @@ export const elements = {
         return instance;
     },
 
+    /**
+     * A file drop / browse area on an element, backed by a real <input type="file">.
+     * @param {string|Element} target - the area (wrapping or next to a file input), or the input
+     * @param {Object} [options]
+     * @returns {Dropzone|null} null when the target matches nothing
+     */
+    dropzone(target, options = {}) {
+        const el = resolveElement(target);
+        if (!el) return null;
+        const instance = dropzoneFor(el, options);
+        this._instances.set(el, instance);
+        return instance;
+    },
+
+    /**
      * A one- or two-thumb slider over real <input type="range"> elements.
      * @param {string|Element} target - an <input type="range"> or a container
      * @param {Object} [options]
