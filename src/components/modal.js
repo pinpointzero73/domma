@@ -8,6 +8,11 @@
  * `modal.element.appendChild(panel)` puts `panel` in the body, styled by the page.
  * A tag that cannot take a shadow root gets an inner host div instead.
  *
+ * Focus is trapped while it is open (`trapFocus`, on by default; off for a modal with
+ * no backdrop unless asked for): Tab cycles through the X, the slotted body and the
+ * footer buttons in the order they show, and closing puts focus back where it was
+ * (`returnFocus`). Toasts, popovers and pickers opened from the modal keep focus.
+ *
  * Events: open, opened, close, closed, beforeopen, beforeclose (cancelable), buttonclick -
  * each as `onX`, `.on('x')` and `dm:modal:x`. The unprefixed `open` / `close` DOM events
  * are still dispatched on the element, once per open / close (deprecated, until 1.0).
@@ -15,6 +20,7 @@
 
 import Component from '../component.js';
 import {fill, flag, num, resolveElement, uniqueId} from './shared.js';
+import FocusTrap from './focus-trap.js';
 
 const SIZES = {
     small: '400px', sm: '400px',
@@ -192,6 +198,8 @@ export class Modal extends Component {
         bodyClass: '',
         footerClass: '',
         focus: true,
+        trapFocus: true,            // Tab stays in the modal; default off when backdrop is false
+        returnFocus: true,          // closing puts focus back where it was
         visible: false,
         onOpen: null,
         onOpened: null,
@@ -285,6 +293,29 @@ export class Modal extends Component {
         this._render();
         this._bind();
         if (flag(o.visible)) this.open();
+    }
+
+    /** Whether this open traps focus: on by default, except over a page left usable (no backdrop). */
+    _wantsTrap() {
+        const o = this.options;
+        if (!flag(o.trapFocus, true)) return false;
+        return flag(o.backdrop, true) || 'trapFocus' in this._givenOptions();
+    }
+
+    _startTrap() {
+        if (!this._wantsTrap() || typeof document === 'undefined') return;
+        if (!this._trap) {
+            this._trap = new FocusTrap(this.element, {
+                initialFocus: false,                // open() focuses the dialog frame itself
+                fallbackFocus: () => this._dialog,
+                returnFocus: true,
+                escapeDeactivates: false,           // Escape stays with the modal (close() by name)
+                allowOutsideClick: true,
+                allowOutsideFocus: 'layers',
+                register: false
+            });
+        }
+        this._trap.activate();
     }
 
     /** Options the caller passed, without the defaults. */
@@ -482,6 +513,7 @@ export class Modal extends Component {
         if (flag(this.options.focus, true) && typeof document !== 'undefined') {
             this._restoreFocus = document.activeElement;
         }
+        this._startTrap();
         const show = () => {
             if (!this._isOpen) return;
             host.classList.add('dm-modal-shown');
@@ -512,6 +544,12 @@ export class Modal extends Component {
         const i = openStack.indexOf(this);
         if (i > -1) openStack.splice(i, 1);
         unbindKeys();
+        if (this._trap && this._trap.isActive()) {
+            // The trap hands focus back now (and to the overlay beneath, when stacked).
+            const back = flag(this.options.focus, true) && flag(this.options.returnFocus, true);
+            this._trap.deactivate({returnFocus: back});
+            this._restoreFocus = null;
+        }
 
         this._legacyEvent('close');
         this._fire('close', this);
@@ -519,7 +557,7 @@ export class Modal extends Component {
         const finish = () => {
             host.classList.remove('dm-modal-visible');
             this.element.classList.remove('dm-modal-visible');
-            const back = this._restoreFocus;
+            const back = flag(this.options.returnFocus, true) ? this._restoreFocus : null;
             this._restoreFocus = null;
             if (back && typeof back.focus === 'function' && back.isConnected) {
                 try { back.focus({preventScroll: true}); } catch { /* gone */ }
@@ -597,6 +635,10 @@ export class Modal extends Component {
         const i = openStack.indexOf(this);
         if (i > -1) openStack.splice(i, 1);
         unbindKeys();
+        if (this._trap) {
+            this._trap.destroy();
+            this._trap = null;
+        }
         super.destroy();
         const el = this.element;
         if (this._factoryMade) {
