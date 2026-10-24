@@ -9930,3 +9930,322 @@ a.avatar-tone-7:hover {
 a.avatar-more-person:hover .avatar-more-name {
     text-decoration: underline;
 }
+
+/* ===== Command Palette ===== */
+/*
+ * E.commandPalette(options) - src/components/command-palette.js
+ *
+ * The overlay covers the viewport: a backdrop and a panel near the top, the way the
+ * modal looks (--dm-modal-* tokens), so it sits with the site's dialogs in every theme.
+ * Above modals and slideovers, which it is often opened over; below popovers (10045)
+ * and the context menu (10050).
+ */
+.dm-command-palette {
+    position: fixed;
+    inset: 0;
+    z-index: 10040;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 12vh 1rem 1rem;
+    box-sizing: border-box;
+    --dm-command-palette-duration: 150ms;
+}
+
+.dm-command-palette[hidden] {
+    display: none;
+}
+
+.dm-command-palette *,
+.dm-command-palette *::before,
+.dm-command-palette *::after {
+    box-sizing: border-box;
+}
+
+.dm-command-palette-backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--dm-modal-backdrop);
+    opacity: 0;
+    transition: opacity var(--dm-command-palette-duration) ease;
+}
+
+.dm-command-palette-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(40rem, 100%);
+    max-height: min(32rem, 76vh);
+    background: var(--dm-modal-bg);
+    color: var(--dm-text);
+    border: 1px solid var(--dm-modal-border);
+    border-radius: var(--dm-radius-lg);
+    box-shadow: var(--dm-modal-shadow);
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.97) translateY(-6px);
+    transition:
+        opacity var(--dm-command-palette-duration) ease,
+        transform var(--dm-command-palette-duration) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dm-command-palette.is-open .dm-command-palette-backdrop { opacity: 1; }
+.dm-command-palette.is-open .dm-command-palette-panel { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-command-palette-backdrop,
+    .dm-command-palette-panel {
+        transition: none;
+    }
+}
+
+/* Where you are in nested pages, with a way back up. */
+.dm-command-palette-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 0.875rem 0;
+    font-size: 0.8125rem;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-crumbs[hidden] { display: none; }
+
+.dm-command-palette-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-sm);
+    background: transparent;
+    color: var(--dm-text);
+    cursor: pointer;
+}
+
+.dm-command-palette-back:hover { background: var(--dm-hover-bg); }
+
+.dm-command-palette-back:focus-visible {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: 1px;
+}
+
+.dm-command-palette-trail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dm-command-palette-trail li + li::before {
+    content: "/";
+    margin-right: 0.25rem;
+    opacity: 0.6;
+}
+
+.dm-command-palette-trail [aria-current] { color: var(--dm-text); font-weight: 500; }
+
+.dm-command-palette-search {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.dm-command-palette-search-icon {
+    display: inline-flex;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.25rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--dm-text);
+    font: inherit;
+    font-size: 1rem;
+    outline: none;
+}
+
+.dm-command-palette-input::placeholder { color: var(--dm-input-placeholder); opacity: 1; }
+
+/* The box is the focus; the panel shows it rather than a ring round a borderless input. */
+.dm-command-palette-search:focus-within {
+    border-bottom-color: var(--dm-border-focus);
+}
+
+.dm-command-palette-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--dm-border);
+    border-top-color: var(--dm-primary);
+    border-radius: 50%;
+    animation: dm-command-palette-spin 0.7s linear infinite;
+}
+
+.dm-command-palette-spinner[hidden] { display: none; }
+
+@keyframes dm-command-palette-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-command-palette-spinner { animation-duration: 2.4s; }
+}
+
+.dm-command-palette-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.375rem;
+}
+
+.dm-command-palette-list[hidden] { display: none; }
+
+.dm-command-palette-group + .dm-command-palette-group,
+.dm-command-palette-group + .dm-command-palette-item,
+.dm-command-palette-item + .dm-command-palette-group {
+    margin-top: 0.375rem;
+}
+
+.dm-command-palette-group-heading {
+    padding: 0.375rem 0.625rem 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.5rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: var(--dm-radius-md);
+    color: var(--dm-text);
+    cursor: pointer;
+    user-select: none;
+}
+
+.dm-command-palette-item.is-active {
+    background: var(--dm-selected-bg);
+}
+
+/* Forced colours drop backgrounds: the active row keeps an outline instead. */
+@media (forced-colors: active) {
+    .dm-command-palette-item.is-active { outline: 2px solid Highlight; }
+}
+
+.dm-command-palette-item[aria-disabled="true"] {
+    cursor: default;
+    opacity: var(--dm-disabled-opacity);
+}
+
+.dm-command-palette-icon {
+    flex: 0 0 1rem;
+    display: inline-flex;
+    justify-content: center;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-item.is-active .dm-command-palette-icon { color: var(--dm-text); }
+
+.dm-command-palette-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.dm-command-palette-title,
+.dm-command-palette-subtitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dm-command-palette-subtitle {
+    font-size: 0.8125rem;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-match {
+    color: var(--dm-primary);
+    font-weight: 600;
+}
+
+.dm-command-palette-shortcut,
+.dm-command-palette-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.dm-command-palette kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.375rem;
+    height: 1.375rem;
+    padding: 0 0.3rem;
+    border: 1px solid var(--dm-border);
+    border-bottom-width: 2px;
+    border-radius: var(--dm-radius-sm);
+    background: var(--dm-background-alt);
+    color: var(--dm-text-secondary);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    line-height: 1;
+}
+
+.dm-command-palette-more {
+    display: inline-flex;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-status {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-status[hidden] { display: none; }
+.dm-command-palette-status[data-state="error"] { color: var(--dm-danger); }
+
+.dm-command-palette-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0.875rem;
+    border-top: 1px solid var(--dm-border);
+    background: var(--dm-background-alt);
+    color: var(--dm-text-secondary);
+    font-size: 0.75rem;
+}
+
+/* Phones: the whole width, from the top. */
+@media (max-width: 640px) {
+    .dm-command-palette {
+        padding: 0;
+    }
+
+    .dm-command-palette-panel {
+        width: 100%;
+        max-height: 85vh;
+        border-width: 0 0 1px;
+        border-radius: 0 0 var(--dm-radius-lg) var(--dm-radius-lg);
+    }
+
+    .dm-command-palette-footer { display: none; }
+}

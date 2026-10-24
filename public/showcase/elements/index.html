@@ -715,6 +715,42 @@
               <code>E.popover('#help', { title, content })</code>
             </div>
         </a>
+
+        <!-- Command Palette -->
+    <a href="command-palette/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="search"></div>
+                <h3 class="card-title">Command Palette</h3>
+        <p class="card-text">A Cmd/Ctrl+K launcher - search every action and page from the keyboard.</p>
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+          <li>Fuzzy search with highlights</li>
+          <li>Nested pages and async search</li>
+          <li>Recent commands</li>
+          <li>Shortcut hints</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+              <code>E.commandPalette({ commands })</code>
+            </div>
+        </a>
+
+        <!-- Focus Trap -->
+    <a href="focus-trap/" class="card card-hover h-full flex flex-col no-underline text-inherit">
+      <div class="card-body flex-1">
+        <div class="mb-4 text-primary" data-icon="lock"></div>
+                <h3 class="card-title">Focus Trap</h3>
+        <p class="card-text">Keep Tab and focus inside a panel while it is open.</p>
+        <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+          <li>Live tabbable lookup</li>
+          <li>Stacks with other traps</li>
+          <li>Return focus on close</li>
+          <li>Optional inert page</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+              <code>E.focusTrap('#panel').activate()</code>
+            </div>
+        </a>
     </div>
   </section>
 </main>

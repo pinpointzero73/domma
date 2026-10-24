@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Palette - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/command-palette/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the palette needs is in elements.css. */
+        .sx-cp-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 18rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-surface);
+            color: var(--dm-text-muted);
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .sx-cp-launch:hover {
+            background: var(--dm-hover-bg);
+        }
+
+        .sx-cp-launch:focus-visible {
+            outline: 2px solid var(--dm-border-focus);
+            outline-offset: 2px;
+        }
+
+        .sx-cp-launch kbd {
+            margin-left: auto;
+        }
+
+        .sx-cp-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .sx-cp-log {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            max-height: 12rem;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Command Palette</div>
+        <div class="hero-subtitle">A Cmd/Ctrl+K launcher - every action and page a few keystrokes away, with fuzzy search, nested pages, async results and recents</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Command Palette</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.commandPalette()</code> builds a search box over a list of commands. Type a few letters -
+                in order, anywhere in the name - and press Enter. Commands can run code, follow a link, or open a
+                nested page of more commands. Press <kbd id="hotkey-hint">Ctrl K</kbd> anywhere on this page.
+            </p>
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Fuzzy search</strong> - "chth" finds "Change theme"; matched letters are highlighted (always as text, never HTML)</li>
+                <li><strong>Groups and recents</strong> - headings per group; recently run commands first, remembered with <code>S</code></li>
+                <li><strong>Nested pages</strong> - from an array or an async function; Backspace or Escape goes back up</li>
+                <li><strong>Async source</strong> - debounced, aborted when the query changes, with loading, empty and error states</li>
+                <li><strong>Keyboard first</strong> - arrows, Home/End, Enter, Escape; Tab stays inside (a focus trap)</li>
+                <li><strong>Accessible</strong> - the ARIA combobox + listbox pattern, with the result count announced</li>
+            </ul>
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+const palette = E.commandPalette({
+    commands: [
+        {id: 'new', title: 'New page', group: 'Pages', icon: 'plus', shortcut: 'mod+n', action: newPage},
+        {id: 'docs', title: 'Documentation', href: '/docs/', keywords: ['help']}
+    ]
+});
+// Cmd+K on a Mac, Ctrl+K elsewhere - or palette.open()
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Demo">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">The palette</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Open it with the button or the hotkey. Try <em>"toast"</em>, <em>"chth"</em> (then Enter for the
+                nested theme page), <em>"pop"</em> for a link, or the <strong>Repositories</strong> page, which
+                loads its commands asynchronously. Run a command or two and open the palette again: they appear
+                under <strong>Recent</strong>.
+            </p>
+            <div class="sx-cp-row mb-4">
+                <button id="open-main" class="sx-cp-launch" type="button" aria-keyshortcuts="Control+K">
+                    <span data-icon="search" data-icon-size="16" aria-hidden="true"></span>
+                    <span>Search commands…</span>
+                    <kbd id="launch-kbd">Ctrl K</kbd>
+                </button>
+                <button id="clear-recent" class="btn btn-sm btn-ghost" type="button">Forget recents</button>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const palette = E.commandPalette({
+    recentKey: 'showcase-palette',
+    commands: [
+        {id: 'toast-ok', title: 'Show a success toast', group: 'Actions', icon: 'check',
+         shortcut: 'mod+shift+s', action: () =&gt; E.toast('Saved', {type: 'success'})},
+        {id: 'theme', title: 'Change theme…', group: 'Appearance', icon: 'droplet',
+         children: Domma.theme.listThemes().map(t =&gt; ({
+             id: 'theme:' + t, title: t, action: () =&gt; Domma.theme.set(t)
+         }))},
+        {id: 'repos', title: 'Repositories…', group: 'Go to', icon: 'git-branch',
+         children: async (command, {signal}) =&gt; loadRepos(signal)},
+        {id: 'go-popover', title: 'Popover', subtitle: 'Showcase page', group: 'Go to',
+         icon: 'external-link', href: '../popover/'}
+    ]
+});
+$('#open-main').on('click', () =&gt; palette.open());
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Async Source">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Searching a server</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                With <code>source(query, {signal})</code> the palette asks somewhere else. Here a pretend people
+                directory answers after 400 ms: type quickly and only the last query's request completes - the
+                others are aborted through <code>signal</code>. Tick the box to make the "server" fail and see the
+                error state; search for something nobody is called to see the empty state.
+            </p>
+            <div class="sx-cp-row mb-4">
+                <button id="open-people" class="btn btn-primary" type="button">Find a person</button>
+                <label class="sx-cp-row text-sm">
+                    <input id="people-fail" type="checkbox"> Make the server fail
+                </label>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const people = E.commandPalette({
+    hotkey: false,
+    placeholder: 'Search people…',
+    debounce: 200,
+    source: (query, {signal}) =&gt; new Promise((resolve, reject) =&gt; {
+        const timer = setTimeout(() =&gt; resolve(search(query)), 400);
+        signal.onabort = () =&gt; {
+            clearTimeout(timer);
+            reject(new DOMException('Aborted', 'AbortError'));
+        };
+    })
+    // in a real page: (query, {signal}) =&gt; H.get('/api/people?q=' + encodeURIComponent(query), {signal})
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Keyboard">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Keyboard</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th scope="col">Key</th><th scope="col">Does</th></tr></thead>
+                <tbody>
+                <tr><td><kbd>Ctrl</kbd> <kbd>K</kbd> / <kbd>⌘</kbd> <kbd>K</kbd></td><td>Open or close (the <code>hotkey</code> option; <code>false</code> for none)</td></tr>
+                <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>Move through the results, wrapping, skipping disabled ones</td></tr>
+                <tr><td><kbd>Home</kbd> <kbd>End</kbd></td><td>First and last result</td></tr>
+                <tr><td><kbd>Enter</kbd></td><td>Run the highlighted command, or open its page</td></tr>
+                <tr><td><kbd>Backspace</kbd></td><td>In an empty box: up one page</td></tr>
+                <tr><td><kbd>Esc</kbd></td><td>Up one page; at the top, close</td></tr>
+                <tr><td><kbd>Tab</kbd></td><td>Stays inside the palette</td></tr>
+                </tbody>
+            </table>
+            <p class="mb-0">
+                Shortcuts on commands (<code>shortcut: 'mod+s'</code>) are shown as hints in the platform's own
+                names and given to screen readers as <code>aria-keyshortcuts</code>; binding them is up to you.
+            </p>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Events">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>beforeopen</code>, <code>open</code>, <code>beforeclose</code>, <code>close</code>,
+                <code>query</code>, <code>beforeselect</code> (cancelable), <code>select</code> and <code>run</code>
+                - as <code>onX</code> options, <code>.on('x')</code> and <code>dm:command-palette:x</code> DOM events.
+                The <strong>Delete everything</strong> command is refused by a <code>beforeselect</code> handler.
+            </p>
+            <ul id="demo-log" class="sx-cp-log mb-4">
+                <li>Nothing yet - use the palettes above.</li>
+            </ul>
+            <div class="code-block language-javascript">
+                <pre><code>
+palette.on('beforeselect', (command) =&gt; {
+    if (command.id === 'danger') {
+        E.toast('Not today', {type: 'warning'});
+        return false;
+    }
+});
+$(document).on('dm:command-palette:run', (e) =&gt; console.log(e.detail.args[0].id));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="API">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">API</h2></div>
+        <div class="card-body">
+            <div class="code-block language-javascript">
+                <pre><code>
+const palette = E.commandPalette({
+    commands: [],          // {id, title, subtitle, group, icon, keywords, shortcut, href, target,
+                           //  action(command, palette, event), disabled, hidden, keepOpen, children}
+    source: null,          // (query, {signal}) =&gt; Promise&lt;commands&gt;
+    debounce: 150,
+    hotkey: 'mod+k',       // or ['mod+k', '/'], or false
+    placeholder: 'Type a command or search…',
+    maxResults: 50,
+    recentKey: null,       // S key; null = no recents
+    recentLimit: 5,
+    emptyText, loadingText, errorText, footer: true,
+    navigate: null,        // (href, {newTab, command}) =&gt; void
+    onOpen, onClose, onQuery, onBeforeSelect, onSelect, onRun
+});
+
+palette.open('query'); palette.close(); palette.toggle(); palette.isOpen();
+palette.setCommands(list); palette.addCommands(list); palette.removeCommand('id');
+palette.back(); palette.recent(); palette.clearRecent(); palette.destroy();
+</code></pre>
+            </div>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(D().format('HH:mm:ss') + ' - ' + message) + '</li>');
+        list.find('li').filter((i) => i >= 8).remove();
+    };
+
+    // The hint shows the platform's own key name.
+    const hotkey = E.commandPalette.formatShortcut('mod+k').join(' ');
+    $('#hotkey-hint').text(hotkey);
+    $('#launch-kbd').text(hotkey);
+
+    // A pretend request that honours its AbortSignal.
+    const later = (ms, value, signal, fail) => new Promise((resolve, reject) => {
+        const timer = setTimeout(() => (fail ? reject(new Error('Server unavailable')) : resolve(value)), ms);
+        if (signal) {
+            signal.onabort = () => {
+                clearTimeout(timer);
+                reject(new DOMException('Aborted', 'AbortError'));
+            };
+        }
+    });
+
+    // ---- The main palette ------------------------------------------------------
+    const pages = ['Modal', 'Popover', 'Slideover', 'Tooltip', 'Focus Trap', 'Toast'];
+    const palette = E.commandPalette({
+        recentKey: 'showcase-palette',
+        commands: [
+            {id: 'toast-ok', title: 'Show a success toast', group: 'Actions', icon: 'check',
+                shortcut: 'mod+shift+s', action: () => E.toast('Saved', {type: 'success'})},
+            {id: 'toast-info', title: 'Show an info toast', group: 'Actions', icon: 'info',
+                keywords: ['message', 'notify'], action: () => E.toast('Just so you know', {type: 'info'})},
+            {id: 'copy-link', title: 'Copy link to this page', group: 'Actions', icon: 'link', shortcut: 'mod+l',
+                action: () => E.toast('Link copied (pretend)', {type: 'success'})},
+            {id: 'count', title: 'Count, and stay open', subtitle: 'keepOpen: true', group: 'Actions', icon: 'plus',
+                keepOpen: true, action: (command) => {
+                    command.times = (command.times || 0) + 1;
+                    command.subtitle = 'Pressed ' + command.times + ' time' + (command.times === 1 ? '' : 's');
+                }},
+            {id: 'danger', title: 'Delete everything', subtitle: 'Refused by beforeselect', group: 'Actions',
+                icon: 'trash'},
+            {id: 'disabled', title: 'Upgrade plan', subtitle: 'disabled: true', group: 'Actions', icon: 'star',
+                disabled: true},
+            {id: 'theme', title: 'Change theme…', group: 'Appearance', icon: 'droplet', keywords: ['colour', 'dark'],
+                placeholder: 'Pick a theme…',
+                children: Domma.theme.listThemes().map((t) => ({
+                    id: 'theme:' + t,
+                    title: t,
+                    group: /-dark$/.test(t) ? 'Dark' : 'Light',
+                    icon: /-dark$/.test(t) ? 'moon' : 'sun',
+                    action: () => Domma.theme.set(t)
+                }))},
+            {id: 'repos', title: 'Repositories…', subtitle: 'Loaded when you open it', group: 'Go to',
+                icon: 'git-branch',
+                children: (command, {signal}) => later(600, [
+                    {id: 'repo:domma', title: 'domma', subtitle: 'The framework', icon: 'box',
+                        action: () => E.toast('domma', {type: 'info'})},
+                    {id: 'repo:reactive', title: 'domma-reactive', subtitle: 'Reactivity', icon: 'box',
+                        action: () => E.toast('domma-reactive', {type: 'info'})},
+                    {id: 'repo:celebrate', title: 'domma-celebrate', subtitle: 'Seasonal effects', icon: 'box',
+                        action: () => E.toast('domma-celebrate', {type: 'info'})}
+                ], signal)},
+            ...pages.map((name) => ({
+                id: 'go:' + name,
+                title: name,
+                subtitle: 'Showcase page',
+                group: 'Go to',
+                icon: 'external-link',
+                href: '../' + name.toLowerCase().replace(/\s+/g, '-') + '/'
+            }))
+        ],
+        onBeforeSelect: (command) => {
+            if (command.id === 'danger') {
+                E.toast('Not today', {type: 'warning'});
+                return false;
+            }
+        }
+    });
+    $('#open-main').on('click', () => palette.open());
+    $('#clear-recent').on('click', () => {
+        palette.clearRecent();
+        E.toast('Recents forgotten', {type: 'info'});
+    });
+
+    // ---- The async palette -----------------------------------------------------
+    const directory = ['Ada Lovelace', 'Alan Turing', 'Grace Hopper', 'Katherine Johnson', 'Margaret Hamilton',
+        'Tim Berners-Lee', 'Barbara Liskov', 'Donald Knuth', 'Edsger Dijkstra', 'Frances Allen', 'Radia Perlman',
+        'Ken Thompson', 'Dennis Ritchie', 'Hedy Lamarr', 'Sophie Wilson'];
+    const people = E.commandPalette({
+        hotkey: false,
+        label: 'Find a person',
+        placeholder: 'Search people…',
+        debounce: 200,
+        emptyText: 'Nobody by that name',
+        errorText: 'The directory did not answer. Try again.',
+        sourceGroup: 'People',
+        source: (query, {signal}) => {
+            const q = query.trim();
+            const found = directory
+                .map((name) => ({name, match: E.commandPalette.fuzzyMatch(q, name)}))
+                .filter((r) => r.match)
+                .sort((a, b) => b.match.score - a.match.score)
+                .slice(0, 8)
+                .map((r) => ({
+                    id: 'person:' + r.name,
+                    title: r.name,
+                    subtitle: r.name.toLowerCase().replace(/[^a-z]+/g, '.') + '@example.org',
+                    icon: 'user',
+                    action: () => E.toast('Messaging ' + r.name, {type: 'success'})
+                }));
+            log('source("' + q + '") requested');
+            return later(400, found, signal, $('#people-fail').prop('checked'));
+        }
+    });
+    $('#open-people').on('click', () => people.open());
+
+    // ---- One listener for the whole page ------------------------------------------
+    for (const name of ['open', 'close', 'select', 'run']) {
+        $(document).on('dm:command-palette:' + name, (e) => {
+            const arg = e.detail.args[0];
+            const what = arg && arg.title ? ' "' + arg.title + '"' : '';
+            log(name + what);
+        });
+    }
+</script>
+
+</body>
+</html>

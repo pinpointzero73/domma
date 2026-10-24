@@ -275,6 +275,12 @@
           "badge": "New"
         },
         {
+          "text": "Command Palette",
+          "url": "showcase/elements/command-palette/index.html",
+          "section": "command-palette",
+          "badge": "New"
+        },
+        {
           "text": "Context Menu",
           "url": "showcase/elements/context-menu/index.html",
           "section": "context-menu",
@@ -294,6 +300,12 @@
           "text": "Editor",
           "url": "showcase/elements/editor/index.html",
           "section": "editor"
+        },
+        {
+          "text": "Focus Trap",
+          "url": "showcase/elements/focus-trap/index.html",
+          "section": "focus-trap",
+          "badge": "New"
         },
         {
           "text": "Footer",
