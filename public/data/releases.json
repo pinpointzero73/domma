@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.57.0",
+      "title": "Focus trapping in overlays",
+      "description": "<p>Modals, slideovers, dialogs and popovers now keep Tab inside while open and hand focus back when they close, stacking cleanly when one opens another. The TypeScript declarations are generated from the source, so they match the code and cover the router, auth, forms and every <code>E.*</code> component.</p>",
+      "date": "2026-10-24"
+    },
+    {
       "year": "v0.56.0",
       "title": "New components: dropzone, range slider, command palette, focus trap, split pane, virtual list and translations",
       "description": "<p>Seven new pieces built to the 0.55 conventions: a dropzone with upload progress, a single or two-thumb range slider (both also as form blueprint fields), a Cmd/Ctrl+K command palette, a focus trap, resizable split panes, a virtual list that scrolls 100,000 rows with infinite loading, and <code>Domma.i18n</code> translations with plurals, Intl formatting and right-to-left support.</p>",
@@ -595,5 +601,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.56.0"
+  "latestVersion": "v0.57.0"
 }
