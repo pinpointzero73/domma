@@ -3686,19 +3686,9 @@ const Dialog = {
             const cancelBtn = dialog.querySelector('.dm-dialog-cancel');
             const input = dialog.querySelector('.dm-dialog-input');
 
-            // Focus management - a destructive confirm starts on Cancel, so a
-            // stray Enter or Space never throws anything away.
-            const focusTarget = input || (opts.danger && cancelBtn) || confirmBtn;
-            // Not once answered: focus has gone back to where it was by then.
-            setTimeout(() => { if (!settled) focusTarget?.focus(); }, 50);
-
-            // Select input text if present
-            if (input) {
-                input.select();
-            }
-
-            // Tab stays in the dialog until it is answered. Focus is placed above (after
-            // 50ms, as it always was), so the trap leaves the first focus alone.
+            // Tab stays in the dialog until it is answered. Started before anything inside
+            // takes focus (select() below does, in Chrome), so it knows where to hand focus
+            // back; the first focus is placed below, after 50ms as it always was.
             const trap = opts.trapFocus !== false && opts.trapFocus !== 'false'
                 ? createFocusTrap(dialog, {
                     initialFocus: false,
@@ -3710,6 +3700,18 @@ const Dialog = {
                 })
                 : null;
             trap?.activate();
+
+            // Focus management - a destructive confirm starts on Cancel, so a
+            // stray Enter or Space never throws anything away.
+            const focusTarget = input || (opts.danger && cancelBtn) || confirmBtn;
+            // Not once answered: focus has gone back to where it was by then.
+            setTimeout(() => { if (!settled) focusTarget?.focus(); }, 50);
+
+            // Select input text if present
+            if (input) {
+                input.select();
+            }
+
 
             // Cleanup function - settles once, whichever way the dialog closes
             let settled = false;
