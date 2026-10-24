@@ -51,3 +51,5 @@
 
 <!-- website -->
 
+
+<p>Modals, slideovers, dialogs and popovers now keep Tab inside while open and hand focus back when they close, stacking cleanly when one opens another. The TypeScript declarations are generated from the source, so they match the code and cover the router, auth, forms and every <code>E.*</code> component.</p>
