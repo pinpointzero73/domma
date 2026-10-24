@@ -1475,13 +1475,11 @@ elements.loader('#container', { color: '#ffffff' }) */
     };
 </script>
 
-<script type="module">
-    import { createLoaderWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
-
-    // Web Components - Wrapper API demo
+<script>
+    // Wrapper API demo
     $(() => {
         if ($('#wrapper-loader-demo').length) {
-            createLoaderWrapper('#wrapper-loader-demo', {
+            Domma.elements.loader('#wrapper-loader-demo', {
                 type: 'dots',
                 size: 'large',
                 color: 'success',

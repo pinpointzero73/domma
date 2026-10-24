@@ -195,39 +195,21 @@ export class DommaElement extends ElementBase {
 }
 
 /**
- * Helper to get CSS variables from host document
- * Enables theme inheritance into Shadow DOM
+ * Theme tokens for a shadow root.
+ *
+ * Custom properties inherit across the shadow boundary, so the page's `--dm-*` theme
+ * tokens are already set inside every shadow root; a component's own styles give their
+ * fallbacks at the point of use (`var(--dm-primary, #6495ED)`).
+ *
+ * This used to return `:host { --dm-primary: var(--dm-primary, #6495ED); ... }`. A
+ * property that refers to itself is a cycle, which makes it invalid at computed-value
+ * time - so inside every shadow root those tokens were reset, and each component drew
+ * its hard-coded fallback colour whatever the theme (measured in Chrome under
+ * ocean-dark: --dm-primary #48cae4 on the page, rgb(79, 70, 229) on a badge).
+ * Kept as an empty hook so callers that concatenate it still work.
+ *
+ * @returns {string}
  */
 export function getThemeVariables() {
-    return `
-        :host {
-            --dm-primary: var(--dm-primary, #6495ED);
-            --dm-secondary: var(--dm-secondary, #6c757d);
-            --dm-success: var(--dm-success, #28a745);
-            --dm-danger: var(--dm-danger, #dc3545);
-            --dm-warning: var(--dm-warning, #ffc107);
-            --dm-info: var(--dm-info, #17a2b8);
-            --dm-white: var(--dm-white, #ffffff);
-            --dm-gray-100: var(--dm-gray-100, #f8f9fa);
-            --dm-gray-200: var(--dm-gray-200, #e9ecef);
-            --dm-gray-300: var(--dm-gray-300, #dee2e6);
-            --dm-gray-400: var(--dm-gray-400, #ced4da);
-            --dm-gray-500: var(--dm-gray-500, #adb5bd);
-            --dm-gray-600: var(--dm-gray-600, #6c757d);
-            --dm-gray-700: var(--dm-gray-700, #495057);
-            --dm-gray-800: var(--dm-gray-800, #343a40);
-            --dm-gray-900: var(--dm-gray-900, #212529);
-            --dm-radius-sm: var(--dm-radius-sm, 0.25rem);
-            --dm-radius-md: var(--dm-radius-md, 0.375rem);
-            --dm-radius-lg: var(--dm-radius-lg, 0.5rem);
-            --dm-radius-full: var(--dm-radius-full, 9999px);
-            --dm-transition-fast: var(--dm-transition-fast, 150ms);
-            --dm-transition-normal: var(--dm-transition-normal, 300ms);
-            --dm-transition-slow: var(--dm-transition-slow, 500ms);
-            --dm-shadow-sm: var(--dm-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
-            --dm-shadow-md: var(--dm-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
-            --dm-shadow-lg: var(--dm-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
-            --dm-shadow-xl: var(--dm-shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
-        }
-    `;
+    return '';
 }
