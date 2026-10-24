@@ -397,6 +397,98 @@ const registry = Domma.components.registry();  // Map<tagName, definition>
 | Reusable instances   | One per route                 | Many per page                 |
 | Best for             | Full-page SPA views           | Reusable UI widgets           |
 
+## Conventions
+
+The `E.*` UI components (`Domma.elements`) share one set of rules, implemented once in
+[`src/component.js`](../src/component.js). New components follow them; nothing here replaces a
+name that already worked.
+
+### 1. Events
+
+Every `onX` option has a matching event. The option still runs exactly as before (same
+arguments, same `this`, same use of its return value); `.on()` listeners and a DOM event follow.
+
+| Option             | `.on()` name     | DOM event (bubbles, cancelable)      |
+|--------------------|------------------|--------------------------------------|
+| `onChange`         | `'change'`       | `dm:<component>:change`              |
+| `onOpen`           | `'open'`         | `dm:<component>:open`                |
+| `onBeforeClose`    | `'beforeclose'`  | `dm:<component>:beforeclose`         |
+| `onItemClick`      | `'itemclick'`    | `dm:<component>:itemclick`           |
+| `onStatusChange`   | `'statuschange'` | `dm:<component>:statuschange`        |
+
+The name is the option minus `on`, lower-cased. `<component>` is the class's `componentName`:
+`tabs`, `accordion`, `list-group`, `dropdown`, `timer`, `carousel`, `cookie-consent`,
+`button-group`, `breadcrumbs`, `navbar`, `sidebar`, `footer`, `autocomplete`, `pillbox`,
+`slideover`, `progression`, `signature`, `date-picker`, `context-menu`, `tree-view`, `sortable`,
+`input-group`, `popover`. The DOM event's `detail` is `{instance, args}`.
+
+```javascript
+const so = E.slideover({title: 'Edit'});
+so.on('close', (instance) => save());
+document.addEventListener('dm:slideover:open', (e) => track(e.detail.instance));
+```
+
+`.once(event, fn)` and `.off(event, fn?)` work too. Sortable and Popover keep their older
+`sortable:<x>` / `popover:<x>` events beside these until 1.0. `E.alarm`, `E.notification` and the
+dialogs (`E.alert` / `confirm` / `prompt`) are not components and have only their options.
+
+### 2. Overlay verbs
+
+Dropdown, Sidebar, Autocomplete, Pillbox, Slideover, DatePicker, ContextMenu and CookieConsent
+answer `open()`, `close()`, `toggle()` and `isOpen()`. `show()`, `hide()` and `isVisible()` are
+permanent aliases. Popover's own names are `show()` / `hide()` / `isOpen()`, with `open()`,
+`close()` and `isVisible()` as its aliases.
+
+An alias looks the canonical method up **by name when it is called**, and so do the component's
+own close button, backdrop and Escape key. A guard patched onto an instance therefore covers every
+way the panel can close:
+
+```javascript
+const close = so.close;
+so.close = function (...args) {
+    if (dirty && !window.confirm('Discard changes?')) return this;
+    return close.apply(this, args);
+};
+so.hide();   // runs the guard; so do the X button, the backdrop and Escape
+```
+
+### 3. `beforeclose` / `beforeopen`
+
+Slideover, Dropdown, Sidebar, DatePicker, Autocomplete, Pillbox and ContextMenu ask before they
+change: `close()` fires `beforeclose`, `open()` fires `beforeopen`, each only when the state would
+actually change. Returning `false` from `onBeforeClose` or a `.on('beforeclose')` handler, or
+calling `preventDefault()` on `dm:<component>:beforeclose`, keeps the overlay open (and the call
+returns as it does when there is nothing to do). `destroy()` always closes. ContextMenu's
+`onBeforeOpen(ctx)` keeps its meaning - it decides whether the menu claims the right-click.
+Popover's cancelable phases are `show` and `hide` (`onShow` / `onHide` returning `false`).
+
+### 4. Factory returns
+
+A factory returns one instance. `E.buttonGroup(sel)` and `E.listGroup(sel)` used to return an
+array when the selector matched several elements; they now set up every match as before and return
+the first, with a non-enumerable `all()` for the list (`E.buttonGroup.all(sel, opts)` and
+`E.listGroup.all(sel, opts)` return the array directly). Until 1.0 the array shape still answers -
+`[i]`, `length`, `forEach`, `map` and iteration - with a one-time warning each
+(`window.DommaOptions = {deprecationWarnings: false}` silences it). A selector that matches nothing
+still returns `[]` until then. `E.chooser()` with a missing host returns an inert chooser (every
+method a no-op, `element` null) rather than `null`. `E.notify({title, ...})` is the same as
+`E.notify(title, {...})`.
+
+### 5. Lookup: `E.get`
+
+`E.get(el, name?)` finds whatever a factory made on an element - including slideovers built from
+options, popovers, button and list groups from a multi-match, choosers, skeletons, avatars and
+avatar groups. `name` is the `componentName` (`'skeleton'`, `'avatar'`, `'avatar-group'`,
+`'chooser'`, ...) when an element hosts several. `E.popover.getInstance`, `E.skeleton.get`,
+`E.avatar.get` and `E.avatarGroup.get` give the same answer. A destroyed component is
+not returned.
+
+### 6. Teardown
+
+`destroy()` takes a component away everywhere. Where `remove` meant something else it keeps that
+meaning: `E.skeleton(...).remove()` restores the original content, and `Alarm.remove(id)` is now an
+alias of `removeAlarm(id)`.
+
 ## See Also
 
 - [domma-reactive](https://www.npmjs.com/package/domma-reactive) - Binding compiler internals. The compiler moved out

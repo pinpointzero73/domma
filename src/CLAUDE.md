@@ -347,6 +347,19 @@ R.view('settings', {
 
 Accessed via `Domma.elements`:
 
+**Conventions** (docs/Components.md, "Conventions"; implemented in `component.js`):
+- Call an `onX` option only through `this._fire('x', ...args)` - it runs the option as `this.options.onX(...)`
+  did, then `.on('x')` listeners and `dm:<componentName>:x`, and returns false if anything cancelled. Where the
+  option is called with another `this` (CookieConsent's `.call(this)`), keep the call and `this._emit('x', ...)` beside it.
+- Overlays: `open()`/`close()`/`toggle()`/`isOpen()` are canonical; `show()`/`hide()`/`isVisible()` are aliases written
+  as `hide(...a) { return this.close(...a); }` - never `this.hide = this.close`. Close buttons, backdrops and Escape call
+  `this.close()` by name (consumers patch `instance.close` with "discard changes?" guards). close() starts with
+  `if (!this._mayClose(...onCloseArgs)) return this;` (beforeclose), open() with `_fire('beforeopen')`; destroy() and other
+  must-close teardown use `this._forcedClose()`, which still calls `this.close()`.
+- A factory returns one object (ButtonGroup/ListGroup: first instance + non-enumerable `all()`; the array shape warns until
+  1.0). Plain handles (skeleton, avatar, avatar group, chooser) set a non-enumerable `componentName` and call
+  `register(el, handle)` / `unregister()` so `E.get` finds them.
+
 - **Card**: `elements.card(selector, { hover, clickable, onClick })`
 - **Modal**: `elements.modal(selector, { backdrop, backdropClose, keyboard, animation, onOpen, onClose, onClosed })` →
   `open()`, `close()`, `toggle()`, `isOpen()`
@@ -480,7 +493,7 @@ Accessed via `Domma.elements`:
 - **Alarm**: Scheduled time-based alerts with localStorage persistence
   -
   `elements.alarm({ alarms, timezone, checkInterval, storageKey, onTrigger, onSnooze, onDismiss, onAlarmAdd, onAlarmRemove })` →
-  `add(alarm)`, `remove(id)`, `update(id, changes)`, `enable(id)`, `disable(id)`, `toggle(id)`, `snooze(id, duration)`,
+  `add(alarm)`, `removeAlarm(id)` (`remove(id)` alias), `update(id, changes)`, `enable(id)`, `disable(id)`, `toggle(id)`, `snooze(id, duration)`,
   `getAlarms()`, `getAlarm(id)`, `getNextAlarm()`, `clearAll()`, `destroy()`
     - Singleton pattern - same instance manages all alarms
     - Alarm structure: `{ time: 'HH:MM', label, enabled, repeat, notification, notificationOptions, sound, soundUrl }`
