@@ -1,6 +1,6 @@
 {
-  "version": "0.57.0",
-  "generated": "2026-10-24T20:03:26.395Z",
+  "version": "0.58.0",
+  "generated": "2026-10-24T22:16:16.218Z",
   "spa": [
     {
       "source": "kickstart-files/spa/.claude/memory/MEMORY.md",
