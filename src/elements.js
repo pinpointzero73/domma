@@ -26,7 +26,7 @@ import Loader from './components/loader.js';
 import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
 import FocusTrap, {tabbables as tabbablesIn} from './components/focus-trap.js';
-import CommandPalette, {formatShortcut, fuzzyMatch} from './components/command-palette.js';
+import CommandPalette, {claimsHotkey, formatShortcut, fuzzyMatch} from './components/command-palette.js';
 import SplitPane, {splitPaneFor} from './components/split-pane.js';
 import VirtualList, {virtualListFor} from './components/virtual-list.js';
 import Dropzone, {dropzoneFor} from './components/dropzone.js';
@@ -9989,6 +9989,7 @@ elements.focusTrap.top = () => FocusTrap.top();
 // Command palette helpers: the shortcut labels and the matcher it uses.
 elements.commandPalette.formatShortcut = formatShortcut;
 elements.commandPalette.fuzzyMatch = fuzzyMatch;
+elements.commandPalette.claims = claimsHotkey;
 
 // Every match, as an array: E.buttonGroup.all('.btn-group', opts). The plain factory
 // returns the first instance (with .all() on it).

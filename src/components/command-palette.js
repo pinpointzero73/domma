@@ -232,6 +232,23 @@ function appendHighlighted(el, text, indices) {
 
 const idOf = (command) => String(command.id ?? command.title ?? '');
 
+/** Live palettes with a hotkey bound - so other page scripts can tell the key is taken. */
+const withHotkeys = new Set();
+
+/**
+ * Whether a live palette answers this keydown. A page script with its own shortcut
+ * (the site search's Ctrl/Cmd+K) asks this rather than relying on listener order.
+ * Exposed as E.commandPalette.claims(e).
+ * @param {KeyboardEvent} e
+ * @returns {boolean}
+ */
+export function claimsHotkey(e) {
+    for (const p of withHotkeys) {
+        if (p._hotkeyList.some(h => matchesHotkey(e, h, p._mac))) return true;
+    }
+    return false;
+}
+
 /** Only links a browser can follow safely: http(s), mailto, tel, or relative. */
 const safeHref = safeUrl;
 
@@ -461,6 +478,8 @@ export class CommandPalette extends Component {
 
         const hotkeys = this._hotkeys();
         if (hotkeys.length) {
+            this._hotkeyList = hotkeys;
+            withHotkeys.add(this);
             this._addEventListener(document, 'keydown', (e) => {
                 if (e.defaultPrevented || e.repeat || e.isComposing) return;
                 const hk = hotkeys.find(h => matchesHotkey(e, h, this._mac));
@@ -674,6 +693,7 @@ export class CommandPalette extends Component {
         if (this._destroyed) return;
         if (this._isOpen) this._forcedClose();
         this._destroyed = true;
+        withHotkeys.delete(this);
         this._cancelSource();
         for (const t of this._timers) clearTimeout(t);
         this._timers.clear();

@@ -465,3 +465,44 @@ describe('E.commandPalette', () => {
         expect(E.get(el, 'command-palette')).toBeUndefined();
     });
 });
+
+describe('E.commandPalette - the site search shortcut steps aside', () => {
+    // public/layouts/js/modules/search.js binds Ctrl/Cmd+K too. It used to back off only
+    // when the palette's listener had already run (defaultPrevented), so a palette made
+    // AFTER search.js registered lost the key: both opened, or search took it.
+    it('claims() says whether a live palette answers a keydown', () => {
+        const ctrlK = new KeyboardEvent('keydown', {key: 'k', ctrlKey: true});
+        expect(E.commandPalette.claims(ctrlK)).toBe(false);
+        const p = palette();
+        expect(E.commandPalette.claims(ctrlK)).toBe(true);
+        expect(E.commandPalette.claims(new KeyboardEvent('keydown', {key: 'j', ctrlKey: true}))).toBe(false);
+        p.destroy();
+        expect(E.commandPalette.claims(ctrlK)).toBe(false);
+        const off = palette({hotkey: false});
+        expect(E.commandPalette.claims(ctrlK)).toBe(false);
+        off.destroy();
+    });
+
+    it('search.js leaves Ctrl+K to a palette created after it registered', async () => {
+        const had = {fetch: globalThis.fetch, Domma: globalThis.Domma};
+        globalThis.fetch = vi.fn(async () => ({json: async () => []}));
+        globalThis.Domma = Domma;
+        try {
+            const {SiteSearch} = await import('../public/layouts/js/modules/search.js');
+            await SiteSearch.init(0);
+            const p = palette();
+            document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'k', ctrlKey: true, bubbles: true, cancelable: true}));
+            expect(p.isOpen()).toBe(true);
+            const overlay = document.getElementById('site-search-overlay');
+            expect(!overlay || !overlay.classList.contains('is-open')).toBe(true);
+            p.destroy();
+            // With no palette left, search answers the key again
+            document.body.dispatchEvent(new KeyboardEvent('keydown', {key: 'k', ctrlKey: true, bubbles: true, cancelable: true}));
+            expect(document.getElementById('site-search-overlay').classList.contains('is-open')).toBe(true);
+            SiteSearch.close();
+        } finally {
+            globalThis.fetch = had.fetch;
+            if (had.Domma === undefined) delete globalThis.Domma; else globalThis.Domma = had.Domma;
+        }
+    });
+});

@@ -1850,6 +1850,8 @@ export interface CommandPaletteFactory {
     (options?: CommandPaletteOptions): CommandPaletteInstance;
     formatShortcut(combo: string, mac?: boolean): string[];
     fuzzyMatch(query: string, text: string): {score: number, indices: number[]} | null;
+    /** Whether a live palette's hotkey answers this keydown (for page scripts with their own shortcut) */
+    claims(e: KeyboardEvent): boolean;
 }
 export interface Elements {
     /** Create a Card component */

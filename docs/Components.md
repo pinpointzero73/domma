@@ -587,7 +587,8 @@ const palette = E.commandPalette({
 - **Keyboard**: Up/Down (wrapping, skipping disabled rows), Home/End, Enter runs, Escape goes up a page and then
   closes, Backspace in the empty box goes up, Tab stays inside (a FocusTrap). `hotkey` (default `'mod+k'`, `mod` =
   Cmd on a Mac, Ctrl elsewhere; a list, or `false`) toggles it; a bare key such as `'/'` is ignored while typing in
-  a field.
+  a field. A page script with its own shortcut asks `E.commandPalette.claims(e)` (true while a live palette's hotkey
+  matches the keydown) and steps aside - the site search's Ctrl/Cmd+K does, whichever listener was added first.
 - **ARIA**: a modal dialog holding the combobox + listbox pattern - `aria-controls`, `aria-expanded`,
   `aria-activedescendant`, `role="option"` rows in labelled `role="group"`s, `aria-keyshortcuts`, and a polite live
   region with the result count.
