@@ -510,6 +510,26 @@ Accessed via `Domma.elements`:
       `avatar-more-popover`) listing the hidden people, or calls `onMore(hidden, event)`; `popover: false` → `title`
     - CSS at the end of elements.css: tones = hue 24% into `--dm-surface`, text = hue 30% into `--dm-text` (min 5.2:1 on all themes);
       hooks `--dm-avatar-size|radius|overlap|gap-color|z`. See [docs/Avatar.md](../docs/Avatar.md)
+- **Dropzone** (`components/dropzone.js`): `elements.dropzone(target, { accept, multiple, maxFiles, maxSize, minSize, previews, name, input, list, upload, autoUpload, retry, labels, disabled })` →
+  `{zone, input, getFiles(), getEntries(), addFiles(), removeFile(id|entry|file), clear(), browse(), upload(), retry(id?), cancel(id?), enable(), disable(), destroy()}`
+    - Events (entry = `{id, file, name, size, type, status, progress, response, error}`): beforeadd (cancelable), add,
+      reject(entry, 'type'|'size'|'count'), remove, change(files), uploadstart, progress(entry, %), success, error, complete
+    - The element is the area (`role="button"`, Enter/Space/click → `input.click()`, paste adds); the list and `sr-only`
+      `aria-live` region are siblings after it (a button cannot hold buttons). A file input target gets an area drawn after it
+    - Forms: no `upload` → `input.files` rewritten with a DataTransfer after every change; no DataTransfer → the form's
+      `formdata` event appends the files. `upload` → one XHR per file (H/fetch has no upload progress), input kept empty
+    - Page drop guard: one document `dragenter` listener while any dropzone exists; a file drag arms dragover/drop
+      preventDefault on the document until drop / leaving the window / 1.5 s without dragover (`_guardState()` for tests)
+    - F.create `type: 'dropzone'` (formConfig = options; value = File[]; required = at least one)
+- **RangeSlider** (`components/range-slider.js`): `elements.rangeSlider(target, { min, max, step, value, range, orientation, ticks, tickLabels, labels, tooltip, marks, disabled, name, names, minDistance, rtl, ariaLabel, ariaLabels })`
+  (alias `elements.slider`) → `getValue()`, `setValue(v, {silent})`, `setRange(min, max)`, `enable()`, `disable()`, `destroy()`
+    - Events: input (drag / each key), change (commit), beforechange(next, current) cancelable; each move also dispatches
+      native `input` / `change` on the real input
+    - Real `<input type="range">`s carry the value (hidden; two for `range: true`, same `name` unless `names`); an instance
+      `value` property on each input (removed on destroy) redraws when code or M.bind sets `input.value`; form reset re-reads
+    - `role="slider"` thumbs with per-thumb aria-valuemin/max (the other thumb), `aria-valuetext` only with a `labels` formatter;
+      pointer capture on the root; RTL via `rtl` or computed direction (positions from the right, Left arrow increases)
+    - F.create `type: 'slider'` (or `'range'` + `formConfig.slider`); `formConfig.range` → value `[low, high]`
 - **Breadcrumbs**: Navigation trail component
     - `elements.breadcrumbs(selector, { items, separator, homeIcon, responsive, onChange })` →
       `setItems()`, `addItem()`, `removeItem()`, `getItems()`, `destroy()`

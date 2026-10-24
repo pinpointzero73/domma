@@ -663,6 +663,15 @@ export interface Elements {
     /** Toast notification system */
     toast: ToastStatic;
 
+    /** A file drop / browse / paste area over a real file input. Null when the target matches nothing. */
+    dropzone(target: string | HTMLElement, options?: DropzoneOptions): DropzoneInstance | null;
+
+    /** A one- or two-thumb slider over real range inputs. Null when the target matches nothing. */
+    rangeSlider(target: string | HTMLElement, options?: RangeSliderOptions): RangeSliderInstance | null;
+
+    /** Alias of rangeSlider() */
+    slider(target: string | HTMLElement, options?: RangeSliderOptions): RangeSliderInstance | null;
+
     /** Get the component on an element - factory-made ones too. `name` picks one when an element hosts several. */
     get(selector: string | HTMLElement, name?: string): ComponentInstance | undefined;
 
@@ -680,3 +689,170 @@ export interface Elements {
 }
 
 export declare const elements: Elements;
+
+// ============================================
+// Dropzone
+// ============================================
+
+export type DropzoneStatus = 'queued' | 'uploading' | 'done' | 'error' | 'cancelled';
+export type DropzoneRejectReason = 'type' | 'size' | 'count';
+
+/** One file in a dropzone, as every event hands it over */
+export interface DropzoneEntry {
+    id: string;
+    file: File;
+    name: string;
+    size: number;
+    type: string;
+    status: DropzoneStatus;
+    /** Upload progress, 0-100 */
+    progress: number;
+    /** The upload's response (parsed when it was JSON) */
+    response: any;
+    error: DropzoneUploadError | null;
+    /** Object URL of an image preview, revoked when the file goes */
+    preview: string | null;
+}
+
+export interface DropzoneUploadError {
+    /** HTTP status, 0 for a network failure */
+    status: number;
+    message: string;
+    response: any;
+}
+
+export interface DropzoneUploadOptions {
+    url: string | ((entry: DropzoneEntry) => string);
+    /** Default 'POST' */
+    method?: string;
+    /** FormData field for the file. Default 'file' */
+    field?: string;
+    headers?: Record<string, string> | ((entry: DropzoneEntry) => Record<string, string>);
+    withCredentials?: boolean;
+    /** Files sent at once. Default 2 */
+    concurrency?: number;
+    /** Extra FormData fields */
+    data?: Record<string, string | Blob> | ((entry: DropzoneEntry) => Record<string, string | Blob>);
+    /** Make the request object (tests, pages without a server). Default: new XMLHttpRequest() */
+    xhr?: (entry: DropzoneEntry) => XMLHttpRequest;
+}
+
+export interface DropzoneOptions {
+    /** Like the input's accept: '.pdf,image/*' or ['.pdf', 'image/*']. Default: the input's */
+    accept?: string | string[] | null;
+    /** Default: the input's `multiple`, or true when the component makes the input */
+    multiple?: boolean | null;
+    maxFiles?: number | null;
+    /** Bytes */
+    maxSize?: number | null;
+    /** Bytes */
+    minSize?: number | null;
+    /** Image thumbnails. Default true */
+    previews?: boolean;
+    /** Form field name. Default: the input's */
+    name?: string | null;
+    /** The file input, when it is not inside or next to the area */
+    input?: string | HTMLInputElement | null;
+    /** true = after the area (default), an element/selector to draw into, false = no list */
+    list?: boolean | string | HTMLElement;
+    upload?: DropzoneUploadOptions | null;
+    /** Default true */
+    autoUpload?: boolean;
+    /** Automatic retries per file. Default 0 */
+    retry?: number;
+    /** Text: prompt, hint, remove, retry, cancel, added, removed, type, size, small, count, uploading, done, failed, cancelled, required ({name}, {max}, {min}, {percent}) */
+    labels?: Record<string, string>;
+    disabled?: boolean;
+    className?: string;
+    /** Return false to refuse the file */
+    onBeforeAdd?: (entry: DropzoneEntry) => boolean | void;
+    onAdd?: (entry: DropzoneEntry) => void;
+    onReject?: (entry: DropzoneEntry, reason: DropzoneRejectReason) => void;
+    onRemove?: (entry: DropzoneEntry) => void;
+    onChange?: (files: File[]) => void;
+    onUploadStart?: (entry: DropzoneEntry) => void;
+    onProgress?: (entry: DropzoneEntry, percent: number) => void;
+    onSuccess?: (entry: DropzoneEntry, response: any) => void;
+    onError?: (entry: DropzoneEntry, error: DropzoneUploadError) => void;
+    onComplete?: (entries: DropzoneEntry[]) => void;
+}
+
+export interface DropzoneInstance extends ComponentInstance {
+    /** The drop area (the element, or the one drawn after a file input given as the target) */
+    zone: HTMLElement;
+    /** The real file input */
+    input: HTMLInputElement;
+    getFiles(): File[];
+    getEntries(): DropzoneEntry[];
+    addFiles(files: FileList | File[] | File): DropzoneEntry[];
+    removeFile(ref: string | DropzoneEntry | File): boolean;
+    clear(): this;
+    /** Open the file picker */
+    browse(): this;
+    upload(): this;
+    retry(ref?: string | DropzoneEntry | File): this;
+    cancel(ref?: string | DropzoneEntry | File): this;
+    enable(): this;
+    disable(): this;
+    isDisabled(): boolean;
+}
+
+// ============================================
+// Range slider
+// ============================================
+
+export type RangeSliderValue = number | [number, number];
+
+export interface RangeSliderMark {
+    value: number;
+    label?: string;
+}
+
+export interface RangeSliderOptions {
+    /** Default: the input's min, else 0 */
+    min?: number;
+    /** Default: the input's max, else 100 */
+    max?: number;
+    /** Default: the input's step, else 1 */
+    step?: number | 'any';
+    /** A number, or [low, high] / "low,high" with range: true */
+    value?: RangeSliderValue | string | null;
+    /** Two thumbs; two inputs, sharing `name` unless `names` is given */
+    range?: boolean;
+    orientation?: 'horizontal' | 'vertical';
+    /** true = every step, n = every n units, or the values to draw at */
+    ticks?: boolean | number | number[];
+    /** Label the ticks (always on for an array) */
+    tickLabels?: boolean;
+    /** Formats the value for ticks, marks, the tooltip and aria-valuetext */
+    labels?: ((value: number, where: 'tick' | 'mark' | 'tooltip' | 'aria') => string) | null;
+    /** Default 'hover' (also shown on focus and while dragging) */
+    tooltip?: 'always' | 'hover' | 'never';
+    marks?: RangeSliderMark[] | null;
+    disabled?: boolean;
+    name?: string | null;
+    /** [lowName, highName] for range: true */
+    names?: [string, string] | null;
+    /** range: true - the closest the thumbs may come */
+    minDistance?: number;
+    /** null = follow the page's direction */
+    rtl?: boolean | null;
+    ariaLabel?: string | null;
+    ariaLabels?: [string, string] | null;
+    className?: string;
+    /** While dragging, and on each key press */
+    onInput?: (value: RangeSliderValue) => void;
+    /** When the value is committed */
+    onChange?: (value: RangeSliderValue) => void;
+    /** Return false to refuse a move */
+    onBeforeChange?: (next: RangeSliderValue, current: RangeSliderValue) => boolean | void;
+}
+
+export interface RangeSliderInstance extends ComponentInstance {
+    getValue(): RangeSliderValue;
+    setValue(value: RangeSliderValue | string, opts?: {silent?: boolean}): this;
+    setRange(min: number, max: number): this;
+    enable(): this;
+    disable(): this;
+    isDisabled(): boolean;
+}
