@@ -25,6 +25,8 @@ import Badge, {NumberBadge} from './components/badge.js';
 import Loader from './components/loader.js';
 import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
+import Dropzone, {dropzoneFor} from './components/dropzone.js';
+import RangeSlider, {rangeSliderFor} from './components/range-slider.js';
 import {resolveAll, resolveElement, reuse} from './components/shared.js';
 import {registerComponents as defineTags} from './web-components/index.js';
 
@@ -9800,6 +9802,39 @@ export const elements = {
     },
 
     /**
+     * A file drop / browse area on an element, backed by a real <input type="file">.
+     * @param {string|Element} target - the area (wrapping or next to a file input), or the input
+     * @param {Object} [options]
+     * @returns {Dropzone|null} null when the target matches nothing
+     */
+    dropzone(target, options = {}) {
+        const el = resolveElement(target);
+        if (!el) return null;
+        const instance = dropzoneFor(el, options);
+        this._instances.set(el, instance);
+        return instance;
+    },
+
+    /**
+     * A one- or two-thumb slider over real <input type="range"> elements.
+     * @param {string|Element} target - an <input type="range"> or a container
+     * @param {Object} [options]
+     * @returns {RangeSlider|null} null when the target matches nothing
+     */
+    rangeSlider(target, options = {}) {
+        const el = resolveElement(target);
+        if (!el) return null;
+        const instance = rangeSliderFor(el, options);
+        this._instances.set(el, instance);
+        return instance;
+    },
+
+    /** Alias of rangeSlider(). */
+    slider(target, options = {}) {
+        return this.rangeSlider(target, options);
+    },
+
+    /**
      * The component on an element - including ones made by a factory (`E.slideover({...})`)
      * or another component, which never pass through this object.
      * @param {string|Element} selector
@@ -9895,3 +9930,4 @@ elements.listGroup.all = (selector, options = {}) => {
 // Export component classes for direct access to static methods
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};
 export {Popover};
+export {Dropzone, RangeSlider};
