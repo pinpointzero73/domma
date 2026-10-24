@@ -8,10 +8,189 @@ import {icons} from './icons.js';
 import {storage} from './storage.js';
 import {escapeHtml} from './escape.js';
 
+/** @typedef {Record<string, any>} TableRow A data row - a plain object keyed by column key. */
+
+/** @typedef {'asc'|'desc'} SortDirection */
+
+/** @typedef {'single'|'multiple'} SelectionMode */
+
+/** @typedef {'csv'|'json'|'excel'} ExportFormat Formats `download()` writes (anything else is written as JSON). */
+
+/** @typedef {'copy'|'text'|'csv'|'excel'|'json'} TableExportOption Buttons the export panel can show ('copy' is an alias of 'text'). */
+
+/** @typedef {'sort'|'filter'|'page'|'select'|'edit'|'render'} TableEventType */
+
+/**
+ * Column filter operators. Text comparisons are case-insensitive; 'between' takes `[min, max]`,
+ * 'in' takes an array of values. An unknown operator compares as 'equals'.
+ * @typedef {'equals'|'contains'|'startsWith'|'endsWith'|'gt'|'lt'|'gte'|'lte'|'between'|'in'} FilterOperator
+ */
+
+/**
+ * A column as passed in `options.columns` (a plain string is shorthand for `{key}`).
+ * @typedef {object} ColumnDefinition
+ * @property {string} key - Column key in the data object
+ * @property {string} [title] - Header text (defaults to the key)
+ * @property {boolean} [sortable] - false turns sorting off for this column (also off when `options.sortable` is false)
+ * @property {boolean} [filterable] - false marks the column as not filterable
+ * @property {boolean} [editable] - Double-click to edit the cell (needs `options.editable`)
+ * @property {string|number} [width] - Column width; a number is pixels
+ * @property {(value: any, row: TableRow, index: number) => string} [render] - Cell HTML (set as innerHTML)
+ * @property {any[]} [filterOptions] - Stored on the column for custom filter UIs
+ * @property {boolean} [visible] - false starts the column hidden
+ */
+
+/**
+ * A column after normalisation, as `getColumns()` returns it.
+ * @typedef {object} TableColumn
+ * @property {string} key
+ * @property {string} title
+ * @property {boolean} sortable
+ * @property {boolean} filterable
+ * @property {boolean} editable
+ * @property {string|number|null} width
+ * @property {((value: any, row: TableRow, index: number) => string)|null} render
+ * @property {any[]|null} filterOptions
+ * @property {boolean} visible
+ */
+
+/**
+ * @typedef {object} SortState
+ * @property {string} column
+ * @property {SortDirection} direction
+ */
+
+/**
+ * @typedef {object} FilterState
+ * @property {string} column
+ * @property {any} value
+ * @property {FilterOperator} [operator]
+ */
+
+/**
+ * @typedef {object} PageInfo
+ * @property {number} page - Current page (1-based)
+ * @property {number} pageSize
+ * @property {number} totalPages
+ * @property {number} totalRows - Rows after filtering
+ * @property {number} startRow - 1-based index of the first row on the page
+ * @property {number} endRow - 1-based index of the last row on the page
+ */
+
+/**
+ * Payload of `onSort`: `sort()` sends column + direction + sorts, `sortMultiple()` sends sorts only.
+ * @typedef {object} TableSortEvent
+ * @property {string} [column]
+ * @property {SortDirection} [direction]
+ * @property {SortState[]} sorts
+ */
+
+/**
+ * Payload of `onFilter`: `type: 'search'` from `search()`, `type: 'column'` from `filter()`.
+ * @typedef {object} TableFilterEvent
+ * @property {'search'|'column'} type
+ * @property {string} [query]
+ * @property {boolean} [isRegex]
+ * @property {string} [column]
+ * @property {any} [value]
+ * @property {FilterOperator} [operator]
+ */
+
+/**
+ * Payload of `onEdit`.
+ * @typedef {object} TableEditEvent
+ * @property {TableRow} row
+ * @property {string} column
+ * @property {any} oldValue
+ * @property {string} newValue
+ */
+
+/**
+ * Payload of `onExport`.
+ * @typedef {object} TableExportEvent
+ * @property {ExportFormat|'clipboard'} format
+ * @property {string} [filename]
+ * @property {number} rowCount
+ * @property {boolean} [selectedOnly]
+ */
+
+/**
+ * What an event callback receives: sort -> TableSortEvent, filter -> TableFilterEvent,
+ * page -> PageInfo, select -> the selected rows, edit -> TableEditEvent, render -> the table.
+ * @typedef {TableSortEvent|TableFilterEvent|PageInfo|TableRow[]|TableEditEvent|TableInstance} TableEventData
+ */
+
+/**
+ * @callback TableEventCallback
+ * @param {TableEventData} data - What each event sends: see TableEventData
+ * @returns {void}
+ */
+
+/**
+ * CSS class names the table renders with.
+ * @typedef {object} TableClasses
+ * @property {string} [wrapper]
+ * @property {string} [table]
+ * @property {string} [header]
+ * @property {string} [body]
+ * @property {string} [row]
+ * @property {string} [cell]
+ * @property {string} [selected]
+ * @property {string} [sorted]
+ * @property {string} [sortAsc]
+ * @property {string} [sortDesc]
+ * @property {string} [pagination]
+ * @property {string} [search]
+ */
+
+/**
+ * @typedef {object} TableOptions
+ * @property {TableRow[]} [data] - Initial data
+ * @property {Array<ColumnDefinition|string>} [columns] - Column definitions
+ * @property {string} [rowKey] - Row identity field for select / update / remove (default 'id')
+ * @property {boolean} [sortable] - Enable sorting (default true)
+ * @property {boolean} [multiSort] - Allow sorting by several columns (default false)
+ * @property {SortState|null} [defaultSort] - Sort applied on first render
+ * @property {boolean} [filterable] - Enable filtering (default true)
+ * @property {boolean} [searchable] - Show the search box (default true)
+ * @property {string} [searchPlaceholder] - Search box placeholder (default 'Search...')
+ * @property {boolean} [pagination] - Enable pagination (default true)
+ * @property {number} [pageSize] - Rows per page (default 10)
+ * @property {number[]} [pageSizeOptions] - Page size choices (default [10, 25, 50, 100])
+ * @property {boolean} [selectable] - Enable row selection (default false)
+ * @property {SelectionMode} [selectionMode] - default 'single'
+ * @property {boolean} [editable] - Enable cell editing on editable columns (default false)
+ * @property {string} [editMode] - default 'cell'
+ * @property {boolean} [resizable] - default true
+ * @property {boolean|number} [loadingSkeleton] - Skeleton rows until the first setData()/addRow(): true = min(pageSize, 5), or a row count
+ * @property {string} [loadingLabel] - Screen-reader status while loading (default 'Loading...')
+ * @property {boolean} [striped] - Striped rows (default true)
+ * @property {boolean} [hover] - Row hover colour (default true)
+ * @property {boolean} [bordered] - default true
+ * @property {boolean} [responsive] - default true
+ * @property {string|null} [evenRowColor] - Named variant (see TableInstance.stripeColors), hex/rgb/hsl or var()
+ * @property {string|null} [oddRowColor] - Named variant or colour
+ * @property {string|null} [hoverColor] - Named variant (see TableInstance.hoverColors) or colour
+ * @property {TableClasses} [classes] - CSS class names
+ * @property {boolean} [exportPanel] - Show the export panel (default false)
+ * @property {TableExportOption[]} [exportOptions] - Export panel buttons (default ['copy', 'csv', 'excel', 'json'])
+ * @property {boolean} [columnToggle] - Show the column visibility menu (default false)
+ * @property {boolean} [regexSearch] - Show the regex search toggle (default false)
+ * @property {boolean} [persistSettings] - Remember column visibility/width, sorting and page size (default false)
+ * @property {string|null} [storageKey] - Storage key (defaults to `domma-table-<element id>`)
+ * @property {((event: TableSortEvent) => void)|null} [onSort]
+ * @property {((event: TableFilterEvent) => void)|null} [onFilter]
+ * @property {((info: PageInfo) => void)|null} [onPageChange]
+ * @property {((selected: TableRow[]) => void)|null} [onSelect]
+ * @property {((event: TableEditEvent) => void)|null} [onEdit]
+ * @property {((table: TableInstance) => void)|null} [onRender]
+ * @property {((event: TableExportEvent) => void)|null} [onExport]
+ */
+
 /**
  * Table Instance Class
  */
-class TableInstance {
+export class TableInstance {
     // Static color dictionaries for stripe and hover colors
     static stripeColors = {
         none: 'transparent',
@@ -36,11 +215,17 @@ class TableInstance {
         default: 'var(--dm-hover-bg, #f0f0f0)'
     };
 
+    /**
+     * @param {string|HTMLElement|null} element - Container element or selector
+     * @param {TableOptions} [options]
+     */
     constructor(element, options = {}) {
+        /** @type {HTMLElement|null} */
         this.element = typeof element === 'string'
             ? document.querySelector(element)
             : element;
 
+        /** @type {TableOptions} */
         this.options = {
             // Data
             data: [],
@@ -149,6 +334,7 @@ class TableInstance {
         this._loading = !!this.options.loadingSkeleton && !(this.options.data && this.options.data.length);
 
         // Normalize columns
+        /** @type {TableColumn[]} @private */
         this._columns = this.options.columns.map(col => ({
             key: col.key || col,
             title: col.title || col.key || col,
@@ -169,6 +355,7 @@ class TableInstance {
         this._init();
     }
 
+    /** @private */
     _init() {
         if (!this.element) return;
 
@@ -267,6 +454,11 @@ class TableInstance {
     // Data Management
     // ============================================
 
+    /**
+     * Replace the data (ends a loadingSkeleton state) and go to page 1.
+     * @param {TableRow[]} data
+     * @returns {this}
+     */
     setData(data) {
         this._loading = false;
         this._originalData = [...data];
@@ -277,6 +469,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Rows on the current page (filtered and sorted).
+     * @returns {TableRow[]}
+     */
     getData() {
         return [...this._getPageData()];
     }
@@ -284,6 +480,8 @@ class TableInstance {
     /**
      * Show (or hide) skeleton rows in place of the body - for a reload. The
      * first setData() or addRow() turns it off again.
+     * @param {boolean} [on=true]
+     * @returns {this}
      */
     setLoading(on = true) {
         this._loading = !!on;
@@ -291,18 +489,35 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Whether skeleton rows are showing.
+     * @returns {boolean}
+     */
     isLoading() {
         return this._loading;
     }
 
+    /**
+     * Every row that passes the search and filters, sorted.
+     * @returns {TableRow[]}
+     */
     getFilteredData() {
         return [...this._filteredData];
     }
 
+    /**
+     * The data as given, unfiltered and unsorted.
+     * @returns {TableRow[]}
+     */
     getOriginalData() {
         return [...this._originalData];
     }
 
+    /**
+     * Append a row (ends a loadingSkeleton state).
+     * @param {TableRow} rowData
+     * @returns {this}
+     */
     addRow(rowData) {
         this._loading = false;
         this._originalData.push(rowData);
@@ -312,6 +527,12 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Merge values into a row.
+     * @param {number|string} identifier - Index in the original data (a number), or the row's `rowKey` value
+     * @param {Partial<TableRow>} rowData
+     * @returns {this}
+     */
     updateRow(identifier, rowData) {
         const index = this._findRowIndex(identifier);
         if (index !== -1) {
@@ -323,6 +544,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * @param {number|string} identifier - Index in the original data (a number), or the row's `rowKey` value
+     * @returns {this}
+     */
     removeRow(identifier) {
         const index = this._findRowIndex(identifier);
         if (index !== -1) {
@@ -334,6 +559,7 @@ class TableInstance {
         return this;
     }
 
+    /** @private */
     _findRowIndex(identifier) {
         const key = this.options.rowKey;
         if (typeof identifier === 'number') {
@@ -346,6 +572,12 @@ class TableInstance {
     // Sorting
     // ============================================
 
+    /**
+     * Sort by one column (replaces any other sort).
+     * @param {string} column
+     * @param {SortDirection} [direction='asc']
+     * @returns {this}
+     */
     sort(column, direction = 'asc') {
         this._sorts = [{column, direction}];
         this._applyFiltersAndSort();
@@ -357,6 +589,11 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Sort by several columns, first entry first.
+     * @param {SortState[]} sorts
+     * @returns {this}
+     */
     sortMultiple(sorts) {
         this._sorts = sorts;
         this._applyFiltersAndSort();
@@ -368,6 +605,7 @@ class TableInstance {
         return this;
     }
 
+    /** @returns {this} */
     clearSort() {
         this._sorts = [];
         this._applyFiltersAndSort();
@@ -376,6 +614,7 @@ class TableInstance {
         return this;
     }
 
+    /** @private */
     _applySort(data) {
         if (this._sorts.length === 0) return data;
 
@@ -403,6 +642,11 @@ class TableInstance {
     // Filtering
     // ============================================
 
+    /**
+     * Search every column (plain text, case-insensitive, or a regular expression in regex mode).
+     * @param {string} query
+     * @returns {this}
+     */
     search(query) {
         this._searchQuery = this._searchIsRegex ? query.trim() : query.toLowerCase().trim();
         this._applyFiltersAndSort();
@@ -414,6 +658,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * @param {boolean} isRegex - true treats the search query as a regular expression
+     * @returns {this}
+     */
     setSearchMode(isRegex) {
         this._searchIsRegex = isRegex;
         if (this._searchQuery) {
@@ -424,10 +672,18 @@ class TableInstance {
         return this;
     }
 
+    /** @returns {this} */
     toggleSearchMode() {
         return this.setSearchMode(!this._searchIsRegex);
     }
 
+    /**
+     * Filter one column (replaces that column's earlier filter; an empty value removes it).
+     * @param {string} column
+     * @param {any} value
+     * @param {FilterOperator} [operator='equals']
+     * @returns {this}
+     */
     filter(column, value, operator = 'equals') {
         // Remove existing filter for this column
         this._filters = this._filters.filter(f => f.column !== column);
@@ -445,6 +701,11 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Filter with a custom predicate (replaces the previous one).
+     * @param {(row: TableRow, index: number, rows: TableRow[]) => boolean} filterFn
+     * @returns {this}
+     */
     filterBy(filterFn) {
         this._customFilter = filterFn;
         this._applyFiltersAndSort();
@@ -453,6 +714,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Clear the column filters, the search and the custom filter.
+     * @returns {this}
+     */
     clearFilters() {
         this._filters = [];
         this._searchQuery = '';
@@ -463,6 +728,7 @@ class TableInstance {
         return this;
     }
 
+    /** @private */
     _applyFilters(data) {
         let filtered = data;
 
@@ -509,6 +775,7 @@ class TableInstance {
         return filtered;
     }
 
+    /** @private */
     _matchFilter(value, filterValue, operator) {
         if (value == null) return false;
 
@@ -543,6 +810,7 @@ class TableInstance {
         }
     }
 
+    /** @private */
     _applyFiltersAndSort() {
         this._filteredData = this._applyFilters(this._data);
         this._filteredData = this._applySort(this._filteredData);
@@ -552,6 +820,11 @@ class TableInstance {
     // Pagination
     // ============================================
 
+    /**
+     * Go to a page (1-based, clamped to the page range).
+     * @param {number} pageNum
+     * @returns {this}
+     */
     page(pageNum) {
         const totalPages = this._getTotalPages();
         this._currentPage = Math.max(1, Math.min(pageNum, totalPages));
@@ -562,6 +835,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * @param {number} size - Rows per page
+     * @returns {this}
+     */
     pageSize(size) {
         this._pageSize = size;
         this._currentPage = 1;
@@ -570,22 +847,27 @@ class TableInstance {
         return this;
     }
 
+    /** @returns {this} */
     nextPage() {
         return this.page(this._currentPage + 1);
     }
 
+    /** @returns {this} */
     prevPage() {
         return this.page(this._currentPage - 1);
     }
 
+    /** @returns {this} */
     firstPage() {
         return this.page(1);
     }
 
+    /** @returns {this} */
     lastPage() {
         return this.page(this._getTotalPages());
     }
 
+    /** @returns {PageInfo} */
     pageInfo() {
         const totalPages = this._getTotalPages();
         return {
@@ -598,11 +880,13 @@ class TableInstance {
         };
     }
 
+    /** @private */
     _getTotalPages() {
         if (!this.options.pagination) return 1;
         return Math.ceil(this._filteredData.length / this._pageSize) || 1;
     }
 
+    /** @private */
     _getPageData() {
         if (!this.options.pagination) return this._filteredData;
 
@@ -615,6 +899,11 @@ class TableInstance {
     // Selection
     // ============================================
 
+    /**
+     * Select a row (needs `selectable`; in 'single' mode it replaces the selection).
+     * @param {string|number|TableRow} identifier - The row's `rowKey` value, or the row itself
+     * @returns {this}
+     */
     select(identifier) {
         if (!this.options.selectable) return this;
 
@@ -634,6 +923,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * @param {string|number|TableRow} identifier - The row's `rowKey` value, or the row itself
+     * @returns {this}
+     */
     deselect(identifier) {
         const key = this.options.rowKey;
         const id = typeof identifier === 'object' ? identifier[key] : identifier;
@@ -646,6 +939,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * @param {string|number|TableRow} identifier - The row's `rowKey` value, or the row itself
+     * @returns {this}
+     */
     toggleSelect(identifier) {
         const key = this.options.rowKey;
         const id = typeof identifier === 'object' ? identifier[key] : identifier;
@@ -658,6 +955,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Select every filtered row ('multiple' mode only).
+     * @returns {this}
+     */
     selectAll() {
         if (!this.options.selectable || this.options.selectionMode === 'single') return this;
 
@@ -673,6 +974,7 @@ class TableInstance {
         return this;
     }
 
+    /** @returns {this} */
     deselectAll() {
         this._selected.clear();
         this.render();
@@ -683,11 +985,19 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Selected rows among the filtered data.
+     * @returns {TableRow[]}
+     */
     getSelected() {
         const key = this.options.rowKey;
         return this._filteredData.filter(row => this._selected.has(row[key]));
     }
 
+    /**
+     * @param {string|number|TableRow} identifier - The row's `rowKey` value, or the row itself
+     * @returns {boolean}
+     */
     isSelected(identifier) {
         const key = this.options.rowKey;
         const id = typeof identifier === 'object' ? identifier[key] : identifier;
@@ -698,11 +1008,13 @@ class TableInstance {
     // Settings Persistence
     // ============================================
 
+    /** @private */
     _getStorageKey() {
         return this.options.storageKey ||
           (this.element.id ? `domma-table-${this.element.id}` : 'domma-table-default');
     }
 
+    /** @private */
     _loadSettings() {
         try {
             const key = this._getStorageKey();
@@ -735,6 +1047,7 @@ class TableInstance {
         }
     }
 
+    /** @private */
     _saveSettings() {
         if (!this.options.persistSettings) return;
 
@@ -757,6 +1070,10 @@ class TableInstance {
         }
     }
 
+    /**
+     * Forget the persisted settings (with `persistSettings`).
+     * @returns {void}
+     */
     clearSettings() {
         if (this.options.persistSettings) {
             const key = this._getStorageKey();
@@ -768,6 +1085,10 @@ class TableInstance {
     // Column Management
     // ============================================
 
+    /**
+     * @param {string} key
+     * @returns {this}
+     */
     showColumn(key) {
         const col = this._columns.find(c => c.key === key);
         if (col) {
@@ -778,6 +1099,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * @param {string} key
+     * @returns {this}
+     */
     hideColumn(key) {
         const col = this._columns.find(c => c.key === key);
         if (col) {
@@ -788,6 +1113,10 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * @param {string} key
+     * @returns {this}
+     */
     toggleColumn(key) {
         const col = this._columns.find(c => c.key === key);
         if (col) {
@@ -798,14 +1127,21 @@ class TableInstance {
         return this;
     }
 
+    /** @returns {TableColumn[]} */
     getVisibleColumns() {
         return this._columns.filter(c => c.visible);
     }
 
+    /** @returns {TableColumn[]} */
     getHiddenColumns() {
         return this._columns.filter(c => !c.visible);
     }
 
+    /**
+     * @param {string} key
+     * @param {string|number} width - A number is pixels
+     * @returns {this}
+     */
     resizeColumn(key, width) {
         const col = this._columns.find(c => c.key === key);
         if (col) {
@@ -815,6 +1151,7 @@ class TableInstance {
         return this;
     }
 
+    /** @returns {TableColumn[]} */
     getColumns() {
         return [...this._columns];
     }
@@ -823,6 +1160,12 @@ class TableInstance {
     // Inline Editing
     // ============================================
 
+    /**
+     * Open a cell's editor (needs `editable`).
+     * @param {number} rowIndex - Row index on the current page
+     * @param {string} column
+     * @returns {this}
+     */
     editCell(rowIndex, column) {
         if (!this.options.editable) return this;
 
@@ -831,12 +1174,14 @@ class TableInstance {
         return this;
     }
 
+    /** @returns {this} */
     saveEdits() {
         this._editingCell = null;
         this.render();
         return this;
     }
 
+    /** @returns {this} */
     cancelEdits() {
         this._editingCell = null;
         this.render();
@@ -847,6 +1192,11 @@ class TableInstance {
     // Export
     // ============================================
 
+    /**
+     * Selected rows if any, otherwise every filtered row, as CSV.
+     * @param {{columns?: TableColumn[], includeHeaders?: boolean}} [options]
+     * @returns {string}
+     */
     toCSV(options = {}) {
         const {columns = this._columns.filter(c => c.visible), includeHeaders = true} = options;
         const rows = [];
@@ -870,12 +1220,18 @@ class TableInstance {
         return rows.join('\n');
     }
 
+    /** @private */
     _getExportData() {
         // If rows are selected, export only those; otherwise export all filtered data
         const selected = this.getSelected();
         return selected.length > 0 ? selected : this._filteredData;
     }
 
+    /**
+     * Selected rows if any, otherwise every filtered row, as a JSON string (visible columns only).
+     * @param {{columns?: TableColumn[], pretty?: boolean}} [options]
+     * @returns {string}
+     */
     toJSON(options = {}) {
         const {columns = this._columns.filter(c => c.visible), pretty = false} = options;
         const keys = columns.map(c => c.key);
@@ -894,6 +1250,12 @@ class TableInstance {
         return pretty ? JSON.stringify(data, null, 2) : JSON.stringify(data);
     }
 
+    /**
+     * Download the export as a file (default name data.csv / data.xls / data.json).
+     * @param {ExportFormat} format
+     * @param {string} [filename]
+     * @returns {void}
+     */
     download(format, filename) {
         let content, mimeType;
 
@@ -937,6 +1299,11 @@ class TableInstance {
         }
     }
 
+    /**
+     * Selected rows if any, otherwise every filtered row, as an Excel-readable HTML document.
+     * @param {{columns?: TableColumn[]}} [options]
+     * @returns {string}
+     */
     toExcel(options = {}) {
         const {columns = this._columns.filter(c => c.visible)} = options;
 
@@ -996,6 +1363,11 @@ class TableInstance {
         return html;
     }
 
+    /**
+     * Copy the export to the clipboard: 'text' (tab-separated, default), 'csv' or 'json'.
+     * @param {'text'|'csv'|'json'} [format='text']
+     * @returns {Promise<this>}
+     */
     async copyToClipboard(format = 'text') {
         let content;
 
@@ -1031,6 +1403,7 @@ class TableInstance {
         return this;
     }
 
+    /** @private */
     _escapeHtml(text) {
 
         return escapeHtml(text);
@@ -1040,6 +1413,10 @@ class TableInstance {
     // Rendering
     // ============================================
 
+    /**
+     * Rebuild the table's DOM.
+     * @returns {this}
+     */
     render() {
         if (!this.element) return this;
 
@@ -1668,6 +2045,7 @@ class TableInstance {
         return this;
     }
 
+    /** @private */
     _reinitRenderedContent() {
         // Icons: `icons` is a direct import, so scan the rebuilt subtree.
         try {
@@ -1693,6 +2071,7 @@ class TableInstance {
     // Event Handling
     // ============================================
 
+    /** @private */
     _addEventHandler(element, event, handler) {
         element.addEventListener(event, handler);
         if (!this._eventListeners.has(element)) {
@@ -1701,6 +2080,7 @@ class TableInstance {
         this._eventListeners.get(element).push({event, handler});
     }
 
+    /** @private */
     _clearEventListeners() {
         for (const [element, listeners] of this._eventListeners) {
             for (const {event, handler} of listeners) {
@@ -1710,6 +2090,7 @@ class TableInstance {
         this._eventListeners.clear();
     }
 
+    /** @private */
     _restoreIconsBeforeRebuild() {
         // Find all processed SVG icons and replace them with data-icon attributes
         const processedIcons = this.element.querySelectorAll('svg[data-icon-processed="true"][data-original-icon]');
@@ -1736,6 +2117,55 @@ class TableInstance {
         });
     }
 
+    /**
+     * @overload
+     * @param {'sort'} event
+     * @param {(event: TableSortEvent) => void} callback
+     * @returns {this}
+     */
+    /**
+     * @overload
+     * @param {'filter'} event
+     * @param {(event: TableFilterEvent) => void} callback
+     * @returns {this}
+     */
+    /**
+     * @overload
+     * @param {'page'} event
+     * @param {(info: PageInfo) => void} callback
+     * @returns {this}
+     */
+    /**
+     * @overload
+     * @param {'select'} event
+     * @param {(selected: TableRow[]) => void} callback
+     * @returns {this}
+     */
+    /**
+     * @overload
+     * @param {'edit'} event
+     * @param {(event: TableEditEvent) => void} callback
+     * @returns {this}
+     */
+    /**
+     * @overload
+     * @param {'render'} event
+     * @param {(table: TableInstance) => void} callback
+     * @returns {this}
+     */
+    /**
+     * @overload
+     * @param {TableEventType} event
+     * @param {TableEventCallback} callback
+     * @returns {this}
+     */
+    /**
+     * Set the callback for an event (the same slot as the matching `on<Event>` option, so it
+     * replaces that one). Unknown events are ignored.
+     * @param {TableEventType} event
+     * @param {TableEventCallback} callback
+     * @returns {this}
+     */
     on(event, callback) {
         const validEvents = ['sort', 'filter', 'page', 'select', 'edit', 'render'];
         if (validEvents.includes(event)) {
@@ -1745,6 +2175,11 @@ class TableInstance {
         return this;
     }
 
+    /**
+     * Remove the callback for an event.
+     * @param {TableEventType} event
+     * @returns {this}
+     */
     off(event) {
         const optKey = 'on' + event.charAt(0).toUpperCase() + event.slice(1);
         this.options[optKey] = null;
@@ -1755,12 +2190,20 @@ class TableInstance {
     // Lifecycle
     // ============================================
 
+    /**
+     * Re-apply filters and sort, then render.
+     * @returns {this}
+     */
     refresh() {
         this._applyFiltersAndSort();
         this.render();
         return this;
     }
 
+    /**
+     * Remove the listeners and empty the element.
+     * @returns {void}
+     */
     destroy() {
         this._clearEventListeners();
         if (this.element) {
@@ -1773,9 +2216,18 @@ class TableInstance {
 // Tables Module Export
 // ============================================
 
+/** @typedef {typeof tables} Tables */
+
 export const tables = {
+    /** @type {Map<HTMLElement, TableInstance>} @private */
     _instances: new Map(),
 
+    /**
+     * Create a table in a container (a later create on the same element replaces the registered one).
+     * @param {string|HTMLElement} selector - Container element or selector
+     * @param {TableOptions} [options]
+     * @returns {TableInstance}
+     */
     create(selector, options = {}) {
         const element = typeof selector === 'string'
             ? document.querySelector(selector)
@@ -1788,6 +2240,11 @@ export const tables = {
         return instance;
     },
 
+    /**
+     * The table created in a container, if any.
+     * @param {string|HTMLElement} selector
+     * @returns {TableInstance|undefined}
+     */
     get(selector) {
         const element = typeof selector === 'string'
             ? document.querySelector(selector)
@@ -1795,6 +2252,11 @@ export const tables = {
         return this._instances.get(element);
     },
 
+    /**
+     * Destroy the table in a container and forget it.
+     * @param {string|HTMLElement} selector
+     * @returns {void}
+     */
     destroy(selector) {
         const element = typeof selector === 'string'
             ? document.querySelector(selector)
@@ -1806,6 +2268,10 @@ export const tables = {
         }
     },
 
+    /**
+     * Destroy every table created through `tables.create()`.
+     * @returns {void}
+     */
     destroyAll() {
         for (const instance of this._instances.values()) {
             instance.destroy();

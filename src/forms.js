@@ -44,9 +44,249 @@ function getFormData(formElement) {
 }
 
 /**
+ * Field types a form can render. Anything not listed renders as a text input.
+ * `boolean`/`checkbox` are one checkbox; `select`/`radio`/`checkbox-group`/`multiselect`/`chooser` take `options`;
+ * `slider` is an E.rangeSlider (as is `range` with `formConfig.slider`); `dropzone` is an E.dropzone (value: File[]);
+ * `signature` is an E.signature pad (value: base64 PNG).
+ * @typedef {'string'|'email'|'password'|'number'|'integer'|'float'|'boolean'|'checkbox'|'date'|'datetime'|'time'|'url'|'tel'|'color'|'range'|'file'|'hidden'|'signature'|'select'|'multiselect'|'textarea'|'radio'|'checkbox-group'|'chooser'|'slider'|'dropzone'|(string & {})} FormFieldType
+ */
+
+/**
+ * A choice for select / radio / checkbox-group / multiselect / chooser fields. A plain string is both the
+ * value and (capitalised) the label. Chooser options also read icon, description, badge, tooltip, etc.
+ * @typedef {string|{value: any, label: string, [key: string]: any}} FormOption
+ */
+
+/**
+ * An input-group addon for `formConfig.prefix` / `formConfig.suffix`: `{icon}` draws a Domma icon,
+ * `{text}` escaped text, `{html}` raw HTML (the caller's responsibility); a string is shorthand for `{text}`.
+ * @typedef {string|{icon: string}|{text: string|number}|{html: string}} FormAddon
+ */
+
+/**
+ * How a field is presented (`fieldDef.formConfig`). Slider fields pass range/ticks/tickLabels/labels/format/
+ * tooltip/marks/minDistance/orientation/rtl/names/ariaLabels/className to E.rangeSlider; dropzone fields pass
+ * accept/multiple/maxFiles/maxSize/minSize/previews/upload/autoUpload/retry/labels/list/className to E.dropzone.
+ * @typedef {object} FormFieldConfig
+ * @property {string} [placeholder]
+ * @property {string} [hint] - Small text beside the label; also the message when `pattern` fails
+ * @property {string} [helperText] - Text under the control (HTML)
+ * @property {string} [tooltip] - Tooltip on the label (a slider field also passes it to E.rangeSlider)
+ * @property {number} [span] - Columns the field spans in a grid layout
+ * @property {boolean} [disabled]
+ * @property {number} [rows] - textarea rows (default 3)
+ * @property {number|'any'} [step] - Used when the field definition has no `step`
+ * @property {string} [autocomplete]
+ * @property {FormAddon} [prefix]
+ * @property {FormAddon} [suffix]
+ * @property {boolean} [reveal] - password: show / hide toggle
+ * @property {boolean} [clear] - text-like inputs and textareas: a clear button
+ * @property {boolean} [stepper] - number / integer / float: - and + buttons
+ * @property {boolean|number} [counter] - text-like inputs and textareas: a character counter; true reads `maxLength`
+ * @property {Record<string, string>|((value: number, where: 'tick'|'mark'|'tooltip'|'aria') => string)} [labels] - Text for the input extras or the dropzone; a slider's value formatter
+ * @property {string|string[]} [accept] - file / dropzone
+ * @property {boolean} [multiple] - file / dropzone (a dropzone allows several unless false)
+ * @property {boolean} [slider] - Render a `range` field as E.rangeSlider
+ * @property {boolean} [range] - slider: two thumbs, value [low, high]
+ * @property {import('./components/range-slider.js').RangeSliderOptions['ticks']} [ticks]
+ * @property {boolean} [tickLabels]
+ * @property {import('./components/range-slider.js').RangeSliderOptions['format']} [format]
+ * @property {import('./components/range-slider.js').RangeSliderOptions['marks']} [marks]
+ * @property {number} [minDistance]
+ * @property {'horizontal'|'vertical'} [orientation]
+ * @property {boolean|null} [rtl]
+ * @property {[string, string]|null} [names]
+ * @property {[string, string]|null} [ariaLabels]
+ * @property {string} [className]
+ * @property {number|null} [maxFiles]
+ * @property {number|null} [maxSize] - Bytes
+ * @property {number|null} [minSize] - Bytes
+ * @property {boolean} [previews]
+ * @property {import('./components/dropzone.js').DropzoneOptions['upload']} [upload]
+ * @property {boolean} [autoUpload]
+ * @property {number} [retry]
+ * @property {boolean|string|HTMLElement} [list]
+ */
+
+/**
+ * One field of a form blueprint. The same object also feeds `M.create` (the form builds its model from the
+ * blueprint), so model keys such as `default`, `required` and `validate` apply to both.
+ * @typedef {object} FormFieldDefinition
+ * @property {FormFieldType} [type] - default 'string'
+ * @property {string} [label] - default: the capitalised field name
+ * @property {any} [default]
+ * @property {boolean} [required]
+ * @property {boolean} [readonly] - Renders the control disabled
+ * @property {number} [min]
+ * @property {number} [max]
+ * @property {number|'any'} [step]
+ * @property {number} [minLength]
+ * @property {number} [maxLength]
+ * @property {RegExp} [pattern]
+ * @property {(value: any, data: Record<string, any>) => boolean|string} [validate] - true passes; a string (or anything else) fails with that message
+ * @property {FormOption[]} [options] - Choices for select / radio / checkbox-group / multiselect / chooser
+ * @property {FormFieldConfig} [formConfig]
+ * @property {(value: any, row: Record<string, any>, index: number) => string} [tableRender] - `F.crud` table cell renderer
+ * @property {'card'|'chip'} [variant] - chooser (default 'card')
+ * @property {boolean} [multiple] - chooser: several choices (value is an array)
+ * @property {'comfortable'|'compact'} [density] - chooser
+ * @property {number} [columns] - chooser (default 3)
+ * @property {string} [accent] - chooser: semantic name or CSS colour (default 'primary')
+ * @property {'border'|'solid'|'glow'|'overlay'|'underline'} [accentStyle] - chooser
+ * @property {boolean} [glow] - chooser
+ * @property {string|null} [glowColour] - chooser
+ * @property {string} [shadow] - chooser (default 'none')
+ * @property {string|null} [shadowColour] - chooser
+ */
+
+/**
+ * A form blueprint: field name -> definition. Fields render in key order unless `options.sections` says otherwise.
+ * @typedef {{[field: string]: FormFieldDefinition}} FormBlueprint
+ */
+
+/**
+ * A group of fields (`options.sections`); with a title it is a fieldset with a legend.
+ * @typedef {object} FormSection
+ * @property {string} [title]
+ * @property {string[]} [fields] - Blueprint keys, in order
+ * @property {'grid'|'stacked'} [layout]
+ * @property {number} [columns] - grid columns (default 2)
+ */
+
+/**
+ * @typedef {object} FormOptions
+ * @property {'stacked'|'grid'|'inline'} [layout] - default 'stacked'
+ * @property {2|3|number} [columns] - grid layout columns (2 or 3, default 2)
+ * @property {'top'|'left'|'floating'} [labelPosition] - default 'top'
+ * @property {boolean} [showLabels] - default true
+ * @property {boolean} [showHelperText] - default true
+ * @property {boolean} [showHints] - default true
+ * @property {'blur'|'change'|'submit'} [validationMode] - default 'blur'
+ * @property {'domma'|'bootstrap'|'tailwind'} [cssFramework] - default 'domma'
+ * @property {string} [className] - default 'domma-form'
+ * @property {string} [fieldClassName] - default 'domma-form-field'
+ * @property {string} [labelClassName] - default 'form-label'
+ * @property {string} [inputClassName] - default 'form-input'
+ * @property {string} [errorClassName] - default 'form-error'
+ * @property {string} [helperClassName] - default 'form-helper-text'
+ * @property {string} [hintClassName] - default 'form-hint'
+ * @property {boolean} [cardWrapper] - Wrap the form in a card (default false)
+ * @property {FormSection[]} [sections]
+ * @property {boolean} [showSubmitButton] - default true
+ * @property {string} [submitText] - default 'Submit'
+ * @property {string} [resetText] - Adds a reset button with this text
+ * @property {'left'|'center'|'right'} [buttonAlignment] - default 'right'
+ * @property {(data: Record<string, any>, form: FormInstance) => void} [onSubmit] - A valid submit
+ * @property {(errors: Record<string, string>, form: FormInstance) => void} [onValidationError] - An invalid submit
+ * @property {string} [persist] - Passed to the model: a storage key to keep the values under
+ * @property {boolean} [autoSave] - Passed to the model
+ */
+
+/**
+ * What `handleSubmit()` returns.
+ * @typedef {object} FormSubmitResult
+ * @property {boolean} isValid
+ * @property {Record<string, any>} data
+ * @property {Record<string, string>} errors - field name -> message
+ */
+
+/**
+ * One step of `F.wizard`.
+ * @typedef {object} FormWizardStep
+ * @property {string} [title] - default 'Step <n>'
+ * @property {string} [description]
+ * @property {FormBlueprint} fields - The step's blueprint
+ * @property {'stacked'|'grid'|'inline'} [layout]
+ */
+
+/**
+ * `F.wizard` options; the rest are FormOptions applied to every step.
+ * @typedef {FormOptions & {
+ *   schema: {steps: FormWizardStep[]},
+ *   data?: Record<string, any>,
+ *   prevText?: string,
+ *   nextText?: string,
+ *   finishText?: string,
+ *   onStepChange?: (stepIndex: number, data: Record<string, any>) => void,
+ *   onValidation?: (isValid: boolean, errors: Record<string, string>, stepIndex: number) => void,
+ *   onSubmit?: (data: Record<string, any>, form: FormInstance) => void|Promise<void>,
+ *   onError?: (error: any, data: Record<string, any>, form: FormInstance) => void
+ * }} FormWizardOptions
+ */
+
+/**
+ * The control object `F.wizard` returns.
+ * @typedef {object} FormWizard
+ * @property {() => void} nextStep
+ * @property {() => void} prevStep
+ * @property {(stepIndex: number) => void} goToStep
+ * @property {() => number} getCurrentStep - 0-based
+ * @property {() => Record<string, any>} getStepData - The values gathered so far (a copy)
+ * @property {(data: Record<string, any>) => void} setStepData - Merge values in and re-render the step
+ * @property {() => boolean} validate - Validate the current step
+ * @property {() => HTMLElement|null} getElement
+ * @property {() => void} destroy - Tear down the current step's controls and remove the wizard
+ */
+
+/**
+ * `F.modal` options; the rest are FormOptions (`onSubmit` and `showSubmitButton` are set by the modal).
+ * @typedef {FormOptions & {
+ *   title?: string,
+ *   saveText?: string,
+ *   closeOnSave?: boolean,
+ *   size?: string,
+ *   onSave?: (data: Record<string, any>, form: FormInstance) => void|Promise<void>,
+ *   onError?: (error: any, data: Record<string, any>, form: FormInstance) => void
+ * }} FormModalOptions
+ */
+
+/**
+ * The control object `F.modal` returns. `close()` removes the modal from the page.
+ * @typedef {object} FormModal
+ * @property {() => void} open
+ * @property {() => void} close
+ * @property {() => boolean} isOpen
+ */
+
+/**
+ * `F.crud` configuration.
+ * @typedef {object} FormCrudConfig
+ * @property {FormBlueprint} schema
+ * @property {string} endpoint - REST endpoint (GET list, POST create, PUT/DELETE `<endpoint>/<id>`); responses are `{success, data, message}`
+ * @property {string|HTMLElement} [tableSelector] - Where the table goes
+ * @property {string} [title] - default 'Manage Items'
+ * @property {string} [primaryKey] - default 'id'
+ * @property {string} [displayField] - default 'name'
+ * @property {Record<string, string>} [headers]
+ * @property {(error: any) => void} [onError]
+ * @property {(message: string) => void} [onSuccess]
+ */
+
+/**
+ * The object `F.crud` returns. Call `init()` to load the data and build the table.
+ * @typedef {object} FormCrud
+ * @property {() => Promise<void>} init
+ * @property {() => Promise<void>} loadData
+ * @property {() => void} createTable
+ * @property {() => void} initializeTableIcons
+ * @property {() => void} bindEvents
+ * @property {() => Promise<void>} create - Open the create modal
+ * @property {(id: string|number) => Promise<void>} edit - Open the edit modal for an item
+ * @property {(id: string|number) => Promise<void>} delete - Confirm, then delete an item
+ * @property {() => Promise<void>} refresh
+ * @property {() => Record<string, any>[]} getData
+ * @property {() => import('./tables.js').TableInstance|null} getTable
+ * @property {(item: Record<string, any>) => void} addItem
+ * @property {(id: string|number, updates: Record<string, any>) => void} updateItem
+ * @property {(id: string|number) => void} removeItem
+ */
+
+/** @typedef {Forma} FormInstance */
+
+/**
  * Forma Class - Generates forms from Model schemas
  */
-class Forma {
+export class Forma {
   static defaults = {
     layout: 'stacked',     // 'stacked', 'grid', 'inline'
     columns: 2,            // For grid layout
@@ -87,17 +327,31 @@ class Forma {
     signature: 'signature'
   };
 
+  /**
+   * @param {FormBlueprint} schema
+   * @param {Record<string, any>} [data] - Initial values
+   * @param {FormOptions} [options]
+   */
   constructor(schema, data = {}, options = {}) {
+    /** @type {FormBlueprint} */
     this.schema = schema;
+    /** @type {Record<string, any>} */
     this.data = {...data};
+    /** @private */
     this._startData = {...data};
+    /** @type {FormOptions} */
     this.options = {...Forma.defaults, ...options};
+    /** @type {import('./models.js').Model|null} The model built from the blueprint */
     this.model = null;
+    /** @type {Record<string, string>} field name -> error message */
     this.errors = {};
+    /** @type {Set<string>} Fields that have lost focus at least once */
     this.touched = new Set();
 
     // Set up runtime references
+    /** @type {typeof utils} */
     this.utils = window.Domma?.utils || utils;
+    /** @type {typeof models} */
     this.models = window.Domma?.models || models;
 
     // Create model from schema and data
@@ -111,6 +365,7 @@ class Forma {
 
   /**
    * Generate form HTML
+   * @returns {string}
    */
   render() {
     if (!this.schema) {
@@ -123,6 +378,8 @@ class Forma {
 
   /**
    * Render form into DOM element
+   * @param {string|HTMLElement} selector - Container (its content is replaced)
+   * @returns {HTMLElement} The container
    */
   renderTo(selector) {
     const element = typeof selector === 'string'
@@ -134,6 +391,7 @@ class Forma {
     }
 
     element.innerHTML = this.render();
+    /** @type {HTMLFormElement|null} The rendered <form> */
     this.formElement = element.querySelector('form');
     this._bindEvents(element);
     this._initTooltips(element);
@@ -142,6 +400,7 @@ class Forma {
 
   /**
    * Build the complete form structure
+   * @private
    */
   _buildForm() {
     const {className, layout, columns, cardWrapper} = this.options;
@@ -207,6 +466,7 @@ class Forma {
 
   /**
    * Build a form section
+   * @private
    */
   _buildSection(section) {
     let html = '';
@@ -240,6 +500,7 @@ class Forma {
 
   /**
    * Build individual field
+   * @private
    */
   _buildField(fieldName, fieldDef) {
     const {
@@ -330,6 +591,7 @@ class Forma {
    * @param {Object} inputOptions - Options to customize the input element including type, value, required, disabled, placeholder, etc.
    *
    * @return {string} A string representing the HTML input element with appropriate attributes and content based on the specified type.
+   * @private
    */
   _buildInput(fieldName, fieldDef, inputOptions) {
     const {type, value, required, disabled, placeholder} = inputOptions;
@@ -438,6 +700,7 @@ class Forma {
    * @param {string} type
    * @param {Object} fieldDef
    * @return {Object|null}
+   * @private
    */
   _inputExtras(type, fieldDef) {
     const fc = fieldDef.formConfig || {};
@@ -464,6 +727,7 @@ class Forma {
    * @param {string} controlHtml
    * @param {Object} formConfig
    * @return {string}
+   * @private
    */
   _wrapAddons(controlHtml, formConfig = {}) {
     const prefixHtml = this._buildAddon(formConfig.prefix, 'left');
@@ -490,6 +754,7 @@ class Forma {
    * @param {Object|undefined} slot  The prefix/suffix descriptor, or falsy to skip.
    * @param {'left'|'right'} side    Which side the addon renders on.
    * @return {string} The addon HTML, or '' if no addon should be rendered.
+   * @private
    */
   _buildAddon(slot, side) {
     if (typeof slot === 'string' && slot) slot = {text: slot};
@@ -515,6 +780,7 @@ class Forma {
    * @param attrs
    * @param currentValue
    * @return {string} A string representing the generated HTML `<select>` element with appropriate options.
+   * @private
    */
   _buildSelect(fieldName, fieldDef, attrs, currentValue) {
     const attrString = Object.entries(attrs)
@@ -559,6 +825,7 @@ class Forma {
    * @param fieldDef
    * @param attrs
    * @param currentValue
+   * @private
    */
   _buildRadioGroup(fieldName, fieldDef, attrs, currentValue) {
     const options = fieldDef.options || [];
@@ -587,6 +854,7 @@ class Forma {
 
   /**
    * Build checkbox group
+   * @private
    */
   _buildCheckboxGroup(fieldName, fieldDef, attrs, currentValue) {
     const options = fieldDef.options || [];
@@ -623,6 +891,7 @@ class Forma {
    * @param {Object} attrs      attribute object built by _buildField
    * @param {*} currentValue    current model value (string or array)
    * @returns {string} HTML string
+   * @private
    */
   _buildChooser(fieldName, fieldDef, attrs, currentValue) {
     const cfg = {
@@ -647,6 +916,8 @@ class Forma {
 
   /**
    * Bind events to form
+   * @param {HTMLElement} formElement
+   * @returns {void}
    */
   _bindEvents(formElement) {
     // Form submission
@@ -786,6 +1057,7 @@ class Forma {
     });
   }
 
+  /** @private */
   _destroyFieldControls(key) {
     Object.values(this[key] || {}).forEach((c) => c.destroy());
     this[key] = {};
@@ -810,6 +1082,7 @@ class Forma {
     });
   }
 
+  /** @private */
   _destroyInputExtras() {
     Object.values(this._inputGroups || {}).forEach((g) => g.destroy());
     this._inputGroups = {};
@@ -840,6 +1113,7 @@ class Forma {
 
   /**
    * Remove the listeners and controls the form's input extras added.
+   * @returns {void}
    */
   destroy() {
     this._destroyInputExtras();
@@ -888,6 +1162,7 @@ class Forma {
   /**
    * Initialise any signature fields inside a rendered form.
    * @param {HTMLElement} formElement
+   * @private
    */
   _initSignatureFields(formElement) {
     const sigContainers = formElement.querySelectorAll('[data-signature-field]');
@@ -907,6 +1182,7 @@ class Forma {
 
   /**
    * Initialize tooltips on form labels
+   * @private
    */
   _initTooltips(container) {
     // Scan for icons first (help-circle icon for tooltips)
@@ -929,6 +1205,7 @@ class Forma {
 
   /**
    * Get form data
+   * @returns {Record<string, any>}
    */
   getData() {
     if (this.model) {
@@ -938,7 +1215,9 @@ class Forma {
   }
 
   /**
-   * Set form data
+   * Set form data (merged into the current values)
+   * @param {Record<string, any>} data
+   * @returns {void}
    */
   setData(data) {
     this.data = {...this.data, ...data};
@@ -949,6 +1228,7 @@ class Forma {
 
   /**
    * Validate entire form
+   * @returns {boolean}
    */
   validate() {
     this.errors = {};
@@ -966,6 +1246,8 @@ class Forma {
 
   /**
    * Validate single field
+   * @param {string} fieldName
+   * @returns {boolean}
    */
   validateField(fieldName) {
     const fieldDef = this.schema[fieldName];
@@ -1000,6 +1282,9 @@ class Forma {
 
   /**
    * Set field error
+   * @param {string} fieldName
+   * @param {string} message
+   * @returns {void}
    */
   setFieldError(fieldName, message) {
     this.errors[fieldName] = message;
@@ -1013,6 +1298,8 @@ class Forma {
 
   /**
    * Clear field error
+   * @param {string} fieldName
+   * @returns {void}
    */
   clearFieldError(fieldName) {
     delete this.errors[fieldName];
@@ -1025,7 +1312,8 @@ class Forma {
   }
 
   /**
-   * Handle form submission
+   * Handle form submission: validate, then call `onSubmit` or `onValidationError`.
+   * @returns {FormSubmitResult}
    */
   handleSubmit() {
     const isValid = this.validate();
@@ -1042,6 +1330,7 @@ class Forma {
 
   /**
    * Get value from form field element
+   * @private
    */
   _getFieldValue(element) {
     const {type, name} = element;
@@ -1069,6 +1358,8 @@ class Forma {
 
   /**
    * Get field value by field name
+   * @param {string} fieldName
+   * @returns {any}
    */
   _getFieldValueByName(fieldName) {
     // Chooser values are read directly from the control instance - they
@@ -1096,6 +1387,7 @@ class Forma {
 
   /**
    * Validate field value against schema definition
+   * @private
    */
   _validateFieldValue(fieldName, value, fieldDef) {
     // Chooser fields: empty means null/undefined OR an empty array
@@ -1174,12 +1466,18 @@ class Forma {
   }
 }
 
+/** @typedef {typeof forms} Forms */
+
 /**
  * Forms module
  */
 export const forms = {
   /**
-   * Create a new form builder instance
+   * Create a new form builder instance (call `renderTo()` to put it on the page)
+   * @param {FormBlueprint} schema
+   * @param {Record<string, any>} [data] - Initial values
+   * @param {FormOptions} [options]
+   * @returns {FormInstance}
    */
   create(schema, data = {}, options = {}) {
     return new Forma(schema, data, options);
@@ -1187,6 +1485,11 @@ export const forms = {
 
   /**
    * Render form into element
+   * @param {string|HTMLElement} selector - Container (its content is replaced)
+   * @param {FormBlueprint} schema
+   * @param {Record<string, any>} [data] - Initial values
+   * @param {FormOptions} [options]
+   * @returns {HTMLElement} The container
    */
   render(selector, schema, data = {}, options = {}) {
     const form = new Forma(schema, data, options);
@@ -1195,6 +1498,9 @@ export const forms = {
 
   /**
    * Create wizard form (multi-step form)
+   * @param {string|HTMLElement} selector - Container
+   * @param {FormWizardOptions} options
+   * @returns {FormWizard}
    */
   wizard(selector, options = {}) {
     if (!options.schema) {
@@ -1471,7 +1777,12 @@ export const forms = {
   },
 
   /**
-   * Create modal form (integration with existing modal system)
+   * Create modal form (integration with existing modal system). The modal is added to the page
+   * at once, hidden; call `open()`.
+   * @param {FormBlueprint} schema
+   * @param {Record<string, any>} [data] - Initial values
+   * @param {FormModalOptions} [options]
+   * @returns {FormModal}
    */
   modal(schema, data = {}, options = {}) {
     const formId = `form-${Date.now()}`;
@@ -1585,6 +1896,8 @@ export const forms = {
 
   /**
    * CRUD Helper - Complete Create, Read, Update, Delete functionality
+   * @param {FormCrudConfig} config
+   * @returns {FormCrud}
    */
   crud(config) {
     if (!config.schema) {
