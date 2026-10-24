@@ -1,54 +1,64 @@
 #!/usr/bin/env node
 /**
- * Phase 4: the API reference collection, from the IDE declarations in
- * public/assets/ide/phpstorm/*.d.ts - the one place every public method is
- * written down with its signature and a line about it (they are kept current
- * with the code; see CLAUDE.md). Examples come from docs/API.md where it has
- * one for the same call.
+ * Phase 4: the API reference collection, from Domma's TypeScript declarations
+ * (assets/types/, generated from the JSDoc in src/ by `npm run build:types`),
+ * read through the TypeScript compiler - every public method with its
+ * signature and the first paragraph of its JSDoc. Examples come from
+ * docs/API.md where it has one for the same call.
  *
- * Each public interface is mapped to how a reader calls it ($(el).find,
- * E.modal, modal.open...); interfaces not mapped (options, events, records)
+ * Each public type below is mapped to how a reader calls it ($(el).find,
+ * E.modal, modal.open...); types not mapped (options, events, records)
  * are types, not calls, and are left out. Overloads become one entry.
  *
- * Writes scripts/site-migrate/collections/api-reference/data.json; apply-site.mjs
- * installs it on a site that has none yet (or with --reseed).
+ * Writes scripts/site-migrate/collections/api-reference/data.json (or --out FILE);
+ * apply-site.mjs installs it on a site that has none yet (or with --reseed).
  *
- * Usage: node scripts/site-migrate/api-reference.mjs
+ * Usage: node scripts/site-migrate/api-reference.mjs [--out FILE]
+ * (needs typescript from devDependencies: npm ci)
  */
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import {createRequire} from 'node:module';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const IDE = path.join(ROOT, 'public', 'assets', 'ide', 'phpstorm');
+const TYPES = path.join(ROOT, 'assets', 'types');
 const API_MD = path.join(ROOT, 'docs', 'API.md');
-const OUT = path.join(ROOT, 'scripts', 'site-migrate', 'collections', 'api-reference', 'data.json');
+const outAt = process.argv.indexOf('--out');
+const OUT = outAt > 0 ? path.resolve(process.argv[outAt + 1])
+    : path.join(ROOT, 'scripts', 'site-migrate', 'collections', 'api-reference', 'data.json');
+const ts = createRequire(import.meta.url)('typescript');
 
-/** interface -> [module, how it is called, showcase page]. Anything else is a type, not a call. */
+/** type -> [module, how it is called, showcase page]. Anything else is a type, not a call. */
 const OWNERS = {
-    'dom.d.ts': {DommaCollection: ['DOM', '$(el).', '/showcase/dom']},
-    'utils.d.ts': {Utils: ['Utils', '_.', '/showcase/utils'], DebouncedFunction: ['Utils', 'debounced.', '/showcase/utils']},
-    'dates.d.ts': {Dates: ['Dates', 'D.', '/showcase/dates'], DommaDate: ['Dates', 'D().', '/showcase/dates']},
-    'models.d.ts': {
+    'index.d.ts': {
+        DommaCollection: ['DOM', '$(el).', '/showcase/dom'],
+        Utils: ['Utils', '_.', '/showcase/utils'], DebouncedFunction: ['Utils', 'debounced.', '/showcase/utils'],
+        Dates: ['Dates', 'D.', '/showcase/dates'], DommaDate: ['Dates', 'D().', '/showcase/dates'],
         Models: ['Models', 'M.', '/showcase/models'], Model: ['Models', 'model.', '/showcase/models'],
         Observable: ['Reactivity', 'observable.', '/showcase/models/reactivity'], ObservableArray: ['Reactivity', 'list.', '/showcase/models/reactivity'],
         ComputedRef: ['Reactivity', 'computed.', '/showcase/models/reactivity'], BindingHandle: ['Bindings', 'bindings.', '/showcase/models/bindings'],
-        Store: ['Models', 'store.', '/showcase/models']
+        Store: ['Models', 'store.', '/showcase/models'],
+        Elements: ['Elements', 'E.', '/showcase/elements'],
+        Effects: ['Effects', 'Domma.effects.', '/showcase/effects'], EffectControl: ['Effects', 'effect.', '/showcase/effects'],
+        ConfigEngine: ['Config', '$.', '/showcase/config'],
+        Http: ['HTTP', 'H.', '/showcase/http'],
+        Storage: ['Storage', 'S.', '/showcase/storage'],
+        Icons: ['Icons', 'I.', '/showcase/icons'],
+        Flags: ['Flags', 'FL.', '/showcase/flags'],
+        Theme: ['Themes', 'Domma.theme.', '/showcase/themes'],
+        Tables: ['Tables', 'T.', '/showcase/tables'], TableInstance: ['Tables', 'table.', '/showcase/tables'],
+        Components: ['Components', 'Domma.components.', '/showcase/components'],
+        DommaStatic: ['Core', 'Domma.', '/showcase']
     },
-    'elements.d.ts': {Elements: ['Elements', 'E.', '/showcase/elements']},
-    'effects.d.ts': {Effects: ['Effects', 'Domma.effects.', '/showcase/effects'], EffectControl: ['Effects', 'effect.', '/showcase/effects']},
-    'config.d.ts': {ConfigEngine: ['Config', '$.', '/showcase/config']},
-    'http.d.ts': {Http: ['HTTP', 'H.', '/showcase/http']},
-    'storage.d.ts': {Storage: ['Storage', 'S.', '/showcase/storage']},
-    'icons.d.ts': {Icons: ['Icons', 'I.', '/showcase/icons']},
-    'flags.d.ts': {Flags: ['Flags', 'FL.', '/showcase/flags']},
-    'theme.d.ts': {Theme: ['Themes', 'Domma.theme.', '/showcase/themes']},
-    'tables.d.ts': {Tables: ['Tables', 'T.', '/showcase/tables'], TableInstance: ['Tables', 'table.', '/showcase/tables']},
-    'components.d.ts': {Components: ['Components', 'Domma.components.', '/showcase/components']},
-    'schema-builder.d.ts': {SchemaBuilderInstance: ['Schema Builder', 'builder.', '/showcase/schema-builder'], SchemaTemplateManager: ['Schema Builder', 'templates.', '/showcase/schema-builder']},
-    'index.d.ts': {DommaStatic: ['Core', 'Domma.', '/showcase']}
+    'generated/src/schema-builder.d.ts': {
+        SchemaBuilderInstance: ['Schema Builder', 'builder.', '/showcase/schema-builder'],
+        SchemaTemplateManager: ['Schema Builder', 'templates.', '/showcase/schema-builder']
+    }
 };
+/** Where the component types are declared: their XInstance / XHandle / XStatic types are calls too. */
+const ELEMENT_FILES = /\/generated\/src\/(elements|component|popover|context-menu|sortable|skeleton|avatar|input-group|treeview|components\/[\w-]+)\.d\.ts$/;
 // Element instances and static helpers: ModalInstance -> modal.open, ToastStatic -> E.toast.success.
 const elementOwner = (name) => {
     const m = /^([A-Z][A-Za-z]*?)(Instance|Handle|Static)$/.exec(name);
@@ -60,68 +70,58 @@ const elementOwner = (name) => {
     return ['Elements', m[2] === 'Static' ? `E.${base}.` : `${base}.`, page];
 };
 
-/** A line for the few undocumented families, from the section they sit in. */
-function fallback(owner, name, section) {
-    if (owner[1] === '$(el).' && /event shortcuts/i.test(section)) return `Bind a ${name} handler - shorthand for .on('${name}', handler); with no handler, trigger ${name}`;
+const EVENT_SHORTCUTS = new Set(['click', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseenter', 'mouseleave',
+    'mouseover', 'mouseout', 'keydown', 'keyup', 'keypress', 'focus', 'blur', 'focusin', 'focusout', 'change', 'input',
+    'submit', 'select', 'scroll', 'resize', 'contextmenu', 'touchstart', 'touchend', 'touchmove']);
+
+/** A line for the few undocumented families. */
+function fallback(owner, name) {
+    if (owner[1] === '$(el).' && EVENT_SHORTCUTS.has(name)) return `Bind a ${name} handler - shorthand for .on('${name}', handler); with no handler, trigger ${name}`;
     if (owner[1] === 'list.') return `Array ${name}(), then notify the list's subscribers`;
     return '';
 }
 
-/** The methods of every mapped interface in a .d.ts file. */
-function readDeclarations(file) {
-    const lines = fs.readFileSync(path.join(IDE, file), 'utf8').split('\n');
+/** The first paragraph of a JSDoc comment, on one line, without a trailing full stop. */
+const firstParagraph = (text) => text.split(/\n\s*\n/)[0].replace(/\s+/g, ' ').trim().replace(/\.$/, '');
+
+/** Every public method of every mapped type, in the order of OWNERS. */
+function readDeclarations() {
+    const files = Object.keys(OWNERS).map(f => path.join(TYPES, f));
+    const program = ts.createProgram(files, {
+        target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler,
+        lib: ['lib.es2022.d.ts', 'lib.dom.d.ts', 'lib.dom.iterable.d.ts'], types: [], strict: true, noEmit: true
+    });
+    const checker = program.getTypeChecker();
     const out = [];
-    let owner = null;
-    let depth = 0;
-    let doc = '';
-    let section = '';
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const head = /^(?:export\s+)?(?:declare\s+)?(?:interface|class)\s+([A-Za-z]+)/.exec(line);
-        if (head && depth === 0) {
-            const name = head[1];
-            owner = OWNERS[file]?.[name] || (file === 'elements.d.ts' ? elementOwner(name) : null);
-            depth = (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
-            doc = '';
-            section = '';
-            continue;
+    for (const [file, owners] of Object.entries(OWNERS)) {
+        const source = program.getSourceFile(path.join(TYPES, file));
+        if (!source) throw new Error(`assets/types/${file} is missing - run npm run build:types`);
+        const exports = checker.getExportsOfModule(checker.getSymbolAtLocation(source));
+        const typed = [];
+        for (let symbol of exports) {
+            const name = symbol.name;
+            if (symbol.flags & ts.SymbolFlags.Alias) symbol = checker.getAliasedSymbol(symbol);
+            if (!(symbol.flags & (ts.SymbolFlags.Type))) continue;
+            const where = symbol.declarations?.[0]?.getSourceFile().fileName || '';
+            const owner = owners[name] || (file === 'index.d.ts' && ELEMENT_FILES.test(where) ? elementOwner(name) : null);
+            if (owner) typed.push({owner, type: checker.getDeclaredTypeOfSymbol(symbol), order: owners[name] ? Object.keys(owners).indexOf(name) : 1e6});
         }
-        if (depth > 0) {
-            // A JSDoc block: keep its first sentence-ish lines (no @tags).
-            if (/^\s{4}\/\*\*/.test(line) && depth === 1) {
-                let text = '';
-                for (; i < lines.length; i++) {
-                    const l = lines[i].replace(/^\s*\/\*\*\s?|\s*\*\/\s*$|^\s*\*\s?/g, '');
-                    if (/^@/.test(l.trim())) { while (i < lines.length && !/\*\//.test(lines[i])) i++; break; }
-                    text += ` ${l.trim()}`;
-                    if (/\*\//.test(lines[i])) break;
+        typed.sort((a, b) => a.order - b.order);
+        for (const {owner, type} of typed) {
+            for (const prop of checker.getPropertiesOfType(type)) {
+                if (prop.name.startsWith('_') || prop.name.startsWith('__@') || prop.name === 'constructor') continue;
+                // An instance's inherited Component methods are listed once, not on every component
+                const from = prop.declarations?.[0]?.getSourceFile().fileName || '';
+                if (owner[0] === 'Elements' && owner[1] !== 'E.' && /\/generated\/src\/component\.d\.ts$/.test(from)) continue;
+                const propType = checker.getTypeOfSymbolAtLocation(prop, source);
+                const signatures = propType.getCallSignatures();
+                if (!signatures.length) continue;
+                const description = firstParagraph(ts.displayPartsToString(prop.getDocumentationComment(checker)));
+                for (const sig of signatures) {
+                    const text = checker.signatureToString(sig, undefined, ts.TypeFormatFlags.NoTruncation);
+                    out.push({owner, name: prop.name, signature: `${owner[1]}${prop.name}${text}`, description: description || fallback(owner, prop.name)});
                 }
-                doc = text.trim();
-                continue;
             }
-            const member = depth === 1 && /^\s{4}(?:static\s+|readonly\s+)?([a-zA-Z_$][\w$]*)\??(<.*?>)?\(/.exec(line);
-            if (member && owner && !['constructor'].includes(member[1])) {
-                // Gather a signature that runs over several lines, up to its closing ';'.
-                let sig = line.trim();
-                let j = i;
-                let balance = (sig.match(/[({]/g) || []).length - (sig.match(/[)}]/g) || []).length;
-                while ((balance > 0 || !/;\s*$/.test(sig)) && j + 1 < lines.length && j - i < 30) {
-                    j++;
-                    sig += ` ${lines[j].trim()}`;
-                    balance = (sig.match(/[({]/g) || []).length - (sig.match(/[)}]/g) || []).length;
-                }
-                i = j;
-                sig = sig.replace(/\s+/g, ' ').replace(/;$/, '').replace(/^(static|readonly) /, '');
-                out.push({owner, name: member[1], signature: owner[1] + sig, description: doc || fallback(owner, member[1], section)});
-                doc = '';
-                // Depth is unchanged by a balanced signature.
-                continue;
-            }
-            const heading = /^\s{4}\/\/\s*([A-Za-z].*)$/.exec(line);
-            if (heading) section = heading[1].trim();
-            if (!/^\s*(\/\/|\*|$)/.test(line)) doc = '';
-            depth += (line.match(/\{/g) || []).length - (line.match(/\}/g) || []).length;
-            if (depth <= 0) { depth = 0; owner = null; }
         }
     }
     return out;
@@ -144,21 +144,19 @@ function readExamples() {
 
 const examples = readExamples();
 const entries = new Map();
-for (const file of Object.keys(OWNERS)) {
-    for (const d of readDeclarations(file)) {
-        const [module, prefix, page] = d.owner;
-        const key = `${prefix}${d.name}`;
-        const have = entries.get(key);
-        if (have) {
-            // An overload: one entry, every signature.
-            if (!have.signature.split('\n').includes(d.signature)) have.signature += `\n${d.signature}`;
-            if (!have.description && d.description) have.description = d.description;
-            continue;
-        }
-        // Only the examples written for this very call: E.modal's, not a model's, under "modal".
-        const example = ['E.', '$(el).', 'Domma.effects.', 'H.', 'M.', 'Domma.'].includes(prefix) ? examples.get(d.name) || '' : '';
-        entries.set(key, {module, name: key, signature: d.signature, description: d.description, example, page});
+for (const d of readDeclarations()) {
+    const [module, prefix, page] = d.owner;
+    const key = `${prefix}${d.name}`;
+    const have = entries.get(key);
+    if (have) {
+        // An overload: one entry, every signature.
+        if (!have.signature.split('\n').includes(d.signature)) have.signature += `\n${d.signature}`;
+        if (!have.description && d.description) have.description = d.description;
+        continue;
     }
+    // Only the examples written for this very call: E.modal's, not a model's, under "modal".
+    const example = ['E.', '$(el).', 'Domma.effects.', 'H.', 'M.', 'Domma.'].includes(prefix) ? examples.get(d.name) || '' : '';
+    entries.set(key, {module, name: key, signature: d.signature, description: d.description, example, page});
 }
 
 const rows = [...entries.values()].map((e, i) => {
