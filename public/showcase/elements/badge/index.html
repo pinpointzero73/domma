@@ -598,9 +598,7 @@ function updateBadge(count) {
 <script src="../../../dist/domma.min.js"></script>
 <script src="../../../dist/domma-syntax.min.js"></script>
 <script type="module" src="../../../layouts/js/layout.js"></script>
-<script type="module">
-  import { createBadgeWrapper } from '../../../src/web-components/wrappers/legacy-wrappers.js';
-
+<script>
   $(() => {
     // Tutorial
     $('#clear-notifications').on('click', () => {
@@ -623,7 +621,7 @@ function updateBadge(count) {
 
     // Web Components - Wrapper API demo
     if ($('#wrapper-badge-1').length) {
-      createBadgeWrapper('#wrapper-badge-1', {
+      Domma.elements.badge('#wrapper-badge-1', {
         variant: 'info',
         size: 'large',
         pill: true
