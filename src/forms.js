@@ -664,6 +664,10 @@ class Forma {
 
     formElement.addEventListener('change', (e) => {
       if (e.target.matches('input, select, textarea')) {
+        // Slider and dropzone fields store their own value (a pair, a list of files)
+        // through the component's onChange; the raw input would overwrite it.
+        const name = e.target.name;
+        if (this._sliders?.[name] || this._dropzones?.[name]) return;
         // Update model if it exists
         if (this.model) {
           const value = this._getFieldValue(e.target);

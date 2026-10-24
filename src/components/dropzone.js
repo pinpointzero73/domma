@@ -173,7 +173,7 @@ export class Dropzone extends Component {
         name: null,                 // form field name; default: the input's name
         input: null,                // the file input to use, when it is not inside / next to the area
         list: true,                 // true = after the area, an element/selector, false = no list
-        upload: null,               // {url, method, field, headers, withCredentials, concurrency, data}
+        upload: null,               // {url, method, field, headers, withCredentials, concurrency, data, xhr}
         autoUpload: true,
         retry: 0,                   // automatic retries per file after a failed upload
         labels: {},
@@ -820,7 +820,9 @@ export class Dropzone extends Component {
         const cfg = this.options.upload;
         const resolve = (v) => (typeof v === 'function' ? v(entry) : v);
         const url = resolve(cfg.url);
-        const xhr = new XMLHttpRequest();
+        // `upload.xhr` makes the request object: for tests, or a page with no server to
+        // talk to (the showcase). Anything with XMLHttpRequest's shape will do.
+        const xhr = typeof cfg.xhr === 'function' ? cfg.xhr(entry) : new XMLHttpRequest();
         entry._xhr = xhr;
         entry._aborted = false;
         entry.status = 'uploading';

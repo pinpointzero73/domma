@@ -9994,7 +9994,12 @@ a.avatar-more-person:hover .avatar-more-name {
 }
 
 .dm-dropzone-icon {
-    color: var(--dm-primary);
+    color: var(--dm-text-secondary);
+}
+
+.dm-dropzone:hover .dm-dropzone-icon,
+.dm-dropzone.is-dragover .dm-dropzone-icon {
+    color: var(--dm-text);
 }
 
 .dm-dropzone-text {
@@ -10010,7 +10015,7 @@ a.avatar-more-person:hover .avatar-more-name {
     display: flex;
     flex-direction: column;
     gap: var(--dm-space-2);
-    margin: var(--dm-space-3) 0 0;
+    margin: var(--dm-space-3) 0;
     padding: 0;
     list-style: none;
 }
@@ -10082,12 +10087,11 @@ a.avatar-more-person:hover .avatar-more-name {
     font-size: var(--dm-font-size-sm);
 }
 
+/* State colours stay on borders and bars (--dm-danger / --dm-success as text on a
+   surface fail AA in several themes); the words carry the state */
 .dm-dropzone-file[data-status="error"] .dm-dropzone-status {
-    color: var(--dm-danger);
-}
-
-.dm-dropzone-file[data-status="done"] .dm-dropzone-status {
-    color: var(--dm-success);
+    color: var(--dm-text);
+    font-weight: 600;
 }
 
 .dm-dropzone-progress {
@@ -10188,6 +10192,11 @@ a.avatar-more-person:hover .avatar-more-name {
 .dm-range-slider.has-tick-labels,
 .dm-range-slider.has-marks {
     margin-bottom: 1.5rem;
+}
+
+/* A tooltip that is always shown needs room above the track */
+.dm-range-slider[data-tooltip="always"]:not([data-orientation="vertical"]) {
+    margin-top: 1.75rem;
 }
 
 .dm-range-slider[data-orientation="vertical"] {

@@ -463,6 +463,10 @@ describe('F blueprint: type dropzone', () => {
         expect(form._getFieldValueByName('attachments').map(f => f.name)).toEqual(['a.pdf']);
         expect(form.getData().attachments.map(f => f.name)).toEqual(['a.pdf']);
         expect(form.validate()).toBe(true);
+        // a file chosen in the picker: the raw input's change must not overwrite the list
+        Object.defineProperty(dz.input, 'files', {configurable: true, get: () => [file('c.pdf')], set() {}});
+        dz.input.dispatchEvent(new Event('change', {bubbles: true}));
+        expect(form.getData().attachments.map(f => f.name)).toEqual(['a.pdf', 'c.pdf']);
         form.destroy();
         expect($1('#host .dm-dropzone')).toBeNull();
     });
