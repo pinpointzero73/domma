@@ -50,7 +50,58 @@ async function readBody(response, method) {
     try { return JSON.parse(text); } catch { return text; }
 }
 
+/**
+ * Options for a request. Anything not listed by name here is passed to `fetch()` as it is.
+ * @typedef {Omit<RequestInit, 'method' | keyof RequestOwnOptions> & RequestOwnOptions} RequestOptions
+ */
+/**
+ * The options Domma reads itself (the rest of {@link RequestOptions} goes to `fetch()`).
+ * @typedef {object} RequestOwnOptions
+ * @property {HeadersInit} [headers] Request headers (plain object, `Headers` or entry pairs); copied, never mutated.
+ *   `Content-Type: application/json` is added for a JSON body unless one is given.
+ * @property {boolean} [silent] Do not log a failure to the console (useful for expected errors such as a 401 check).
+ * @property {number} [timeout] Abort after this many milliseconds (rejects with a `TimeoutError`).
+ * @property {RequestCredentials} [credentials] Defaults to `'same-origin'`; pass `'include'` to send cookies cross-origin.
+ * @property {AbortSignal} [signal] Abort signal, composed with `timeout` (whichever fires first aborts).
+ * @property {RequestMode} [mode]
+ * @property {RequestCache} [cache]
+ * @property {RequestRedirect} [redirect]
+ * @property {string} [referrer]
+ * @property {ReferrerPolicy} [referrerPolicy]
+ * @property {string} [integrity]
+ * @property {boolean} [keepalive]
+ */
+
+/**
+ * Options for `http.delete()`: a body is sent only when given as `data`.
+ * @typedef {RequestOptions & {data?: any}} DeleteRequestOptions
+ */
+
+/**
+ * The error a failed request rejects with: the server's `message` (or `error`) from a JSON body,
+ * otherwise `HTTP Error: <status> <statusText>`.
+ * @typedef {Error & {status?: number, statusText?: string, body?: any}} HttpError
+ */
+
+/** @typedef {'GET'|'POST'|'PUT'|'PATCH'|'DELETE'|'HEAD'|'OPTIONS'|(string & {})} HttpMethod */
+
+/**
+ * Fetch-based HTTP client. Every method resolves to the response BODY (not a response object):
+ * parsed JSON for a JSON or unlabelled body, text for any other type, `null` when there is no body
+ * (204/205/304, HEAD, an empty body). A non-2xx status rejects with an {@link HttpError}.
+ * @typedef {typeof http} Http
+ */
+
 export const http = {
+    /**
+     * Make a request with any method.
+     * @template [T=any]
+     * @param {HttpMethod} method HTTP method
+     * @param {string} url Request URL
+     * @param {any} [data] Body - JSON-encoded unless FormData, URLSearchParams, Blob, ArrayBuffer/view or a stream. Not sent for GET/HEAD.
+     * @param {RequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     async request(method, url, data = null, config = {}) {
         const {headers, silent, timeout, credentials, signal, ...rest} = config || {};
         const options = {
@@ -130,32 +181,83 @@ export const http = {
         }
     },
 
+    /**
+     * Make a GET request.
+     * @template [T=any]
+     * @param {string} url Request URL
+     * @param {RequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     get(url, config) {
         return this.request('GET', url, null, config);
     },
 
+    /**
+     * Make a POST request.
+     * @template [T=any]
+     * @param {string} url Request URL
+     * @param {any} [data] Request body (JSON-encoded unless a raw body such as FormData)
+     * @param {RequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     post(url, data, config) {
         return this.request('POST', url, data, config);
     },
 
+    /**
+     * Make a PUT request.
+     * @template [T=any]
+     * @param {string} url Request URL
+     * @param {any} [data] Request body (JSON-encoded unless a raw body such as FormData)
+     * @param {RequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     put(url, data, config) {
         return this.request('PUT', url, data, config);
     },
 
+    /**
+     * Make a PATCH request.
+     * @template [T=any]
+     * @param {string} url Request URL
+     * @param {any} [data] Request body (JSON-encoded unless a raw body such as FormData)
+     * @param {RequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     patch(url, data, config) {
         return this.request('PATCH', url, data, config);
     },
 
-    /** DELETE sends no body unless one is given as `config.data`. */
+    /**
+     * Make a DELETE request. DELETE sends no body unless one is given as `config.data`.
+     * @template [T=any]
+     * @param {string} url Request URL
+     * @param {DeleteRequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     delete(url, config) {
         const {data = null, ...rest} = config || {};
         return this.request('DELETE', url, data, rest);
     },
 
+    /**
+     * Make a HEAD request.
+     * @template [T=any]
+     * @param {string} url Request URL
+     * @param {RequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     head(url, config) {
         return this.request('HEAD', url, null, config);
     },
 
+    /**
+     * Make a OPTIONS request.
+     * @template [T=any]
+     * @param {string} url Request URL
+     * @param {RequestOptions} [config] Request options
+     * @returns {Promise<T>} The response body
+     */
     options(url, config) {
         return this.request('OPTIONS', url, null, config);
     }

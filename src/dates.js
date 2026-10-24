@@ -29,11 +29,39 @@ const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 const MONTH_NAMES_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /**
+ * Anything a date can be made from. `null`/`undefined` mean now.
+ * @typedef {Date|string|number|DommaDate|null|undefined} DateInput
+ */
+
+/**
+ * A unit of time - singular or plural, any case. `date` is the day of the month; `day` is the
+ * day of the week for `get()` and a calendar day elsewhere.
+ * @typedef {'year'|'years'|'month'|'months'|'week'|'weeks'|'day'|'days'|'date'|'hour'|'hours'|'minute'|'minutes'|'second'|'seconds'|'millisecond'|'milliseconds'} DateUnit
+ */
+
+/**
+ * A unit for `diff()` - singular or plural.
+ * @typedef {'milliseconds'|'seconds'|'minutes'|'hours'|'days'|'weeks'|'months'|'years'|'millisecond'|'second'|'minute'|'hour'|'day'|'week'|'month'|'year'} DiffUnit
+ */
+
+/**
+ * Bounds for `isBetween()`: `(` / `)` exclusive, `[` / `]` inclusive.
+ * @typedef {'()'|'[]'|'[)'|'(]'} Inclusivity
+ */
+
+/**
  * Chainable date wrapper class
  */
-class DommaDate {
+export class DommaDate {
+    /**
+     * @param {DateInput} [value] The date; now when omitted
+     */
     constructor(value) {
         if (value instanceof DommaDate) {
+            /**
+             * @type {Date}
+             * @private
+             */
             this._date = new Date(value._date);
         } else if (value instanceof Date) {
             this._date = new Date(value);
@@ -52,6 +80,12 @@ class DommaDate {
     // Manipulation Methods (return this for chaining)
     // ============================================
 
+    /**
+     * Add time to the date (mutates and returns this date)
+     * @param {number} amount
+     * @param {DateUnit} unit
+     * @returns {this}
+     */
     add(amount, unit) {
         const u = this._normalizeUnit(unit);
         const d = this._date;
@@ -77,10 +111,21 @@ class DommaDate {
         return this;
     }
 
+    /**
+     * Subtract time from the date (mutates and returns this date)
+     * @param {number} amount
+     * @param {DateUnit} unit
+     * @returns {this}
+     */
     subtract(amount, unit) {
         return this.add(-amount, unit);
     }
 
+    /**
+     * Set to the start of a unit of time (weeks start on Sunday)
+     * @param {DateUnit} unit
+     * @returns {this}
+     */
     startOf(unit) {
         const u = this._normalizeUnit(unit);
         const d = this._date;
@@ -107,6 +152,11 @@ class DommaDate {
         return this;
     }
 
+    /**
+     * Set to the end of a unit of time
+     * @param {DateUnit} unit
+     * @returns {this}
+     */
     endOf(unit) {
         const u = this._normalizeUnit(unit);
         const d = this._date;
@@ -133,6 +183,12 @@ class DommaDate {
         return this;
     }
 
+    /**
+     * Set a unit of time (`month` is 0-11; `day` and `date` both set the day of the month)
+     * @param {DateUnit} unit
+     * @param {number} value
+     * @returns {this}
+     */
     set(unit, value) {
         const u = this._normalizeUnit(unit);
         const d = this._date;
@@ -160,6 +216,20 @@ class DommaDate {
     // Getter Methods
     // ============================================
 
+    /**
+     * @overload
+     * @returns {Date} The underlying Date (not a copy)
+     */
+    /**
+     * @overload
+     * @param {Exclude<DateUnit, 'week'|'weeks'>} unit
+     * @returns {number} The unit's value (`day` is the day of the week, `date` the day of the month)
+     */
+    /**
+     * Get a unit's value, or the underlying Date when no unit is given
+     * @param {DateUnit} [unit]
+     * @returns {number|Date}
+     */
     get(unit) {
         if (!unit) return this._date;
 
@@ -178,38 +248,74 @@ class DommaDate {
         return this._date;
     }
 
+    /**
+     * Get the year
+     * @returns {number}
+     */
     year() {
         return this._date.getFullYear();
     }
 
+    /**
+     * Get the month (0-11)
+     * @returns {number}
+     */
     month() {
         return this._date.getMonth();
     }
 
+    /**
+     * Get the date of month (1-31)
+     * @returns {number}
+     */
     date() {
         return this._date.getDate();
     }
 
+    /**
+     * Get the day of week (0-6, Sunday=0)
+     * @returns {number}
+     */
     day() {
         return this._date.getDay();
     }
 
+    /**
+     * Get the hour (0-23)
+     * @returns {number}
+     */
     hour() {
         return this._date.getHours();
     }
 
+    /**
+     * Get the minute (0-59)
+     * @returns {number}
+     */
     minute() {
         return this._date.getMinutes();
     }
 
+    /**
+     * Get the second (0-59)
+     * @returns {number}
+     */
     second() {
         return this._date.getSeconds();
     }
 
+    /**
+     * Get the millisecond (0-999)
+     * @returns {number}
+     */
     millisecond() {
         return this._date.getMilliseconds();
     }
 
+    /**
+     * Get the day of year (1-366)
+     * @returns {number}
+     */
     dayOfYear() {
         const start = new Date(this._date.getFullYear(), 0, 0);
         const diff = this._date - start;
@@ -217,6 +323,10 @@ class DommaDate {
         return Math.floor(diff / oneDay);
     }
 
+    /**
+     * Get the week of year
+     * @returns {number}
+     */
     week() {
         const start = new Date(this._date.getFullYear(), 0, 1);
         const diff = this._date - start;
@@ -224,14 +334,26 @@ class DommaDate {
         return Math.ceil((diff / oneWeek) + start.getDay() / 7);
     }
 
+    /**
+     * Get the quarter (1-4)
+     * @returns {number}
+     */
     quarter() {
         return Math.floor(this._date.getMonth() / 3) + 1;
     }
 
+    /**
+     * Get Unix timestamp (seconds)
+     * @returns {number}
+     */
     unix() {
         return Math.floor(this._date.getTime() / 1000);
     }
 
+    /**
+     * Get milliseconds since epoch
+     * @returns {number}
+     */
     valueOf() {
         return this._date.getTime();
     }
@@ -240,6 +362,11 @@ class DommaDate {
     // Formatting
     // ============================================
 
+    /**
+     * Format the date using tokens (see `D.tokens`)
+     * @param {string} [formatStr='YYYY-MM-DD HH:mm:ss']
+     * @returns {string}
+     */
     format(formatStr = 'YYYY-MM-DD HH:mm:ss') {
         const d = this._date;
         const year = d.getFullYear();
@@ -286,18 +413,35 @@ class DommaDate {
         return formatStr.replace(pattern, (match) => tokens[match]);
     }
 
+    /**
+     * Get ISO 8601 string
+     * @returns {string}
+     */
     toISOString() {
         return this._date.toISOString();
     }
 
+    /**
+     * Get a copy of the native Date
+     * @returns {Date}
+     */
     toDate() {
         return new Date(this._date);
     }
 
+    /**
+     * Get string representation
+     * @returns {string}
+     */
     toString() {
         return this._date.toString();
     }
 
+    /**
+     * Relative time from now (or from `relativeTo`), e.g. `3 days ago`, `in 2 hours`, `just now`
+     * @param {DateInput} [relativeTo]
+     * @returns {string}
+     */
     fromNow(relativeTo) {
         const now = relativeTo ? new DommaDate(relativeTo)._date : new Date();
         const diffMs = this._date.getTime() - now.getTime();
@@ -331,6 +475,11 @@ class DommaDate {
         return isPast ? `${value} ${unit} ago` : `in ${value} ${unit}`;
     }
 
+    /**
+     * Relative time from this date to another
+     * @param {DateInput} date
+     * @returns {string}
+     */
     to(date) {
         const other = new DommaDate(date);
         const diffMs = other._date.getTime() - this._date.getTime();
@@ -368,6 +517,12 @@ class DommaDate {
     // Comparison Methods
     // ============================================
 
+    /**
+     * Check if date is before another (at the granularity of `unit` when given)
+     * @param {DateInput} other
+     * @param {DateUnit} [unit]
+     * @returns {boolean}
+     */
     isBefore(other, unit) {
         const otherDate = new DommaDate(other);
         if (!unit) {
@@ -376,6 +531,12 @@ class DommaDate {
         return this.clone().endOf(unit).valueOf() < otherDate.clone().startOf(unit).valueOf();
     }
 
+    /**
+     * Check if date is after another (at the granularity of `unit` when given)
+     * @param {DateInput} other
+     * @param {DateUnit} [unit]
+     * @returns {boolean}
+     */
     isAfter(other, unit) {
         const otherDate = new DommaDate(other);
         if (!unit) {
@@ -384,6 +545,12 @@ class DommaDate {
         return this.clone().startOf(unit).valueOf() > otherDate.clone().endOf(unit).valueOf();
     }
 
+    /**
+     * Check if date is the same as another (within the same `unit` when given)
+     * @param {DateInput} other
+     * @param {DateUnit} [unit]
+     * @returns {boolean}
+     */
     isSame(other, unit) {
         const otherDate = new DommaDate(other);
         if (!unit) {
@@ -395,6 +562,14 @@ class DommaDate {
         return otherVal >= start && otherVal <= end;
     }
 
+    /**
+     * Check if date is between two dates
+     * @param {DateInput} start
+     * @param {DateInput} end
+     * @param {DateUnit|null} [unit]
+     * @param {Inclusivity} [inclusivity='()']
+     * @returns {boolean}
+     */
     isBetween(start, end, unit, inclusivity = '()') {
         const startDate = new DommaDate(start);
         const endDate = new DommaDate(end);
@@ -420,6 +595,13 @@ class DommaDate {
         return leftOk && rightOk;
     }
 
+    /**
+     * Difference between this date and another (positive when this one is later), floored unless `precise`
+     * @param {DateInput} other
+     * @param {DiffUnit} [unit='milliseconds']
+     * @param {boolean} [precise=false]
+     * @returns {number}
+     */
     diff(other, unit = 'milliseconds', precise = false) {
         const otherDate = new DommaDate(other);
         const diffMs = this._date.getTime() - otherDate._date.getTime();
@@ -450,6 +632,11 @@ class DommaDate {
         return precise ? result : Math.floor(result);
     }
 
+    /**
+     * @param {DommaDate} other
+     * @returns {number}
+     * @private
+     */
     _monthDiff(other) {
         const d1 = this._date;
         const d2 = other._date;
@@ -460,15 +647,27 @@ class DommaDate {
     // Query Methods
     // ============================================
 
+    /**
+     * Check if date is valid
+     * @returns {boolean}
+     */
     isValid() {
         return !isNaN(this._date.getTime());
     }
 
+    /**
+     * Check if year is a leap year
+     * @returns {boolean}
+     */
     isLeapYear() {
         const year = this._date.getFullYear();
         return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
     }
 
+    /**
+     * Get number of days in month
+     * @returns {number}
+     */
     daysInMonth() {
         return new Date(this._date.getFullYear(), this._date.getMonth() + 1, 0).getDate();
     }
@@ -477,6 +676,10 @@ class DommaDate {
     // Clone
     // ============================================
 
+    /**
+     * Create a copy of this date
+     * @returns {DommaDate}
+     */
     clone() {
         return new DommaDate(this._date);
     }
@@ -485,6 +688,11 @@ class DommaDate {
     // Helpers
     // ============================================
 
+    /**
+     * @param {string} unit
+     * @returns {string}
+     * @private
+     */
     _normalizeUnit(unit) {
         if (!unit) return unit;
         const u = String(unit).toLowerCase().trim();
@@ -502,7 +710,52 @@ class DommaDate {
 }
 
 /**
+ * Descriptions of the `format()` tokens, keyed by token.
+ * @typedef {object} FormatTokens
+ * @property {string} YYYY
+ * @property {string} YY
+ * @property {string} MM
+ * @property {string} M
+ * @property {string} DD
+ * @property {string} D
+ * @property {string} HH
+ * @property {string} H
+ * @property {string} hh
+ * @property {string} h
+ * @property {string} mm
+ * @property {string} m
+ * @property {string} ss
+ * @property {string} s
+ * @property {string} SSS
+ * @property {string} A
+ * @property {string} a
+ * @property {string} ddd
+ * @property {string} dddd
+ * @property {string} MMM
+ * @property {string} MMMM
+ */
+
+/**
+ * The statics on the date factory.
+ * @typedef {object} DatesStatics
+ * @property {() => number} now Get current timestamp in milliseconds
+ * @property {(dateString: string, format?: string) => DommaDate} parse Parse a date string, optionally with a
+ *   format of YYYY YY MM M DD D HH H mm m ss s tokens; an unmatched string gives an invalid date
+ * @property {(value: DateInput) => boolean} isValid Check if a value is a valid date
+ * @property {(...dates: Array<DateInput|DateInput[]>) => DommaDate} min The earliest of the dates (arrays are flattened)
+ * @property {(...dates: Array<DateInput|DateInput[]>) => DommaDate} max The latest of the dates (arrays are flattened)
+ * @property {FormatTokens} tokens Format tokens reference
+ */
+
+/**
+ * The date factory (`D`): `D(value?)` wraps a date in a chainable {@link DommaDate};
+ * the statics (`D.now()`, `D.parse()`, ...) do the rest.
+ * @typedef {((value?: DateInput) => DommaDate) & DatesStatics} Dates
+ */
+
+/**
  * Main date factory function
+ * @type {Dates}
  */
 const dates = function (value) {
     return new DommaDate(value);

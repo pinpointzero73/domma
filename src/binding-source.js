@@ -34,22 +34,23 @@
 /**
  * Build the object the binding engine reads from and writes through.
  *
- * @param {Object}   primary            Reads resolve here first; writes land here.
+ * @template {object} T
+ * @param {T}        primary            Reads resolve here first; writes land here.
  *                                      For `M.applyBindings` this is a model's
  *                                      `tracked()` view, which is what makes a
  *                                      write reach the model.
- * @param {Object}   [options]
- * @param {Object}   [options.fallback] Consulted only when `primary` has no such
+ * @param {object}   [options]
+ * @param {Record<string, any>} [options.fallback] Consulted only when `primary` has no such
  *                                      key. Event handlers live here, so a data
  *                                      field of the same name always wins - a
  *                                      template mostly renders data, and a method
  *                                      quietly shadowing a rendered value is the
  *                                      worse failure.
- * @param {Function} [options.onWrite]  Called `(key, value)` after a write lands
+ * @param {(key: string, value: any) => void} [options.onWrite]  Called `(key, value)` after a write lands
  *                                      on `primary`. Used where `primary` is a
  *                                      snapshot that cannot route the write
  *                                      itself, so the model has to be told.
- * @returns {Object} `primary` itself when there is nothing to layer, otherwise a
+ * @returns {T} `primary` itself when there is nothing to layer, otherwise a
  *                   Proxy over it.
  */
 export function createBindingSource(primary, {fallback, onWrite} = {}) {
