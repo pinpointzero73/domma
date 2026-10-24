@@ -347,15 +347,58 @@ R.view('settings', {
 
 Accessed via `Domma.elements`:
 
-- **Card**: `elements.card(selector, { hover, clickable, onClick })`
-- **Modal**: `elements.modal(selector, { backdrop, backdropClose, keyboard, animation, onOpen, onClose, onClosed })` →
-  `open()`, `close()`, `toggle()`, `isOpen()`
+**Conventions** (docs/Components.md, "Conventions"; implemented in `component.js`):
+- Call an `onX` option only through `this._fire('x', ...args)` - it runs the option as `this.options.onX(...)`
+  did, then `.on('x')` listeners and `dm:<componentName>:x`, and returns false if anything cancelled. Where the
+  option is called with another `this` (CookieConsent's `.call(this)`), keep the call and `this._emit('x', ...)` beside it.
+- Overlays: `open()`/`close()`/`toggle()`/`isOpen()` are canonical; `show()`/`hide()`/`isVisible()` are aliases written
+  as `hide(...a) { return this.close(...a); }` - never `this.hide = this.close`. Close buttons, backdrops and Escape call
+  `this.close()` by name (consumers patch `instance.close` with "discard changes?" guards). close() starts with
+  `if (!this._mayClose(...onCloseArgs)) return this;` (beforeclose), open() with `_fire('beforeopen')`; destroy() and other
+  must-close teardown use `this._forcedClose()`, which still calls `this.close()`.
+- A factory returns one object (ButtonGroup/ListGroup: first instance + non-enumerable `all()`; the array shape warns until
+  1.0). Plain handles (skeleton, avatar, avatar group, chooser) set a non-enumerable `componentName` and call
+  `register(el, handle)` / `unregister()` so `E.get` finds them.
+
+- **One implementation per component** (`src/components/`): card, modal, tooltip, badge, numberBadge, toast, loader and
+  backToTop are `Component` subclasses (componentName `card`, `modal`, `tooltip`, `badge`, `number-badge`, `toast`,
+  `loader`, `back-to-top`). `instance.element` is ALWAYS the element the caller passed (or the one a factory made) -
+  nothing is wrapped or replaced, so `E.get(el)` finds it. Events: `onX` + `.on('x')` + `dm:<name>:x`. Everything but
+  the modal is light DOM styled by `elements.css`. The `<domma-*>` tags are shells - see "The `<domma-*>` tags" below
+- **Card** (`components/card.js`): `elements.card(selector, { title, icon, content, safe, hoverable|hover, shadow, rounded, color, clickable, collapsible, collapsed, persistKey, animation, animationDuration, onClick, onCollapse, onExpand })` →
+  `collapse()`, `expand()`, `toggle()`, `isCollapsed()`, `setContent(html, {safe})`, `getBody()`, `setShadow()`, `setHoverable()`, `updateHeight()`, `destroy()`
+    - Adds `.card` (+ `.card-hover`, `.card-collapsible`/`.card-collapsed`, `.card-shadow-*`, `.card-square`, `.card-<color>`); `title` makes a
+      `.card-header`; `content` fills `.card-body`, sanitised like `$().html()` unless `{safe: false}`. Collapsed state in `S` under
+      `persistKey` or `domma-card-<id>`. The header becomes a button (Enter/Space, `aria-expanded`). `onClick(card, event)`
+- **Modal** (`components/modal.js`): `elements.modal(selector, options)` or `elements.modal({...})` (factory) →
+  `open()`, `close()`, `toggle()`, `isOpen()`, `show()`/`hide()` (aliases calling open/close BY NAME), `setTitle()`, `setContent(html, {safe})`,
+  `setButtons()`, `destroy()` (`remove()` alias)
+    - Options: `title, content, safe, buttons [{id, text, variant, close, onClick}], footer, size (small|medium|large|xl|full|CSS width), backdrop,
+      backdropClose, keyboard, closeOnEscape, closeButton, animation (fade|slide|zoom|false), animationDuration, centered, scrollable, className
+      (dialog), headerClass, bodyClass, footerClass, focus, visible, onBeforeOpen, onOpen, onOpened, onBeforeClose, onClose, onClosed, onButtonClick(id, modal)`
+    - The chrome (backdrop, `.modal-dialog`, header/X, `.modal-body` with a default slot, footer with `slot="footer"` + buttons) is in a shadow
+      root ON THE CALLER'S ELEMENT (an inner `.dm-modal-inner` host for a tag that cannot take one). The element's children are the body:
+      `modal.element.appendChild(panel)` works. `modal.element.shadowRoot.querySelector('.modal-dialog')` and `modal.element.style.zIndex` are used
+      by consumers - keep both. `.dm-modal-host.dm-modal-host` in elements.css neutralises the hand-written `.modal` rules on the host
+    - Selector markup with `.modal-header/.modal-body/...` children is "authored": no shadow X, body unpadded; its `.modal-close`, `[data-close]`,
+      `[data-dismiss="modal"]` close it. `modal-sm/lg/xl` classes or `data-size` set the size
+    - Unprefixed `open` / `close` CustomEvents are dispatched on the element (non-bubbling), exactly once per open/close - deprecated, kept
+      until 1.0 (docs-pro, the mail helper listen for them). X, backdrop (press and release both on it), Escape (top of the open stack only)
+      and footer buttons call `this.close()` dynamically, so a monkeypatched close is honoured
+    - Factory (`createModal`, `E.modal({})`): `div.dm-modal` in the shared `.dm-dialog-container` (z 1040), inline z-index 1050 + 10 per open
+      modal, default `size: 'large'` and a Close button, `_factoryCreated` getter; `destroy()` removes it. `showModal()` → Promise of the
+      button id, `null` when closed otherwise
 - **Tabs**: `elements.tabs(selector, { activeIndex, animation, onChange })` → `show()`, `getActive()`, `next()`,
   `prev()`
 - **Accordion**: `elements.accordion(selector, { multiExpand, animation, activeIndex, onChange })` → `open()`,
   `close()`, `toggle()`, `openAll()`, `closeAll()`
-- **Tooltip**: `elements.tooltip(selector, { content, position, trigger, delay, animation })` → `show()`, `hide()`,
-  `toggle()`, `setContent()`
+- **Tooltip** (`components/tooltip.js`): `elements.tooltip(selector, { content, position|placement, trigger, delay (ms or {show, hide}), hideDelay, offset, html, safe, animation, maxWidth, className, visible, onShow, onHide })` →
+  `open()`/`show()`, `close()`/`hide()`, `toggle()`, `isVisible()`, `setContent()`, `setPosition()`, `destroy()`
+    - EVERY match of the selector gets an instance; returns the first with a non-enumerable `all()` (`firstOfMatches()` in elements.js: null on no match, the array shape warns until 1.0).
+      A second call on the same element updates its instance
+    - Nothing wraps the target: a `.domma-tooltip` bubble on body, `position: fixed`, flipped when it does not fit, `aria-describedby` while shown.
+      Content falls back to `data-tooltip`, then `title` (removed while active, restored on destroy). Triggers: hover (+ keyboard focus), click,
+      focus, manual, or several space-separated
 - **Popover** (`popover.js`): `elements.popover(trigger, { content, title, html, trigger, placement, flip, offset, arrow, dismissible, closeOnOutside, closeOnEscape, group, width, maxWidth, className, id, role, ariaLabel, autoFocus, trapFocus, delay, animation, animationDuration, container, zIndex, onShow, onShown, onHide, onHidden })` →
   `show({focus})`, `hide({returnFocus})`, `toggle()`, `isOpen()`, `setContent()`, `setTitle()`, `update()`, `setOptions()`, `destroy()`, `panel`, `trigger`
     - Statics: `E.popover.scan(root)` (`data-popover`, `data-popover-title`, `-placement`, `-trigger`, `-dismissible`,
@@ -404,8 +447,22 @@ Accessed via `Domma.elements`:
     - Sizes: `'sm'`, `'md'`, `'lg'`, `'xl'`, `'full'`, or custom (e.g., `'400px'`)
     - Factory method: `Slideover.create({ title, content, position, size, ... })`
     - Form blueprint integration supported
-- **BackToTop**: `elements.backToTop(selector, { showAfter, duration, position, offset, target, onShow, onHide })` →
-  `scroll()`, `show()`, `hide()`, `toggle()`, `isVisible()`, `getButton()`, `destroy()`
+- **BackToTop** (`components/back-to-top.js`): `elements.backToTop(selector, { showAfter, duration, position, offset (px or {bottom, right|left}), target, zIndex, label, onShow, onHide, onScroll })` →
+  `scroll(ms?)`, `show()`, `hide()`, `toggle()`, `isVisible()`, `getButton()`, `setShowAfter()`, `setPosition()`, `setOffset()`, `destroy()`
+    - A `<button>`/`<a>`/`.dm-back-to-top` selector is the button; anything else (old code passed `'body'`) adds a `.dm-back-to-top` to body.
+      A button inside its `target` container gets `.dm-back-to-top-contained` (sticky in that container's corner)
+- **Badge** (`components/badge.js`): `elements.badge(selector, { variant, size, pill, outline, removable, pulse, onClick(event, badge), onRemove(badge, event) })` →
+  `setVariant()`, `setSize()`, `setText()`, `destroy()` (`remove()` alias)
+    - Classes on the element (`.badge .badge-<variant> .badge-sm|lg .badge-pill|rounded .badge-outline`); children (icons) stay; removable adds a
+      `.domma-badge-remove` button (onRemove returning false keeps it)
+- **NumberBadge**: `elements.numberBadge(target, { count, max, variant, dot, pulse, borderColor, label, onChange(count, previous, nb) })` →
+  `setCount()`, `increment()`, `decrement()`, `getCount()`, `setDot()`, `setVariant()`, `setPulse()`, `destroy()`
+    - Appends a `.badge-counter` span INSIDE the target (`:where(.badge-counter-host)` makes it `position: relative`); hidden at 0 unless `dot`
+- **Toast** (`components/toast.js`): `elements.toast(message, { type, title, duration, position, closable, pauseOnHover, showProgress, html, safe, icon, actions [{label, primary, closeOnClick, onClick}], action, maxToasts, className, animationDuration, onShow, onClose, onPause, onResume, onAction })` →
+  `close()`/`hide()`, `setMessage()`, `setTitle()`, `setType()`, `setActions()`, `isVisible()`, `destroy()`; statics `.show/.success/.error/.warning/.info/.closeAll`
+    - Light-DOM `.domma-toast` in `.domma-toast-container.domma-toast-<position>`; message is text unless `html: true` (sanitised unless
+      `safe: false`) - `E.toast('123')` shows "123". Typed helpers add the type's SVG icon; plain `E.toast(msg, {type})` has none (as before).
+      `onClose` fires after the exit animation, just before removal. `E.toast({message, ...})` is accepted
 - **ButtonGroup**: `elements.buttonGroup(selector, { mode, activeClass, allowEmpty, onChange })` →
   `getValue()`, `getActive()`, `setValue()`, `toggle()`, `selectAll()`, `deselectAll()`
     - CSS classes: `.btn-group`, `.btn-group-vertical`, `.active`
@@ -416,12 +473,14 @@ Accessed via `Domma.elements`:
     - `elements.prompt(message, options)` → `Promise<string|null>` - Text input, returns value or null
     - Options: `title`, `confirmText`, `cancelText`, `inputPlaceholder`, `inputValue`, `inputType`, `animation`,
       `keyboard`
-- **Loader**: Loading indicators with multiple animation types
-    - `elements.loader(selector, { type, size, color, overlay, text, centered })` →
-      `show()`, `hide()`, `toggle()`, `isVisible()`, `setText()`, `destroy()`
-    - Types: `'spinner'`, `'dots'`, `'pulse'`, `'bars'`
-    - Sizes: `'small'`, `'medium'`, `'large'`, or number (px)
-    - Static: `elements.showLoader(selector)`, `elements.hideLoader(selector)`, `elements.fullscreenLoader(text)`
+- **Loader** (`components/loader.js`): Loading indicators with multiple animation types
+    - `elements.loader(container, { type, size, color, overlay, text, centered, visible, label })` →
+      `show()`, `hide()`, `toggle()`, `isVisible()`, `setText()`, `setType()`, `setSize()`, `setColor()`, `destroy()`
+    - `element` is the container; the indicator (`.dm-loader.dm-loader-js`, `instance.indicator`) is appended to it and removed by destroy()
+    - Types: `'spinner'`, `'dots'`, `'pulse'`, `'bars'`; sizes `'small'|'medium'|'large'` or px; colour = theme name, `white`, `dark` or any CSS colour
+      (`--dm-loader-size` / `--dm-loader-color`). String booleans (`centered: 'false'`) are read as booleans
+    - Static: `elements.showLoader(selector, opts)` / `hideLoader(selector)` reuse the container's instance; `fullscreenLoader(text, opts)` reuses
+      one `#dm-loader-fullscreen` overlay, which `hideLoader` hides
 - **Skeleton** (`skeleton.js`): `elements.skeleton(target, { type, lines, count, rows, columns, header, avatar, image, animate, template, label })` →
   handle `{remove(), replace(content), destroy(), active, element, options}` (null if no match)
     - Types: `'text'`, `'card'`, `'list'`, `'table'`, `'custom'` (`template` string or fn); markup from `skeletonMarkup()`
@@ -480,7 +539,7 @@ Accessed via `Domma.elements`:
 - **Alarm**: Scheduled time-based alerts with localStorage persistence
   -
   `elements.alarm({ alarms, timezone, checkInterval, storageKey, onTrigger, onSnooze, onDismiss, onAlarmAdd, onAlarmRemove })` →
-  `add(alarm)`, `remove(id)`, `update(id, changes)`, `enable(id)`, `disable(id)`, `toggle(id)`, `snooze(id, duration)`,
+  `add(alarm)`, `removeAlarm(id)` (`remove(id)` alias), `update(id, changes)`, `enable(id)`, `disable(id)`, `toggle(id)`, `snooze(id, duration)`,
   `getAlarms()`, `getAlarm(id)`, `getNextAlarm()`, `clearAll()`, `destroy()`
     - Singleton pattern - same instance manages all alarms
     - Alarm structure: `{ time: 'HH:MM', label, enabled, repeat, notification, notificationOptions, sound, soundUrl }`
@@ -737,6 +796,18 @@ scribe.destroy();
 | `Domma.icons`    | `I`   | `window.I` | SVG icon system                  |
 | `Domma.tables`   | `T`   | `window.T` | DataTable functionality          |
 
+### The `<domma-*>` tags (`web-components/index.js`)
+
+`<domma-badge>`, `<domma-number-badge>`, `<domma-tooltip>`, `<domma-loader>`, `<domma-back-to-top>`, `<domma-card>` and
+`<domma-modal>` are thin custom-element shells: on connect each builds the E.* component on ITSELF from its attributes
+(`numbers` lists the only attributes parsed as numbers - `content="123"` stays text), copies the component's methods
+onto the tag (returning the tag when the method returned the instance, so calls chain) and passes changed attributes to
+`setOptions()`. Built once - moving the tag keeps the instance. Registration is lazy and once: the first call of one of
+these E.* entries (`registerComponents()`), or a `<domma-*>` tag in the page at load or added later (a MutationObserver
+that disconnects on registration). No customElements (Node) = nothing defined. `base/domma-element.js` stays for
+`Domma.component()` (component-factory.js); its `getThemeVariables()` returns '' - custom properties inherit into shadow
+roots, and the old `--dm-x: var(--dm-x, fallback)` declarations were cycles that blanked the theme.
+
 ## File Structure
 
 ```
@@ -747,7 +818,9 @@ src/
 ├── utils.js         # Lodash-compatible utilities
 ├── dates.js         # Moment-style date manipulation
 ├── models.js        # Reactive models & pub/sub
-├── elements.js      # UI components
+├── elements.js      # UI components (E.*)
+├── components/      # One implementation each: card, modal, tooltip, badge (+ number badge), toast, loader, back-to-top
+├── web-components/  # <domma-*> tag shells over components/, DommaElement base for Domma.component()
 ├── tables.js        # DataTable functionality
 ├── config.js        # JSON configuration engine
 ├── http.js          # HTTP client

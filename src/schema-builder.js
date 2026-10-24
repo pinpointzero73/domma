@@ -260,6 +260,8 @@ if (typeof window !== 'undefined') {
 // ============================================
 
 class SchemaBuilder extends Component {
+    static componentName = 'schema-builder';
+
     static defaults = {
         theme: 'light',
         autoSave: true,

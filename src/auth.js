@@ -372,6 +372,8 @@ export const auth = {
  * LoginForm Component
  */
 class LoginForm extends Component {
+    static componentName = 'login-form';
+
   static defaults = {
     emailPlaceholder: 'your@email.com',
     passwordPlaceholder: 'Enter your password',
@@ -457,6 +459,8 @@ class LoginForm extends Component {
  * RegisterForm Component
  */
 class RegisterForm extends Component {
+    static componentName = 'register-form';
+
   static defaults = {
     namePlaceholder: 'Your name',
     emailPlaceholder: 'your@email.com',
@@ -596,6 +600,8 @@ class RegisterForm extends Component {
  * AuthTabs Component
  */
 class AuthTabs extends Component {
+    static componentName = 'auth-tabs';
+
   static defaults = {
     activeTab: 'login',
     loginText: 'Login',
@@ -662,6 +668,8 @@ class AuthTabs extends Component {
  * UserInfo Component
  */
 class UserInfo extends Component {
+    static componentName = 'user-info';
+
   static defaults = {
     showIcon: true,
     showRole: true,

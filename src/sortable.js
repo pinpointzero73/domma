@@ -64,6 +64,8 @@ function scrollParentOf(el, axis) {
 }
 
 class Sortable extends Component {
+    static componentName = 'sortable';
+
     static defaults = {
         items: null,            // selector for the sortable items; null = the container's children
         handle: null,           // selector inside an item that starts a drag; null = the whole item
@@ -497,7 +499,7 @@ class Sortable extends Component {
             this._drag.indicator = ind;
         }
 
-        this._emit('start', {item, from: this._drag.from});
+        this._signal('start', {item, from: this._drag.from});
         if (this.options.autoScroll) this._scrollLoop();
     }
 
@@ -516,7 +518,7 @@ class Sortable extends Component {
         } else {
             this._indicate(target, x, y);
         }
-        this._emit('move', {item: d.item, target: d.target || target, zone: d.zone, x, y});
+        this._signal('move', {item: d.item, target: d.target || target, zone: d.zone, x, y});
     }
 
     /**
@@ -641,9 +643,9 @@ class Sortable extends Component {
             this._finish(true);
             if (changed) {
                 this._save(order);
-                this._emit('sort', {item: d.item, from: d.from, to, order, previous: d.previous});
+                this._signal('sort', {item: d.item, from: d.from, to, order, previous: d.previous});
             }
-            this._emit('end', {item: d.item, changed});
+            this._signal('end', {item: d.item, changed});
             return;
         }
 
@@ -678,6 +680,7 @@ class Sortable extends Component {
             else if (zone === 'after') target.after(d.item);
             return undefined;
         });
+        this._emit('drop', detail);
         this._dispatch('drop', detail);
 
         const settle = () => {
@@ -687,7 +690,7 @@ class Sortable extends Component {
                 return;
             }
             this._finish(true);
-            this._emit('end', {item: d.item, changed: true});
+            this._signal('end', {item: d.item, changed: true});
         };
         if (result && isFn(result.then)) {
             result.then(settle, () => {
@@ -707,8 +710,8 @@ class Sortable extends Component {
             });
         }
         this._finish(false);
-        this._emit('cancel', {item: d.item});
-        this._emit('end', {item: d.item, changed: false});
+        this._signal('cancel', {item: d.item});
+        this._signal('end', {item: d.item, changed: false});
     }
 
     /** Land the ghost on the item's (possibly new) element, then tidy up. */
@@ -828,8 +831,8 @@ class Sortable extends Component {
         e.target.focus();
         const order = this.toArray();
         this._save(order);
-        this._emit('sort', {item, from, to, order, previous});
-        this._emit('end', {item, changed: true});
+        this._signal('sort', {item, from, to, order, previous});
+        this._signal('end', {item, changed: true});
         this._announce(item);
     }
 
@@ -920,10 +923,11 @@ class Sortable extends Component {
         if (key && this._isLive()) storage.set(key, order.filter((k) => k != null));
     }
 
-    _emit(name, detail) {
+    /** The onX callback, .on() listeners and `dm:sortable:<name>`, then the older `sortable:<name>` (kept until 1.0). */
+    _signal(name, detail) {
         const cb = this.options[`on${name[0].toUpperCase()}${name.slice(1)}`];
         if (isFn(cb)) cb(detail);
-        this._notify(name, detail);
+        this._emit(name, detail);
         this._dispatch(name, detail);
     }
 

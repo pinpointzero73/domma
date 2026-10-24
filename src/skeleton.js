@@ -19,6 +19,7 @@
  * The container's existing children are moved aside, not copied, so `remove()`
  * puts back the very same nodes - listeners and state intact.
  */
+import {register, unregister, instanceOf} from './component.js';
 
 const ANNOUNCE_DELAY = 100;
 
@@ -182,6 +183,7 @@ export function skeleton(target, options = {}) {
         // A declared container has had its turn: a later scan() must not cover the real content
         if (el.hasAttribute('data-skeleton')) el.setAttribute('data-skeleton-done', '');
         if (active.get(el) === handle) active.delete(el);
+        unregister(el, handle);
         live = false;
     };
 
@@ -221,8 +223,11 @@ export function skeleton(target, options = {}) {
 
         destroy() { return handle.remove(); }
     };
+    // So E.get(el) / E.get(el, 'skeleton') finds it, like any component.
+    Object.defineProperty(handle, 'componentName', {value: 'skeleton'});
 
     active.set(el, handle);
+    register(el, handle);
     return handle;
 }
 
@@ -244,10 +249,10 @@ skeleton.while = async function (target, promise, options = {}) {
     }
 };
 
-/** The live handle on a container, if any. */
+/** The live handle on a container, if any - the same answer as E.get(target, 'skeleton'). */
 skeleton.get = function (target) {
     const el = resolveTarget(target);
-    return (el && active.get(el)) || null;
+    return (el && instanceOf(el, 'skeleton')) || null;
 };
 
 /** Remove the skeleton from a container, restoring its content. */

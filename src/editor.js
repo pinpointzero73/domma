@@ -7,6 +7,8 @@ import Component from './component.js';
 import {escapeHtml} from './escape.js';
 
 class Editor extends Component {
+    static componentName = 'editor';
+
     constructor(selector, options = {}) {
         super(selector, options);
 

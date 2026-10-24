@@ -149,7 +149,7 @@ describe('Component events', () => {
         const seen = [];
         const handler = (d) => seen.push(d);
         const dom = vi.fn();
-        c.element.addEventListener('dm:open', dom);
+        c.element.addEventListener('dm:component:open', dom);
 
         expect(c.on('open', handler)).toBe(c);
         c._emit('open', 1);
@@ -158,7 +158,7 @@ describe('Component events', () => {
 
         expect(seen).toEqual([1]);
         expect(dom).toHaveBeenCalledTimes(2);
-        expect(dom.mock.calls[0][0].detail).toBe(1);
+        expect(dom.mock.calls[0][0].detail.args).toEqual([1]);
     });
 
     it('destroy() drops listeners', () => {

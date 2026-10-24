@@ -5,7 +5,7 @@
  * Note: ThemeRoller, QuickRoller, and Editor are in the separate tools bundle (domma-tools.min.js)
  */
 
-import Component from './component.js';
+import Component, {instanceOf, register, unregister} from './component.js';
 import TreeView from './treeview.js';
 import ContextMenu from './context-menu.js';
 import Sortable from './sortable.js';
@@ -17,809 +17,69 @@ import sanitizeModule from './sanitize.js';
 import {escapeHtml} from './escape.js';
 import {loadOption} from './globals.js';
 
-// Web Component wrappers for Phase 1 & 2 components
-import {
-    createBadgeWrapper,
-    createNumberBadgeWrapper,
-    createTooltipWrapper,
-    createLoaderWrapper,
-    createBackToTopWrapper,
-    ToastWrapper,
-    createModalWrapper,
-    ModalFactoryWrapper,
-    createCardWrapper
-} from './web-components/wrappers/legacy-wrappers.js';
+// One implementation per component (src/components/); the <domma-*> tags are shells over them
+import Card from './components/card.js';
+import Modal, {createModal, showModal} from './components/modal.js';
+import Tooltip, {tooltipsFor} from './components/tooltip.js';
+import Badge, {NumberBadge} from './components/badge.js';
+import Loader from './components/loader.js';
+import BackToTop from './components/back-to-top.js';
+import {toast as toastApi} from './components/toast.js';
+import {resolveAll, resolveElement, reuse} from './components/shared.js';
+import {registerComponents as defineTags} from './web-components/index.js';
 
 let timelineWarned = false;
+const groupWarned = new Set();
 
-// ============================================
-// Card Component
-// ============================================
+/**
+ * E.buttonGroup / E.listGroup used to return an array when the selector matched more than
+ * one element. They return the first instance now, with a non-enumerable all() for the
+ * list. Until 1.0 the old array shape still answers on the instance - [i], length,
+ * forEach, map and iteration - and each of those warns once.
+ * @param {Object[]} instances - one per matched element, in document order
+ * @param {string} name - the factory name, for the warning
+ * @returns {Object|Object[]} the first instance; an empty array (as before) when nothing matched
+ */
+function firstOfMatches(instances, name) {
+    if (!instances.length) return instances;
+    const first = instances[0];
+    const list = instances.slice();
+    Object.defineProperty(first, 'all', {value: () => list.slice(), configurable: true, writable: true});
+    if (list.length < 2) return first;
 
-class Card extends Component {
-    static defaults = {
-        hoverable: true,
-        shadow: 'medium',
-        rounded: true,
-        animation: true,
-        animationDuration: 200,
-        onHover: null,
-        onLeave: null,
-        onClick: null,
-        collapsible: false,
-        collapsed: false,
-        persistKey: null,
-        collapseIcon: 'chevron-down',
-        onCollapse: null,
-        onExpand: null,
-        // HTML generation options
-        title: null,
-        icon: null,
-        content: '',
-        color: null
+    const warn = (what) => {
+        const key = `${name}:${what}`;
+        if (groupWarned.has(key) || loadOption('deprecationWarnings', true) === false || typeof console === 'undefined') return;
+        groupWarned.add(key);
+        console.warn(`Domma: E.${name}() matched ${list.length} elements and returns the first instance; using it as an array (${what}) is deprecated and stops working at 1.0. Use .all() or E.${name}.all().`);
     };
-
-    constructor(selector, options = {}) {
-        super(selector, options);
-
-        // Generate HTML if title or content provided
-        if (options.title || options.content) {
-            this._render();
-        }
-
-        this._init();
-        this._initCollapsible();
+    list.forEach((instance, i) => Object.defineProperty(first, i, {
+        get() { warn('[index]'); return instance; },
+        configurable: true
+    }));
+    Object.defineProperty(first, 'length', {get() { warn('length'); return list.length; }, configurable: true});
+    for (const method of ['forEach', 'map']) {
+        Object.defineProperty(first, method, {
+            value(...args) { warn(method); return list[method](...args); },
+            configurable: true,
+            writable: true
+        });
     }
-
-    /**
-     * Generate card HTML structure (DataCard-style)
-     */
-    _render() {
-        if (!this.element) return;
-
-        const iconHtml = this.options.icon
-            ? `<span data-icon="${this.options.icon}" class="card-title-icon"></span>`
-            : '';
-        const colorClass = this.options.color ? `card-${this.options.color}` : '';
-        const collapsibleClass = this.options.collapsible ? 'card-collapsible' : '';
-        const collapsedClass = this.options.collapsed ? 'card-collapsed' : '';
-
-        const headerHtml = this.options.title
-            ? `<div class="card-header">
-                <div class="card-header-content">
-                    <h4 class="card-title">${iconHtml}${Domma.utils.escapeHtml(this.options.title)}</h4>
-                </div>
-            </div>`
-            : '';
-
-        const bodyHtml = `<div class="card-body">${this.options.content}</div>`;
-
-        const cardHtml = `<div class="card ${collapsibleClass} ${collapsedClass} ${colorClass}">
-            ${headerHtml}
-            ${bodyHtml}
-        </div>`;
-
-        // Use Domma's sanitize function for safe HTML insertion
-        // Unreachable: E.card goes through createCardWrapper (legacy-wrappers.js)
-        this.element.innerHTML = cardHtml;
-
-        // Update element reference to the inner card div
-        this.element = this.element.querySelector('.card');
-
-        // Scan for icons
-        if (Domma.icons && typeof Domma.icons.scan === 'function') {
-            Domma.icons.scan(this.element);
-        }
-    }
-
-    _init() {
-        if (!this.element) return;
-
-        const el = this.element;
-        const opts = this.options;
-
-        // Apply base styles
-        el.style.transition = opts.animation
-            ? `transform ${opts.animationDuration}ms ease, box-shadow ${opts.animationDuration}ms ease`
-            : 'none';
-
-        if (opts.rounded) {
-            el.style.borderRadius = '8px';
-        }
-
-        this._applyShadow(opts.shadow);
-
-        if (opts.hoverable) {
-            this._addEventListener(el, 'mouseenter', (e) => {
-                el.style.transform = 'scale(1.02)';
-                this._applyShadow('large');
-                if (opts.onHover) opts.onHover(e, this);
-            });
-
-            this._addEventListener(el, 'mouseleave', (e) => {
-                el.style.transform = 'scale(1)';
-                this._applyShadow(opts.shadow);
-                if (opts.onLeave) opts.onLeave(e, this);
-            });
-        }
-
-        if (opts.onClick) {
-            el.style.cursor = 'pointer';
-            this._addEventListener(el, 'click', (e) => {
-                opts.onClick(e, this);
-            });
-        }
-    }
-
-    _applyShadow(size) {
-        const shadows = {
-            none: 'none',
-            small: '0 1px 3px rgba(0,0,0,0.12)',
-            medium: '0 2px 8px rgba(0,0,0,0.15)',
-            large: '0 8px 20px rgba(0,0,0,0.2)'
-        };
-        this.element.style.boxShadow = shadows[size] || shadows.medium;
-    }
-
-    setShadow(size) {
-        this.options.shadow = size;
-        this._applyShadow(size);
-        return this;
-    }
-
-    _initCollapsible() {
-        if (!this.options.collapsible) return;
-
-        this.element.classList.add('card-collapsible');
-        this._addCollapseIcon();
-        this._bindHeaderClick();
-        this._restoreState();
-    }
-
-    _addCollapseIcon() {
-        const header = this.element.querySelector('.card-header');
-        if (!header) return;
-
-        // Check if content wrapper already exists (from _render)
-        let contentWrapper = header.querySelector('.card-header-content');
-        if (!contentWrapper) {
-            // Wrap existing children in a content span
-            contentWrapper = document.createElement('span');
-            contentWrapper.className = 'card-header-content';
-            while (header.firstChild) {
-                contentWrapper.appendChild(header.firstChild);
-            }
-            header.appendChild(contentWrapper);
-        }
-
-        // Add icon span (only if it doesn't exist)
-        if (!header.querySelector('.card-collapse-icon')) {
-            const iconWrapper = document.createElement('span');
-            iconWrapper.className = 'card-collapse-icon';
-            const iconSvg = Domma.icons.render(this.options.collapseIcon, {size: 16});
-            iconWrapper.appendChild(iconSvg);
-            header.appendChild(iconWrapper);
-        }
-    }
-
-    _bindHeaderClick() {
-        const header = this.element.querySelector('.card-header');
-        if (!header) return;
-
-        this._addEventListener(header, 'click', () => this.toggle());
-    }
-
-    _getStorageKey() {
-        return this.options.persistKey ||
-          (this.element.id ? `domma-card-${this.element.id}` : null);
-    }
-
-    _restoreState() {
-        const key = this._getStorageKey();
-        if (key) {
-            const saved = Domma.storage.get(key);
-            if (saved?.collapsed) {
-                this._setCollapsed(true, false);
-                return;
-            }
-        }
-        // Apply initial collapsed option if no saved state
-        if (this.options.collapsed) {
-            this._setCollapsed(true, false);
-        }
-    }
-
-    _saveState() {
-        const key = this._getStorageKey();
-        if (key) {
-            Domma.storage.set(key, {collapsed: this.isCollapsed()});
-        }
-    }
-
-    _setCollapsed(collapsed, save = true) {
-        const body = this.element.querySelector('.card-body');
-        if (!body) return;
-
-        if (collapsed) {
-            body.style.height = body.scrollHeight + 'px';
-            body.offsetHeight; // Force reflow
-            body.style.height = '0';
-            this.element.classList.add('card-collapsed');
-            if (this.options.onCollapse) this.options.onCollapse(this);
-        } else {
-            this.element.classList.remove('card-collapsed');
-            body.style.height = body.scrollHeight + 'px';
-            setTimeout(() => {
-                body.style.height = 'auto';
-            }, 200);
-            if (this.options.onExpand) this.options.onExpand(this);
-        }
-
-        if (save) this._saveState();
-    }
-
-    collapse() {
-        this._setCollapsed(true);
-        return this;
-    }
-
-    expand() {
-        this._setCollapsed(false);
-        return this;
-    }
-
-    toggle() {
-        this._setCollapsed(!this.isCollapsed());
-        return this;
-    }
-
-    isCollapsed() {
-        return this.element.classList.contains('card-collapsed');
-    }
-
-    /**
-     * Set card body content
-     * @param {string} content - HTML content
-     * @returns {this}
-     */
-    setContent(content) {
-        const body = this.element.querySelector('.card-body');
-        if (body) {
-            body.innerHTML = content;
-            // Rescan icons after content update
-            if (Domma.icons && typeof Domma.icons.scan === 'function') {
-                Domma.icons.scan(body);
-            }
-        }
-        return this;
-    }
-
-    /**
-     * Get card body element
-     * @returns {HTMLElement|null}
-     */
-    getBody() {
-        return this.element.querySelector('.card-body');
-    }
-
-    /**
-     * Update card body height (call after dynamic content changes)
-     * @returns {this}
-     */
-    updateHeight() {
-        if (!this.isCollapsed()) {
-            const body = this.element.querySelector('.card-body');
-            if (body) {
-                body.style.height = 'auto';
-                const height = body.scrollHeight;
-                body.style.height = height + 'px';
-            }
-        }
-        return this;
-    }
+    Object.defineProperty(first, Symbol.iterator, {
+        value() { warn('iteration'); return list[Symbol.iterator](); },
+        configurable: true,
+        writable: true
+    });
+    return first;
 }
-
-// ============================================
-// Modal Component
-// ============================================
-
-class Modal extends Component {
-    static defaults = {
-        backdrop: true,
-        backdropClose: true,
-        keyboard: true,
-        animation: 'fade',
-        animationDuration: 300,
-        closeButton: true,
-        onOpen: null,
-        onOpened: null,
-        onClose: null,
-        onClosed: null,
-
-        // Factory mode options
-        size: 'medium',              // 'small', 'medium', 'large', 'xl'
-        centered: true,
-        scrollable: false,
-
-        // Content options (for programmatic creation)
-        title: '',
-        content: '',
-        footer: '',
-        buttons: [],                 // [{id, text, variant, close}]
-
-        // Styling options
-        className: '',
-        headerClass: '',
-        bodyClass: '',
-        footerClass: '',
-        onButtonClick: null
-    };
-
-    constructor(selector, options = {}) {
-        super(selector, options);
-        this._backdrop = null;
-        this._isOpen = false;
-        this._init();
-    }
-
-    _init() {
-        if (!this.element) return;
-
-        const el = this.element;
-        const opts = this.options;
-
-        // Skip inline positioning for factory-created modals (they use flexbox overlay)
-        if (!opts._factoryCreated) {
-            // Traditional modal: use fixed positioning with manual centering
-            el.style.display = 'none';
-            el.style.position = 'fixed';
-            el.style.top = '50%';
-            el.style.left = '50%';
-            el.style.transform = 'translate(-50%, -50%)';
-            el.style.zIndex = '1001';
-            el.style.opacity = '0';
-            el.style.transition = `opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease`;
-        } else {
-            // Factory modal: positioned by flexbox overlay, only set initial opacity
-            el.style.opacity = '0';
-            el.style.transition = `opacity ${opts.animationDuration}ms ease, transform ${opts.animationDuration}ms ease`;
-        }
-
-        // Keyboard handler
-        if (opts.keyboard) {
-            this._keyHandler = (e) => {
-                if (e.key === 'Escape' && this._isOpen) {
-                    this.close();
-                }
-            };
-            document.addEventListener('keydown', this._keyHandler);
-        }
-
-        // ARIA semantics
-        if (!el.hasAttribute('role')) {
-            el.setAttribute('role', 'dialog');
-        }
-        if (!el.hasAttribute('aria-modal')) {
-            el.setAttribute('aria-modal', 'true');
-        }
-        const titleEl = el.querySelector('.modal-title, [data-modal-title]');
-        if (titleEl && !el.hasAttribute('aria-labelledby')) {
-            if (!titleEl.id) {
-                titleEl.id = 'dm-modal-title-' + Math.random().toString(36).substring(2, 9);
-            }
-            el.setAttribute('aria-labelledby', titleEl.id);
-        } else if (opts.title && !el.hasAttribute('aria-label')) {
-            el.setAttribute('aria-label', opts.title);
-        }
-
-        // Close button (header × button)
-        if (opts.closeButton) {
-            const closeBtn = el.querySelector('[data-close], .modal-close, .close');
-            if (closeBtn) {
-                if (!closeBtn.hasAttribute('aria-label')) closeBtn.setAttribute('aria-label', 'Close');
-                this._addEventListener(closeBtn, 'click', () => this.close());
-            }
-        }
-
-        // Close button(s) in footer (e.g., Cancel, Close buttons)
-        const closeBtns = el.querySelectorAll('.modal-close-btn');
-        closeBtns.forEach(btn => {
-            this._addEventListener(btn, 'click', () => this.close());
-        });
-    }
-
-    open() {
-        if (this._isOpen) return this;
-
-        const opts = this.options;
-        const el = this.element;
-
-        if (opts.onOpen) opts.onOpen(this);
-
-        // Create backdrop
-        if (opts.backdrop) {
-            this._backdrop = document.createElement('div');
-            this._backdrop.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 1000;
-                opacity: 0;
-                transition: opacity ${opts.animationDuration}ms ease;
-            `;
-            document.body.appendChild(this._backdrop);
-
-            if (opts.backdropClose) {
-                this._addEventListener(this._backdrop, 'click', () => this.close());
-            }
-
-            // Trigger reflow and fade in
-            this._backdrop.offsetHeight;
-            this._backdrop.style.opacity = '1';
-        }
-
-        // Show modal
-        el.style.display = 'block';
-        el.offsetHeight; // Trigger reflow
-
-        // Apply animation
-        if (opts.animation === 'fade') {
-            el.style.opacity = '1';
-        } else if (opts.animation === 'slide') {
-            el.style.transform = 'translate(-50%, -50%)';
-            el.style.opacity = '1';
-        } else if (opts.animation === 'zoom') {
-            el.style.transform = 'translate(-50%, -50%) scale(1)';
-            el.style.opacity = '1';
-        } else {
-            el.style.opacity = '1';
-        }
-
-        this._isOpen = true;
-
-        // Call onOpened after animation
-        setTimeout(() => {
-            if (opts.onOpened) opts.onOpened(this);
-        }, opts.animationDuration);
-
-        return this;
-    }
-
-    close() {
-        if (!this._isOpen) return this;
-
-        const opts = this.options;
-        const el = this.element;
-
-        if (opts.onClose) opts.onClose(this);
-
-        // Fade out
-        el.style.opacity = '0';
-
-        if (this._backdrop) {
-            this._backdrop.style.opacity = '0';
-        }
-
-        setTimeout(() => {
-            el.style.display = 'none';
-
-            if (this._backdrop) {
-                this._backdrop.remove();
-                this._backdrop = null;
-            }
-
-            this._isOpen = false;
-
-            if (opts.onClosed) opts.onClosed(this);
-        }, opts.animationDuration);
-
-        return this;
-    }
-
-    toggle() {
-        return this._isOpen ? this.close() : this.open();
-    }
-
-    isOpen() {
-        return this._isOpen;
-    }
-
-    destroy() {
-        super.destroy();
-        if (this._keyHandler) {
-            document.removeEventListener('keydown', this._keyHandler);
-        }
-        if (this._backdrop) {
-            this._backdrop.remove();
-        }
-    }
-
-    remove() {
-        if (this._isOpen) {
-            this.close();
-        }
-
-        // Wait for close animation
-        setTimeout(() => {
-            this.destroy();
-
-            if (this.element && this.element.parentNode) {
-                this.element.remove();
-            }
-
-            if (this._backdrop) {
-                this._backdrop.remove();
-                this._backdrop = null;
-            }
-
-            // Remove from instances map (access via elements namespace)
-            const elementsNS = typeof elements !== 'undefined' ? elements :
-              (typeof window !== 'undefined' && window.Domma && window.Domma.elements) || null;
-            if (elementsNS && elementsNS._instances && elementsNS._instances.has(this.element)) {
-                elementsNS._instances.delete(this.element);
-            }
-
-            // Remove overlay if factory-created
-            if (this._overlay && this._overlay.parentNode) {
-                this._overlay.remove();
-            }
-        }, this.options.animationDuration);
-
-        return this;
-    }
-}
-
-// ============================================
-// Modal Factory (Programmatic Creation)
-// ============================================
-
-const ModalFactory = {
-    _container: null,
-    _zIndexBase: 1050,
-    _activeModals: [],
-    _defaults: {
-        size: 'large',
-        title: '',
-        content: '',
-        buttons: [{id: 'close', text: 'Close', variant: 'secondary'}],
-        backdrop: true,
-        backdropClose: true,
-        keyboard: true,
-        animation: true,
-        animationDuration: 300,
-        className: '',
-        headerClass: '',
-        bodyClass: '',
-        footerClass: '',
-        scrollable: false,
-        onButtonClick: null,
-        onOpen: null,
-        onClose: null
-    },
-
-    _ensureContainer() {
-        if (!this._container) {
-            this._container = document.createElement('div');
-            this._container.className = 'dm-dialog-container';
-            this._container.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1040;';
-            document.body.appendChild(this._container);
-        }
-        return this._container;
-    },
-
-    _createElements(options) {
-        const opts = {...this._defaults, ...options};
-        const container = this._ensureContainer();
-
-        // Create overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'dm-dialog-overlay';
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: ${this._getNextZIndex()};
-            pointer-events: auto;
-            opacity: 0;
-            transition: opacity ${opts.animationDuration}ms ease;
-        `;
-
-        // Create dialog
-        const dialog = document.createElement('div');
-        dialog.className = `dm-dialog dm-dialog-${opts.size}${opts.className ? ' ' + opts.className : ''}`;
-        dialog.setAttribute('role', 'dialog');
-        dialog.setAttribute('aria-modal', 'true');
-        dialog.style.cssText = `
-            background: var(--dm-surface, #fff);
-            border-radius: 8px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 90%;
-            max-height: 90vh;
-            overflow: hidden;
-            transform: scale(0.95) translateY(-10px);
-            transition: transform ${opts.animationDuration}ms ease, opacity ${opts.animationDuration}ms ease;
-            opacity: 0;
-        `;
-
-        // Build content (sanitize all user-provided strings)
-        let html = '<div class="dm-dialog-content">';
-
-        if (opts.title) {
-            const safeTitle = sanitizeModule.sanitise(String(opts.title), {preset: 'basic'});
-            html += `<div class="dm-dialog-header${opts.headerClass ? ' ' + opts.headerClass : ''}" style="position: relative; padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid var(--dm-border, #e5e7eb);">`;
-            html += `<h3 class="dm-dialog-title" style="margin: 0; font-size: 1.25rem; font-weight: 600;">${safeTitle}</h3>`;
-            if (opts.backdrop && opts.backdropClose) {
-                html += '<button type="button" class="dm-dialog-close" aria-label="Close" style="position: absolute; right: 1rem; top: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--dm-text-secondary, #6b7280); line-height: 1; padding: 0; width: 2rem; height: 2rem;">&times;</button>';
-            }
-            html += '</div>';
-        }
-
-        html += `<div class="dm-dialog-body${opts.bodyClass ? ' ' + opts.bodyClass : ''}${opts.scrollable ? ' dm-dialog-body-scrollable' : ''}" style="padding: 1.5rem;">`;
-        // Content is sanitized by default (use {unsafe: true} to bypass)
-        const safeContent = opts.unsafe ? String(opts.content) : sanitizeModule.sanitise(String(opts.content));
-        html += safeContent;
-        html += '</div>';
-
-        if (opts.buttons && opts.buttons.length > 0) {
-            html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 1rem; padding: 1rem 1.5rem; border-top: 1px solid var(--dm-border, #e5e7eb); background: var(--dm-surface-raised, #f9fafb);">`;
-            opts.buttons.forEach(btn => {
-                const variant = btn.variant || 'secondary';
-                const safeId = escapeHtml(btn.id);
-                const safeText = sanitizeModule.sanitise(String(btn.text), {preset: 'basic'});
-                html += `<button type="button" class="btn btn-${variant}" data-button-id="${safeId}">${safeText}</button>`;
-            });
-            html += '</div>';
-        }
-
-        html += '</div>';
-        dialog.innerHTML = html;
-        overlay.appendChild(dialog);
-
-        return {overlay, dialog, opts};
-    },
-
-    _getNextZIndex() {
-        return this._zIndexBase + (this._activeModals.length * 10);
-    },
-
-    createModal(options) {
-        const {overlay, dialog, opts} = this._createElements(options);
-
-        // Pass factory flag via options so _init() can check it
-        opts._factoryCreated = true;
-
-        // Create Modal instance using the generated dialog element
-        const modal = new Modal(dialog, opts);
-        modal._overlay = overlay;
-        modal._factoryCreated = true;
-
-        // Append to container (hidden initially)
-        this._ensureContainer().appendChild(overlay);
-
-        // Button click handling
-        const closeButton = dialog.querySelector('.dm-dialog-close');
-        if (closeButton) {
-            closeButton.addEventListener('click', () => {
-                modal.close();
-                if (modal._factoryCreated) {
-                    setTimeout(() => modal.remove(), opts.animationDuration);
-                }
-            });
-        }
-
-        dialog.querySelectorAll('[data-button-id]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const buttonId = btn.getAttribute('data-button-id');
-                if (opts.onButtonClick) {
-                    opts.onButtonClick(buttonId, modal);
-                }
-
-                const buttonConfig = opts.buttons.find(b => b.id === buttonId);
-                if (!buttonConfig || buttonConfig.close !== false) {
-                    modal.close();
-                    if (modal._factoryCreated) {
-                        setTimeout(() => modal.remove(), opts.animationDuration);
-                    }
-                }
-            });
-        });
-
-        // Backdrop click handling
-        if (opts.backdropClose) {
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) {
-                    modal.close();
-                    if (modal._factoryCreated) {
-                        setTimeout(() => modal.remove(), opts.animationDuration);
-                    }
-                }
-            });
-        }
-
-        // Override open to show overlay with animation
-        const originalOpen = modal.open.bind(modal);
-        modal.open = function () {
-            overlay.style.display = 'flex';
-            dialog.style.display = 'block';
-            this._activeModals.push(modal);
-
-            // Trigger animations
-            setTimeout(() => {
-                overlay.style.opacity = '1';
-                dialog.style.transform = 'scale(1) translateY(0)';
-                dialog.style.opacity = '1';
-            }, 10);
-
-            // Call callbacks
-            if (opts.onOpen) opts.onOpen(modal);
-            if (opts.onOpened) {
-                setTimeout(() => opts.onOpened(modal), opts.animationDuration);
-            }
-
-            modal._isOpen = true;
-            return modal;
-        }.bind(this);
-
-        // Override close to hide overlay with animation
-        const originalClose = modal.close.bind(modal);
-        modal.close = function () {
-            if (!modal._isOpen) return modal;
-
-            if (opts.onClose) opts.onClose(modal);
-
-            // Trigger animations
-            overlay.style.opacity = '0';
-            dialog.style.transform = 'scale(0.95) translateY(-10px)';
-            dialog.style.opacity = '0';
-
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                dialog.style.display = 'none';
-                const index = this._activeModals.indexOf(modal);
-                if (index > -1) this._activeModals.splice(index, 1);
-
-                modal._isOpen = false;
-
-                if (opts.onClosed) opts.onClosed(modal);
-            }, opts.animationDuration);
-
-            return modal;
-        }.bind(this);
-
-        return modal;
-    },
-
-    showModal(options) {
-        return new Promise((resolve) => {
-            const modal = this.createModal({
-                ...options,
-                onButtonClick: (buttonId, modalInstance) => {
-                    if (options.onButtonClick) {
-                        options.onButtonClick(buttonId, modalInstance);
-                    }
-                    resolve(buttonId);
-                }
-            });
-
-            modal.open();
-        });
-    }
-};
 
 // ============================================
 // Tabs Component
 // ============================================
 
 class Tabs extends Component {
+    static componentName = 'tabs';
+
     static defaults = {
         active: 0,
         animation: 'fade',
@@ -883,9 +143,7 @@ class Tabs extends Component {
 
         this._updateState();
 
-        if (opts.onChange) {
-            opts.onChange({index, oldIndex, tab: this._tabs[index], panel: this._panels[index]});
-        }
+        this._fire('change', {index, oldIndex, tab: this._tabs[index], panel: this._panels[index]});
 
         return this;
     }
@@ -946,6 +204,8 @@ class Tabs extends Component {
 // ============================================
 
 class Accordion extends Component {
+    static componentName = 'accordion';
+
     static defaults = {
         allowMultiple: false,
         multiExpand: null,  // Alias for allowMultiple
@@ -1069,9 +329,7 @@ class Accordion extends Component {
             this._open(index);
         }
 
-        if (opts.onChange) {
-            opts.onChange({index, isOpen: !isActive, header, content});
-        }
+        this._fire('change', {index, isOpen: !isActive, header, content});
 
         return this;
     }
@@ -1135,480 +393,12 @@ class Accordion extends Component {
 }
 
 // ============================================
-// Tooltip Component
-// ============================================
-
-class Tooltip extends Component {
-    static defaults = {
-        content: '',
-        position: 'top',
-        trigger: 'hover',
-        delay: {show: 0, hide: 0},
-        animation: true,
-        animationDuration: 150,
-        html: false,
-        offset: [0, 8],
-        container: null,
-        onShow: null,
-        onHide: null
-    };
-
-    constructor(selector, options = {}) {
-        super(selector, options);
-        this._tooltip = null;
-        this._isVisible = false;
-        this._showTimeout = null;
-        this._hideTimeout = null;
-        this._init();
-    }
-
-    _init() {
-        if (!this.element) return;
-
-        const opts = this.options;
-        const el = this.element;
-
-        // Get content from data attribute if not specified
-        if (!opts.content && el.dataset.tooltip) {
-            opts.content = el.dataset.tooltip;
-        }
-
-        if (opts.trigger === 'hover') {
-            this._addEventListener(el, 'mouseenter', () => this.show());
-            this._addEventListener(el, 'mouseleave', () => this.hide());
-        } else if (opts.trigger === 'click') {
-            this._addEventListener(el, 'click', () => this.toggle());
-        } else if (opts.trigger === 'focus') {
-            this._addEventListener(el, 'focus', () => this.show());
-            this._addEventListener(el, 'blur', () => this.hide());
-        }
-    }
-
-    show() {
-        clearTimeout(this._hideTimeout);
-
-        if (this._isVisible) return this;
-
-        const opts = this.options;
-
-        this._showTimeout = setTimeout(() => {
-            this._createTooltip();
-            this._positionTooltip();
-
-            if (opts.onShow) opts.onShow(this);
-        }, opts.delay.show);
-
-        return this;
-    }
-
-    hide() {
-        clearTimeout(this._showTimeout);
-
-        if (!this._isVisible) return this;
-
-        const opts = this.options;
-
-        this._hideTimeout = setTimeout(() => {
-            if (this._tooltip) {
-                this._tooltip.classList.remove('show');
-
-                setTimeout(() => {
-                    if (this._tooltip) {
-                        this._tooltip.remove();
-                        this._tooltip = null;
-                    }
-                    this._isVisible = false;
-
-                    if (opts.onHide) opts.onHide(this);
-                }, opts.animationDuration);
-            }
-        }, opts.delay.hide);
-
-        return this;
-    }
-
-    toggle() {
-        return this._isVisible ? this.hide() : this.show();
-    }
-
-    _createTooltip() {
-        const opts = this.options;
-
-        this._tooltip = document.createElement('div');
-        this._tooltip.className = 'domma-tooltip';
-
-        if (opts.html) {
-            this._tooltip.innerHTML = sanitizeModule.sanitise(String(opts.content));
-        } else {
-            this._tooltip.textContent = opts.content;
-        }
-
-        const container = opts.container || document.body;
-        container.appendChild(this._tooltip);
-
-        // Trigger animation
-        this._tooltip.offsetHeight;
-        this._tooltip.classList.add('show');
-
-        this._isVisible = true;
-    }
-
-    _positionTooltip() {
-        if (!this._tooltip || !this.element) return;
-
-        const opts = this.options;
-        const rect = this.element.getBoundingClientRect();
-        const tooltipRect = this._tooltip.getBoundingClientRect();
-        const [offsetX, offsetY] = opts.offset;
-
-        let top, left;
-
-        switch (opts.position) {
-            case 'top':
-                top = rect.top - tooltipRect.height - offsetY;
-                left = rect.left + (rect.width - tooltipRect.width) / 2 + offsetX;
-                break;
-            case 'bottom':
-                top = rect.bottom + offsetY;
-                left = rect.left + (rect.width - tooltipRect.width) / 2 + offsetX;
-                break;
-            case 'left':
-                top = rect.top + (rect.height - tooltipRect.height) / 2 + offsetX;
-                left = rect.left - tooltipRect.width - offsetY;
-                break;
-            case 'right':
-                top = rect.top + (rect.height - tooltipRect.height) / 2 + offsetX;
-                left = rect.right + offsetY;
-                break;
-            default:
-                top = rect.top - tooltipRect.height - offsetY;
-                left = rect.left + (rect.width - tooltipRect.width) / 2 + offsetX;
-        }
-
-        // Add scroll offset
-        top += window.scrollY;
-        left += window.scrollX;
-
-        this._tooltip.style.top = top + 'px';
-        this._tooltip.style.left = left + 'px';
-    }
-
-    setContent(content) {
-        this.options.content = content;
-        if (this._tooltip) {
-            if (this.options.html) {
-                this._tooltip.innerHTML = content;
-            } else {
-                this._tooltip.textContent = content;
-            }
-            this._positionTooltip();
-        }
-        return this;
-    }
-
-    destroy() {
-        super.destroy();
-        clearTimeout(this._showTimeout);
-        clearTimeout(this._hideTimeout);
-        if (this._tooltip) {
-            this._tooltip.remove();
-        }
-    }
-}
-
-// ============================================
-// Badge Component
-// ============================================
-
-class Badge extends Component {
-    static defaults = {
-        variant: 'primary',
-        size: 'medium',
-        pill: false,
-        outline: false,
-        removable: false,
-        onClick: null,
-        onRemove: null
-    };
-
-    static variants = {
-        primary: {bg: 'var(--dm-primary, #4f46e5)', color: '#fff'},
-        secondary: {bg: 'var(--dm-secondary, #6b7280)', color: '#fff'},
-        success: {bg: 'var(--dm-success, #10b981)', color: '#fff'},
-        danger: {bg: 'var(--dm-danger, #ef4444)', color: '#fff'},
-        warning: {bg: 'var(--dm-warning, #f59e0b)', color: '#000'},
-        info: {bg: 'var(--dm-info, #3b82f6)', color: '#fff'},
-        light: {bg: 'var(--dm-background-alt, #f3f4f6)', color: 'var(--dm-text, #111)'},
-        dark: {bg: 'var(--dm-surface-overlay, #1f2937)', color: 'var(--dm-white, #fff)'}
-    };
-
-    static sizes = {
-        small: {padding: '2px 6px', fontSize: '10px'},
-        medium: {padding: '4px 10px', fontSize: '12px'},
-        large: {padding: '6px 14px', fontSize: '14px'}
-    };
-
-    constructor(selector, options = {}) {
-        super(selector, options);
-        this._init();
-    }
-
-    _init() {
-        if (!this.element) return;
-
-        this._applyStyles();
-
-        if (this.options.onClick) {
-            this.element.style.cursor = 'pointer';
-            this._addEventListener(this.element, 'click', (e) => {
-                if (!e.target.classList.contains('domma-badge-remove')) {
-                    this.options.onClick(e, this);
-                }
-            });
-        }
-
-        if (this.options.removable) {
-            this._addRemoveButton();
-        }
-    }
-
-    _applyStyles() {
-        const opts = this.options;
-        const variant = Badge.variants[opts.variant] || Badge.variants.primary;
-        const size = Badge.sizes[opts.size] || Badge.sizes.medium;
-
-        let styles = {
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '4px',
-            fontWeight: '500',
-            lineHeight: '1',
-            borderRadius: opts.pill ? '9999px' : '4px',
-            transition: 'all 150ms ease',
-            ...size
-        };
-
-        if (opts.outline) {
-            styles.background = 'transparent';
-            styles.color = variant.bg;
-            styles.border = `1px solid ${variant.bg}`;
-        } else {
-            styles.background = variant.bg;
-            styles.color = variant.color;
-            styles.border = 'none';
-        }
-
-        Object.assign(this.element.style, styles);
-    }
-
-    _addRemoveButton() {
-        const removeBtn = document.createElement('span');
-        removeBtn.className = 'domma-badge-remove';
-        removeBtn.innerHTML = '&times;';
-
-        this._addEventListener(removeBtn, 'click', (e) => {
-            e.stopPropagation();
-            if (this.options.onRemove) {
-                this.options.onRemove(e, this);
-            }
-            this.remove();
-        });
-
-        this.element.appendChild(removeBtn);
-    }
-
-    setVariant(variant) {
-        this.options.variant = variant;
-        this._applyStyles();
-        return this;
-    }
-
-    setText(text) {
-        // Preserve remove button if exists
-        const removeBtn = this.element.querySelector('.domma-badge-remove');
-        this.element.textContent = text;
-        if (removeBtn) {
-            this.element.appendChild(removeBtn);
-        }
-        return this;
-    }
-
-    remove() {
-        if (this.element) {
-            this.element.remove();
-        }
-        this.destroy();
-    }
-}
-
-// ============================================
-// NumberBadge Component
-// ============================================
-
-class NumberBadge {
-    static defaults = {
-        count: 0,
-        variant: 'danger',
-        dot: false,
-        pulse: false,
-        borderColor: null
-    };
-
-    static variants = {
-        primary:   { bg: 'var(--dm-primary, #4f46e5)',          color: '#fff' },
-        secondary: { bg: 'var(--dm-background-alt, #f3f4f6)',   color: 'var(--dm-text, #111)' },
-        success:   { bg: 'var(--dm-success, #10b981)',          color: '#fff' },
-        danger:    { bg: 'var(--dm-danger, #ef4444)',           color: '#fff' },
-        warning:   { bg: 'var(--dm-warning, #f59e0b)',          color: '#000' },
-        info:      { bg: 'var(--dm-info, #3b82f6)',             color: '#fff' },
-        light:     { bg: 'var(--dm-background-alt, #f3f4f6)',   color: 'var(--dm-text, #111)' },
-        dark:      { bg: 'var(--dm-surface-overlay, #1f2937)',  color: '#fff' }
-    };
-
-    constructor(selector, options = {}) {
-        const element = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-
-        if (!element) {
-            console.warn('NumberBadge: element not found for selector', selector);
-            this.element = null;
-            return;
-        }
-
-        this.element = element;
-        this.options = Object.assign({}, NumberBadge.defaults, options);
-        this._wrapper = null;
-        this._badge = null;
-        this._eventListeners = [];
-
-        this._init();
-    }
-
-    _init() {
-        this._wrapElement();
-        this._createBadge();
-        this._render();
-    }
-
-    _wrapElement() {
-        const wrapper = document.createElement('span');
-        wrapper.className = 'badge-counter-wrapper';
-
-        // Insert wrapper in place of element, then move element inside
-        this.element.parentNode.insertBefore(wrapper, this.element);
-        wrapper.appendChild(this.element);
-
-        this._wrapper = wrapper;
-    }
-
-    _createBadge() {
-        const badge = document.createElement('span');
-        badge.className = 'badge-counter';
-        badge.setAttribute('aria-live', 'polite');
-        badge.setAttribute('role', 'status');
-
-        this._wrapper.appendChild(badge);
-        this._badge = badge;
-    }
-
-    _render() {
-        const { count, variant, dot, pulse, borderColor } = this.options;
-
-        // Reset classes
-        this._badge.className = 'badge-counter';
-
-        // Apply variant class
-        if (variant && variant !== 'danger') {
-            this._badge.classList.add(`badge-counter-${variant}`);
-        }
-
-        // Dot mode
-        if (dot) {
-            this._badge.classList.add('badge-dot');
-            this._badge.textContent = '';
-        } else {
-            this._badge.textContent = String(count);
-        }
-
-        // Pulse animation
-        if (pulse) {
-            this._badge.classList.add('badge-pulse');
-        }
-
-        // Custom border colour
-        if (borderColor) {
-            this._badge.style.borderColor = borderColor;
-        } else {
-            this._badge.style.borderColor = '';
-        }
-
-        // Hide when count is zero and not in dot mode
-        if (!dot && count === 0) {
-            this._badge.classList.add('badge-counter-hidden');
-        }
-    }
-
-    setCount(count) {
-        this.options.count = count;
-        this._render();
-        return this;
-    }
-
-    increment(by = 1) {
-        this.options.count = (this.options.count || 0) + by;
-        this._render();
-        return this;
-    }
-
-    decrement(by = 1) {
-        this.options.count = Math.max(0, (this.options.count || 0) - by);
-        this._render();
-        return this;
-    }
-
-    setDot(dot) {
-        this.options.dot = dot;
-        this._render();
-        return this;
-    }
-
-    setVariant(variant) {
-        this.options.variant = variant;
-        this._render();
-        return this;
-    }
-
-    setPulse(pulse) {
-        this.options.pulse = pulse;
-        this._render();
-        return this;
-    }
-
-    getCount() {
-        return this.options.count;
-    }
-
-    remove() {
-        if (this._wrapper && this.element) {
-            // Unwrap the element back to its original position
-            this._wrapper.parentNode.insertBefore(this.element, this._wrapper);
-            this._wrapper.remove();
-            this._wrapper = null;
-            this._badge = null;
-        }
-    }
-
-    destroy() {
-        this.remove();
-    }
-}
-
-// ============================================
 // ListGroup Component
 // ============================================
 
 class ListGroup extends Component {
+    static componentName = 'list-group';
+
     static defaults = {
         selectable: false,
         multiSelect: false,
@@ -1802,9 +592,7 @@ class ListGroup extends Component {
                     el.setAttribute('aria-selected', 'false');
                 }
                 const i = this._items.indexOf(el);
-                if (this.options.onDeselect) {
-                    this.options.onDeselect(el, i, event);
-                }
+                this._fire('deselect', el, i, event);
             });
 
             if (!isSelected) {
@@ -1812,17 +600,15 @@ class ListGroup extends Component {
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'true');
                 }
-                if (this.options.onSelect) {
-                    this.options.onSelect(item, index, event);
-                }
+                this._fire('select', item, index, event);
             } else {
                 // Item was already selected - deselect it and fire callbacks
                 item.classList.remove(this.options.activeClass);
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'false');
                 }
-                if (this.options.onDeselect) this.options.onDeselect(item, index, event);
-                if (this.options.onChange) this.options.onChange(this.getSelected(), event);
+                this._fire('deselect', item, index, event);
+                this._fire('change', this.getSelected(), event);
                 return;
             }
         } else {
@@ -1832,23 +618,17 @@ class ListGroup extends Component {
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'false');
                 }
-                if (this.options.onDeselect) {
-                    this.options.onDeselect(item, index, event);
-                }
+                this._fire('deselect', item, index, event);
             } else {
                 item.classList.add(this.options.activeClass);
                 if (this.options.selectable) {
                     item.setAttribute('aria-selected', 'true');
                 }
-                if (this.options.onSelect) {
-                    this.options.onSelect(item, index, event);
-                }
+                this._fire('select', item, index, event);
             }
         }
 
-        if (this.options.onChange) {
-            this.options.onChange(this.getSelected(), event);
-        }
+        this._fire('change', this.getSelected(), event);
     }
 
     _updateAriaSelected() {
@@ -1881,7 +661,7 @@ class ListGroup extends Component {
                 if (el.classList.contains(this.options.activeClass)) {
                     el.classList.remove(this.options.activeClass);
                     if (this.options.selectable) el.setAttribute('aria-selected', 'false');
-                    if (this.options.onDeselect) this.options.onDeselect(el, i, null);
+                    this._fire('deselect', el, i, null);
                 }
             });
         }
@@ -1889,8 +669,8 @@ class ListGroup extends Component {
         item.classList.add(this.options.activeClass);
         if (this.options.selectable) item.setAttribute('aria-selected', 'true');
 
-        if (this.options.onSelect) this.options.onSelect(item, index, null);
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('select', item, index, null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -1907,8 +687,8 @@ class ListGroup extends Component {
         item.classList.remove(this.options.activeClass);
         if (this.options.selectable) item.setAttribute('aria-selected', 'false');
 
-        if (this.options.onDeselect) this.options.onDeselect(item, index, null);
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('deselect', item, index, null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -1939,11 +719,11 @@ class ListGroup extends Component {
             if (!item.classList.contains(this.options.disabledClass)) {
                 item.classList.add(this.options.activeClass);
                 if (this.options.selectable) item.setAttribute('aria-selected', 'true');
-                if (this.options.onSelect) this.options.onSelect(item, index, null);
+                this._fire('select', item, index, null);
             }
         });
 
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -1957,11 +737,11 @@ class ListGroup extends Component {
             if (item.classList.contains(this.options.activeClass)) {
                 item.classList.remove(this.options.activeClass);
                 if (this.options.selectable) item.setAttribute('aria-selected', 'false');
-                if (this.options.onDeselect) this.options.onDeselect(item, index, null);
+                this._fire('deselect', item, index, null);
             }
         });
 
-        if (this.options.onChange) this.options.onChange(this.getSelected(), null);
+        this._fire('change', this.getSelected(), null);
 
         return this;
     }
@@ -2088,6 +868,8 @@ class ListGroup extends Component {
 // ============================================
 
 class Dropdown extends Component {
+    static componentName = 'dropdown';
+
     static defaults = {
         trigger: 'click',           // 'click' | 'hover' - click works in both
         position: 'bottom-start',   // bottom|top|left|right + -start|-end
@@ -2105,7 +887,9 @@ class Dropdown extends Component {
         model: null,
         modelKey: null,
         itemTemplate: null,
+        onBeforeOpen: null,         // return false to keep it closed
         onOpen: null,
+        onBeforeClose: null,        // return false to keep it open
         onClose: null,
         onSelect: null
     };
@@ -2220,6 +1004,8 @@ class Dropdown extends Component {
         clearTimeout(this._hoverCloseTimer);
         this._hoverOpenTimer = this._hoverCloseTimer = null;
 
+        if (!this._isOpen && this._fire('beforeopen', this) === false) return this;
+
         // A close that has not finished fading still owns a live menu node.
         // Reclaim it rather than stacking a fresh one on top of it: re-opening
         // inside the animation window used to leave orphaned menus in the DOM,
@@ -2240,7 +1026,7 @@ class Dropdown extends Component {
             });
         }
 
-        if (opts.onOpen) opts.onOpen(this);
+        this._fire('open', this);
 
         if (this._menu) {
             // Reused node - refresh it, since setItems() may have run while closed.
@@ -2267,6 +1053,7 @@ class Dropdown extends Component {
         this._hoverOpenTimer = this._hoverCloseTimer = null;
 
         if (!this._isOpen) return this;
+        if (!this._mayClose(this)) return this;
 
         const opts = this.options;
         const duration = opts.animation ? opts.animationDuration : 0;
@@ -2293,7 +1080,7 @@ class Dropdown extends Component {
             }, duration);
         }
 
-        if (opts.onClose) opts.onClose(this);
+        this._fire('close', this);
 
         return this;
     }
@@ -2301,6 +1088,12 @@ class Dropdown extends Component {
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     // ---- hover ----------------------------------------------------------
 
@@ -2527,9 +1320,7 @@ class Dropdown extends Component {
 
         this._selectedValue = value;
 
-        if (opts.onSelect) {
-            opts.onSelect({item, index, value}, this);
-        }
+        this._fire('select', {item, index, value}, this);
 
         // Update model if bound
         if (opts.model && opts.modelKey && typeof opts.model.set === 'function') {
@@ -2674,320 +1465,6 @@ class Dropdown extends Component {
             this._menu = null;
         }
         this._isOpen = false;
-    }
-}
-
-// ============================================
-// Toast Component
-// ============================================
-
-class Toast {
-    static defaults = {
-        position: 'top-right',
-        duration: 3000,
-        pauseOnHover: true,
-        showProgress: true,
-        animation: 'slide',
-        animationDuration: 300,
-        closable: true,
-        maxToasts: 5
-    };
-
-    static _containers = {};
-    static _toasts = [];
-
-    static _getContainer(position) {
-        if (!Toast._containers[position]) {
-            const container = document.createElement('div');
-            container.className = `domma-toast-container domma-toast-${position}`;
-            container.setAttribute('aria-live', 'polite');
-            container.setAttribute('aria-atomic', 'true');
-
-            document.body.appendChild(container);
-            Toast._containers[position] = container;
-        }
-
-        return Toast._containers[position];
-    }
-
-    static show(message, options = {}) {
-        const opts = {...Toast.defaults, ...options};
-        const container = Toast._getContainer(opts.position);
-
-        // Enforce max toasts
-        while (Toast._toasts.length >= opts.maxToasts) {
-            const oldest = Toast._toasts.shift();
-            if (oldest) oldest.close();
-        }
-
-        const toast = new ToastInstance(message, opts, container);
-        Toast._toasts.push(toast);
-
-        return toast;
-    }
-
-    static success(message, options = {}) {
-        return Toast.show(message, {
-            ...options,
-            type: 'success',
-            icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>'
-        });
-    }
-
-    static error(message, options = {}) {
-        return Toast.show(message, {
-            ...options,
-            type: 'error',
-            icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>'
-        });
-    }
-
-    static warning(message, options = {}) {
-        return Toast.show(message, {
-            ...options,
-            type: 'warning',
-            icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>'
-        });
-    }
-
-    static info(message, options = {}) {
-        return Toast.show(message, {
-            ...options,
-            type: 'info',
-            icon: '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>'
-        });
-    }
-
-    static closeAll() {
-        Toast._toasts.forEach(toast => toast.close());
-        Toast._toasts = [];
-    }
-}
-
-class ToastInstance {
-    static typeStyles = {
-        default: {bg: 'var(--dm-surface-overlay, #1f2937)', color: 'var(--dm-white, #fff)', accent: 'var(--dm-secondary, #6b7280)'},
-        success: {bg: 'var(--dm-success-dark, #065f46)', color: '#fff', accent: 'var(--dm-success, #10b981)'},
-        error: {bg: 'var(--dm-danger-dark, #991b1b)', color: '#fff', accent: 'var(--dm-danger, #ef4444)'},
-        warning: {bg: 'var(--dm-warning-dark, #92400e)', color: '#fff', accent: 'var(--dm-warning, #f59e0b)'},
-        info: {bg: 'var(--dm-info-dark, #1e40af)', color: '#fff', accent: 'var(--dm-info, #3b82f6)'}
-    };
-
-    constructor(message, options, container) {
-        this.options = options;
-        this.container = container;
-        this._element = null;
-        this._progressBar = null;
-        this._timeout = null;
-        this._isPaused = false;
-        this._remainingTime = options.duration;
-        this._startTime = null;
-
-        this._create(message);
-        this._show();
-
-        if (options.duration > 0) {
-            this._startTimer();
-        }
-    }
-
-    _create(message) {
-        const opts = this.options;
-        const typeStyle = ToastInstance.typeStyles[opts.type || 'default'];
-
-        this._element = document.createElement('div');
-        this._element.className = `domma-toast domma-toast-${opts.type || 'default'}`;
-        this._element.setAttribute('role', opts.type === 'error' ? 'alert' : 'status');
-        this._element.setAttribute('aria-live', opts.type === 'error' ? 'assertive' : 'polite');
-        this._element.setAttribute('aria-atomic', 'true');
-
-        // Icon
-        if (opts.icon) {
-            const iconWrapper = document.createElement('div');
-            iconWrapper.className = 'domma-toast-icon';
-            iconWrapper.innerHTML = sanitizeModule.sanitise(String(opts.icon), {preset: 'basic'});
-            this._element.appendChild(iconWrapper);
-        }
-
-        // Content
-        const content = document.createElement('div');
-        content.className = 'domma-toast-content';
-
-        if (opts.title) {
-            const title = document.createElement('div');
-            title.className = 'domma-toast-title';
-            title.textContent = opts.title;
-            content.appendChild(title);
-        }
-
-        const messageEl = document.createElement('div');
-        messageEl.className = 'domma-toast-message';
-        if (opts.html) {
-            // Sanitize HTML content before inserting
-            messageEl.innerHTML = sanitizeModule.sanitise(String(message));
-        } else {
-            messageEl.textContent = message;
-        }
-        content.appendChild(messageEl);
-
-        // Action buttons
-        if (opts.actions && opts.actions.length) {
-            const actions = document.createElement('div');
-            actions.className = 'domma-toast-actions';
-
-            opts.actions.forEach(action => {
-                const btn = document.createElement('button');
-                btn.textContent = action.label;
-                btn.style.cssText = `
-                    padding: 6px 12px;
-                    border: none;
-                    border-radius: 4px;
-                    font-size: 12px;
-                    font-weight: 500;
-                    cursor: pointer;
-                    background: ${action.primary ? typeStyle.accent : 'rgba(255,255,255,0.2)'};
-                    color: #fff;
-                    transition: opacity 150ms;
-                `;
-                btn.addEventListener('mouseenter', () => btn.style.opacity = '0.8');
-                btn.addEventListener('mouseleave', () => btn.style.opacity = '1');
-                btn.addEventListener('click', () => {
-                    if (action.onClick) action.onClick(this);
-                    if (action.closeOnClick !== false) this.close();
-                });
-                actions.appendChild(btn);
-            });
-
-            content.appendChild(actions);
-        }
-
-        this._element.appendChild(content);
-
-        // Close button
-        if (opts.closable) {
-            const closeBtn = document.createElement('button');
-            closeBtn.className = 'domma-toast-close';
-            closeBtn.setAttribute('aria-label', 'Close');
-
-            // Use Domma icon if available
-            if (typeof window !== 'undefined' && window.Domma && window.Domma.icons) {
-                const icon = window.Domma.icons.render('close', { size: 16 });
-                if (icon) {
-                    closeBtn.appendChild(icon);
-                } else {
-                    closeBtn.textContent = '×';
-                }
-            } else {
-                closeBtn.textContent = '×';
-            }
-
-            closeBtn.addEventListener('click', () => this.close());
-            this._element.appendChild(closeBtn);
-        }
-
-        // Progress bar
-        if (opts.showProgress && opts.duration > 0) {
-            this._progressBar = document.createElement('div');
-            this._progressBar.style.cssText = `
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                height: 3px;
-                background: ${typeStyle.accent};
-                width: 100%;
-                transform-origin: left;
-                transition: transform linear;
-            `;
-            this._element.appendChild(this._progressBar);
-        }
-
-        // Pause on hover
-        if (opts.pauseOnHover) {
-            this._element.addEventListener('mouseenter', () => this._pause());
-            this._element.addEventListener('mouseleave', () => this._resume());
-        }
-
-        this.container.appendChild(this._element);
-    }
-
-    _show() {
-        // Trigger reflow and animate in
-        this._element.offsetHeight;
-        this._element.classList.add('show');
-    }
-
-    _startTimer() {
-        this._startTime = Date.now();
-
-        if (this._progressBar) {
-            this._progressBar.style.transitionDuration = this._remainingTime + 'ms';
-            this._progressBar.offsetHeight;
-            this._progressBar.style.transform = 'scaleX(0)';
-        }
-
-        this._timeout = setTimeout(() => this.close(), this._remainingTime);
-    }
-
-    _pause() {
-        if (this._isPaused || !this._timeout) return;
-
-        this._isPaused = true;
-        clearTimeout(this._timeout);
-        this._remainingTime -= Date.now() - this._startTime;
-
-        if (this._progressBar) {
-            const computed = getComputedStyle(this._progressBar);
-            this._progressBar.style.transitionDuration = '0ms';
-            this._progressBar.style.transform = computed.transform;
-        }
-    }
-
-    _resume() {
-        if (!this._isPaused) return;
-
-        this._isPaused = false;
-        this._startTimer();
-    }
-
-    close() {
-        if (!this._element) return;
-
-        const opts = this.options;
-
-        clearTimeout(this._timeout);
-
-        this._element.classList.add('hiding');
-        this._element.classList.remove('show');
-
-        setTimeout(() => {
-            if (this._element) {
-                this._element.remove();
-                this._element = null;
-
-                // Remove from toasts array
-                const index = Toast._toasts.indexOf(this);
-                if (index > -1) {
-                    Toast._toasts.splice(index, 1);
-                }
-
-                if (opts.onClose) opts.onClose(this);
-            }
-        }, opts.animationDuration);
-    }
-
-    update(message, options = {}) {
-        if (!this._element) return;
-
-        const messageEl = this._element.querySelector('.domma-toast > div:nth-child(2) > div:last-of-type');
-        if (messageEl) {
-            if (options.html) {
-                messageEl.innerHTML = message;
-            } else {
-                messageEl.textContent = message;
-            }
-        }
-
-        return this;
     }
 }
 
@@ -3210,6 +1687,8 @@ class DesktopNotification {
  * Works in both visual mode (with DOM element) and headless mode (pure logic)
  */
 class Timer extends Component {
+    static componentName = 'timer';
+
     static defaults = {
         duration: 60000,          // 1 minute default (ms)
         autoStart: false,
@@ -3389,9 +1868,7 @@ class Timer extends Component {
         this._updateDisplay();
 
         // Call onTick callback
-        if (this.options.onTick) {
-            this.options.onTick(this._remaining);
-        }
+        this._fire('tick', this._remaining);
 
         // Check if complete
         if (this._remaining === 0) {
@@ -3424,9 +1901,7 @@ class Timer extends Component {
         }
 
         // Call onComplete callback
-        if (this.options.onComplete) {
-            this.options.onComplete();
-        }
+        this._fire('complete');
     }
 
     /**
@@ -3451,9 +1926,7 @@ class Timer extends Component {
         }
 
         // Call onStart callback
-        if (this.options.onStart) {
-            this.options.onStart();
-        }
+        this._fire('start');
 
         return this;
     }
@@ -3483,9 +1956,7 @@ class Timer extends Component {
         }
 
         // Call onPause callback
-        if (this.options.onPause) {
-            this.options.onPause();
-        }
+        this._fire('pause');
 
         return this;
     }
@@ -3508,9 +1979,7 @@ class Timer extends Component {
         }
 
         // Call onReset callback
-        if (this.options.onReset) {
-            this.options.onReset();
-        }
+        this._fire('reset');
 
         return this;
     }
@@ -3945,11 +2414,12 @@ class Alarm {
     }
 
     /**
-     * Remove an alarm by ID
+     * Remove an alarm by ID. remove(id) is a permanent alias - removeAlarm is the name,
+     * because remove() means "take this component away" elsewhere and destroy() does that here.
      * @param {string} id - Alarm ID
      * @returns {boolean} True if removed
      */
-    remove(id) {
+    removeAlarm(id) {
         const index = this._alarms.findIndex(a => a.id === id);
         if (index === -1) return false;
 
@@ -3961,6 +2431,11 @@ class Alarm {
         }
 
         return true;
+    }
+
+    /** Alias of removeAlarm(id), looked up by name at call time. */
+    remove(id) {
+        return this.removeAlarm(id);
     }
 
     /**
@@ -4132,6 +2607,8 @@ class Alarm {
 // ============================================
 
 class Carousel extends Component {
+    static componentName = 'carousel';
+
     static defaults = {
         autoplay: false,
         interval: 5000,
@@ -4494,9 +2971,7 @@ class Carousel extends Component {
             this._isAnimating = false;
         }, opts.animationDuration);
 
-        if (opts.onChange) {
-            opts.onChange({index, oldIndex, slide: this._slides[index]});
-        }
+        this._fire('change', {index, oldIndex, slide: this._slides[index]});
 
         return this;
     }
@@ -4551,6 +3026,8 @@ class Carousel extends Component {
 // ============================================
 
 class CookieConsent extends Component {
+    static componentName = 'cookie-consent';
+
     static defaults = {
         // Text content
         message: 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.',
@@ -4637,7 +3114,7 @@ class CookieConsent extends Component {
 
         // Auto show if needed
         if (this.options.autoShow && !this._hasConsented()) {
-            this.show();
+            this.open();
         }
 
         // Setup reopen triggers
@@ -4662,9 +3139,7 @@ class CookieConsent extends Component {
                     });
 
                     // Notify about version mismatch
-                    if (this.options.onVersionMismatch) {
-                        this.options.onVersionMismatch(stored.version, this.options.consentVersion);
-                    }
+                    this._fire('versionmismatch', stored.version, this.options.consentVersion);
 
                     return;
                 }
@@ -4702,6 +3177,9 @@ class CookieConsent extends Component {
     _createUI() {
         // Create main container
         this.element = document.createElement('div');
+        // Made here rather than passed to the constructor, so register it for E.get() here too.
+        this.element._dommaComponent = this;
+        register(this.element, this);
         this.element.className = `dm-cookie-consent dm-cookie-consent-${this.options.position} dm-cookie-consent-${this.options.layout} dm-cookie-consent-${this.options.theme}`;
         this.element.setAttribute('role', 'dialog');
         this.element.setAttribute('aria-label', 'Cookie consent');
@@ -4829,7 +3307,7 @@ class CookieConsent extends Component {
             if (backdrop) {
                 backdrop.addEventListener('click', () => {
                     if (!this.options.requireExplicitConsent) {
-                        this.hide();
+                        this.close();
                     }
                 });
             }
@@ -4871,13 +3349,13 @@ class CookieConsent extends Component {
             const trigger = e.target.closest(this.options.reopenSelector);
             if (trigger) {
                 e.preventDefault();
-                this.show();
+                this.open();
             }
         });
     }
 
-    show() {
-        if (this._isVisible) return;
+    open() {
+        if (this._isVisible) return this;
 
         this.element.style.display = '';
 
@@ -4894,10 +3372,12 @@ class CookieConsent extends Component {
         if (this.options.onShow) {
             this.options.onShow.call(this);
         }
+        this._emit('show');
+        return this;
     }
 
-    hide() {
-        if (!this._isVisible) return;
+    close() {
+        if (!this._isVisible) return this;
 
         const cleanup = () => {
             this.element.style.display = 'none';
@@ -4906,6 +3386,7 @@ class CookieConsent extends Component {
             if (this.options.onHide) {
                 this.options.onHide.call(this);
             }
+            this._emit('hide');
         };
 
         if (this.options.animation) {
@@ -4915,7 +3396,22 @@ class CookieConsent extends Component {
             this.element.classList.remove('dm-cookie-consent-visible');
             cleanup();
         }
+        return this;
     }
+
+    toggle() {
+        return this.isOpen() ? this.close() : this.open();
+    }
+
+    isOpen() {
+        return this._isVisible;
+    }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     accept() {
         // Accept all categories
@@ -4929,13 +3425,15 @@ class CookieConsent extends Component {
         if (this.options.onAccept) {
             this.options.onAccept.call(this, this._preferences);
         }
+        this._emit('accept', this._preferences);
 
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
 
         if (this.options.hideAfterAction) {
-            this.hide();
+            this.close();
         }
     }
 
@@ -4951,13 +3449,15 @@ class CookieConsent extends Component {
         if (this.options.onReject) {
             this.options.onReject.call(this);
         }
+        this._emit('reject');
 
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
 
         if (this.options.hideAfterAction) {
-            this.hide();
+            this.close();
         }
     }
 
@@ -4983,6 +3483,7 @@ class CookieConsent extends Component {
         if (this.options.onCustomize) {
             this.options.onCustomize.call(this, this._preferences);
         }
+        this._emit('customize', this._preferences);
     }
 
     hideCustomize() {
@@ -5016,13 +3517,15 @@ class CookieConsent extends Component {
         if (this.options.onAccept) {
             this.options.onAccept.call(this, this._preferences);
         }
+        this._emit('accept', this._preferences);
 
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
 
         if (this.options.hideAfterAction) {
-            this.hide();
+            this.close();
         }
     }
 
@@ -5055,11 +3558,15 @@ class CookieConsent extends Component {
         if (this.options.onChange) {
             this.options.onChange.call(this, this._state, this._preferences);
         }
+        this._emit('change', this._state, this._preferences);
     }
 
     destroy() {
-        this.hide();
+        this.close();
         this.hideCustomize();
+        super.destroy();
+        // The factory keeps one per page; a destroyed one must not be handed out again.
+        if (elements._instances.get('cookieConsent') === this) elements._instances.delete('cookieConsent');
 
         if (this.element) {
             this.element.remove();
@@ -5069,242 +3576,6 @@ class CookieConsent extends Component {
         if (this._customizeModal) {
             this._customizeModal.remove();
             this._customizeModal = null;
-        }
-    }
-}
-
-// BackToTop Component
-// ============================================
-
-class BackToTop extends Component {
-    static defaults = {
-        showAfter: null,        // Scroll distance to show (null = viewport height)
-        duration: 300,          // Scroll animation duration in ms
-        position: 'bottom-right', // Position: bottom-right, bottom-left
-        offset: 16,             // Distance from edge in px
-        target: null,           // Scroll container to monitor (null = window)
-        zIndex: 1000,
-        onShow: null,
-        onHide: null,
-        onScroll: null
-    };
-
-    constructor(selector, options = {}) {
-        super(selector, options);
-        this._isVisible = false;
-        this._isScrolling = false;
-        this._scrollContainer = null;
-        this._init();
-    }
-
-    _init() {
-        this._setupScrollContainer();  // Setup container FIRST
-        this._setupButton();           // Then button (which calls _applyStyles)
-        this._bindEvents();
-        this._checkVisibility();
-    }
-
-    _setupScrollContainer() {
-        // Set up scroll container from options.target
-        if (this.options.target) {
-            this._scrollContainer = typeof this.options.target === 'string'
-                ? document.querySelector(this.options.target)
-                : this.options.target;
-        }
-        // If no target specified, monitor window scroll (default behavior)
-    }
-
-    _setupButton() {
-        // Use existing button from selector parameter
-        if (this.element) {
-            this._button = this.element;
-            this._created = false;
-        } else {
-            this._button = this._createButton();
-            this._created = true;
-            document.body.appendChild(this._button);
-        }
-
-        if (this._button) {
-            this._applyStyles();
-        }
-    }
-
-    _createButton() {
-        const btn = document.createElement('button');
-        btn.className = 'dm-back-to-top';
-        btn.setAttribute('title', 'Back to top');
-        btn.setAttribute('aria-label', 'Scroll back to top');
-        btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>`;
-        return btn;
-    }
-
-    _applyStyles() {
-        const {position, offset, zIndex} = this.options;
-        const isLeft = position === 'bottom-left';
-
-        const styles = {
-            position: this._scrollContainer ? 'absolute' : 'fixed',
-            bottom: `${offset}px`,
-            [isLeft ? 'left' : 'right']: `${offset}px`,
-            padding: '0.5rem',
-            background: 'var(--dm-surface, #fff)',
-            border: '1px solid var(--dm-border, #dee2e6)',
-            borderRadius: '9999px',
-            cursor: 'pointer',
-            zIndex: zIndex,
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: '0',
-            visibility: 'hidden',
-            transform: 'translateY(10px)',
-            transition: 'opacity 0.2s ease, transform 0.15s ease, visibility 0.2s, background 0.2s ease, box-shadow 0.15s ease'
-        };
-
-        Object.assign(this._button.style, styles);
-
-        // Add hover styles via event listeners
-        this._addEventListener(this._button, 'mouseenter', () => {
-            if (this._isVisible) {
-                this._button.style.background = 'var(--dm-hover-bg, rgba(0,0,0,0.04))';
-                this._button.style.transform = 'translateY(0) scale(1.1)';
-                this._button.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
-            }
-        });
-
-        this._addEventListener(this._button, 'mouseleave', () => {
-            if (this._isVisible) {
-                this._button.style.background = 'var(--dm-surface, #fff)';
-                this._button.style.transform = 'translateY(0)';
-                this._button.style.boxShadow = 'none';
-            }
-        });
-
-        // Style the SVG
-        const svg = this._button.querySelector('svg');
-        if (svg) {
-            svg.style.color = 'var(--dm-text, #212529)';
-        }
-    }
-
-    _bindEvents() {
-        // Attach scroll listener to container or window
-        const scrollTarget = this._scrollContainer || window;
-        this._scrollHandler = () => this._checkVisibility();
-        scrollTarget.addEventListener('scroll', this._scrollHandler, {passive: true});
-
-        // Click handler
-        this._addEventListener(this._button, 'click', (e) => {
-            e.preventDefault();
-            this.scroll();
-        });
-    }
-
-    _checkVisibility() {
-        const threshold = this.options.showAfter ?? (this._scrollContainer ? this._scrollContainer.clientHeight : window.innerHeight);
-        const scrollY = this._scrollContainer
-            ? this._scrollContainer.scrollTop
-            : window.scrollY;
-
-        const shouldShow = scrollY > threshold;
-
-        if (shouldShow && !this._isVisible) {
-            this.show();
-        } else if (!shouldShow && this._isVisible) {
-            this.hide();
-        }
-
-        if (this.options.onScroll) {
-            this.options.onScroll({scrollY, isVisible: this._isVisible});
-        }
-    }
-
-    scroll() {
-        if (this._isScrolling) return this;
-
-        this._isScrolling = true;
-        const start = this._scrollContainer
-            ? this._scrollContainer.scrollTop
-            : window.scrollY;
-        const startTime = performance.now();
-        const duration = this.options.duration;
-
-        // easeOutQuad: fast start, gentle end
-        const easeOutQuad = t => t * (2 - t);
-
-        const animate = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = easeOutQuad(progress);
-
-            if (this._scrollContainer) {
-                this._scrollContainer.scrollTop = start * (1 - eased);
-            } else {
-                window.scrollTo(0, start * (1 - eased));
-            }
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            } else {
-                this._isScrolling = false;
-            }
-        };
-
-        requestAnimationFrame(animate);
-        return this;
-    }
-
-    show() {
-        if (this._isVisible) return this;
-
-        this._isVisible = true;
-        this._button.style.opacity = '1';
-        this._button.style.visibility = 'visible';
-        this._button.style.transform = 'translateY(0)';
-
-        if (this.options.onShow) {
-            this.options.onShow({button: this._button});
-        }
-
-        return this;
-    }
-
-    hide() {
-        if (!this._isVisible) return this;
-
-        this._isVisible = false;
-        this._button.style.opacity = '0';
-        this._button.style.visibility = 'hidden';
-        this._button.style.transform = 'translateY(10px)';
-
-        if (this.options.onHide) {
-            this.options.onHide({button: this._button});
-        }
-
-        return this;
-    }
-
-    toggle() {
-        return this._isVisible ? this.hide() : this.show();
-    }
-
-    isVisible() {
-        return this._isVisible;
-    }
-
-    getButton() {
-        return this._button;
-    }
-
-    destroy() {
-        window.removeEventListener('scroll', this._scrollHandler);
-        super.destroy();
-
-        if (this._created && this._button && this._button.parentNode) {
-            this._button.parentNode.removeChild(this._button);
         }
     }
 }
@@ -5584,6 +3855,8 @@ const Dialog = {
 // ============================================
 
 class ButtonGroup extends Component {
+    static componentName = 'button-group';
+
     static defaults = {
         mode: 'single',           // 'single' (radio) or 'multiple' (checkbox)
         activeClass: 'active',
@@ -5626,9 +3899,7 @@ class ButtonGroup extends Component {
             btn.classList.toggle(this.options.activeClass);
         }
 
-        if (this.options.onChange) {
-            this.options.onChange(this.getValue(), index, btn);
-        }
+        this._fire('change', this.getValue(), index, btn);
     }
 
     /**
@@ -5699,9 +3970,7 @@ class ButtonGroup extends Component {
     selectAll() {
         if (this.options.mode === 'multiple') {
             this.buttons.forEach(btn => btn.classList.add(this.options.activeClass));
-            if (this.options.onChange) {
-                this.options.onChange(this.getValue(), -1, null);
-            }
+            this._fire('change', this.getValue(), -1, null);
         }
         return this;
     }
@@ -5712,365 +3981,8 @@ class ButtonGroup extends Component {
      */
     deselectAll() {
         this.buttons.forEach(btn => btn.classList.remove(this.options.activeClass));
-        if (this.options.onChange) {
-            this.options.onChange(this.getValue(), -1, null);
-        }
+        this._fire('change', this.getValue(), -1, null);
         return this;
-    }
-}
-
-// ============================================
-// Loader Component
-// ============================================
-
-class Loader extends Component {
-    static defaults = {
-        type: 'spinner',        // 'spinner', 'dots', 'pulse', 'bars'
-        size: 'medium',         // 'small', 'medium', 'large', or number (px)
-        color: 'primary',       // 'primary', 'secondary', 'white', or hex
-        overlay: false,         // Show with backdrop overlay
-        text: '',               // Optional loading text
-        centered: true          // Centre in container
-    };
-
-    static sizes = {
-        small: 24,
-        medium: 40,
-        large: 64
-    };
-
-    static _overlayInstances = new Map();
-
-    constructor(selector, options = {}) {
-        super(selector, options);
-        this._visible = false;
-        this._init();
-    }
-
-    _init() {
-        if (!this.element) return;
-        this._render();
-    }
-
-    _getSize() {
-        const {size} = this.options;
-        if (typeof size === 'number') return size;
-        return Loader.sizes[size] || Loader.sizes.medium;
-    }
-
-    _getColor() {
-        const {color} = this.options;
-        const colorMap = {
-            primary: 'var(--dm-primary, #6495ED)',
-            secondary: 'var(--dm-secondary, #6c757d)',
-            success: 'var(--dm-success, #28a745)',
-            danger: 'var(--dm-danger, #dc3545)',
-            warning: 'var(--dm-warning, #ffc107)',
-            info: 'var(--dm-info, #17a2b8)',
-            white: '#ffffff',
-            dark: 'var(--dm-gray-800, #343a40)'
-        };
-        return colorMap[color] || color;
-    }
-
-    _render() {
-        const size = this._getSize();
-        const color = this._getColor();
-        const {type, overlay, text, centered} = this.options;
-
-        // Create wrapper
-        this._wrapper = document.createElement('div');
-        this._wrapper.className = 'dm-loader';
-        this._wrapper.setAttribute('role', 'status');
-        this._wrapper.setAttribute('aria-live', 'polite');
-
-        // Base wrapper styles
-        const wrapperStyles = {
-            display: 'inline-flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.75rem'
-        };
-
-        if (overlay) {
-            Object.assign(wrapperStyles, {
-                position: 'absolute',
-                inset: '0',
-                background: 'rgba(0, 0, 0, 0.5)',
-                zIndex: '1000'
-            });
-            this.element.style.position = 'relative';
-        } else if (centered) {
-            Object.assign(wrapperStyles, {
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)'
-            });
-            if (getComputedStyle(this.element).position === 'static') {
-                this.element.style.position = 'relative';
-            }
-        }
-
-        Object.assign(this._wrapper.style, wrapperStyles);
-
-        // Create spinner element
-        this._spinner = document.createElement('div');
-        this._spinner.className = `dm-loader-${type}`;
-
-        // Apply type-specific rendering
-        switch (type) {
-            case 'dots':
-                this._renderDots(size, color);
-                break;
-            case 'pulse':
-                this._renderPulse(size, color);
-                break;
-            case 'bars':
-                this._renderBars(size, color);
-                break;
-            case 'spinner':
-            default:
-                this._renderSpinner(size, color);
-        }
-
-        this._wrapper.appendChild(this._spinner);
-
-        // Add text if provided
-        if (text) {
-            this._textEl = document.createElement('span');
-            this._textEl.className = 'dm-loader-text';
-            this._textEl.textContent = text;
-            this._textEl.style.cssText = `
-                color: ${overlay ? '#fff' : 'var(--dm-text, #212529)'};
-                font-size: var(--dm-text-sm, 0.875rem);
-            `;
-            this._wrapper.appendChild(this._textEl);
-        }
-
-        // Add to DOM but hidden initially
-        this._wrapper.style.display = 'none';
-        this.element.appendChild(this._wrapper);
-    }
-
-    _renderSpinner(size, color) {
-        this._spinner.style.cssText = `
-            width: ${size}px;
-            height: ${size}px;
-            border: ${Math.max(2, size / 10)}px solid ${color};
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: dm-loader-spin 0.8s linear infinite;
-        `;
-
-        this._injectKeyframes('dm-loader-spin', `
-            @keyframes dm-loader-spin {
-                to { transform: rotate(360deg); }
-            }
-        `);
-    }
-
-    _renderDots(size, color) {
-        const dotSize = size / 4;
-        this._spinner.style.cssText = `
-            display: flex;
-            gap: ${dotSize / 2}px;
-        `;
-
-        for (let i = 0; i < 3; i++) {
-            const dot = document.createElement('span');
-            dot.style.cssText = `
-                width: ${dotSize}px;
-                height: ${dotSize}px;
-                background: ${color};
-                border-radius: 50%;
-                animation: dm-loader-bounce 1.4s ease-in-out ${i * 0.16}s infinite both;
-            `;
-            this._spinner.appendChild(dot);
-        }
-
-        this._injectKeyframes('dm-loader-bounce', `
-            @keyframes dm-loader-bounce {
-                0%, 80%, 100% { transform: scale(0); }
-                40% { transform: scale(1); }
-            }
-        `);
-    }
-
-    _renderPulse(size, color) {
-        this._spinner.style.cssText = `
-            width: ${size}px;
-            height: ${size}px;
-            background: ${color};
-            border-radius: 50%;
-            animation: dm-loader-pulse 1.2s ease-in-out infinite;
-        `;
-
-        this._injectKeyframes('dm-loader-pulse', `
-            @keyframes dm-loader-pulse {
-                0% { transform: scale(0); opacity: 1; }
-                100% { transform: scale(1); opacity: 0; }
-            }
-        `);
-    }
-
-    _renderBars(size, color) {
-        const barWidth = size / 6;
-        const barHeight = size;
-
-        this._spinner.style.cssText = `
-            display: flex;
-            align-items: center;
-            gap: ${barWidth / 2}px;
-            height: ${barHeight}px;
-        `;
-
-        for (let i = 0; i < 4; i++) {
-            const bar = document.createElement('span');
-            bar.style.cssText = `
-                width: ${barWidth}px;
-                height: 100%;
-                background: ${color};
-                border-radius: 2px;
-                animation: dm-loader-bars 1s ease-in-out ${i * 0.1}s infinite;
-            `;
-            this._spinner.appendChild(bar);
-        }
-
-        this._injectKeyframes('dm-loader-bars', `
-            @keyframes dm-loader-bars {
-                0%, 40%, 100% { transform: scaleY(0.4); }
-                20% { transform: scaleY(1); }
-            }
-        `);
-    }
-
-    _injectKeyframes(name, css) {
-        if (document.getElementById(`dm-loader-${name}`)) return;
-
-        const style = document.createElement('style');
-        style.id = `dm-loader-${name}`;
-        style.textContent = css;
-        document.head.appendChild(style);
-    }
-
-    show() {
-        if (this._wrapper) {
-            this._wrapper.style.display = 'inline-flex';
-            this._visible = true;
-        }
-        return this;
-    }
-
-    hide() {
-        if (this._wrapper) {
-            this._wrapper.style.display = 'none';
-            this._visible = false;
-        }
-        return this;
-    }
-
-    toggle() {
-        return this._visible ? this.hide() : this.show();
-    }
-
-    isVisible() {
-        return this._visible;
-    }
-
-    setText(text) {
-        if (this._textEl) {
-            this._textEl.textContent = text;
-        } else if (text && this._wrapper) {
-            this._textEl = document.createElement('span');
-            this._textEl.className = 'dm-loader-text';
-            this._textEl.textContent = text;
-            this._textEl.style.cssText = `
-                color: ${this.options.overlay ? '#fff' : 'var(--dm-text, #212529)'};
-                font-size: var(--dm-text-sm, 0.875rem);
-            `;
-            this._wrapper.appendChild(this._textEl);
-        }
-        return this;
-    }
-
-    destroy() {
-        if (this._wrapper) {
-            this._wrapper.remove();
-        }
-        super.destroy();
-    }
-
-    // Static convenience methods
-    static show(selector, options = {}) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-
-        if (!el) return null;
-
-        let instance = Loader._overlayInstances.get(el);
-        if (!instance) {
-            instance = new Loader(el, options);
-            Loader._overlayInstances.set(el, instance);
-        }
-
-        instance.show();
-        return instance;
-    }
-
-    static hide(selector) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-
-        const instance = Loader._overlayInstances.get(el);
-        if (instance) {
-            instance.hide();
-        }
-    }
-
-    static fullscreen(text = 'Loading...', options = {}) {
-        let container = document.getElementById('dm-loader-fullscreen');
-
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'dm-loader-fullscreen';
-            container.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.7);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            `;
-            document.body.appendChild(container);
-        }
-
-        const instance = new Loader(container, {
-            type: options.type || 'spinner',
-            size: options.size || 'large',
-            color: options.color || 'white',
-            text,
-            overlay: false,
-            centered: false
-        });
-
-        instance.show();
-        instance._fullscreenContainer = container;
-
-        // Override destroy to also remove the container
-        const originalDestroy = instance.destroy.bind(instance);
-        instance.destroy = () => {
-            originalDestroy();
-            if (container.parentNode) {
-                container.remove();
-            }
-        };
-
-        return instance;
     }
 }
 
@@ -6079,6 +3991,8 @@ class Loader extends Component {
 // ============================================
 
 class Breadcrumbs extends Component {
+    static componentName = 'breadcrumbs';
+
     static defaults = {
         items: [],
         separator: '/',        // '/', '>', '→', 'chevron', or custom HTML
@@ -6159,10 +4073,8 @@ class Breadcrumbs extends Component {
             const link = e.target.closest('.dm-breadcrumbs-link');
             if (link) {
                 const index = parseInt(link.dataset.index, 10);
-                if (this.options.onChange) {
-                    e.preventDefault();
-                    this.options.onChange(this.options.items[index], index, e);
-                }
+                if (this.options.onChange) e.preventDefault();
+                this._fire('change', this.options.items[index], index, e);
             }
         });
     }
@@ -6204,6 +4116,8 @@ class Breadcrumbs extends Component {
 // ============================================
 
 class Navbar extends Component {
+    static componentName = 'navbar';
+
     static defaults = {
         brand: null,            // { text, logo, url }
         items: [],              // [{ text, url, active, items (for dropdown) }]
@@ -6386,10 +4300,8 @@ class Navbar extends Component {
             const link = e.target.closest('.navbar-link:not(.navbar-dropdown-toggle)');
             if (link) {
                 const index = parseInt(link.dataset.index, 10);
-                if (this.options.onItemClick) {
-                    e.preventDefault();
-                    this.options.onItemClick(this.options.items[index], index, e);
-                }
+                if (this.options.onItemClick) e.preventDefault();
+                this._fire('itemclick', this.options.items[index], index, e);
                 // Collapse on mobile after click
                 if (window.innerWidth < this.options.collapseAt) {
                     this.collapse();
@@ -6398,8 +4310,8 @@ class Navbar extends Component {
 
             // Dropdown item clicks (resolved by data-path, any depth)
             const dropdownItem = e.target.closest('.navbar-dropdown-item');
-            if (dropdownItem && this.options.onItemClick) {
-                e.preventDefault();
+            if (dropdownItem) {
+                if (this.options.onItemClick) e.preventDefault();
                 const path = dropdownItem.dataset.path;
                 const parts = path
                     ? path.split('.').map(n => parseInt(n, 10))
@@ -6409,7 +4321,7 @@ class Navbar extends Component {
                 const subIndex = parts[parts.length - 1];
                 const item = parent.items[subIndex];
                 const parentItem = parent.items === this.options.items ? null : parent;
-                this.options.onItemClick(item, subIndex, e, parentItem);
+                this._fire('itemclick', item, subIndex, e, parentItem);
             }
         });
 
@@ -6622,6 +4534,8 @@ class Navbar extends Component {
 // ============================================
 
 class Sidebar extends Component {
+    static componentName = 'sidebar';
+
     static defaults = {
         position: 'left',           // 'left', 'right'
         fixed: true,                // Fixed or static positioning
@@ -6650,6 +4564,8 @@ class Sidebar extends Component {
         persistCollapsed: false,    // Save collapsed state to localStorage
         persistCollapseKey: null,   // localStorage key for collapsed state
         onItemClick: null,          // Click callback (item, index, event)
+        onBeforeOpen: null,         // return false to keep it closed
+        onBeforeClose: null,        // return false to keep it open
         onToggle: null,             // Toggle callback (isOpen)
         onExpand: null,             // Submenu expand callback (item, depth)
         onCollapse: null            // Submenu collapse callback (item, depth)
@@ -6889,9 +4805,7 @@ class Sidebar extends Component {
                     this.setActive(item.section);
                 }
 
-                if (this.options.onItemClick) {
-                    this.options.onItemClick(item, path, e);
-                }
+                this._fire('itemclick', item, path, e);
 
                 // Close sidebar on mobile after click
                 if (window.innerWidth < this.options.collapseAt) {
@@ -6942,17 +4856,13 @@ class Sidebar extends Component {
             this._collapseSubmenu(itemElement, submenu);
             this._expandedItems.delete(path);
 
-            if (this.options.onCollapse) {
-                this.options.onCollapse(item, depth);
-            }
+            this._fire('collapse', item, depth);
         } else {
             // Expand
             this._expandSubmenu(itemElement, submenu);
             this._expandedItems.add(path);
 
-            if (this.options.onExpand) {
-                this.options.onExpand(item, depth);
-            }
+            this._fire('expand', item, depth);
         }
 
         this._saveExpandedState();
@@ -7151,6 +5061,7 @@ class Sidebar extends Component {
 
     open() {
         if (this._isOpen) return this;
+        if (this._fire('beforeopen') === false) return this;
 
         this._isOpen = true;
         this.element.classList.add('open');
@@ -7167,15 +5078,14 @@ class Sidebar extends Component {
         // Apply push to content element
         this._applyPush();
 
-        if (this.options.onToggle) {
-            this.options.onToggle(true);
-        }
+        this._fire('toggle', true);
 
         return this;
     }
 
     close() {
         if (!this._isOpen) return this;
+        if (!this._mayClose()) return this;
 
         this._isOpen = false;
         this.element.classList.remove('open');
@@ -7189,9 +5099,7 @@ class Sidebar extends Component {
         // Remove push from content element
         this._removePush();
 
-        if (this.options.onToggle) {
-            this.options.onToggle(false);
-        }
+        this._fire('toggle', false);
 
         return this;
     }
@@ -7203,6 +5111,12 @@ class Sidebar extends Component {
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     collapse() {
         if (!this.options.collapsibleDesktop || this._isCollapsed) return this;
@@ -7217,9 +5131,7 @@ class Sidebar extends Component {
         // Remove content push
         this._removePush();
 
-        if (this.options.onCollapse) {
-            this.options.onCollapse();
-        }
+        this._fire('collapse');
 
         return this;
     }
@@ -7241,9 +5153,7 @@ class Sidebar extends Component {
         const collapseIcon = this.options.position === 'right' ? 'chevron-right' : 'chevron-left';
         this._updateToggleIcon(collapseIcon);
 
-        if (this.options.onExpand) {
-            this.options.onExpand();
-        }
+        this._fire('expand');
 
         return this;
     }
@@ -7297,14 +5207,6 @@ class Sidebar extends Component {
                 window.Domma.icons.scan(this._toggle);
             }
         }
-    }
-
-    destroy() {
-        // Clean up floating toggle
-        this._removeFloatingToggle();
-
-        // Call parent destroy
-        super.destroy();
     }
 
     toggleCollapse() {
@@ -7395,6 +5297,9 @@ class Sidebar extends Component {
         }
 
         this._removeOverlay();
+        // Clean up floating toggle (a second destroy() above this one used to do it,
+        // and was shadowed by this one)
+        this._removeFloatingToggle();
         super.destroy();
     }
 }
@@ -7404,6 +5309,8 @@ class Sidebar extends Component {
 // ============================================
 
 class Footer extends Component {
+    static componentName = 'footer';
+
     static defaults = {
         variant: 'light',           // 'light', 'dark', 'transparent'
         layout: 'simple',           // 'simple', 'columns', 'minimal'
@@ -7648,6 +5555,8 @@ class Footer extends Component {
 // ============================================
 
 class Autocomplete extends Component {
+    static componentName = 'autocomplete';
+
     static defaults = {
         data: [],
         dataSource: null,
@@ -7666,7 +5575,9 @@ class Autocomplete extends Component {
         clearOnSelect: false,
         onSelect: null,
         onChange: null,
+        onBeforeOpen: null,
         onOpen: null,
+        onBeforeClose: null,
         onClose: null,
         onFilter: null
     };
@@ -7805,9 +5716,7 @@ class Autocomplete extends Component {
         }
 
         // Trigger onChange callback
-        if (this.options.onChange) {
-            this.options.onChange(value, e);
-        }
+        this._fire('change', value, e);
 
         // Check minimum characters
         if (value.length < this.options.minChars) {
@@ -7895,9 +5804,7 @@ class Autocomplete extends Component {
         }
 
         // Trigger onFilter callback
-        if (this.options.onFilter) {
-            results = this.options.onFilter(results, query) || results;
-        }
+        results = this._fire('filter', results, query) || results;
 
         this._filteredData = results;
         this._renderResults(query);
@@ -8013,9 +5920,7 @@ class Autocomplete extends Component {
         this.element.value = value;
 
         // Trigger onSelect callback
-        if (this.options.onSelect) {
-            this.options.onSelect(item, {target: this.element});
-        }
+        this._fire('select', item, {target: this.element});
 
         // Clear on select if option enabled
         if (this.options.clearOnSelect) {
@@ -8075,30 +5980,28 @@ class Autocomplete extends Component {
 
     open() {
         if (this._isOpen) return this;
+        if (this._fire('beforeopen') === false) return this;
 
         this._isOpen = true;
         this._dropdown.style.display = 'block';
         this.element.setAttribute('aria-expanded', 'true');
         this._updatePosition();
 
-        if (this.options.onOpen) {
-            this.options.onOpen();
-        }
+        this._fire('open');
 
         return this;
     }
 
     close() {
         if (!this._isOpen) return this;
+        if (!this._mayClose()) return this;
 
         this._isOpen = false;
         this._dropdown.style.display = 'none';
         this.element.setAttribute('aria-expanded', 'false');
         this._activeIndex = -1;
 
-        if (this.options.onClose) {
-            this.options.onClose();
-        }
+        this._fire('close');
 
         return this;
     }
@@ -8110,6 +6013,12 @@ class Autocomplete extends Component {
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     setValue(value) {
         this.element.value = value;
@@ -8145,7 +6054,7 @@ class Autocomplete extends Component {
     }
 
     destroy() {
-        this.close();
+        this._forcedClose();
         if (this._dropdown && this._dropdown.parentNode) {
             this._dropdown.parentNode.removeChild(this._dropdown);
         }
@@ -8165,6 +6074,8 @@ class Autocomplete extends Component {
 // ============================================
 
 class Pillbox extends Component {
+    static componentName = 'pillbox';
+
     static defaults = {
         data: [],
         value: [],
@@ -8182,6 +6093,10 @@ class Pillbox extends Component {
         maxItemsMessage: 'Maximum {max} items allowed',
         duplicateMessage: 'Item already exists',
         noResultsMessage: 'No results found',
+        onBeforeOpen: null,
+        onOpen: null,
+        onBeforeClose: null,
+        onClose: null,
         onAdd: null,
         onRemove: null,
         onChange: null,
@@ -8525,27 +6440,21 @@ class Pillbox extends Component {
         // Validate
         const error = this._validate(text);
         if (error) {
-            if (this.options.onValidationError) {
-                this.options.onValidationError(error, text);
-            }
+            this._fire('validationerror', error, text);
             return;
         }
 
         this._addPill(text, text);
         this._input.value = '';
 
-        if (this.options.onCreate) {
-            this.options.onCreate(text);
-        }
+        this._fire('create', text);
     }
 
     _addPill(value, label) {
         // Validate
         const error = this._validate(value);
         if (error) {
-            if (this.options.onValidationError) {
-                this.options.onValidationError(error, value);
-            }
+            this._fire('validationerror', error, value);
             return;
         }
 
@@ -8592,9 +6501,7 @@ class Pillbox extends Component {
         }
 
         // Trigger onAdd
-        if (this.options.onAdd) {
-            this.options.onAdd(value, pill);
-        }
+        this._fire('add', value, pill);
 
         // Trigger onChange
         this._triggerChange();
@@ -8623,9 +6530,7 @@ class Pillbox extends Component {
         }
 
         // Trigger onRemove
-        if (this.options.onRemove) {
-            this.options.onRemove(value, pillElement);
-        }
+        this._fire('remove', value, pillElement);
 
         // Trigger onChange
         this._triggerChange();
@@ -8634,9 +6539,7 @@ class Pillbox extends Component {
     _validate(value) {
         // Check max items
         if (this.options.maxItems && this._pills.length >= this.options.maxItems) {
-            if (this.options.onMaxReached) {
-                this.options.onMaxReached();
-            }
+            this._fire('maxreached');
             return this.options.maxItemsMessage.replace('{max}', this.options.maxItems);
         }
 
@@ -8677,37 +6580,49 @@ class Pillbox extends Component {
         }
 
         // Trigger onChange callback
-        if (this.options.onChange) {
-            this.options.onChange(values);
-        }
+        this._fire('change', values);
     }
 
     // Public methods
 
     open() {
         if (!this._dropdown || this._isOpen) return this;
+        if (this._fire('beforeopen') === false) return this;
 
         this._isOpen = true;
         this._dropdown.style.display = 'block';
         this._input.setAttribute('aria-expanded', 'true');
 
+        this._fire('open');
         return this;
     }
 
     close() {
         if (!this._dropdown || !this._isOpen) return this;
+        if (!this._mayClose()) return this;
 
         this._isOpen = false;
         this._dropdown.style.display = 'none';
         this._input.setAttribute('aria-expanded', 'false');
         this._activeIndex = -1;
 
+        this._fire('close');
         return this;
+    }
+
+    toggle() {
+        return this._isOpen ? this.close() : this.open();
     }
 
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     getValue() {
         return this._pills.map(p => p.value);
@@ -8788,7 +6703,7 @@ class Pillbox extends Component {
     }
 
     destroy() {
-        this.close();
+        this._forcedClose();
         if (this._wrapper && this._wrapper.parentNode) {
             this._wrapper.parentNode.removeChild(this._wrapper);
         }
@@ -8802,20 +6717,12 @@ class Pillbox extends Component {
 }
 
 // ============================================
-// Editor Component
-// ============================================
-
-/**
- * Universal Editor Component
- * Supports three modes: text, rich (WYSIWYG), and code
- * Features: Model integration, autosave, image paste, code blocks, embeds
- */
-
-// ============================================
 // Slideover Component
 // ============================================
 
 class Slideover extends Component {
+    static componentName = 'slideover';
+
     /**
      * Open slideovers, oldest first. Escape closes only the last one: every
      * open slideover listens on document, so without this one key press
@@ -8857,7 +6764,9 @@ class Slideover extends Component {
         bodyClass: '',
         footerClass: '',
         customSizes: {},
+        onBeforeOpen: null,     // return false to keep it closed
         onOpen: null,
+        onBeforeClose: null,    // return false to keep it open
         onClose: null,
         onClosed: null
     };
@@ -9053,7 +6962,8 @@ class Slideover extends Component {
         if (!this._backdrop) return;
         this._backdrop.style.display = 'block';
         requestAnimationFrame(() => {
-            this._backdrop.style.opacity = '1';
+            // destroy() in the same frame takes the backdrop away
+            if (this._backdrop) this._backdrop.style.opacity = '1';
         });
     }
 
@@ -9086,6 +6996,7 @@ class Slideover extends Component {
 
         const el = this.element;
         if (!el) return this;
+        if (this._fire('beforeopen', this) === false) return this;
 
         // Create backdrop if needed
         if (this.options.backdrop && !this._backdrop) {
@@ -9119,9 +7030,7 @@ class Slideover extends Component {
 
         // Call onOpen callback after animation
         setTimeout(() => {
-            if (this.options.onOpen) {
-                this.options.onOpen(this);
-            }
+            this._fire('open', this);
             // Create form if schema exists and form hasn't been created yet
             this._createForm();
         }, this.options.animationDuration);
@@ -9216,11 +7125,10 @@ class Slideover extends Component {
 
         const el = this.element;
         if (!el) return this;
+        if (!this._mayClose(this)) return this;
 
         // Call onClose callback
-        if (this.options.onClose) {
-            this.options.onClose(this);
-        }
+        this._fire('close', this);
 
         // Hide slideover with animation
         this._applyPosition(); // Reset to closed position
@@ -9262,9 +7170,7 @@ class Slideover extends Component {
             this._isOpen = false;
 
             // Call onClosed callback
-            if (this.options.onClosed) {
-                this.options.onClosed(this);
-            }
+            this._fire('closed', this);
         }, this.options.animationDuration);
 
         return this;
@@ -9277,6 +7183,12 @@ class Slideover extends Component {
     isOpen() {
         return this._isOpen;
     }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     setTitle(title) {
         const titleEl = this.element.querySelector('.dm-slideover-header .dm-slideover-title');
@@ -9313,7 +7225,7 @@ class Slideover extends Component {
     }
 
     destroy() {
-        this.close();
+        this._forcedClose();
 
         // Remove backdrop
         if (this._backdrop) {
@@ -9396,148 +7308,6 @@ class Slideover extends Component {
 }
 
 // ============================================
-// Timeline Component  
-// ============================================
-
-/**
- * Timeline Component - Data-driven timeline with multiple layouts
- * Features: Vertical/horizontal layouts, responsive design, animations, theming
- */
-class Timeline extends Component {
-    static defaults = {
-        items: [],
-        layout: 'vertical', // 'vertical', 'horizontal', 'centered'
-        animation: true,
-        animationDelay: 100,
-        responsive: true,
-        clickable: false,
-        theme: 'default', // 'default', 'minimal', 'corporate'
-        onItemClick: null,
-        yearWidth: '80px',
-        contentMaxWidth: '600px'
-    };
-
-    constructor(selector, options = {}) {
-        super(selector, options);
-        this._init();
-    }
-
-    _init() {
-        if (!this.element) return;
-
-        this.element.classList.add('dm-timeline', `dm-timeline-${this.options.layout}`);
-
-        if (this.options.theme !== 'default') {
-            this.element.classList.add(`dm-timeline-${this.options.theme}`);
-        }
-
-        this._renderItems();
-        this._attachEvents();
-
-        if (this.options.animation) {
-            this._animateItems();
-        }
-    }
-
-    _renderItems() {
-        const items = this.options.items;
-        if (!Array.isArray(items) || items.length === 0) return;
-
-        this.element.innerHTML = '';
-
-        items.forEach((item, index) => {
-            const itemEl = document.createElement('div');
-            itemEl.className = 'dm-timeline-item';
-            itemEl.setAttribute('data-index', index);
-
-            if (this.options.animation) {
-                itemEl.style.opacity = '0';
-                itemEl.style.transform = 'translateY(20px)';
-                itemEl.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            }
-
-            itemEl.innerHTML = `
-                <div class="dm-timeline-year">${this._escapeHtml(item.year || '')}</div>
-                <div class="dm-timeline-content">
-                    <h4 class="dm-timeline-title">${this._escapeHtml(item.title || '')}</h4>
-                    <p class="dm-timeline-description">${this._escapeHtml(item.description || '')}</p>
-                </div>
-            `;
-
-            this.element.appendChild(itemEl);
-        });
-    }
-
-    _attachEvents() {
-        if (!this.options.clickable) return;
-
-        this._addEventListener(this.element, 'click', (e) => {
-            const itemEl = e.target.closest('.dm-timeline-item');
-            if (itemEl) {
-                const index = parseInt(itemEl.getAttribute('data-index'), 10);
-                const item = this.options.items[index];
-                if (item && this.options.onItemClick) {
-                    this.options.onItemClick(item, index, itemEl);
-                }
-            }
-        });
-    }
-
-    _animateItems() {
-        const items = this.element.querySelectorAll('.dm-timeline-item');
-        items.forEach((item, index) => {
-            setTimeout(() => {
-                item.style.opacity = '1';
-                item.style.transform = 'translateY(0)';
-            }, index * this.options.animationDelay);
-        });
-    }
-
-    _escapeHtml(text) {
-
-        return escapeHtml(text);
-    }
-
-    // Public API methods
-    setItems(items) {
-        this.options.items = items;
-        this._renderItems();
-        if (this.options.animation) {
-            this._animateItems();
-        }
-        return this;
-    }
-
-    addItem(item) {
-        this.options.items.push(item);
-        this._renderItems();
-        if (this.options.animation) {
-            this._animateItems();
-        }
-        return this;
-    }
-
-    getItems() {
-        return [...this.options.items];
-    }
-
-    setLayout(layout) {
-        this.element.classList.remove(`dm-timeline-${this.options.layout}`);
-        this.options.layout = layout;
-        this.element.classList.add(`dm-timeline-${layout}`);
-        return this;
-    }
-
-    refresh() {
-        this._renderItems();
-        if (this.options.animation) {
-            this._animateItems();
-        }
-        return this;
-    }
-}
-
-// ============================================
 // Progression Component (Timeline + Roadmap)
 // ============================================
 
@@ -9548,6 +7318,8 @@ class Timeline extends Component {
  * Backwards compatible with Timeline component
  */
 class Progression extends Component {
+    static componentName = 'progression';
+
     static defaults = {
         // Core options (shared)
         mode: 'timeline',           // 'timeline' | 'roadmap'
@@ -9767,9 +7539,7 @@ class Progression extends Component {
             if (itemEl) {
                 const index = parseInt(itemEl.getAttribute('data-index'), 10);
                 const item = this.options.items[index];
-                if (item && this.options.onItemClick) {
-                    this.options.onItemClick(item, index, itemEl);
-                }
+                if (item) this._fire('itemclick', item, index, itemEl);
             }
         });
 
@@ -9966,9 +7736,7 @@ class Progression extends Component {
             const oldStatus = this.options.items[index].status;
             this.options.items[index].status = status;
 
-            if (this.options.onStatusChange) {
-                this.options.onStatusChange(this.options.items[index], oldStatus, status);
-            }
+            this._fire('statuschange', this.options.items[index], oldStatus, status);
 
             this._renderItems();
             if (this.options.animation) {
@@ -10031,6 +7799,8 @@ class Progression extends Component {
 // ============================================
 
 class Signature extends Component {
+    static componentName = 'signature';
+
     static defaults = {
         width: null,
         height: 180,
@@ -10248,7 +8018,7 @@ class Signature extends Component {
         };
         this._undoneStrokes = [];
         this._updateState();
-        if (typeof this.options.onBegin === 'function') this.options.onBegin(this._currentStroke);
+        this._fire('begin', this._currentStroke);
     }
 
     _onPointerMove(e) {
@@ -10272,8 +8042,8 @@ class Signature extends Component {
         this._redraw();
         this._updateState();
         this._updateHiddenInput();
-        if (typeof this.options.onEnd === 'function' && stroke) this.options.onEnd(stroke);
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        if (stroke) this._fire('end', stroke);
+        this._fire('change', this._hiddenInput.value);
     }
 
     _getPoint(e) {
@@ -10418,7 +8188,7 @@ class Signature extends Component {
             ctx.restore();
         }
         this._updateHiddenInput();
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        this._fire('change', this._hiddenInput.value);
     }
 
     _updateHiddenInput() {
@@ -10489,8 +8259,8 @@ class Signature extends Component {
         if (this._hiddenInput) this._hiddenInput.value = '';
         if (!silent) {
             if (this._statusEl) this._statusEl.textContent = 'Signature cleared';
-            if (typeof this.options.onClear === 'function') this.options.onClear();
-            if (typeof this.options.onChange === 'function') this.options.onChange('');
+            this._fire('clear');
+            this._fire('change', '');
         }
     }
 
@@ -10503,7 +8273,7 @@ class Signature extends Component {
         this._redraw();
         this._updateState();
         this._updateHiddenInput();
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        this._fire('change', this._hiddenInput.value);
     }
 
     /**
@@ -10515,7 +8285,7 @@ class Signature extends Component {
         this._redraw();
         this._updateState();
         this._updateHiddenInput();
-        if (typeof this.options.onChange === 'function') this.options.onChange(this._hiddenInput.value);
+        this._fire('change', this._hiddenInput.value);
     }
 
     /**
@@ -10676,6 +8446,8 @@ function dpSameDay(a, b) {
  * then no longer the value.
  */
 class DatePicker extends Component {
+    static componentName = 'date-picker';
+
     static defaults = {
         value: null,               // ISO string, Date, or null to read the input
         format: 'YYYY-MM-DD',      // what the input SHOWS
@@ -10696,7 +8468,9 @@ class DatePicker extends Component {
         weekNumbers: false,
         placeholder: null,
         onChange: null,
+        onBeforeOpen: null,        // return false to keep it closed
         onOpen: null,
+        onBeforeClose: null,       // return false to keep it open
         onClose: null
     };
 
@@ -10793,9 +8567,7 @@ class DatePicker extends Component {
                 this.element.dispatchEvent(new Event('change', {bubbles: true}));
                 this._suppress = false;
             }
-            if (typeof this.options.onChange === 'function') {
-                this.options.onChange(this.getValue(), this.getDate(), this);
-            }
+            this._fire('change', this.getValue(), this.getDate(), this);
         }
         return this;
     }
@@ -11102,6 +8874,7 @@ class DatePicker extends Component {
     /** @returns {this} */
     open() {
         if (this._isOpen || this.options.inline || this.element.disabled) return this;
+        if (this._fire('beforeopen', this) === false) return this;
 
         if (DatePicker._open && DatePicker._open !== this) DatePicker._open.close();
 
@@ -11133,7 +8906,7 @@ class DatePicker extends Component {
         window.addEventListener('resize', this._onReposition);
         window.addEventListener('scroll', this._onReposition, true);
 
-        if (typeof this.options.onOpen === 'function') this.options.onOpen(this);
+        this._fire('open', this);
         return this;
     }
 
@@ -11143,6 +8916,7 @@ class DatePicker extends Component {
      */
     close({focus = false} = {}) {
         if (!this._isOpen || this.options.inline) return this;
+        if (!this._mayClose(this)) return this;
 
         document.removeEventListener('mousedown', this._onOutside, true);
         window.removeEventListener('resize', this._onReposition);
@@ -11154,7 +8928,7 @@ class DatePicker extends Component {
         this.element.setAttribute('aria-expanded', 'false');
         if (focus) this.element.focus();
 
-        if (typeof this.options.onClose === 'function') this.options.onClose(this);
+        this._fire('close', this);
         return this;
     }
 
@@ -11162,6 +8936,17 @@ class DatePicker extends Component {
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
+
+    /** @returns {boolean} */
+    isOpen() {
+        return this._isOpen;
+    }
+
+    // Permanent aliases. They look open/close up by name at call time, so a guard
+    // patched onto instance.close still runs.
+    show(...args) { return this.open(...args); }
+    hide(...args) { return this.close(...args); }
+    isVisible() { return this.isOpen(); }
 
     _position() {
         const panel = this._panel;
@@ -11250,7 +9035,7 @@ class DatePicker extends Component {
     // ---- lifecycle ------------------------------------------------------
 
     destroy() {
-        this.close();
+        this._forcedClose();
         this._panel?.remove();
         this._panel = null;
         super.destroy();
@@ -11265,29 +9050,26 @@ export const elements = {
     _instances: new Map(),
 
     card(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const result = createCardWrapper(selector, options);
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-        return result;
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = reuse(el, 'card', options) || new Card(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     modal(selectorOrOptions, options = {}) {
-        // Detect factory mode: first arg is plain object (not string, not DOM element)
-        // Use Web Component wrappers (maintains backwards compatibility)
-        if (typeof selectorOrOptions === 'object' &&
-          !selectorOrOptions.nodeType &&
-          typeof selectorOrOptions !== 'string') {
-            return ModalFactoryWrapper.createModal(selectorOrOptions);
+        defineTags();
+        // Factory mode: a plain options object (not a selector, element or collection)
+        if (selectorOrOptions && typeof selectorOrOptions === 'object' && !selectorOrOptions.nodeType
+            && typeof selectorOrOptions.length !== 'number') {
+            return createModal(selectorOrOptions);
         }
-
-        // Traditional selector mode
-        const result = createModalWrapper(selectorOrOptions, options);
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-        return result;
+        const el = resolveElement(selectorOrOptions);
+        if (!el) return null;
+        const instance = reuse(el, 'modal', options) || new Modal(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     tabs(selector, options = {}) {
@@ -11307,45 +9089,30 @@ export const elements = {
     },
 
     tooltip(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const result = createTooltipWrapper(selector, options);
-
-        // Store instances for lifecycle management
-        if (Array.isArray(result)) {
-            result.forEach(instance => {
-                if (instance.element) {
-                    this._instances.set(instance.element, instance);
-                }
-            });
-        } else if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-
-        return result;
+        defineTags();
+        // Every match gets a tooltip; the first is returned, with all() for the rest
+        const list = tooltipsFor(resolveAll(selector), options);
+        for (const instance of list) this._instances.set(instance.element, instance);
+        // null on no match and the array shape (with a warning) until 1.0, as before
+        return list.length ? firstOfMatches(list, 'tooltip') : null;
     },
 
     badge(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        // Note: Badge wrapper doesn't support multiple elements like the original
-        // It wraps a single element at a time
-        const result = createBadgeWrapper(selector, options);
-
-        // Store instance for lifecycle management
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-
-        return result;
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = reuse(el, 'badge', options) || new Badge(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     numberBadge(selector, options = {}) {
-        const result = createNumberBadgeWrapper(selector, options);
-
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-
-        return result;
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = reuse(el, 'number-badge', options) || new NumberBadge(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     dropdown(selector, options = {}) {
@@ -11375,14 +9142,11 @@ export const elements = {
     },
 
     backToTop(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const instance = createBackToTopWrapper(selector, options);
-
-        // Store instance for lifecycle management
-        if (instance && instance.element) {
-            this._instances.set('backToTop', instance);
-        }
-
+        defineTags();
+        // A button / link selector is used as the button; anything else adds one to the body
+        const instance = new BackToTop(selector, options);
+        this._instances.set(instance.element, instance);
+        this._instances.set('backToTop', instance);
         return instance;
     },
 
@@ -11400,81 +9164,61 @@ export const elements = {
             instances.push(instance);
         }
 
-        return instances.length === 1 ? instances[0] : instances;
+        return firstOfMatches(instances, 'buttonGroup');
     },
 
     loader(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const instance = createLoaderWrapper(selector, options);
-
-        // Store instance for lifecycle management
-        if (instance && instance.element) {
-            this._instances.set(instance.element, instance);
-        }
-
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = new Loader(el, options);
+        this._instances.set(el, instance);
         return instance;
     },
 
     // Static loader methods for convenience
     showLoader(selector, options = {}) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-
+        const el = resolveElement(selector);
         if (!el) return null;
-
-        // Check if loader already exists
-        let instance = this._instances.get(el);
-        if (!instance) {
-            instance = createLoaderWrapper(el, { ...options, visible: true });
-            this._instances.set(el, instance);
-        } else {
-            instance.show();
+        const existing = instanceOf(el, 'loader');
+        if (existing) {
+            if (Object.keys(options).length) existing.setOptions(options);
+            return existing.show();
         }
-
-        return instance;
+        return this.loader(el, {...options, visible: true});
     },
 
     hideLoader(selector) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-
-        const instance = this._instances.get(el);
-        if (instance && instance.hide) {
-            instance.hide();
-        }
+        const el = resolveElement(selector);
+        const instance = el && instanceOf(el, 'loader');
+        if (instance) instance.hide();
+        return instance || undefined;
     },
 
     fullscreenLoader(text = 'Loading...', options = {}) {
         let container = document.getElementById('dm-loader-fullscreen');
-
         if (!container) {
             container = document.createElement('div');
             container.id = 'dm-loader-fullscreen';
-            container.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.7);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            `;
+            container.className = 'dm-loader-fullscreen';
             document.body.appendChild(container);
         }
-
-        const instance = createLoaderWrapper(container, {
+        const settings = {
             type: options.type || 'spinner',
             size: options.size || 'large',
             color: options.color || 'white',
             text,
             overlay: false,
             centered: false,
+            fullscreen: true,
             visible: true
-        });
-
-        container.style.display = 'flex';
+        };
+        const existing = instanceOf(container, 'loader');
+        if (existing) {
+            existing.setOptions(settings);
+            return existing.show();
+        }
+        const instance = new Loader(container, settings);
         this._instances.set(container, instance);
         return instance;
     },
@@ -11515,8 +9259,9 @@ export const elements = {
         return new DesktopNotification(options);
     },
 
-    // Convenience method for quick notifications
+    // Convenience method for quick notifications: notify(title, options) or notify({title, ...})
     notify(title, options = {}) {
+        if (title && typeof title === 'object') return DesktopNotification.notify(title.title, {...title, ...options});
         return DesktopNotification.notify(title, options);
     },
 
@@ -11609,7 +9354,18 @@ export const elements = {
             : selector;
         if (!host) {
             console.warn('[Domma.elements.chooser] host not found:', selector);
-            return null;
+            // An inert chooser, so a missing host does not become a TypeError further on
+            // (it used to return null).
+            const none = options.multiple ? [] : null;
+            return {
+                _root: null,
+                element: null,
+                getValue() { return none; },
+                setValue() {},
+                disable() {},
+                enable() {},
+                destroy() {}
+            };
         }
 
         const cfg = {
@@ -11838,8 +9594,10 @@ export const elements = {
         host.appendChild(root);
         rerender();
 
-        return {
+        const api = {
             _root: root,
+            /** The chooser's root (`.domma-chooser`), the same node as `_root`. */
+            get element() { return root; },
             getValue() { return value; },
             setValue(v) { setValueInternal(v, false); },
             disable() {
@@ -11848,8 +9606,17 @@ export const elements = {
             enable() {
                 root.querySelectorAll('.picker-option').forEach((el) => el.classList.remove('is-disabled'));
             },
-            destroy() { root.remove(); }
+            destroy() {
+                root.remove();
+                unregister(host, api);
+                unregister(root, api);
+            }
         };
+        // So E.get(host) / E.get(host, 'chooser') finds it, like any component.
+        Object.defineProperty(api, 'componentName', {value: 'chooser'});
+        register(host, api);
+        register(root, api);
+        return api;
     },
 
     /**
@@ -11992,7 +9759,7 @@ export const elements = {
             instances.push(instance);
         }
 
-        return instances.length === 1 ? instances[0] : instances;
+        return firstOfMatches(instances, 'listGroup');
     },
 
     timeline(selector, options = {}) {
@@ -12007,18 +9774,8 @@ export const elements = {
         return this.progression(selector, { mode: 'timeline', ...options });
     },
 
-    // Toast wrapper - callable as function or use static methods (Web Component)
-    toast: Object.assign(
-        (message, options = {}) => ToastWrapper.show(message, options),
-        {
-            show: ToastWrapper.show.bind(ToastWrapper),
-            success: ToastWrapper.success.bind(ToastWrapper),
-            error: ToastWrapper.error.bind(ToastWrapper),
-            warning: ToastWrapper.warning.bind(ToastWrapper),
-            info: ToastWrapper.info.bind(ToastWrapper),
-            closeAll: ToastWrapper.closeAll.bind(ToastWrapper)
-        }
-    ),
+    // E.toast(message, options) plus .show/.success/.error/.warning/.info/.closeAll
+    toast: toastApi,
 
     dialog: Dialog,
 
@@ -12027,9 +9784,9 @@ export const elements = {
     confirm: Dialog.confirm.bind(Dialog),
     prompt: Dialog.prompt.bind(Dialog),
 
-    // Modal factory methods (Web Component)
-    createModal: ModalFactoryWrapper.createModal.bind(ModalFactoryWrapper),
-    showModal: ModalFactoryWrapper.showModal.bind(ModalFactoryWrapper),
+    // Modal factory methods: a new modal in the shared dialog container
+    createModal: (options = {}) => { defineTags(); return createModal(options); },
+    showModal: (options = {}) => { defineTags(); return showModal(options); },
 
     // Note: themeRoller() and pageRoller() are in domma-tools.min.js
     // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.pageRoller()
@@ -12042,21 +9799,31 @@ export const elements = {
         return instance;
     },
 
-    get(selector) {
+    /**
+     * The component on an element - including ones made by a factory (`E.slideover({...})`)
+     * or another component, which never pass through this object.
+     * @param {string|Element} selector
+     * @param {string} [name] - componentName ('slideover', 'popover', ...) when an element hosts several
+     * @returns {Object|undefined}
+     */
+    get(selector, name) {
         const el = typeof selector === 'string'
             ? document.querySelector(selector)
             : selector;
-        return this._instances.get(el);
+        if (!el) return undefined;
+        const made = this._instances.get(el);
+        if (made && (!name || made.constructor?.componentName === name)) return made;
+        return instanceOf(el, name) || (name ? undefined : made);
     },
 
-    destroy(selector) {
+    destroy(selector, name) {
         const el = typeof selector === 'string'
             ? document.querySelector(selector)
             : selector;
-        const instance = this._instances.get(el);
+        const instance = this.get(el, name);
         if (instance) {
             instance.destroy();
-            this._instances.delete(el);
+            if (this._instances.get(el) === instance) this._instances.delete(el);
         }
     },
 
@@ -12109,6 +9876,21 @@ elements.popover.scan = (root) => Popover.scan(root, (el, opts) => elements.popo
 elements.popover.closeAll = Popover.closeAll;
 elements.popover.getInstance = Popover.getInstance;
 elements.popover.open = Popover.openPopovers;
+
+// Every match, as an array: E.buttonGroup.all('.btn-group', opts). The plain factory
+// returns the first instance (with .all() on it).
+elements.buttonGroup.all = (selector, options = {}) => {
+    const result = elements.buttonGroup(selector, options);
+    return Array.isArray(result) ? result : result.all();
+};
+elements.tooltip.all = (selector, options = {}) => {
+    const result = elements.tooltip(selector, options);
+    return result ? result.all() : [];
+};
+elements.listGroup.all = (selector, options = {}) => {
+    const result = elements.listGroup(selector, options);
+    return Array.isArray(result) ? result : result.all();
+};
 
 // Export component classes for direct access to static methods
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};

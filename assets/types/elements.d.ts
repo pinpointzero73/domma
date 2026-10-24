@@ -30,6 +30,18 @@ export interface ComponentInstance {
     /** Update component options at runtime */
     setOptions(newOptions: Record<string, any>): this;
 
+    /**
+     * Listen for a component event - the name of an `onX` option without `on`, lower-cased
+     * ('change', 'open', 'beforeclose'). The handler gets the same arguments as the option;
+     * returning false from a `before...` handler cancels. The same event is dispatched on
+     * `element` as `dm:<component>:<event>` with `detail = {instance, args}`.
+     */
+    on(event: string, handler: (...args: any[]) => any): this;
+    /** Listen once */
+    once(event: string, handler: (...args: any[]) => any): this;
+    /** Stop listening (every handler for the event when none is given) */
+    off(event: string, handler?: (...args: any[]) => any): this;
+
     /** Destroy the component and cleanup event listeners */
     destroy(): void;
 }
@@ -79,6 +91,14 @@ export interface ModalOptions {
     animationDuration?: number;
     /** Show close button */
     closeButton?: boolean;
+    /** Return false to keep the modal closed (also `.on('beforeopen')`, `dm:modal:beforeopen`) */
+    onBeforeOpen?: (modal: ModalInstance) => boolean | void;
+    /** Return false to keep the modal open (also `.on('beforeclose')`, `dm:modal:beforeclose`) */
+    onBeforeClose?: (modal: ModalInstance) => boolean | void;
+    /** Modal content (HTML, sanitised like $().html() unless `safe: false`) */
+    content?: string;
+    /** false: insert `content` as trusted markup */
+    safe?: boolean;
     /** Callback before opening */
     onOpen?: (modal: ModalInstance) => void;
     /** Callback after open animation completes */
@@ -622,7 +642,8 @@ export interface Elements {
     accordion(selector: string | HTMLElement, options?: AccordionOptions): AccordionInstance;
 
     /** Create Tooltip(s) - returns array if multiple elements match */
-    tooltip(selector: string | HTMLElement, options?: TooltipOptions): TooltipInstance | TooltipInstance[];
+    /** Sets up every match; returns the first, with `all()` for every instance */
+    tooltip(selector: string | HTMLElement, options?: TooltipOptions): TooltipInstance & {all(): TooltipInstance[]};
 
     /** Create Badge(s) - returns array if multiple elements match */
     badge(selector: string | HTMLElement, options?: BadgeOptions): BadgeInstance | BadgeInstance[];
@@ -642,8 +663,8 @@ export interface Elements {
     /** Toast notification system */
     toast: ToastStatic;
 
-    /** Get component instance for an element */
-    get(selector: string | HTMLElement): ComponentInstance | undefined;
+    /** Get the component on an element - factory-made ones too. `name` picks one when an element hosts several. */
+    get(selector: string | HTMLElement, name?: string): ComponentInstance | undefined;
 
     /** Destroy a component */
     destroy(selector: string | HTMLElement): void;

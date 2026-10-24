@@ -29,7 +29,7 @@
  * pointer, focus leaving), bound on the first open and removed with the last.
  */
 
-import Component from './component.js';
+import Component, {instanceOf} from './component.js';
 import sanitizeModule from './sanitize.js';
 
 const SIDES = ['top', 'bottom', 'left', 'right'];
@@ -184,6 +184,8 @@ function unbindDoc() {
 // ============================================
 
 class Popover extends Component {
+    static componentName = 'popover';
+
     static defaults = {
         content: '',            // string (text), Node, or (popover) => string | Node
         title: '',              // same types as content
@@ -273,7 +275,7 @@ class Popover extends Component {
         clearTimeout(this._timers.show);
         clearTimeout(this._timers.hide);
         if (this._open) return this;
-        if (!this._emit('show', true)) return this;
+        if (!this._phase('show', true)) return this;
         this._openedBy = opts.via || 'api';
 
         const panel = this._ensurePanel();
@@ -321,10 +323,10 @@ class Popover extends Component {
         const duration = this._duration();
         if (duration) {
             this._timers.shown = setTimeout(() => {
-                if (this._open) this._emit('shown');
+                if (this._open) this._phase('shown');
             }, duration);
         } else {
-            this._emit('shown');
+            this._phase('shown');
         }
         return this;
     }
@@ -337,7 +339,7 @@ class Popover extends Component {
         clearTimeout(this._timers.show);
         clearTimeout(this._timers.hide);
         if (!this._open) return this;
-        const cancelled = !this._emit('hide', !opts._force);
+        const cancelled = !this._phase('hide', !opts._force);
         if (cancelled && !opts._force) return this;
 
         // Children first, so none is left pointing at a panel that has gone.
@@ -374,7 +376,7 @@ class Popover extends Component {
             const finish = () => {
                 if (this._open) return;
                 panel.remove();
-                this._emit('hidden');
+                this._phase('hidden');
             };
             const duration = this._duration();
             if (duration) this._timers.remove = setTimeout(finish, duration);
@@ -386,6 +388,13 @@ class Popover extends Component {
     toggle(opts = {}) {
         return this._open ? this.hide(opts) : this.show(opts);
     }
+
+    // Aliases, so a popover answers the overlay names every other overlay uses
+    // (open/close/isOpen). They look show/hide up by name at call time. A popover's
+    // cancelable phases stay `show` and `hide` (onShow / onHide returning false).
+    open(...args) { return this.show(...args); }
+    close(...args) { return this.hide(...args); }
+    isVisible() { return this.isOpen(); }
 
     /** Replace the content. Same types as the `content` option. */
     setContent(content) {
@@ -1030,14 +1039,15 @@ class Popover extends Component {
     // ============================================
 
     /**
-     * Run the callback, then dispatch `popover:<name>` on the trigger.
-     * For a cancelable phase, returns false when either said no.
+     * Run the callback, the .on() listeners and `dm:popover:<name>`, then the older
+     * `popover:<name>` event (kept until 1.0). For a cancelable phase, returns false
+     * when any of them said no.
      */
-    _emit(name, cancelable = false) {
+    _phase(name, cancelable = false) {
         const cb = this.options[`on${name[0].toUpperCase()}${name.slice(1)}`];
         let ok = true;
         if (isFn(cb) && cb.call(this, this) === false && cancelable) ok = false;
-        this._notify(name, this);
+        if (!this._emit(name, this) && cancelable) ok = false;
         if (!this.element) return ok;
         const event = new CustomEvent(`popover:${name}`, {
             detail: {popover: this},
@@ -1117,10 +1127,10 @@ class Popover extends Component {
         }
     }
 
-    /** The popover bound to a trigger, if any. */
+    /** The popover bound to a trigger, if any - the same answer as E.get(trigger, 'popover'). */
     static getInstance(trigger) {
         const el = resolveElement(trigger);
-        return el ? byTrigger.get(el) || null : null;
+        return el ? instanceOf(el, 'popover') || null : null;
     }
 
     /** The open popovers, oldest first. */

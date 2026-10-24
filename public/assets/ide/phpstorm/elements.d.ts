@@ -436,6 +436,9 @@ export interface ListGroupInstance {
     /** The root list-group element */
     element: HTMLElement;
 
+    /** Every instance the selector made, in document order (non-enumerable) */
+    all(): ListGroupInstance[];
+
     /** Select an item by index */
     select(index: number): this;
 
@@ -922,6 +925,9 @@ export interface ChooserOptions {
 }
 
 export interface ChooserInstance {
+    /** The chooser's root (`.domma-chooser`); null on the inert chooser a missing host gets */
+    readonly element: HTMLElement | null;
+    _root: HTMLElement | null;
     getValue(): string | string[] | null;
     setValue(value: string | string[] | null): void;
     disable(): void;
@@ -1577,7 +1583,7 @@ export interface Elements {
     numberBadge(selector: string | HTMLElement, options?: NumberBadgeOptions): NumberBadgeInstance;
 
     /** Create a ListGroup component - returns array if multiple elements match */
-    listGroup(selector: string | HTMLElement, options?: ListGroupOptions): ListGroupInstance | ListGroupInstance[];
+    listGroup(selector: string | HTMLElement, options?: ListGroupOptions): ListGroupInstance;
 
     /** Create a Dropdown component */
     dropdown(selector: string | HTMLElement, options?: DropdownOptions): DropdownInstance;
@@ -1634,7 +1640,7 @@ export interface Elements {
      * with rich per-option metadata (icon, description, tooltip, badge,
      * recommended, disabled).
      */
-    chooser(selector: string | HTMLElement, options: ChooserOptions): ChooserInstance | null;
+    chooser(selector: string | HTMLElement, options: ChooserOptions): ChooserInstance;
 
     /** Get component instance for an element */
     get(selector: string | HTMLElement): ComponentInstance | undefined;

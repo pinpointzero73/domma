@@ -26,6 +26,7 @@
  */
 
 import Popover from './popover.js';
+import {register, unregister, instanceOf} from './component.js';
 
 export const AVATAR_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'];
 export const AVATAR_SHAPES = ['circle', 'rounded', 'square'];
@@ -335,6 +336,7 @@ export function avatar(target, options = {}) {
         destroy() {
             if (avatars.get(el) !== handle) return el;
             avatars.delete(el);
+            unregister(el, handle);
             el.textContent = '';
             el.appendChild(saved.children);
             el.className = [...saved.classes].join(' ');
@@ -348,17 +350,20 @@ export function avatar(target, options = {}) {
         }
     };
 
+    // So E.get(el) / E.get(el, 'avatar') finds it, like any component.
+    Object.defineProperty(handle, 'componentName', {value: 'avatar'});
     avatars.set(el, handle);
+    register(el, handle);
     return handle;
 }
 
 avatar.initials = avatarInitials;
 avatar.tone = avatarTone;
 
-/** The live handle on an element, if any. */
+/** The live handle on an element, if any - the same answer as E.get(target, 'avatar'). */
 avatar.get = function (target) {
     const el = resolveTarget(target);
-    return (el && avatars.get(el)) || null;
+    return (el && instanceOf(el, 'avatar')) || null;
 };
 
 /**
@@ -596,6 +601,8 @@ export function avatarGroup(target, options = {}) {
         destroy() {
             if (groups.get(host) !== handle) return host;
             groups.delete(host);
+            unregister(host, handle);
+            if (list !== host) unregister(list, handle);
             teardownMore();
             if (ownList) {
                 list.textContent = '';
@@ -613,14 +620,18 @@ export function avatarGroup(target, options = {}) {
         }
     };
 
+    // E.get(host) and E.get(handle.element) find it, as 'avatar-group'.
+    Object.defineProperty(handle, 'componentName', {value: 'avatar-group'});
     groups.set(host, handle);
+    register(host, handle);
+    if (list !== host) register(list, handle);
     return handle;
 }
 
-/** The live group handle on a host element, if any. */
+/** The live group handle on a host element (or its list), if any - the same answer as E.get(target, 'avatar-group'). */
 avatarGroup.get = function (target) {
     const el = resolveTarget(target);
-    return (el && groups.get(el)) || null;
+    return (el && instanceOf(el, 'avatar-group')) || null;
 };
 
 export default avatar;
