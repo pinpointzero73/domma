@@ -27,6 +27,7 @@ import Component from '../component.js';
 import {storage} from '../storage.js';
 import FocusTrap from './focus-trap.js';
 import {num, reducedMotion, scanIcons, uniqueId} from './shared.js';
+import {safeUrl} from '../safe-url.js';
 
 const PREFIX = 'dm-command-palette';
 
@@ -232,16 +233,7 @@ function appendHighlighted(el, text, indices) {
 const idOf = (command) => String(command.id ?? command.title ?? '');
 
 /** Only links a browser can follow safely: http(s), mailto, tel, or relative. */
-function safeHref(href) {
-    if (!href || typeof href !== 'string') return null;
-    try {
-        const base = typeof location !== 'undefined' ? location.href : 'http://localhost/';
-        const url = new URL(href, base);
-        return /^(https?:|mailto:|tel:)$/.test(url.protocol) ? url.href : null;
-    } catch {
-        return null;
-    }
-}
+const safeHref = safeUrl;
 
 function isEditable(node) {
     if (!node || node.nodeType !== 1) return false;

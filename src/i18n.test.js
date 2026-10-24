@@ -351,6 +351,57 @@ describe('i18n - DOM', () => {
         expect(document.getElementById('m').textContent).toBe('Kept');
     });
 
+    it('data-i18n-attr never writes an event handler, style, srcdoc or formaction', () => {
+        i18n.add('en', {by: '{name} wrote this', css: 'color:red'});
+        document.body.innerHTML = `
+            <span id="a" data-i18n-attr="onclick:by; ONMOUSEOVER:by; style:css; title:by" data-i18n-params='{"name":"window.__pwn=1;//"}'></span>
+            <iframe id="f" data-i18n-attr="srcdoc:by"></iframe>
+            <button id="b" data-i18n-attr="formaction:by"></button>`;
+        i18n.translate();
+        const a = document.getElementById('a');
+        expect(a.hasAttribute('onclick')).toBe(false);
+        expect(a.hasAttribute('onmouseover')).toBe(false);
+        expect(a.hasAttribute('style')).toBe(false);
+        expect(a.getAttribute('title')).toBe('window.__pwn=1;// wrote this');
+        expect(document.getElementById('f').hasAttribute('srcdoc')).toBe(false);
+        expect(document.getElementById('b').hasAttribute('formaction')).toBe(false);
+        a.click();
+        expect(window.__pwn).toBeUndefined();
+        // One warning per attribute name, however often it is asked for
+        const before = warn.mock.calls.length;
+        i18n.translate();
+        expect(warn.mock.calls.length).toBe(before);
+        expect(warn.mock.calls.some(c => String(c[0]).includes('onclick'))).toBe(true);
+    });
+
+    it('data-i18n-attr only puts safe URLs into href, src and the other URL attributes', () => {
+        i18n.add('en', {js: 'javascript:alert(1)', tab: 'java\tscript:alert(1)', data: 'data:text/html,<b>x</b>',
+            web: 'https://example.com/a', rel: '/docs/{page}', frag: '#top', mail: 'mailto:a@b.c', tel: 'tel:+441234'});
+        document.body.innerHTML = `
+            <a id="j" href="/kept" data-i18n-attr="href:js"></a>
+            <a id="t" data-i18n-attr="href:tab"></a>
+            <img id="d" data-i18n-attr="src:data">
+            <form id="fm" data-i18n-attr="action:js"></form>
+            <svg><a id="x" data-i18n-attr="xlink:href:js"></a></svg>
+            <a id="w" data-i18n-attr="href:web"></a>
+            <a id="r" data-i18n-attr="href:rel" data-i18n-params='{"page":"intro"}'></a>
+            <a id="h" data-i18n-attr="href:frag"></a>
+            <a id="m" data-i18n-attr="href:mail"></a>
+            <a id="p" data-i18n-attr="href:tel"></a>`;
+        i18n.translate();
+        const $id = (id) => document.getElementById(id);
+        expect($id('j').getAttribute('href')).toBe('/kept');
+        expect($id('t').hasAttribute('href')).toBe(false);
+        expect($id('d').hasAttribute('src')).toBe(false);
+        expect($id('fm').hasAttribute('action')).toBe(false);
+        expect($id('w').getAttribute('href')).toBe('https://example.com/a');
+        expect($id('r').getAttribute('href')).toBe('/docs/intro');
+        expect($id('h').getAttribute('href')).toBe('#top');
+        expect($id('m').getAttribute('href')).toBe('mailto:a@b.c');
+        expect($id('p').getAttribute('href')).toBe('tel:+441234');
+        expect(document.querySelector('svg a').getAttribute('xlink:href')).toBeNull();
+    });
+
     it('translate(el) handles content added later, including the root itself', () => {
         const el = document.createElement('div');
         el.setAttribute('data-i18n', 'title');

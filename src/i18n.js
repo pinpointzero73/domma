@@ -27,6 +27,7 @@ import {http} from './http.js';
 import {storage} from './storage.js';
 import {escapeHtml} from './escape.js';
 import {sanitise} from './sanitize.js';
+import {isSafeUrl} from './safe-url.js';
 import {loadOption} from './globals.js';
 
 const PLURAL_KEYS = new Set(['zero', 'one', 'two', 'few', 'many', 'other']);
@@ -255,7 +256,8 @@ function readParams(el) {
 
 function parseAttrList(spec) {
     return spec.split(';').map(part => {
-        const at = part.indexOf(':');
+        // The LAST colon: an attribute name can carry one (xlink:href), a key does not.
+        const at = part.lastIndexOf(':');
         if (at === -1) return null;
         const attr = part.slice(0, at).trim();
         const key = part.slice(at + 1).trim();
@@ -600,6 +602,7 @@ export const i18n = {
         formatters.clear();
         listeners.clear();
         warned.clear();
+        attrWarned.clear();
         current = 'en';
         fallbacks = [];
         missingHook = null;
@@ -639,6 +642,36 @@ function markDocument(code) {
     document.documentElement.setAttribute('dir', i18n.dir(code));
 }
 
+/**
+ * data-i18n-attr writes text a translator (or a param) controls, so it never writes an
+ * attribute the browser would run: event handlers, inline style, srcdoc, formaction.
+ */
+const REFUSED_ATTR = /^(on.*|style|srcdoc|formaction)$/i;
+
+/** Attributes holding a URL: only http(s), mailto, tel or relative values are written. */
+const URL_ATTRS = new Set(['href', 'xlink:href', 'src', 'action', 'poster', 'cite', 'background', 'data',
+    'codebase', 'longdesc', 'manifest', 'ping', 'usemap', 'lowsrc', 'dynsrc']);
+
+const attrWarned = new Set();
+function warnAttr(id, message) {
+    if (attrWarned.has(id) || typeof console === 'undefined') return;
+    attrWarned.add(id);
+    console.warn(message);
+}
+
+/** The value as it may be written to `attr`, or null when it may not. */
+function safeAttrValue(attr, value, key) {
+    const name = attr.toLowerCase();
+    if (name === 'srcset') {
+        const ok = value.split(',').every(c => !c.trim() || isSafeUrl(c.trim().split(/\s+/)[0]));
+        if (ok) return value;
+    } else if (!URL_ATTRS.has(name) || isSafeUrl(value)) {
+        return value;
+    }
+    warnAttr(`url:${name}:${key}`, `Domma i18n: "${key}" is not a safe URL for ${name}; data-i18n-attr only writes http(s), mailto, tel or relative URLs`);
+    return null;
+}
+
 function translateElement(el) {
     let orig = originals.get(el);
     if (!orig) {
@@ -660,8 +693,13 @@ function translateElement(el) {
     const spec = el.getAttribute('data-i18n-attr');
     if (spec) {
         for (const [attr, key] of parseAttrList(spec)) {
+            if (REFUSED_ATTR.test(attr)) {
+                warnAttr(`attr:${attr.toLowerCase()}`, `Domma i18n: data-i18n-attr will not write "${attr}" (event handlers, style, srcdoc and formaction are refused)`);
+                continue;
+            }
             if (!(attr in orig.attrs)) orig.attrs[attr] = el.getAttribute(attr);
-            const text = resolve(key, params, null, String);
+            let text = resolve(key, params, null, String);
+            if (text !== null) text = safeAttrValue(attr, text, key);
             if (text !== null) el.setAttribute(attr, text);
             else if (orig.attrs[attr] == null) el.removeAttribute(attr);
             else el.setAttribute(attr, orig.attrs[attr]);

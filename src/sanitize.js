@@ -10,6 +10,9 @@
 
 import {loadOption} from './globals.js';
 import {escapeHtml} from './escape.js';
+import {isSafeUrl, safeUrl} from './safe-url.js';
+
+export {isSafeUrl, safeUrl};
 
 /**
  * Check if DOMPurify is available
@@ -193,5 +196,7 @@ export default {
     sanitiseBasic,
     sanitiseUserContent,
     escape,
-    hasDOMPurify
+    hasDOMPurify,
+    isSafeUrl,
+    safeUrl
 };
