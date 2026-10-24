@@ -625,8 +625,306 @@ export interface BackToTopInstance extends ComponentInstance {
 }
 
 // ============================================
+// Split Pane
+// ============================================
+
+/** A pane size limit: px as a number, or a percentage string such as '20%' */
+export type SplitPaneSize = number | string;
+
+export interface SplitPaneOptions {
+    /** 'horizontal' = side by side (default), 'vertical' = stacked */
+    direction?: 'horizontal' | 'vertical';
+    /** Percentages, one per pane (scaled to add up to 100); equal by default */
+    sizes?: number[];
+    /** Minimum size, one value or one per pane (default 0) */
+    minSize?: SplitPaneSize | SplitPaneSize[];
+    /** Maximum size, one value or one per pane (default none) */
+    maxSize?: SplitPaneSize | null | Array<SplitPaneSize | null>;
+    /** Gutter thickness in px (default 8) */
+    gutterSize?: number;
+    /** Snap to a limit when dragged within this many px of it (default 0) */
+    snapOffset?: number;
+    /** Which panes the gutter gestures may collapse */
+    collapsible?: boolean | boolean[];
+    /** What a collapsed pane shrinks to (default 0) */
+    collapsedSize?: SplitPaneSize | SplitPaneSize[];
+    /** A small toggle button in gutters next to a collapsible pane */
+    collapseButton?: boolean;
+    /** Remember sizes and collapse state with S under 'split-pane:<key>' */
+    persistKey?: string | null;
+    /** Gutter cursor (default col-resize / row-resize) */
+    cursor?: string | null;
+    disabled?: boolean;
+    /** Percent per arrow key (default 1) */
+    step?: number;
+    /** Percent per Shift+arrow (default 10) */
+    largeStep?: number;
+    /** The gutters' aria-label */
+    gutterLabel?: string;
+    /** Return false to refuse a drag */
+    onBeforeDrag?: (gutterIndex: number, event: PointerEvent) => boolean | void;
+    onDragStart?: (sizes: number[], gutterIndex: number) => void;
+    onDrag?: (sizes: number[], gutterIndex: number) => void;
+    onDragEnd?: (sizes: number[], gutterIndex: number) => void;
+    /** Any size change: drag, keys, setSizes, collapse */
+    onResize?: (sizes: number[]) => void;
+    onCollapse?: (paneIndex: number) => void;
+    onExpand?: (paneIndex: number) => void;
+}
+
+export interface SplitPaneInstance extends ComponentInstance {
+    /** The pane elements */
+    readonly panes: HTMLElement[];
+    /** Current sizes, percentages that add up to 100 */
+    getSizes(): number[];
+    /** Set every pane's size (clamped to the limits) */
+    setSizes(sizes: number[]): this;
+    collapse(index: number): this;
+    expand(index: number): this;
+    isCollapsed(index: number): boolean;
+    /** Remove the gutters and listeners and restore the panes' own styles */
+    destroy(): void;
+}
+
+// ============================================
+// Virtual List
+// ============================================
+
+export interface VirtualListRange {
+    /** First index, inclusive */
+    start: number;
+    /** Last index, inclusive (-1 for an empty list) */
+    end: number;
+}
+
+export type VirtualListTemplate = string | Node | ((error?: unknown) => string | Node | null) | null;
+
+export interface VirtualListOptions<T = any> {
+    items?: T[] | null;
+    /** With getItem, instead of items */
+    count?: number;
+    getItem?: ((index: number) => T) | null;
+    /** px, or 'auto' to measure each row (default 40) */
+    itemHeight?: number | 'auto';
+    /** Height assumed for unmeasured rows in 'auto' mode (default 40) */
+    estimatedItemHeight?: number;
+    /** Rows rendered beyond each edge (default 4) */
+    overscan?: number;
+    /** A string is HTML (sanitised unless safe: false); an Element goes in as it is */
+    render?: ((item: T, index: number) => string | Node) | null;
+    /** false: render() strings are inserted unsanitised (default true) */
+    safe?: boolean;
+    /** Property name or function giving each item a stable key (default: the index) */
+    keyField?: string | ((item: T, index: number) => unknown) | null;
+    /** aria-label for the list */
+    label?: string | null;
+    /** Extra class on every row */
+    rowClass?: string;
+    /** Called near the end; resolves to the next items, or {items, done} */
+    loadMore?: ((info: {count: number; page: number}) => Promise<T[] | {items: T[]; done?: boolean}>) | null;
+    /** px from the end at which loadMore is called (default 200) */
+    threshold?: number;
+    loadingTemplate?: VirtualListTemplate;
+    endTemplate?: VirtualListTemplate;
+    /** A [data-vlist-retry] element inside it retries */
+    errorTemplate?: VirtualListTemplate;
+    onRender?: (range: VirtualListRange) => void;
+    onScroll?: (visible: VirtualListRange) => void;
+    onLoadMore?: (info: {count: number; page: number}) => void;
+    onLoaded?: (items: T[]) => void;
+    onEnd?: () => void;
+    onError?: (error: unknown) => void;
+    onItemClick?: (item: T, index: number, event: MouseEvent | KeyboardEvent) => void;
+}
+
+export interface VirtualListInstance<T = any> extends ComponentInstance {
+    /** Number of rows */
+    readonly count: number;
+    setItems(items: T[]): this;
+    append(items: T[]): this;
+    /** Add at the start without moving what is on screen */
+    prepend(items: T[]): this;
+    /** A number is an index; anything else is a key */
+    update(indexOrKey: number | unknown, item: T): this;
+    indexOfKey(key: unknown): number;
+    scrollToIndex(index: number, options?: {align?: 'start' | 'center' | 'end' | 'auto'; smooth?: boolean}): this;
+    /** Scroll to a row and focus it */
+    focusIndex(index: number): this;
+    /** Re-render (and re-measure) the rendered rows */
+    refresh(): this;
+    /** Rows at least partly on screen */
+    getVisibleRange(): VirtualListRange;
+    /** Rows in the DOM, overscan included */
+    getRenderedRange(): VirtualListRange;
+    /** Retry a failed load */
+    retry(): this;
+    /** Whether loadMore has said there is nothing more */
+    isDone(): boolean;
+    /** Count mode: change the number of rows */
+    setCount(count: number): this;
+    /** Remove the rows and listeners and give the container its children back */
+    destroy(): void;
+}
+
+// ============================================
 // Elements Module
 // ============================================
+
+// ============================================
+// Focus trap
+// ============================================
+
+type FocusTarget = string | HTMLElement;
+
+export interface FocusTrapOptions {
+    /** Where focus goes on activate: a selector, an element, a function returning one, or false to leave it. Default: focus already inside stays, else the first tabbable, else the container. */
+    initialFocus?: FocusTarget | (() => HTMLElement | null) | false;
+    /** Where focus goes when nothing is tabbable (default: the first container, given tabindex="-1") */
+    fallbackFocus?: FocusTarget | (() => HTMLElement | null);
+    /** true (default): back to what had focus before activate(); or an element / selector; false: nowhere */
+    returnFocus?: boolean | FocusTarget;
+    /** Escape deactivates (default false - the owning overlay decides) */
+    escapeDeactivates?: boolean | ((e: KeyboardEvent) => boolean);
+    /** A press outside deactivates (default false) */
+    clickOutsideDeactivates?: boolean | ((e: MouseEvent) => boolean);
+    /** Let clicks outside through (default false: they are blocked) */
+    allowOutsideClick?: boolean | ((e: MouseEvent) => boolean);
+    /** Set `inert` on everything outside the containers while active (default false) */
+    inert?: boolean;
+    /** Walk open shadow roots (default true) */
+    shadow?: boolean;
+    preventScroll?: boolean;
+    onActivate?: (trap: FocusTrapInstance) => void;
+    onDeactivate?: (trap: FocusTrapInstance) => void;
+    onPause?: (trap: FocusTrapInstance) => void;
+    onUnpause?: (trap: FocusTrapInstance) => void;
+}
+
+export interface FocusTrapInstance extends ComponentInstance {
+    /** Start trapping; pauses the trap that was on top */
+    activate(opts?: {initialFocus?: FocusTrapOptions['initialFocus']}): this;
+    /** Stop trapping; unpauses the trap beneath */
+    deactivate(opts?: {returnFocus?: boolean | FocusTarget}): this;
+    pause(): this;
+    unpause(opts?: {focus?: boolean}): this;
+    updateContainers(containers: FocusTarget | FocusTarget[]): this;
+    containers(): HTMLElement[];
+    isActive(): boolean;
+    isPaused(): boolean;
+    /** The tabbable elements in the containers right now, in Tab order */
+    tabbables(): HTMLElement[];
+    destroy(): void;
+}
+
+export interface FocusTrapFactory {
+    (containers: FocusTarget | FocusTarget[], options?: FocusTrapOptions): FocusTrapInstance | null;
+    /** What Tab would reach in some containers, in order */
+    tabbables(containers: HTMLElement | HTMLElement[], opts?: {shadow?: boolean}): HTMLElement[];
+    /** The trap that currently listens */
+    top(): FocusTrapInstance | null;
+}
+
+// ============================================
+// Command palette
+// ============================================
+
+export interface PaletteCommand {
+    id?: string;
+    title: string;
+    subtitle?: string;
+    /** Heading the command is listed under */
+    group?: string;
+    /** Domma icon name */
+    icon?: string;
+    /** More words that find it */
+    keywords?: string[];
+    /** Shown as a hint, e.g. 'mod+s' (mod = Cmd on a Mac, Ctrl elsewhere) */
+    shortcut?: string;
+    /** Followed when run (http(s), mailto, tel or relative only) */
+    href?: string;
+    /** '_blank' opens href in a new tab */
+    target?: string;
+    action?: (command: PaletteCommand, palette: CommandPaletteInstance, event?: Event) => void;
+    disabled?: boolean;
+    hidden?: boolean;
+    /** Running it leaves the palette open */
+    keepOpen?: boolean;
+    /** A nested page: a list, or a function returning one (called once on entering) */
+    children?: PaletteCommand[] | ((command: PaletteCommand, ctx: {signal?: AbortSignal, palette: CommandPaletteInstance}) => Promise<PaletteCommand[]> | PaletteCommand[]);
+    /** Placeholder for the box while this command's page is open */
+    placeholder?: string;
+    [key: string]: any;
+}
+
+export interface CommandPaletteOptions {
+    commands?: PaletteCommand[];
+    /** Search elsewhere: debounced, the previous request aborted through `signal` */
+    source?: (query: string, ctx: {signal?: AbortSignal, palette: CommandPaletteInstance}) => Promise<PaletteCommand[]> | PaletteCommand[];
+    /** ms (default 150) */
+    debounce?: number;
+    /** 'mod+k' (default), several, or false */
+    hotkey?: string | string[] | false;
+    placeholder?: string;
+    /** Accessible name of the dialog and list (default 'Command palette') */
+    label?: string;
+    maxResults?: number;
+    /** Storage (S) key for recent commands; null (default) = off */
+    recentKey?: string | null;
+    recentLimit?: number;
+    recentLabel?: string;
+    sourceGroup?: string | null;
+    emptyText?: string;
+    loadingText?: string;
+    /** While a nested page's async children load (default 'Loading…') */
+    pageLoadingText?: string;
+    errorText?: string;
+    backLabel?: string;
+    /** Key hints under the list (default true) */
+    footer?: boolean;
+    resultsText?: (count: number) => string;
+    /** Replaces the default navigation for href commands */
+    navigate?: (href: string, ctx: {newTab: boolean, command: PaletteCommand}) => void;
+    animationDuration?: number;
+    className?: string;
+    /** Force Mac (true) or other (false) key names; default detects */
+    mac?: boolean;
+    onBeforeOpen?: (palette: CommandPaletteInstance) => boolean | void;
+    onOpen?: (palette: CommandPaletteInstance) => void;
+    onBeforeClose?: (palette: CommandPaletteInstance) => boolean | void;
+    onClose?: (palette: CommandPaletteInstance) => void;
+    onQuery?: (query: string, palette: CommandPaletteInstance) => void;
+    onBeforeSelect?: (command: PaletteCommand, palette: CommandPaletteInstance) => boolean | void;
+    onSelect?: (command: PaletteCommand, palette: CommandPaletteInstance) => void;
+    onRun?: (command: PaletteCommand, palette: CommandPaletteInstance) => void;
+}
+
+export interface CommandPaletteInstance extends ComponentInstance {
+    open(query?: string): this;
+    close(): this;
+    toggle(query?: string): this;
+    isOpen(): boolean;
+    show(query?: string): this;
+    hide(): this;
+    isVisible(): boolean;
+    setCommands(list: PaletteCommand[]): this;
+    addCommands(list: PaletteCommand | PaletteCommand[]): this;
+    removeCommand(id: string): this;
+    getCommands(): PaletteCommand[];
+    /** Up one nested page; false at the top */
+    back(): boolean;
+    query(): string;
+    recent(): string[];
+    clearRecent(): this;
+    destroy(): void;
+}
+
+export interface CommandPaletteFactory {
+    (options?: CommandPaletteOptions): CommandPaletteInstance;
+    formatShortcut(combo: string, mac?: boolean): string[];
+    fuzzyMatch(query: string, text: string): {score: number, indices: number[]} | null;
+    /** Whether a live palette's hotkey answers this keydown (for page scripts with their own shortcut) */
+    claims(e: KeyboardEvent): boolean;
+}
 
 export interface Elements {
     /** Create a Card component */
@@ -663,6 +961,27 @@ export interface Elements {
     /** Toast notification system */
     toast: ToastStatic;
 
+    /** Keep Tab and focus inside containers while active */
+    focusTrap: FocusTrapFactory;
+
+    /** A Cmd/Ctrl+K command palette (builds its own overlay) */
+    commandPalette: CommandPaletteFactory;
+
+    /** Resizable panes from a container's children; null when nothing matches */
+    splitPane(container: string | HTMLElement, options?: SplitPaneOptions): SplitPaneInstance | null;
+
+    /** A scrolling list that renders only the visible rows; null when nothing matches */
+    virtualList<T = any>(container: string | HTMLElement, options?: VirtualListOptions<T>): VirtualListInstance<T> | null;
+
+    /** A file drop / browse / paste area over a real file input. Null when the target matches nothing. */
+    dropzone(target: string | HTMLElement, options?: DropzoneOptions): DropzoneInstance | null;
+
+    /** A one- or two-thumb slider over real range inputs. Null when the target matches nothing. */
+    rangeSlider(target: string | HTMLElement, options?: RangeSliderOptions): RangeSliderInstance | null;
+
+    /** Alias of rangeSlider() */
+    slider(target: string | HTMLElement, options?: RangeSliderOptions): RangeSliderInstance | null;
+
     /** Get the component on an element - factory-made ones too. `name` picks one when an element hosts several. */
     get(selector: string | HTMLElement, name?: string): ComponentInstance | undefined;
 
@@ -680,3 +999,170 @@ export interface Elements {
 }
 
 export declare const elements: Elements;
+
+// ============================================
+// Dropzone
+// ============================================
+
+export type DropzoneStatus = 'queued' | 'uploading' | 'done' | 'error' | 'cancelled';
+export type DropzoneRejectReason = 'type' | 'size' | 'count';
+
+/** One file in a dropzone, as every event hands it over */
+export interface DropzoneEntry {
+    id: string;
+    file: File;
+    name: string;
+    size: number;
+    type: string;
+    status: DropzoneStatus;
+    /** Upload progress, 0-100 */
+    progress: number;
+    /** The upload's response (parsed when it was JSON) */
+    response: any;
+    error: DropzoneUploadError | null;
+    /** Object URL of an image preview, revoked when the file goes */
+    preview: string | null;
+}
+
+export interface DropzoneUploadError {
+    /** HTTP status, 0 for a network failure */
+    status: number;
+    message: string;
+    response: any;
+}
+
+export interface DropzoneUploadOptions {
+    url: string | ((entry: DropzoneEntry) => string);
+    /** Default 'POST' */
+    method?: string;
+    /** FormData field for the file. Default 'file' */
+    field?: string;
+    headers?: Record<string, string> | ((entry: DropzoneEntry) => Record<string, string>);
+    withCredentials?: boolean;
+    /** Files sent at once. Default 2 */
+    concurrency?: number;
+    /** Extra FormData fields */
+    data?: Record<string, string | Blob> | ((entry: DropzoneEntry) => Record<string, string | Blob>);
+    /** Make the request object (tests, pages without a server). Default: new XMLHttpRequest() */
+    xhr?: (entry: DropzoneEntry) => XMLHttpRequest;
+}
+
+export interface DropzoneOptions {
+    /** Like the input's accept: '.pdf,image/*' or ['.pdf', 'image/*']. Default: the input's */
+    accept?: string | string[] | null;
+    /** Default: the input's `multiple`, or true when the component makes the input */
+    multiple?: boolean | null;
+    maxFiles?: number | null;
+    /** Bytes */
+    maxSize?: number | null;
+    /** Bytes */
+    minSize?: number | null;
+    /** Image thumbnails. Default true */
+    previews?: boolean;
+    /** Form field name. Default: the input's */
+    name?: string | null;
+    /** The file input, when it is not inside or next to the area */
+    input?: string | HTMLInputElement | null;
+    /** true = after the area (default), an element/selector to draw into, false = no list */
+    list?: boolean | string | HTMLElement;
+    upload?: DropzoneUploadOptions | null;
+    /** Default true */
+    autoUpload?: boolean;
+    /** Automatic retries per file. Default 0 */
+    retry?: number;
+    /** Text: prompt, hint, remove, retry, cancel, added, removed, type, size, small, count, uploading, done, failed, cancelled, required ({name}, {max}, {min}, {percent}) */
+    labels?: Record<string, string>;
+    disabled?: boolean;
+    className?: string;
+    /** Return false to refuse the file */
+    onBeforeAdd?: (entry: DropzoneEntry) => boolean | void;
+    onAdd?: (entry: DropzoneEntry) => void;
+    onReject?: (entry: DropzoneEntry, reason: DropzoneRejectReason) => void;
+    onRemove?: (entry: DropzoneEntry) => void;
+    onChange?: (files: File[]) => void;
+    onUploadStart?: (entry: DropzoneEntry) => void;
+    onProgress?: (entry: DropzoneEntry, percent: number) => void;
+    onSuccess?: (entry: DropzoneEntry, response: any) => void;
+    onError?: (entry: DropzoneEntry, error: DropzoneUploadError) => void;
+    onComplete?: (entries: DropzoneEntry[]) => void;
+}
+
+export interface DropzoneInstance extends ComponentInstance {
+    /** The drop area (the element, or the one drawn after a file input given as the target) */
+    zone: HTMLElement;
+    /** The real file input */
+    input: HTMLInputElement;
+    getFiles(): File[];
+    getEntries(): DropzoneEntry[];
+    addFiles(files: FileList | File[] | File): DropzoneEntry[];
+    removeFile(ref: string | DropzoneEntry | File): boolean;
+    clear(): this;
+    /** Open the file picker */
+    browse(): this;
+    upload(): this;
+    retry(ref?: string | DropzoneEntry | File): this;
+    cancel(ref?: string | DropzoneEntry | File): this;
+    enable(): this;
+    disable(): this;
+    isDisabled(): boolean;
+}
+
+// ============================================
+// Range slider
+// ============================================
+
+export type RangeSliderValue = number | [number, number];
+
+export interface RangeSliderMark {
+    value: number;
+    label?: string;
+}
+
+export interface RangeSliderOptions {
+    /** Default: the input's min, else 0 */
+    min?: number;
+    /** Default: the input's max, else 100 */
+    max?: number;
+    /** Default: the input's step, else 1 */
+    step?: number | 'any';
+    /** A number, or [low, high] / "low,high" with range: true */
+    value?: RangeSliderValue | string | null;
+    /** Two thumbs; two inputs, sharing `name` unless `names` is given */
+    range?: boolean;
+    orientation?: 'horizontal' | 'vertical';
+    /** true = every step, n = every n units, or the values to draw at */
+    ticks?: boolean | number | number[];
+    /** Label the ticks (always on for an array) */
+    tickLabels?: boolean;
+    /** Formats the value for ticks, marks, the tooltip and aria-valuetext */
+    labels?: ((value: number, where: 'tick' | 'mark' | 'tooltip' | 'aria') => string) | null;
+    /** Default 'hover' (also shown on focus and while dragging) */
+    tooltip?: 'always' | 'hover' | 'never';
+    marks?: RangeSliderMark[] | null;
+    disabled?: boolean;
+    name?: string | null;
+    /** [lowName, highName] for range: true */
+    names?: [string, string] | null;
+    /** range: true - the closest the thumbs may come */
+    minDistance?: number;
+    /** null = follow the page's direction */
+    rtl?: boolean | null;
+    ariaLabel?: string | null;
+    ariaLabels?: [string, string] | null;
+    className?: string;
+    /** While dragging, and on each key press */
+    onInput?: (value: RangeSliderValue) => void;
+    /** When the value is committed */
+    onChange?: (value: RangeSliderValue) => void;
+    /** Return false to refuse a move */
+    onBeforeChange?: (next: RangeSliderValue, current: RangeSliderValue) => boolean | void;
+}
+
+export interface RangeSliderInstance extends ComponentInstance {
+    getValue(): RangeSliderValue;
+    setValue(value: RangeSliderValue | string, opts?: {silent?: boolean}): this;
+    setRange(min: number, max: number): this;
+    enable(): this;
+    disable(): this;
+    isDisabled(): boolean;
+}

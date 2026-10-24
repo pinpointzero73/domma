@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual List - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/virtual-list/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the component itself needs is in elements.css. */
+        .sx-vl {
+            height: 22rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+        }
+
+        .sx-vl .dm-vlist-row {
+            display: flex;
+            align-items: center;
+            gap: var(--dm-space-3);
+            padding: 0 var(--dm-space-4);
+            border-bottom: 1px solid var(--dm-border);
+            cursor: pointer;
+        }
+
+        .sx-vl .dm-vlist-row:hover {
+            background: var(--dm-hover-bg);
+        }
+
+        .sx-vl-num {
+            min-width: 4.5rem;
+            color: var(--dm-text-muted);
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.85rem;
+        }
+
+        .sx-vl-grow {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .sx-vl-amount {
+            font-family: var(--dm-font-mono, monospace);
+        }
+
+        .sx-vl-msg.dm-vlist-row {
+            display: block;
+            padding: var(--dm-space-3) var(--dm-space-4);
+        }
+
+        .sx-vl-who {
+            font-weight: 600;
+            margin-right: var(--dm-space-2);
+        }
+
+        .sx-vl-when {
+            color: var(--dm-text-muted);
+            font-size: 0.8rem;
+        }
+
+        .sx-vl-text {
+            margin: var(--dm-space-1) 0 0;
+        }
+
+        .sx-vl-post.dm-vlist-row {
+            display: block;
+            padding: var(--dm-space-4);
+        }
+
+        .sx-vl-post-title {
+            font-weight: 600;
+            margin: 0 0 var(--dm-space-1);
+        }
+
+        .sx-vl-post-body {
+            margin: 0;
+            color: var(--dm-text-secondary);
+        }
+
+        .sx-vl-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--dm-space-3);
+        }
+
+        .sx-vl-bar .form-input {
+            width: 8rem;
+        }
+
+        .sx-vl-output {
+            font-family: var(--dm-font-mono, monospace);
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Virtual List</div>
+        <div class="hero-subtitle">A hundred thousand rows, scrolled like thirty - only what is on screen is rendered, with measured heights, keyboard navigation and infinite loading</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Virtual List</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.virtualList()</code> renders a long list inside a scrolling container, but only the rows in
+                view (plus a few either side). Scrolling re-uses the rows it has, places them with a transform and
+                leaves everything else out of the page, so a list of 100,000 records costs about as much as a list of
+                thirty.
+            </p>
+            <p class="mb-4">
+                The container is the scroller. Give it a height in CSS - a fixed height, a <code>max-height</code>
+                or a flex child with <code>min-height: 0</code> - and the list fills it.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Fixed or measured rows</strong> - <code>itemHeight: 40</code>, or <code>'auto'</code> with a cached height per row</li>
+                <li><strong>Stable scrolling</strong> - rows above the view that change height do not move what you are reading</li>
+                <li><strong>Infinite loading</strong> - <code>loadMore()</code> near the end, with loading, end and retry rows</li>
+                <li><strong>Keyed rows</strong> - <code>keyField</code> re-uses rows across updates; <code>prepend()</code> keeps your place</li>
+                <li><strong>Keyboard</strong> - arrows, Page Up/Down, Home/End and Enter; the focused row is never lost</li>
+                <li><strong>Safe</strong> - strings from <code>render()</code> are sanitised; return an Element for your own nodes</li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+const list = E.virtualList('#people', {
+    items: people,                       // any array
+    itemHeight: 40,
+    keyField: 'id',
+    render: (p) =&gt; `&lt;strong&gt;${_.escape(p.name)}&lt;/strong&gt; ${_.escape(p.email)}`,
+    onItemClick: (p) =&gt; openProfile(p.id)
+});
+list.scrollToIndex(500, {align: 'center'});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="100,000 rows">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">100,000 fixed-height rows</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Every row is the same height, so the list never measures anything: the row under any scroll
+                position is a division away. Drag the scrollbar from top to bottom, or click a row and use the
+                keyboard. Rows in the page right now: <strong id="demo-big-dom" class="sx-vl-output">0</strong>.
+            </p>
+            <div class="sx-vl-bar mb-3">
+                <label for="demo-big-index" class="form-label m-0">Go to row</label>
+                <input id="demo-big-index" class="form-input" type="number" min="0" max="99999" value="50000">
+                <button id="demo-big-go" class="btn btn-sm btn-primary" type="button">Scroll to it</button>
+                <button id="demo-big-top" class="btn btn-sm btn-outline" type="button">Top</button>
+                <span class="text-sm text-gray-600">Showing <span id="demo-big-range" class="sx-vl-output">-</span></span>
+            </div>
+            <div id="demo-big" class="sx-vl mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const rows = Array.from({length: 100000}, (_, i) =&gt; ({id: i, name: 'Customer ' + i, total: (i * 7919) % 10000}));
+
+const big = E.virtualList('#demo-big', {
+    items: rows,
+    itemHeight: 40,
+    keyField: 'id',
+    label: 'Customers',
+    render: (r) =&gt; `&lt;span class="sx-vl-num"&gt;#${r.id}&lt;/span&gt;
+                   &lt;span class="sx-vl-grow"&gt;${_.escape(r.name)}&lt;/span&gt;
+                   &lt;span class="sx-vl-amount"&gt;£${(r.total / 100).toFixed(2)}&lt;/span&gt;`,
+    onItemClick: (r) =&gt; E.toast('Clicked ' + r.name)
+});
+
+$('#demo-big-go').on('click', () =&gt; big.scrollToIndex(Number($('#demo-big-index').val()), {align: 'center'}));
+big.on('scroll', ({start, end}) =&gt; $('#demo-big-range').text(start + ' - ' + end));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Variable heights">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Rows of different heights</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                With <code>itemHeight: 'auto'</code> each row is measured once it is rendered (and again if it
+                changes size), and rows not yet seen count as <code>estimatedItemHeight</code>. The heights are
+                cached by key. "Load older" prepends twenty messages: the one you are reading stays where it is.
+            </p>
+            <div class="sx-vl-bar mb-3">
+                <button id="demo-chat-older" class="btn btn-sm btn-outline" type="button">Load older</button>
+                <button id="demo-chat-bottom" class="btn btn-sm btn-outline" type="button">Latest</button>
+                <span class="text-sm text-gray-600"><span id="demo-chat-count" class="sx-vl-output">0</span> messages</span>
+            </div>
+            <div id="demo-chat" class="sx-vl mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const chat = E.virtualList('#demo-chat', {
+    items: messages,
+    itemHeight: 'auto',
+    estimatedItemHeight: 72,
+    keyField: 'id',
+    rowClass: 'sx-vl-msg',
+    render: (m) =&gt; `&lt;span class="sx-vl-who"&gt;${_.escape(m.who)}&lt;/span&gt;
+                   &lt;span class="sx-vl-when"&gt;${m.when}&lt;/span&gt;
+                   &lt;p class="sx-vl-text"&gt;${_.escape(m.text)}&lt;/p&gt;`
+});
+chat.scrollToIndex(messages.length - 1, {align: 'end'});
+
+$('#demo-chat-older').on('click', () =&gt; chat.prepend(olderMessages(20)));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Infinite feed">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Infinite feed</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>loadMore()</code> is called whenever the end is within <code>threshold</code> px. It returns a
+                promise of the next items - or of <code>{items, done}</code>. Only one load runs at a time; an empty
+                page or <code>done: true</code> ends the list. This fake source takes half a second a page, fails
+                once on page three (press Retry) and stops after eight pages.
+            </p>
+            <div id="demo-feed" class="sx-vl mb-4"></div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const feed = E.virtualList('#demo-feed', {
+    itemHeight: 'auto',
+    estimatedItemHeight: 96,
+    keyField: 'id',
+    rowClass: 'sx-vl-post',
+    label: 'Posts',
+    threshold: 300,
+    loadMore: ({page}) =&gt; fetchPage(page),      // H.get('/api/posts?page=' + page) in real life
+    endTemplate: 'You are all caught up.',
+    render: (p) =&gt; `&lt;p class="sx-vl-post-title"&gt;${_.escape(p.title)}&lt;/p&gt;
+                   &lt;p class="sx-vl-post-body"&gt;${_.escape(p.body)}&lt;/p&gt;`
+});
+feed.on('error', (err) =&gt; E.toast(err.message, {type: 'error'}));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Events">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Every event is an <code>onX</code> option, an <code>.on('x')</code> listener and a bubbling
+                <code>dm:virtual-list:x</code> DOM event (<code>detail = {instance, args}</code>). This log listens to
+                the feed and to clicks on any list.
+            </p>
+            <ul id="demo-log" class="list-none p-0 text-sm text-gray-600 mb-4">
+                <li>Nothing yet - scroll the feed or click a row.</li>
+            </ul>
+            <table class="table mb-4">
+                <thead><tr><th>Event</th><th>Arguments</th><th>When</th></tr></thead>
+                <tbody>
+                    <tr><td><code>render</code></td><td><code>({start, end})</code></td><td>The rendered range (overscan included) changed</td></tr>
+                    <tr><td><code>scroll</code></td><td><code>({start, end})</code></td><td>Once per frame while scrolling: the rows on screen</td></tr>
+                    <tr><td><code>loadmore</code></td><td><code>({count, page})</code></td><td>A <code>loadMore()</code> call starts</td></tr>
+                    <tr><td><code>loaded</code></td><td><code>(items)</code></td><td>A page arrived</td></tr>
+                    <tr><td><code>end</code></td><td>-</td><td><code>loadMore()</code> said there is nothing more</td></tr>
+                    <tr><td><code>error</code></td><td><code>(error)</code></td><td><code>loadMore()</code> failed; the retry row shows</td></tr>
+                    <tr><td><code>itemclick</code></td><td><code>(item, index, event)</code></td><td>A row was clicked, or Enter pressed on it</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Keyboard">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Keyboard and screen readers</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                The rows sit in a <code>role="list"</code> and are <code>role="listitem"</code> with
+                <code>aria-posinset</code> and <code>aria-setsize</code> (<code>-1</code> while an infinite list can
+                still grow), so a screen reader announces "row 50,001 of 100,000" even though only a handful exist.
+                The list is one tab stop (roving <code>tabindex</code>). The focused row stays rendered when you
+                scroll it out of view, so focus is never dropped onto the page.
+            </p>
+            <table class="table mb-4">
+                <thead><tr><th>Key</th><th>Does</th></tr></thead>
+                <tbody>
+                    <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>Previous / next row</td></tr>
+                    <tr><td><kbd>Page Up</kbd> <kbd>Page Down</kbd></td><td>A screenful up / down</td></tr>
+                    <tr><td><kbd>Home</kbd> <kbd>End</kbd></td><td>First / last row</td></tr>
+                    <tr><td><kbd>Enter</kbd></td><td>Fires <code>itemclick</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Options</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>items</code></td><td>array</td><td><code>[]</code></td><td>The data</td></tr>
+                    <tr><td><code>count</code> + <code>getItem</code></td><td>number, function</td><td>-</td><td>Instead of <code>items</code>: rows served on demand by <code>getItem(index)</code></td></tr>
+                    <tr><td><code>itemHeight</code></td><td>number | <code>'auto'</code></td><td><code>40</code></td><td>Fixed px height, or measure each row</td></tr>
+                    <tr><td><code>estimatedItemHeight</code></td><td>number</td><td><code>40</code></td><td>Height assumed for rows not yet measured</td></tr>
+                    <tr><td><code>overscan</code></td><td>number</td><td><code>4</code></td><td>Rows rendered beyond each edge</td></tr>
+                    <tr><td><code>render</code></td><td>function</td><td>the item as text</td><td><code>(item, index)</code> → HTML string or Element</td></tr>
+                    <tr><td><code>safe</code></td><td>boolean</td><td><code>true</code></td><td><code>false</code> inserts <code>render()</code> strings without sanitising</td></tr>
+                    <tr><td><code>keyField</code></td><td>string | function</td><td>the index</td><td>A stable key per item; rows and measured heights follow it</td></tr>
+                    <tr><td><code>label</code></td><td>string</td><td><code>null</code></td><td>The list's <code>aria-label</code></td></tr>
+                    <tr><td><code>rowClass</code></td><td>string</td><td><code>''</code></td><td>Extra class on every row</td></tr>
+                    <tr><td><code>loadMore</code></td><td>function</td><td><code>null</code></td><td><code>({count, page})</code> → Promise of <code>items[]</code> or <code>{items, done}</code></td></tr>
+                    <tr><td><code>threshold</code></td><td>number</td><td><code>200</code></td><td>px from the end at which to load</td></tr>
+                    <tr><td><code>loadingTemplate</code> / <code>endTemplate</code> / <code>errorTemplate</code></td><td>string | Element | function</td><td>built in / none / built in</td><td>The status row; a <code>[data-vlist-retry]</code> element in it retries</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Methods">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Methods</h2></div>
+        <div class="card-body">
+            <table class="table mb-4">
+                <thead><tr><th>Method</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>setItems(items)</code></td><td>Replace the data (and reset infinite loading)</td></tr>
+                    <tr><td><code>append(items)</code> / <code>prepend(items)</code></td><td>Add at the end / at the start without moving the view</td></tr>
+                    <tr><td><code>update(indexOrKey, item)</code></td><td>Replace one item; a number is an index, anything else a key</td></tr>
+                    <tr><td><code>indexOfKey(key)</code></td><td>The index of an item by key</td></tr>
+                    <tr><td><code>scrollToIndex(i, {align, smooth})</code></td><td><code>align</code>: <code>start</code>, <code>center</code>, <code>end</code> or <code>auto</code> (only if out of view)</td></tr>
+                    <tr><td><code>focusIndex(i)</code></td><td>Scroll to a row and focus it</td></tr>
+                    <tr><td><code>getVisibleRange()</code> / <code>getRenderedRange()</code></td><td><code>{start, end}</code>, inclusive</td></tr>
+                    <tr><td><code>refresh()</code></td><td>Re-render (and re-measure) the rendered rows</td></tr>
+                    <tr><td><code>retry()</code> / <code>isDone()</code></td><td>Retry a failed load / whether loading has ended</td></tr>
+                    <tr><td><code>setCount(n)</code></td><td>Count mode: change the number of rows</td></tr>
+                    <tr><td><code>destroy()</code></td><td>Remove the rows and listeners and give the container its own children back</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(D().format('HH:mm:ss') + ' - ' + message) + '</li>');
+        list.find('li').filter((i) => i >= 8).remove();
+    };
+
+    // A small seeded generator, so every visit shows the same data.
+    let seed = 7;
+    const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const pick = (list) => list[Math.floor(rand() * list.length)];
+    const WORDS = ('lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore ' +
+        'et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip').split(' ');
+    const sentence = (min, max) => {
+        const n = min + Math.floor(rand() * (max - min));
+        const words = Array.from({length: n}, () => pick(WORDS));
+        const text = words.join(' ');
+        return text.charAt(0).toUpperCase() + text.slice(1) + '.';
+    };
+
+    // ---- 100,000 rows ------------------------------------------------------
+    const rows = Array.from({length: 100000}, (_v, i) => ({id: i, name: 'Customer ' + i, total: (i * 7919) % 10000}));
+    const big = E.virtualList('#demo-big', {
+        items: rows,
+        itemHeight: 40,
+        keyField: 'id',
+        label: 'Customers',
+        render: (r) => '<span class="sx-vl-num">#' + r.id + '</span>' +
+            '<span class="sx-vl-grow">' + _.escape(r.name) + '</span>' +
+            '<span class="sx-vl-amount">£' + (r.total / 100).toFixed(2) + '</span>',
+        onItemClick: (r) => log('Clicked ' + r.name)
+    });
+    const showBig = () => {
+        const r = big.getVisibleRange();
+        $('#demo-big-range').text(r.start + ' - ' + r.end);
+        $('#demo-big-dom').text(String($('#demo-big .dm-vlist-row').length));
+    };
+    big.on('scroll', showBig);
+    big.on('render', showBig);
+    showBig();
+    $('#demo-big-go').on('click', () => big.scrollToIndex(Number($('#demo-big-index').val()) || 0, {align: 'center'}));
+    $('#demo-big-top').on('click', () => big.scrollToIndex(0, {align: 'start'}));
+
+    // ---- Variable heights ----------------------------------------------------
+    const PEOPLE = ['Ada', 'Grace', 'Alan', 'Katherine', 'Tim', 'Margaret'];
+    let messageId = 0;
+    let minutesAgo = 0;
+    const message = () => {
+        minutesAgo += 1 + Math.floor(rand() * 9);
+        return {
+            id: 'm' + (messageId++),
+            who: pick(PEOPLE),
+            when: D().subtract(minutesAgo, 'minutes').format('D MMM HH:mm'),
+            text: sentence(3, rand() < 0.2 ? 90 : 25)
+        };
+    };
+    // Generated newest first, shown oldest first.
+    const messages = Array.from({length: 5000}, message).reverse();
+    const olderMessages = (n) => Array.from({length: n}, message).reverse();
+    const chat = E.virtualList('#demo-chat', {
+        items: messages,
+        itemHeight: 'auto',
+        estimatedItemHeight: 72,
+        keyField: 'id',
+        rowClass: 'sx-vl-msg',
+        label: 'Messages',
+        render: (m) => '<span class="sx-vl-who">' + _.escape(m.who) + '</span>' +
+            '<span class="sx-vl-when">' + _.escape(m.when) + '</span>' +
+            '<p class="sx-vl-text">' + _.escape(m.text) + '</p>',
+        onItemClick: (m) => log(m.who + ' at ' + m.when)
+    });
+    chat.scrollToIndex(messages.length - 1, {align: 'end'});
+    // The showcase layout moves the page into its own wrapper once it has loaded, and a
+    // browser resets the scroll position of anything it moves. Scroll again once it is done.
+    const whenLaidOut = (fn, tries = 50) => ($('body').hasClass('dm-ready') || !tries
+        ? fn()
+        : setTimeout(() => whenLaidOut(fn, tries - 1), 100));
+    whenLaidOut(() => chat.scrollToIndex(chat.count - 1, {align: 'end'}));
+    const showChat = () => $('#demo-chat-count').text(String(chat.count));
+    showChat();
+    $('#demo-chat-older').on('click', () => { chat.prepend(olderMessages(20)); showChat(); });
+    $('#demo-chat-bottom').on('click', () => chat.scrollToIndex(chat.count - 1, {align: 'end'}));
+
+    // ---- Infinite feed -------------------------------------------------------
+    let failedOnce = false;
+    let postId = 0;
+    const fetchPage = (page) => new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (page === 2 && !failedOnce) {
+                failedOnce = true;
+                reject(new Error('The network went away (on purpose). Press Retry.'));
+                return;
+            }
+            const items = Array.from({length: 20}, () => ({
+                id: 'p' + (postId++),
+                title: 'Post ' + postId + ': ' + sentence(3, 8),
+                body: sentence(10, rand() < 0.3 ? 60 : 24)
+            }));
+            resolve({items, done: page >= 7});
+        }, 500);
+    });
+    const feed = E.virtualList('#demo-feed', {
+        itemHeight: 'auto',
+        estimatedItemHeight: 96,
+        keyField: 'id',
+        rowClass: 'sx-vl-post',
+        label: 'Posts',
+        threshold: 300,
+        loadMore: ({page}) => fetchPage(page),
+        endTemplate: 'You are all caught up.',
+        render: (p) => '<p class="sx-vl-post-title">' + _.escape(p.title) + '</p>' +
+            '<p class="sx-vl-post-body">' + _.escape(p.body) + '</p>',
+        onItemClick: (p) => log('Opened ' + p.title)
+    });
+    feed.on('loadmore', ({page}) => log('Loading page ' + (page + 1)));
+    feed.on('loaded', (items) => log('Loaded ' + items.length + ' posts'));
+    feed.on('error', (err) => log('Error: ' + err.message));
+    feed.on('end', () => log('Feed ended'));
+</script>
+
+</body>
+</html>

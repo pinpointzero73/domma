@@ -526,3 +526,232 @@ E.get(document.querySelector('domma-badge'));              // the instance
 - [src/plugins/rollup-plugin-domma.js](../src/plugins/rollup-plugin-domma.js) - SFC build plugin
 - [public/showcase/components/](../public/showcase/components/) - Interactive showcase
 - [docs/API.md](./API.md) - Full API reference
+
+## Focus trap - `E.focusTrap(container, options)`
+
+Keeps Tab, Shift+Tab and stray focus inside one or more containers while it is active. Overlays use it so a
+keyboard user cannot reach the page behind them. Source: `src/components/focus-trap.js` (also importable on its
+own: `import FocusTrap, {tabbables} from 'src/components/focus-trap.js'`).
+
+```javascript
+const trap = E.focusTrap('#dialog', {initialFocus: '#name', returnFocus: true});
+trap.activate();      // focus moves in; Tab wraps last -> first
+trap.deactivate();    // focus goes back to what had it before
+```
+
+- **Tabbables are found on every key press**, so controls added later take part. Disabled, `hidden`, `inert`,
+  `tabindex="-1"`, invisible and hidden-input elements are skipped; positive tabindex comes first; a radio group
+  counts once. Open shadow roots are walked in render order (slotted children at their slot), so a trap round a
+  Domma modal reaches its X and footer buttons. `E.focusTrap.tabbables(el)` gives the same list.
+- **Nothing tabbable**: the container itself takes focus (`tabindex="-1"` is added, and removed on deactivate).
+- **Options**: `initialFocus` (selector | element | function | `false`), `fallbackFocus`, `returnFocus` (`true` |
+  `false` | element | selector), `escapeDeactivates` (default `false` - the overlay that owns the trap decides),
+  `clickOutsideDeactivates`, `allowOutsideClick` (clicks outside are blocked by default; each of the three may be a
+  function of the event), `inert` (`inert` on everything outside while active; only what it set is undone),
+  `shadow`, `onActivate` / `onDeactivate` / `onPause` / `onUnpause`.
+- **Methods**: `activate(opts)`, `deactivate({returnFocus})`, `pause()`, `unpause()`, `updateContainers([...])`,
+  `isActive()`, `isPaused()`, `tabbables()`, `destroy()`.
+- **Traps stack.** Activating a trap pauses the one on top; deactivating it unpauses that one.
+  `E.focusTrap.top()` is the one listening.
+- Events `dm:focus-trap:activate|deactivate|pause|unpause` are dispatched on the first container.
+
+## Command palette - `E.commandPalette(options)`
+
+A Cmd/Ctrl+K launcher: a search box over a filtered list of commands. The factory builds its own overlay at the end
+of `<body>`; `palette.element` is that overlay. Source: `src/components/command-palette.js`.
+
+```javascript
+const palette = E.commandPalette({
+    recentKey: 'app-palette',            // recents remembered with S; null (default) = off
+    commands: [
+        {id: 'new', title: 'New page', group: 'Pages', icon: 'plus', shortcut: 'mod+n', action: () => newPage()},
+        {id: 'docs', title: 'Documentation', href: '/docs/', keywords: ['help', 'manual']},
+        {id: 'theme', title: 'Change theme', children: [
+            {id: 'dark', title: 'Dark', action: () => setTheme('dark')},
+            {id: 'light', title: 'Light', action: () => setTheme('light')}
+        ]}
+    ],
+    source: (q, {signal}) => H.get('/api/search?q=' + encodeURIComponent(q), {signal})
+});
+```
+
+- **Commands**: `{id, title, subtitle, group, icon, keywords, shortcut, href, target, action(command, palette,
+  event), disabled, hidden, keepOpen, children, placeholder}`. `children` is an array or an async function (called
+  once on entering) - a nested page. `href` takes http(s), mailto, tel or relative links only; `navigate` replaces
+  the default navigation. Running a command closes the palette unless `keepOpen: true`.
+- **Matching** is fuzzy (letters in order), scored for prefixes, word starts and unbroken runs; title, then
+  keywords, then subtitle. Matched letters are wrapped in `<span class="dm-command-palette-match">`; everything is
+  written with `textContent`, never as HTML. `E.commandPalette.fuzzyMatch(q, text)` is the matcher.
+- **Async `source(query, {signal})`**: debounced (`debounce`, 150 ms), the previous request aborted, a late answer
+  ignored; loading, empty (`emptyText`) and error (`errorText`) states. Its results follow the local ones.
+- **Keyboard**: Up/Down (wrapping, skipping disabled rows), Home/End, Enter runs, Escape goes up a page and then
+  closes, Backspace in the empty box goes up, Tab stays inside (a FocusTrap). `hotkey` (default `'mod+k'`, `mod` =
+  Cmd on a Mac, Ctrl elsewhere; a list, or `false`) toggles it; a bare key such as `'/'` is ignored while typing in
+  a field. A page script with its own shortcut asks `E.commandPalette.claims(e)` (true while a live palette's hotkey
+  matches the keydown) and steps aside - the site search's Ctrl/Cmd+K does, whichever listener was added first.
+- **ARIA**: a modal dialog holding the combobox + listbox pattern - `aria-controls`, `aria-expanded`,
+  `aria-activedescendant`, `role="option"` rows in labelled `role="group"`s, `aria-keyshortcuts`, and a polite live
+  region with the result count.
+- **Methods**: `open(query?)`, `close()`, `toggle()`, `isOpen()`, `show()` / `hide()` / `isVisible()` (aliases by
+  name), `setCommands(list)`, `addCommands(list)` (same id replaces), `removeCommand(id)` (top level), `back()`,
+  `query()`, `recent()`, `clearRecent()`, `destroy()`.
+- **Events**: `beforeopen`, `open`, `beforeclose`, `close`, `query(q)`, `beforeselect(command)` (cancelable),
+  `select(command)`, `run(command)` - `onX`, `.on('x')`, `dm:command-palette:x`.
+- **Look**: the modal's tokens (`--dm-modal-bg`, `--dm-modal-border`, `--dm-modal-backdrop`, `--dm-modal-shadow`),
+  the active row `--dm-selected-bg`; full width from the top under 640px; no transition under reduced motion.
+
+## Split Pane - `E.splitPane(container, options)`
+
+The container's element children become panes; a gutter is inserted between each pair. Layout is flexbox -
+each pane gets a `flex-basis` from its share - so the container keeps the size your CSS gives it and a pane can
+hold anything, another split pane included.
+
+```javascript
+const split = E.splitPane('#editor', {
+    direction: 'horizontal',     // side by side; 'vertical' stacks
+    sizes: [25, 75],             // percentages; equal by default
+    minSize: [160, '30%'],       // px or %, one value or one per pane (maxSize the same)
+    snapOffset: 24,              // snap to the minimum within 24px
+    collapsible: [true, false],  // double-click / Enter / button collapses pane 0
+    collapseButton: true,
+    persistKey: 'editor'         // S.set('split-pane:editor', ...) and restored on init
+});
+split.on('dragend', (sizes) => console.log(sizes));
+split.setSizes([40, 60]);
+split.collapse(0); split.expand(0);
+```
+
+- **Options**: `direction`, `sizes`, `minSize`, `maxSize`, `gutterSize` (8), `snapOffset`, `collapsible`,
+  `collapsedSize` (0), `collapseButton`, `persistKey`, `cursor`, `disabled`, `step` (1%), `largeStep` (10%),
+  `gutterLabel`.
+- **Methods**: `getSizes()`, `setSizes(arr)`, `collapse(i)`, `expand(i)`, `isCollapsed(i)`, `setOptions()`,
+  `destroy()` (removes the gutters, restores the panes' own styles), `panes`.
+- **Events**: `beforedrag(gutterIndex, event)` (cancelable), `dragstart` / `drag` / `dragend` `(sizes, gutterIndex)`,
+  `resize(sizes)` (any size change), `collapse(i)`, `expand(i)` - as options, `.on()` and `dm:split-pane:*`.
+- **Accessibility**: gutters are focusable `role="separator"` with `aria-orientation`, `aria-valuenow` (the pane
+  before, in %), `aria-valuemin` / `aria-valuemax` and `aria-controls`. Arrow keys move them (Shift for 10%),
+  Home / End go to the limits, Enter collapses when a neighbouring pane is collapsible.
+- Panes stop taking pointer events during a drag (`.dm-split-dragging`), so an iframe cannot swallow the moves.
+  Horizontal splits follow `direction: rtl`.
+
+## Virtual List - `E.virtualList(container, options)`
+
+Renders only the rows in view of a long list. The container is the scroller and needs a height from CSS (a
+fixed height, a `max-height`, or a flex child with `min-height: 0`).
+
+```javascript
+const list = E.virtualList('#people', {
+    items: people,               // or count: 1e6, getItem: (i) => ...
+    itemHeight: 40,              // or 'auto' with estimatedItemHeight
+    keyField: 'id',
+    label: 'People',
+    render: (p, i) => `<strong>${_.escape(p.name)}</strong>`,   // string (sanitised) or Element
+    onItemClick: (p, i, event) => open(p)
+});
+list.scrollToIndex(500, {align: 'center'});
+
+// Infinite loading
+E.virtualList('#feed', {
+    itemHeight: 'auto', estimatedItemHeight: 96, keyField: 'id',
+    loadMore: ({count, page}) => H.get('/api/posts?page=' + page),   // items[] or {items, done}
+    endTemplate: 'You are all caught up.'
+});
+```
+
+- **Options**: `items` | `count` + `getItem`, `itemHeight` (40 or `'auto'`), `estimatedItemHeight` (40),
+  `overscan` (4), `render(item, index)`, `safe` (true), `keyField` (property or function; default the index),
+  `label`, `rowClass`, `loadMore`, `threshold` (200px), `loadingTemplate`, `endTemplate`, `errorTemplate`.
+- **Strings are HTML**: what `render()` returns is put in with `sanitise()` (DOMPurify when loaded, escaped
+  otherwise) unless `safe: false`. Return an Element to insert your own nodes untouched. A `[data-vlist-retry]`
+  element in a custom error template retries.
+- **Methods**: `setItems()`, `append()`, `prepend()` (keeps the view still), `update(indexOrKey, item)` (a number is
+  an index), `indexOfKey(key)`, `scrollToIndex(i, {align: 'start'|'center'|'end'|'auto', smooth})`, `focusIndex(i)`,
+  `refresh()`, `getVisibleRange()`, `getRenderedRange()`, `retry()`, `isDone()`, `setCount(n)`, `destroy()`, `count`.
+- **Events**: `render({start, end})`, `scroll({start, end})`, `loadmore({count, page})`, `loaded(items)`, `end`,
+  `error(err)`, `itemclick(item, index, event)` - as options, `.on()` and `dm:virtual-list:*`.
+- **Accessibility**: rows are `role="listitem"` in a `role="list"`, with `aria-posinset` / `aria-setsize` (-1
+  while more can load). One tab stop (roving `tabindex`); arrows, Page Up/Down, Home/End move, Enter fires
+  `itemclick`. The focused row stays rendered when it is scrolled out of view.
+- **Measured rows** (`'auto'`): heights are cached by key; a row above the view that turns out taller or shorter
+  moves the scroll position by the difference, so the content you are reading stays put. Use `keyField` with
+  `prepend()`, or heights are re-measured.
+- **Not supported**: horizontal lists and sticky group headers. A browser resets the scroll position of an element
+  that is moved in the DOM; call `scrollToIndex()` again after moving the container.
+
+## Dropzone - `E.dropzone(target, options)`
+
+The element becomes a drop / browse / paste area (`role="button"`; click, Enter or Space opens the picker). It uses
+the `<input type="file">` inside it, next to it, given as `input`, or the target itself (then the area is drawn after
+it); otherwise it adds one. The file list and an `aria-live` region are drawn after the area.
+
+| Option | Default | |
+|---|---|---|
+| `accept` | the input's | `'.pdf,image/*'` or an array |
+| `multiple` | the input's / `true` | without it a new file replaces the old |
+| `maxFiles`, `maxSize`, `minSize` | `null` | sizes in bytes |
+| `previews` | `true` | image thumbnails (object URLs, revoked on remove / destroy) |
+| `name` | the input's | form field name |
+| `list` | `true` | `false`, or an element / selector to draw the list into |
+| `upload` | `null` | `{url, method, field, headers, withCredentials, concurrency, data, xhr}` |
+| `autoUpload`, `retry` | `true`, `0` | |
+| `labels` | | prompt, hint and every message (`{name}`, `{max}`, `{min}`, `{percent}`) |
+
+Methods: `getFiles()`, `getEntries()`, `addFiles(list)`, `removeFile(id | entry | file)`, `clear()`, `browse()`,
+`upload()`, `retry(id?)`, `cancel(id?)`, `enable()`, `disable()`, `isDisabled()`, `destroy()`.
+
+Events: `beforeadd` (cancelable), `add`, `reject(entry, reason)`, `remove`, `change(files)`, `uploadstart`,
+`progress(entry, percent)`, `success(entry, response)`, `error(entry, error)`, `complete(entries)`.
+
+**In a form.** Without `upload` the input's `FileList` is rewritten with a `DataTransfer` after each change, so a
+normal submit and `new FormData(form)` carry exactly the files shown. Where `new DataTransfer()` is unavailable the
+form's `formdata` event adds them instead; code that builds a request any other way should use `getFiles()`. With
+`upload` the input is left empty so the files are not sent twice. Uploads use `XMLHttpRequest`, not `H`: fetch has no
+upload progress.
+
+**Drops outside the area.** While any dropzone exists there is one document `dragenter` listener. A drag carrying
+files arms a document guard that refuses drops (other file inputs keep theirs); it is removed on the drop, when the
+drag leaves the window, or when dragover stops for 1.5 s. Nothing is intercepted between drags.
+
+## Range slider - `E.rangeSlider(target, options)` / `E.slider`
+
+Target an `<input type="range">` (it stays `.element`; min / max / step / value / name are read from it) or a
+container (the inputs are made inside it). The inputs are hidden and carry the value; a drawn track with
+`role="slider"` thumbs sits in front.
+
+| Option | Default | |
+|---|---|---|
+| `min`, `max`, `step` | input's / `0`, `100`, `1` | `step: 'any'` allowed |
+| `value` | input's / middle | `[low, high]` or `"low,high"` with `range` |
+| `range` | `false` | two thumbs, two inputs |
+| `name`, `names` | input's | both inputs share `name`; `names: [a, b]` names them apart |
+| `minDistance` | `0` | the closest two thumbs may come |
+| `orientation` | `'horizontal'` | or `'vertical'` (minimum at the bottom) |
+| `ticks`, `tickLabels` | `false` | `true` every step (at most 100), `n` every n units, or `[values]` |
+| `marks` | `null` | `[{value, label}]`, pressing one jumps to it |
+| `labels` | `null` | `(value, where) => text` for ticks, marks, tooltip and `aria-valuetext` |
+| `tooltip` | `'hover'` | `'always'`, `'never'` (hover also covers focus and dragging) |
+| `rtl` | page direction | |
+
+Methods: `getValue()`, `setValue(v, {silent})`, `setRange(min, max)`, `enable()`, `disable()`, `isDisabled()`,
+`destroy()`. Events: `input(value)` while moving, `change(value)` on commit, `beforechange(next, current)`
+(cancelable). Every move also fires native `input` / `change` on the real input. Setting `input.value` from code
+(as `M.bind` does) moves the slider; a form reset puts it back.
+
+**Why two inputs for a range.** Each stays a number that validates against min / max, and the server needs no
+parsing: the form sends `price=10&price=50` (or `min_price=10&max_price=50` with `names`). `FormData.getAll()` and
+Domma's form data both give the pair.
+
+### In F.create blueprints
+
+```javascript
+F.render('#form', {
+    volume: {type: 'slider', min: 0, max: 10, default: 4},
+    hours: {type: 'slider', min: 0, max: 24, default: [9, 17], formConfig: {range: true, ticks: 6}},
+    files: {type: 'dropzone', required: true, formConfig: {accept: 'image/*', maxFiles: 3}}
+});
+```
+
+`formConfig` passes the component's options. A plain `type: 'range'` stays a native input unless
+`formConfig.slider` is set. Slider values are numbers or `[low, high]`; dropzone values are `File[]` and `required`
+means at least one file.
+

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Range Slider - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/range-slider/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. Everything the component itself needs is in elements.css. */
+        .sx-rs-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sx-rs-value {
+            min-width: 8rem;
+            font-family: var(--dm-font-mono, monospace);
+            color: var(--dm-text);
+        }
+
+        .sx-rs-output {
+            margin: 0;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-background-alt);
+            color: var(--dm-text);
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+        }
+
+        .sx-rs-verticals {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .sx-rs-log {
+            margin: 0;
+            padding-left: 1.25rem;
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+        }
+
+        .sx-rs-field {
+            max-width: 32rem;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Range Slider</div>
+        <div class="hero-subtitle">One value or a range between two thumbs - with ticks, marks and a tooltip, full keyboard support, and real range inputs underneath for your forms</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Range Slider</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.rangeSlider()</code> (or <code>E.slider()</code>) draws a slider over real
+                <code>&lt;input type="range"&gt;</code> elements. Point it at a range input and that input stays the
+                element - its <code>min</code>, <code>max</code>, <code>step</code>, <code>value</code> and
+                <code>name</code> are read from it - or point it at a container and the inputs are made for you.
+            </p>
+            <p class="mb-4">
+                The inputs are hidden but still carry the value, so forms submit it, <code>FormData</code> reads it,
+                and anything listening for the inputs' native <code>input</code> and <code>change</code> events -
+                including Domma's model bindings - hears every move.
+            </p>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>One or two thumbs</strong> - <code>range: true</code> gives <code>[low, high]</code>, kept apart by <code>minDistance</code></li>
+                <li><strong>Ticks, marks and a tooltip</strong> - all labelled through one formatter</li>
+                <li><strong>Keyboard</strong> - arrows step, Page Up / Page Down move ten steps, Home / End go to the ends</li>
+                <li><strong>Accessible</strong> - ARIA sliders with <code>aria-valuenow</code>, <code>aria-valuetext</code> and per-thumb limits</li>
+                <li><strong>Pointer and touch</strong> - drag with pointer capture, a large hit area, press anywhere on the track</li>
+                <li><strong>Vertical and right-to-left</strong></li>
+            </ul>
+
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+// &lt;input id="volume" type="range" name="volume" min="0" max="100" value="40"&gt;
+const volume = E.rangeSlider('#volume');
+volume.on('change', (value) => save(value));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Basic">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">A single value</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Drag the thumb, press anywhere on the track, or tab to it and use the arrow keys.
+                <code>onInput</code> runs while it moves, <code>onChange</code> when you let go.
+            </p>
+            <div class="sx-rs-field mb-2">
+                <label class="form-label" for="demo-volume">Volume</label>
+                <input id="demo-volume" type="range" name="volume" min="0" max="100" value="40">
+            </div>
+            <p class="mb-4">Value: <span id="demo-volume-value" class="sx-rs-value">40</span></p>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.rangeSlider('#demo-volume', {
+    onInput: (value) => $('#demo-volume-value').text(value)
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Range">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Two thumbs</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>range: true</code> makes a low and a high thumb. They never cross, and
+                <code>minDistance</code> keeps them that far apart. <code>labels</code> formats the value
+                everywhere it is shown - the tooltip, the ticks and the <code>aria-valuetext</code> a screen reader
+                speaks.
+            </p>
+            <div id="demo-price" class="sx-rs-field mb-2"></div>
+            <p class="mb-4">Between <span id="demo-price-value" class="sx-rs-value">£100 and £600</span></p>
+            <div class="code-block language-javascript">
+                <pre><code>
+const price = E.rangeSlider('#demo-price', {
+    range: true,
+    min: 0,
+    max: 1000,
+    step: 10,
+    value: [100, 600],
+    minDistance: 50,
+    name: 'price',
+    ariaLabel: 'Price',
+    labels: (v) => '£' + v,
+    tooltip: 'always'
+});
+price.getValue();               // [100, 600]
+price.setValue([200, 400]);
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Ticks and Marks">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Ticks and marks</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>ticks: true</code> draws one at every step, a number draws one every that many units, and an
+                array draws them where you say (and labels them). <code>marks</code> are labelled points; pressing
+                one jumps straight to it.
+            </p>
+            <div class="sx-rs-field">
+                <label class="form-label" for="demo-rating">Rating</label>
+                <input id="demo-rating" type="range" min="1" max="5" value="3">
+            </div>
+            <div class="sx-rs-field">
+                <label class="form-label" for="demo-temp">Wash temperature</label>
+                <input id="demo-temp" type="range" min="20" max="90" step="5" value="40">
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.rangeSlider('#demo-rating', {ticks: true, tickLabels: true, labels: (v) => v + '★'});
+
+E.rangeSlider('#demo-temp', {
+    ticks: 10,
+    labels: (v) => v + '°C',
+    marks: [
+        {value: 30, label: 'Delicates'},
+        {value: 40, label: 'Everyday'},
+        {value: 60, label: 'Towels'},
+        {value: 90, label: 'Boil'}
+    ]
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Vertical and RTL">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Vertical and right-to-left</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>orientation: 'vertical'</code> stands it up (minimum at the bottom). In a right-to-left
+                page - or with <code>rtl: true</code> - the minimum is on the right and the arrow keys follow it,
+                as a native range input does.
+            </p>
+            <div class="sx-rs-verticals mb-4">
+                <div id="demo-eq-1"></div>
+                <div id="demo-eq-2"></div>
+                <div id="demo-eq-3"></div>
+            </div>
+            <div class="sx-rs-field mb-4" dir="rtl" lang="ar">
+                <label class="form-label" for="demo-rtl">مستوى الصوت</label>
+                <input id="demo-rtl" type="range" min="0" max="10" value="3">
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.rangeSlider('#demo-eq-1', {orientation: 'vertical', min: -12, max: 12, value: 3, ariaLabel: 'Bass'});
+E.rangeSlider('#demo-rtl', {ticks: true});   // the page's direction is followed
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Forms">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">In a form</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                A two-thumb slider submits two inputs. They share the <code>name</code> by default, so the form
+                sends <code>budget=200&amp;budget=800</code> (<code>FormData.getAll('budget')</code> gives both);
+                <code>names: ['budget_min', 'budget_max']</code> names them separately. Reset puts the slider back
+                with the form.
+            </p>
+            <form id="demo-form" class="sx-rs-field mb-4">
+                <label class="form-label" for="demo-form-guests">Guests</label>
+                <input id="demo-form-guests" type="range" name="guests" min="1" max="12" value="2">
+                <span class="form-label">Budget</span>
+                <div id="demo-form-budget"></div>
+                <div class="flex gap-2">
+                    <button class="btn btn-primary" type="submit">Show FormData</button>
+                    <button class="btn btn-outline" type="reset">Reset</button>
+                </div>
+            </form>
+            <pre id="demo-form-output" class="sx-rs-output mb-4">Nothing submitted yet</pre>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.rangeSlider('#demo-form-guests', {ticks: true});
+E.rangeSlider('#demo-form-budget', {
+    range: true, min: 0, max: 2000, step: 50, value: [200, 800],
+    names: ['budget_min', 'budget_max'], ariaLabels: ['Budget from', 'Budget to'],
+    labels: (v) => '£' + v
+});
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Blueprint">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">In an F.create blueprint</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>type: 'slider'</code> is the slider as a form field; <code>formConfig</code> takes its
+                options. With <code>formConfig.range</code> the field's value is <code>[low, high]</code>. A plain
+                <code>type: 'range'</code> stays a native input unless <code>formConfig.slider</code> is set.
+            </p>
+            <div id="demo-blueprint" class="sx-rs-field mb-3"></div>
+            <pre id="demo-blueprint-output" class="sx-rs-output mb-4">Submit to see the data</pre>
+            <div class="code-block language-javascript">
+                <pre><code>
+F.render('#demo-blueprint', {
+    brightness: {type: 'slider', label: 'Brightness', min: 0, max: 100, default: 70,
+                 formConfig: {labels: (v) => v + '%'}},
+    hours: {type: 'slider', label: 'Opening hours', min: 0, max: 24, default: [9, 17],
+            formConfig: {range: true, minDistance: 1, ticks: 6, tickLabels: true,
+                         labels: (v) => String(v).padStart(2, '0') + ':00'}}
+}, {}, {onSubmit: (data) => console.log(data.hours)});   // [9, 17]
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="API">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">API</h2></div>
+        <div class="card-body">
+            <h3 class="text-lg font-semibold mb-3">Methods</h3>
+            <ul class="mb-4">
+                <li><code>getValue()</code> - a number, or <code>[low, high]</code></li>
+                <li><code>setValue(value, {silent})</code> - fires beforechange, input and change unless silent</li>
+                <li><code>setRange(min, max)</code> - new bounds; the value is pulled inside them</li>
+                <li><code>enable()</code>, <code>disable()</code>, <code>isDisabled()</code>, <code>destroy()</code></li>
+            </ul>
+            <h3 class="text-lg font-semibold mb-3">Events</h3>
+            <ul class="mb-4">
+                <li><code>input(value)</code> - while dragging, and on each key press</li>
+                <li><code>change(value)</code> - when the value is committed</li>
+                <li><code>beforechange(next, current)</code> - return <code>false</code> to refuse a move</li>
+            </ul>
+            <p class="mb-2">
+                Each is an <code>onX</code> option, a <code>.on('x')</code> listener and a bubbling
+                <code>dm:range-slider:x</code> DOM event. This one refuses to go above 80:
+            </p>
+            <div class="sx-rs-field mb-2">
+                <label class="form-label" for="demo-capped">Capped at 80</label>
+                <input id="demo-capped" type="range" value="50">
+            </div>
+            <div class="flex gap-2 mb-4">
+                <button id="demo-capped-disable" class="btn btn-outline btn-sm" type="button">Disable</button>
+                <button id="demo-capped-set" class="btn btn-ghost btn-sm" type="button">setValue(25)</button>
+            </div>
+            <ul id="demo-log" class="sx-rs-log" aria-live="off">
+                <li>Nothing yet - change events from every slider on this page appear here</li>
+            </ul>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(D().format('HH:mm:ss') + ' - ' + message) + '</li>');
+        list.find('li').filter((i) => i >= 8).remove();
+    };
+
+    // ---- Basic -----------------------------------------------------------
+    E.rangeSlider('#demo-volume', {
+        onInput: (value) => $('#demo-volume-value').text(value)
+    });
+
+    // ---- Range -------------------------------------------------------------
+    E.rangeSlider('#demo-price', {
+        range: true,
+        min: 0,
+        max: 1000,
+        step: 10,
+        value: [100, 600],
+        minDistance: 50,
+        name: 'price',
+        ariaLabel: 'Price',
+        labels: (v) => '£' + v,
+        tooltip: 'always',
+        onInput: ([low, high]) => $('#demo-price-value').text('£' + low + ' and £' + high)
+    });
+
+    // ---- Ticks and marks -------------------------------------------------------
+    E.rangeSlider('#demo-rating', {ticks: true, tickLabels: true, labels: (v) => v + '★'});
+    E.rangeSlider('#demo-temp', {
+        ticks: 10,
+        labels: (v) => v + '°C',
+        marks: [
+            {value: 30, label: 'Delicates'},
+            {value: 40, label: 'Everyday'},
+            {value: 60, label: 'Towels'},
+            {value: 90, label: 'Boil'}
+        ]
+    });
+
+    // ---- Vertical and RTL ------------------------------------------------------
+    [['#demo-eq-1', 'Bass', 3], ['#demo-eq-2', 'Middle', -2], ['#demo-eq-3', 'Treble', 6]].forEach(([sel, name, value]) => {
+        E.rangeSlider(sel, {orientation: 'vertical', min: -12, max: 12, value, ariaLabel: name, labels: (v) => (v > 0 ? '+' : '') + v + ' dB'});
+    });
+    E.rangeSlider('#demo-rtl', {ticks: true});
+
+    // ---- Forms -------------------------------------------------------------
+    E.rangeSlider('#demo-form-guests', {ticks: true});
+    E.rangeSlider('#demo-form-budget', {
+        range: true, min: 0, max: 2000, step: 50, value: [200, 800],
+        names: ['budget_min', 'budget_max'], ariaLabels: ['Budget from', 'Budget to'],
+        labels: (v) => '£' + v
+    });
+    $('#demo-form').on('submit', (e) => {
+        e.preventDefault();
+        const lines = [];
+        for (const [key, value] of new FormData(e.currentTarget).entries()) lines.push(key + ' = ' + value);
+        $('#demo-form-output').text(lines.join('\n'));
+    });
+
+    // ---- Blueprint -------------------------------------------------------------
+    F.render('#demo-blueprint', {
+        brightness: {type: 'slider', label: 'Brightness', min: 0, max: 100, default: 70,
+            formConfig: {labels: (v) => v + '%'}},
+        hours: {type: 'slider', label: 'Opening hours', min: 0, max: 24, default: [9, 17],
+            formConfig: {range: true, minDistance: 1, ticks: 6, tickLabels: true,
+                labels: (v) => String(v).padStart(2, '0') + ':00'}}
+    }, {}, {
+        submitText: 'Save',
+        onSubmit: (data) => $('#demo-blueprint-output').text(JSON.stringify(data))
+    });
+
+    // ---- API ---------------------------------------------------------------------
+    const capped = E.rangeSlider('#demo-capped', {
+        labels: (v) => v + ' / 100',
+        onBeforeChange: (next) => next <= 80
+    });
+    $('#demo-capped-disable').on('click', (e) => {
+        if (capped.isDisabled()) capped.enable();
+        else capped.disable();
+        $(e.currentTarget).text(capped.isDisabled() ? 'Enable' : 'Disable');
+    });
+    $('#demo-capped-set').on('click', () => capped.setValue(25));
+
+    // ---- One listener for the whole page ---------------------------------------
+    $('main').on('dm:range-slider:change', (e) => {
+        log((e.target.id || 'slider') + ': ' + JSON.stringify(e.detail.args[0]));
+    });
+</script>
+
+</body>
+</html>

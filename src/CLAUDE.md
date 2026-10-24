@@ -510,6 +510,26 @@ Accessed via `Domma.elements`:
       `avatar-more-popover`) listing the hidden people, or calls `onMore(hidden, event)`; `popover: false` → `title`
     - CSS at the end of elements.css: tones = hue 24% into `--dm-surface`, text = hue 30% into `--dm-text` (min 5.2:1 on all themes);
       hooks `--dm-avatar-size|radius|overlap|gap-color|z`. See [docs/Avatar.md](../docs/Avatar.md)
+- **Dropzone** (`components/dropzone.js`): `elements.dropzone(target, { accept, multiple, maxFiles, maxSize, minSize, previews, name, input, list, upload, autoUpload, retry, labels, disabled })` →
+  `{zone, input, getFiles(), getEntries(), addFiles(), removeFile(id|entry|file), clear(), browse(), upload(), retry(id?), cancel(id?), enable(), disable(), destroy()}`
+    - Events (entry = `{id, file, name, size, type, status, progress, response, error}`): beforeadd (cancelable), add,
+      reject(entry, 'type'|'size'|'count'), remove, change(files), uploadstart, progress(entry, %), success, error, complete
+    - The element is the area (`role="button"`, Enter/Space/click → `input.click()`, paste adds); the list and `sr-only`
+      `aria-live` region are siblings after it (a button cannot hold buttons). A file input target gets an area drawn after it
+    - Forms: no `upload` → `input.files` rewritten with a DataTransfer after every change; no DataTransfer → the form's
+      `formdata` event appends the files. `upload` → one XHR per file (H/fetch has no upload progress), input kept empty
+    - Page drop guard: one document `dragenter` listener while any dropzone exists; a file drag arms dragover/drop
+      preventDefault on the document until drop / leaving the window / 1.5 s without dragover (`_guardState()` for tests)
+    - F.create `type: 'dropzone'` (formConfig = options; value = File[]; required = at least one)
+- **RangeSlider** (`components/range-slider.js`): `elements.rangeSlider(target, { min, max, step, value, range, orientation, ticks, tickLabels, labels, tooltip, marks, disabled, name, names, minDistance, rtl, ariaLabel, ariaLabels })`
+  (alias `elements.slider`) → `getValue()`, `setValue(v, {silent})`, `setRange(min, max)`, `enable()`, `disable()`, `destroy()`
+    - Events: input (drag / each key), change (commit), beforechange(next, current) cancelable; each move also dispatches
+      native `input` / `change` on the real input
+    - Real `<input type="range">`s carry the value (hidden; two for `range: true`, same `name` unless `names`); an instance
+      `value` property on each input (removed on destroy) redraws when code or M.bind sets `input.value`; form reset re-reads
+    - `role="slider"` thumbs with per-thumb aria-valuemin/max (the other thumb), `aria-valuetext` only with a `labels` formatter;
+      pointer capture on the root; RTL via `rtl` or computed direction (positions from the right, Left arrow increases)
+    - F.create `type: 'slider'` (or `'range'` + `formConfig.slider`); `formConfig.range` → value `[low, high]`
 - **Breadcrumbs**: Navigation trail component
     - `elements.breadcrumbs(selector, { items, separator, homeIcon, responsive, onChange })` →
       `setItems()`, `addItem()`, `removeItem()`, `getItems()`, `destroy()`
@@ -608,6 +628,22 @@ Accessed via `Domma.elements`:
       `_bindEvents`, beside signature / chooser init) binds them into `form._inputGroups`; a re-render or `form.destroy()` tears down
     - `destroy()` removes the addons and extras (listeners, timers, revealed type, aria-describedby), and the wrapper only if this
       instance created it. See docs/DommaDocumentation.md#input-groups
+- **SplitPane** (`components/split-pane.js`): `elements.splitPane(container, { direction, sizes, minSize, maxSize, gutterSize, snapOffset, collapsible, collapsedSize, collapseButton, persistKey, cursor, disabled, step, largeStep, gutterLabel, onBeforeDrag, onDragStart, onDrag, onDragEnd, onResize, onCollapse, onExpand })` →
+  `getSizes()`, `setSizes(arr)`, `collapse(i)`, `expand(i)`, `isCollapsed(i)`, `setOptions()`, `destroy()`, `panes`; componentName `split-pane`
+    - Element children = panes; `div.dm-split-gutter[role=separator]` inserted between; each pane `flex: 0 0 calc(P% - share-of-gutters px)`
+      (no absolute positioning). Sizes are % of the content box less gutters, always summing to 100; px limits are converted on demand
+    - Pointer events with capture on the gutter; `.dm-split-dragging` on the container sets `pointer-events: none` on panes (iframes).
+      RTL inverts horizontal deltas and arrow keys. A ResizeObserver re-clamps px limits in rAF (flex-basis writes cannot loop it)
+    - `persistKey` → `S.set('split-pane:<key>', {sizes, collapsed, restoreTo})`; destroy restores pane `style`/ids and removes gutters
+- **VirtualList** (`components/virtual-list.js`): `elements.virtualList(container, { items | count + getItem, itemHeight (px | 'auto'), estimatedItemHeight, overscan, render, safe, keyField, label, rowClass, loadMore, threshold, loadingTemplate, endTemplate, errorTemplate, onRender, onScroll, onLoadMore, onLoaded, onEnd, onError, onItemClick })` →
+  `setItems()`, `append()`, `prepend()`, `update(indexOrKey, item)`, `indexOfKey()`, `scrollToIndex(i, {align, smooth})`, `focusIndex()`,
+  `refresh()`, `getVisibleRange()`, `getRenderedRange()`, `retry()`, `isDone()`, `setCount()`, `destroy()`, `count`; componentName `virtual-list`
+    - Container = scroller (needs a CSS height). Inside: `.dm-vlist-spacer` (total height), `.dm-vlist-items[role=list]` with absolutely placed
+      `.dm-vlist-row[role=listitem]` (translateY per row, aria-posinset/setsize; setsize -1 while loadMore may add more), `.dm-vlist-status[role=status]`
+    - 'auto': heights cached by key, prefix sums in a Float64Array rebuilt from the first dirty index; new rows measured in one read per pass;
+      a row above the viewport changing height shifts scrollTop by the difference. A row ResizeObserver catches later changes
+    - Roving tabindex; the focused row stays rendered out of range; render() strings go through `fill()` (sanitised unless `safe: false`)
+    - No horizontal mode and no sticky group headers (deliberately)
 
 ### tables.js - DataTable-like functionality
 
@@ -713,6 +749,17 @@ S.get('missing', []);                              // Default value
 S.keys();                                          // List all Domma keys
 S.clear();                                         // Clear only Domma keys
 ```
+
+### i18n.js - Translations
+
+Accessed via `Domma.i18n` (and `Domma.t()`; no single-letter alias). Full guide: [docs/I18n.md](../docs/I18n.md).
+
+- Messages are JSON, flattened to dot keys; plurals/select are OBJECTS of forms (no ICU parser) chosen by
+  `Intl.PluralRules` of the locale the message came from. `t()` = plain text, `html()` = markup kept + params
+  escaped; nothing is ever evaluated. `translate()` sanitises `data-i18n-html`.
+- All locale data comes from `Intl` - do not add tables (the RTL list is only a fallback for engines without
+  `Intl.Locale` text info). Formatter instances are cached per locale + options.
+- Node-safe: no DOM at import; `translate()` returns 0 without `document`. `i18n.reset()` for tests.
 
 ### effects.js - Visual effects and animations
 
@@ -825,6 +872,7 @@ src/
 ├── config.js        # JSON configuration engine
 ├── http.js          # HTTP client
 ├── storage.js       # localStorage wrapper
+├── i18n.js          # Translations, plurals, Intl formatting (Domma.i18n / Domma.t)
 ├── effects.js       # Visual effects (breathe, pulse, scribe, reveal, scramble, counter, ripple, shake)
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system
@@ -848,3 +896,13 @@ src/
 - [Main CLAUDE.md](../CLAUDE.md) - Project overview and documentation index
 - [Bundles Guide](./bundles/CLAUDE.md) - Custom bundle creation
 - [Showcase Development](../public/showcase/CLAUDE.md) - Creating showcase examples
+- **Focus trap** (`components/focus-trap.js`, `E.focusTrap(containers, opts)`, componentName `focus-trap`): a
+  module-level stack - activating pauses the trap on top, deactivating unpauses it. Tabbables are looked up per Tab
+  press (`tabbables()` walks open shadow roots in render order, slots by their assigned elements), Tab is always
+  handled by the trap (`preventDefault` then focus), focusin outside pulls focus back. `inert: true` marks siblings
+  up to <body> and removes only what it marked (also on pause). Not yet used by modal/slideover/popover.
+- **Command palette** (`components/command-palette.js`, `E.commandPalette(opts)`, componentName `command-palette`):
+  factory-made overlay on <body>; rows are built with createElement/textContent (highlights are spans), never
+  innerHTML. Uses a FocusTrap (`allowOutsideClick`, returnFocus) for Tab; Escape/arrows/Enter are handled on the
+  overlay's keydown. `source` runs are guarded by a token plus AbortController, so a late answer is dropped.
+  Recents store ids only (S under `recentKey`), resolved against the static tree and commands run this session.

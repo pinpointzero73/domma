@@ -9930,3 +9930,1067 @@ a.avatar-tone-7:hover {
 a.avatar-more-person:hover .avatar-more-name {
     text-decoration: underline;
 }
+
+/* ===== Command Palette ===== */
+/*
+ * E.commandPalette(options) - src/components/command-palette.js
+ *
+ * The overlay covers the viewport: a backdrop and a panel near the top, the way the
+ * modal looks (--dm-modal-* tokens), so it sits with the site's dialogs in every theme.
+ * Above modals and slideovers, which it is often opened over; below popovers (10045)
+ * and the context menu (10050).
+ */
+.dm-command-palette {
+    position: fixed;
+    inset: 0;
+    z-index: 10040;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 12vh 1rem 1rem;
+    box-sizing: border-box;
+    --dm-command-palette-duration: 150ms;
+}
+
+.dm-command-palette[hidden] {
+    display: none;
+}
+
+.dm-command-palette *,
+.dm-command-palette *::before,
+.dm-command-palette *::after {
+    box-sizing: border-box;
+}
+
+.dm-command-palette-backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--dm-modal-backdrop);
+    opacity: 0;
+    transition: opacity var(--dm-command-palette-duration) ease;
+}
+
+.dm-command-palette-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(40rem, 100%);
+    max-height: min(32rem, 76vh);
+    background: var(--dm-modal-bg);
+    color: var(--dm-text);
+    border: 1px solid var(--dm-modal-border);
+    border-radius: var(--dm-radius-lg);
+    box-shadow: var(--dm-modal-shadow);
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.97) translateY(-6px);
+    transition:
+        opacity var(--dm-command-palette-duration) ease,
+        transform var(--dm-command-palette-duration) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dm-command-palette.is-open .dm-command-palette-backdrop { opacity: 1; }
+.dm-command-palette.is-open .dm-command-palette-panel { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-command-palette-backdrop,
+    .dm-command-palette-panel {
+        transition: none;
+    }
+}
+
+/* Where you are in nested pages, with a way back up. */
+.dm-command-palette-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 0.875rem 0;
+    font-size: 0.8125rem;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-crumbs[hidden] { display: none; }
+
+.dm-command-palette-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-sm);
+    background: transparent;
+    color: var(--dm-text);
+    cursor: pointer;
+}
+
+.dm-command-palette-back:hover { background: var(--dm-hover-bg); }
+
+.dm-command-palette-back:focus-visible {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: 1px;
+}
+
+.dm-command-palette-trail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dm-command-palette-trail li + li::before {
+    content: "/";
+    margin-right: 0.25rem;
+    opacity: 0.6;
+}
+
+.dm-command-palette-trail [aria-current] { color: var(--dm-text); font-weight: 500; }
+
+.dm-command-palette-search {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid var(--dm-border);
+}
+
+.dm-command-palette-search-icon {
+    display: inline-flex;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.25rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--dm-text);
+    font: inherit;
+    font-size: 1rem;
+    outline: none;
+}
+
+.dm-command-palette-input::placeholder { color: var(--dm-input-placeholder); opacity: 1; }
+
+/* The box is the focus; the panel shows it rather than a ring round a borderless input. */
+.dm-command-palette-search:focus-within {
+    border-bottom-color: var(--dm-border-focus);
+}
+
+.dm-command-palette-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--dm-border);
+    border-top-color: var(--dm-primary);
+    border-radius: 50%;
+    animation: dm-command-palette-spin 0.7s linear infinite;
+}
+
+.dm-command-palette-spinner[hidden] { display: none; }
+
+@keyframes dm-command-palette-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-command-palette-spinner { animation-duration: 2.4s; }
+}
+
+.dm-command-palette-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.375rem;
+}
+
+.dm-command-palette-list[hidden] { display: none; }
+
+.dm-command-palette-group + .dm-command-palette-group,
+.dm-command-palette-group + .dm-command-palette-item,
+.dm-command-palette-item + .dm-command-palette-group {
+    margin-top: 0.375rem;
+}
+
+.dm-command-palette-group-heading {
+    padding: 0.375rem 0.625rem 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.5rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: var(--dm-radius-md);
+    color: var(--dm-text);
+    cursor: pointer;
+    user-select: none;
+}
+
+.dm-command-palette-item.is-active {
+    background: var(--dm-selected-bg);
+}
+
+/* Forced colours drop backgrounds: the active row keeps an outline instead. */
+@media (forced-colors: active) {
+    .dm-command-palette-item.is-active { outline: 2px solid Highlight; }
+}
+
+.dm-command-palette-item[aria-disabled="true"] {
+    cursor: default;
+    opacity: var(--dm-disabled-opacity);
+}
+
+.dm-command-palette-icon {
+    flex: 0 0 1rem;
+    display: inline-flex;
+    justify-content: center;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-item.is-active .dm-command-palette-icon { color: var(--dm-text); }
+
+.dm-command-palette-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.dm-command-palette-title,
+.dm-command-palette-subtitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dm-command-palette-subtitle {
+    font-size: 0.8125rem;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-match {
+    color: var(--dm-primary);
+    font-weight: 600;
+}
+
+.dm-command-palette-shortcut,
+.dm-command-palette-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.dm-command-palette kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.375rem;
+    height: 1.375rem;
+    padding: 0 0.3rem;
+    border: 1px solid var(--dm-border);
+    border-bottom-width: 2px;
+    border-radius: var(--dm-radius-sm);
+    background: var(--dm-background-alt);
+    color: var(--dm-text-secondary);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    line-height: 1;
+}
+
+.dm-command-palette-more {
+    display: inline-flex;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-status {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--dm-text-muted);
+}
+
+.dm-command-palette-status[hidden] { display: none; }
+.dm-command-palette-status[data-state="error"] { color: var(--dm-danger); }
+
+.dm-command-palette-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0.875rem;
+    border-top: 1px solid var(--dm-border);
+    background: var(--dm-background-alt);
+    color: var(--dm-text-secondary);
+    font-size: 0.75rem;
+}
+
+/* Phones: the whole width, from the top. */
+@media (max-width: 640px) {
+    .dm-command-palette {
+        padding: 0;
+    }
+
+    .dm-command-palette-panel {
+        width: 100%;
+        max-height: 85vh;
+        border-width: 0 0 1px;
+        border-radius: 0 0 var(--dm-radius-lg) var(--dm-radius-lg);
+    }
+
+    .dm-command-palette-footer { display: none; }
+}
+
+/* ===== Split Pane ===== */
+/* E.splitPane(container): flexbox panes with a fixed flex-basis each, gutters between. */
+.dm-split {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+}
+
+.dm-split-horizontal {
+    flex-direction: row;
+}
+
+.dm-split-vertical {
+    flex-direction: column;
+}
+
+.dm-split > .dm-split-pane {
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+.dm-split-collapsed {
+    overflow: hidden;
+}
+
+.dm-split > .dm-split-gutter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dm-border);
+    touch-action: none;
+    user-select: none;
+    transition: background-color var(--dm-transition-fast);
+}
+
+/* A thin grip line drawn inside the gutter. */
+.dm-split > .dm-split-gutter::before {
+    content: "";
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-text-muted);
+    opacity: 0.6;
+}
+
+.dm-split-horizontal > .dm-split-gutter::before {
+    width: 2px;
+    height: 1.5rem;
+}
+
+.dm-split-vertical > .dm-split-gutter::before {
+    width: 1.5rem;
+    height: 2px;
+}
+
+.dm-split > .dm-split-gutter:hover,
+.dm-split > .dm-split-gutter.is-dragging {
+    background: var(--dm-primary);
+}
+
+.dm-split > .dm-split-gutter:hover::before,
+.dm-split > .dm-split-gutter.is-dragging::before {
+    background: var(--dm-primary-text);
+}
+
+.dm-split > .dm-split-gutter:focus-visible {
+    outline: 2px solid var(--dm-primary);
+    outline-offset: 1px;
+    z-index: 1;
+}
+
+.dm-split-disabled > .dm-split-gutter,
+.dm-split-disabled > .dm-split-gutter:hover {
+    background: var(--dm-border);
+    cursor: default;
+}
+
+/* While dragging, the panes (and any iframe in them) take no pointer events, so the
+   gutter's captured pointer keeps every move, and text does not get selected. */
+.dm-split-dragging > .dm-split-pane {
+    pointer-events: none;
+    user-select: none;
+}
+
+.dm-split-horizontal.dm-split-dragging {
+    cursor: col-resize;
+}
+
+.dm-split-vertical.dm-split-dragging {
+    cursor: row-resize;
+}
+
+.dm-split-toggle {
+    position: absolute;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    cursor: pointer;
+    font: inherit;
+    line-height: 1;
+}
+
+.dm-split-horizontal > .dm-split-gutter > .dm-split-toggle {
+    top: 0.5rem;
+}
+
+.dm-split-vertical > .dm-split-gutter > .dm-split-toggle {
+    left: 0.5rem;
+}
+
+.dm-split-toggle::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border: 4px solid transparent;
+}
+
+.dm-split-horizontal > .dm-split-gutter > .dm-split-toggle::before {
+    border-right-color: currentColor;
+    margin-right: 4px;
+}
+
+.dm-split-vertical > .dm-split-gutter > .dm-split-toggle::before {
+    border-bottom-color: currentColor;
+    margin-bottom: 4px;
+}
+
+.dm-split-toggle:hover {
+    background: var(--dm-hover-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-split > .dm-split-gutter {
+        transition: none;
+    }
+}
+
+/* ===== Virtual List ===== */
+/* E.virtualList(container): the container scrolls; a spacer gives it its height and the
+   rendered rows are placed by transform. The container needs a height from your CSS. */
+.dm-vlist {
+    position: relative;
+    overflow: auto;
+    overflow-anchor: none;
+    contain: content;
+    background: var(--dm-surface);
+    color: var(--dm-text);
+}
+
+.dm-vlist-spacer {
+    width: 1px;
+    pointer-events: none;
+}
+
+.dm-vlist-items {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    outline: none;
+}
+
+.dm-vlist-row {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    will-change: transform;
+}
+
+.dm-vlist-fixed .dm-vlist-row {
+    overflow: hidden;
+}
+
+.dm-vlist-row:focus-visible {
+    outline: 2px solid var(--dm-primary);
+    outline-offset: -2px;
+}
+
+.dm-vlist-status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dm-space-2);
+    padding: var(--dm-space-3);
+    color: var(--dm-text-muted);
+    box-sizing: border-box;
+}
+
+.dm-vlist-status[hidden] {
+    display: none;
+}
+
+.dm-vlist-loading,
+.dm-vlist-error {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dm-space-2);
+}
+
+/* Plain text colour: --dm-danger is not readable on --dm-surface in every theme. */
+.dm-vlist-error {
+    color: var(--dm-text);
+}
+
+.dm-vlist-spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--dm-border);
+    border-top-color: var(--dm-primary);
+    border-radius: var(--dm-radius-full);
+    animation: dm-loader-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-vlist-spinner {
+        animation-duration: 2.4s;
+    }
+}
+
+/* ===== Dropzone ===== */
+/*
+ * E.dropzone(target, options) - src/components/dropzone.js
+ *
+ * The caller's element is the area (.dm-dropzone, role="button"); the file list
+ * (.dm-dropzone-files) is drawn after it, because a button cannot hold buttons.
+ * Theme tokens only, so every theme and its dark variant colour it.
+ */
+.dm-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dm-space-2);
+    min-height: 8rem;
+    padding: var(--dm-space-6) var(--dm-space-4);
+    border: 2px dashed var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--dm-transition-fast), background-color var(--dm-transition-fast);
+}
+
+.dm-dropzone:hover {
+    border-color: var(--dm-primary);
+}
+
+.dm-dropzone:focus-visible {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: 2px;
+    border-color: var(--dm-primary);
+}
+
+.dm-dropzone.is-dragover {
+    border-color: var(--dm-primary);
+    border-style: solid;
+    background: color-mix(in srgb, var(--dm-primary) 10%, var(--dm-surface));
+}
+
+.dm-dropzone.is-invalid {
+    border-color: var(--dm-danger);
+}
+
+.dm-dropzone.is-disabled {
+    opacity: var(--dm-disabled-opacity, 0.6);
+    cursor: not-allowed;
+}
+
+.dm-dropzone.is-disabled:hover {
+    border-color: var(--dm-border);
+}
+
+.dm-dropzone-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--dm-space-1);
+    pointer-events: none;
+}
+
+.dm-dropzone-icon {
+    color: var(--dm-text-secondary);
+}
+
+.dm-dropzone:hover .dm-dropzone-icon,
+.dm-dropzone.is-dragover .dm-dropzone-icon {
+    color: var(--dm-text);
+}
+
+.dm-dropzone-text {
+    font-weight: 500;
+}
+
+.dm-dropzone-hint {
+    color: var(--dm-text-muted);
+    font-size: var(--dm-font-size-sm);
+}
+
+.dm-dropzone-files {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dm-space-2);
+    margin: var(--dm-space-3) 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dm-dropzone-files[hidden] {
+    display: none;
+}
+
+.dm-dropzone-file {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto auto;
+    grid-template-areas: "thumb meta retry remove" "thumb bar bar bar";
+    align-items: center;
+    column-gap: var(--dm-space-3);
+    row-gap: var(--dm-space-1);
+    padding: var(--dm-space-2) var(--dm-space-3);
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-md);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+}
+
+.dm-dropzone-file[data-status="error"] {
+    border-color: var(--dm-danger);
+}
+
+.dm-dropzone-thumb {
+    grid-area: thumb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    overflow: hidden;
+    border-radius: var(--dm-radius-sm);
+    background: color-mix(in srgb, var(--dm-text) 8%, var(--dm-surface));
+    color: var(--dm-text-secondary);
+    font-size: var(--dm-font-size-xs);
+    font-weight: 600;
+}
+
+.dm-dropzone-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dm-dropzone-meta {
+    grid-area: meta;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--dm-space-2);
+    min-width: 0;
+}
+
+.dm-dropzone-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dm-dropzone-size,
+.dm-dropzone-status {
+    color: var(--dm-text-muted);
+    font-size: var(--dm-font-size-sm);
+}
+
+/* State colours stay on borders and bars (--dm-danger / --dm-success as text on a
+   surface fail AA in several themes); the words carry the state */
+.dm-dropzone-file[data-status="error"] .dm-dropzone-status {
+    color: var(--dm-text);
+    font-weight: 600;
+}
+
+.dm-dropzone-progress {
+    grid-area: bar;
+    display: block;
+    height: 0.375rem;
+    overflow: hidden;
+    border-radius: var(--dm-radius-full);
+    background: color-mix(in srgb, var(--dm-text) 10%, var(--dm-surface));
+}
+
+.dm-dropzone-progress[hidden] {
+    display: none;
+}
+
+.dm-dropzone-progress-bar {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--dm-primary);
+}
+
+.dm-dropzone-file[data-status="done"] .dm-dropzone-progress-bar {
+    background: var(--dm-success);
+}
+
+.dm-dropzone-retry {
+    grid-area: retry;
+}
+
+.dm-dropzone-retry[hidden] {
+    display: none;
+}
+
+.dm-dropzone-remove {
+    grid-area: remove;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--dm-radius-full);
+    background: transparent;
+    color: var(--dm-text-muted);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.dm-dropzone-remove:hover:not(:disabled) {
+    background: var(--dm-hover-bg);
+    color: var(--dm-text);
+}
+
+.dm-dropzone-remove:focus-visible {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .dm-dropzone-progress-bar {
+        transition: width var(--dm-transition-fast);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-dropzone {
+        transition: none;
+    }
+}
+
+/* ===== Range Slider ===== */
+/*
+ * E.rangeSlider(target, options) / E.slider - src/components/range-slider.js
+ *
+ * The real <input type="range"> elements are hidden; this is the drawn slider in
+ * front of them. The root is the hit area (2.75rem tall - a comfortable touch
+ * target) with a thin track through its middle. Thumbs are positioned by JS
+ * with left / right / bottom as a percentage and centred with a transform.
+ */
+.dm-range-slider {
+    position: relative;
+    display: block;
+    height: 2.75rem;
+    margin: 0 0.625rem;
+    color: var(--dm-text);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    /* A horizontal slider still lets the page scroll vertically on touch */
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dm-range-slider.has-tick-labels,
+.dm-range-slider.has-marks {
+    margin-bottom: 1.5rem;
+}
+
+/* A tooltip that is always shown needs room above the track */
+.dm-range-slider[data-tooltip="always"]:not([data-orientation="vertical"]) {
+    margin-top: 1.75rem;
+}
+
+.dm-range-slider[data-orientation="vertical"] {
+    display: inline-block;
+    width: 2.75rem;
+    height: 12rem;
+    margin: 0.625rem 0;
+    touch-action: pan-x;
+    vertical-align: top;
+}
+
+.dm-range-slider[data-orientation="vertical"].has-tick-labels,
+.dm-range-slider[data-orientation="vertical"].has-marks {
+    margin-bottom: 0.625rem;
+    margin-right: 3rem;
+}
+
+.dm-range-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 0.375rem;
+    transform: translateY(-50%);
+    border-radius: var(--dm-radius-full);
+    background: color-mix(in srgb, var(--dm-text) 16%, var(--dm-surface));
+}
+
+.dm-range-slider[data-orientation="vertical"] .dm-range-track {
+    left: 50%;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 0.375rem;
+    height: auto;
+    transform: translateX(-50%);
+}
+
+.dm-range-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: var(--dm-primary);
+}
+
+.dm-range-slider[data-orientation="vertical"] .dm-range-fill {
+    left: 0;
+    right: 0;
+    top: auto;
+}
+
+.dm-range-thumb {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--dm-primary);
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-surface);
+    box-shadow: var(--dm-shadow-md);
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    touch-action: none;
+}
+
+.dm-range-slider[dir="rtl"] .dm-range-thumb {
+    transform: translate(50%, -50%);
+}
+
+.dm-range-slider[data-orientation="vertical"] .dm-range-thumb {
+    top: auto;
+    left: 50%;
+    transform: translate(-50%, 50%);
+}
+
+.dm-range-thumb:hover {
+    box-shadow: 0 0 0 0.375rem var(--dm-focus-ring);
+}
+
+.dm-range-thumb:focus-visible {
+    outline: 2px solid var(--dm-border-focus);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 0.375rem var(--dm-focus-ring);
+}
+
+/* The thumb being moved sits above the other when they meet */
+.dm-range-thumb.is-active,
+.dm-range-thumb:focus-visible {
+    z-index: 3;
+}
+
+.dm-range-slider.is-dragging,
+.dm-range-slider.is-dragging .dm-range-thumb {
+    cursor: grabbing;
+}
+
+.dm-range-tooltip {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--dm-radius-sm);
+    background: var(--dm-text);
+    color: var(--dm-surface);
+    font-size: var(--dm-font-size-xs);
+    line-height: 1.5;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dm-range-slider[data-orientation="vertical"] .dm-range-tooltip {
+    bottom: auto;
+    left: calc(100% + 0.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dm-range-slider[data-tooltip="always"] .dm-range-tooltip,
+.dm-range-slider[data-tooltip="hover"] .dm-range-thumb:hover .dm-range-tooltip,
+.dm-range-slider[data-tooltip="hover"] .dm-range-thumb:focus-visible .dm-range-tooltip,
+.dm-range-slider[data-tooltip="hover"] .dm-range-thumb.is-active .dm-range-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dm-range-ticks,
+.dm-range-marks {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.dm-range-tick,
+.dm-range-mark {
+    position: absolute;
+    top: calc(50% + 0.375rem);
+    width: 1px;
+    height: 0.375rem;
+    background: var(--dm-border-dark);
+    transform: translateX(-50%);
+}
+
+.dm-range-slider[dir="rtl"] .dm-range-tick,
+.dm-range-slider[dir="rtl"] .dm-range-mark {
+    transform: translateX(50%);
+}
+
+.dm-range-tick.is-in-range {
+    background: var(--dm-primary);
+}
+
+.dm-range-slider[data-orientation="vertical"] .dm-range-tick,
+.dm-range-slider[data-orientation="vertical"] .dm-range-mark {
+    top: auto;
+    left: calc(50% + 0.375rem);
+    width: 0.375rem;
+    height: 1px;
+    transform: translateY(50%);
+}
+
+.dm-range-mark {
+    width: 0.375rem;
+    height: 0.375rem;
+    top: 50%;
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-surface);
+    border: 1px solid var(--dm-border-dark);
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    z-index: 1;
+}
+
+.dm-range-slider[dir="rtl"] .dm-range-mark {
+    transform: translate(50%, -50%);
+}
+
+.dm-range-slider[data-orientation="vertical"] .dm-range-mark {
+    left: 50%;
+    width: 0.375rem;
+    height: 0.375rem;
+    transform: translate(-50%, 50%);
+}
+
+.dm-range-tick-label,
+.dm-range-mark-label {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 50%;
+    color: var(--dm-text-muted);
+    font-size: var(--dm-font-size-xs);
+    line-height: 1.2;
+    white-space: nowrap;
+    transform: translateX(-50%);
+}
+
+.dm-range-mark-label {
+    top: calc(100% + 0.625rem);
+    color: var(--dm-text-secondary);
+    cursor: pointer;
+}
+
+.dm-range-slider[data-orientation="vertical"] .dm-range-tick-label,
+.dm-range-slider[data-orientation="vertical"] .dm-range-mark-label {
+    top: 50%;
+    left: calc(100% + 0.5rem);
+    transform: translateY(-50%);
+}
+
+.dm-range-slider.is-disabled {
+    opacity: var(--dm-disabled-opacity, 0.6);
+    cursor: not-allowed;
+}
+
+.dm-range-slider.is-disabled .dm-range-thumb {
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .dm-range-thumb {
+        transition: box-shadow var(--dm-transition-fast);
+    }
+
+    .dm-range-tooltip {
+        transition: opacity var(--dm-transition-fast), visibility var(--dm-transition-fast);
+    }
+}
+
+@media (forced-colors: active) {
+    .dm-range-fill,
+    .dm-dropzone-progress-bar {
+        background: Highlight;
+    }
+
+    .dm-range-thumb {
+        background: ButtonFace;
+        border-color: ButtonText;
+    }
+}

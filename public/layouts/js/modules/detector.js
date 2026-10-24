@@ -112,6 +112,7 @@ export const LayoutDetector = {
             path.includes('/storage/') ||
             path.includes('/download/') ||
             path.includes('/http/') ||
+            path.includes('/i18n/') ||
             path.includes('/grid/') ||
             path.includes('/theme-roller/') ||
             path.includes('/page-roller/');

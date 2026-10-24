@@ -21,6 +21,7 @@ export * from './icons';
 export * from './flags';
 export * from './effects';
 export * from './components';
+export * from './i18n';
 
 // Import types for the main Domma object
 import {dom, DommaCollection} from './dom';
@@ -37,6 +38,7 @@ import {Icons, icons} from './icons';
 import {Flags} from './flags';
 import {Effects, effects} from './effects';
 import {Components, ComponentDefinition, ComponentContext, DommaElement} from './components';
+import {I18n, I18nTranslateOptions} from './i18n';
 
 // ============================================
 // Main Domma Interface
@@ -86,6 +88,12 @@ export interface DommaStatic {
 
     /** Icon library */
     icons: Icons;
+
+    /** Translations, plurals and Intl formatting */
+    i18n: I18n;
+
+    /** Shortcut for {@link I18n.t} */
+    t(key: string, params?: Record<string, any> | null, options?: I18nTranslateOptions): string;
 
     /** Nation flags (opt-in module - present when domma-flags is loaded) */
     flags?: Flags;

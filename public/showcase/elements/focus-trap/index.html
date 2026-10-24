@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Trap - Elements - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/elements/focus-trap/">
+    <link rel="icon" type="image/svg+xml" href="../../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../../dist/domma.css">
+    <link rel="stylesheet" href="../../../dist/elements.css">
+    <link rel="stylesheet" href="../../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../css/domma-showcase.css">
+    <style>
+        /* Demo-only styling. The trap itself needs no CSS. */
+        .sx-trap-panel {
+            padding: 1rem;
+            border: 2px dashed var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-background-alt);
+            color: var(--dm-text);
+        }
+
+        .sx-trap-panel.is-trapping {
+            border-style: solid;
+            border-color: var(--dm-primary);
+        }
+
+        .sx-trap-panel:focus-visible {
+            outline: 2px solid var(--dm-border-focus);
+            outline-offset: 2px;
+        }
+
+        .sx-trap-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .sx-trap-state {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+            color: var(--dm-text-muted);
+        }
+
+        .sx-trap-log {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            max-height: 12rem;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body class="dm-cloaked dm-theme-charcoal-dark" data-layout="showcase" data-layout-variant="element">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">Focus Trap</div>
+        <div class="hero-subtitle">Keep Tab, Shift+Tab and stray focus inside a panel while it is open - and hand focus back when it closes</div>
+    </div>
+</div>
+
+<main class="container py-8">
+
+    <section class="card mb-6" data-section="Overview">
+        <div class="card-header">
+            <h1 class="text-3xl font-semibold m-0">Focus Trap</h1>
+        </div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>E.focusTrap()</code> is the piece every overlay needs and few get right: while a dialog,
+                drawer or palette is open, a keyboard user must not Tab out into the page behind it. The trap wraps
+                Tab from the last control to the first (and Shift+Tab back), pulls focus back in if a click or a
+                script moves it out, and on deactivation returns focus to whatever had it before.
+            </p>
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Features</h3>
+            <ul class="mb-4">
+                <li><strong>Live</strong> - tabbable elements are found on every key press, so controls added later take part</li>
+                <li><strong>Correct skipping</strong> - disabled, hidden, <code>inert</code>, invisible and <code>tabindex="-1"</code> elements; one stop per radio group</li>
+                <li><strong>Shadow roots</strong> - open shadow trees are walked in render order, slotted children at their slot</li>
+                <li><strong>Empty panels</strong> - with nothing tabbable the container itself takes focus</li>
+                <li><strong>Stacks</strong> - a second trap pauses the first; closing it hands back to the first</li>
+                <li><strong>Optional inert</strong> - <code>inert: true</code> shuts the rest of the page off for pointers and screen readers too</li>
+            </ul>
+            <h3 class="text-lg font-semibold mt-6 mb-3">Basic Usage</h3>
+            <div class="code-block language-javascript">
+                <pre><code>
+const trap = E.focusTrap('#panel', {initialFocus: '#name'});
+trap.activate();     // focus moves in, Tab wraps
+trap.deactivate();   // focus goes back to the button that opened it
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Basic">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Trap a panel</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Activate the trap, then press Tab a few times: focus goes round the three controls and never
+                reaches the rest of the page. <strong>Done</strong> deactivates it and focus returns to the
+                Activate button. The <strong>Add a button</strong> control shows that new controls join the cycle.
+            </p>
+            <div class="sx-trap-row mb-4">
+                <button id="basic-on" class="btn btn-primary" type="button">Activate</button>
+                <span id="basic-state" class="sx-trap-state">inactive</span>
+            </div>
+            <div id="basic-panel" class="sx-trap-panel mb-4">
+                <label class="form-label" for="basic-name">Name</label>
+                <input id="basic-name" class="form-input mb-3" type="text" placeholder="Ada Lovelace">
+                <div id="basic-actions" class="sx-trap-row">
+                    <button id="basic-add" class="btn btn-outline btn-sm" type="button">Add a button</button>
+                    <button id="basic-done" class="btn btn-sm btn-success" type="button">Done</button>
+                </div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const trap = E.focusTrap('#basic-panel', {
+    initialFocus: '#basic-name',
+    onActivate:   () =&gt; $('#basic-panel').addClass('is-trapping'),
+    onDeactivate: () =&gt; $('#basic-panel').removeClass('is-trapping')
+});
+$('#basic-on').on('click', () =&gt; trap.activate());
+$('#basic-done').on('click', () =&gt; trap.deactivate());
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Stacking">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Stacked traps</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Traps keep a stack. Activate the outer panel, then the inner one from inside it: the outer trap
+                pauses. Closing the inner panel unpauses the outer one and puts focus back on the button that
+                opened it - exactly what a confirm dialog over a form needs.
+            </p>
+            <div class="sx-trap-row mb-4">
+                <button id="outer-on" class="btn btn-primary" type="button">Activate outer</button>
+                <span id="stack-state" class="sx-trap-state">outer: inactive · inner: inactive</span>
+            </div>
+            <div id="outer-panel" class="sx-trap-panel mb-4">
+                <p class="mb-3">Outer panel</p>
+                <div class="sx-trap-row mb-4">
+                    <button id="inner-on" class="btn btn-outline btn-sm" type="button">Activate inner</button>
+                    <button id="outer-off" class="btn btn-sm btn-ghost" type="button">Close outer</button>
+                </div>
+                <div id="inner-panel" class="sx-trap-panel">
+                    <p class="mb-3">Inner panel</p>
+                    <div class="sx-trap-row">
+                        <button class="btn btn-outline btn-sm" type="button">One</button>
+                        <button class="btn btn-outline btn-sm" type="button">Two</button>
+                        <button id="inner-off" class="btn btn-sm btn-ghost" type="button">Close inner</button>
+                    </div>
+                </div>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+const outer = E.focusTrap('#outer-panel');
+const inner = E.focusTrap('#inner-panel');
+outer.activate();
+inner.activate();    // outer.isPaused() === true
+inner.deactivate();  // outer listens again; focus back on "Activate inner"
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Options">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Escape, outside clicks and inert</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                By default the trap ignores Escape (the overlay that owns it decides what Escape means) and blocks
+                clicks outside. This panel turns on <code>escapeDeactivates</code> and
+                <code>clickOutsideDeactivates</code>, and <code>inert: true</code> - while it is active the rest of
+                the page is <code>inert</code>, so a screen reader's virtual cursor cannot reach it either. It has
+                nothing tabbable inside, so the panel itself takes focus.
+            </p>
+            <div class="sx-trap-row mb-4">
+                <button id="opts-on" class="btn btn-primary" type="button">Activate</button>
+                <span id="opts-state" class="sx-trap-state">inactive</span>
+            </div>
+            <div id="opts-panel" class="sx-trap-panel mb-4" aria-label="Notice">
+                <p class="m-0">Nothing to press in here. Press <kbd>Esc</kbd> or click anywhere outside.</p>
+            </div>
+            <div class="code-block language-javascript">
+                <pre><code>
+E.focusTrap('#opts-panel', {
+    escapeDeactivates: true,
+    clickOutsideDeactivates: true,
+    inert: true
+}).activate();
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="Events">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>activate</code>, <code>deactivate</code>, <code>pause</code> and <code>unpause</code> - as
+                <code>onX</code> options, <code>.on('x')</code> and <code>dm:focus-trap:x</code> DOM events on the
+                container. This log listens with one handler on <code>main</code>.
+            </p>
+            <ul id="demo-log" class="sx-trap-log mb-4">
+                <li>Nothing yet - use the demos above.</li>
+            </ul>
+            <div class="code-block language-javascript">
+                <pre><code>
+$('main').on('dm:focus-trap:pause', (e) =&gt; console.log('paused', e.detail.instance.element));
+</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section class="card mb-6" data-section="API">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">API</h2></div>
+        <div class="card-body">
+            <div class="code-block language-javascript">
+                <pre><code>
+const trap = E.focusTrap(containers, {
+    initialFocus,             // selector | element | () =&gt; element | false
+    fallbackFocus,            // when nothing is tabbable (default: the container)
+    returnFocus: true,        // true | false | selector | element
+    escapeDeactivates: false, // boolean | (event) =&gt; boolean
+    clickOutsideDeactivates: false,
+    allowOutsideClick: false,
+    inert: false,
+    onActivate, onDeactivate, onPause, onUnpause
+});
+
+trap.activate(); trap.deactivate({returnFocus: false});
+trap.pause(); trap.unpause();
+trap.updateContainers(['#dialog', '#toolbar']);
+trap.isActive(); trap.isPaused(); trap.tabbables(); trap.destroy();
+
+E.focusTrap.tabbables(el);   // what Tab would reach, in order
+E.focusTrap.top();           // the trap that currently listens
+</code></pre>
+            </div>
+        </div>
+    </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<script src="../../../dist/domma.min.js"></script>
+<script src="../../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../../layouts/js/layout.js"></script>
+<script>
+    const log = (message) => {
+        const list = $('#demo-log');
+        list.find('li').filter((i, el) => /^Nothing yet/.test(el.textContent)).remove();
+        list.prepend('<li>' + _.escape(D().format('HH:mm:ss') + ' - ' + message) + '</li>');
+        list.find('li').filter((i) => i >= 8).remove();
+    };
+    const marker = (selector) => ({
+        onActivate: () => $(selector).addClass('is-trapping'),
+        onDeactivate: () => $(selector).removeClass('is-trapping')
+    });
+
+    // ---- Basic -------------------------------------------------------------
+    const basic = E.focusTrap('#basic-panel', {initialFocus: '#basic-name', ...marker('#basic-panel')});
+    const basicState = () => $('#basic-state').text(basic.isActive() ? 'active - press Tab' : 'inactive');
+    basic.on('activate', basicState).on('deactivate', basicState);
+    $('#basic-on').on('click', () => basic.activate());
+    $('#basic-done').on('click', () => basic.deactivate());
+    let added = 0;
+    $('#basic-add').on('click', () => {
+        added += 1;
+        $('#basic-done').before('<button class="btn btn-outline btn-sm" type="button">New ' + added + '</button>');
+    });
+
+    // ---- Stacking ------------------------------------------------------------
+    const outer = E.focusTrap('#outer-panel', marker('#outer-panel'));
+    const inner = E.focusTrap('#inner-panel', marker('#inner-panel'));
+    const said = (t) => (t.isPaused() ? 'paused' : t.isActive() ? 'active' : 'inactive');
+    const stackState = () => $('#stack-state').text('outer: ' + said(outer) + ' · inner: ' + said(inner));
+    for (const t of [outer, inner]) {
+        for (const name of ['activate', 'deactivate', 'pause', 'unpause']) t.on(name, stackState);
+    }
+    $('#outer-on').on('click', () => outer.activate());
+    $('#outer-off').on('click', () => outer.deactivate());
+    $('#inner-on').on('click', () => inner.activate());
+    $('#inner-off').on('click', () => inner.deactivate());
+
+    // ---- Options -------------------------------------------------------------
+    const opts = E.focusTrap('#opts-panel', {
+        escapeDeactivates: true,
+        clickOutsideDeactivates: true,
+        inert: true,
+        ...marker('#opts-panel')
+    });
+    const optsState = () => $('#opts-state').text(opts.isActive() ? 'active - the rest of the page is inert' : 'inactive');
+    opts.on('activate', optsState).on('deactivate', optsState);
+    $('#opts-on').on('click', () => opts.activate());
+
+    // ---- One listener for the whole page --------------------------------------
+    const names = {'basic-panel': 'Basic', 'outer-panel': 'Outer', 'inner-panel': 'Inner', 'opts-panel': 'Options'};
+    for (const name of ['activate', 'deactivate', 'pause', 'unpause']) {
+        $('main').on('dm:focus-trap:' + name, (e) => log(names[e.detail.instance.element.id] + ': ' + name));
+    }
+</script>
+
+</body>
+</html>

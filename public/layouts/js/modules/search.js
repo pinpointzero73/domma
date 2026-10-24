@@ -67,8 +67,13 @@ export const SiteSearch = (() => {
             _debouncedSearch = _onInput;
         }
 
-        // Global keyboard shortcut: Ctrl+K / Cmd+K
+        // Global keyboard shortcut: Ctrl+K / Cmd+K - unless the page already claimed it.
+        // An E.commandPalette answers the same keys; whichever listener runs first, the
+        // palette wins (it may be created after this one registered).
         document.addEventListener('keydown', (e) => {
+            if (e.defaultPrevented) return;
+            const palette = typeof Domma !== 'undefined' && Domma.elements && Domma.elements.commandPalette;
+            if (palette && typeof palette.claims === 'function' && palette.claims(e)) return;
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 _isOpen ? close() : open();
