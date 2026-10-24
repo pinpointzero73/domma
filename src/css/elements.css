@@ -9995,6 +9995,147 @@ a.avatar-more-person:hover .avatar-more-name {
 @media (prefers-reduced-motion: reduce) {
     .dm-command-palette-backdrop,
     .dm-command-palette-panel {
+/* ===== Split Pane ===== */
+/* E.splitPane(container): flexbox panes with a fixed flex-basis each, gutters between. */
+.dm-split {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+}
+
+.dm-split-horizontal {
+    flex-direction: row;
+}
+
+.dm-split-vertical {
+    flex-direction: column;
+}
+
+.dm-split > .dm-split-pane {
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+}
+
+.dm-split-collapsed {
+    overflow: hidden;
+}
+
+.dm-split > .dm-split-gutter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dm-border);
+    touch-action: none;
+    user-select: none;
+    transition: background-color var(--dm-transition-fast);
+}
+
+/* A thin grip line drawn inside the gutter. */
+.dm-split > .dm-split-gutter::before {
+    content: "";
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-text-muted);
+    opacity: 0.6;
+}
+
+.dm-split-horizontal > .dm-split-gutter::before {
+    width: 2px;
+    height: 1.5rem;
+}
+
+.dm-split-vertical > .dm-split-gutter::before {
+    width: 1.5rem;
+    height: 2px;
+}
+
+.dm-split > .dm-split-gutter:hover,
+.dm-split > .dm-split-gutter.is-dragging {
+    background: var(--dm-primary);
+}
+
+.dm-split > .dm-split-gutter:hover::before,
+.dm-split > .dm-split-gutter.is-dragging::before {
+    background: var(--dm-primary-text);
+}
+
+.dm-split > .dm-split-gutter:focus-visible {
+    outline: 2px solid var(--dm-primary);
+    outline-offset: 1px;
+    z-index: 1;
+}
+
+.dm-split-disabled > .dm-split-gutter,
+.dm-split-disabled > .dm-split-gutter:hover {
+    background: var(--dm-border);
+    cursor: default;
+}
+
+/* While dragging, the panes (and any iframe in them) take no pointer events, so the
+   gutter's captured pointer keeps every move, and text does not get selected. */
+.dm-split-dragging > .dm-split-pane {
+    pointer-events: none;
+    user-select: none;
+}
+
+.dm-split-horizontal.dm-split-dragging {
+    cursor: col-resize;
+}
+
+.dm-split-vertical.dm-split-dragging {
+    cursor: row-resize;
+}
+
+.dm-split-toggle {
+    position: absolute;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    border: 1px solid var(--dm-border);
+    border-radius: var(--dm-radius-full);
+    background: var(--dm-surface);
+    color: var(--dm-text);
+    cursor: pointer;
+    font: inherit;
+    line-height: 1;
+}
+
+.dm-split-horizontal > .dm-split-gutter > .dm-split-toggle {
+    top: 0.5rem;
+}
+
+.dm-split-vertical > .dm-split-gutter > .dm-split-toggle {
+    left: 0.5rem;
+}
+
+.dm-split-toggle::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border: 4px solid transparent;
+}
+
+.dm-split-horizontal > .dm-split-gutter > .dm-split-toggle::before {
+    border-right-color: currentColor;
+    margin-right: 4px;
+}
+
+.dm-split-vertical > .dm-split-gutter > .dm-split-toggle::before {
+    border-bottom-color: currentColor;
+    margin-bottom: 4px;
+}
+
+.dm-split-toggle:hover {
+    background: var(--dm-hover-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-split > .dm-split-gutter {
         transition: none;
     }
 }
@@ -10082,6 +10223,81 @@ a.avatar-more-person:hover .avatar-more-name {
 }
 
 .dm-command-palette-spinner {
+/* ===== Virtual List ===== */
+/* E.virtualList(container): the container scrolls; a spacer gives it its height and the
+   rendered rows are placed by transform. The container needs a height from your CSS. */
+.dm-vlist {
+    position: relative;
+    overflow: auto;
+    overflow-anchor: none;
+    contain: content;
+    background: var(--dm-surface);
+    color: var(--dm-text);
+}
+
+.dm-vlist-spacer {
+    width: 1px;
+    pointer-events: none;
+}
+
+.dm-vlist-items {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    outline: none;
+}
+
+.dm-vlist-row {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    will-change: transform;
+}
+
+.dm-vlist-fixed .dm-vlist-row {
+    overflow: hidden;
+}
+
+.dm-vlist-row:focus-visible {
+    outline: 2px solid var(--dm-primary);
+    outline-offset: -2px;
+}
+
+.dm-vlist-status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dm-space-2);
+    padding: var(--dm-space-3);
+    color: var(--dm-text-muted);
+    box-sizing: border-box;
+}
+
+.dm-vlist-status[hidden] {
+    display: none;
+}
+
+.dm-vlist-loading,
+.dm-vlist-error {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dm-space-2);
+}
+
+/* Plain text colour: --dm-danger is not readable on --dm-surface in every theme. */
+.dm-vlist-error {
+    color: var(--dm-text);
+}
+
+.dm-vlist-spinner {
     width: 1rem;
     height: 1rem;
     border: 2px solid var(--dm-border);
@@ -10248,4 +10464,12 @@ a.avatar-more-person:hover .avatar-more-name {
     }
 
     .dm-command-palette-footer { display: none; }
+    border-radius: var(--dm-radius-full);
+    animation: dm-loader-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dm-vlist-spinner {
+        animation-duration: 2.4s;
+    }
 }

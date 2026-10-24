@@ -27,6 +27,8 @@ import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
 import FocusTrap, {tabbables as tabbablesIn} from './components/focus-trap.js';
 import CommandPalette, {formatShortcut, fuzzyMatch} from './components/command-palette.js';
+import SplitPane, {splitPaneFor} from './components/split-pane.js';
+import VirtualList, {virtualListFor} from './components/virtual-list.js';
 import {resolveAll, resolveElement, reuse} from './components/shared.js';
 import {registerComponents as defineTags} from './web-components/index.js';
 
@@ -9820,6 +9822,40 @@ export const elements = {
     commandPalette(options = {}) {
         // Found by E.get through the component registry, which forgets it on destroy().
         return new CommandPalette(options);
+     * Resizable panes: the container's element children become panes with draggable,
+     * keyboard-operable gutters between them.
+     * @param {string|Element} selector - the container
+     * @param {Object} [options] - see src/components/split-pane.js
+     * @returns {SplitPane|null} null when nothing matches
+     */
+    splitPane(selector, options = {}) {
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = splitPaneFor(el, options);
+        this._instances.set(el, instance);
+        // So E.get() never hands back a destroyed instance.
+        instance._onDestroy = () => {
+            if (this._instances.get(el) === instance) this._instances.delete(el);
+        };
+        return instance;
+    },
+
+    /**
+     * A scrolling list that renders only the rows in view, with optional infinite loading.
+     * @param {string|Element} selector - the scroll container (give it a height in CSS)
+     * @param {Object} [options] - see src/components/virtual-list.js
+     * @returns {VirtualList|null} null when nothing matches
+     */
+    virtualList(selector, options = {}) {
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = virtualListFor(el, options);
+        this._instances.set(el, instance);
+        // So E.get() never hands back a destroyed instance.
+        instance._onDestroy = () => {
+            if (this._instances.get(el) === instance) this._instances.delete(el);
+        };
+        return instance;
     },
 
     /**
@@ -9927,3 +9963,4 @@ elements.listGroup.all = (selector, options = {}) => {
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};
 export {Popover};
 export {FocusTrap, CommandPalette};
+export {SplitPane, VirtualList};

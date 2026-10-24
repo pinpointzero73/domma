@@ -625,6 +625,148 @@ export interface BackToTopInstance extends ComponentInstance {
 }
 
 // ============================================
+// Split Pane
+// ============================================
+
+/** A pane size limit: px as a number, or a percentage string such as '20%' */
+export type SplitPaneSize = number | string;
+
+export interface SplitPaneOptions {
+    /** 'horizontal' = side by side (default), 'vertical' = stacked */
+    direction?: 'horizontal' | 'vertical';
+    /** Percentages, one per pane (scaled to add up to 100); equal by default */
+    sizes?: number[];
+    /** Minimum size, one value or one per pane (default 0) */
+    minSize?: SplitPaneSize | SplitPaneSize[];
+    /** Maximum size, one value or one per pane (default none) */
+    maxSize?: SplitPaneSize | null | Array<SplitPaneSize | null>;
+    /** Gutter thickness in px (default 8) */
+    gutterSize?: number;
+    /** Snap to a limit when dragged within this many px of it (default 0) */
+    snapOffset?: number;
+    /** Which panes the gutter gestures may collapse */
+    collapsible?: boolean | boolean[];
+    /** What a collapsed pane shrinks to (default 0) */
+    collapsedSize?: SplitPaneSize | SplitPaneSize[];
+    /** A small toggle button in gutters next to a collapsible pane */
+    collapseButton?: boolean;
+    /** Remember sizes and collapse state with S under 'split-pane:<key>' */
+    persistKey?: string | null;
+    /** Gutter cursor (default col-resize / row-resize) */
+    cursor?: string | null;
+    disabled?: boolean;
+    /** Percent per arrow key (default 1) */
+    step?: number;
+    /** Percent per Shift+arrow (default 10) */
+    largeStep?: number;
+    /** The gutters' aria-label */
+    gutterLabel?: string;
+    /** Return false to refuse a drag */
+    onBeforeDrag?: (gutterIndex: number, event: PointerEvent) => boolean | void;
+    onDragStart?: (sizes: number[], gutterIndex: number) => void;
+    onDrag?: (sizes: number[], gutterIndex: number) => void;
+    onDragEnd?: (sizes: number[], gutterIndex: number) => void;
+    /** Any size change: drag, keys, setSizes, collapse */
+    onResize?: (sizes: number[]) => void;
+    onCollapse?: (paneIndex: number) => void;
+    onExpand?: (paneIndex: number) => void;
+}
+
+export interface SplitPaneInstance extends ComponentInstance {
+    /** The pane elements */
+    readonly panes: HTMLElement[];
+    /** Current sizes, percentages that add up to 100 */
+    getSizes(): number[];
+    /** Set every pane's size (clamped to the limits) */
+    setSizes(sizes: number[]): this;
+    collapse(index: number): this;
+    expand(index: number): this;
+    isCollapsed(index: number): boolean;
+    /** Remove the gutters and listeners and restore the panes' own styles */
+    destroy(): void;
+}
+
+// ============================================
+// Virtual List
+// ============================================
+
+export interface VirtualListRange {
+    /** First index, inclusive */
+    start: number;
+    /** Last index, inclusive (-1 for an empty list) */
+    end: number;
+}
+
+export type VirtualListTemplate = string | Node | ((error?: unknown) => string | Node | null) | null;
+
+export interface VirtualListOptions<T = any> {
+    items?: T[] | null;
+    /** With getItem, instead of items */
+    count?: number;
+    getItem?: ((index: number) => T) | null;
+    /** px, or 'auto' to measure each row (default 40) */
+    itemHeight?: number | 'auto';
+    /** Height assumed for unmeasured rows in 'auto' mode (default 40) */
+    estimatedItemHeight?: number;
+    /** Rows rendered beyond each edge (default 4) */
+    overscan?: number;
+    /** A string is HTML (sanitised unless safe: false); an Element goes in as it is */
+    render?: ((item: T, index: number) => string | Node) | null;
+    /** false: render() strings are inserted unsanitised (default true) */
+    safe?: boolean;
+    /** Property name or function giving each item a stable key (default: the index) */
+    keyField?: string | ((item: T, index: number) => unknown) | null;
+    /** aria-label for the list */
+    label?: string | null;
+    /** Extra class on every row */
+    rowClass?: string;
+    /** Called near the end; resolves to the next items, or {items, done} */
+    loadMore?: ((info: {count: number; page: number}) => Promise<T[] | {items: T[]; done?: boolean}>) | null;
+    /** px from the end at which loadMore is called (default 200) */
+    threshold?: number;
+    loadingTemplate?: VirtualListTemplate;
+    endTemplate?: VirtualListTemplate;
+    /** A [data-vlist-retry] element inside it retries */
+    errorTemplate?: VirtualListTemplate;
+    onRender?: (range: VirtualListRange) => void;
+    onScroll?: (visible: VirtualListRange) => void;
+    onLoadMore?: (info: {count: number; page: number}) => void;
+    onLoaded?: (items: T[]) => void;
+    onEnd?: () => void;
+    onError?: (error: unknown) => void;
+    onItemClick?: (item: T, index: number, event: MouseEvent | KeyboardEvent) => void;
+}
+
+export interface VirtualListInstance<T = any> extends ComponentInstance {
+    /** Number of rows */
+    readonly count: number;
+    setItems(items: T[]): this;
+    append(items: T[]): this;
+    /** Add at the start without moving what is on screen */
+    prepend(items: T[]): this;
+    /** A number is an index; anything else is a key */
+    update(indexOrKey: number | unknown, item: T): this;
+    indexOfKey(key: unknown): number;
+    scrollToIndex(index: number, options?: {align?: 'start' | 'center' | 'end' | 'auto'; smooth?: boolean}): this;
+    /** Scroll to a row and focus it */
+    focusIndex(index: number): this;
+    /** Re-render (and re-measure) the rendered rows */
+    refresh(): this;
+    /** Rows at least partly on screen */
+    getVisibleRange(): VirtualListRange;
+    /** Rows in the DOM, overscan included */
+    getRenderedRange(): VirtualListRange;
+    /** Retry a failed load */
+    retry(): this;
+    /** Whether loadMore has said there is nothing more */
+    isDone(): boolean;
+    /** Count mode: change the number of rows */
+    setCount(count: number): this;
+    /** Remove the rows and listeners and give the container its children back */
+    destroy(): void;
+}
+
+// ============================================
 // Elements Module
 // ============================================
 
@@ -822,6 +964,11 @@ export interface Elements {
 
     /** A Cmd/Ctrl+K command palette (builds its own overlay) */
     commandPalette: CommandPaletteFactory;
+    /** Resizable panes from a container's children; null when nothing matches */
+    splitPane(container: string | HTMLElement, options?: SplitPaneOptions): SplitPaneInstance | null;
+
+    /** A scrolling list that renders only the visible rows; null when nothing matches */
+    virtualList<T = any>(container: string | HTMLElement, options?: VirtualListOptions<T>): VirtualListInstance<T> | null;
 
     /** Get the component on an element - factory-made ones too. `name` picks one when an element hosts several. */
     get(selector: string | HTMLElement, name?: string): ComponentInstance | undefined;
