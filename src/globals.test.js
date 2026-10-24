@@ -40,7 +40,8 @@ describe('installGlobals', () => {
         expect(window.Domma).toBe(D);
 
         D.noConflict(true);
-        expect(window.Domma).toBe(savedDomma);
+        expect(window.Domma).toBe(D);
+        window.Domma = savedDomma;
     });
 
     it("'safe' leaves an existing $ alone and takes the free names", () => {
@@ -180,5 +181,34 @@ describe('timeline() deprecation', () => {
         const timelineWarnings = warn.mock.calls.filter(c => String(c[0]).includes('timeline()'));
         expect(timelineWarnings.length).toBeLessThanOrEqual(1);
         warn.mockRestore();
+    });
+});
+
+describe('safe mode and named access', () => {
+    it('an element with id="_" does not count as an owner', () => {
+        document.body.innerHTML = '<div id="_"></div>';
+        window.DommaOptions = {globals: 'safe'};
+        const savedDomma = window.Domma;
+        const {D, aliases} = fresh();
+        installGlobals(D, aliases);
+        expect(window._).toBe(aliases._);
+        window.Domma = savedDomma;
+    });
+});
+
+describe('.on() on components with their own _emit', () => {
+    it('Popover and Sortable call .on() listeners', () => {
+        document.body.innerHTML = '<button id="pb">Go</button><ul id="sl"><li>a</li><li>b</li></ul>';
+        const pop = Domma.elements.popover('#pb', {content: 'Hi'});
+        const shown = vi.fn();
+        pop.on('show', shown);
+        pop.show();
+        expect(shown).toHaveBeenCalled();
+
+        const sort = Domma.elements.sortable('#sl');
+        const seen = vi.fn();
+        sort.on('test', seen);
+        sort._emit('test', {x: 1});
+        expect(seen).toHaveBeenCalledWith({x: 1});
     });
 });

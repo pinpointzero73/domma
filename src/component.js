@@ -45,6 +45,18 @@ class Component {
     }
 
     /**
+     * Call the .on() listeners for an event. Components with their own _emit call this from it.
+     * @param {string} event
+     * @param {*} [detail]
+     * @protected
+     */
+    _notify(event, detail) {
+        for (const handler of [...(this._listeners?.[event] || [])]) {
+            handler.call(this, detail);
+        }
+    }
+
+    /**
      * Fire an event to .on() listeners and as a bubbling `dm:<event>` DOM event on the element.
      * @param {string} event
      * @param {*} [detail]
@@ -52,9 +64,7 @@ class Component {
      * @protected
      */
     _emit(event, detail) {
-        for (const handler of [...(this._listeners[event] || [])]) {
-            handler.call(this, detail);
-        }
+        this._notify(event, detail);
         if (!this.element || typeof CustomEvent === 'undefined') return true;
         return this.element.dispatchEvent(new CustomEvent(`dm:${event}`, {
             bubbles: true, cancelable: true, detail

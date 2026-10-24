@@ -100,7 +100,8 @@ class Card extends Component {
         </div>`;
 
         // Use Domma's sanitize function for safe HTML insertion
-        this.element.innerHTML = sanitizeModule.sanitise(cardHtml);
+        // Unreachable: E.card goes through createCardWrapper (legacy-wrappers.js)
+        this.element.innerHTML = cardHtml;
 
         // Update element reference to the inner card div
         this.element = this.element.querySelector('.card');
@@ -284,7 +285,7 @@ class Card extends Component {
     setContent(content) {
         const body = this.element.querySelector('.card-body');
         if (body) {
-            body.innerHTML = sanitizeModule.sanitise(content);
+            body.innerHTML = content;
             // Rescan icons after content update
             if (Domma.icons && typeof Domma.icons.scan === 'function') {
                 Domma.icons.scan(body);

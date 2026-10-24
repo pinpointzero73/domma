@@ -136,7 +136,7 @@ export interface DommaStatic {
 
     /**
      * Give `$` and `_` back to whatever owned them before Domma loaded (jQuery, Lodash).
-     * With `deep`, give back every short alias and `window.Domma` too.
+     * With `deep`, give back every short alias (`window.Domma` stays).
      * @returns Domma, so `const dm = Domma.noConflict()` keeps a handle
      */
     noConflict(deep?: boolean): DommaStatic;

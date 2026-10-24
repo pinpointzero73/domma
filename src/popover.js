@@ -1037,6 +1037,7 @@ class Popover extends Component {
         const cb = this.options[`on${name[0].toUpperCase()}${name.slice(1)}`];
         let ok = true;
         if (isFn(cb) && cb.call(this, this) === false && cancelable) ok = false;
+        this._notify(name, this);
         if (!this.element) return ok;
         const event = new CustomEvent(`popover:${name}`, {
             detail: {popover: this},

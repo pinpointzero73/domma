@@ -6,6 +6,13 @@
  * @alias R (window.R / Domma.router)
  */
 
+// Its own modules, not window.$ / window.M / window._ / window.I - those may be jQuery or
+// Lodash, or absent, under DommaOptions.globals and Domma.noConflict().
+import {dom} from './dom.js';
+import {models} from './models.js';
+import {icons} from './icons.js';
+import {utils} from './utils.js';
+
 /**
  * Router module for hash-based single-page applications
  * Provides client-side routing with transitions, lifecycle hooks, and middleware
@@ -86,9 +93,7 @@ export const router = {
         this._initialised = true;
 
         // Publish router ready event
-        if (typeof window !== 'undefined' && window.M) {
-            window.M.publish('router:ready', {router: this});
-        }
+        models.publish('router:ready', {router: this});
 
         return this;
     },
@@ -244,9 +249,7 @@ export const router = {
     // Internal: log a routing failure and publish router:error.
     _reportError(error, route, view) {
         console.error(`[Domma Router] Error on ${route}:`, error);
-        if (typeof window !== 'undefined' && window.M) {
-            window.M.publish('router:error', {error, route, view});
-        }
+        models.publish('router:error', {error, route, view});
     },
 
     // Internal: Handle route changes
@@ -318,9 +321,7 @@ export const router = {
         }
 
         // Publish before change event
-        if (typeof window !== 'undefined' && window.M) {
-            window.M.publish('router:beforeChange', {from, to});
-        }
+        models.publish('router:beforeChange', {from, to});
 
         // Run onEnter hook
         if (route.onEnter) {
@@ -340,9 +341,7 @@ export const router = {
         this._shownPath = hash;
 
         // Publish after change event
-        if (typeof window !== 'undefined' && window.M) {
-            window.M.publish('router:afterChange', {from, to});
-        }
+        models.publish('router:afterChange', {from, to});
     },
 
     /**
@@ -460,15 +459,7 @@ export const router = {
                 return;
             }
 
-            // Get jQuery wrapper if available
-            const $ = typeof window !== 'undefined' && window.$ ? window.$ : null;
-            if (!$) {
-                console.error('[Domma Router] jQuery/Domma $ not found. Cannot animate transitions.');
-                await this._renderViewStatic(view, params);
-                return;
-            }
-
-            const $container = $(this._container);
+            const $container = dom(this._container);
 
             // Fade out current content
             await new Promise(resolve => {
@@ -591,9 +582,7 @@ export const router = {
             $container.html(html, {safe: false});
 
             // Scan for icons
-            if (typeof window !== 'undefined' && window.I) {
-                window.I.scan(this._container);
-            }
+            icons.scan(this._container);
 
             // Call onMount lifecycle hook
             if (view.onMount && typeof view.onMount === 'function') {
@@ -604,96 +593,23 @@ export const router = {
             html = await view(params);
             $container.html(html, {safe: false});
 
-            if (typeof window !== 'undefined' && window.I) {
-                window.I.scan(this._container);
-            }
+            icons.scan(this._container);
         } else if (typeof view === 'string') {
             // View is a template string
             html = this._renderTemplate(view, params);
             $container.html(html, {safe: false});
 
-            if (typeof window !== 'undefined' && window.I) {
-                window.I.scan(this._container);
-            }
+            icons.scan(this._container);
         }
     },
 
     // Internal: Render template using Domma template engine
     _renderTemplate(template, params, partials = {}) {
-        if (typeof window !== 'undefined' && window._ && typeof window._.render === 'function') {
-            return window._.render(template, params || {}, { partials });
+        if (typeof utils.render === 'function') {
+            return utils.render(template, params || {}, { partials });
         }
         // Fallback: simple replacement
         return template.replace(/\{\{(\w+)\}\}/g, (match, key) => params[key] || '');
-    },
-
-    // Internal: Static render (no animations) - uses trusted application templates
-    async _renderViewStatic(view, params) {
-        // ── Component-based routes (no animation path) ──────────────────────
-        if (typeof view === 'object' && view.component && !Array.isArray(view)) {
-            const tagName     = view.component;
-            const containerEl = this._container[0] || this._container;
-            const resolvedProps = typeof view.props === 'function'
-                ? view.props(params)
-                : (view.props || {});
-            const el = document.createElement(tagName);
-            for (const [key, val] of Object.entries(resolvedProps)) {
-                const attr = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-                if (val === true || val === '') {
-                    el.setAttribute(attr, '');
-                } else if (val !== false && val !== null && val !== undefined) {
-                    el.setAttribute(attr, typeof val === 'object' ? JSON.stringify(val) : String(val));
-                }
-            }
-            while (containerEl.firstChild) containerEl.removeChild(containerEl.firstChild);
-            containerEl.appendChild(el);
-            if (typeof view.onMount === 'function') view.onMount(this._container);
-            if (typeof window !== 'undefined' && window.I) window.I.scan(containerEl);
-            return;
-        }
-
-        let html;
-
-        if (typeof view === 'object' && !Array.isArray(view)) {
-            let template = view.template;
-
-            // Load template from URL if templateUrl specified
-            if (!template && view.templateUrl) {
-                template = await this._loadTemplate(view.templateUrl);
-            }
-
-            // Load partials from URLs if specified
-            let partials = {};
-            if (view.partials) {
-                const entries = Object.entries(view.partials);
-                const loaded = await Promise.all(
-                    entries.map(([name, url]) => this._loadTemplate(url).then(t => [name, t]))
-                );
-                partials = Object.fromEntries(loaded);
-            }
-
-            if (typeof template === 'function') {
-                html = await template(params);
-            } else if (typeof template === 'string') {
-                html = this._renderTemplate(template, params, partials);
-            }
-            // Safe: html is from application-controlled templates, not user input
-            this._container.innerHTML = html;
-
-            if (view.onMount && typeof view.onMount === 'function') {
-                view.onMount(this._container);
-            }
-        } else if (typeof view === 'function') {
-            html = await view(params);
-            this._container.innerHTML = html;
-        } else if (typeof view === 'string') {
-            html = this._renderTemplate(view, params);
-            this._container.innerHTML = html;
-        }
-
-        if (typeof window !== 'undefined' && window.I) {
-            window.I.scan(this._container);
-        }
     },
 
     // Internal: Render 404 view - uses DOM methods to safely handle user-controlled path

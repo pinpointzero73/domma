@@ -6,12 +6,18 @@
  *   'safe'  install only aliases that are free - an existing jQuery `$` or Lodash `_` is left alone
  *   false   install `window.Domma` only
  *
+ * `window.Domma` is always installed: parts of the library still reach each other through it.
  * `Domma.noConflict()` hands `$` and `_` back to whatever owned them before Domma loaded;
- * `Domma.noConflict(true)` hands back every alias and `window.Domma` too. Either way it
- * returns Domma, so `const dm = Domma.noConflict();` keeps a handle.
+ * `Domma.noConflict(true)` hands back every short alias. Either way it returns Domma, so
+ * `const dm = Domma.noConflict();` keeps a handle.
  */
 
 const SHARED = ['$', '_'];
+
+// An element with id="E" shows up as window.E (named access) - that is not an owner to respect.
+const isNamedAccess = (value) => (typeof Element !== 'undefined' && value instanceof Element)
+    || (typeof HTMLCollection !== 'undefined' && value instanceof HTMLCollection);
+const isTaken = (current, ours) => current !== undefined && current !== ours && !isNamedAccess(current);
 
 /**
  * Read a load-time option from `window.DommaOptions`.
@@ -37,7 +43,7 @@ export function installGlobals(Domma, aliases) {
 
     Domma.noConflict = (deep = false) => {
         if (typeof window === 'undefined') return Domma;
-        const names = deep ? [...Object.keys(installed), 'Domma'] : SHARED;
+        const names = deep ? Object.keys(installed).filter(n => n !== 'Domma') : SHARED;
         for (const name of names) {
             // Only give a name back if it is still ours - something loaded after us owns it otherwise
             if (installed[name] && window[name] === installed[name]) {
@@ -53,8 +59,8 @@ export function installGlobals(Domma, aliases) {
 
     const mode = loadOption('globals', true);
     const take = (name, value) => {
-        if (mode === 'safe' && window[name] !== undefined && window[name] !== value) return;
-        previous[name] = window[name];
+        if (mode === 'safe' && name !== 'Domma' && isTaken(window[name], value)) return;
+        previous[name] = isNamedAccess(window[name]) ? undefined : window[name];
         installed[name] = value;
         window[name] = value;
     };

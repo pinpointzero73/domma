@@ -294,7 +294,7 @@ class InputGroup extends Component {
             this._listen(x.clear, 'mousedown', (e) => e.preventDefault());
             this._listen(x.clear, 'click', () => {
                 input.value = '';
-                this._emit();
+                this._fireInput();
                 input.focus();
                 this.refresh();
             });
@@ -349,7 +349,7 @@ class InputGroup extends Component {
     }
 
     /** Dispatch input and change so Forma's model and any listener see it. */
-    _emit() {
+    _fireInput() {
         this.input.dispatchEvent(new Event('input', {bubbles: true}));
         this.input.dispatchEvent(new Event('change', {bubbles: true}));
     }
@@ -372,7 +372,7 @@ class InputGroup extends Component {
         next = Number(next.toFixed(places));
         if (current !== next) {
             input.value = String(next);
-            this._emit();
+            this._fireInput();
         }
         this.refresh();
         return this;
