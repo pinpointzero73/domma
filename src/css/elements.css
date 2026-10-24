@@ -358,6 +358,54 @@
     padding-bottom: 0;
 }
 
+/* E.card options (src/components/card.js) */
+.card-collapsible .card-body,
+.card-collapse-icon {
+    transition-duration: var(--dm-card-duration, 200ms);
+}
+
+.card-no-animation,
+.card-no-animation .card-body,
+.card-no-animation .card-collapse-icon {
+    transition: none;
+}
+
+.card-collapse-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.card-primary .card-collapse-icon,
+.card-primary.card-collapsible .card-header:hover .card-collapse-icon {
+    color: inherit;
+}
+
+.card-title-icon {
+    display: inline-flex;
+    vertical-align: -0.125em;
+    margin-right: var(--dm-space-2);
+}
+
+.card-clickable {
+    cursor: pointer;
+}
+
+.card-shadow-none {
+    box-shadow: none;
+}
+
+.card-shadow-sm {
+    box-shadow: var(--dm-shadow-sm);
+}
+
+.card-shadow-lg {
+    box-shadow: var(--dm-shadow-lg);
+}
+
+.card-square {
+    border-radius: 0;
+}
+
 
 /* ============================================
    MODAL
@@ -458,6 +506,50 @@
 
 .dm-dialog-xl {
     max-width: 1200px !important;
+}
+
+/* E.modal (src/components/modal.js): the caller's element becomes the full-screen layer
+   that holds the dialog drawn in its shadow root. The class is doubled so it outranks
+   .modal / .modal-sm / .modal.active, which describe the hand-written, JS-free modal
+   box and would otherwise hide or shrink the layer. z-index stays settable inline. */
+.dm-modal-host.dm-modal-host {
+    display: none;
+    position: fixed;
+    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+    opacity: 1;
+    transform: none;
+    transition: none;
+    pointer-events: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.dm-modal-host.dm-modal-host.dm-modal-visible {
+    display: flex;
+}
+
+.dm-modal-host.dm-modal-host.dm-modal-no-backdrop {
+    pointer-events: none;
+}
+
+.dm-modal-host.dm-modal-host.dm-modal-top {
+    align-items: flex-start;
+    padding-top: 5vh;
 }
 
 
@@ -1438,6 +1530,57 @@ textarea:not([class])::placeholder {
     color: var(--dm-info-text, var(--dm-white));
 }
 
+.badge-light {
+    background-color: var(--dm-background-alt);
+    color: var(--dm-text);
+}
+
+.badge-dark {
+    background-color: var(--dm-text);
+    color: var(--dm-background);
+}
+
+/* E.badge options (src/components/badge.js) */
+.badge {
+    gap: 0.25rem;
+}
+
+.badge-sm {
+    padding: 2px 6px;
+    font-size: 0.625rem;
+}
+
+.badge-lg {
+    padding: var(--dm-space-1) var(--dm-space-3);
+    font-size: var(--dm-font-size-sm);
+}
+
+.badge-rounded {
+    border-radius: var(--dm-radius-sm);
+}
+
+.badge-pill {
+    border-radius: var(--dm-radius-full);
+}
+
+/* Outline badges carry .badge-outline-<variant> instead of the filled .badge-<variant>:
+   the page's text on its surface, ringed in the variant colour - legible in every theme
+   (variant-coloured text is not: warning on a light surface is under 2:1) */
+.badge-outline {
+    background-color: var(--dm-surface);
+    color: var(--dm-text);
+    box-shadow: inset 0 0 0 1px var(--dm-border);
+}
+
+.badge-outline-primary   { box-shadow: inset 0 0 0 1px var(--dm-primary); }
+.badge-outline-secondary { box-shadow: inset 0 0 0 1px var(--dm-text-secondary); }
+.badge-outline-success   { box-shadow: inset 0 0 0 1px var(--dm-success); }
+.badge-outline-danger    { box-shadow: inset 0 0 0 1px var(--dm-danger); }
+.badge-outline-warning   { box-shadow: inset 0 0 0 1px var(--dm-warning); }
+.badge-outline-info      { box-shadow: inset 0 0 0 1px var(--dm-info); }
+.badge-outline-light     { box-shadow: inset 0 0 0 1px var(--dm-border); }
+.badge-outline-dark      { box-shadow: inset 0 0 0 1px var(--dm-text); }
+
 /* Pulse animation for new content indicators */
 .badge-pulse {
     animation: badge-pulse 2s ease-in-out infinite;
@@ -1481,6 +1624,15 @@ textarea:not([class])::placeholder {
     height: 0.5rem;
     border-radius: var(--dm-radius-full);
     background-color: var(--dm-danger);
+}
+
+/* E.numberBadge puts the counter inside its target; a target already positioned keeps its own */
+:where(.badge-counter-host) {
+    position: relative;
+}
+
+domma-number-badge {
+    display: inline-flex;
 }
 
 /* Wrapper for positioned counter badges */
@@ -5483,17 +5635,22 @@ code {
    TOOLTIP
    ============================================ */
 
+/* E.tooltip's bubble (src/components/tooltip.js): on document.body, placed at the target.
+   Inverted against the page - the text colour as its fill - in light and dark themes. */
 .domma-tooltip {
-    position: absolute;
-    z-index: 9999;
-    background-color: var(--dm-background);
-    color: var(--dm-text);
+    --dm-tooltip-bg: var(--dm-text);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10050;
+    background-color: var(--dm-text);
+    color: var(--dm-background);
     padding: 0.5rem 0.75rem;
     border-radius: var(--dm-radius-md);
     font-size: 0.875rem;
     line-height: 1.4;
-    max-width: 200px;
-    word-wrap: break-word;
+    max-width: 250px;
+    overflow-wrap: break-word;
     pointer-events: none;
     opacity: 0;
     transition: opacity var(--dm-transition-fast);
@@ -5504,9 +5661,42 @@ code {
     opacity: 1;
 }
 
-[data-mode="dark"] .domma-tooltip {
-    background-color: var(--dm-text);
-    color: var(--dm-text-inverse);
+.domma-tooltip::before {
+    content: '';
+    position: absolute;
+    border: 5px solid transparent;
+}
+
+.domma-tooltip[data-position="top"]::before {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: var(--dm-tooltip-bg);
+}
+
+.domma-tooltip[data-position="bottom"]::before {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: var(--dm-tooltip-bg);
+}
+
+.domma-tooltip[data-position="left"]::before {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: var(--dm-tooltip-bg);
+}
+
+.domma-tooltip[data-position="right"]::before {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: var(--dm-tooltip-bg);
+}
+
+domma-tooltip {
+    display: inline-block;
 }
 
 
@@ -5728,21 +5918,36 @@ code {
 }
 
 /* Toast variants */
+.domma-toast {
+    position: relative;
+    overflow: hidden;
+    align-items: flex-start;
+    border: 1px solid var(--dm-border);
+    transition-duration: var(--dm-toast-duration, 300ms);
+}
+
 .domma-toast.domma-toast-success {
     background-color: var(--dm-success);
+    color: var(--dm-success-text, var(--dm-white));
+    border-color: transparent;
 }
 
 .domma-toast.domma-toast-error {
     background-color: var(--dm-danger);
+    color: var(--dm-danger-text, var(--dm-white));
+    border-color: transparent;
 }
 
 .domma-toast.domma-toast-warning {
     background-color: var(--dm-warning);
     color: var(--dm-warning-text, var(--dm-text));
+    border-color: transparent;
 }
 
 .domma-toast.domma-toast-info {
     background-color: var(--dm-info);
+    color: var(--dm-info-text, var(--dm-white));
+    border-color: transparent;
 }
 
 /* Toast internal structure */
@@ -5784,6 +5989,72 @@ code {
 
 .domma-toast-close svg {
     display: block;
+}
+
+.domma-toast-close {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.domma-toast-icon {
+    display: flex;
+    align-items: center;
+}
+
+.domma-toast-title[hidden],
+.domma-toast-actions[hidden] {
+    display: none;
+}
+
+.domma-toast-message {
+    overflow-wrap: anywhere;
+}
+
+.domma-toast-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.domma-toast-action {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid currentColor;
+    border-radius: var(--dm-radius-sm);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.domma-toast-action.is-primary {
+    background-color: var(--dm-primary);
+    color: var(--dm-primary-text, var(--dm-white));
+    border-color: var(--dm-primary);
+}
+
+.domma-toast-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: color-mix(in srgb, currentColor 15%, transparent);
+}
+
+.domma-toast-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .domma-toast,
+    .domma-toast-progress-bar {
+        transition: none !important;
+    }
 }
 
 
@@ -5834,6 +6105,20 @@ code {
     box-shadow: 0 0 0 3px var(--dm-focus-ring);
 }
 
+/* E.backToTop on a button inside the container it watches: it sticks to that
+   container's bottom corner instead of the viewport's */
+.dm-back-to-top.dm-back-to-top-contained {
+    position: sticky;
+    right: auto;
+    left: auto;
+    margin-left: auto;
+}
+
+.dm-back-to-top.dm-back-to-top-contained.dm-back-to-top-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
 /* Desktop (≥577px) - Back to Top enhancements */
 @media (min-width: 577px) {
     .dm-back-to-top {
@@ -5855,6 +6140,100 @@ code {
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
+}
+
+.dm-loader[hidden] {
+    display: none !important;
+}
+
+/* E.loader's indicator (src/components/loader.js); size and colour come from
+   --dm-loader-size / --dm-loader-color, set from the options */
+.dm-loader-js {
+    --dm-loader-size: 40px;
+    --dm-loader-color: var(--dm-primary);
+}
+
+.dm-loader-js.dm-loader-centered {
+    display: flex;
+    width: 100%;
+    padding: var(--dm-space-4) 0;
+}
+
+:where(.dm-loader-host) {
+    position: relative;
+}
+
+.dm-loader-anim {
+    flex-shrink: 0;
+}
+
+.dm-loader-anim-spinner {
+    width: var(--dm-loader-size);
+    height: var(--dm-loader-size);
+    border: max(2px, calc(var(--dm-loader-size) / 10)) solid var(--dm-loader-color);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: dm-loader-spin 0.8s linear infinite;
+}
+
+.dm-loader-anim-dots,
+.dm-loader-anim-bars {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--dm-loader-size) / 8);
+    height: var(--dm-loader-size);
+}
+
+.dm-loader-anim-dots span {
+    /* Shapes are drawn with borders, not backgrounds: they hold no text */
+    width: 0;
+    height: 0;
+    border: calc(var(--dm-loader-size) / 8) solid var(--dm-loader-color);
+    border-radius: 50%;
+    animation: dm-loader-bounce 1.4s ease-in-out infinite both;
+}
+
+.dm-loader-anim-dots span:nth-child(2) { animation-delay: 0.16s; }
+.dm-loader-anim-dots span:nth-child(3) { animation-delay: 0.32s; }
+
+.dm-loader-anim-pulse {
+    width: 0;
+    height: 0;
+    border: calc(var(--dm-loader-size) / 2) solid var(--dm-loader-color);
+    border-radius: 50%;
+    animation: dm-loader-pulse 1.2s ease-in-out infinite;
+}
+
+.dm-loader-anim-bars span {
+    width: 0;
+    height: 100%;
+    border-left: calc(var(--dm-loader-size) / 6) solid var(--dm-loader-color);
+    border-radius: 2px;
+    animation: dm-loader-bars 1s ease-in-out infinite;
+}
+
+.dm-loader-anim-bars span:nth-child(2) { animation-delay: 0.1s; }
+.dm-loader-anim-bars span:nth-child(3) { animation-delay: 0.2s; }
+.dm-loader-anim-bars span:nth-child(4) { animation-delay: 0.3s; }
+
+.dm-loader-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dm-loader-fullscreen .dm-loader-text {
+    color: #fff;
+}
+
+domma-loader,
+domma-card,
+domma-back-to-top {
+    display: block;
 }
 
 .dm-loader.dm-loader-overlay {

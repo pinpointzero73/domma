@@ -1,25 +1,19 @@
 // src/wrapper-identity.test.js
 //
-// The legacy wrappers replace the author's element with a Web Component.
-// Two things must both hold, and they pull in opposite directions:
+// E.card / modal / tooltip / badge / numberBadge / loader work ON the element they are
+// given. The old wrappers swapped it for a <domma-*> custom element with replaceWith(),
+// which detached every reference a caller held, dropped listeners bound to it, and
+// left E.get(original) finding nothing. These tests hold the opposite: the reference
+// passed in IS instance.element, still in the page, with its id, classes and data-*.
 //
-//   1. The element keeps its identity (id, data-*, author classes) so later
-//      selector lookups still work.
-//   2. It must NOT keep the legacy base class (.modal/.card/.badge). Those
-//      elements.css rules describe the hand-written, JS-free component and are
-//      driven by class toggles the Web Component never performs - `.modal` sets
-//      opacity:0 / pointer-events:none, undone only by `.modal.active`, while
-//      the component shows itself via :host([visible]). Copying it lets outer
-//      document CSS override the shadow styling and the component renders
-//      invisible.
-//
-// These tests assert RENDERED state (computed style), not just API state -
-// isOpen() returned true the whole time the modal was invisible.
+// They also assert RENDERED state where it matters (computed style under the real
+// elements.css): the old modal reported isOpen() true while invisible.
 
 import {beforeEach, describe, expect, it} from 'vitest';
 import {readFileSync} from 'fs';
 import Domma from './index.js';
 
+const E = Domma.elements;
 let elementsCss = null;
 
 /** Load the built elements.css into the document so the cascade is real. */
@@ -32,107 +26,89 @@ function withElementsCss() {
     document.head.appendChild(style);
 }
 
-describe('legacy wrappers - element identity', () => {
+function place(html) {
+    const host = document.createElement('div');
+    host.innerHTML = html;
+    document.body.appendChild(host);
+    return host.firstElementChild;
+}
 
+describe('E.* keep the caller\'s element', () => {
     beforeEach(() => {
         document.body.replaceChildren();
         document.head.replaceChildren();
     });
 
-    it('modal keeps its id so selector lookups still resolve', () => {
-        const el = document.createElement('div');
-        el.id = 'my-modal';
-        el.className = 'modal';
-        document.body.appendChild(el);
+    const cases = {
+        card: () => [place('<div id="x" class="card demo" data-k="1"><div class="card-body">b</div></div>'), (el) => E.card(el)],
+        modal: () => [place('<div id="x" class="modal demo" data-k="1"><p>b</p></div>'), (el) => E.modal(el)],
+        tooltip: () => [place('<button id="x" class="demo" data-k="1">t</button>'), (el) => E.tooltip(el, {content: 'Tip'})],
+        badge: () => [place('<span id="x" class="demo" data-k="1">3</span>'), (el) => E.badge(el)],
+        numberBadge: () => [place('<button id="x" class="demo" data-k="1">Inbox</button>'), (el) => E.numberBadge(el, {count: 2})],
+        loader: () => [place('<div id="x" class="demo" data-k="1"></div>'), (el) => E.loader(el)]
+    };
 
-        Domma.elements.modal('#my-modal', {});
+    for (const [name, make] of Object.entries(cases)) {
+        it(`${name}: the element passed in is instance.element, in place, found by E.get`, () => {
+            const [el, init] = make();
+            const parent = el.parentNode;
+            const viaSelector = name === 'modal' || name === 'card';
+            const instance = viaSelector ? (name === 'modal' ? E.modal('#x') : E.card('#x')) : init(el);
 
-        expect(document.querySelectorAll('#my-modal')).toHaveLength(1);
-        expect(document.querySelector('#my-modal').tagName).toBe('DOMMA-MODAL');
+            expect(instance.element).toBe(el);
+            expect(el.parentNode).toBe(parent);
+            expect(document.querySelectorAll('#x')).toHaveLength(1);
+            expect(el.classList.contains('demo')).toBe(true);
+            expect(el.dataset.k).toBe('1');
+            expect(E.get(el)).toBe(instance);
+            expect(instance.options).toBeTypeOf('object');
+        });
+    }
+
+    it('a listener bound to the element before init still fires after', () => {
+        const el = place('<span id="b">1</span>');
+        let clicks = 0;
+        el.addEventListener('click', () => clicks++);
+        E.badge(el);
+        el.click();
+        expect(clicks).toBe(1);
     });
 
-    it('modal does NOT inherit the legacy .modal class', () => {
-        const el = document.createElement('div');
-        el.id = 'm';
-        el.className = 'modal my-custom-class';
-        document.body.appendChild(el);
-
-        const modal = Domma.elements.modal('#m', {});
-
-        expect(modal.element.classList.contains('modal')).toBe(false);
-        // Author classes still carry across
-        expect(modal.element.classList.contains('my-custom-class')).toBe(true);
-    });
-
-    it('an open modal is actually visible under elements.css', () => {
+    it('a modal keeps .modal and an open one is visible and clickable under elements.css', () => {
         withElementsCss();
+        const el = place('<div id="m" class="modal modal-sm"><div class="modal-body">Hi</div></div>');
+        const modal = E.modal('#m', {animation: false});
 
-        const el = document.createElement('div');
-        el.id = 'm';
-        el.className = 'modal';
-        document.body.appendChild(el);
-
-        const modal = Domma.elements.modal('#m', {});
+        expect(el.classList.contains('modal')).toBe(true);
+        expect(getComputedStyle(el).display).toBe('none');
         modal.open();
 
         expect(modal.isOpen()).toBe(true);
-        expect(modal.element.hasAttribute('visible')).toBe(true);
-
-        // The regression: .modal from elements.css zeroed these on the host,
-        // so the modal was open but invisible and unclickable.
-        const styles = getComputedStyle(modal.element);
+        const styles = getComputedStyle(el);
+        expect(styles.display).toBe('flex');
         expect(styles.opacity).not.toBe('0');
         expect(styles.pointerEvents).not.toBe('none');
+        expect(styles.position).toBe('fixed');
     });
 
-    it('card keeps author classes but not the legacy .card class', () => {
-        const el = document.createElement('div');
-        el.id = 'c';
-        el.className = 'card demo-card';
-        document.body.appendChild(el);
-
-        const card = Domma.elements.card('#c', {});
-
-        expect(card.element.classList.contains('card')).toBe(false);
-        expect(card.element.classList.contains('demo-card')).toBe(true);
-        expect(card.element.id).toBe('c');
+    it('a size class on the markup sets the dialog width, and an option overrides it', () => {
+        const a = place('<div class="modal modal-sm"></div>');
+        expect(E.modal(a).options.size).toBe('small');
+        const b = place('<div class="modal modal-sm"></div>');
+        expect(E.modal(b, {size: 'large'}).options.size).toBe('large');
     });
 
-    it('badge keeps author classes but not the legacy .badge class', () => {
-        const el = document.createElement('span');
-        el.id = 'b';
-        el.className = 'badge tracking-pill';
-        el.textContent = '3';
-        document.body.appendChild(el);
-
-        const badge = Domma.elements.badge('#b', {});
-
-        expect(badge.element.classList.contains('badge')).toBe(false);
-        expect(badge.element.classList.contains('tracking-pill')).toBe(true);
-        expect(badge.element.id).toBe('b');
+    it('card text that is not in a child element survives', () => {
+        const el = place('<div class="card">Loose text <b>bold</b></div>');
+        E.card(el, {title: 'T'});
+        expect(el.textContent).toContain('Loose text');
+        expect(el.querySelector('b').textContent).toBe('bold');
     });
 
-    it('data-* attributes survive the swap', () => {
-        const el = document.createElement('div');
-        el.id = 'd';
-        el.className = 'modal';
-        el.setAttribute('data-analytics-id', 'signup-modal');
-        document.body.appendChild(el);
-
-        const modal = Domma.elements.modal('#d', {});
-
-        expect(modal.element.getAttribute('data-analytics-id')).toBe('signup-modal');
-    });
-
-    it('option-derived attributes are not clobbered by the original element', () => {
-        const el = document.createElement('div');
-        el.id = 'o';
-        el.className = 'modal';
-        el.setAttribute('size', 'small');   // author markup
-        document.body.appendChild(el);
-
-        const modal = Domma.elements.modal('#o', {size: 'large'});   // option wins
-
-        expect(modal.element.getAttribute('size')).toBe('large');
+    it('badge child markup (an icon) survives', () => {
+        const el = place('<span><span data-icon="star" class="ic"></span> New</span>');
+        E.badge(el, {variant: 'success'});
+        expect(el.querySelector('.ic')).not.toBeNull();
+        expect(el.classList.contains('badge-success')).toBe(true);
     });
 });

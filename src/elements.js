@@ -17,18 +17,16 @@ import sanitizeModule from './sanitize.js';
 import {escapeHtml} from './escape.js';
 import {loadOption} from './globals.js';
 
-// Web Component wrappers for Phase 1 & 2 components
-import {
-    createBadgeWrapper,
-    createNumberBadgeWrapper,
-    createTooltipWrapper,
-    createLoaderWrapper,
-    createBackToTopWrapper,
-    ToastWrapper,
-    createModalWrapper,
-    ModalFactoryWrapper,
-    createCardWrapper
-} from './web-components/wrappers/legacy-wrappers.js';
+// One implementation per component (src/components/); the <domma-*> tags are shells over them
+import Card from './components/card.js';
+import Modal, {createModal, showModal} from './components/modal.js';
+import Tooltip, {tooltipsFor} from './components/tooltip.js';
+import Badge, {NumberBadge} from './components/badge.js';
+import Loader from './components/loader.js';
+import BackToTop from './components/back-to-top.js';
+import {toast as toastApi} from './components/toast.js';
+import {firstWithAll, resolveAll, resolveElement, reuse} from './components/shared.js';
+import {registerComponents as defineTags} from './web-components/index.js';
 
 let timelineWarned = false;
 
@@ -8991,29 +8989,26 @@ export const elements = {
     _instances: new Map(),
 
     card(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const result = createCardWrapper(selector, options);
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-        return result;
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = reuse(el, 'card', options) || new Card(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     modal(selectorOrOptions, options = {}) {
-        // Detect factory mode: first arg is plain object (not string, not DOM element)
-        // Use Web Component wrappers (maintains backwards compatibility)
-        if (typeof selectorOrOptions === 'object' &&
-          !selectorOrOptions.nodeType &&
-          typeof selectorOrOptions !== 'string') {
-            return ModalFactoryWrapper.createModal(selectorOrOptions);
+        defineTags();
+        // Factory mode: a plain options object (not a selector, element or collection)
+        if (selectorOrOptions && typeof selectorOrOptions === 'object' && !selectorOrOptions.nodeType
+            && typeof selectorOrOptions.length !== 'number') {
+            return createModal(selectorOrOptions);
         }
-
-        // Traditional selector mode
-        const result = createModalWrapper(selectorOrOptions, options);
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-        return result;
+        const el = resolveElement(selectorOrOptions);
+        if (!el) return null;
+        const instance = reuse(el, 'modal', options) || new Modal(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     tabs(selector, options = {}) {
@@ -9033,45 +9028,29 @@ export const elements = {
     },
 
     tooltip(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const result = createTooltipWrapper(selector, options);
-
-        // Store instances for lifecycle management
-        if (Array.isArray(result)) {
-            result.forEach(instance => {
-                if (instance.element) {
-                    this._instances.set(instance.element, instance);
-                }
-            });
-        } else if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-
-        return result;
+        defineTags();
+        // Every match gets a tooltip; the first is returned, with all() for the rest
+        const list = tooltipsFor(resolveAll(selector), options);
+        for (const instance of list) this._instances.set(instance.element, instance);
+        return firstWithAll(list);
     },
 
     badge(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        // Note: Badge wrapper doesn't support multiple elements like the original
-        // It wraps a single element at a time
-        const result = createBadgeWrapper(selector, options);
-
-        // Store instance for lifecycle management
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-
-        return result;
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = reuse(el, 'badge', options) || new Badge(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     numberBadge(selector, options = {}) {
-        const result = createNumberBadgeWrapper(selector, options);
-
-        if (result && result.element) {
-            this._instances.set(result.element, result);
-        }
-
-        return result;
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = reuse(el, 'number-badge', options) || new NumberBadge(el, options);
+        this._instances.set(el, instance);
+        return instance;
     },
 
     dropdown(selector, options = {}) {
@@ -9101,14 +9080,11 @@ export const elements = {
     },
 
     backToTop(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const instance = createBackToTopWrapper(selector, options);
-
-        // Store instance for lifecycle management
-        if (instance && instance.element) {
-            this._instances.set('backToTop', instance);
-        }
-
+        defineTags();
+        // A button / link selector is used as the button; anything else adds one to the body
+        const instance = new BackToTop(selector, options);
+        this._instances.set(instance.element, instance);
+        this._instances.set('backToTop', instance);
         return instance;
     },
 
@@ -9130,77 +9106,57 @@ export const elements = {
     },
 
     loader(selector, options = {}) {
-        // Use Web Component wrapper (maintains backwards compatibility)
-        const instance = createLoaderWrapper(selector, options);
-
-        // Store instance for lifecycle management
-        if (instance && instance.element) {
-            this._instances.set(instance.element, instance);
-        }
-
+        defineTags();
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = new Loader(el, options);
+        this._instances.set(el, instance);
         return instance;
     },
 
     // Static loader methods for convenience
     showLoader(selector, options = {}) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-
+        const el = resolveElement(selector);
         if (!el) return null;
-
-        // Check if loader already exists
-        let instance = this._instances.get(el);
-        if (!instance) {
-            instance = createLoaderWrapper(el, { ...options, visible: true });
-            this._instances.set(el, instance);
-        } else {
-            instance.show();
+        const existing = instanceOf(el, 'loader');
+        if (existing) {
+            if (Object.keys(options).length) existing.setOptions(options);
+            return existing.show();
         }
-
-        return instance;
+        return this.loader(el, {...options, visible: true});
     },
 
     hideLoader(selector) {
-        const el = typeof selector === 'string'
-            ? document.querySelector(selector)
-            : selector;
-
-        const instance = this._instances.get(el);
-        if (instance && instance.hide) {
-            instance.hide();
-        }
+        const el = resolveElement(selector);
+        const instance = el && instanceOf(el, 'loader');
+        if (instance) instance.hide();
+        return instance || undefined;
     },
 
     fullscreenLoader(text = 'Loading...', options = {}) {
         let container = document.getElementById('dm-loader-fullscreen');
-
         if (!container) {
             container = document.createElement('div');
             container.id = 'dm-loader-fullscreen';
-            container.style.cssText = `
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.7);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            `;
+            container.className = 'dm-loader-fullscreen';
             document.body.appendChild(container);
         }
-
-        const instance = createLoaderWrapper(container, {
+        const settings = {
             type: options.type || 'spinner',
             size: options.size || 'large',
             color: options.color || 'white',
             text,
             overlay: false,
             centered: false,
+            fullscreen: true,
             visible: true
-        });
-
-        container.style.display = 'flex';
+        };
+        const existing = instanceOf(container, 'loader');
+        if (existing) {
+            existing.setOptions(settings);
+            return existing.show();
+        }
+        const instance = new Loader(container, settings);
         this._instances.set(container, instance);
         return instance;
     },
@@ -9733,18 +9689,8 @@ export const elements = {
         return this.progression(selector, { mode: 'timeline', ...options });
     },
 
-    // Toast wrapper - callable as function or use static methods (Web Component)
-    toast: Object.assign(
-        (message, options = {}) => ToastWrapper.show(message, options),
-        {
-            show: ToastWrapper.show.bind(ToastWrapper),
-            success: ToastWrapper.success.bind(ToastWrapper),
-            error: ToastWrapper.error.bind(ToastWrapper),
-            warning: ToastWrapper.warning.bind(ToastWrapper),
-            info: ToastWrapper.info.bind(ToastWrapper),
-            closeAll: ToastWrapper.closeAll.bind(ToastWrapper)
-        }
-    ),
+    // E.toast(message, options) plus .show/.success/.error/.warning/.info/.closeAll
+    toast: toastApi,
 
     dialog: Dialog,
 
@@ -9753,9 +9699,9 @@ export const elements = {
     confirm: Dialog.confirm.bind(Dialog),
     prompt: Dialog.prompt.bind(Dialog),
 
-    // Modal factory methods (Web Component)
-    createModal: ModalFactoryWrapper.createModal.bind(ModalFactoryWrapper),
-    showModal: ModalFactoryWrapper.showModal.bind(ModalFactoryWrapper),
+    // Modal factory methods: a new modal in the shared dialog container
+    createModal: (options = {}) => { defineTags(); return createModal(options); },
+    showModal: (options = {}) => { defineTags(); return showModal(options); },
 
     // Note: themeRoller() and pageRoller() are in domma-tools.min.js
     // Load that bundle to enable: Domma.elements.themeRoller(), Domma.elements.pageRoller()
