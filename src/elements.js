@@ -25,6 +25,8 @@ import Badge, {NumberBadge} from './components/badge.js';
 import Loader from './components/loader.js';
 import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
+import SplitPane, {splitPaneFor} from './components/split-pane.js';
+import VirtualList, {virtualListFor} from './components/virtual-list.js';
 import {resolveAll, resolveElement, reuse} from './components/shared.js';
 import {registerComponents as defineTags} from './web-components/index.js';
 
@@ -9800,6 +9802,43 @@ export const elements = {
     },
 
     /**
+     * Resizable panes: the container's element children become panes with draggable,
+     * keyboard-operable gutters between them.
+     * @param {string|Element} selector - the container
+     * @param {Object} [options] - see src/components/split-pane.js
+     * @returns {SplitPane|null} null when nothing matches
+     */
+    splitPane(selector, options = {}) {
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = splitPaneFor(el, options);
+        this._instances.set(el, instance);
+        // So E.get() never hands back a destroyed instance.
+        instance._onDestroy = () => {
+            if (this._instances.get(el) === instance) this._instances.delete(el);
+        };
+        return instance;
+    },
+
+    /**
+     * A scrolling list that renders only the rows in view, with optional infinite loading.
+     * @param {string|Element} selector - the scroll container (give it a height in CSS)
+     * @param {Object} [options] - see src/components/virtual-list.js
+     * @returns {VirtualList|null} null when nothing matches
+     */
+    virtualList(selector, options = {}) {
+        const el = resolveElement(selector);
+        if (!el) return null;
+        const instance = virtualListFor(el, options);
+        this._instances.set(el, instance);
+        // So E.get() never hands back a destroyed instance.
+        instance._onDestroy = () => {
+            if (this._instances.get(el) === instance) this._instances.delete(el);
+        };
+        return instance;
+    },
+
+    /**
      * The component on an element - including ones made by a factory (`E.slideover({...})`)
      * or another component, which never pass through this object.
      * @param {string|Element} selector
@@ -9895,3 +9934,4 @@ elements.listGroup.all = (selector, options = {}) => {
 // Export component classes for direct access to static methods
 export {DesktopNotification, TreeView, ContextMenu, Sortable, InputGroup};
 export {Popover};
+export {SplitPane, VirtualList};
