@@ -2,7 +2,7 @@
 
 ### Removed (breaking)
 
-Everything 0.55 marked as deprecated is gone. Each one has warned since then, and nothing in Domma CMS or its plugins still uses them.
+Everything 0.55 marked as deprecated is gone. Domma CMS 1.10.14 (with Docs 2.14.1) and Docs Pro 0.11.2 no longer use them; update those before this release.
 
 | Removed | Use instead |
 |---|---|
