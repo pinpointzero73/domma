@@ -22,6 +22,23 @@ import {components, createComponent} from './component-factory.js';
 import './web-components/index.js';
 import {installGlobals, loadOption} from './globals.js';
 
+/**
+ * `$.setup()` input: page-wide switches, then selectors, each with a {@link SelectorConfig}.
+ * @typedef {DommaSetupOptions & {[selector: string]: import('./config.js').SelectorConfig | string | boolean
+ *   | (() => void) | undefined}} DommaSetupConfig
+ */
+/**
+ * The page-wide switches `$.setup()` reads before the selectors.
+ * @typedef {object} DommaSetupOptions
+ * @property {boolean} [cloak] false: reveal the page now and stop cloaking it
+ * @property {boolean} [noStyles] true: switch Domma's theming off (bring your own styles)
+ * @property {string} [theme] Theme to start, e.g. 'ocean-dark'
+ * @property {boolean} [autoDetectTheme] Follow the system light/dark preference
+ * @property {boolean} [persistTheme] false: do not remember the theme (default true)
+ * @property {boolean} [scanIcons] true: run `I.scan()` over the page
+ * @property {() => void} [$init] Runs once, before the selectors
+ */
+
 // Cloaking - hide page immediately to prevent FOUC. `window.DommaOptions = {cloak: false}`
 // before Domma loads turns it off before it can apply; `Domma.setup({cloak: false})` is too late for that.
 let cloakEnabled = loadOption('cloak', true) !== false;
@@ -35,6 +52,24 @@ if (cloakEnabled && typeof document !== 'undefined' && document.body) {
     });
 }
 
+/**
+ * Wrap elements in a {@link DommaCollection}: a CSS selector, an HTML string (`'<li>One</li>'`), an element,
+ * a NodeList, an array of elements or another collection.
+ * @overload
+ * @param {import('./dom.js').DommaSelector} selector - CSS selector, HTML string, element(s) or a collection
+ * @param {Document | Element | DocumentFragment} [context] - Where to look for a CSS selector (default: document)
+ * @returns {import('./dom.js').DommaCollection}
+ */
+/**
+ * Run a function when the DOM is ready (straight away if it already is).
+ * @overload
+ * @param {() => void} callback
+ * @returns {import('./dom.js').DommaCollection} An empty collection
+ */
+/**
+ * @param {*} selector
+ * @param {*} [context]
+ */
 const Domma = (selector, context) => dom(selector, context);
 
 // Version and build info (injected at build time by Rollup)
@@ -50,6 +85,11 @@ Domma.buildInfo = {
 // Attach modules
 Domma.http = http;
 Domma.utils = utils;
+/**
+ * Set up components, initial state and events declaratively, keyed by selector.
+ * @param {DommaSetupConfig} config
+ * @returns {void}
+ */
 Domma.setup = (config) => {
     // Handle cloak configuration (default: enabled)
     if (config.cloak === false) {
@@ -82,20 +122,30 @@ Domma.setup = (config) => {
 };
 
 // Configuration update method
+/**
+ * Update the configuration for a selector (deep merged) and apply the changes.
+ * @param {string} selector
+ * @param {Partial<import('./config.js').SelectorConfig>} changes
+ * @returns {import('./config.js').SelectorConfig} The merged configuration
+ */
 Domma.update = (selector, changes) => configEngine.update(selector, changes);
 
 // Configuration retrieval method
+/** @type {import('./config.js').ConfigEngine['config']} */
 Domma.config = (selector) => configEngine.config(selector);
 
 // Live component instance created by $.setup() for a selector.
 // NOTE: named getComponent, not component - Domma.component() defines a
 // standalone Web Component and must not be shadowed.
+/** @type {import('./config.js').ConfigEngine['getComponent']} */
 Domma.getComponent = (selector) => configEngine.getComponent(selector);
 
 // Configuration reset/destroy method
+/** @type {import('./config.js').ConfigEngine['reset']} */
 Domma.reset = (selector) => configEngine.reset(selector);
 
 // DOMReady helper method
+/** @type {import('./config.js').ConfigEngine['ready']} */
 Domma.ready = (callback) => configEngine.ready(callback);
 
 Domma.models = models;
@@ -114,6 +164,13 @@ Domma.sanitize = sanitizeModule;
 Domma.components = components;
 Domma.i18n = i18n;
 // Domma.t('key', params) - the call you write most, so it gets a short name on Domma itself.
+/**
+ * Translate a key - shortcut for `Domma.i18n.t()`.
+ * @param {string} key
+ * @param {Record<string, any> | null} [params] - Values for `{name}` placeholders, `count` for plurals
+ * @param {import('./i18n.js').I18nTranslateOptions} [options]
+ * @returns {string}
+ */
 Domma.t = (key, params, options) => i18n.t(key, params, options);
 
 /**
@@ -121,26 +178,58 @@ Domma.t = (key, params, options) => i18n.t(key, params, options);
  * Usage: Domma.component('tag-name', definition)
  *
  * @param {string} tagName
- * @param {Object} definition
+ * @param {import('./component-factory.js').ComponentDefinition} definition
+ * @returns {ReturnType<typeof createComponent>}
  */
 Domma.component = (tagName, definition) => createComponent(tagName, definition);
 
 // Expose DesktopNotification class for static method access
 Domma.DesktopNotification = DesktopNotification;
 
+/**
+ * The Domma function and everything on it. `$` is the same function.
+ * @typedef {typeof Domma & DommaExtras} DommaStatic
+ */
+/**
+ * Statics attached outside this file: `noConflict` by installGlobals() (globals.js), `flags` / `FL` by the
+ * opt-in domma-flags bundle.
+ * @typedef {object} DommaExtras
+ * @property {(deep?: boolean) => DommaStatic} noConflict Give `$` and `_` back to whatever owned them before
+ *   Domma loaded (jQuery, Lodash). With `deep`, give back every short alias (`window.Domma` stays). Returns
+ *   Domma, so `const dm = Domma.noConflict()` keeps a handle.
+ * @property {import('./flags.js').Flags} [flags] Nation flags - present when domma-flags is loaded
+ * @property {import('./flags.js').Flags} [FL] Alias for `flags` (opt-in module)
+ */
+
 // Short aliases
+/** @type {DommaStatic} */
 const $ = Domma;
+/** @type {typeof utils} */
 const _ = utils;
+/** @type {typeof models} */
 const M = models;
+/** @type {typeof dates} */
 const D = dates;
+/** @type {typeof storage} */
 const S = storage;
+/** @type {typeof auth} */
 const A = auth;
+/** @type {typeof forms} */
 const F = forms;
+/** @type {typeof http} */
 const H = http;
+/** @type {typeof elements} */
 const E = elements;
+/** @type {typeof icons} */
 const I = icons;
+/** @type {typeof tables} */
 const T = tables;
+/** @type {typeof router} */
 const R = router;
+/**
+ * Blueprint composition: `B.extend`, `B.pick`, `B.omit` (the same functions as `M.extend` / `M.pick` / `M.omit`).
+ * @type {{extend: typeof models.extend, pick: typeof models.pick, omit: typeof models.omit}}
+ */
 const B = {  // Blueprint composition methods
     extend: models.extend.bind(models),
     pick: models.pick.bind(models),
