@@ -8,12 +8,10 @@ export function mount(root) {
             const variant = $(this).attr('data-variant');
 
             if (theme === 'reset') {
-                Domma.theme.set('light');
-                Domma.theme.setVariant('');
+                Domma.theme.set('ocean-light');
                 E.toast('Theme reset to Light', { type: 'success' });
             } else {
-                Domma.theme.set(theme);
-                Domma.theme.setVariant(variant || '');
+                Domma.theme.set(`${variant || 'ocean'}-${theme}`);
 
                 const themeName = variant ? _.capitalize(variant) : _.capitalize(theme);
                 E.toast(`Theme changed to ${themeName}`, { type: 'success' });

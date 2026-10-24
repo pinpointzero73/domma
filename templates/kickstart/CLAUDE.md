@@ -537,7 +537,7 @@ if (Domma.theme.isDark()) {
 }
 
 // Toggle between light/dark variants
-Domma.theme.toggle();  // ocean-dark → ocean-light
+Domma.theme.set(`${Domma.theme.getBase()}-${Domma.theme.isDark() ? 'light' : 'dark'}`);  // ocean-dark → ocean-light
 
 // Listen to theme changes
 $(document.body).on('themechange', (e) => {

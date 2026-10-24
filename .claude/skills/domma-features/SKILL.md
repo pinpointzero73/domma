@@ -153,7 +153,7 @@ This comprehensive list covers ALL Domma features. **Always check this list befo
 
 - Dynamic theme management
 - 10+ built-in themes with light/dark variants
-- Methods: `init()`, `set()`, `setVariant()`, `toggle()`
+- Methods: `init()`, `set('ocean-dark')`, `get()`, `getBase()`, `getMode()`, `isDark()`, `listThemes()`, `listBases()`
 - Auto system preference detection
 - Persistence to localStorage
 

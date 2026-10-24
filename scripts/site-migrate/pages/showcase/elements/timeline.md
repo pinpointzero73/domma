@@ -192,7 +192,7 @@ $('#change-layout').on('click', () => {
 
 Domma.elements.progression(selector, {mode: 'timeline', ...})
 
-Creates a new timeline instance. `Domma.elements.timeline(selector, options)` remains as a deprecated alias for exactly this call, so existing code keeps working - it logs a deprecation warning.
+Creates a new timeline instance. `Domma.elements.timeline(selector, options)` was removed in 0.58 - `progression(selector, {mode: 'timeline'})` is the call.
 
 ### Options
 

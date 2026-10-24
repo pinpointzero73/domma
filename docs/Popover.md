@@ -202,20 +202,22 @@ including a `tabindex` / `role` it gave a non-interactive trigger.
 
 ## Events
 
-Each phase calls its callback, then dispatches a bubbling event on the trigger with
-`{popover}` as `event.detail`:
+Each phase calls its callback and `.on(name, fn)` listeners, then dispatches a bubbling
+`dm:popover:<name>` event on the trigger with `{instance, args}` as `event.detail` (the older
+unprefixed `popover:<name>` events were removed in 0.58):
 
-| Callback   | Event             | When | Cancelable |
-|------------|-------------------|------|------------|
-| `onShow`   | `popover:show`    | Before opening | yes - return `false` or `preventDefault()` |
-| `onShown`  | `popover:shown`   | After the open transition | no |
-| `onHide`   | `popover:hide`    | Before closing | yes |
-| `onHidden` | `popover:hidden`  | After the panel is removed from the document | no |
+| Callback   | Event               | When | Cancelable |
+|------------|---------------------|------|------------|
+| `onShow`   | `dm:popover:show`   | Before opening | yes - return `false` or `preventDefault()` |
+| `onShown`  | `dm:popover:shown`  | After the open transition | no |
+| `onHide`   | `dm:popover:hide`   | Before closing | yes |
+| `onHidden` | `dm:popover:hidden` | After the panel is removed from the document | no |
 
 A popover shown again while it is still fading out skips `hidden` for that close.
 
 ```javascript
-$('main').on('popover:shown', (e) => console.log('Opened', e.detail.popover.panel.id));
+pop.on('shown', (p) => console.log('Opened', p.panel.id));
+$('main').on('dm:popover:shown', (e) => console.log('Opened', e.detail.instance.panel.id));
 ```
 
 ## Declarative markup
@@ -320,5 +322,5 @@ which can be opened from inside a popover. Override per instance with `zIndex`.
 
 ## Reduced motion
 
-Under `prefers-reduced-motion: reduce` the fade and scale are skipped, and `popover:shown` /
-`popover:hidden` fire at once instead of after the transition.
+Under `prefers-reduced-motion: reduce` the fade and scale are skipped, and `dm:popover:shown` /
+`dm:popover:hidden` fire at once instead of after the transition.

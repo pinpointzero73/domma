@@ -474,10 +474,12 @@ export const http: Http;
 export interface Theme {
     init(options?: { theme?: string; autoDetect?: boolean; persist?: boolean }): void;
     set(themeName: string): void;
-    setVariant(variant: 'light' | 'dark'): void;
-    toggle(): void;
     get(): string;
-    getVariant(): string;
+    getBase(): string;
+    getMode(): string;
+    isDark(): boolean;
+    listThemes(): string[];
+    listBases(): string[];
 }
 
 export const theme: Theme;

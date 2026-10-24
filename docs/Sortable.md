@@ -119,23 +119,25 @@ list.animate(() => renderTasks(_.sortBy(tasks, 'due')));
 
 ## Callbacks and events
 
-Each callback also fires as a bubbling `CustomEvent` on the container, named `sortable:<name>`,
-with the same object as `event.detail`.
+Each callback also reaches `.on(name, fn)` listeners (called with the detail object) and fires as
+a bubbling `CustomEvent` on the container, named `dm:sortable:<name>`, with `{instance, args: [detail]}`
+as `event.detail`. (The older unprefixed `sortable:<name>` events were removed in 0.58.)
 
 | Callback | Event | Detail | When |
 |----------|-------|--------|------|
-| `onStart` | `sortable:start` | `{item, from}` | A press has become a drag |
-| `onMove` | `sortable:move` | `{item, target, zone, x, y}` | Every pointer move during a drag |
-| `onSort` | `sortable:sort` | `{item, from, to, order, previous}` | Live mode: the order changed (drag or keyboard) |
-| `onDrop` | `sortable:drop` | `{item, target, zone, key, targetKey}` | Indicator mode: dropped on a valid target |
-| `onCancel` | `sortable:cancel` | `{item}` | Esc, a refused drop, or a drop over nothing |
-| `onEnd` | `sortable:end` | `{item, changed}` | Every drag, keyboard move and cancel ends here |
+| `onStart` | `dm:sortable:start` | `{item, from}` | A press has become a drag |
+| `onMove` | `dm:sortable:move` | `{item, target, zone, x, y}` | Every pointer move during a drag |
+| `onSort` | `dm:sortable:sort` | `{item, from, to, order, previous}` | Live mode: the order changed (drag or keyboard) |
+| `onDrop` | `dm:sortable:drop` | `{item, target, zone, key, targetKey}` | Indicator mode: dropped on a valid target |
+| `onCancel` | `dm:sortable:cancel` | `{item}` | Esc, a refused drop, or a drop over nothing |
+| `onEnd` | `dm:sortable:end` | `{item, changed}` | Every drag, keyboard move and cancel ends here |
 
 `order` and `previous` are arrays of keys. A drag that ends where it began fires `onEnd` with
 `changed: false` and no `onSort`.
 
 ```javascript
-$('#tasks').on('sortable:sort', (e) => console.log(e.detail.order));
+sortable.on('sort', (detail) => console.log(detail.order));
+$('#tasks').on('dm:sortable:sort', (e) => console.log(e.detail.args[0].order));
 ```
 
 ### `onDrop`

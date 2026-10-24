@@ -528,26 +528,26 @@ E.popover('#demo-modal-help', {
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
         <div class="card-body">
             <p class="mb-4">
-                Each phase calls its callback and then fires a bubbling <code>popover:*</code> event on the trigger,
-                with <code>{popover}</code> as <code>event.detail</code>. Return <code>false</code> from
+                Each phase calls its callback and then fires a bubbling <code>dm:popover:*</code> event on the trigger,
+                with <code>{instance, args}</code> as <code>event.detail</code>. Return <code>false</code> from
                 <code>onShow</code> / <code>onHide</code>, or call <code>preventDefault()</code> on
-                <code>popover:show</code> / <code>popover:hide</code>, to cancel. This log listens to the whole page.
+                <code>dm:popover:show</code> / <code>dm:popover:hide</code>, to cancel. This log listens to the whole page.
             </p>
             <ul id="demo-log" class="list-none p-0 text-sm text-gray-600 mb-4">
                 <li>Nothing yet - open a popover above.</li>
             </ul>
             <div class="code-block language-javascript">
                 <pre><code>
-$('main').on('popover:shown', (e) =&gt; console.log('Opened', e.detail.popover.panel.id));
+$('main').on('dm:popover:shown', (e) =&gt; console.log('Opened', e.detail.instance.panel.id));
 </code></pre>
             </div>
             <table class="table mb-4">
                 <thead><tr><th>Callback</th><th>Event</th><th>When</th></tr></thead>
                 <tbody>
-                    <tr><td><code>onShow</code></td><td><code>popover:show</code></td><td>Before opening; cancelable</td></tr>
-                    <tr><td><code>onShown</code></td><td><code>popover:shown</code></td><td>After the open transition</td></tr>
-                    <tr><td><code>onHide</code></td><td><code>popover:hide</code></td><td>Before closing; cancelable</td></tr>
-                    <tr><td><code>onHidden</code></td><td><code>popover:hidden</code></td><td>After the panel has been removed</td></tr>
+                    <tr><td><code>onShow</code></td><td><code>dm:popover:show</code></td><td>Before opening; cancelable</td></tr>
+                    <tr><td><code>onShown</code></td><td><code>dm:popover:shown</code></td><td>After the open transition</td></tr>
+                    <tr><td><code>onHide</code></td><td><code>dm:popover:hide</code></td><td>Before closing; cancelable</td></tr>
+                    <tr><td><code>onHidden</code></td><td><code>dm:popover:hidden</code></td><td>After the panel has been removed</td></tr>
                 </tbody>
             </table>
         </div>
@@ -768,12 +768,12 @@ $('main').on('popover:shown', (e) =&gt; console.log('Opened', e.detail.popover.p
     });
 
     // ---- One listener for the whole page -------------------------------------
-    $('main').on('popover:shown', (e) => {
-        const trigger = e.detail.popover.trigger;
+    $('main').on('dm:popover:shown', (e) => {
+        const trigger = e.detail.instance.trigger;
         log('Opened: ' + (trigger.getAttribute('aria-label') || trigger.textContent.trim()));
     });
-    $('main').on('popover:hidden', (e) => {
-        const trigger = e.detail.popover.trigger;
+    $('main').on('dm:popover:hidden', (e) => {
+        const trigger = e.detail.instance.trigger;
         log('Closed: ' + (trigger.getAttribute('aria-label') || trigger.textContent.trim()));
     });
 </script>

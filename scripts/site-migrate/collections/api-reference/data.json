@@ -11556,42 +11556,6 @@
     }
   },
   {
-    "id": "8c387170-a197-9287-0a76-1af9c6604072",
-    "data": {
-      "module": "Themes",
-      "name": "Domma.theme.setVariant",
-      "signature": "Domma.theme.setVariant(variant: ThemeVariant): Theme",
-      "description": "Set the colour variant",
-      "example": "",
-      "page": "/showcase/themes",
-      "order": 643
-    },
-    "meta": {
-      "createdAt": "2026-10-11T00:00:00.000Z",
-      "updatedAt": "2026-10-11T00:00:00.000Z",
-      "createdBy": null,
-      "source": "admin"
-    }
-  },
-  {
-    "id": "84ccfb04-c255-c2a3-e9db-1974605821fe",
-    "data": {
-      "module": "Themes",
-      "name": "Domma.theme.toggle",
-      "signature": "Domma.theme.toggle(): Theme",
-      "description": "Toggle between light and dark modes",
-      "example": "",
-      "page": "/showcase/themes",
-      "order": 644
-    },
-    "meta": {
-      "createdAt": "2026-10-11T00:00:00.000Z",
-      "updatedAt": "2026-10-11T00:00:00.000Z",
-      "createdBy": null,
-      "source": "admin"
-    }
-  },
-  {
     "id": "09042611-caf0-f66c-89a4-51765c4ac1b9",
     "data": {
       "module": "Themes",
@@ -11637,24 +11601,6 @@
       "example": "",
       "page": "/showcase/themes",
       "order": 647
-    },
-    "meta": {
-      "createdAt": "2026-10-11T00:00:00.000Z",
-      "updatedAt": "2026-10-11T00:00:00.000Z",
-      "createdBy": null,
-      "source": "admin"
-    }
-  },
-  {
-    "id": "706b9176-3f93-18af-e2f1-6bc5c46e1d64",
-    "data": {
-      "module": "Themes",
-      "name": "Domma.theme.listVariants",
-      "signature": "Domma.theme.listVariants(): ThemeVariant[]",
-      "description": "List available variants",
-      "example": "",
-      "page": "/showcase/themes",
-      "order": 648
     },
     "meta": {
       "createdAt": "2026-10-11T00:00:00.000Z",

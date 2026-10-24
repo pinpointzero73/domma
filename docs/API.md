@@ -2394,13 +2394,9 @@ progression.setCurrent(id)             // Set current active item
 
 #### Backwards Compatibility
 
-The `timeline()` function is deprecated but remains fully functional as an alias:
+`Domma.elements.timeline()` was removed in 0.58. Use `progression()` in timeline mode:
 
 ```javascript
-// Deprecated (still works)
-const timeline = Domma.elements.timeline(selector, options);
-
-// Recommended
 const timeline = Domma.elements.progression(selector, { mode: 'timeline', ...options });
 ```
 

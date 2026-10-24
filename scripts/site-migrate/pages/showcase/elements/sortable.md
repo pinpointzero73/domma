@@ -144,23 +144,23 @@ Even without a handle, a press on an input, button, link or select inside an ite
 
 ## Events
 
-Every callback also fires as a bubbling `sortable:*` event on the container, with the same object as `event.detail`. This log listens to all four demos above.
+Every callback also fires as a bubbling `dm:sortable:*` event on the container, with `{instance, args: [detail]}` as `event.detail`. This log listens to all four demos above.
 
 [showcase-demo id="showcase/elements/sortable/events" title="Events" /]
 
 ```
-$('#demo-tasks').on('sortable:sort', (e) => console.log(e.detail.order));
+$('#demo-tasks').on('dm:sortable:sort', (e) => console.log(e.detail.args[0].order));
 ```
 
 [table striped="true"]
 | Callback | Event | Detail |
 | --- | --- | --- |
-| `onStart` | `sortable:start` | `{item, from}` |
-| `onMove` | `sortable:move` | `{item, target, zone, x, y}` |
-| `onSort` | `sortable:sort` | `{item, from, to, order, previous}` - live mode |
-| `onDrop` | `sortable:drop` | `{item, target, zone, key, targetKey}` - indicator mode |
-| `onCancel` | `sortable:cancel` | `{item}` |
-| `onEnd` | `sortable:end` | `{item, changed}` |
+| `onStart` | `dm:sortable:start` | `{item, from}` |
+| `onMove` | `dm:sortable:move` | `{item, target, zone, x, y}` |
+| `onSort` | `dm:sortable:sort` | `{item, from, to, order, previous}` - live mode |
+| `onDrop` | `dm:sortable:drop` | `{item, target, zone, key, targetKey}` - indicator mode |
+| `onCancel` | `dm:sortable:cancel` | `{item}` |
+| `onEnd` | `dm:sortable:end` | `{item, changed}` |
 [/table]
 
 ## Keyboard and touch

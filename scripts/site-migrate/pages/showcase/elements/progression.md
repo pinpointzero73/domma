@@ -211,9 +211,9 @@ Domma.elements.progression('#interactive-roadmap', {
 
 ## Migration from Timeline
 
-The `timeline()` component is now an alias for `progression({ mode: 'timeline' })`. Your existing timeline code continues to work, but we recommend migrating to the new API.
+The `timeline()` component was removed in 0.58. Use `progression({ mode: 'timeline' })` instead - the options are the same.
 
-### Old (Still Works)
+### Old (removed in 0.58)
 
 ```
 Domma.elements.timeline('#my-timeline', {

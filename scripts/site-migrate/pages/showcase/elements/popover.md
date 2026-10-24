@@ -237,21 +237,21 @@ E.popover('#demo-modal-help', {
 
 ## Events
 
-Each phase calls its callback and then fires a bubbling `popover:*` event on the trigger, with `{popover}` as `event.detail`. Return `false` from `onShow` / `onHide`, or call `preventDefault()` on `popover:show` / `popover:hide`, to cancel. This log listens to the whole page.
+Each phase calls its callback and then fires a bubbling `dm:popover:*` event on the trigger, with `{instance, args}` as `event.detail`. Return `false` from `onShow` / `onHide`, or call `preventDefault()` on `dm:popover:show` / `dm:popover:hide`, to cancel. This log listens to the whole page.
 
 [showcase-demo id="showcase/elements/popover/events" title="Events" /]
 
 ```
-$('main').on('popover:shown', (e) => console.log('Opened', e.detail.popover.panel.id));
+$('main').on('dm:popover:shown', (e) => console.log('Opened', e.detail.instance.panel.id));
 ```
 
 [table striped="true"]
 | Callback | Event | When |
 | --- | --- | --- |
-| `onShow` | `popover:show` | Before opening; cancelable |
-| `onShown` | `popover:shown` | After the open transition |
-| `onHide` | `popover:hide` | Before closing; cancelable |
-| `onHidden` | `popover:hidden` | After the panel has been removed |
+| `onShow` | `dm:popover:show` | Before opening; cancelable |
+| `onShown` | `dm:popover:shown` | After the open transition |
+| `onHide` | `dm:popover:hide` | Before closing; cancelable |
+| `onHidden` | `dm:popover:hidden` | After the panel has been removed |
 [/table]
 
 ## Keyboard and screen readers

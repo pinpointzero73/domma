@@ -353,11 +353,11 @@ Domma.elements.progression('#interactive-roadmap', {
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Migration from Timeline</h2></div>
         <div class="card-body">
             <p class="mb-4">
-                The <code>timeline()</code> component is now an alias for <code>progression({ mode: 'timeline' })</code>.
-                Your existing timeline code continues to work, but we recommend migrating to the new API.
+                The <code>timeline()</code> component was removed in 0.58. Use <code>progression({ mode: 'timeline' })</code>
+                instead - the options are the same.
             </p>
 
-            <h3 class="category-title-style">Old (Still Works)</h3>
+            <h3 class="category-title-style">Old (removed in 0.58)</h3>
             <div class="code-block language-javascript mb-4">
                 <pre><code>
 Domma.elements.timeline('#my-timeline', {

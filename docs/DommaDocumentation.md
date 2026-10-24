@@ -2777,7 +2777,7 @@ Markup works too - `data-popover`, `data-popover-title`, `data-popover-placement
 <script>E.popover.scan();</script>
 ```
 
-Events: `popover:show` / `shown` / `hide` / `hidden` on the trigger (`show` and `hide` cancelable).
+Events: `dm:popover:show` / `shown` / `hide` / `hidden` on the trigger (`show` and `hide` cancelable), or `pop.on('shown', fn)`.
 See [docs/Popover.md](./Popover.md) for every option, the keyboard model, the CSS and stacking.
 
 ## Avatars
