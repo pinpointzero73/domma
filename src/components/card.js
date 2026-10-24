@@ -28,6 +28,30 @@ function chevron() {
     return svg;
 }
 
+/**
+ * @typedef {object} CardOptions
+ * @property {boolean} [hoverable=true] - Enable hover effects (`hover` is accepted as an alias)
+ * @property {boolean} [hover] - Alias of `hoverable`
+ * @property {import('../elements.js').ShadowSize|'sm'|'lg'} [shadow='medium'] - Shadow size
+ * @property {boolean} [rounded=true] - Apply border radius (false gives square corners)
+ * @property {boolean} [animation=true] - Enable animations
+ * @property {number} [animationDuration=200] - Animation duration in ms
+ * @property {boolean} [collapsible=false] - Clicking the header collapses/expands the body
+ * @property {boolean} [collapsed=false] - Start collapsed (a saved state wins)
+ * @property {string|null} [persistKey] - Storage key for the collapsed state (default `domma-card-<id>` when the card has an id)
+ * @property {string} [title] - Adds a `.card-header` with this title when the card has none
+ * @property {string} [icon] - Icon name shown before the title
+ * @property {string|Node} [content] - Body content: HTML (sanitised unless `safe: false`) or a Node
+ * @property {boolean} [safe=true] - Sanitise string content
+ * @property {boolean} [clickable=false] - Clickable style (also on when `onClick` is given)
+ * @property {string|null} [color] - Colour variant, e.g. 'primary' adds `.card-primary`
+ * @property {((card: CardInstance) => void)|null} [onCollapse] - After the body collapses
+ * @property {((card: CardInstance) => void)|null} [onExpand] - After the body expands
+ * @property {((card: CardInstance, event: MouseEvent) => void)|null} [onClick] - Click on the card (not a collapsing header click)
+ */
+
+/** @typedef {Card} CardInstance */
+
 export class Card extends Component {
     static componentName = 'card';
 
@@ -51,6 +75,10 @@ export class Card extends Component {
         onClick: null
     };
 
+    /**
+     * @param {import('./shared.js').ComponentTarget} selector
+     * @param {CardOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(resolveElement(selector), options);
         if (!this.element) return;
@@ -205,31 +233,54 @@ export class Card extends Component {
 
     // ---- public API -----------------------------------------------------
 
+    /**
+     * Collapse the body.
+     * @returns {this}
+     */
     collapse() {
         if (!this.isCollapsed()) this._setCollapsed(true);
         return this;
     }
 
+    /**
+     * Expand the body.
+     * @returns {this}
+     */
     expand() {
         if (this.isCollapsed()) this._setCollapsed(false);
         return this;
     }
 
+    /**
+     * Toggle collapsed/expanded.
+     * @returns {this}
+     */
     toggle() {
         this._setCollapsed(!this.isCollapsed());
         return this;
     }
 
+    /** @returns {boolean} */
     isCollapsed() {
         return this.element.classList.contains('card-collapsed');
     }
 
+    /**
+     * Set the shadow size.
+     * @param {import('../elements.js').ShadowSize|'sm'|'lg'} size
+     * @returns {this}
+     */
     setShadow(size) {
         this.options.shadow = size;
         this._apply();
         return this;
     }
 
+    /**
+     * Turn the hover style on or off.
+     * @param {boolean} hoverable
+     * @returns {this}
+     */
     setHoverable(hoverable) {
         this.options.hoverable = hoverable;
         this.element.classList.toggle('card-hover', flag(hoverable, true));
@@ -239,6 +290,9 @@ export class Card extends Component {
     /**
      * Replace the body's content. A string is HTML, sanitised like `$().html()` unless
      * `{safe: false}`; a Node is appended.
+     * @param {string|Node|null} content
+     * @param {{safe?: boolean}} [opts]
+     * @returns {this}
      */
     setContent(content, opts = {}) {
         const body = this.getBody();
@@ -247,7 +301,10 @@ export class Card extends Component {
         return this;
     }
 
-    /** The `.card-body`, made if the card has none. */
+    /**
+     * The `.card-body`, made if the card has none.
+     * @returns {HTMLElement}
+     */
     getBody() {
         let body = this._body();
         if (!body) {
@@ -260,7 +317,10 @@ export class Card extends Component {
         return body;
     }
 
-    /** Re-measure an expanded collapsible body whose content changed. */
+    /**
+     * Re-measure an expanded collapsible body whose content changed.
+     * @returns {this}
+     */
     updateHeight() {
         const body = this._body();
         if (body && !this.isCollapsed()) body.style.height = '';

@@ -18,6 +18,84 @@ const SQUARE_VIEWBOX = '10 0 40 40'; // centre-cropped 1:1 slice
 
 let _clipSeq = 0;
 
+/**
+ * Region group a flag is listed under; registered flags default to 'custom'.
+ * @typedef {'europe'|'americas'|'africa'|'asia'|'oceania'|'custom'|(string & {})} FlagRegion
+ */
+
+/** @typedef {'rect'|'rounded'|'square'|'circle'} FlagShape */
+
+/**
+ * A single overlay primitive used to compose a flag (on the 60x40 canvas). Which coordinates
+ * are read depends on `type`: rect (x, y, w, h, rx), circle (cx, cy, r), ellipse (cx, cy, rx, ry),
+ * line (x1, y1, x2, y2), path (d), star (cx, cy, r, points, innerRatio, rotation),
+ * crescent (cx, cy, r, off), group (transform, children).
+ * @typedef {object} FlagOverlay
+ * @property {'rect'|'circle'|'ellipse'|'line'|'path'|'star'|'crescent'|'group'} type
+ * @property {string} [fill]
+ * @property {string} [stroke]
+ * @property {number} [strokeWidth]
+ * @property {number} [x]
+ * @property {number} [y]
+ * @property {number} [w]
+ * @property {number} [h]
+ * @property {number} [rx]
+ * @property {number} [ry]
+ * @property {number} [cx]
+ * @property {number} [cy]
+ * @property {number} [r]
+ * @property {number} [x1]
+ * @property {number} [y1]
+ * @property {number} [x2]
+ * @property {number} [y2]
+ * @property {string} [d] Path data
+ * @property {number} [points] Star points (default 5)
+ * @property {number} [innerRatio] Star inner radius as a fraction of outer (default 0.382)
+ * @property {number} [rotation] Star rotation in degrees (default -90, pointing up)
+ * @property {number} [off] Crescent carving-circle offset
+ * @property {string} [transform] Group transform
+ * @property {FlagOverlay[]} [children] Group members
+ */
+
+/**
+ * A flag definition - either raw SVG markup or a compact descriptor.
+ * @typedef {object} FlagDefinition
+ * @property {string} name Country name
+ * @property {FlagRegion} [region] Region group (defaults to 'custom' when registered)
+ * @property {string} [svg] Raw inner SVG markup (60x40 canvas)
+ * @property {string} [bg] Solid background colour
+ * @property {{dir?: 'h'|'v', colors: string[], weights?: number[]}} [stripes] Stripe descriptor
+ * @property {{bg: string, colour: string, border?: string, thickness?: number}} [cross] Nordic (offset) cross descriptor
+ * @property {FlagOverlay[]} [overlays] Overlay primitives drawn on top
+ */
+
+/**
+ * Options for rendering a flag.
+ * @typedef {object} FlagRenderOptions
+ * @property {number} [size=24] Height in px (width follows aspect)
+ * @property {number} [width] Explicit width override
+ * @property {number} [height] Explicit height override
+ * @property {FlagShape} [shape='rect'] Output shape
+ * @property {boolean|string} [border=false] Add a hairline border (or colour)
+ * @property {string} [class] Extra CSS classes
+ * @property {string|null} [title] Accessible title (defaults to country name)
+ * @property {Record<string, string>} [attrs] Additional attributes
+ */
+
+/**
+ * Options for `inject()`.
+ * @typedef {FlagRenderOptions & {position?: 'prepend'|'append'|'replace'}} FlagInjectOptions
+ */
+
+/**
+ * @typedef {object} FlagRegionMeta
+ * @property {string} name
+ * @property {string} [description]
+ * @property {string[]} codes
+ */
+
+/** The flag registry (FL / Domma.flags). @typedef {FlagRegistry} Flags */
+
 /* -------------------------------------------------------------------------- */
 /* Geometry helpers (shared by descriptor expansion)                          */
 /* -------------------------------------------------------------------------- */
@@ -163,11 +241,15 @@ function expandFlag(def) {
 
 class FlagRegistry {
     constructor() {
+        /** @type {Record<string, FlagDefinition>} @private */
         this._flags = {...defaultFlags};
+        /** @type {Record<string, FlagRegionMeta>} @private */
         this._regions = {...regions};
+        /** @type {Record<string, string|null>} @private */
         this._cache = {};
     }
 
+    /** @private @param {string} code @returns {string|null} */
     _markup(code) {
         if (this._cache[code] !== undefined) {
             return this._cache[code];
@@ -181,15 +263,7 @@ class FlagRegistry {
     /**
      * Render a flag as an SVG element.
      * @param {string} code - ISO 3166-1 alpha-2 code (case-insensitive)
-     * @param {Object} [options]
-     * @param {number} [options.size=24] - Height in px (width follows aspect)
-     * @param {number} [options.width] - Explicit width override
-     * @param {number} [options.height] - Explicit height override
-     * @param {string} [options.shape='rect'] - 'rect' | 'square' | 'circle' | 'rounded'
-     * @param {boolean|string} [options.border=false] - Add a hairline border (or colour)
-     * @param {string} [options.class] - Extra CSS classes
-     * @param {string} [options.title] - Accessible title (defaults to country name)
-     * @param {Object} [options.attrs] - Additional attributes
+     * @param {FlagRenderOptions} [options]
      * @returns {SVGElement|null}
      */
     render(code, options = {}) {
@@ -266,7 +340,7 @@ class FlagRegistry {
     /**
      * Get a flag as an HTML string.
      * @param {string} code
-     * @param {Object} [options] - Same as render()
+     * @param {FlagRenderOptions} [options] - Same as render()
      * @returns {string}
      */
     html(code, options = {}) {
@@ -283,8 +357,7 @@ class FlagRegistry {
      * Inject a flag into an element.
      * @param {string|HTMLElement} target
      * @param {string} code
-     * @param {Object} [options] - Same as render(), plus position
-     * @param {string} [options.position='prepend'] - 'prepend' | 'append' | 'replace'
+     * @param {FlagInjectOptions} [options] - Same as render(), plus position: 'prepend' (default) | 'append' | 'replace'
      * @returns {SVGElement|null}
      */
     inject(target, code, options = {}) {
@@ -313,7 +386,7 @@ class FlagRegistry {
      * Scan a container for [data-flag] elements and replace them with SVGs.
      * Supported attributes: data-flag, data-flag-size, data-flag-shape,
      * data-flag-class, data-flag-border, data-flag-title.
-     * @param {HTMLElement|string} [container=document]
+     * @param {Element|Document|DocumentFragment|string} [container=document]
      * @returns {number} Number of flags replaced
      */
     scan(container = document) {
@@ -355,8 +428,8 @@ class FlagRegistry {
     /**
      * Register a custom flag (or override an existing one).
      * @param {string} code - ISO alpha-2 code
-     * @param {Object} definition - { name, region?, svg? | stripes?/cross?/bg?/overlays? }
-     * @returns {FlagRegistry}
+     * @param {FlagDefinition} definition - { name, region?, svg? | stripes?/cross?/bg?/overlays? }
+     * @returns {this}
      */
     register(code, definition) {
         if (!code || !definition) {
@@ -410,7 +483,7 @@ class FlagRegistry {
     /**
      * Get a flag definition.
      * @param {string} code
-     * @returns {Object|null}
+     * @returns {FlagDefinition|null}
      */
     get(code) {
         return this._flags[String(code || '').toLowerCase()] || null;
@@ -428,7 +501,7 @@ class FlagRegistry {
 
     /**
      * List flag codes, optionally filtered by region.
-     * @param {string} [region]
+     * @param {FlagRegion|null} [region]
      * @returns {string[]}
      */
     list(region = null) {
@@ -440,7 +513,7 @@ class FlagRegistry {
 
     /**
      * List all regions with metadata.
-     * @returns {Object}
+     * @returns {Record<string, FlagRegionMeta>}
      */
     listRegions() {
         return {...this._regions};

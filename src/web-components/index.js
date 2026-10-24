@@ -72,6 +72,7 @@ const SHELLS = {
     }
 };
 
+/** The `<domma-*>` tag names. @type {string[]} */
 export const TAGS = Object.keys(SHELLS);
 const TAG_SELECTOR = TAGS.join(',');
 
@@ -139,7 +140,10 @@ function shellClass(spec) {
 let defined = false;
 let observer = null;
 
-/** Define every `<domma-*>` tag. Safe to call more than once; does nothing outside a browser. */
+/**
+ * Define every `<domma-*>` tag. Safe to call more than once; does nothing outside a browser.
+ * @returns {void}
+ */
 export function registerComponents() {
     if (defined || typeof customElements === 'undefined' || typeof HTMLElement === 'undefined') return;
     defined = true;
@@ -150,7 +154,11 @@ export function registerComponents() {
     }
 }
 
-/** Define the tags when `root` contains one. */
+/**
+ * Define the tags when `root` contains one.
+ * @param {ParentNode|null} [root] - Defaults to `document`
+ * @returns {void}
+ */
 export function registerIfPresent(root = typeof document !== 'undefined' ? document : null) {
     if (defined || !root || typeof root.querySelector !== 'function') return;
     if (root.querySelector(TAG_SELECTOR)) registerComponents();

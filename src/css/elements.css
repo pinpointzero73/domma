@@ -3978,6 +3978,12 @@ code {
     z-index: 10000;
 }
 
+/* A slideover takes focus itself on open (its focus trap), so the first Tab reaches its
+   first control; the panel is not a tab stop and needs no ring of its own. */
+.dm-slideover[tabindex="-1"]:focus {
+    outline: none;
+}
+
 .dm-dialog-overlay {
     position: fixed;
     top: 0;

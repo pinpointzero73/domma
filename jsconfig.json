@@ -6,15 +6,13 @@
     "baseUrl": ".",
     "paths": {
       "domma": [
-        "public/assets/ide/phpstorm/index.d.ts"
+        "assets/types/index.d.ts"
       ]
     }
   },
   "include": [
     "src/**/*",
-    "public/**/*"
-  ],
-  "typeRoots": [
-    "public/assets/ide/phpstorm"
+    "public/**/*",
+    "assets/types/index.d.ts"
   ]
 }

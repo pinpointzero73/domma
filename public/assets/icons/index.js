@@ -24,6 +24,7 @@ import code from './code.js';
 import {forms, formsRelated} from './forms.js';
 
 // Merge all icon categories
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const icons = {
     ...ui,
     ...communication,
@@ -69,6 +70,7 @@ export {
 };
 
 // Category metadata for icon gallery
+/** @type {Record<Exclude<import('../../../src/icons.js').IconCategory, 'custom'>, import('../../../src/icons.js').IconCategoryInfo>} */
 export const categories = {
     ui: {
         name: 'UI',

@@ -25,6 +25,22 @@ function arrow() {
     return svg;
 }
 
+/**
+ * @typedef {object} BackToTopOptions
+ * @property {number|null} [showAfter] - Px scrolled before it shows (null: one viewport / container height)
+ * @property {number} [duration=300] - Scroll animation duration in ms (0 under reduced motion)
+ * @property {import('../elements.js').BackToTopPosition} [position='bottom-right'] - Button position
+ * @property {number|{bottom?: number, right?: number, left?: number}|null} [offset] - Px from the edges (null: the stylesheet's)
+ * @property {string|HTMLElement|null} [target] - Scroll container to watch (null: the window)
+ * @property {number|null} [zIndex] - z-index for the button
+ * @property {string} [label='Scroll back to top'] - aria-label when the button has none
+ * @property {((backToTop: BackToTopInstance) => void)|null} [onShow] - When the button shows
+ * @property {((backToTop: BackToTopInstance) => void)|null} [onHide] - When the button hides
+ * @property {((backToTop: BackToTopInstance) => void)|null} [onScroll] - When a scroll to the top starts
+ */
+
+/** @typedef {BackToTop} BackToTopInstance */
+
 export class BackToTop extends Component {
     static componentName = 'back-to-top';
 
@@ -41,6 +57,10 @@ export class BackToTop extends Component {
         onScroll: null
     };
 
+    /**
+     * @param {import('./shared.js').ComponentTarget} selector - A button / link / `.dm-back-to-top` to use; anything else adds a button to the body
+     * @param {BackToTopOptions} [options]
+     */
     constructor(selector, options = {}) {
         let el = resolveElement(selector);
         const usable = el && (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName.includes('-')
@@ -57,6 +77,7 @@ export class BackToTop extends Component {
         this._scrolling = false;
         // A <domma-back-to-top> tag holds a real button; a button is its own.
         if (el.tagName.includes('-')) {
+            /** The button element. @type {HTMLElement} */
             this.button = el.querySelector(':scope > button.dm-back-to-top') || document.createElement('button');
             this.button.type = 'button';
             if (!this.button.isConnected) el.appendChild(this.button);
@@ -137,7 +158,11 @@ export class BackToTop extends Component {
 
     // ---- public API -----------------------------------------------------
 
-    /** Scroll to the top; `duration` overrides the option for this call. */
+    /**
+     * Scroll to the top; `duration` overrides the option for this call.
+     * @param {number} [duration] - ms
+     * @returns {this}
+     */
     scroll(duration) {
         if (this._scrolling) return this;
         const box = this._box;
@@ -164,6 +189,10 @@ export class BackToTop extends Component {
         return this;
     }
 
+    /**
+     * Show the button.
+     * @returns {this}
+     */
     show() {
         if (this._visible) return this;
         this._visible = true;
@@ -172,6 +201,10 @@ export class BackToTop extends Component {
         return this;
     }
 
+    /**
+     * Hide the button.
+     * @returns {this}
+     */
     hide() {
         if (!this._visible) return this;
         this._visible = false;
@@ -180,44 +213,72 @@ export class BackToTop extends Component {
         return this;
     }
 
-    /** Alias of show(), by name. */
+    /**
+     * Alias of show(), by name.
+     * @returns {this}
+     */
     open(...args) {
         return this.show(...args);
     }
 
-    /** Alias of hide(), by name. */
+    /**
+     * Alias of hide(), by name.
+     * @returns {this}
+     */
     close(...args) {
         return this.hide(...args);
     }
 
+    /**
+     * Toggle button visibility.
+     * @returns {this}
+     */
     toggle() {
         return this._visible ? this.hide() : this.show();
     }
 
+    /** @returns {boolean} */
     isVisible() {
         return this._visible;
     }
 
+    /** @returns {boolean} */
     isOpen() {
         return this._visible;
     }
 
+    /**
+     * The button element.
+     * @returns {HTMLElement}
+     */
     getButton() {
         return this.button;
     }
 
+    /**
+     * @param {number|string|null} value - Px; null or '' for one viewport / container height
+     * @returns {this}
+     */
     setShowAfter(value) {
         this.options.showAfter = value === null || value === '' ? null : num(value, null);
         this._check();
         return this;
     }
 
+    /**
+     * @param {import('../elements.js').BackToTopPosition} position
+     * @returns {this}
+     */
     setPosition(position) {
         this.options.position = position;
         this._place();
         return this;
     }
 
+    /**
+     * @param {BackToTopOptions['offset']} offset
+     * @returns {this}
+     */
     setOffset(offset) {
         this.options.offset = offset;
         this._place();

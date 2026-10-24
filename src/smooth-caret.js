@@ -12,10 +12,30 @@ const TEXT_STYLES = [
     'borderBottomWidth', 'borderLeftWidth'
 ];
 
+/**
+ * Caret preference kept in localStorage: 'auto' follows prefers-reduced-motion.
+ * @typedef {'auto'|'smooth'|'native'} CaretPreference
+ */
+
+/**
+ * What `attach()` returns.
+ * @typedef {object} SmoothCaretHandle
+ * @property {() => void} refresh Re-measure and redraw the caret now
+ * @property {() => void} destroy Remove the caret and every listener, restoring the control
+ */
+
+/** @typedef {typeof smoothCaret} SmoothCaret */
+
 const instances = new WeakMap();
 const installations = new WeakMap();
 const INPUT_TYPES = new Set(['text', 'search', 'url', 'tel']);
 
+/**
+ * Whether an element can carry the smooth caret: an enabled, writable textarea, a text-like
+ * input (text, search, url, tel) or a contenteditable element.
+ * @param {Element|null|undefined} element
+ * @returns {boolean}
+ */
 export function supportsSmoothCaret(element) {
     return !!element && !element.disabled && !element.readOnly && (element.tagName === 'TEXTAREA'
         || (element.tagName === 'INPUT' && INPUT_TYPES.has(element.type))
@@ -26,6 +46,11 @@ export function supportsSmoothCaret(element) {
 const PREFERENCE_KEY = 'domma:editor-caret';
 const PREFERENCE_EVENT = 'dm-editor-caret-preference';
 
+/**
+ * The stored caret preference ('auto' when none or unreadable).
+ * @param {Window} [win]
+ * @returns {CaretPreference}
+ */
 export function getCaretPreference(win = globalThis.window) {
     try {
         const value = win.localStorage.getItem(PREFERENCE_KEY);
@@ -33,12 +58,24 @@ export function getCaretPreference(win = globalThis.window) {
     } catch { return 'auto'; }
 }
 
+/**
+ * Store the caret preference (anything else is stored as 'auto') and tell every attached caret.
+ * @param {CaretPreference} value
+ * @param {Window} [win]
+ * @returns {void}
+ */
 export function setCaretPreference(value, win = globalThis.window) {
     const preference = ['smooth', 'native'].includes(value) ? value : 'auto';
     try { win.localStorage.setItem(PREFERENCE_KEY, preference); } catch { /* private browser */ }
     win.dispatchEvent(new win.CustomEvent(PREFERENCE_EVENT, {detail: preference}));
 }
 
+/**
+ * Attach a smooth caret to one control. Attaching twice returns the same handle; an element
+ * that cannot carry one gets a handle that does nothing.
+ * @param {HTMLInputElement|HTMLTextAreaElement|HTMLElement} textarea
+ * @returns {SmoothCaretHandle}
+ */
 export function attachSmoothCaret(textarea) {
     if (!supportsSmoothCaret(textarea)) return {refresh() {}, destroy() {}};
     const existing = instances.get(textarea);
@@ -270,6 +307,8 @@ export function attachSmoothCaret(textarea) {
  * Enhance controls on focus, including controls rendered later by a wizard,
  * dialog or Web Component. Only the focused automatic instance is retained.
  * Explicitly attached editor instances keep their owner's lifecycle.
+ * @param {Document|HTMLElement|ShadowRoot} [root=document]
+ * @returns {{destroy(): void}}
  */
 export function installSmoothCarets(root = globalThis.document) {
     if (!root?.addEventListener) return {destroy() {}};

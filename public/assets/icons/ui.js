@@ -3,6 +3,7 @@
  * Core user interface icons: arrows, menu, close, search, settings, etc.
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const ui = {
     // Arrows
     'arrow-up': {

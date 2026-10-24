@@ -4,6 +4,76 @@ import {forms} from './forms.js';
 import {utils} from './utils.js';
 import effects from './effects.js';
 
+/**
+ * A component `$.setup()` can create for a selector - the keys of the map in `initComponent()`.
+ * @typedef {'card' | 'modal' | 'tabs' | 'accordion' | 'tooltip' | 'carousel' | 'dropdown' | 'contextMenu'
+ *   | 'sortable' | 'skeleton' | 'avatar' | 'avatarGroup' | 'inputGroup' | 'popover' | 'badge' | 'numberBadge'
+ *   | 'listGroup' | 'cookieConsent' | 'backToTop' | 'buttonGroup' | 'loader' | 'breadcrumbs' | 'navbar'
+ *   | 'sidebar' | 'footer' | 'notification' | 'timer' | 'alarm' | 'autocomplete' | 'pillbox' | 'signature'
+ *   | 'form' | 'breathe' | 'pulse' | 'scribe'} ComponentType
+ */
+
+/**
+ * Properties applied to the matched elements once (`initial`) - each is the collection method of the same name.
+ * @typedef {object} InitialProperties
+ * @property {Record<string, string | number>} [css]
+ * @property {string} [text]
+ * @property {string} [html]
+ * @property {string} [addClass]
+ * @property {string} [removeClass]
+ * @property {string} [toggleClass]
+ * @property {Record<string, string>} [attr] Attribute name -> value
+ */
+
+/**
+ * A declarative event action: applied to `target` (a selector) or else to the element the event fired on.
+ * @typedef {object} EventAction
+ * @property {string} [target] Selector of the elements to change (default: the event target)
+ * @property {Record<string, string | number>} [css]
+ * @property {string} [text]
+ * @property {string} [html]
+ * @property {string} [addClass]
+ * @property {string} [removeClass]
+ * @property {string} [toggleClass]
+ * @property {string} [log] Written to the console
+ */
+
+/**
+ * An event handler in a setup config. `this` is the event target.
+ * @callback ConfigEventHandler
+ * @this {EventTarget}
+ * @param {Event} event
+ * @param {import('./dom.js').DommaCollection} $el - The event target, wrapped
+ * @returns {void}
+ */
+
+/**
+ * What an event runs: a handler, an action, or a list of either (run in order).
+ * @typedef {ConfigEventHandler | EventAction | Array<ConfigEventHandler | EventAction>} EventActions
+ */
+
+/**
+ * The configuration for one selector.
+ * @typedef {object} SelectorConfig
+ * @property {ComponentType} [component] Component to create on the selector
+ * @property {Record<string, any>} [options] Options for that component (`schema` and `data` for `form`)
+ * @property {InitialProperties} [initial] Applied to the matched elements once
+ * @property {Record<string, EventActions>} [events] Event name -> what it runs
+ * @property {(this: import('./dom.js').DommaCollection, $el: import('./dom.js').DommaCollection) => void} [init]
+ *   Called first with the matched elements
+ */
+
+/**
+ * Configuration keyed by selector.
+ * @typedef {{[selector: string]: SelectorConfig}} SetupConfig
+ */
+
+/**
+ * The declarative configuration engine behind `$.setup()`, `$.update()`, `$.config()`, `$.getComponent()` and
+ * `$.reset()`.
+ * @typedef {typeof configEngine} ConfigEngine
+ */
+
 export const configEngine = {
     // Storage for mutable configuration
     _configs: new Map(),        // selector -> config object
@@ -15,8 +85,9 @@ export const configEngine = {
 
     /**
      * Process initial configuration
-     * @param {Object} config - Configuration object keyed by selector
-     * @param {Object} [options] - Processing options
+     * @param {SetupConfig & {$init?: () => void}} config - Configuration object keyed by selector
+     *   (`$init` runs once, first)
+     * @param {{autoWrap?: boolean}} [options] - Processing options
      * @param {boolean} [options.autoWrap=true] - Automatically wrap in DOMContentLoaded
      */
     process(config, options = {}) {
@@ -86,8 +157,8 @@ export const configEngine = {
     /**
      * Update configuration for a selector
      * @param {string} selector - CSS selector
-     * @param {Object} changes - Changes to merge into existing config
-     * @returns {Object} The merged configuration
+     * @param {Partial<SelectorConfig>} changes - Changes to merge into existing config
+     * @returns {SelectorConfig} The merged configuration
      */
     update(selector, changes) {
         const existing = this._configs.get(selector);
@@ -126,9 +197,20 @@ export const configEngine = {
     },
 
     /**
+     * Retrieve the configuration of every selector
+     * @overload
+     * @returns {Record<string, SelectorConfig>}
+     */
+    /**
+     * Retrieve configuration for a selector
+     * @overload
+     * @param {string} selector - Selector to get config for
+     * @returns {SelectorConfig | null} Configuration object or null if not found
+     */
+    /**
      * Retrieve configuration for a selector or all selectors
      * @param {string} [selector] - Optional selector to get config for
-     * @returns {Object|null} Configuration object or null if not found
+     * @returns {Record<string, SelectorConfig> | SelectorConfig | null} Configuration object or null if not found
      */
     config(selector) {
         if (!selector) {
@@ -149,8 +231,17 @@ export const configEngine = {
      * reach them - calling a component's methods (modal.open(), tabs.show(),
      * timer.start()) requires this accessor.
      *
+     * @overload
+     * @returns {Map<string, any>} Every instance, by selector
+     */
+    /**
+     * @overload
+     * @param {string} selector - Selector the component was configured under
+     * @returns {any} The instance, or null
+     */
+    /**
      * @param {string} [selector] - Selector the component was configured under
-     * @returns {Object|Map|null} The instance, or a Map of all when no selector
+     * @returns {any} The instance, or a Map of all when no selector
      */
     getComponent(selector) {
         if (!selector) return new Map(this._components);
@@ -186,9 +277,9 @@ export const configEngine = {
     /**
      * Initialise a component
      * @param {string} selector - CSS selector
-     * @param {string} componentType - Component type name
-     * @param {Object} options - Component options
-     * @returns {Object|undefined} Component instance
+     * @param {ComponentType} componentType - Component type name
+     * @param {Record<string, any>} options - Component options
+     * @returns {any} Component instance
      */
     initComponent(selector, componentType, options) {
         const componentMap = {
@@ -250,8 +341,8 @@ export const configEngine = {
 
     /**
      * Apply properties to DOM elements
-     * @param {Object} domElements - Domma collection
-     * @param {Object} properties - Properties to apply
+     * @param {import('./dom.js').DommaCollection} domElements - Domma collection
+     * @param {InitialProperties} properties - Properties to apply
      */
     applyProperties(domElements, properties) {
         Object.keys(properties).forEach(prop => {
@@ -278,7 +369,7 @@ export const configEngine = {
     /**
      * Bind events to elements
      * @param {string} selector - CSS selector
-     * @param {Object} events - Event handlers object
+     * @param {Record<string, EventActions>} events - Event handlers object
      * @param {boolean} [track=false] - Whether to track handlers for later removal
      */
     bindEvents(selector, events, track = false) {
@@ -319,7 +410,7 @@ export const configEngine = {
     /**
      * Update events for a selector (replaces existing handlers for same events)
      * @param {string} selector - CSS selector
-     * @param {Object} newEvents - New event handlers
+     * @param {Record<string, EventActions>} newEvents - New event handlers
      */
     updateEvents(selector, newEvents) {
         const existingHandlers = this._eventHandlers.get(selector);
@@ -342,7 +433,7 @@ export const configEngine = {
     /**
      * Execute actions for an event
      * @param {Event} event - DOM event
-     * @param {Function|Array|Object} actions - Actions to execute
+     * @param {EventActions} actions - Actions to execute
      */
     executeActions(event, actions) {
         // Actions can be a function, an array, or a single object
@@ -376,7 +467,7 @@ export const configEngine = {
 
     /**
      * Register a callback to run when DOM is ready
-     * @param {Function} callback - Function to execute when DOM is ready
+     * @param {() => void} callback - Function to execute when DOM is ready
      * @returns {void}
      */
     ready(callback) {

@@ -105,3 +105,20 @@ describe('auth.init autoCheck', () => {
         expect(expired).toHaveBeenCalledTimes(1);
     });
 });
+
+describe('UserInfo', () => {
+    it('renders the signed-in user, and its logout button still works after a re-render', () => {
+        const getUser = vi.spyOn(auth, 'getUser').mockReturnValue({email: 'a@b.c', role: 'admin'});
+        const logout = vi.fn();
+        document.body.innerHTML = '<div id="ui"></div>';
+        const ui = auth.createUserInfo('#ui', {onLogout: logout});
+        const el = document.getElementById('ui');
+        expect(el.textContent).toContain('a@b.c');
+        ui.render(); // a login/logout re-renders and replaces the button
+        const handle = vi.spyOn(ui, 'handleLogout').mockImplementation(() => {});
+        el.querySelector('.auth-logout-btn').click();
+        expect(handle).toHaveBeenCalledTimes(1);
+        ui.destroy();
+        getUser.mockRestore();
+    });
+});

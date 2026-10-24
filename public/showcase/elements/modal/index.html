@@ -732,7 +732,9 @@ async function dangerousOperation() {
                     opens, return focus to trigger when closing
                 </li>
                 <li><strong>Keyboard Navigation</strong>: Support Escape key to close (use <code>keyboard: true</code>),
-                    Tab to cycle through focusable elements
+                    Tab to cycle through focusable elements. Domma does this for you: Tab and Shift+Tab stay inside an
+                    open modal (<code>trapFocus: true</code>, the default) and focus goes back to the trigger on close
+                    (<code>returnFocus: true</code>)
                 </li>
                 <li><strong>ARIA Attributes</strong>: Add <code>role="dialog"</code>, <code>aria-modal="true"</code>,
                     <code>aria-labelledby</code> pointing to title

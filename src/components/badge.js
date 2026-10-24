@@ -15,6 +15,20 @@ import {flag, num, resolveElement} from './shared.js';
 const VARIANTS = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
 const SIZES = {small: 'badge-sm', sm: 'badge-sm', large: 'badge-lg', lg: 'badge-lg'};
 
+/**
+ * @typedef {object} BadgeOptions
+ * @property {import('../elements.js').BadgeVariant} [variant='primary'] - Badge variant/colour
+ * @property {import('../elements.js').BadgeSize|'sm'|'lg'} [size='medium'] - Badge size
+ * @property {boolean} [pill=false] - Use pill/rounded style
+ * @property {boolean} [outline=false] - Use outline style
+ * @property {boolean} [removable=false] - Show remove button
+ * @property {boolean} [pulse=false] - Pulse animation
+ * @property {((event: MouseEvent, badge: BadgeInstance) => void)|null} [onClick] - Callback on click (not the remove button)
+ * @property {((badge: BadgeInstance, event: MouseEvent) => boolean|void)|null} [onRemove] - Callback on remove; return false to keep the badge
+ */
+
+/** @typedef {Badge} BadgeInstance */
+
 export class Badge extends Component {
     static componentName = 'badge';
 
@@ -29,6 +43,10 @@ export class Badge extends Component {
         onRemove: null
     };
 
+    /**
+     * @param {import('./shared.js').ComponentTarget} selector
+     * @param {BadgeOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(resolveElement(selector), options);
         if (!this.element) return;
@@ -81,19 +99,33 @@ export class Badge extends Component {
         this._apply();
     }
 
+    /**
+     * Set the badge variant.
+     * @param {import('../elements.js').BadgeVariant} variant
+     * @returns {this}
+     */
     setVariant(variant) {
         this.options.variant = variant;
         this._apply();
         return this;
     }
 
+    /**
+     * Set the badge size.
+     * @param {import('../elements.js').BadgeSize|'sm'|'lg'} size
+     * @returns {this}
+     */
     setSize(size) {
         this.options.size = size;
         this._apply();
         return this;
     }
 
-    /** Replace the text, keeping the remove button. */
+    /**
+     * Replace the text, keeping the remove button.
+     * @param {string|number|null} text
+     * @returns {this}
+     */
     setText(text) {
         for (const node of Array.from(this.element.childNodes)) {
             if (node !== this._removeBtn) node.remove();
@@ -115,13 +147,32 @@ export class Badge extends Component {
         super.destroy();
     }
 
-    /** Permanent alias of destroy(). */
+    /**
+     * Permanent alias of destroy() (the element stays in the page).
+     * @returns {void}
+     */
     remove(...args) {
         return this.destroy(...args);
     }
 }
 
 const VOID = new Set(['IMG', 'INPUT', 'BR', 'HR', 'AREA', 'BASE', 'COL', 'EMBED', 'LINK', 'META', 'SOURCE', 'TRACK', 'WBR', 'TEXTAREA', 'SELECT']);
+
+/** @typedef {'primary'|'secondary'|'success'|'danger'|'warning'|'info'|'light'|'dark'} NumberBadgeVariant */
+
+/**
+ * @typedef {object} NumberBadgeOptions
+ * @property {number} [count=0] - Initial count to display (0 hides the counter unless `dot`)
+ * @property {number|null} [max] - Cap, e.g. 99 shows "99+"
+ * @property {NumberBadgeVariant} [variant='danger'] - Colour variant
+ * @property {boolean} [dot=false] - Show as dot indicator instead of number
+ * @property {boolean} [pulse=false] - Enable pulse animation
+ * @property {string|null} [borderColor] - Custom border ring colour
+ * @property {string|null} [label] - Accessible name (default: the count, or "New" for a dot)
+ * @property {((count: number, previous: number, badge: NumberBadgeInstance) => void)|null} [onChange] - The count changed
+ */
+
+/** @typedef {NumberBadge} NumberBadgeInstance */
 
 export class NumberBadge extends Component {
     static componentName = 'number-badge';
@@ -137,6 +188,10 @@ export class NumberBadge extends Component {
         onChange: null
     };
 
+    /**
+     * @param {import('./shared.js').ComponentTarget} selector - The element the counter sits on
+     * @param {NumberBadgeOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(resolveElement(selector), options);
         if (!this.element) return;
@@ -145,6 +200,7 @@ export class NumberBadge extends Component {
         this._holder = VOID.has(el.tagName) && el.parentElement ? el.parentElement : el;
         this._hostClassAdded = !this._holder.classList.contains('badge-counter-host');
         this._holder.classList.add('badge-counter-host');
+        /** The `.badge-counter` span. @type {HTMLSpanElement} */
         this.counter = document.createElement('span');
         this.counter.className = 'badge-counter';
         this.counter.setAttribute('role', 'status');
@@ -172,6 +228,11 @@ export class NumberBadge extends Component {
         this._paint();
     }
 
+    /**
+     * Set the badge count.
+     * @param {number} count
+     * @returns {this}
+     */
     setCount(count) {
         const previous = this.options.count;
         this.options.count = count;
@@ -180,30 +241,56 @@ export class NumberBadge extends Component {
         return this;
     }
 
+    /**
+     * Increment the badge count.
+     * @param {number} [by=1]
+     * @returns {this}
+     */
     increment(by = 1) {
         return this.setCount(this.getCount() + num(by, 1));
     }
 
+    /**
+     * Decrement the badge count (min 0).
+     * @param {number} [by=1]
+     * @returns {this}
+     */
     decrement(by = 1) {
         return this.setCount(Math.max(0, this.getCount() - num(by, 1)));
     }
 
+    /** @returns {number} The current count */
     getCount() {
         return num(this.options.count, 0);
     }
 
+    /**
+     * Toggle dot mode.
+     * @param {boolean} dot
+     * @returns {this}
+     */
     setDot(dot) {
         this.options.dot = dot;
         this._paint();
         return this;
     }
 
+    /**
+     * Set the colour variant.
+     * @param {NumberBadgeVariant} variant
+     * @returns {this}
+     */
     setVariant(variant) {
         this.options.variant = variant;
         this._paint();
         return this;
     }
 
+    /**
+     * Toggle pulse animation.
+     * @param {boolean} pulse
+     * @returns {this}
+     */
     setPulse(pulse) {
         this.options.pulse = pulse;
         this._paint();
@@ -216,7 +303,10 @@ export class NumberBadge extends Component {
         super.destroy();
     }
 
-    /** Permanent alias of destroy(). */
+    /**
+     * Permanent alias of destroy() (the element stays in the page).
+     * @returns {void}
+     */
     remove(...args) {
         return this.destroy(...args);
     }

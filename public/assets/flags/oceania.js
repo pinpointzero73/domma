@@ -12,6 +12,7 @@ const UNION_CANTON =
     '<path d="M30,0 V40 M0,20 H60" stroke="#C8102E" stroke-width="8"/>' +
     '</g>';
 
+/** @type {Record<string, import('../../../src/flags.js').FlagDefinition>} */
 export const oceania = {
     au: {
         name: 'Australia',

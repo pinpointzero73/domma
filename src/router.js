@@ -14,6 +14,129 @@ import {icons} from './icons.js';
 import {utils} from './utils.js';
 
 /**
+ * Values of a route's `:param` segments, decoded (`/user/:id` at `#/user/42` -> `{id: '42'}`).
+ * The not-found view gets `{path}`, the address that matched nothing.
+ * @typedef {Record<string, string>} RouteParams
+ */
+
+/**
+ * The query string of an address as an object (`#/search?q=a%20b&f` -> `{q: 'a b', f: ''}`).
+ * @typedef {Record<string, string>} RouteQuery
+ */
+
+/**
+ * A route as registered with `R.init({routes})` or `R.route()`.
+ * @typedef {object} RouteDefinition
+ * @property {string} path - Route path; `:name` segments are parameters (`/user/:id`). A query string is not part of the match
+ * @property {string} view - Name of the view to render (a key of `views` / `R.view()`)
+ * @property {string} [title] - Sets `document.title` when the route is entered
+ * @property {(params: RouteParams, to: Route) => unknown} [onEnter] - Runs before the view renders (may be async). Returning (or resolving to) `false` cancels the change and puts the address back
+ * @property {() => unknown} [onLeave] - Runs when leaving this route (may be async). Returning (or resolving to) `false` cancels the change
+ * @property {Record<string, any>} [meta] - Custom metadata, e.g. `{requiresAuth: true}` for a middleware to read
+ */
+
+/**
+ * The route being entered or currently shown (`R.current()`, a middleware's `to`/`from`):
+ * its definition plus the address it was reached at.
+ * @typedef {Omit<RouteDefinition, 'path'> & {path: string, params: RouteParams, query: RouteQuery}} Route
+ */
+
+/**
+ * A view given as a function: called with the route params, returns the HTML (may be async).
+ * @callback ViewRenderFunction
+ * @param {RouteParams} params
+ * @returns {string|Promise<string>}
+ */
+
+/**
+ * A view object. `template` (or `templateUrl`) is rendered with the route params through Domma's
+ * template engine (`{{name}}`, partials as `{{> name}}`).
+ * @typedef {object} ViewDefinition
+ * @property {string|ViewRenderFunction} [template] - Inline template, or a function returning the HTML
+ * @property {string} [templateUrl] - URL of a template file, fetched once and cached (used when `template` is not set)
+ * @property {Record<string, string>} [partials] - Partial name -> template URL, each fetched and cached
+ * @property {($container: import('./dom.js').DommaCollection) => void} [onMount] - Called after the view's HTML is in the container
+ */
+
+/**
+ * A view that renders a standalone component (`Domma.component()`): the container is emptied and
+ * the custom element appended, with the props set as attributes (camelCase -> kebab-case; `true`
+ * is an empty attribute, `false`/`null` none, objects JSON).
+ * @typedef {object} ComponentViewDefinition
+ * @property {string} component - Custom element tag name
+ * @property {Record<string, any>|((params: RouteParams) => Record<string, any>)} [props] - Props, or a function of the route params returning them
+ * @property {($container: import('./dom.js').DommaCollection) => void} [onMount] - Called after the element is appended
+ */
+
+/**
+ * Anything `R.view()` / `R.init({views})` accepts: a template string, a render function, a view
+ * object or a component view.
+ * @typedef {string|ViewRenderFunction|ViewDefinition|ComponentViewDefinition} RouterView
+ */
+
+/**
+ * Transition settings. Only `duration` is used (the fade out and in); `enter`/`leave` are stored.
+ * @typedef {object} RouterTransitions
+ * @property {string} [enter='fadeIn'] - Enter animation
+ * @property {string} [leave='fadeOut'] - Leave animation
+ * @property {number} [duration=200] - Animation duration in ms
+ */
+
+/**
+ * Options for `R.init()`.
+ * @typedef {object} RouterOptions
+ * @property {string} container - Selector for the view container element (throws when not found)
+ * @property {RouteDefinition[]} [routes] - Route definitions
+ * @property {Record<string, RouterView>} [views] - View registry `{name: view}`
+ * @property {string} [default='/'] - Route used when the address has no hash
+ * @property {string} [notFound='404'] - Name of the view rendered for an address no route matches
+ * @property {RouterTransitions} [transitions] - Transition animation options (replaces the defaults as a whole)
+ */
+
+/**
+ * Options for `R.navigate()`.
+ * @typedef {object} NavigateOptions
+ * @property {boolean} [replace=false] - Replace the current history entry instead of adding one
+ */
+
+/**
+ * A middleware's `next`: call it to let the change go ahead, or with a path to go there instead
+ * (replacing the refused entry). Not calling it refuses the change.
+ * @callback RouterNext
+ * @param {string} [redirect] - Path to go to instead
+ * @returns {void}
+ */
+
+/**
+ * A middleware, run in order before every route change (may be async).
+ * @callback RouterMiddleware
+ * @param {Route} to - The route being entered
+ * @param {Route|null} from - The route being left (null on the first change)
+ * @param {RouterNext} next - Call to continue
+ * @returns {void|Promise<void>}
+ */
+
+/**
+ * Payload of the `router:beforeChange` and `router:afterChange` events (`M.subscribe`).
+ * @typedef {object} RouterChangeEvent
+ * @property {Route|null} from
+ * @property {Route} to
+ */
+
+/**
+ * Payload of the `router:error` event (`M.subscribe`): a failed route change or render.
+ * @typedef {object} RouterErrorEvent
+ * @property {any} error
+ * @property {string} route - The address being routed
+ * @property {string} [view] - The view being rendered, when the failure was in a render
+ */
+
+/**
+ * The router (`R`, `Domma.router`).
+ * @typedef {typeof router} Router
+ */
+
+/**
  * Router module for hash-based single-page applications
  * Provides client-side routing with transitions, lifecycle hooks, and middleware
  */
@@ -35,17 +158,8 @@ export const router = {
 
     /**
      * Initialise the router
-     * @param {Object} options - Configuration options
-     * @param {string} options.container - Selector for view container element
-     * @param {Array} options.routes - Route definitions
-     * @param {Object} options.views - View registry { name: template/function }
-     * @param {string} [options.default='/'] - Default route path
-     * @param {string} [options.notFound='404'] - 404 view name
-     * @param {Object} [options.transitions] - Transition animation options
-     * @param {string} [options.transitions.enter='fadeIn'] - Enter animation
-     * @param {string} [options.transitions.leave='fadeOut'] - Leave animation
-     * @param {number} [options.transitions.duration=200] - Animation duration in ms
-     * @returns {Object} Router instance for chaining
+     * @param {RouterOptions} options - Configuration options (see RouterOptions: container, routes, views, default, notFound, transitions)
+     * @returns {Router} Router instance for chaining
      *
      * @example
      * R.init({
@@ -101,8 +215,7 @@ export const router = {
     /**
      * Navigate to a route
      * @param {string} path - Route path (without #)
-     * @param {Object} [options] - Navigation options
-     * @param {boolean} [options.replace=false] - Replace current history entry
+     * @param {NavigateOptions} [options] - Navigation options (`replace`: replace current history entry)
      * @returns {void}
      *
      * @example
@@ -146,7 +259,7 @@ export const router = {
 
     /**
      * Get current route information
-     * @returns {Object|null} Current route object or null
+     * @returns {Route|null} Current route object or null
      *
      * @example
      * const currentRoute = R.current();
@@ -159,8 +272,8 @@ export const router = {
     /**
      * Register a view
      * @param {string} name - View name
-     * @param {string|Function|Object} view - Template string, render function, or view object
-     * @returns {Object} Router instance for chaining
+     * @param {RouterView} view - Template string, render function, or view object
+     * @returns {Router} Router instance for chaining
      *
      * @example
      * R.view('home', '<h1>Home</h1>');
@@ -174,14 +287,8 @@ export const router = {
 
     /**
      * Add a route
-     * @param {Object} route - Route definition
-     * @param {string} route.path - Route path (supports :param for dynamic segments)
-     * @param {string} route.view - View name
-     * @param {string} [route.title] - Page title
-     * @param {Function} [route.onEnter] - Before enter hook
-     * @param {Function} [route.onLeave] - Before leave hook
-     * @param {Object} [route.meta] - Custom metadata
-     * @returns {Object} Router instance for chaining
+     * @param {RouteDefinition} route - Route definition (path supports :param for dynamic segments; view, title, onEnter, onLeave, meta)
+     * @returns {Router} Router instance for chaining
      *
      * @example
      * R.route({
@@ -198,8 +305,8 @@ export const router = {
 
     /**
      * Add middleware function
-     * @param {Function} fn - Middleware function (to, from, next)
-     * @returns {Object} Router instance for chaining
+     * @param {RouterMiddleware} fn - Middleware function (to, from, next)
+     * @returns {Router} Router instance for chaining
      *
      * @example
      * R.use((to, from, next) => {

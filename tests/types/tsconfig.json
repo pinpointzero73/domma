@@ -1,0 +1,14 @@
+{
+    "//": "Type-checks consumer.ts against the published declarations (resolved through package.json exports, as a user's project would) - npm run check:types.",
+    "compilerOptions": {
+        "strict": true,
+        "noEmit": true,
+        "skipLibCheck": false,
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "types": []
+    },
+    "files": ["consumer.ts", "globals.ts"]
+}

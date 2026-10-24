@@ -3,6 +3,7 @@
  * Icons for media playback, audio, video, and images
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const media = {
     'play': {
         viewBox: '0 0 24 24',

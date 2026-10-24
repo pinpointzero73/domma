@@ -12,6 +12,17 @@
  * `const dm = Domma.noConflict();` keeps a handle.
  */
 
+/**
+ * Options read from `window.DommaOptions` when Domma loads - set it before the script tag.
+ * @typedef {object} DommaLoadOptions
+ * @property {boolean | 'safe'} [globals] true (default): every alias; 'safe': only aliases nobody else owns; false: window.Domma only
+ * @property {boolean} [cloak] false: never add the `dm-cloaked` class
+ * @property {boolean} [theme] false: don't initialise the theme engine automatically
+ * @property {boolean} [purifyWarning] false: no console warning when DOMPurify is missing
+ * @property {boolean} [deprecationWarnings] false: no deprecation warnings
+ * @property {boolean} [i18nWarnings] false: no console warning for a missing translation
+ */
+
 const SHARED = ['$', '_'];
 
 // An element with id="E" shows up as window.E (named access) - that is not an owner to respect.
@@ -21,7 +32,7 @@ const isTaken = (current, ours) => current !== undefined && current !== ours && 
 
 /**
  * Read a load-time option from `window.DommaOptions`.
- * @param {string} key
+ * @param {keyof DommaLoadOptions} key
  * @param {*} fallback
  * @returns {*}
  */

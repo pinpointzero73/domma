@@ -45,7 +45,11 @@ const DEFAULT_LABELS = {
     required: 'Please add a file'
 };
 
-/** "1.5 MB" - powers of 1024, the way file managers show sizes. */
+/**
+ * "1.5 MB" - powers of 1024, the way file managers show sizes.
+ * @param {number|string} bytes
+ * @returns {string}
+ */
 export function formatBytes(bytes) {
     const n = Number(bytes) || 0;
     if (n < 1024) return `${n} B`;
@@ -66,7 +70,12 @@ function acceptList(accept) {
     return list.map(s => String(s).trim().toLowerCase()).filter(Boolean);
 }
 
-/** Whether a file matches an accept list (an empty list takes anything). */
+/**
+ * Whether a file matches an accept list (an empty list takes anything).
+ * @param {{name?: string, type?: string}|null|undefined} file
+ * @param {string|string[]|null} [accept]
+ * @returns {boolean}
+ */
 export function accepts(file, accept) {
     const tokens = acceptList(accept);
     if (!tokens.length) return true;
@@ -160,9 +169,79 @@ function guardRemove() {
 /** For tests: whether the document guard is on. */
 export const _guardState = () => ({zones: guard.zones, armed: guard.armed});
 
+/** @typedef {'queued'|'uploading'|'done'|'error'|'cancelled'} DropzoneStatus */
+/** @typedef {'type'|'size'|'count'} DropzoneRejectReason */
+
+/**
+ * One file in a dropzone, as every event hands it over.
+ * @typedef {object} DropzoneEntry
+ * @property {string} id
+ * @property {File} file
+ * @property {string} name
+ * @property {number} size
+ * @property {string} type
+ * @property {DropzoneStatus} status
+ * @property {number} progress Upload progress, 0-100
+ * @property {any} response The upload's response (parsed when it was JSON)
+ * @property {DropzoneUploadError|null} error
+ * @property {number} attempts Upload attempts since the last (re)queue
+ * @property {string|null} preview Object URL of an image preview, revoked when the file goes
+ */
+
+/**
+ * @typedef {object} DropzoneUploadError
+ * @property {number} status HTTP status, 0 for a network failure
+ * @property {string} message
+ * @property {any} response
+ */
+
+/**
+ * @typedef {object} DropzoneUploadOptions
+ * @property {string|((entry: DropzoneEntry) => string)} url
+ * @property {string} [method] Default 'POST'
+ * @property {string} [field] FormData field for the file. Default 'file'
+ * @property {Record<string, string>|((entry: DropzoneEntry) => Record<string, string>)} [headers]
+ * @property {boolean} [withCredentials]
+ * @property {number} [concurrency] Files sent at once. Default 2
+ * @property {Record<string, string|Blob>|((entry: DropzoneEntry) => Record<string, string|Blob>)} [data] Extra FormData fields
+ * @property {(entry: DropzoneEntry) => XMLHttpRequest} [xhr] Make the request object (tests, pages without a server). Default: new XMLHttpRequest()
+ */
+
+/**
+ * @typedef {object} DropzoneOptions
+ * @property {string|string[]|null} [accept] Like the input's accept: '.pdf,image/*' or ['.pdf', 'image/*']. Default: the input's
+ * @property {boolean|null} [multiple] Default: the input's `multiple`, or true when the component makes the input
+ * @property {number|null} [maxFiles]
+ * @property {number|null} [maxSize] Bytes
+ * @property {number|null} [minSize] Bytes
+ * @property {boolean} [previews] Image thumbnails. Default true
+ * @property {string|null} [name] Form field name. Default: the input's
+ * @property {string|HTMLInputElement|null} [input] The file input, when it is not inside or next to the area
+ * @property {boolean|string|HTMLElement} [list] true = after the area (default), an element/selector to draw into, false = no list
+ * @property {DropzoneUploadOptions|null} [upload]
+ * @property {boolean} [autoUpload] Default true
+ * @property {number} [retry] Automatic retries per file. Default 0
+ * @property {Record<string, string>} [labels] Text: prompt, hint, remove, retry, cancel, added, removed, type, size, small, count, uploading, done, failed, cancelled, required ({name}, {max}, {min}, {percent})
+ * @property {boolean} [disabled]
+ * @property {string} [className]
+ * @property {((entry: DropzoneEntry) => boolean|void)|null} [onBeforeAdd] Return false to refuse the file
+ * @property {((entry: DropzoneEntry) => void)|null} [onAdd]
+ * @property {((entry: DropzoneEntry, reason: DropzoneRejectReason) => void)|null} [onReject]
+ * @property {((entry: DropzoneEntry) => void)|null} [onRemove]
+ * @property {((files: File[]) => void)|null} [onChange]
+ * @property {((entry: DropzoneEntry) => void)|null} [onUploadStart]
+ * @property {((entry: DropzoneEntry, percent: number) => void)|null} [onProgress]
+ * @property {((entry: DropzoneEntry, response: any) => void)|null} [onSuccess]
+ * @property {((entry: DropzoneEntry, error: DropzoneUploadError) => void)|null} [onError]
+ * @property {((entries: DropzoneEntry[]) => void)|null} [onComplete]
+ */
+
+/** @typedef {Dropzone} DropzoneInstance */
+
 export class Dropzone extends Component {
     static componentName = 'dropzone';
 
+    /** @type {DropzoneOptions} */
     static defaults = {
         accept: null,               // ".pdf,image/*" or ['.pdf', 'image/*']; default: the input's accept
         multiple: null,             // null = the input's `multiple`, or true when there is no input
@@ -191,6 +270,10 @@ export class Dropzone extends Component {
         onComplete: null
     };
 
+    /**
+     * @param {string|Element|null} element - The drop area, or the file input itself
+     * @param {DropzoneOptions} [options]
+     */
     constructor(element, options = {}) {
         super(element, options);
         if (!this.element) return;
@@ -219,6 +302,7 @@ export class Dropzone extends Component {
             const zone = document.createElement('div');
             el.after(zone);
             this._added.push(zone);
+            /** The drop area (the element, or the one drawn after a file input given as the target). @type {HTMLElement} */
             this.zone = zone;
             this._givenInput = el;
         } else {
@@ -270,6 +354,7 @@ export class Dropzone extends Component {
             this.zone.appendChild(input);
             this._added.push(input);
         }
+        /** The real file input. @type {HTMLInputElement} */
         this.input = input;
         const o = this.options;
         if (o.accept === null || o.accept === undefined) o.accept = input.getAttribute('accept') || null;
@@ -487,7 +572,7 @@ export class Dropzone extends Component {
      * count rules and `beforeadd`, or fires `reject` (type | size | count). Without
      * `multiple`, a new file replaces the one there.
      * @param {FileList|File[]|File} files
-     * @returns {Object[]} the entries added
+     * @returns {DropzoneEntry[]} the entries added
      */
     addFiles(files) {
         if (!this._entries || this.isDisabled() || !files) return [];
@@ -534,7 +619,7 @@ export class Dropzone extends Component {
 
     /**
      * Remove a file (by entry, id or File). An upload in progress is cancelled.
-     * @param {Object|string|File} ref
+     * @param {DropzoneEntry|string|File} ref
      * @returns {boolean}
      */
     removeFile(ref) {
@@ -576,7 +661,7 @@ export class Dropzone extends Component {
         return (this._entries || []).map(e => e.file);
     }
 
-    /** @returns {Object[]} the entries (file, status, progress, response...) */
+    /** @returns {DropzoneEntry[]} the entries (file, status, progress, response...) */
     getEntries() {
         return (this._entries || []).slice();
     }
@@ -750,7 +835,7 @@ export class Dropzone extends Component {
 
     /**
      * Upload failed or cancelled files again - one by id/entry/File, or all of them.
-     * @param {string|Object|File} [ref]
+     * @param {string|DropzoneEntry|File} [ref]
      * @returns {this}
      */
     retry(ref) {
@@ -769,7 +854,7 @@ export class Dropzone extends Component {
 
     /**
      * Stop uploads - one file, or all of them. Queued files are taken out of the queue.
-     * @param {string|Object|File} [ref]
+     * @param {string|DropzoneEntry|File} [ref]
      * @returns {this}
      */
     cancel(ref) {
@@ -935,7 +1020,10 @@ export class Dropzone extends Component {
         this._entries.forEach(e => this._paintEntry(e));
     }
 
-    /** Cancel uploads, release previews, remove what was added and give the element back. */
+    /**
+     * Cancel uploads, release previews, remove what was added and give the element back.
+     * @returns {void}
+     */
     destroy() {
         if (!this.element || !this._entries) return super.destroy();
         (this._timers || []).forEach(clearTimeout);
@@ -977,7 +1065,7 @@ export class Dropzone extends Component {
 /**
  * E.dropzone: one instance per element; a second call updates it.
  * @param {Element} el
- * @param {Object} options
+ * @param {DropzoneOptions} [options]
  * @returns {Dropzone}
  */
 export function dropzoneFor(el, options = {}) {

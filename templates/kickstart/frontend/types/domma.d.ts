@@ -6,7 +6,8 @@
  * jQuery-style DOM manipulation, Lodash utilities, and modern UI components.
  *
  * NOTE: This is a consolidated type definition file for the Domma framework.
- * For complete type definitions, see: https://dommajs.org/assets/ide/phpstorm/
+ * For complete type definitions (generated from the source), see the domma-js npm package:
+ * assets/types/index.d.ts - https://unpkg.com/domma-js/assets/types/index.d.ts
  */
 
 // ============================================

@@ -14,6 +14,7 @@ import {asia} from './asia.js';
 import {oceania} from './oceania.js';
 
 // Merge all regions into a single registry
+/** @type {Record<string, import('../../../src/flags.js').FlagDefinition>} */
 export const flags = {
     ...europe,
     ...americas,
@@ -26,6 +27,7 @@ export const flags = {
 export {europe, americas, africa, asia, oceania};
 
 // Region metadata for the flag gallery
+/** @type {Record<string, import('../../../src/flags.js').FlagRegionMeta>} */
 export const regions = {
     europe: {name: 'Europe', description: 'European nations', codes: Object.keys(europe)},
     americas: {name: 'Americas', description: 'North, Central & South America', codes: Object.keys(americas)},

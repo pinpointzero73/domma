@@ -5,8 +5,22 @@
 
 const STORAGE_PREFIX = 'domma:';
 
+/**
+ * localStorage wrapper: values are JSON-serialised and keys carry the `domma:` prefix.
+ * Every method fails soft (false / 0 / the default) when localStorage is unavailable.
+ * @typedef {typeof storage} Storage
+ */
+
 export const storage = {
+    /**
+     * @type {string}
+     * @private
+     */
     _prefix: STORAGE_PREFIX,
+    /**
+     * @type {boolean|null}
+     * @private
+     */
     _available: null,
 
     /**
@@ -53,9 +67,10 @@ export const storage = {
 
     /**
      * Retrieve and auto-parse a value from localStorage
+     * @template [T=any]
      * @param {string} key - Storage key (without prefix)
-     * @param {*} [defaultValue=null] - Default if key doesn't exist
-     * @returns {*} - Parsed value or defaultValue
+     * @param {T} [defaultValue=null] - Default if key doesn't exist
+     * @returns {T} - Parsed value or defaultValue
      */
     get(key, defaultValue = null) {
         if (!this.isAvailable()) return defaultValue;
@@ -77,7 +92,7 @@ export const storage = {
     /**
      * Store a value with auto-stringify
      * @param {string} key - Storage key (without prefix)
-     * @param {*} value - Value to store (will be JSON stringified)
+     * @param {any} value - Value to store (will be JSON stringified)
      * @returns {boolean} - True if successful
      */
     set(key, value) {
@@ -208,7 +223,7 @@ export const storage = {
 
     /**
      * Get all stored data as an object
-     * @returns {Object}
+     * @returns {Record<string, any>}
      */
     getAll() {
         if (!this.isAvailable()) return {};
@@ -222,7 +237,7 @@ export const storage = {
 
     /**
      * Set multiple values at once
-     * @param {Object} data - Key-value pairs to store
+     * @param {Record<string, any>} data - Key-value pairs to store
      * @returns {boolean} - True if all successful
      */
     setAll(data) {

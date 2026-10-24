@@ -3,6 +3,7 @@
  * Icons for shopping, payments, and e-commerce
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const commerce = {
     'cart': {
         viewBox: '0 0 24 24',

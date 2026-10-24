@@ -3,6 +3,7 @@
  * Icons for documents, folders, and file operations
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const files = {
     'document': {
         viewBox: '0 0 24 24',

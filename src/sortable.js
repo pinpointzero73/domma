@@ -63,9 +63,83 @@ function scrollParentOf(el, axis) {
     return null;
 }
 
+/**
+ * Where an indicator-mode drop lands relative to its target.
+ * @typedef {'before'|'after'|'into'} SortableZone
+ */
+
+/**
+ * @typedef {object} SortableStartDetail
+ * @property {HTMLElement} item
+ * @property {number} from - Index of the item when the drag began
+ */
+
+/**
+ * @typedef {object} SortableMoveDetail
+ * @property {HTMLElement} item
+ * @property {HTMLElement|null} target - The item under the pointer (indicator mode: the accepted drop target), or null
+ * @property {SortableZone|null} zone - Indicator mode only; null in live mode
+ * @property {number} x
+ * @property {number} y
+ */
+
+/**
+ * @typedef {object} SortableSortDetail
+ * @property {HTMLElement} item
+ * @property {number} from
+ * @property {number} to
+ * @property {(string|null)[]} order - Every item's key, in the new order
+ * @property {(string|null)[]} previous - Every item's key, in the order before the drag
+ */
+
+/**
+ * @typedef {object} SortableDropDetail
+ * @property {HTMLElement} item - The dragged element (it has not moved - the host re-renders)
+ * @property {HTMLElement} target - The item it was dropped on or beside
+ * @property {SortableZone} zone
+ * @property {string|null} key - Value of the `key` attribute on the dragged item
+ * @property {string|null} targetKey - Value of the `key` attribute on the target
+ */
+
+/**
+ * @typedef {object} SortableEndDetail
+ * @property {HTMLElement} item
+ * @property {boolean} changed - Whether the order changed
+ */
+
+/**
+ * @typedef {object} SortableOptions
+ * @property {string|null} [items] - Selector for the sortable items; null = the container's direct children
+ * @property {string|null} [handle] - Selector inside an item that starts a drag; null = the whole item
+ * @property {boolean} [nest] - Adds an "into" drop zone and switches to indicator mode (for trees)
+ * @property {boolean|null} [live] - null = !nest. true = siblings slide aside while you drag; false = indicator mode
+ * @property {'x'|'y'} [axis] - 'y' for a column, 'x' for a row
+ * @property {string} [key] - Attribute that identifies an item across re-renders (default 'data-id')
+ * @property {number} [animation] - Animation duration in ms; 0 turns it off. Reduced motion always does
+ * @property {string} [easing] - CSS easing for every glide
+ * @property {number} [threshold] - Pixels the pointer must travel before a press becomes a drag (default 4)
+ * @property {number} [touchDelay] - Ms a finger must rest on an item with no handle before it drags (default 220)
+ * @property {number} [nestZone] - Share of an item's height, centred, that means "into" (default 0.5)
+ * @property {((item: HTMLElement, target: HTMLElement, zone: SortableZone) => boolean)|null} [accepts] - Veto a drop. Live mode passes 'before' or 'after'
+ * @property {boolean} [disabled] - Start disabled
+ * @property {boolean} [keyboard] - Alt+Arrow moves the focused item (live mode). Default true
+ * @property {string|boolean} [persist] - Storage key (or true = the container's id): remember the order. Live mode
+ * @property {boolean} [autoScroll] - Scroll the nearest scrolling ancestor (or the page) near its edges. Default true
+ * @property {HTMLElement|null} [ghostParent] - Where the dragged copy is appended; null = the container
+ * @property {((detail: SortableStartDetail) => void)|null} [onStart]
+ * @property {((detail: SortableMoveDetail) => void)|null} [onMove]
+ * @property {((detail: SortableSortDetail) => void)|null} [onSort] - Live mode: the order changed
+ * @property {((detail: SortableDropDetail) => boolean|void|Promise<any>)|null} [onDrop] - Indicator mode: update your data and re-render here. Return false (or a promise that rejects) to refuse; a returned promise is awaited before animating.
+ * @property {((detail: {item: HTMLElement}) => void)|null} [onCancel] - Esc, a refused drop, or a drop over nothing
+ * @property {((detail: SortableEndDetail) => void)|null} [onEnd] - Every drag, keyboard move and cancel ends here
+ */
+
+/** @typedef {Sortable} SortableInstance */
+
 class Sortable extends Component {
     static componentName = 'sortable';
 
+    /** @type {SortableOptions} */
     static defaults = {
         items: null,            // selector for the sortable items; null = the container's children
         handle: null,           // selector inside an item that starts a drag; null = the whole item
@@ -92,6 +166,10 @@ class Sortable extends Component {
         onEnd: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The container whose items are sorted
+     * @param {SortableOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         if (!this.element) return;
@@ -126,12 +204,20 @@ class Sortable extends Component {
     // Public API
     // ============================================
 
-    /** The keys of the items, in their current order. */
+    /**
+     * The keys of the items, in their current order.
+     * @returns {(string|null)[]}
+     */
     toArray() {
         return this._items().map((el) => this._keyOf(el));
     }
 
-    /** Put the items in the order of `keys`. Items not named keep their slots. */
+    /**
+     * Put the items in the order of `keys`. Items not named keep their slots.
+     * @param {(string|number)[]} keys
+     * @param {{animate?: boolean}} [options]
+     * @returns {this}
+     */
     sort(keys, {animate = true} = {}) {
         const apply = () => {
             const items = this._items();
@@ -154,14 +240,20 @@ class Sortable extends Component {
         return this;
     }
 
-    /** Re-apply the saved order (live mode with `persist`). */
+    /**
+     * Re-apply the saved order (live mode with `persist`).
+     * @returns {this}
+     */
     restore() {
         const saved = this._storageKey() ? storage.get(this._storageKey()) : null;
         if (Array.isArray(saved) && saved.length) this.sort(saved, {animate: false});
         return this;
     }
 
-    /** Forget the saved order. */
+    /**
+     * Forget the saved order.
+     * @returns {this}
+     */
     forget() {
         const key = this._storageKey();
         if (key) storage.remove(key);
@@ -172,6 +264,9 @@ class Sortable extends Component {
      * Run `mutate` (which may re-render the container) and animate every item
      * from where it was to where it is afterwards, matched by `key`.
      * Returns whatever `mutate` returns; a promise is awaited before animating.
+     * @template T
+     * @param {() => T} mutate
+     * @returns {T}
      */
     animate(mutate) {
         const before = this._snapshot();
@@ -186,12 +281,20 @@ class Sortable extends Component {
         return result;
     }
 
+    /**
+     * Re-arm dragging.
+     * @returns {this}
+     */
     enable() {
         this.options.disabled = false;
         this.element?.classList.remove('dm-sortable-disabled');
         return this;
     }
 
+    /**
+     * Stop dragging; a drag in progress is cancelled.
+     * @returns {this}
+     */
     disable() {
         if (this._drag) this._cancel();
         this.options.disabled = true;
@@ -199,10 +302,18 @@ class Sortable extends Component {
         return this;
     }
 
+    /**
+     * Whether a drag is in progress.
+     * @returns {boolean}
+     */
     get dragging() {
         return !!this._drag;
     }
 
+    /**
+     * Cancel any drag, remove the classes and detach.
+     * @returns {void}
+     */
     destroy() {
         if (this._drag) this._finish(false);
         this._clearPending();

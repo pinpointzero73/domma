@@ -24,10 +24,12 @@ import {clearCursorRule, DEFAULT_CURSOR_SIZE, setCursorRule} from './context-cur
 
 // Every live instance, in registration order. Small by construction: one entry
 // per bound container pattern, not per element.
+/** @type {Set<ContextMenu>} */
 const registry = new Set();
 
 // Only one context menu is ever on screen. Unlike a dropdown, two open at once
 // is never a legitimate state.
+/** @type {ContextMenu|null} */
 let active = null;
 
 let docBound = false;
@@ -292,9 +294,113 @@ function unbindDocListeners() {
 // ContextMenu Component
 // ============================================
 
+/**
+ * The open context: passed to callbacks, item actions and resolvers.
+ * @typedef {object} ContextMenuContext
+ * @property {HTMLElement} target - The delegated element the menu was opened against (or the container when no `match` is set)
+ * @property {HTMLElement} container - The bound container that claimed the gesture
+ * @property {number} x - Viewport x of the opening point
+ * @property {number} y - Viewport y of the opening point
+ * @property {Event|null} event - Originating event, or null when opened programmatically
+ * @property {HTMLElement|null} menu - The menu element, once rendered
+ * @property {ContextMenu} instance - The instance that owns the menu
+ */
+
+/**
+ * @typedef {object} ContextMenuItem
+ * @property {string} [label] - Item text
+ * @property {string} [text] - Item text, when there is no label
+ * @property {string} [name] - Item text, when there is no label or text
+ * @property {string} [icon] - Domma icon name, rendered through data-icon
+ * @property {*} [value] - Arbitrary value carried to onSelect (with the item)
+ * @property {(target: HTMLElement|null, ctx: ContextMenuContext) => void|Promise<void>} [action] - Invoked with the delegated target and the open context
+ * @property {boolean|((target: HTMLElement, ctx: ContextMenuContext) => boolean)} [disabled] - Greyed but still shown; a function is resolved per target
+ * @property {boolean|((target: HTMLElement, ctx: ContextMenuContext) => boolean)} [visible] - Omitted entirely when false; a function is resolved per target
+ * @property {boolean} [danger] - Destructive styling
+ * @property {string|string[]} [className] - Extra classes on the item
+ * @property {string} [shortcut] - Right-aligned hint text - display only, no key is bound
+ * @property {ContextMenuItem[]|((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[])} [submenu] - Nested items, to unlimited depth
+ * @property {'item'|'divider'|'header'|'checkbox'|'radio'} [type] - Item kind (default 'item')
+ * @property {boolean|((target: HTMLElement, ctx: ContextMenuContext) => boolean)} [checked] - Checked state for checkbox/radio types
+ * @property {boolean} [divider] - Shorthand for type: 'divider'
+ * @property {string} [header] - Shorthand for type: 'header'
+ */
+
+/**
+ * @typedef {object} ContextMenuOptions
+ * @property {ContextMenuItem[]|((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[])|import('domma-reactive').Observable<ContextMenuItem[]>} [items] - Items, or a resolver called with the delegated target. Accepts a Domma Reactive observable.
+ * @property {string|null} [match] - Delegation selector - the menu claims only descendants matching it (default: the whole container)
+ * @property {string|null} [exclude] - Regions inside the container that decline and fall through outward
+ * @property {boolean|((target: HTMLElement, ctx: ContextMenuContext) => boolean)} [enabled] - False declines the gesture and falls through to the next menu outward
+ * @property {'append'|'prepend'|false} [inherit] - Merge ancestor menus' items rather than replacing them (default 'append')
+ * @property {number} [priority] - Tie-break only when two menus bind the SAME element; depth wins otherwise
+ * @property {boolean} [exclusive] - This menu owns its region: once it encloses the click and accepts it, nothing bound deeper is offered the gesture. Not a veto - an exclusive menu that declines steps aside.
+ * @property {boolean} [nativeOnShift] - Shift+right-click passes through to the browser's own menu (default true)
+ * @property {boolean} [closeOnSelect] - Close after an item is chosen (default true)
+ * @property {boolean} [closeOnEscape] - Close on Esc (default true)
+ * @property {boolean} [closeOnClickOutside] - Close on outside mousedown (default true)
+ * @property {boolean} [closeOnScroll] - Close on scroll - the anchoring point has moved (default true)
+ * @property {number|false} [longPress] - Long-press duration in ms for touch, or false to disable (default 500)
+ * @property {'auto'|'glyph'|false|(string & {})} [cursor] - Pointer over a claimed region: 'auto' (the CSS `context-menu` keyword, default), 'glyph' (a generated themed cursor), false (leave it alone) or any CSS cursor value
+ * @property {number} [cursorSize] - Glyph cursor size in px, clamped to 32 - browsers ignore anything larger (default 26)
+ * @property {string} [className] - Extra class on the menu root
+ * @property {string} [minWidth] - Minimum menu width (default '200px')
+ * @property {string} [maxWidth] - Maximum menu width (default '320px')
+ * @property {string} [maxHeight] - Maximum menu height before it scrolls (default '60vh')
+ * @property {[number, number]} [offset] - Offset [x, y] from the cursor point (default [2, 2])
+ * @property {boolean} [flip] - Flip across the cursor and clamp to the viewport (default true)
+ * @property {boolean} [animation] - Whether to transition on open and close (default true)
+ * @property {number} [animationDuration] - Transition duration in ms (default 120)
+ * @property {'scale'|'fade'|'slide'|'none'} [transition] - How the panel enters (default 'scale')
+ * @property {string} [easing] - Any CSS easing (default cubic-bezier(0.16, 1, 0.3, 1))
+ * @property {string|null} [accent] - Preset key ('primary'|'success'|'danger'|'warning'|'info') or any CSS colour
+ * @property {string|null} [surface] - Overrides the panel background
+ * @property {string|null} [radius] - 'none'|'sm'|'md'|'lg'|'xl', or any CSS length
+ * @property {string|null} [shadow] - 'none'|'sm'|'md'|'lg'|'xl'
+ * @property {number|null} [opacity] - 20-100; translucent panel with a blurred backdrop. Clamped.
+ * @property {'comfortable'|'compact'} [density] - Row height and font size (default 'comfortable')
+ * @property {((item: ContextMenuItem, index: number) => string)|null} [itemTemplate] - Custom item renderer returning HTML
+ * @property {number} [submenuDelay] - Hover grace before a submenu opens, in ms (default 150)
+ * @property {((ctx: ContextMenuContext) => HTMLElement|void)|null} [render] - Render your own panel instead of an item list. Called only once this menu has claimed the gesture. Return an element for Domma to position and dismiss, or nothing to manage it yourself.
+ * @property {boolean} [keyboardTrigger] - Open on Shift+F10 and the Menu key against the focused element (default true)
+ * @property {boolean} [typeahead] - Jump to an item by typing (default true)
+ * @property {string} [ariaLabel] - aria-label for the menu
+ * @property {{get(key: string): any}|null} [model] - Bind items to a Domma Model
+ * @property {string|null} [modelKey] - Model key holding the items array
+ * @property {((ctx: ContextMenuContext) => boolean|void)|null} [onBeforeOpen] - Return false to decline and fall through to the next menu outward
+ * @property {((ctx: ContextMenuContext) => void)|null} [onOpen] - Fired once the menu is on screen
+ * @property {((ctx: ContextMenuContext|null) => boolean|void)|null} [onBeforeClose] - Return false to keep it open
+ * @property {((ctx: ContextMenuContext|null) => void)|null} [onClose] - Fired after the menu is dismissed
+ * @property {((item: ContextMenuItem, ctx: ContextMenuContext) => void)|null} [onSelect] - Fired before the item's own action
+ */
+
+/**
+ * One accepted candidate for a gesture.
+ * @typedef {object} ContextMenuHit
+ * @property {ContextMenu} instance
+ * @property {HTMLElement} container
+ * @property {HTMLElement} target
+ * @property {ContextMenuContext} ctx
+ */
+
+/** @typedef {ContextMenu} ContextMenuInstance */
+
+/**
+ * `E.contextMenu` - the factory plus its statics: `closeAll()` closes whichever menu is open;
+ * `active()` is the open instance, or null - only one can be open at a time; `registry(el)`
+ * lists the bound menus, or with an element the resolution chain for it, innermost first.
+ * @typedef {{
+ *     (selector: string|HTMLElement, options?: ContextMenuOptions): ContextMenu,
+ *     closeAll(): void,
+ *     active(): ContextMenu|null,
+ *     registry(forElement?: HTMLElement|null): ContextMenu[]
+ * }} ContextMenuStatic
+ */
+
 class ContextMenu extends Component {
     static componentName = 'context-menu';
 
+    /** @type {ContextMenuOptions} */
     static defaults = {
         // Targeting and cascade
         items: [],
@@ -401,6 +507,10 @@ class ContextMenu extends Component {
         onSelect: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - A selector (matched live, so later elements are covered) or one element
+     * @param {ContextMenuOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
 
@@ -481,6 +591,11 @@ class ContextMenu extends Component {
         });
     }
 
+    /**
+     * Whether `el` is a container this menu is bound to.
+     * @param {Element} el
+     * @returns {boolean}
+     */
     matchesContainer(el) {
         if (this.selector) {
             return isFn(el.matches) && el.matches(this.selector);
@@ -494,6 +609,10 @@ class ContextMenu extends Component {
      * Decide whether this instance takes the gesture for `container`. Returning
      * null is not a dead click: the caller carries on walking outward, so the
      * next menu up gets its chance.
+     * @param {HTMLElement} container
+     * @param {HTMLElement} target
+     * @param {MouseEvent|{clientX: number, clientY: number, target: Element}|null} event
+     * @returns {ContextMenuHit|null}
      */
     _accept(container, target, event) {
         const opts = this.options;
@@ -593,6 +712,10 @@ class ContextMenu extends Component {
     /**
      * Programmatic open. Resolves the chain itself so a menu opened from a
      * "..." button behaves exactly like the right-click on the same row.
+     * @param {number} x - Viewport x
+     * @param {number} y - Viewport y
+     * @param {HTMLElement} [target] - Open against this element (default: the bound container)
+     * @returns {this}
      */
     open(x, y, target) {
         const el = target || (this.selector ? document.querySelector(this.selector) : this._node);
@@ -678,6 +801,10 @@ class ContextMenu extends Component {
         this._fire('open', this._ctx);
     }
 
+    /**
+     * Close the menu.
+     * @returns {this}
+     */
     close() {
         if (!this._isOpen) return this;
         if (!this._mayClose(this._ctx)) return this;
@@ -717,7 +844,10 @@ class ContextMenu extends Component {
         return this;
     }
 
-    /** Rebuild the open menu in place, keeping its position. */
+    /**
+     * Rebuild the open menu in place, keeping its position.
+     * @returns {this}
+     */
     refresh() {
         if (!this._isOpen || !this._ctx) return this;
         const hit = this._chain && this._chain.length
@@ -731,32 +861,66 @@ class ContextMenu extends Component {
         return this;
     }
 
+    /**
+     * Whether this menu is currently open.
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isOpen;
     }
 
-    /** Close if open, else open at (x, y) as open() does. */
+    /**
+     * Close if open, else open at (x, y) as open() does.
+     * @param {number} x
+     * @param {number} y
+     * @param {HTMLElement} [target]
+     * @returns {this}
+     */
     toggle(x, y, target) {
         return this._isOpen ? this.close() : this.open(x, y, target);
     }
 
     // Permanent aliases. They look open/close up by name at call time, so a guard
     // patched onto instance.close still runs.
+    /**
+     * Alias of open(x, y, target).
+     * @param {...*} args
+     * @returns {this}
+     */
     show(...args) { return this.open(...args); }
+    /**
+     * Alias of close().
+     * @param {...*} args
+     * @returns {this}
+     */
     hide(...args) { return this.close(...args); }
+    /** @returns {boolean} */
     isVisible() { return this.isOpen(); }
 
+    /**
+     * Replace the items.
+     * @param {ContextMenuOptions['items']} items
+     * @returns {this}
+     */
     setItems(items) {
         this.options.items = items;
         if (this._isOpen) this.refresh();
         return this;
     }
 
+    /**
+     * Re-arm the menu.
+     * @returns {this}
+     */
     enable() {
         this._enabledFlag = true;
         return this;
     }
 
+    /**
+     * Suppress the menu; right-clicks fall through to the next menu outward.
+     * @returns {this}
+     */
     disable() {
         if (this._isOpen) this.close();
         this._enabledFlag = false;
@@ -1216,6 +1380,10 @@ class ContextMenu extends Component {
 
     // ---- teardown -------------------------------------------------------
 
+    /**
+     * Close, deregister and detach.
+     * @returns {void}
+     */
     destroy() {
         this._forcedClose();
         registry.delete(this);
@@ -1232,15 +1400,27 @@ class ContextMenu extends Component {
 // Statics
 // ============================================
 
+/**
+ * Close whichever menu is open.
+ * @returns {void}
+ */
 ContextMenu.closeAll = function closeAll() {
     if (active) active.close();
 };
 
+/**
+ * The open instance, or null - only one can be open at a time.
+ * @returns {ContextMenu|null}
+ */
 ContextMenu.active = function activeMenu() {
     return active;
 };
 
-/** Bound containers, innermost-first for a given element, else registration order. */
+/**
+ * Bound containers, innermost-first for a given element, else registration order.
+ * @param {Element|null} [forElement]
+ * @returns {ContextMenu[]}
+ */
 ContextMenu.registry = function registryList(forElement = null) {
     if (forElement) return collectCandidates(forElement).map((c) => c.instance);
     return Array.from(registry);

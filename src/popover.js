@@ -18,6 +18,11 @@
  *   - It takes the pointer and the keyboard. A click popover is a non-modal
  *     dialog: focus moves in, Tab leaves it in document order as if the panel
  *     sat straight after the trigger, and Esc or closing puts focus back.
+ *     Inside a modal, slideover or dialog, "the next element" is the next one
+ *     in that overlay's focus trap, wrapping as the trap does.
+ *   - `trapFocus: true` makes it modal for the keyboard: while focus is in the
+ *     panel a FocusTrap keeps Tab there (pausing any trap round the trigger),
+ *     and lets go when focus leaves the panel by other means or it closes.
  *
  * Positioning prefers the requested side, flips to the opposite one when that
  * does not fit, tries the two perpendicular sides after that, and finally
@@ -31,6 +36,7 @@
 
 import Component, {instanceOf} from './component.js';
 import sanitizeModule from './sanitize.js';
+import FocusTrap, {tabbables} from './components/focus-trap.js';
 
 const SIDES = ['top', 'bottom', 'left', 'right'];
 const OPPOSITE = {top: 'bottom', bottom: 'top', left: 'right', right: 'left'};
@@ -41,12 +47,6 @@ const AUTO_ORDER = ['bottom', 'top', 'right', 'left'];
 const VIEWPORT_MARGIN = 8;
 // Keeps the arrow off the rounded corners.
 const ARROW_PADDING = 12;
-
-const TABBABLE = [
-    'a[href]', 'area[href]', 'button:not([disabled])', 'input:not([disabled]):not([type="hidden"])',
-    'select:not([disabled])', 'textarea:not([disabled])', 'iframe', 'summary',
-    '[contenteditable=""]', '[contenteditable="true"]', '[tabindex]'
-].join(',');
 
 const NATIVE_INTERACTIVE = 'a[href], button, input, select, textarea, summary';
 
@@ -86,15 +86,9 @@ function resolveElement(target) {
     return null;
 }
 
-function tabbablesIn(root) {
-    if (!root) return [];
-    return Array.from(root.querySelectorAll(TABBABLE)).filter((el) => {
-        if (el.tabIndex < 0) return false;
-        if (el.closest('[hidden], [inert]')) return false;
-        // display:none / visibility:hidden (a closed modal, a collapsed section)
-        // cannot take focus. jsdom has no checkVisibility, so it counts as visible there.
-        return typeof el.checkVisibility === 'function' ? el.checkVisibility({visibilityProperty: true}) : true;
-    });
+/** What Tab reaches inside an element - the shared helper the focus trap uses. */
+function tabbablesIn(root, opts) {
+    return root ? tabbables(root, opts) : [];
 }
 
 /** "top-start" -> ['top', 'start']; anything unknown falls back to the default. */
@@ -183,9 +177,81 @@ function unbindDoc() {
 // Popover Component
 // ============================================
 
+/** @typedef {'top'|'bottom'|'left'|'right'} PopoverSide */
+
+/**
+ * @typedef {PopoverSide|'auto'|'top-start'|'top-end'|'bottom-start'|'bottom-end'|'left-start'|'left-end'|'right-start'|'right-end'|'auto-start'|'auto-end'} PopoverPlacement
+ */
+
+/**
+ * 'click', 'hover', 'focus', 'manual', or several separated by spaces ('hover focus').
+ * @typedef {'click'|'hover'|'focus'|'manual'|(string & {})} PopoverTrigger
+ */
+
+/**
+ * Text, a DOM node or collection, or a function returning either - called on every open.
+ * @typedef {string|Node|ArrayLike<Node>|null|((popover: Popover) => string|Node|ArrayLike<Node>|null)} PopoverContent
+ */
+
+/**
+ * @typedef {object} PopoverOptions
+ * @property {PopoverContent} [content] - Text (default), a Node, or a function returning either; see `html`
+ * @property {PopoverContent} [title] - Heading; empty for none
+ * @property {boolean} [html] - Treat string content/title as HTML, passed through Domma's sanitiser (default: false)
+ * @property {PopoverTrigger} [trigger] - 'click' (default), 'hover', 'focus', 'manual', or several separated by spaces
+ * @property {PopoverPlacement} [placement] - Preferred side and alignment (default: 'bottom')
+ * @property {boolean} [flip] - Try the other sides when the preferred one has no room (default: true)
+ * @property {number|[number, number]} [offset] - Gap in px, or [crossAxis, mainAxis] (default: 10)
+ * @property {boolean} [arrow] - Show the arrow (default: true)
+ * @property {boolean} [dismissible] - Show a close (x) button (default: false)
+ * @property {boolean} [closeOnOutside] - Close on a pointer press or focus outside (default: true)
+ * @property {boolean} [closeOnEscape] - Close on Escape (default: true)
+ * @property {string|null} [group] - One open at a time per group; null = independent (default: 'default')
+ * @property {string|number|null} [width] - Any CSS width; numbers are px
+ * @property {string|number|null} [maxWidth] - Any CSS width; the stylesheet default is 20rem
+ * @property {string} [className] - Extra classes on the panel
+ * @property {string|null} [id] - Panel id (generated when omitted)
+ * @property {'dialog'|'tooltip'|(string & {})|null} [role] - 'dialog', or 'tooltip' for hover/focus-only triggers (default: auto)
+ * @property {string|null} [ariaLabel] - Accessible name when there is no title
+ * @property {boolean|null} [autoFocus] - Move focus into the panel on open; null = for click popovers
+ * @property {boolean} [trapFocus] - Tab cycles inside the panel instead of leaving it, with a focus trap while focus is in it (default: false)
+ * @property {number|{show?: number, hide?: number}} [delay] - Hover delays in ms (default: {show: 80, hide: 120})
+ * @property {boolean} [animation] - Fade and scale (default: true; skipped under reduced motion)
+ * @property {number} [animationDuration] - ms (default: 150)
+ * @property {string|HTMLElement|null} [container] - Where the panel is placed (default: document.body)
+ * @property {number|null} [zIndex] - Override the stylesheet's z-index (10045)
+ * @property {((popover: Popover) => boolean|void)|null} [onShow] - Before opening; return false to cancel
+ * @property {((popover: Popover) => void)|null} [onShown] - After the open transition
+ * @property {((popover: Popover) => boolean|void)|null} [onHide] - Before closing; return false to cancel
+ * @property {((popover: Popover) => void)|null} [onHidden] - After the panel has been removed
+ */
+
+/**
+ * event.detail of popover:show / popover:shown / popover:hide / popover:hidden (fired on the trigger).
+ * @typedef {object} PopoverEventDetail
+ * @property {Popover} popover
+ */
+
+/** @typedef {Popover} PopoverInstance */
+
+/**
+ * `E.popover` - the factory plus its statics: `scan(root)` creates popovers from
+ * [data-popover] / [data-popover-content] markup under root and returns the new ones;
+ * `closeAll(group)` closes every open popover, or one group's; `getInstance(trigger)` is the
+ * popover bound to a trigger; `open()` lists the open popovers, oldest first.
+ * @typedef {{
+ *     (trigger: string|HTMLElement|ArrayLike<HTMLElement>, options?: PopoverOptions): Popover,
+ *     scan(root?: string|Element|Document): Popover[],
+ *     closeAll(group?: string|null): void,
+ *     getInstance(trigger: string|HTMLElement): Popover|null,
+ *     open(): Popover[]
+ * }} PopoverStatic
+ */
+
 class Popover extends Component {
     static componentName = 'popover';
 
+    /** @type {PopoverOptions} */
     static defaults = {
         content: '',            // string (text), Node, or (popover) => string | Node
         title: '',              // same types as content
@@ -218,6 +284,10 @@ class Popover extends Component {
         onHidden: null
     };
 
+    /**
+     * @param {string|HTMLElement|ArrayLike<HTMLElement>|null} trigger - Selector, element or collection
+     * @param {PopoverOptions} [options]
+     */
     constructor(trigger, options = {}) {
         super(resolveElement(trigger), options);
 
@@ -242,6 +312,7 @@ class Popover extends Component {
         }
         byTrigger.set(this.element, this);
 
+        /** Panel id. @type {string} */
         this.id = this.options.id || `dm-popover-${++seq}`;
         this._saveAttrs();
         this._applyTriggerAria();
@@ -252,16 +323,23 @@ class Popover extends Component {
     // Public API
     // ============================================
 
-    /** The panel element (created on first show). */
+    /**
+     * The panel element (created on first show).
+     * @returns {HTMLElement|null}
+     */
     get panel() {
         return this._panel;
     }
 
-    /** The trigger element. */
+    /**
+     * The trigger element.
+     * @returns {HTMLElement|null}
+     */
     get trigger() {
         return this.element;
     }
 
+    /** @returns {boolean} */
     isOpen() {
         return this._open;
     }
@@ -269,6 +347,7 @@ class Popover extends Component {
     /**
      * Open the popover.
      * @param {{focus?: boolean}} [opts] - focus overrides `autoFocus` for this open
+     * @returns {this}
      */
     show(opts = {}) {
         if (!this.element || this._destroyed || !this.element.isConnected) return this;
@@ -334,6 +413,7 @@ class Popover extends Component {
     /**
      * Close the popover.
      * @param {{returnFocus?: boolean}} [opts] - default: only when focus is inside the panel
+     * @returns {this}
      */
     hide(opts = {}) {
         clearTimeout(this._timers.show);
@@ -360,6 +440,8 @@ class Popover extends Component {
         unbindDoc();
         this._setExpanded(false);
         clearTimeout(this._timers.shown);
+        // Before focus goes back to the trigger, or the trap would pull it into the panel.
+        this._releaseTrap();
 
         if (returnFocus && this.element && isFn(this.element.focus)) {
             // A focus or hover trigger would take this focus as a reason to reopen.
@@ -385,6 +467,10 @@ class Popover extends Component {
         return this;
     }
 
+    /**
+     * @param {{focus?: boolean, returnFocus?: boolean}} [opts]
+     * @returns {this}
+     */
     toggle(opts = {}) {
         return this._open ? this.hide(opts) : this.show(opts);
     }
@@ -392,11 +478,29 @@ class Popover extends Component {
     // Aliases, so a popover answers the overlay names every other overlay uses
     // (open/close/isOpen). They look show/hide up by name at call time. A popover's
     // cancelable phases stay `show` and `hide` (onShow / onHide returning false).
+    /**
+     * Alias of show().
+     * @param {...{focus?: boolean}} args - passed to show()
+     * @returns {this}
+     */
     open(...args) { return this.show(...args); }
+    /**
+     * Alias of hide().
+     * @param {...{returnFocus?: boolean}} args - passed to hide()
+     * @returns {this}
+     */
     close(...args) { return this.hide(...args); }
+    /**
+     * Alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() { return this.isOpen(); }
 
-    /** Replace the content. Same types as the `content` option. */
+    /**
+     * Replace the content. Same types as the `content` option.
+     * @param {PopoverContent} content
+     * @returns {this}
+     */
     setContent(content) {
         this.options.content = content;
         if (this._panel) {
@@ -406,7 +510,11 @@ class Popover extends Component {
         return this;
     }
 
-    /** Replace the title. An empty value removes the header. */
+    /**
+     * Replace the title. An empty value removes the header.
+     * @param {PopoverContent} title
+     * @returns {this}
+     */
     setTitle(title) {
         this.options.title = title;
         if (this._panel) {
@@ -416,7 +524,10 @@ class Popover extends Component {
         return this;
     }
 
-    /** Recalculate the position (after the trigger moved or the content changed size). */
+    /**
+     * Recalculate the position (after the trigger moved or the content changed size).
+     * @returns {this}
+     */
     update() {
         if (!this._open || !this._panel || !this.element) return this;
         if (!this.element.isConnected) {
@@ -427,6 +538,10 @@ class Popover extends Component {
         return this;
     }
 
+    /**
+     * Close at once, remove the panel and listeners, restore the trigger's attributes.
+     * @returns {void}
+     */
     destroy() {
         if (this._destroyed) return;
         this._destroyed = true;
@@ -441,6 +556,11 @@ class Popover extends Component {
         }
         const hadFocus = this._panel && this._panel.contains(document.activeElement);
         this._open = false;
+        this._releaseTrap();
+        if (this._trap) {
+            this._trap.destroy();
+            this._trap = null;
+        }
         this._unbindOpen();
         unbindDoc();
         Object.values(this._timers).forEach((t) => clearTimeout(t));
@@ -456,6 +576,10 @@ class Popover extends Component {
         super.destroy();
     }
 
+    /**
+     * @param {PopoverOptions} [newOptions]
+     * @returns {this}
+     */
     setOptions(newOptions = {}) {
         this._changedKeys = Object.keys(newOptions || {});
         return super.setOptions(newOptions);
@@ -705,7 +829,15 @@ class Popover extends Component {
         panel.addEventListener('mouseleave', () => {
             if (this._triggers().includes('hover')) this._scheduleHide(parseDelay(this.options.delay).hide, 'hover');
         });
+        panel.addEventListener('focusin', () => this._holdTrap());
         panel.addEventListener('focusout', (e) => {
+            // Focus leaving the panel some other way than Tab (a click elsewhere, a child
+            // popover) takes the trap off, once focus has landed.
+            if (this._trap?.isActive() && !this._panel.contains(e.relatedTarget)) {
+                setTimeout(() => {
+                    if (this._panel && !this._panel.contains(document.activeElement)) this._releaseTrap();
+                }, 0);
+            }
             const t = this._triggers();
             if (!(t.includes('focus') || t.includes('hover'))) return;
             if (this._contains(e.relatedTarget)) return;
@@ -815,6 +947,26 @@ class Popover extends Component {
     // Focus
     // ============================================
 
+    /** trapFocus: a FocusTrap round the panel while focus is in it. */
+    _holdTrap() {
+        if (!this.options.trapFocus || !this._open || !this._panel) return;
+        if (!this._trap) {
+            this._trap = new FocusTrap(this._panel, {
+                initialFocus: false,        // the popover places focus itself
+                returnFocus: false,         // hide() puts it back on the trigger
+                escapeDeactivates: false,   // Escape is the popover's
+                allowOutsideClick: true,    // closeOnOutside decides what a click does
+                allowOutsideFocus: true,    // only Tab is held, as it always was
+                register: false
+            });
+        }
+        if (!this._trap.isActive()) this._trap.activate();
+    }
+
+    _releaseTrap() {
+        if (this._trap?.isActive()) this._trap.deactivate({returnFocus: false});
+    }
+
     /** First tabbable in the content; the panel itself when there is none. */
     _focusInside() {
         const panel = this._panel;
@@ -842,6 +994,8 @@ class Popover extends Component {
         const active = document.activeElement;
 
         if (this.options.trapFocus) {
+            // The trap moves focus as the key reaches window.
+            if (this._trap?.isActive()) return;
             if (!items.length) {
                 e.preventDefault();
                 return;
@@ -878,7 +1032,20 @@ class Popover extends Component {
         const trigger = this.element;
         // A trigger inside another popover's panel continues within that panel.
         const own = trigger.closest('.dm-popover');
-        const all = tabbablesIn(own || document.body).filter((el) =>
+        // A trigger in a modal, slideover or dialog: the next stop in its focus trap,
+        // wrapping the way Tab does there - not something in the page behind it.
+        const trap = FocusTrap.top();
+        if (!own && trap && trap !== this._trap && trap.containers().some((c) => c.contains(trigger))) {
+            const full = trap.tabbables();
+            const at = full.indexOf(trigger);
+            if (at > -1) {
+                return full.slice(at + 1).concat(full.slice(0, at)).find((el) => !trigger.contains(el)) || null;
+            }
+            const list = full.filter((el) => !trigger.contains(el));
+            return list.find((el) => trigger.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)
+                || list[0] || null;
+        }
+        const all = tabbablesIn(own || document.body, {shadow: false}).filter((el) =>
             el.closest('.dm-popover') === own && !trigger.contains(el));
         return all.find((el) =>
             trigger.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) || null;
@@ -1068,7 +1235,8 @@ class Popover extends Component {
      * skipped. Returns the instances created.
      *
      * @param {Element|Document|string} [root=document]
-     * @param {Function} [factory] - (el, options) => instance; defaults to `new Popover`
+     * @param {((el: HTMLElement, options: PopoverOptions) => Popover)|null} [factory] - defaults to `new Popover`
+     * @returns {Popover[]}
      */
     static scan(root = document, factory = null) {
         const host = typeof root === 'string' ? document.querySelector(root) : (resolveElement(root) || root);
@@ -1087,7 +1255,11 @@ class Popover extends Component {
         return found;
     }
 
-    /** Read the declarative options off a trigger's data-popover-* attributes. */
+    /**
+     * Read the declarative options off a trigger's data-popover-* attributes.
+     * @param {HTMLElement} el
+     * @returns {PopoverOptions}
+     */
     static optionsFromAttributes(el) {
         const d = el.dataset || {};
         const options = {};
@@ -1120,20 +1292,31 @@ class Popover extends Component {
         return options;
     }
 
-    /** Close every open popover, or only those in `group`. */
+    /**
+     * Close every open popover, or only those in `group`.
+     * @param {string|null} [group]
+     * @returns {void}
+     */
     static closeAll(group) {
         for (const instance of openStack.slice().reverse()) {
             if (group === undefined || instance.options.group === group) instance.hide({returnFocus: false});
         }
     }
 
-    /** The popover bound to a trigger, if any - the same answer as E.get(trigger, 'popover'). */
+    /**
+     * The popover bound to a trigger, if any - the same answer as E.get(trigger, 'popover').
+     * @param {string|HTMLElement} trigger
+     * @returns {Popover|null}
+     */
     static getInstance(trigger) {
         const el = resolveElement(trigger);
         return el ? instanceOf(el, 'popover') || null : null;
     }
 
-    /** The open popovers, oldest first. */
+    /**
+     * The open popovers, oldest first.
+     * @returns {Popover[]}
+     */
     static openPopovers() {
         return openStack.slice();
     }

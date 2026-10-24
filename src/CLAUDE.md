@@ -156,10 +156,10 @@ settings.reset(true);      // Reset and clear storage
 Accessed via `Domma.router` or `R`:
 
 - **Initialization**: `init(options)` - Set up router with container, routes, views
-- **Navigation**: `navigate(path, options)`, `back()`, `forward()`, `reload()`
+- **Navigation**: `navigate(path, options)`, `back()`, `forward()`
 - **Registration**: `route(config)`, `view(name, viewDef)`
-- **Middleware**: `use(middleware)`, `clearMiddleware()`
-- **State**: `current()`, `getContainer()`
+- **Middleware**: `use(middleware)`
+- **State**: `current()`; `destroy()` removes the hashchange listener
 
 **Router Configuration:**
 
@@ -197,13 +197,6 @@ export const homeView = {
     'footer': 'js/views/templates/partials/footer.html'
   },
 
-  // Called before rendering (async supported)
-  async onEnter(params) {
-    // Fetch data, validate auth, etc.
-    const data = await H.get('/api/home');
-    return data;  // Can return data to pass to template
-  },
-
   // Called after view is mounted
   onMount($container) {
     // Scan for icons
@@ -216,14 +209,12 @@ export const homeView = {
     $container.find('#my-button').on('click', () => {
       E.toast('Clicked!', {type: 'success'});
     });
-  },
-
-  // Called when leaving view (cleanup)
-  onLeave() {
-    // Remove event listeners, timers, etc.
-    $('#my-button').off('click');
   }
 };
+
+// onEnter / onLeave belong on the ROUTE, not the view - the router only calls the route's:
+// { path: '/', view: 'home', onEnter: async (params, to) => {...}, onLeave: () => {...} }
+// Returning false from either refuses the navigation.
 
 // Alternative: Inline template (use only for simple views <5 lines)
 export const simpleView = {
@@ -314,9 +305,6 @@ R.navigate('/about', {replace: true});
 // History navigation
 R.back();
 R.forward();
-
-// Reload current route
-R.reload();
 
 // Get current route info
 const current = R.current();
@@ -885,11 +873,29 @@ src/
 
 - When updating features or adding new ones, the documentation and showcase should be updated in-line
 - Where and whenever possible use Domma in the showcase, documentation and tutorials
-- When making changes to the namespaces/modules ensure that we update the PHPStorm code intelligence files
-  @public/assets/ide/phpstorm
+- The JSDoc in these files IS the TypeScript declarations: `npm run build:types` generates `assets/types/generated/`
+  from it (see "Types from JSDoc" below and docs/Types.md). Change a public signature or option, change its JSDoc
 - Do not run a server as I am running one
 - Audit your own work and reiterate where possible
 - **British English**: Use British spellings in all new code, comments, and documentation (-ise not -ize, -yse not -yze, -our not -or). Existing code may use American spellings for backwards compatibility.
+
+## Types from JSDoc
+
+`npm run build:types` runs tsc over `src/index.js`, `src/flags-bundle.js` and `src/schema-builder.js`
+(`tsconfig.types.json`) and writes `assets/types/generated/`; `assets/types/index.d.ts` is the only hand-written
+declaration file (globals, `Domma.noConflict`/`flags`, the list of public modules). So JSDoc here is public API:
+
+- `@typedef` names are exported and must be unique across src (TS2308 in the index otherwise). Keep the
+  established names: `XOptions` for options, `XInstance` (typedef of the class) for instances, `Utils =
+  typeof utils` style for namespaces.
+- `@returns {this}` only in classes; an object-literal method names its type.
+- An object literal whose members are assigned to later (`elements.x.y = ...`) loses its members in the output -
+  hence `/** @type {Elements} */` on `elements` and the `Elements` typedef above it: a new `E.*` factory needs a
+  line there as well as its method.
+- `@type {typeof otherModule.fn}` on an expando can print the other module's typedef names unimported - write the
+  `@param`s out instead (see `Domma.update` in index.js).
+- Adding `export` to a class so its type can be named is fine (rollup only exports the entry's exports).
+- `npm run check:types` fails when the output is stale and type-checks `tests/types/` under `--strict`.
 
 ## Related Documentation
 
@@ -897,10 +903,22 @@ src/
 - [Bundles Guide](./bundles/CLAUDE.md) - Custom bundle creation
 - [Showcase Development](../public/showcase/CLAUDE.md) - Creating showcase examples
 - **Focus trap** (`components/focus-trap.js`, `E.focusTrap(containers, opts)`, componentName `focus-trap`): a
-  module-level stack - activating pauses the trap on top, deactivating unpauses it. Tabbables are looked up per Tab
-  press (`tabbables()` walks open shadow roots in render order, slots by their assigned elements), Tab is always
-  handled by the trap (`preventDefault` then focus), focusin outside pulls focus back. `inert: true` marks siblings
-  up to <body> and removes only what it marked (also on pause). Not yet used by modal/slideover/popover.
+  module-level stack - activating pauses the trap on top, deactivating unpauses it (a non-top trap going hands its
+  return target to the trap above). Tabbables are looked up per Tab press (`tabbables()` walks open shadow roots in
+  render order, slots by their assigned elements). Tab is handled in a **bubble listener on window** (capture on
+  document only notes it), so a handler that `preventDefault`s Tab on the way (textarea indent, grid cells, the
+  popover's own Tab steering) wins - keep it that way, the CMS editors rely on it. focusin outside pulls focus
+  back unless `allowOutsideFocus` allows it; `'layers'` (`layerOf()`: fixed ancestor, absolute or newly added
+  `<body>` child, `[data-focus-trap-allow]`; never another trap's containers) is what overlays pass. A trap
+  whose containers are all disconnected deactivates itself on the next event. `register: false` keeps the trap
+  out of the component registry - every overlay-owned trap passes it, or `E.get(el)` returns the trap.
+  `inert: true` marks siblings up to <body> and removes only what it marked (also on pause).
+- **Overlay focus traps**: Modal (`_startTrap` in open, deactivate in close - it returns focus there, the
+  after-animation `_restoreFocus` is only the fallback for `trapFocus: false`), Slideover (same; adds
+  `tabindex="-1"` to the panel and focuses it), Dialog (trap made BEFORE the input's `select()`, which focuses in
+  Chrome and would become the return target), Popover (`trapFocus: true` only: activated on panel focusin,
+  released on focusout/hide before focus goes back to the trigger, `allowOutsideFocus: true`). All use
+  `escapeDeactivates: false` and `allowOutsideClick: true`; no backdrop = no trap unless `trapFocus` is passed.
 - **Command palette** (`components/command-palette.js`, `E.commandPalette(opts)`, componentName `command-palette`):
   factory-made overlay on <body>; rows are built with createElement/textContent (highlights are spans), never
   innerHTML. Uses a FocusTrap (`allowOutsideClick`, returnFocus) for Tab; Escape/arrows/Enter are handled on the

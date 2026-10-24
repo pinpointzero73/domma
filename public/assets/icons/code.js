@@ -3,6 +3,7 @@
  * Icons for text editing, code formatting, and content creation
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export default {
     // Code
     'code': {

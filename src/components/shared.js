@@ -5,7 +5,17 @@
 import {sanitise} from '../sanitize.js';
 import {instanceOf} from '../component.js';
 
-/** An element from a selector, an element, or a Domma/jQuery-like collection. */
+/**
+ * What a component accepts as its host: a CSS selector, an element, or a Domma/jQuery-like
+ * collection (its first element is used).
+ * @typedef {string|Element|ArrayLike<Element>|null|undefined} ComponentTarget
+ */
+
+/**
+ * An element from a selector, an element, or a Domma/jQuery-like collection.
+ * @param {ComponentTarget} target
+ * @returns {HTMLElement|null}
+ */
 export function resolveElement(target) {
     if (!target) return null;
     if (typeof target === 'string') {
@@ -17,7 +27,11 @@ export function resolveElement(target) {
     return null;
 }
 
-/** Every element a selector matches (one for an element). */
+/**
+ * Every element a selector matches (one for an element).
+ * @param {ComponentTarget} target
+ * @returns {HTMLElement[]}
+ */
 export function resolveAll(target) {
     if (!target) return [];
     if (typeof target === 'string') {
@@ -31,6 +45,9 @@ export function resolveAll(target) {
 /**
  * A boolean option that may have arrived as a string ('false' from an attribute, or
  * from a caller who worked around the old wrappers dropping a boolean false).
+ * @param {*} value
+ * @param {boolean} [fallback]
+ * @returns {boolean}
  */
 export function flag(value, fallback = false) {
     if (value === undefined || value === null) return fallback;
@@ -39,7 +56,12 @@ export function flag(value, fallback = false) {
     return Boolean(value);
 }
 
-/** A number option that may be a string; anything unparseable gives the fallback. */
+/**
+ * A number option that may be a string; anything unparseable gives the fallback.
+ * @param {*} value
+ * @param {number} [fallback]
+ * @returns {number}
+ */
 export function num(value, fallback = 0) {
     if (value === undefined || value === null || value === '') return fallback;
     const n = Number(value);
@@ -65,7 +87,10 @@ export function fill(el, content, opts = {}) {
     else el.innerHTML = opts.safe === false ? str : sanitise(str);
 }
 
-/** Scan new markup for `data-icon` placeholders when the icon module is loaded. */
+/**
+ * Scan new markup for `data-icon` placeholders when the icon module is loaded.
+ * @param {Element|null|undefined} el
+ */
 export function scanIcons(el) {
     const icons = typeof window !== 'undefined' ? window.Domma?.icons : null;
     if (el && icons && typeof icons.scan === 'function') {
@@ -74,7 +99,11 @@ export function scanIcons(el) {
 }
 
 let uid = 0;
-/** A page-unique id with a prefix. */
+/**
+ * A page-unique id with a prefix.
+ * @param {string} prefix
+ * @returns {string}
+ */
 export function uniqueId(prefix) {
     uid += 1;
     return `${prefix}-${uid}`;
@@ -83,8 +112,9 @@ export function uniqueId(prefix) {
 /**
  * Give the first of several instances a non-enumerable `all()` that returns every
  * one, so `E.tooltip('.many')` initialises each match and still returns an instance.
- * @param {Object[]} list
- * @returns {Object|null}
+ * @template {object} T
+ * @param {T[]} list
+ * @returns {(T & {all(): T[]})|null}
  */
 export function firstWithAll(list) {
     if (!list.length) return null;
@@ -103,8 +133,8 @@ export function firstWithAll(list) {
  * E.card(el) twice updates one card instead of stacking a second set of listeners on it.
  * @param {Element} el
  * @param {string} name - componentName
- * @param {Object} options
- * @returns {Object|null}
+ * @param {Record<string, any>} [options]
+ * @returns {any}
  */
 export function reuse(el, name, options = {}) {
     const existing = instanceOf(el, name);
@@ -120,4 +150,26 @@ export function reducedMotion() {
     } catch {
         return false;
     }
+}
+
+/**
+ * Lift a popup that lives on <body> above whatever stacking layer its trigger sits in.
+ * A date picker or dropdown opened from inside a slideover (z-index 9999) or a modal
+ * would otherwise draw underneath it, because its own stylesheet z-index (1000-1080)
+ * is only meant to beat ordinary page content. Sets an inline z-index only when the
+ * trigger's layer is higher than the popup's own; clears it otherwise.
+ * @param {Element} trigger - the element the popup belongs to
+ * @param {HTMLElement} popup - the popup, appended to <body>
+ * @returns {void}
+ */
+export function layerAbove(trigger, popup) {
+    if (!trigger || !popup || typeof getComputedStyle === 'undefined') return;
+    popup.style.removeProperty('z-index');
+    const own = parseInt(getComputedStyle(popup).zIndex, 10) || 0;
+    let highest = 0;
+    for (let el = trigger; el && el.nodeType === 1; el = el.parentElement || el.getRootNode?.().host) {
+        const z = parseInt(getComputedStyle(el).zIndex, 10);
+        if (!Number.isNaN(z) && z > highest) highest = z;
+    }
+    if (highest > 0 && highest >= own) popup.style.zIndex = String(highest + 1);
 }

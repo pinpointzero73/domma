@@ -25,14 +25,30 @@ import Badge, {NumberBadge} from './components/badge.js';
 import Loader from './components/loader.js';
 import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
-import FocusTrap, {tabbables as tabbablesIn} from './components/focus-trap.js';
+import FocusTrap, {createFocusTrap, tabbables as tabbablesIn} from './components/focus-trap.js';
 import CommandPalette, {claimsHotkey, formatShortcut, fuzzyMatch} from './components/command-palette.js';
 import SplitPane, {splitPaneFor} from './components/split-pane.js';
 import VirtualList, {virtualListFor} from './components/virtual-list.js';
 import Dropzone, {dropzoneFor} from './components/dropzone.js';
 import RangeSlider, {rangeSliderFor} from './components/range-slider.js';
-import {resolveAll, resolveElement, reuse} from './components/shared.js';
+import {layerAbove, resolveAll, resolveElement, reuse} from './components/shared.js';
 import {registerComponents as defineTags} from './web-components/index.js';
+
+// ============================================
+// Common types
+// ============================================
+
+/** @typedef {'fade'|'slide'|'zoom'|'none'} AnimationType */
+/** @typedef {'top'|'bottom'|'left'|'right'} TooltipPosition */
+/**
+ * @typedef {'bottom-start'|'bottom-end'|'top-start'|'top-end'|'left-start'|'left-end'|'right-start'|'right-end'} DropdownPosition
+ */
+/** @typedef {'top-left'|'top-right'|'top-center'|'bottom-left'|'bottom-right'|'bottom-center'} ToastPosition */
+/** @typedef {'default'|'success'|'error'|'warning'|'info'} ToastType */
+/** @typedef {'primary'|'secondary'|'success'|'danger'|'warning'|'info'|'light'|'dark'} BadgeVariant */
+/** @typedef {'small'|'medium'|'large'} BadgeSize */
+/** @typedef {'none'|'small'|'medium'|'large'} ShadowSize */
+/** @typedef {'bottom-right'|'bottom-left'} BackToTopPosition */
 
 let timelineWarned = false;
 const groupWarned = new Set();
@@ -83,6 +99,31 @@ function firstOfMatches(instances, name) {
 // Tabs Component
 // ============================================
 
+/**
+ * Fired when the active tab changes (onChange option / `.on('change')`).
+ * @typedef {object} TabChangeEvent
+ * @property {number} index - The new active index
+ * @property {number} oldIndex - The previous active index
+ * @property {HTMLElement} tab - The new active tab
+ * @property {HTMLElement} panel - Its panel
+ */
+/**
+ * @typedef {object} TabsOptions
+ * @property {number} [active=0] - Initially active tab index
+ * @property {'fade'|'none'} [animation='fade'] - Panel animation
+ * @property {number} [animationDuration=200] - Animation duration in ms
+ * @property {string} [tabSelector='.tab-item, [data-tab]'] - Selector for tab items
+ * @property {string} [panelSelector='.tab-panel, [data-panel]'] - Selector for tab panels
+ * @property {string} [activeClass='active'] - CSS class for the active tab
+ * @property {((event: TabChangeEvent) => void)|null} [onChange] - Called when the active tab changes
+ */
+/**
+ * Tabs: tab items paired by index with panels, with ARIA roles set up.
+ * @typedef {Tabs} TabsInstance
+ */
+/**
+ * Tabs component.
+ */
 class Tabs extends Component {
     static componentName = 'tabs';
 
@@ -96,6 +137,10 @@ class Tabs extends Component {
         onChange: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The tabs container
+     * @param {TabsOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._activeIndex = this.options.active;
@@ -134,6 +179,11 @@ class Tabs extends Component {
         this._updateState();
     }
 
+    /**
+     * Activate a tab by index, or by its `data-tab` / `href` value.
+     * @param {number|string} index
+     * @returns {this}
+     */
     activate(index) {
         if (typeof index === 'string') {
             const foundIndex = Array.from(this._tabs).findIndex(t => t.dataset?.tab === index || t.getAttribute('data-tab') === index || t.getAttribute('href') === index || t.getAttribute('href') === `#${index}`);
@@ -185,20 +235,37 @@ class Tabs extends Component {
         });
     }
 
+    /**
+     * The active tab index.
+     * @returns {number}
+     */
     getActive() {
         return this._activeIndex;
     }
 
     // Alias for activate
+    /**
+     * Alias of activate().
+     * @param {number|string} index
+     * @returns {this}
+     */
     show(index) {
         return this.activate(index);
     }
 
+    /**
+     * Go to the next tab (wraps).
+     * @returns {this}
+     */
     next() {
         const nextIndex = (this._activeIndex + 1) % this._tabs.length;
         return this.activate(nextIndex);
     }
 
+    /**
+     * Go to the previous tab (wraps).
+     * @returns {this}
+     */
     prev() {
         const prevIndex = (this._activeIndex - 1 + this._tabs.length) % this._tabs.length;
         return this.activate(prevIndex);
@@ -209,6 +276,32 @@ class Tabs extends Component {
 // Accordion Component
 // ============================================
 
+/**
+ * Fired when a panel opens or closes through toggle() (onChange option / `.on('change')`).
+ * @typedef {object} AccordionChangeEvent
+ * @property {number} index
+ * @property {boolean} isOpen - Whether the panel is now open
+ * @property {HTMLElement} header
+ * @property {HTMLElement} content
+ */
+/**
+ * @typedef {object} AccordionOptions
+ * @property {boolean} [allowMultiple=false] - Allow several panels open at once
+ * @property {boolean|null} [multiExpand=null] - Alias of allowMultiple (wins when set)
+ * @property {number|number[]|null} [activeIndex=null] - Initially open panel index(es); null keeps the markup's active class
+ * @property {boolean} [animation=true] - Animate the height
+ * @property {number} [animationDuration=300] - Animation duration in ms
+ * @property {string} [headerSelector='.accordion-header, [data-accordion-header]'] - Selector for headers
+ * @property {string} [contentSelector='.accordion-body, .accordion-content, [data-accordion-content]'] - Selector for panels (outermost matches only)
+ * @property {string} [activeClass='active'] - Class put on the open item (the header's parent)
+ * @property {((event: AccordionChangeEvent) => void)|null} [onChange] - Called when toggle() opens or closes a panel
+ */
+/**
+ * @typedef {Accordion} AccordionInstance
+ */
+/**
+ * Accordion component.
+ */
 class Accordion extends Component {
     static componentName = 'accordion';
 
@@ -224,6 +317,10 @@ class Accordion extends Component {
         onChange: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The accordion container
+     * @param {AccordionOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         // Support multiExpand as alias for allowMultiple
@@ -313,6 +410,11 @@ class Accordion extends Component {
         });
     }
 
+    /**
+     * Open or close a panel; closes the others unless allowMultiple.
+     * @param {number} index
+     * @returns {this}
+     */
     toggle(index) {
         const opts = this.options;
         const header = this._headers[index];
@@ -373,6 +475,11 @@ class Accordion extends Component {
         content.style.height = '0';
     }
 
+    /**
+     * Open a panel by index.
+     * @param {number} index
+     * @returns {this}
+     */
     open(index) {
         if (index >= 0 && index < this._headers.length) {
             this._open(index);
@@ -380,6 +487,11 @@ class Accordion extends Component {
         return this;
     }
 
+    /**
+     * Close a panel by index.
+     * @param {number} index
+     * @returns {this}
+     */
     close(index) {
         if (index >= 0 && index < this._headers.length) {
             this._close(index);
@@ -387,11 +499,19 @@ class Accordion extends Component {
         return this;
     }
 
+    /**
+     * Open every panel.
+     * @returns {this}
+     */
     openAll() {
         this._headers.forEach((_, i) => this._open(i));
         return this;
     }
 
+    /**
+     * Close every panel.
+     * @returns {this}
+     */
     closeAll() {
         this._headers.forEach((_, i) => this._close(i));
         return this;
@@ -402,6 +522,31 @@ class Accordion extends Component {
 // ListGroup Component
 // ============================================
 
+/**
+ * @typedef {'primary'|'secondary'|'success'|'danger'|'warning'|'info'} ListGroupVariant
+ */
+/**
+ * @typedef {object} ListGroupOptions
+ * @property {boolean} [selectable=false] - Items can be selected (role="listbox")
+ * @property {boolean} [multiSelect=false] - Allow several selected items at once
+ * @property {string} [activeClass='active'] - Class on selected items
+ * @property {string} [disabledClass='disabled'] - Class marking disabled items
+ * @property {string} [itemSelector='.list-group-item'] - Selector for the items
+ * @property {boolean} [keyboard=true] - Arrow keys, Home/End, Enter/Space
+ * @property {boolean} [loop=true] - Keyboard navigation wraps from last to first
+ * @property {boolean} [focusOnInit=false] - Focus the first enabled item on init
+ * @property {((selected: HTMLElement[], event: Event|null) => void)|null} [onChange] - Selection changed; the selected items
+ * @property {((item: HTMLElement, index: number, event: Event|null) => void)|null} [onSelect] - An item was selected
+ * @property {((item: HTMLElement, index: number, event: Event|null) => void)|null} [onDeselect] - An item was deselected
+ */
+/**
+ * A list group. `E.listGroup()` returns the first instance; `all()` (non-enumerable) lists every
+ * instance the selector made.
+ * @typedef {ListGroup & {all(): ListGroup[]}} ListGroupInstance
+ */
+/**
+ * ListGroup component.
+ */
 class ListGroup extends Component {
     static componentName = 'list-group';
 
@@ -419,6 +564,10 @@ class ListGroup extends Component {
         onDeselect: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The list-group element
+     * @param {ListGroupOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._items = [];
@@ -873,6 +1022,56 @@ class ListGroup extends Component {
 // Dropdown Component
 // ============================================
 
+/**
+ * A menu item. A plain string is an item whose label and value are the string.
+ * @typedef {object} DropdownItem
+ * @property {string} [label] - Display text
+ * @property {string} [text] - Alternative to label
+ * @property {string} [name] - Alternative to label
+ * @property {any} [value] - Value when selected (default: the item's index)
+ * @property {string} [icon] - Icon HTML
+ * @property {boolean} [disabled] - Shown greyed, not selectable
+ * @property {boolean} [divider] - Render as a divider
+ * @property {string} [header] - Render as a header with this text
+ */
+/**
+ * Passed to onSelect / `.on('select')`.
+ * @typedef {object} DropdownSelectEvent
+ * @property {DropdownItem|string} item
+ * @property {number} index
+ * @property {any} value
+ */
+/**
+ * @typedef {object} DropdownOptions
+ * @property {'click'|'hover'} [trigger='click'] - 'hover' also opens on click (touch has no hover)
+ * @property {DropdownPosition} [position='bottom-start'] - Preferred menu position - flipped or clamped if it would open off screen
+ * @property {[number, number]} [offset=[0, 4]] - Position offset [x, y]
+ * @property {boolean} [flip=true] - Flip to the opposite side and clamp to the viewport rather than open off screen
+ * @property {boolean} [animation=true] - Fade the menu
+ * @property {number} [animationDuration=150] - Animation duration in ms
+ * @property {number} [hoverOpenDelay=0] - ms before a hover opens the menu
+ * @property {number} [hoverCloseDelay=300] - ms of grace before a hover menu closes once the pointer has left trigger, menu and the gap between
+ * @property {boolean} [closeOnSelect=true] - Close after an item is chosen
+ * @property {boolean} [closeOnClickOutside=true] - Close on a click outside
+ * @property {boolean} [closeOnEscape=true] - Close on Esc and restore focus to the trigger
+ * @property {boolean} [closeOthers=true] - Opening this dropdown closes any other open one
+ * @property {(DropdownItem|string)[]} [items=[]] - Menu items
+ * @property {any} [model=null] - A Domma Model holding the items array (with modelKey)
+ * @property {string|null} [modelKey=null] - Model key for the items array
+ * @property {string} [selectedKey] - Model key the selected value is written to (default `<modelKey>_selected`)
+ * @property {((item: DropdownItem, index: number) => string)|null} [itemTemplate=null] - Item HTML for object items
+ * @property {((dropdown: DropdownInstance) => boolean|void)|null} [onBeforeOpen] - Return false to keep it closed
+ * @property {((dropdown: DropdownInstance) => void)|null} [onOpen] - Menu opened
+ * @property {((dropdown: DropdownInstance) => boolean|void)|null} [onBeforeClose] - Return false to keep it open
+ * @property {((dropdown: DropdownInstance) => void)|null} [onClose] - Menu closed
+ * @property {((event: DropdownSelectEvent, dropdown: DropdownInstance) => void)|null} [onSelect] - An item was chosen
+ */
+/**
+ * @typedef {Dropdown} DropdownInstance
+ */
+/**
+ * Dropdown menu attached to a trigger element.
+ */
 class Dropdown extends Component {
     static componentName = 'dropdown';
 
@@ -905,6 +1104,10 @@ class Dropdown extends Component {
     // screen at the same time, each convinced it was the only one.
     static _open = new Set();
 
+    /**
+     * @param {string|HTMLElement} selector - The trigger element
+     * @param {DropdownOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._menu = null;
@@ -1005,6 +1208,10 @@ class Dropdown extends Component {
         }
     }
 
+    /**
+     * Open the menu (onBeforeOpen may refuse).
+     * @returns {this}
+     */
     open() {
         clearTimeout(this._hoverOpenTimer);
         clearTimeout(this._hoverCloseTimer);
@@ -1053,6 +1260,10 @@ class Dropdown extends Component {
         return this;
     }
 
+    /**
+     * Close the menu (onBeforeClose may refuse).
+     * @returns {this}
+     */
     close() {
         clearTimeout(this._hoverOpenTimer);
         clearTimeout(this._hoverCloseTimer);
@@ -1091,6 +1302,9 @@ class Dropdown extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
@@ -1348,6 +1562,7 @@ class Dropdown extends Component {
      */
     _positionMenu() {
         if (!this._menu || !this.element) return;
+        layerAbove(this.element, this._menu);
 
         const opts = this.options;
         const rect = this.element.getBoundingClientRect();
@@ -1413,6 +1628,11 @@ class Dropdown extends Component {
         this._menu.style.left = left + 'px';
     }
 
+    /**
+     * Replace the menu items.
+     * @param {(DropdownItem|string)[]} items
+     * @returns {this}
+     */
     setItems(items) {
         this._items = [...items];
         if (this._isOpen) {
@@ -1422,6 +1642,10 @@ class Dropdown extends Component {
         return this;
     }
 
+    /**
+     * @param {DropdownItem|string} item
+     * @returns {this}
+     */
     addItem(item) {
         this._items.push(item);
         if (this._isOpen) {
@@ -1431,6 +1655,10 @@ class Dropdown extends Component {
         return this;
     }
 
+    /**
+     * @param {number} index
+     * @returns {this}
+     */
     removeItem(index) {
         this._items.splice(index, 1);
         if (this._isOpen) {
@@ -1440,14 +1668,24 @@ class Dropdown extends Component {
         return this;
     }
 
+    /**
+     * The value of the last chosen item, or null.
+     * @returns {any}
+     */
     getSelected() {
         return this._selectedValue;
     }
 
+    /**
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isOpen;
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         super.destroy();
         clearTimeout(this._hoverOpenTimer);
@@ -1479,6 +1717,21 @@ class Dropdown extends Component {
 // ============================================
 
 /**
+ * @typedef {object} DesktopNotificationOptions
+ * @property {string} [title='Notification'] - Notification title
+ * @property {string} [body=''] - Body text
+ * @property {string|null} [icon=null] - Icon URL
+ * @property {string|null} [badge=null] - Badge URL
+ * @property {string|null} [tag=null] - Tag: a new notification with the same tag replaces the old one
+ * @property {boolean} [requireInteraction=false] - Stay until the user dismisses it
+ * @property {boolean} [silent=false] - No sound or vibration
+ * @property {any} [data=null] - Data kept on the native notification
+ * @property {((event: Event, notification: DesktopNotification) => void)|null} [onClick] - Notification clicked
+ * @property {((event: Event, notification: DesktopNotification) => void)|null} [onClose] - Notification closed
+ * @property {((error: Error|Event, notification?: DesktopNotification) => void)|null} [onError] - Unsupported, permission denied, or the native notification failed
+ * @property {((event: Event, notification: DesktopNotification) => void)|null} [onShow] - Notification shown
+ */
+/**
  * DesktopNotification - Browser native notification wrapper
  * Provides a clean API for desktop notifications with permission handling
  */
@@ -1506,7 +1759,7 @@ class DesktopNotification {
 
     /**
      * Request notification permission
-     * @returns {Promise<string>} Permission state: 'granted', 'denied', or 'default'
+     * @returns {Promise<NotificationPermission>} Permission state: 'granted', 'denied', or 'default'
      */
     static async requestPermission() {
         if (!DesktopNotification.isSupported) {
@@ -1527,8 +1780,8 @@ class DesktopNotification {
     /**
      * Quick static method to show a notification
      * @param {string} title - Notification title
-     * @param {Object} options - Notification options
-     * @returns {DesktopNotification|null} Notification instance or null if not supported/denied
+     * @param {DesktopNotificationOptions} [options] - Notification options
+     * @returns {DesktopNotification} The notification (shown asynchronously; onError reports unsupported/denied)
      */
     static notify(title, options = {}) {
         const notification = new DesktopNotification({title, ...options});
@@ -1538,6 +1791,7 @@ class DesktopNotification {
 
     /**
      * Close all active notifications
+     * @returns {void}
      */
     static closeAll() {
         DesktopNotification._instances.forEach(instance => {
@@ -1550,17 +1804,19 @@ class DesktopNotification {
 
     /**
      * Constructor
-     * @param {Object} options - Notification options
+     * @param {DesktopNotificationOptions} [options] - Notification options
      */
     constructor(options = {}) {
+        /** The options in force. @type {DesktopNotificationOptions} */
         this.options = {...DesktopNotification.defaults, ...options};
+        /** The native notification once shown. @type {Notification|null} */
         this.notification = null;
         this._shown = false;
     }
 
     /**
-     * Show the notification
-     * @returns {Promise<this>} Resolves when notification is shown or rejects if denied/error
+     * Show the notification (asks for permission first when it has not been decided)
+     * @returns {Promise<this>} Resolves once shown, or at once when unsupported/denied (onError is called)
      */
     async show() {
         if (!DesktopNotification.isSupported) {
@@ -1689,6 +1945,26 @@ class DesktopNotification {
 // ============================================
 
 /**
+ * @typedef {object} TimerOptions
+ * @property {number} [duration=60000] - Countdown length in ms
+ * @property {boolean} [autoStart=false] - Start at once
+ * @property {'hh:mm:ss'|'mm:ss'|'ss'|string} [format='mm:ss'] - Display format (case-insensitive)
+ * @property {boolean} [showControls=false] - Show start/pause/reset buttons
+ * @property {number} [updateInterval=100] - Tick interval in ms
+ * @property {boolean} [notification=false] - Desktop notification on completion
+ * @property {DesktopNotificationOptions} [notificationOptions] - Options for that notification
+ * @property {boolean} [sound=false] - Play soundUrl on completion
+ * @property {string|null} [soundUrl=null] - Sound to play
+ * @property {((remaining: number) => void)|null} [onTick] - Every tick, with the ms remaining
+ * @property {(() => void)|null} [onComplete] - Reached zero
+ * @property {(() => void)|null} [onStart] - Started
+ * @property {(() => void)|null} [onPause] - Paused
+ * @property {(() => void)|null} [onReset] - Reset
+ */
+/**
+ * @typedef {Timer} TimerInstance
+ */
+/**
  * Timer - Countdown timer with optional visual display
  * Works in both visual mode (with DOM element) and headless mode (pure logic)
  */
@@ -1712,6 +1988,10 @@ class Timer extends Component {
         onReset: null
     };
 
+    /**
+     * @param {string|HTMLElement|null} [selector] - Where to draw the display; null for a headless timer
+     * @param {TimerOptions} [options]
+     */
     constructor(selector, options = {}) {
         // Must call super before accessing 'this' in derived class
         super(selector, options);
@@ -2074,6 +2354,7 @@ class Timer extends Component {
 
     /**
      * Destroy the timer
+     * @returns {void}
      */
     destroy() {
         this.stop();
@@ -2111,6 +2392,37 @@ class Timer extends Component {
 // ============================================
 
 /**
+ * One alarm. add() fills in the defaults and the id.
+ * @typedef {object} AlarmItem
+ * @property {string} [id] - Assigned by add() ('alarm-<n>')
+ * @property {string} time - Time of day, 'HH:MM'
+ * @property {string} [label] - Shown in the notification
+ * @property {boolean} [enabled=true]
+ * @property {null|'daily'|'weekdays'|'weekends'|string[]} [repeat=null] - null = once; an array of day names ('monday', ...)
+ * @property {boolean} [notification=true] - Desktop notification when it goes off
+ * @property {DesktopNotificationOptions} [notificationOptions] - Options for that notification
+ * @property {boolean} [sound=false] - Play soundUrl
+ * @property {string|null} [soundUrl=null]
+ * @property {number|null} [lastTriggered=null] - Timestamp (ms) it last went off
+ * @property {number|null} [snoozedUntil=null] - Timestamp (ms) a snooze ends
+ * @property {Date} [nextTrigger] - Set on the copy getNextAlarm() returns
+ */
+/**
+ * @typedef {object} AlarmOptions
+ * @property {AlarmItem[]} [alarms=[]] - Initial alarms, used when storage holds none
+ * @property {string} [timezone='local'] - Not read: times are local
+ * @property {number} [checkInterval=30000] - How often alarms are checked, in ms
+ * @property {string} [storageKey='domma-alarms'] - localStorage key
+ * @property {((alarm: AlarmItem) => void)|null} [onTrigger] - An alarm went off
+ * @property {((alarm: AlarmItem, duration: number) => void)|null} [onSnooze] - An alarm was snoozed
+ * @property {(() => void)|null} [onDismiss] - Not called by the current code
+ * @property {((alarm: AlarmItem) => void)|null} [onAlarmAdd] - add() added one
+ * @property {((alarm: AlarmItem) => void)|null} [onAlarmRemove] - removeAlarm() removed one
+ */
+/**
+ * @typedef {Alarm} AlarmInstance
+ */
+/**
  * Alarm - Scheduled time-based alerts with localStorage persistence
  * Singleton pattern - only one instance manages all alarms
  */
@@ -2133,7 +2445,7 @@ class Alarm {
 
     /**
      * Constructor - implements singleton pattern
-     * @param {Object} options - Alarm options
+     * @param {AlarmOptions} [options] - Alarm options (ignored once the instance exists)
      */
     constructor(options = {}) {
         // Singleton pattern - return existing instance if it exists
@@ -2141,6 +2453,7 @@ class Alarm {
             return Alarm._instance;
         }
 
+        /** @type {AlarmOptions} */
         this.options = {...Alarm.defaults, ...options};
         this._alarms = [];
         this._init();
@@ -2392,8 +2705,8 @@ class Alarm {
 
     /**
      * Add a new alarm
-     * @param {Object} alarm - Alarm configuration
-     * @returns {Object} Created alarm with ID
+     * @param {AlarmItem} alarm - Alarm configuration
+     * @returns {AlarmItem} Created alarm with ID
      */
     add(alarm) {
         const newAlarm = {
@@ -2439,7 +2752,11 @@ class Alarm {
         return true;
     }
 
-    /** Alias of removeAlarm(id), looked up by name at call time. */
+    /**
+     * Alias of removeAlarm(id), looked up by name at call time.
+     * @param {string} id
+     * @returns {boolean}
+     */
     remove(id) {
         return this.removeAlarm(id);
     }
@@ -2447,8 +2764,8 @@ class Alarm {
     /**
      * Update an alarm
      * @param {string} id - Alarm ID
-     * @param {Object} changes - Changes to apply
-     * @returns {Object|null} Updated alarm or null if not found
+     * @param {Partial<AlarmItem>} changes - Changes to apply
+     * @returns {AlarmItem|null} Updated alarm or null if not found
      */
     update(id, changes) {
         const alarm = this._alarms.find(a => a.id === id);
@@ -2481,7 +2798,7 @@ class Alarm {
     /**
      * Toggle alarm enabled state
      * @param {string} id - Alarm ID
-     * @returns {boolean} New enabled state or null if not found
+     * @returns {boolean|null} New enabled state or null if not found
      */
     toggle(id) {
         const alarm = this._alarms.find(a => a.id === id);
@@ -2496,7 +2813,7 @@ class Alarm {
     /**
      * Snooze an alarm for a duration
      * @param {string} id - Alarm ID
-     * @param {number} duration - Snooze duration in milliseconds (default 5 minutes)
+     * @param {number} [duration=300000] - Snooze duration in milliseconds (default 5 minutes)
      * @returns {boolean} True if snoozed
      */
     snooze(id, duration = 300000) {
@@ -2515,7 +2832,7 @@ class Alarm {
 
     /**
      * Get all alarms
-     * @returns {Array} Array of alarm objects
+     * @returns {AlarmItem[]} Array of alarm objects
      */
     getAlarms() {
         return [...this._alarms];
@@ -2524,7 +2841,7 @@ class Alarm {
     /**
      * Get a specific alarm by ID
      * @param {string} id - Alarm ID
-     * @returns {Object|null} Alarm object or null
+     * @returns {AlarmItem|null} Alarm object or null
      */
     getAlarm(id) {
         return this._alarms.find(a => a.id === id) || null;
@@ -2532,7 +2849,7 @@ class Alarm {
 
     /**
      * Get the next alarm that will trigger
-     * @returns {Object|null} Next alarm object with trigger time
+     * @returns {AlarmItem|null} Next alarm object with trigger time (`nextTrigger`)
      */
     getNextAlarm() {
         const now = new Date();
@@ -2612,6 +2929,36 @@ class Alarm {
 // Carousel Component
 // ============================================
 
+/**
+ * Passed to onChange / `.on('change')`.
+ * @typedef {object} CarouselChangeEvent
+ * @property {number} index
+ * @property {number} oldIndex
+ * @property {HTMLElement} slide
+ */
+/**
+ * @typedef {object} CarouselOptions
+ * @property {boolean} [autoplay=false] - Advance on a timer
+ * @property {number} [interval=5000] - Autoplay interval in ms
+ * @property {boolean} [pauseOnHover=true] - Pause autoplay on hover
+ * @property {boolean} [loop=true] - Wrap from the last slide to the first
+ * @property {'slide'|'fade'|'crossfade'} [animation='slide'] - 'slide' (track translate), 'fade' (clean swap), or 'crossfade' (overlapping opacity)
+ * @property {number} [animationDuration=500] - Animation duration in ms
+ * @property {string} [animationEasing='ease'] - Any CSS timing function ('ease', 'linear', 'ease-in-out', 'cubic-bezier(...)' etc.)
+ * @property {'crop'|'average'} [heightMode='crop'] - Image carousels: 'crop' = the shortest image, 'average' = halfway between shortest and tallest
+ * @property {number|null} [height=null] - Fixed viewport height in px
+ * @property {boolean} [showArrows=true] - Previous / next arrows
+ * @property {boolean} [showIndicators=true] - Indicator dots
+ * @property {string} [slideSelector='.carousel-slide, [data-slide]'] - Selector for slides
+ * @property {string} [activeClass='active'] - Class on the active slide
+ * @property {((event: CarouselChangeEvent) => void)|null} [onChange] - The slide changed
+ */
+/**
+ * @typedef {Carousel} CarouselInstance
+ */
+/**
+ * Carousel component.
+ */
 class Carousel extends Component {
     static componentName = 'carousel';
 
@@ -2632,6 +2979,10 @@ class Carousel extends Component {
         onChange: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The carousel element
+     * @param {CarouselOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._currentIndex = 0;
@@ -2952,6 +3303,11 @@ class Carousel extends Component {
         }
     }
 
+    /**
+     * Go to a slide (wraps when loop is on; ignored mid-animation).
+     * @param {number} index
+     * @returns {this}
+     */
     goTo(index) {
         if (this._isAnimating) return this;
 
@@ -2982,32 +3338,58 @@ class Carousel extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     next() {
         return this.goTo(this._currentIndex + 1);
     }
 
+    /**
+     * @returns {this}
+     */
     prev() {
         return this.goTo(this._currentIndex - 1);
     }
 
+    /**
+     * Start autoplay.
+     * @returns {this}
+     */
     play() {
         this._startAutoplay();
         return this;
     }
 
+    /**
+     * Stop autoplay.
+     * @returns {this}
+     */
     pause() {
         this._stopAutoplay();
         return this;
     }
 
+    /**
+     * The current slide index.
+     * @returns {number}
+     */
     getIndex() {
         return this._currentIndex;
     }
 
+    /**
+     * A slide element (default: the current one).
+     * @param {number} [index]
+     * @returns {HTMLElement|undefined}
+     */
     getSlide(index = this._currentIndex) {
         return this._slides[index];
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         super.destroy();
         this._stopAutoplay();
@@ -3031,6 +3413,55 @@ class Carousel extends Component {
 // CookieConsent Component
 // ============================================
 
+/**
+ * A cookie category in the customise panel.
+ * @typedef {object} CookieCategory
+ * @property {string} label
+ * @property {string} [description]
+ * @property {boolean} [required] - Always on; cannot be switched off
+ */
+/**
+ * @typedef {'accepted'|'rejected'|'customized'|'undecided'} CookieConsentState
+ */
+/**
+ * @typedef {object} CookieConsentOptions
+ * @property {string} [message] - Banner text
+ * @property {string} [acceptAllText='Accept All']
+ * @property {string} [rejectAllText='Reject All']
+ * @property {string} [customizeText='Customize']
+ * @property {string} [savePreferencesText='Save Preferences']
+ * @property {string} [privacyPolicyText='Privacy Policy']
+ * @property {string|null} [privacyPolicyUrl='/privacy-policy']
+ * @property {string} [cookiePolicyText='Cookie Policy']
+ * @property {string|null} [cookiePolicyUrl=null]
+ * @property {Record<string, CookieCategory>} [categories] - Default: necessary, functional, analytics, marketing
+ * @property {'bottom'|'top'|'bottom-left'|'bottom-right'|'center-modal'} [position='bottom']
+ * @property {'light'|'dark'|'auto'} [theme='light'] - 'auto' follows the system
+ * @property {'bar'|'box'|'modal'} [layout='bar']
+ * @property {boolean} [animation=true]
+ * @property {boolean} [backdrop=false] - Backdrop behind the modal layout
+ * @property {boolean} [autoShow=true] - Show on a first visit
+ * @property {boolean} [hideAfterAction=true] - Hide once a choice is made
+ * @property {string} [reopenSelector='[data-cookie-consent-open]'] - Elements that reopen the banner
+ * @property {string} [storageKey='domma-cookie-consent']
+ * @property {number} [storageDuration=365] - Days the choice is remembered
+ * @property {CookieConsentState} [defaultState='undecided']
+ * @property {boolean} [requireExplicitConsent=true] - GDPR mode: optional categories start off
+ * @property {string} [consentVersion='1.0'] - Bump when the policy changes to ask again
+ * @property {((oldVersion: string, newVersion: string) => void)|null} [onVersionMismatch] - The stored choice was for another version
+ * @property {((preferences: Record<string, boolean>) => void)|null} [onAccept] - Accept all, or saved custom preferences
+ * @property {(() => void)|null} [onReject]
+ * @property {((preferences: Record<string, boolean>) => void)|null} [onCustomize] - The customise panel opened
+ * @property {((state: CookieConsentState, preferences: Record<string, boolean>) => void)|null} [onChange]
+ * @property {(() => void)|null} [onShow]
+ * @property {(() => void)|null} [onHide]
+ */
+/**
+ * @typedef {CookieConsent} CookieConsentInstance
+ */
+/**
+ * Cookie consent banner (one per page).
+ */
 class CookieConsent extends Component {
     static componentName = 'cookie-consent';
 
@@ -3099,6 +3530,9 @@ class CookieConsent extends Component {
         onHide: null
     };
 
+    /**
+     * @param {CookieConsentOptions} [options]
+     */
     constructor(options = {}) {
         super(null, options);  // No selector needed
         this._state = null;
@@ -3360,6 +3794,10 @@ class CookieConsent extends Component {
         });
     }
 
+    /**
+     * Show the banner.
+     * @returns {this}
+     */
     open() {
         if (this._isVisible) return this;
 
@@ -3382,6 +3820,10 @@ class CookieConsent extends Component {
         return this;
     }
 
+    /**
+     * Hide the banner.
+     * @returns {this}
+     */
     close() {
         if (!this._isVisible) return this;
 
@@ -3405,20 +3847,44 @@ class CookieConsent extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     toggle() {
         return this.isOpen() ? this.close() : this.open();
     }
 
+    /**
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isVisible;
     }
 
     // Permanent aliases. They look open/close up by name at call time, so a guard
     // patched onto instance.close still runs.
+    /**
+     * Alias of open().
+     * @param {...any} args
+     * @returns {this}
+     */
     show(...args) { return this.open(...args); }
+    /**
+     * Alias of close().
+     * @param {...any} args
+     * @returns {this}
+     */
     hide(...args) { return this.close(...args); }
+    /**
+     * Alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() { return this.isOpen(); }
 
+    /**
+     * Accept every category.
+     * @returns {void}
+     */
     accept() {
         // Accept all categories
         Object.keys(this.options.categories).forEach(key => {
@@ -3443,6 +3909,10 @@ class CookieConsent extends Component {
         }
     }
 
+    /**
+     * Reject every optional category.
+     * @returns {void}
+     */
     reject() {
         // Reject all non-necessary categories
         Object.entries(this.options.categories).forEach(([key, category]) => {
@@ -3467,6 +3937,10 @@ class CookieConsent extends Component {
         }
     }
 
+    /**
+     * Open the customise panel.
+     * @returns {void}
+     */
     showCustomize() {
         this._createCustomizeModal();
 
@@ -3492,6 +3966,9 @@ class CookieConsent extends Component {
         this._emit('customize', this._preferences);
     }
 
+    /**
+     * @returns {void}
+     */
     hideCustomize() {
         if (!this._customizeModal) return;
 
@@ -3508,6 +3985,10 @@ class CookieConsent extends Component {
         }
     }
 
+    /**
+     * Save the customise panel's toggles.
+     * @returns {void}
+     */
     saveCustomPreferences() {
         // Update preferences from toggles
         this._customizeModal.querySelectorAll('.dm-cookie-consent-category-toggle').forEach(toggle => {
@@ -3535,14 +4016,26 @@ class CookieConsent extends Component {
         }
     }
 
+    /**
+     * @returns {CookieConsentState|null}
+     */
     getState() {
         return this._state;
     }
 
+    /**
+     * A copy of the per-category choices.
+     * @returns {Record<string, boolean>}
+     */
     getPreferences() {
         return {...this._preferences};
     }
 
+    /**
+     * Whether a category was accepted, or (no category) whether consent was given.
+     * @param {string|null} [category]
+     * @returns {boolean}
+     */
     isAccepted(category = null) {
         if (category) {
             return this._preferences[category] === true;
@@ -3550,6 +4043,10 @@ class CookieConsent extends Component {
         return this._state === 'accepted' || this._state === 'customized';
     }
 
+    /**
+     * Forget the stored choice.
+     * @returns {void}
+     */
     reset() {
         this._state = this.options.defaultState;
         this._preferences = {};
@@ -3567,6 +4064,9 @@ class CookieConsent extends Component {
         this._emit('change', this._state, this._preferences);
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         this.close();
         this.hideCustomize();
@@ -3590,6 +4090,29 @@ class CookieConsent extends Component {
 // Dialog Component (Alert, Confirm, Prompt)
 // ============================================
 
+/**
+ * Options for E.alert / E.confirm / E.prompt (and E.dialog.*).
+ * @typedef {object} DialogOptions
+ * @property {string} [title=''] - Heading (basic HTML, sanitised)
+ * @property {string} [message=''] - Message (basic HTML, sanitised); the first argument wins
+ * @property {string} [confirmText='OK'] - Confirm button label
+ * @property {string} [cancelText='Cancel'] - Cancel button label (confirm and prompt)
+ * @property {string} [inputPlaceholder=''] - Prompt: input placeholder
+ * @property {string} [inputValue=''] - Prompt: initial value
+ * @property {string} [inputType='text'] - Prompt: input type
+ * @property {boolean} [animation=true]
+ * @property {boolean} [backdrop=true]
+ * @property {boolean} [backdropClose=false] - A backdrop click cancels
+ * @property {boolean} [keyboard=true] - Esc cancels, Enter confirms
+ * @property {boolean} [danger=false] - Danger-styled confirm; focus starts on Cancel
+ * @property {boolean} [trapFocus=true] - Tab stays in the dialog
+ * @property {boolean} [returnFocus=true] - Answering puts focus back where it was
+ * @property {string} [className=''] - Extra class on the dialog
+ */
+
+/**
+ * Promise-based alert, confirm and prompt dialogs.
+ */
 const Dialog = {
     _container: null,
     // Open dialogs ({overlay, handler}), oldest first; only the top one answers.
@@ -3616,6 +4139,8 @@ const Dialog = {
         backdropClose: false,
         keyboard: true,
         danger: false,
+        trapFocus: true,        // Tab stays in the dialog
+        returnFocus: true,      // answering puts focus back where it was
         className: ''
     },
 
@@ -3684,15 +4209,33 @@ const Dialog = {
             const cancelBtn = dialog.querySelector('.dm-dialog-cancel');
             const input = dialog.querySelector('.dm-dialog-input');
 
+            // Tab stays in the dialog until it is answered. Started before anything inside
+            // takes focus (select() below does, in Chrome), so it knows where to hand focus
+            // back; the first focus is placed below, after 50ms as it always was.
+            const trap = opts.trapFocus !== false && opts.trapFocus !== 'false'
+                ? createFocusTrap(dialog, {
+                    initialFocus: false,
+                    returnFocus: true,
+                    escapeDeactivates: false,   // Escape is the dialog's (cancel)
+                    allowOutsideClick: true,
+                    allowOutsideFocus: 'layers',
+                    allowScriptFocus: true,
+                    register: false
+                })
+                : null;
+            trap?.activate();
+
             // Focus management - a destructive confirm starts on Cancel, so a
             // stray Enter or Space never throws anything away.
             const focusTarget = input || (opts.danger && cancelBtn) || confirmBtn;
-            setTimeout(() => focusTarget?.focus(), 50);
+            // Not once answered: focus has gone back to where it was by then.
+            setTimeout(() => { if (!settled) focusTarget?.focus(); }, 50);
 
             // Select input text if present
             if (input) {
                 input.select();
             }
+
 
             // Cleanup function - settles once, whichever way the dialog closes
             let settled = false;
@@ -3701,6 +4244,10 @@ const Dialog = {
                 if (settled) return;
                 settled = true;
                 detachKeys();
+                if (trap) {
+                    trap.deactivate({returnFocus: opts.returnFocus !== false && opts.returnFocus !== 'false'});
+                    trap.destroy();
+                }
                 if (opts.animation) {
                     overlay.classList.add('dm-dialog-closing');
                     setTimeout(() => {
@@ -3815,9 +4362,9 @@ const Dialog = {
 
     /**
      * Show an alert dialog
-     * @param {string} message - The message to display
-     * @param {object} options - Optional configuration
-     * @returns {Promise<void>}
+     * @param {string|DialogOptions} message - The message to display, or the options
+     * @param {DialogOptions} [options] - Optional configuration
+     * @returns {Promise<undefined|false>} Resolves undefined on OK, false when dismissed (Esc / backdrop)
      */
     alert(message, options = {}) {
         if (typeof message === 'object') {
@@ -3829,8 +4376,8 @@ const Dialog = {
 
     /**
      * Show a confirm dialog
-     * @param {string} message - The message to display
-     * @param {object} options - Optional configuration
+     * @param {string|DialogOptions} message - The message to display, or the options
+     * @param {DialogOptions} [options] - Optional configuration
      * @returns {Promise<boolean>} - True if confirmed, false if cancelled
      */
     confirm(message, options = {}) {
@@ -3843,8 +4390,8 @@ const Dialog = {
 
     /**
      * Show a prompt dialog
-     * @param {string} message - The message to display
-     * @param {object} options - Optional configuration
+     * @param {string|DialogOptions} message - The message to display, or the options
+     * @param {DialogOptions} [options] - Optional configuration
      * @returns {Promise<string|null>} - Input value if confirmed, null if cancelled
      */
     prompt(message, options = {}) {
@@ -3860,6 +4407,21 @@ const Dialog = {
 // ButtonGroup Component
 // ============================================
 
+/**
+ * @typedef {object} ButtonGroupOptions
+ * @property {'single'|'multiple'} [mode='single'] - 'single' behaves like radios, 'multiple' like checkboxes
+ * @property {string} [activeClass='active'] - Class on active buttons
+ * @property {boolean} [allowEmpty=false] - Single mode: clicking the active button deselects it
+ * @property {((value: number|number[]|null, index: number, button: HTMLElement|null) => void)|null} [onChange] - Selection changed (index -1 from selectAll/deselectAll)
+ */
+/**
+ * A button group. `E.buttonGroup()` returns the first instance; `all()` (non-enumerable) lists every
+ * instance the selector made.
+ * @typedef {ButtonGroup & {all(): ButtonGroup[]}} ButtonGroupInstance
+ */
+/**
+ * Toggle group over a container's `.btn` children.
+ */
 class ButtonGroup extends Component {
     static componentName = 'button-group';
 
@@ -3870,6 +4432,10 @@ class ButtonGroup extends Component {
         onChange: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The group container
+     * @param {ButtonGroupOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._init();
@@ -3996,6 +4562,27 @@ class ButtonGroup extends Component {
 // Breadcrumbs Component
 // ============================================
 
+/**
+ * A breadcrumb. A plain string is a crumb with that text and no link.
+ * @typedef {object} BreadcrumbItem
+ * @property {string} text - Label (HTML)
+ * @property {string} [url] - Link (default '#'); the last item is never a link
+ * @property {boolean} [active] - Render as the current page
+ */
+/**
+ * @typedef {object} BreadcrumbsOptions
+ * @property {(BreadcrumbItem|string)[]} [items=[]]
+ * @property {'/'|'>'|'→'|'chevron'|string} [separator='/'] - A preset, or custom HTML
+ * @property {boolean} [homeIcon=false] - Home icon on the first item
+ * @property {boolean} [responsive=true] - Collapse on small screens
+ * @property {((item: BreadcrumbItem|string, index: number, event: MouseEvent) => void)|null} [onChange] - A crumb link was clicked (setting it prevents navigation)
+ */
+/**
+ * @typedef {Breadcrumbs} BreadcrumbsInstance
+ */
+/**
+ * Breadcrumb trail rendered into an element.
+ */
 class Breadcrumbs extends Component {
     static componentName = 'breadcrumbs';
 
@@ -4014,6 +4601,10 @@ class Breadcrumbs extends Component {
         'chevron': '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The element to render into
+     * @param {BreadcrumbsOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._init();
@@ -4085,12 +4676,21 @@ class Breadcrumbs extends Component {
         });
     }
 
+    /**
+     * @param {(BreadcrumbItem|string)[]} items
+     * @returns {this}
+     */
     setItems(items) {
         this.options.items = items;
         this._render();
         return this;
     }
 
+    /**
+     * Append a crumb (it becomes the current page).
+     * @param {BreadcrumbItem|string} item
+     * @returns {this}
+     */
     addItem(item) {
         // Remove active from previous last item
         if (this.options.items.length > 0) {
@@ -4104,6 +4704,10 @@ class Breadcrumbs extends Component {
         return this;
     }
 
+    /**
+     * @param {number} index
+     * @returns {this}
+     */
     removeItem(index) {
         if (index >= 0 && index < this.options.items.length) {
             this.options.items.splice(index, 1);
@@ -4112,6 +4716,9 @@ class Breadcrumbs extends Component {
         return this;
     }
 
+    /**
+     * @returns {(BreadcrumbItem|string)[]}
+     */
     getItems() {
         return [...this.options.items];
     }
@@ -4121,6 +4728,50 @@ class Breadcrumbs extends Component {
 // Navbar Component
 // ============================================
 
+/**
+ * A navbar link; `items` makes it a dropdown (nested `items` make flyouts).
+ * @typedef {object} NavbarItem
+ * @property {string} [text] - Label
+ * @property {string} [url] - Link
+ * @property {string} [icon] - Domma icon name
+ * @property {boolean} [active] - Highlighted as the current page
+ * @property {boolean} [external] - Opens in a new tab
+ * @property {boolean} [divider] - Inside a dropdown: a divider
+ * @property {NavbarItem[]} [items] - Dropdown entries
+ */
+/**
+ * @typedef {object} NavbarBrand
+ * @property {string} [text]
+ * @property {string} [logo] - Logo image URL
+ * @property {string} [url] - Brand link
+ * @property {string} [html] - Brand markup instead of text/logo
+ */
+/**
+ * @typedef {object} NavbarAction
+ * @property {string} [text]
+ * @property {string} [url]
+ * @property {string} [icon] - Domma icon name
+ * @property {string} [variant] - Button variant ('primary', 'outline', ...)
+ */
+/**
+ * @typedef {object} NavbarOptions
+ * @property {NavbarBrand|null} [brand=null]
+ * @property {NavbarItem[]} [items=[]]
+ * @property {'static'|'fixed'|'sticky'} [position='static']
+ * @property {'light'|'dark'|'transparent'|string} [variant='light']
+ * @property {boolean} [collapsible=true] - Hamburger menu on small screens
+ * @property {number} [collapseAt=993] - Below this width (px) the bar is collapsed
+ * @property {boolean} [appearOnHover=false] - Desktop: open dropdowns/flyouts on hover (click still works)
+ * @property {number} [hoverCloseDelay=250] - ms of grace when the pointer leaves the bar
+ * @property {NavbarAction[]} [actions=[]] - Right-side buttons
+ * @property {((item: NavbarItem, index: number, event: MouseEvent, parent?: NavbarItem) => void)|null} [onItemClick] - A link was clicked (sub-items also get the parent)
+ */
+/**
+ * @typedef {Navbar} NavbarInstance
+ */
+/**
+ * Responsive navigation bar rendered into an element.
+ */
 class Navbar extends Component {
     static componentName = 'navbar';
 
@@ -4141,6 +4792,10 @@ class Navbar extends Component {
         onItemClick: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The element to render into
+     * @param {NavbarOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._isCollapsed = true;
@@ -4482,6 +5137,11 @@ class Navbar extends Component {
         });
     }
 
+    /**
+     * Mark one top-level item active.
+     * @param {number} index
+     * @returns {this}
+     */
     setActive(index) {
         this.options.items.forEach((item, i) => {
             item.active = i === index;
@@ -4490,12 +5150,20 @@ class Navbar extends Component {
         return this;
     }
 
+    /**
+     * @param {NavbarItem[]} items
+     * @returns {this}
+     */
     setItems(items) {
         this.options.items = items;
         this._render();
         return this;
     }
 
+    /**
+     * Open the collapsed (mobile) menu.
+     * @returns {this}
+     */
     expand() {
         if (this._collapse) {
             this._collapse.classList.add('show');
@@ -4507,6 +5175,10 @@ class Navbar extends Component {
         return this;
     }
 
+    /**
+     * Close the collapsed (mobile) menu.
+     * @returns {this}
+     */
     collapse() {
         if (this._collapse) {
             this._collapse.classList.remove('show');
@@ -4518,14 +5190,23 @@ class Navbar extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     toggle() {
         return this._isCollapsed ? this.expand() : this.collapse();
     }
 
+    /**
+     * @returns {boolean}
+     */
     isCollapsed() {
         return this._isCollapsed;
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         clearTimeout(this._navCloseTimer);
         this._pinned = null;
@@ -4539,6 +5220,59 @@ class Navbar extends Component {
 // Sidebar Component
 // ============================================
 
+/**
+ * A sidebar entry: a link, a heading, a divider, or (with `items`) an expandable group.
+ * @typedef {object} SidebarItem
+ * @property {string} [text] - Label (HTML)
+ * @property {string} [url] - Link
+ * @property {string} [icon] - Domma icon name
+ * @property {string} [section] - Section key; setActive(section) highlights it, and clicking it makes it active
+ * @property {string|number} [badge] - Badge text
+ * @property {string} [heading] - Render as a heading with this text
+ * @property {boolean} [divider] - Render as a divider
+ * @property {SidebarItem[]} [items] - Children (an expandable group)
+ */
+/**
+ * @typedef {object} SidebarOptions
+ * @property {'left'|'right'} [position='left']
+ * @property {boolean} [fixed=true] - Fixed rather than static positioning
+ * @property {string} [width='250px']
+ * @property {string} [top='0'] - Top offset, e.g. '60px' under a navbar
+ * @property {{title?: string, toggle?: boolean, icon?: string}|null} [header=null] - Header; `toggle: false` hides its close button
+ * @property {SidebarItem[]} [items=[]]
+ * @property {{text?: string, html?: string}|null} [footer=null]
+ * @property {'light'|'dark'|'theme'} [variant='dark'] - 'theme' follows the active theme
+ * @property {boolean} [collapsible=true] - Toggle on small screens
+ * @property {number} [collapseAt=768] - Breakpoint in px
+ * @property {string|null} [activeSection=null] - Initially active section
+ * @property {string[]} [expandedSections=[]] - Initially expanded groups (their paths)
+ * @property {boolean} [persistExpanded=false] - Remember expanded groups in localStorage
+ * @property {string|null} [persistKey=null] - Storage key for that
+ * @property {number} [animationDuration=200] - ms
+ * @property {boolean} [push=true] - Push the content aside rather than overlay it
+ * @property {string} [contentSelector='.main-content'] - The content pushed aside
+ * @property {boolean} [scrollSpy=false] - Track the active section while scrolling
+ * @property {string} [scrollSpyOffset='-100px 0px -50% 0px'] - IntersectionObserver rootMargin
+ * @property {number} [scrollSpyThreshold=0.5] - IntersectionObserver threshold
+ * @property {boolean} [floating=false] - Floating toggle at the bottom left
+ * @property {string|null} [customContent=null] - HTML to show instead of items
+ * @property {boolean} [collapsibleDesktop=false] - Desktop collapse to icons only
+ * @property {string} [collapsedWidth='60px'] - Width when collapsed
+ * @property {boolean} [persistCollapsed=false] - Remember the collapsed state
+ * @property {string|null} [persistCollapseKey=null] - Storage key for that
+ * @property {((item: SidebarItem|null, path: string, event: MouseEvent) => void)|null} [onItemClick] - A link was clicked; path is its index path ('2.0')
+ * @property {(() => boolean|void)|null} [onBeforeOpen] - Return false to keep it closed
+ * @property {(() => boolean|void)|null} [onBeforeClose] - Return false to keep it open
+ * @property {((isOpen: boolean) => void)|null} [onToggle] - Opened or closed
+ * @property {((item?: SidebarItem, depth?: number) => void)|null} [onExpand] - A group expanded (no arguments: the desktop sidebar expanded)
+ * @property {((item?: SidebarItem, depth?: number) => void)|null} [onCollapse] - A group collapsed (no arguments: the desktop sidebar collapsed)
+ */
+/**
+ * @typedef {Sidebar} SidebarInstance
+ */
+/**
+ * Navigation sidebar rendered into an element.
+ */
 class Sidebar extends Component {
     static componentName = 'sidebar';
 
@@ -4577,6 +5311,10 @@ class Sidebar extends Component {
         onCollapse: null            // Submenu collapse callback (item, depth)
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The element to render into
+     * @param {SidebarOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._isOpen = false;
@@ -5065,6 +5803,10 @@ class Sidebar extends Component {
 
     // Public API
 
+    /**
+     * Open (small screens; onBeforeOpen may refuse).
+     * @returns {this}
+     */
     open() {
         if (this._isOpen) return this;
         if (this._fire('beforeopen') === false) return this;
@@ -5089,6 +5831,10 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * Close (onBeforeClose may refuse).
+     * @returns {this}
+     */
     close() {
         if (!this._isOpen) return this;
         if (!this._mayClose()) return this;
@@ -5110,20 +5856,44 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
 
+    /**
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isOpen;
     }
 
     // Permanent aliases. They look open/close up by name at call time, so a guard
     // patched onto instance.close still runs.
+    /**
+     * Alias of open().
+     * @param {...any} args
+     * @returns {this}
+     */
     show(...args) { return this.open(...args); }
+    /**
+     * Alias of close().
+     * @param {...any} args
+     * @returns {this}
+     */
     hide(...args) { return this.close(...args); }
+    /**
+     * Alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() { return this.isOpen(); }
 
+    /**
+     * Desktop: collapse to icons only (collapsibleDesktop).
+     * @returns {this}
+     */
     collapse() {
         if (!this.options.collapsibleDesktop || this._isCollapsed) return this;
 
@@ -5142,6 +5912,10 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * Desktop: expand from icons only.
+     * @returns {this}
+     */
     expand() {
         if (!this.options.collapsibleDesktop || !this._isCollapsed) return this;
 
@@ -5215,14 +5989,25 @@ class Sidebar extends Component {
         }
     }
 
+    /**
+     * @returns {this}
+     */
     toggleCollapse() {
         return this._isCollapsed ? this.expand() : this.collapse();
     }
 
+    /**
+     * @returns {boolean}
+     */
     isCollapsed() {
         return this._isCollapsed;
     }
 
+    /**
+     * Highlight the links of a section.
+     * @param {string} section
+     * @returns {this}
+     */
     setActive(section) {
         this.options.activeSection = section;
 
@@ -5238,6 +6023,10 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * @param {SidebarItem[]} items
+     * @returns {this}
+     */
     setItems(items) {
         this.options.items = items;
         this._expandedItems.clear();
@@ -5247,6 +6036,11 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * @param {SidebarItem} item
+     * @param {number|null} [index=null] - Position; null appends
+     * @returns {this}
+     */
     addItem(item, index = null) {
         if (index === null || index >= this.options.items.length) {
             this.options.items.push(item);
@@ -5259,6 +6053,10 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * @param {number} index
+     * @returns {this}
+     */
     removeItem(index) {
         if (index >= 0 && index < this.options.items.length) {
             this.options.items.splice(index, 1);
@@ -5269,6 +6067,10 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * Expand every group.
+     * @returns {this}
+     */
     expandAll() {
         this.element.querySelectorAll('.sidebar-item.has-children').forEach(item => {
             const path = item.dataset.path;
@@ -5282,6 +6084,10 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * Collapse every group.
+     * @returns {this}
+     */
     collapseAll() {
         this.element.querySelectorAll('.sidebar-item.has-children.open').forEach(item => {
             const path = item.dataset.path;
@@ -5295,6 +6101,9 @@ class Sidebar extends Component {
         return this;
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         // Disconnect scroll-spy observer
         if (this._scrollSpyObserver) {
@@ -5314,6 +6123,48 @@ class Sidebar extends Component {
 // Footer Component
 // ============================================
 
+/**
+ * @typedef {object} FooterLink
+ * @property {string} [text]
+ * @property {string} [url]
+ * @property {string} [icon] - Domma icon name
+ */
+/**
+ * @typedef {object} FooterBrand
+ * @property {string} [text]
+ * @property {string} [logo] - Logo image URL
+ * @property {string} [url]
+ * @property {string} [description]
+ */
+/**
+ * @typedef {object} FooterColumn
+ * @property {string} [title]
+ * @property {FooterLink[]} [links]
+ */
+/**
+ * @typedef {object} FooterSocial
+ * @property {string} icon - Domma icon name
+ * @property {string} [url]
+ * @property {string} [label] - Accessible name (default: the icon name)
+ */
+/**
+ * @typedef {object} FooterOptions
+ * @property {'light'|'dark'|'transparent'|string} [variant='light']
+ * @property {'simple'|'columns'|'minimal'} [layout='simple']
+ * @property {FooterBrand|null} [brand=null]
+ * @property {FooterColumn[]} [columns=[]] - For the 'columns' layout
+ * @property {FooterLink[]} [links=[]] - Simple link list
+ * @property {FooterSocial[]} [social=[]] - Social icons
+ * @property {string|{text?: string, year?: number}|null} [copyright=null] - Text, or the year for '© <year> All rights reserved'
+ * @property {string} [className=''] - Extra classes
+ * @property {'static'|'fixed'|'sticky'} [position='static']
+ */
+/**
+ * @typedef {Footer} FooterInstance
+ */
+/**
+ * Site footer rendered into an element.
+ */
 class Footer extends Component {
     static componentName = 'footer';
 
@@ -5329,6 +6180,10 @@ class Footer extends Component {
         position: 'static'          // 'static', 'fixed', 'sticky'
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The element to render into
+     * @param {FooterOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._init();
@@ -5522,6 +6377,10 @@ class Footer extends Component {
 
     // Public API
 
+    /**
+     * @param {FooterBrand|null} brand
+     * @returns {this}
+     */
     setBrand(brand) {
         this.options.brand = brand;
         this._render();
@@ -5529,6 +6388,10 @@ class Footer extends Component {
         return this;
     }
 
+    /**
+     * @param {FooterLink[]} links
+     * @returns {this}
+     */
     setLinks(links) {
         this.options.links = links;
         this._render();
@@ -5536,6 +6399,10 @@ class Footer extends Component {
         return this;
     }
 
+    /**
+     * @param {FooterColumn[]} columns
+     * @returns {this}
+     */
     setColumns(columns) {
         this.options.columns = columns;
         this._render();
@@ -5543,6 +6410,10 @@ class Footer extends Component {
         return this;
     }
 
+    /**
+     * @param {FooterSocial[]} social
+     * @returns {this}
+     */
     setSocial(social) {
         this.options.social = social;
         this._render();
@@ -5550,6 +6421,10 @@ class Footer extends Component {
         return this;
     }
 
+    /**
+     * @param {string|{text?: string, year?: number}|null} copyright
+     * @returns {this}
+     */
     setCopyright(copyright) {
         this.options.copyright = copyright;
         this._render();
@@ -5560,6 +6435,43 @@ class Footer extends Component {
 // Autocomplete Component
 // ============================================
 
+/**
+ * A suggestion: a string, or an object shown by `label` and written as `value`.
+ * @typedef {string|{label?: string, value?: string, [key: string]: any}} AutocompleteItem
+ */
+/**
+ * @typedef {object} AutocompleteOptions
+ * @property {AutocompleteItem[]} [data=[]] - Suggestions to filter
+ * @property {((query: string) => AutocompleteItem[]|Promise<AutocompleteItem[]>)|null} [dataSource=null] - Fetch suggestions instead of filtering data
+ * @property {number} [minChars=1] - Characters typed before suggesting
+ * @property {number} [maxResults=10]
+ * @property {number} [debounce=300] - ms
+ * @property {((item: AutocompleteItem, query: string) => boolean)|null} [filterFn=null] - Replaces the default contains-match
+ * @property {((item: AutocompleteItem, query: string) => string|Node)|null} [renderItem=null] - Suggestion HTML or a node
+ * @property {boolean} [highlightMatches=true]
+ * @property {'auto'|'above'|'below'} [position='auto'] - Where the list opens; 'auto' picks the side with room
+ * @property {string} [placeholder='']
+ * @property {string} [emptyMessage='No results found']
+ * @property {string} [loadingMessage='Loading...']
+ * @property {boolean} [caseSensitive=false]
+ * @property {boolean} [selectOnEnter=true]
+ * @property {boolean} [clearOnSelect=false] - Empty the input after a choice
+ * @property {any} [model] - A Domma Model the typed value is written to (with modelKey)
+ * @property {string} [modelKey]
+ * @property {((item: AutocompleteItem, event: {target: HTMLElement}) => void)|null} [onSelect] - A suggestion was chosen
+ * @property {((value: string, event: Event) => void)|null} [onChange] - The input's value changed
+ * @property {(() => boolean|void)|null} [onBeforeOpen] - Return false to keep it closed
+ * @property {(() => void)|null} [onOpen]
+ * @property {(() => boolean|void)|null} [onBeforeClose] - Return false to keep it open
+ * @property {(() => void)|null} [onClose]
+ * @property {((results: AutocompleteItem[], query: string) => AutocompleteItem[]|void)|null} [onFilter] - May return a replacement result list
+ */
+/**
+ * @typedef {Autocomplete} AutocompleteInstance
+ */
+/**
+ * Suggestions under a text input.
+ */
 class Autocomplete extends Component {
     static componentName = 'autocomplete';
 
@@ -5588,6 +6500,10 @@ class Autocomplete extends Component {
         onFilter: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The input
+     * @param {AutocompleteOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this.model = options.model || null;
@@ -5984,6 +6900,9 @@ class Autocomplete extends Component {
 
     // Public methods
 
+    /**
+     * @returns {this}
+     */
     open() {
         if (this._isOpen) return this;
         if (this._fire('beforeopen') === false) return this;
@@ -5998,6 +6917,9 @@ class Autocomplete extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     close() {
         if (!this._isOpen) return this;
         if (!this._mayClose()) return this;
@@ -6012,34 +6934,71 @@ class Autocomplete extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
 
+    /**
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isOpen;
     }
 
     // Permanent aliases. They look open/close up by name at call time, so a guard
     // patched onto instance.close still runs.
+    /**
+     * Alias of open().
+     * @param {...any} args
+     * @returns {this}
+     */
     show(...args) { return this.open(...args); }
+    /**
+     * Alias of close().
+     * @param {...any} args
+     * @returns {this}
+     */
     hide(...args) { return this.close(...args); }
+    /**
+     * Alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() { return this.isOpen(); }
 
+    /**
+     * Set the input's value (no events).
+     * @param {string} value
+     * @returns {this}
+     */
     setValue(value) {
         this.element.value = value;
         return this;
     }
 
+    /**
+     * @returns {string}
+     */
     getValue() {
         return this.element.value;
     }
 
+    /**
+     * Replace the suggestions.
+     * @param {AutocompleteItem[]} data
+     * @returns {this}
+     */
     setData(data) {
         this.options.data = data;
         return this;
     }
 
+    /**
+     * Filter again for the current value.
+     * @returns {this}
+     */
     refresh() {
         const value = this.element.value;
         if (value.length >= this.options.minChars) {
@@ -6048,17 +7007,27 @@ class Autocomplete extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     focus() {
         this.element.focus();
         return this;
     }
 
+    /**
+     * Empty the input and close the list.
+     * @returns {this}
+     */
     clearValue() {
         this.element.value = '';
         this.close();
         return this;
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         this._forcedClose();
         if (this._dropdown && this._dropdown.parentNode) {
@@ -6079,6 +7048,47 @@ class Autocomplete extends Component {
 // Pillbox Component
 // ============================================
 
+/**
+ * An option: a string, or an object shown by `label` and stored as `value`.
+ * @typedef {string|{value: string, label?: string, disabled?: boolean, [key: string]: any}} PillboxItem
+ */
+/**
+ * @typedef {object} PillboxOptions
+ * @property {PillboxItem[]} [data=[]] - Options to choose from
+ * @property {string[]} [value=[]] - Initial values
+ * @property {string} [placeholder='Add items...']
+ * @property {boolean} [searchable=true] - Filter the options while typing
+ * @property {boolean} [creatable=false] - Enter adds typed text that is not an option
+ * @property {number|null} [maxItems=null]
+ * @property {boolean} [duplicates=false]
+ * @property {boolean} [clearable=true] - Clear-all button
+ * @property {'small'|'medium'|'large'|string} [size='medium']
+ * @property {((pill: {value: string, label: string}) => string|Node)|null} [renderPill=null] - Pill HTML or a node
+ * @property {((item: PillboxItem) => string|Node)|null} [renderOption=null] - Option HTML or a node
+ * @property {string} [pillTemplate='<span>{label}</span>'] - Pill HTML when there is no renderPill
+ * @property {((value: string) => boolean|string|void)|null} [validatePill=null] - true/undefined accepts; a string is the error message
+ * @property {string} [maxItemsMessage='Maximum {max} items allowed']
+ * @property {string} [duplicateMessage='Item already exists']
+ * @property {string} [noResultsMessage='No results found']
+ * @property {any} [model] - A Domma Model the values are kept in (with modelKey)
+ * @property {string} [modelKey]
+ * @property {(() => boolean|void)|null} [onBeforeOpen] - Return false to keep it closed
+ * @property {(() => void)|null} [onOpen]
+ * @property {(() => boolean|void)|null} [onBeforeClose] - Return false to keep it open
+ * @property {(() => void)|null} [onClose]
+ * @property {((value: string, pill: HTMLElement) => void)|null} [onAdd]
+ * @property {((value: string, pill: HTMLElement) => void)|null} [onRemove]
+ * @property {((values: string[]) => void)|null} [onChange]
+ * @property {((text: string) => void)|null} [onCreate] - Typed text was added (creatable)
+ * @property {(() => void)|null} [onMaxReached]
+ * @property {((error: string, value: string) => void)|null} [onValidationError]
+ */
+/**
+ * @typedef {Pillbox} PillboxInstance
+ */
+/**
+ * Multi-value input that shows each value as a removable pill.
+ */
 class Pillbox extends Component {
     static componentName = 'pillbox';
 
@@ -6111,6 +7121,10 @@ class Pillbox extends Component {
         onValidationError: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The input (or select) to enhance
+     * @param {PillboxOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this.model = options.model || null;
@@ -6591,6 +7605,9 @@ class Pillbox extends Component {
 
     // Public methods
 
+    /**
+     * @returns {this}
+     */
     open() {
         if (!this._dropdown || this._isOpen) return this;
         if (this._fire('beforeopen') === false) return this;
@@ -6603,6 +7620,9 @@ class Pillbox extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     close() {
         if (!this._dropdown || !this._isOpen) return this;
         if (!this._mayClose()) return this;
@@ -6616,24 +7636,53 @@ class Pillbox extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
 
+    /**
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isOpen;
     }
 
     // Permanent aliases. They look open/close up by name at call time, so a guard
     // patched onto instance.close still runs.
+    /**
+     * Alias of open().
+     * @param {...any} args
+     * @returns {this}
+     */
     show(...args) { return this.open(...args); }
+    /**
+     * Alias of close().
+     * @param {...any} args
+     * @returns {this}
+     */
     hide(...args) { return this.close(...args); }
+    /**
+     * Alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() { return this.isOpen(); }
 
+    /**
+     * The pill values, in order.
+     * @returns {string[]}
+     */
     getValue() {
         return this._pills.map(p => p.value);
     }
 
+    /**
+     * Replace every pill.
+     * @param {string[]} values
+     * @returns {this}
+     */
     setValue(values) {
         this.clear();
 
@@ -6652,12 +7701,21 @@ class Pillbox extends Component {
         return this;
     }
 
+    /**
+     * @param {string} value
+     * @param {string} [label] - Default: the value
+     * @returns {this}
+     */
     addPill(value, label) {
         label = label || value;
         this._addPill(value, label);
         return this;
     }
 
+    /**
+     * @param {string} value
+     * @returns {this}
+     */
     removePill(value) {
         const pill = this._container.querySelector(`.dm-pill[data-value="${value}"]`);
         if (pill) {
@@ -6666,6 +7724,10 @@ class Pillbox extends Component {
         return this;
     }
 
+    /**
+     * @param {number} index
+     * @returns {this}
+     */
     removePillAt(index) {
         if (index >= 0 && index < this._pills.length) {
             this._removePill(this._pills[index].element);
@@ -6673,6 +7735,10 @@ class Pillbox extends Component {
         return this;
     }
 
+    /**
+     * Remove every pill.
+     * @returns {this}
+     */
     clear() {
         // Remove all pills
         [...this._pills].forEach(pill => {
@@ -6681,26 +7747,43 @@ class Pillbox extends Component {
         return this;
     }
 
+    /**
+     * @returns {number}
+     */
     getCount() {
         return this._pills.length;
     }
 
+    /**
+     * Replace the options.
+     * @param {PillboxItem[]} data
+     * @returns {this}
+     */
     setData(data) {
         this.options.data = data;
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     focus() {
         this._input.focus();
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     enable() {
         this._input.disabled = false;
         this._wrapper.classList.remove('disabled');
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     disable() {
         this._input.disabled = true;
         this._wrapper.classList.add('disabled');
@@ -6708,6 +7791,9 @@ class Pillbox extends Component {
         return this;
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         this._forcedClose();
         if (this._wrapper && this._wrapper.parentNode) {
@@ -6726,6 +7812,45 @@ class Pillbox extends Component {
 // Slideover Component
 // ============================================
 
+/**
+ * @typedef {'sm'|'md'|'lg'|'xl'|'full'} SlideoverSize
+ */
+/**
+ * @typedef {object} SlideoverOptions
+ * @property {'left'|'right'|'top'|'bottom'} [position='right'] - Edge it slides from
+ * @property {SlideoverSize|string} [size='lg'] - A preset (sm 25%, md 50%, lg 75%, xl 90%, full), a customSizes key, or a CSS length ('400px', '60%', '30rem')
+ * @property {boolean} [backdrop=true]
+ * @property {boolean} [backdropClose=true] - A backdrop click closes it
+ * @property {boolean} [keyboard=true] - Esc closes it (with closeOnEscape)
+ * @property {boolean} [animation=true]
+ * @property {number} [animationDuration=300] - ms
+ * @property {boolean} [closeOnEscape=true]
+ * @property {string} [title=''] - Title (create(): the header text)
+ * @property {string|Element} [content=''] - Body (create(): HTML or an element)
+ * @property {boolean} [closable=true] - Close button in the header (create())
+ * @property {string} [closeIcon='x'] - Domma icon name for it (create())
+ * @property {string} [headerClass='']
+ * @property {string} [bodyClass='']
+ * @property {string} [footerClass='']
+ * @property {Record<string, string>} [customSizes={}] - Named sizes, e.g. {wide: '640px'}
+ * @property {boolean} [trapFocus=true] - Tab stays in the panel; default off when backdrop is false unless given
+ * @property {boolean} [returnFocus=true] - Closing puts focus back where it was
+ * @property {((slideover: SlideoverInstance) => boolean|void)|null} [onBeforeOpen] - Return false to keep it closed
+ * @property {((slideover: SlideoverInstance) => void)|null} [onOpen]
+ * @property {((slideover: SlideoverInstance) => boolean|void)|null} [onBeforeClose] - Return false to keep it open
+ * @property {((slideover: SlideoverInstance) => void)|null} [onClose] - Closing (before the animation)
+ * @property {((slideover: SlideoverInstance) => void)|null} [onClosed] - After the close animation
+ */
+/**
+ * Options for `E.slideover({...})` / `Slideover.create()`: a new panel at the end of `<body>`.
+ * @typedef {SlideoverOptions & {schema?: object, data?: Record<string, any>, onSave?: (formData: Record<string, any>, form: any, slideover: SlideoverInstance) => void}} SlideoverCreateOptions
+ */
+/**
+ * @typedef {Slideover} SlideoverInstance
+ */
+/**
+ * Panel that slides in from an edge of the viewport.
+ */
 class Slideover extends Component {
     static componentName = 'slideover';
 
@@ -6770,6 +7895,8 @@ class Slideover extends Component {
         bodyClass: '',
         footerClass: '',
         customSizes: {},
+        trapFocus: true,        // Tab stays in the panel; default off when backdrop is false
+        returnFocus: true,      // closing puts focus back where it was
         onBeforeOpen: null,     // return false to keep it closed
         onOpen: null,
         onBeforeClose: null,    // return false to keep it open
@@ -6777,10 +7904,18 @@ class Slideover extends Component {
         onClosed: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The panel element
+     * @param {SlideoverOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._isOpen = false;
         this._backdrop = null;
+        this._trap = null;
+        // An explicit trapFocus traps even without a backdrop.
+        this._trapAsked = !!options && Object.prototype.hasOwnProperty.call(options, 'trapFocus')
+            && options.trapFocus !== false && options.trapFocus !== 'false';
         this._originalBodyOverflow = null;
         this._keydownHandler = null;
         this._init();
@@ -6997,6 +8132,10 @@ class Slideover extends Component {
         }
     }
 
+    /**
+     * Open (onBeforeOpen may refuse).
+     * @returns {this}
+     */
     open() {
         if (this._isOpen) return this;
 
@@ -7033,6 +8172,7 @@ class Slideover extends Component {
         this._isOpen = true;
         Slideover._removeFromStack(this);
         Slideover._stack.push(this);
+        this._startTrap();
 
         // Call onOpen callback after animation
         setTimeout(() => {
@@ -7042,6 +8182,47 @@ class Slideover extends Component {
         }, this.options.animationDuration);
 
         return this;
+    }
+
+    /** Whether this open traps focus: on by default, except beside a page left usable (no backdrop). */
+    _wantsTrap() {
+        const o = this.options;
+        if (o.trapFocus === false || o.trapFocus === 'false') return false;
+        return !!o.backdrop || this._trapAsked === true;
+    }
+
+    /**
+     * Keep Tab inside the panel while it is open. Focus moves to the panel itself (so
+     * the first Tab reaches its first control) unless something inside already has it;
+     * a caller focusing a field after open() is unaffected.
+     */
+    _startTrap() {
+        if (!this._wantsTrap() || typeof document === 'undefined') return;
+        const el = this.element;
+        if (!el.hasAttribute('tabindex')) {
+            el.setAttribute('tabindex', '-1');
+            this._addedTabindex = true;
+        }
+        if (!this._trap) {
+            this._trap = createFocusTrap(el, {
+                initialFocus: () => {
+                    const active = document.activeElement;
+                    return active && active !== document.body && el.contains(active) ? active : el;
+                },
+                returnFocus: true,
+                escapeDeactivates: false,       // Escape stays with the slideover (close() by name)
+                allowOutsideClick: true,        // the backdrop, toasts, popovers
+                allowOutsideFocus: 'layers',
+                allowScriptFocus: true,
+                register: false
+            });
+        }
+        this._trap.activate();
+    }
+
+    _stopTrap() {
+        if (!this._trap || !this._trap.isActive()) return;
+        this._trap.deactivate({returnFocus: this.options.returnFocus !== false && this.options.returnFocus !== 'false'});
     }
 
     _createForm() {
@@ -7126,12 +8307,19 @@ class Slideover extends Component {
         }
     }
 
+    /**
+     * Close (onBeforeClose may refuse).
+     * @returns {this}
+     */
     close() {
         if (!this._isOpen) return this;
 
         const el = this.element;
         if (!el) return this;
         if (!this._mayClose(this)) return this;
+
+        // Let go of focus first, so focus an onClose handler places is not pulled back.
+        this._stopTrap();
 
         // Call onClose callback
         this._fire('close', this);
@@ -7182,20 +8370,44 @@ class Slideover extends Component {
         return this;
     }
 
+    /**
+     * @returns {this}
+     */
     toggle() {
         return this._isOpen ? this.close() : this.open();
     }
 
+    /**
+     * @returns {boolean}
+     */
     isOpen() {
         return this._isOpen;
     }
 
     // Permanent aliases. They look open/close up by name at call time, so a guard
     // patched onto instance.close still runs.
+    /**
+     * Alias of open().
+     * @param {...any} args
+     * @returns {this}
+     */
     show(...args) { return this.open(...args); }
+    /**
+     * Alias of close().
+     * @param {...any} args
+     * @returns {this}
+     */
     hide(...args) { return this.close(...args); }
+    /**
+     * Alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() { return this.isOpen(); }
 
+    /**
+     * @param {string} title - Set as text
+     * @returns {this}
+     */
     setTitle(title) {
         const titleEl = this.element.querySelector('.dm-slideover-header .dm-slideover-title');
         if (titleEl) {
@@ -7204,6 +8416,11 @@ class Slideover extends Component {
         return this;
     }
 
+    /**
+     * Replace the body: an HTML string (sanitised) or an element.
+     * @param {string|Element} content
+     * @returns {this}
+     */
     setContent(content) {
         const bodyEl = this.element.querySelector('.dm-slideover-body');
         if (bodyEl) {
@@ -7217,12 +8434,20 @@ class Slideover extends Component {
         return this;
     }
 
+    /**
+     * @param {SlideoverSize|string} size
+     * @returns {this}
+     */
     setSize(size) {
         this.options.size = size;
         this._applySize();
         return this;
     }
 
+    /**
+     * @param {'left'|'right'|'top'|'bottom'} position
+     * @returns {this}
+     */
     setPosition(position) {
         this.options.position = position;
         this.element.style.boxShadow = this._getBoxShadow();
@@ -7230,6 +8455,9 @@ class Slideover extends Component {
         return this;
     }
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         this._forcedClose();
 
@@ -7244,11 +8472,25 @@ class Slideover extends Component {
             document.removeEventListener('keydown', this._keydownHandler);
         }
         Slideover._removeFromStack(this);
+        if (this._trap) {
+            this._trap.destroy();
+            this._trap = null;
+        }
+        if (this._addedTabindex && this.element) {
+            this.element.removeAttribute('tabindex');
+            this._addedTabindex = false;
+        }
 
         super.destroy();
     }
 
     // Static factory method for creating slideover with content or schema
+    /**
+     * Build a slideover (header, close button, body) at the end of `<body>`. With `schema`, the body
+     * is a Domma form built on open, and `onSave` gets its data.
+     * @param {SlideoverCreateOptions} [options]
+     * @returns {Slideover}
+     */
     static create(options = {}) {
         const slideover = document.createElement('div');
         slideover.className = 'dm-slideover';
@@ -7318,6 +8560,52 @@ class Slideover extends Component {
 // ============================================
 
 /**
+ * @typedef {'planned'|'in-progress'|'completed'|'blocked'|'cancelled'} ProgressionStatus
+ */
+/**
+ * A timeline event or roadmap milestone.
+ * @typedef {object} ProgressionItem
+ * @property {string|number} [id] - Lets methods find it by id instead of index
+ * @property {string} [title]
+ * @property {string} [description] - Text (HTML when allowHtml, sanitised)
+ * @property {string} [date]
+ * @property {string|number} [year] - Timeline marker (default: date)
+ * @property {ProgressionStatus|string} [status] - Roadmap status
+ * @property {number} [progress] - 0-100, shown for 'in-progress'
+ * @property {string} [priority]
+ * @property {string[]} [tags]
+ * @property {string} [assignee]
+ */
+/**
+ * @typedef {object} ProgressionOptions
+ * @property {'timeline'|'roadmap'} [mode='timeline']
+ * @property {ProgressionItem[]} [items=[]]
+ * @property {'vertical'|'horizontal'|'centered'} [layout='vertical']
+ * @property {boolean} [animation=true] - Items animate in
+ * @property {number} [animationDelay=100] - ms between items
+ * @property {boolean} [responsive=true]
+ * @property {'default'|'minimal'|'corporate'|'modern'} [theme='default']
+ * @property {boolean} [clickable=false]
+ * @property {((item: ProgressionItem, index: number, element: HTMLElement) => void)|null} [onItemClick]
+ * @property {boolean} [allowHtml=false] - HTML in descriptions (sanitised)
+ * @property {string} [yearWidth='80px'] - Timeline
+ * @property {string} [contentMaxWidth='600px'] - Timeline
+ * @property {string} [dateFormat='YYYY'] - Timeline
+ * @property {boolean} [showConnector=true] - Timeline
+ * @property {boolean} [showProgress=true] - Roadmap: overall progress bar
+ * @property {'top'|'bottom'|'none'} [progressPosition='top'] - Roadmap
+ * @property {boolean} [statusIcons=true] - Roadmap
+ * @property {boolean} [allowStatusChange=false] - Roadmap: status can be changed from the UI
+ * @property {((item: ProgressionItem, oldStatus: string|undefined, status: string) => void)|null} [onStatusChange]
+ * @property {string|number|null} [currentItem=null] - Roadmap: the current item's id or index
+ * @property {boolean} [completedAnimation=true]
+ * @property {Partial<Record<ProgressionStatus, string>>} [icons] - Domma icon name per status
+ * @property {Partial<Record<ProgressionStatus, string>>} [colors] - CSS colour per status
+ */
+/**
+ * @typedef {Progression} ProgressionInstance
+ */
+/**
  * Progression Component - Unified timeline and roadmap component
  * Features: Timeline mode (chronological events), Roadmap mode (status-driven milestones)
  * Layouts: vertical, horizontal, centered
@@ -7369,6 +8657,10 @@ class Progression extends Component {
         }
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The element to render into
+     * @param {ProgressionOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         this._init();
@@ -7613,6 +8905,10 @@ class Progression extends Component {
     }
 
     // Public API methods (Timeline mode + shared)
+    /**
+     * @param {ProgressionItem[]} items
+     * @returns {this}
+     */
     setItems(items) {
         this.options.items = items;
         this._renderItems();
@@ -7622,6 +8918,10 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @param {ProgressionItem} item
+     * @returns {this}
+     */
     addItem(item) {
         this.options.items.push(item);
         this._renderItems();
@@ -7631,15 +8931,29 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @returns {ProgressionItem[]}
+     */
     getItems() {
         return [...this.options.items];
     }
 
+    /**
+     * A copy of an item, by index or id.
+     * @param {number|string} indexOrId
+     * @returns {ProgressionItem|null}
+     */
     getItem(indexOrId) {
         const index = this._findItemIndex(indexOrId);
         return index >= 0 ? {...this.options.items[index]} : null;
     }
 
+    /**
+     * Merge data into an item.
+     * @param {number|string} indexOrId
+     * @param {Partial<ProgressionItem>} data
+     * @returns {this}
+     */
     updateItem(indexOrId, data) {
         const index = this._findItemIndex(indexOrId);
         if (index >= 0) {
@@ -7652,6 +8966,10 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @param {number|string} indexOrId
+     * @returns {this}
+     */
     removeItem(indexOrId) {
         const index = this._findItemIndex(indexOrId);
         if (index >= 0) {
@@ -7664,6 +8982,10 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @param {'vertical'|'horizontal'|'centered'} layout
+     * @returns {this}
+     */
     setLayout(layout) {
         this.element.classList.remove(`dm-progression-${this.options.layout}`);
         if (this.options.mode === 'timeline') {
@@ -7677,6 +8999,10 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @param {'default'|'minimal'|'corporate'|'modern'} theme
+     * @returns {this}
+     */
     setTheme(theme) {
         if (this.options.theme !== 'default') {
             this.element.classList.remove(`dm-progression-${this.options.theme}`);
@@ -7694,6 +9020,10 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @param {'timeline'|'roadmap'} mode
+     * @returns {this}
+     */
     setMode(mode) {
         // Remove current mode classes
         this.element.classList.remove(`dm-progression-${this.options.mode}`);
@@ -7723,10 +9053,17 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @returns {'timeline'|'roadmap'}
+     */
     getMode() {
         return this.options.mode;
     }
 
+    /**
+     * Re-render the items.
+     * @returns {this}
+     */
     refresh() {
         this._renderItems();
         if (this.options.animation) {
@@ -7736,6 +9073,12 @@ class Progression extends Component {
     }
 
     // Roadmap-specific methods
+    /**
+     * Roadmap: set an item's status (fires statuschange).
+     * @param {number|string} indexOrId
+     * @param {ProgressionStatus|string} status
+     * @returns {this}
+     */
     setStatus(indexOrId, status) {
         const index = this._findItemIndex(indexOrId);
         if (index >= 0) {
@@ -7752,15 +9095,28 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @param {number|string} indexOrId
+     * @returns {string|null}
+     */
     getStatus(indexOrId) {
         const item = this.getItem(indexOrId);
         return item ? item.status : null;
     }
 
+    /**
+     * @param {ProgressionStatus|string} status
+     * @returns {ProgressionItem[]}
+     */
     getItemsByStatus(status) {
         return this.options.items.filter(item => item.status === status);
     }
 
+    /**
+     * Roadmap: mark the current item.
+     * @param {number|string} indexOrId
+     * @returns {this}
+     */
     setCurrent(indexOrId) {
         const index = this._findItemIndex(indexOrId);
         if (index >= 0) {
@@ -7773,11 +9129,18 @@ class Progression extends Component {
         return this;
     }
 
+    /**
+     * @returns {ProgressionItem|null}
+     */
     getCurrent() {
         if (this.options.currentItem === null) return null;
         return this.getItem(this.options.currentItem);
     }
 
+    /**
+     * Roadmap: percentage of items completed (0 in timeline mode).
+     * @returns {number}
+     */
     getProgress() {
         if (this.options.mode !== 'roadmap' || this.options.items.length === 0) {
             return 0;
@@ -7787,14 +9150,26 @@ class Progression extends Component {
         return Math.round((completed / this.options.items.length) * 100);
     }
 
+    /**
+     * @param {number|string} indexOrId
+     * @returns {this}
+     */
     markComplete(indexOrId) {
         return this.setStatus(indexOrId, 'completed');
     }
 
+    /**
+     * @param {number|string} indexOrId
+     * @returns {this}
+     */
     markInProgress(indexOrId) {
         return this.setStatus(indexOrId, 'in-progress');
     }
 
+    /**
+     * @param {number|string} indexOrId
+     * @returns {this}
+     */
     markBlocked(indexOrId) {
         return this.setStatus(indexOrId, 'blocked');
     }
@@ -7804,6 +9179,42 @@ class Progression extends Component {
 // Signature Component
 // ============================================
 
+/**
+ * A drawn stroke, as onBegin / onEnd receive it.
+ * @typedef {object} SignatureStroke
+ * @property {{x: number, y: number, pressure: number}[]} points
+ * @property {string} colour
+ * @property {number} width
+ */
+/**
+ * @typedef {object} SignatureOptions
+ * @property {number|null} [width=null] - Not read: the pad fills its container
+ * @property {number} [height=180] - Canvas height in px
+ * @property {string} [penColour='#000000'] - Default pen colour
+ * @property {number} [penWidth=2] - Default pen width in px
+ * @property {'png'|'svg'} [format='png'] - Export format
+ * @property {string} [label='Signature'] - Toolbar label text
+ * @property {boolean} [guideLine=true] - Dashed guide line
+ * @property {string} [placeholder='Sign here']
+ * @property {string[]} [colours] - Colour swatches in the toolbar
+ * @property {number[]} [widths=[1, 2, 4]] - Pen widths in the toolbar
+ * @property {boolean} [toolbar=true] - Show the toolbar
+ * @property {string} [name='signature'] - Name of the hidden input
+ * @property {boolean} [disabled=false]
+ * @property {boolean} [typeFallback=false] - Draw / Type toggle
+ * @property {number} [minStrokeLength=3] - Points needed to keep a stroke
+ * @property {boolean} [respectMotionPreference=true] - Honour prefers-reduced-motion
+ * @property {((base64: string) => void)|null} [onChange] - The signature changed - receives the data URL ('' when empty)
+ * @property {(() => void)|null} [onClear]
+ * @property {((stroke: SignatureStroke) => void)|null} [onBegin] - A stroke began
+ * @property {((stroke: SignatureStroke) => void)|null} [onEnd] - A stroke ended
+ */
+/**
+ * @typedef {Signature} SignatureInstance
+ */
+/**
+ * Signature capture pad on a canvas, with an optional typed fallback.
+ */
 class Signature extends Component {
     static componentName = 'signature';
 
@@ -7830,6 +9241,10 @@ class Signature extends Component {
         onEnd: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - The container
+     * @param {SignatureOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         if (!this.element) return;
@@ -8205,7 +9620,7 @@ class Signature extends Component {
 
     /**
      * Export the signature as a base64 data URL.
-     * @param {string} [format] - Override the instance format: 'png' or 'svg'
+     * @param {'png'|'svg'} [format] - Override the instance format: 'png' or 'svg'
      * @returns {string} Base64-encoded data URL
      */
     toBase64(format) {
@@ -8428,6 +9843,35 @@ function dpSameDay(a, b) {
 }
 
 /**
+ * @typedef {object} DatePickerOptions
+ * @property {string|Date|null} [value=null] - Initial date; null reads the input
+ * @property {string} [format='YYYY-MM-DD'] - What the input shows (YYYY YY MMMM MMM MM M DDDD DDD DD D); the value stays ISO
+ * @property {string|Date|null} [min=null] - Earliest selectable date
+ * @property {string|Date|null} [max=null] - Latest selectable date
+ * @property {number} [firstDay=1] - First day of the week: 0 Sunday, 1 Monday
+ * @property {((date: Date) => boolean)|null} [disabledDates=null] - true means unavailable
+ * @property {boolean} [openOnFocus=true]
+ * @property {boolean} [closeOnSelect=true]
+ * @property {boolean} [closeOnClickOutside=true]
+ * @property {boolean} [closeOnEscape=true]
+ * @property {boolean} [clearable=true] - Clear button
+ * @property {boolean} [todayButton=true]
+ * @property {boolean} [readonlyInput=false] - Stop typing; only the calendar sets it
+ * @property {boolean} [inline=false] - Render in place instead of as a popup
+ * @property {DropdownPosition} [position='bottom-start'] - Popup position
+ * @property {[number, number]} [offset=[0, 4]] - Popup offset [x, y]
+ * @property {boolean} [weekNumbers=false] - ISO week numbers
+ * @property {string|null} [placeholder=null] - Default: the format
+ * @property {((value: string, date: Date|null, picker: DatePickerInstance) => void)|null} [onChange] - ISO value ('' when cleared)
+ * @property {((picker: DatePickerInstance) => boolean|void)|null} [onBeforeOpen] - Return false to keep it closed
+ * @property {((picker: DatePickerInstance) => void)|null} [onOpen]
+ * @property {((picker: DatePickerInstance) => boolean|void)|null} [onBeforeClose] - Return false to keep it open
+ * @property {((picker: DatePickerInstance) => void)|null} [onClose]
+ */
+/**
+ * @typedef {DatePicker} DatePickerInstance
+ */
+/**
  * A calendar, attached to an input.
  *
  * ## Why this exists
@@ -8483,6 +9927,10 @@ class DatePicker extends Component {
     /** Only one popup is ever open, exactly as with a dropdown. */
     static _open = null;
 
+    /**
+     * @param {string|HTMLElement} selector - The input to attach to
+     * @param {DatePickerOptions} [options]
+     */
     constructor(selector, options = {}) {
         super(selector, options);
         if (!this.element) return;
@@ -8539,12 +9987,18 @@ class DatePicker extends Component {
 
     // ---- value ----------------------------------------------------------
 
-    /** The ISO date currently held, or ''. */
+    /**
+     * The ISO date currently held, or ''.
+     * @returns {string}
+     */
     getValue() {
         return this._value ? dpToIso(this._value) : '';
     }
 
-    /** The Date currently held, or null. */
+    /**
+     * The Date currently held, or null.
+     * @returns {Date|null}
+     */
     getDate() {
         return this._value ? new Date(this._value) : null;
     }
@@ -8950,13 +10404,28 @@ class DatePicker extends Component {
 
     // Permanent aliases. They look open/close up by name at call time, so a guard
     // patched onto instance.close still runs.
+    /**
+     * Alias of open().
+     * @param {...any} args
+     * @returns {this}
+     */
     show(...args) { return this.open(...args); }
+    /**
+     * Alias of close().
+     * @param {...any} args
+     * @returns {this}
+     */
     hide(...args) { return this.close(...args); }
+    /**
+     * Alias of isOpen().
+     * @returns {boolean}
+     */
     isVisible() { return this.isOpen(); }
 
     _position() {
         const panel = this._panel;
         if (!panel) return;
+        layerAbove(this.element, panel);
         const anchor = this.element.getBoundingClientRect();
         const [dx, dy] = this.options.offset;
 
@@ -9040,6 +10509,9 @@ class DatePicker extends Component {
 
     // ---- lifecycle ------------------------------------------------------
 
+    /**
+     * @returns {void}
+     */
     destroy() {
         this._forcedClose();
         this._panel?.remove();
@@ -9052,6 +10524,206 @@ class DatePicker extends Component {
 // Elements Module Export
 // ============================================
 
+/**
+ * @typedef {object} ChooserBadge
+ * @property {string} text
+ * @property {'success'|'info'|'warning'|'danger'|'primary'} [type='primary']
+ */
+/**
+ * @typedef {object} ChooserOption
+ * @property {string|number} value
+ * @property {string} label
+ * @property {string} [icon] - Domma icon name
+ * @property {string} [description] - Card variant, comfortable density only
+ * @property {string} [tooltip]
+ * @property {ChooserBadge} [badge]
+ * @property {boolean} [recommended]
+ * @property {boolean} [disabled]
+ */
+/** @typedef {'primary'|'success'|'info'|'warning'|'danger'} ChooserSemanticColour */
+/**
+ * @typedef {object} ChooserOptions
+ * @property {ChooserOption[]} options - The choices
+ * @property {'card'|'chip'} [variant='card']
+ * @property {boolean} [multiple=false] - Multi-select
+ * @property {'comfortable'|'compact'} [density='comfortable']
+ * @property {number} [columns=3] - Grid columns (card variant)
+ * @property {string} [label] - Label rendered above
+ * @property {boolean} [required=false] - Required indicator
+ * @property {string} [name] - Hidden-input name for native form submission
+ * @property {string|string[]|null} [value] - Initial selection
+ * @property {ChooserSemanticColour|string} [accent='primary'] - Selected/recommended highlight colour - semantic name or any CSS colour string
+ * @property {'border'|'solid'|'glow'|'overlay'|'underline'} [accentStyle='border'] - Visual style of the selected state
+ * @property {boolean} [glow=false] - Soft outer glow on the selected option
+ * @property {ChooserSemanticColour|string|null} [glowColour=null] - Glow colour override - semantic name or any CSS colour string. Defaults to the accent colour.
+ * @property {'none'|'sm'|'md'|'lg'|'xl'} [shadow='none'] - Shadow weight applied to every option
+ * @property {string|null} [shadowColour=null] - Optional shadow tint - any CSS colour string
+ * @property {(value: string|string[]|null) => void} [onChange] - Called with the new value (user changes only, not setValue)
+ */
+/**
+ * What `E.chooser()` returns. A missing host gets an inert one (`element` null, methods do nothing).
+ * @typedef {{
+ *   readonly element: HTMLElement|null,
+ *   _root: HTMLElement|null,
+ *   getValue(): string|string[]|null,
+ *   setValue(value: string|string[]|null): void,
+ *   disable(): void,
+ *   enable(): void,
+ *   destroy(): void
+ * }} ChooserInstance
+ */
+
+/**
+ * `Domma.elements` / `E` - every UI component factory.
+ * @typedef {object} Elements
+ * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/card.js').CardOptions) => import('./components/card.js').CardInstance|null} card
+ *   Create a Card component (null when nothing matches)
+ * @property {{
+ *   (selector: string|Element|ArrayLike<Element>, options?: import('./components/modal.js').ModalOptions): import('./components/modal.js').ModalInstance|null,
+ *   (options: import('./components/modal.js').ModalOptions): import('./components/modal.js').ModalInstance
+ * }} modal
+ *   Create a Modal: on an element (null when nothing matches), or - given only an options object - a new
+ *   modal in the shared dialog container
+ * @property {(selector: string|HTMLElement, options?: TabsOptions) => TabsInstance} tabs - Create a Tabs component
+ * @property {(selector: string|HTMLElement, options?: AccordionOptions) => AccordionInstance} accordion - Create an Accordion component
+ * @property {{
+ *   (selector: import('./components/shared.js').ComponentTarget, options?: import('./components/tooltip.js').TooltipOptions): (import('./components/tooltip.js').TooltipInstance & {all(): import('./components/tooltip.js').TooltipInstance[]})|null,
+ *   all(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/tooltip.js').TooltipOptions): import('./components/tooltip.js').TooltipInstance[]
+ * }} tooltip
+ *   A tooltip on every match; returns the first (with `all()` for the rest), or null.
+ *   `E.tooltip.all()` returns them as an array.
+ * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/badge.js').BadgeOptions) => import('./components/badge.js').BadgeInstance|null} badge
+ *   Create a Badge (null when nothing matches)
+ * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/badge.js').NumberBadgeOptions) => import('./components/badge.js').NumberBadgeInstance|null} numberBadge
+ *   Create a NumberBadge notification counter on an element (null when nothing matches)
+ * @property {(selector: string|HTMLElement, options?: DropdownOptions) => DropdownInstance} dropdown - Create a Dropdown component
+ * @property {(selector: string|HTMLElement, options?: CarouselOptions) => CarouselInstance} carousel - Create a Carousel component
+ * @property {(options?: CookieConsentOptions) => CookieConsentInstance} cookieConsent - The page's cookie consent banner (one per page)
+ * @property {(selector?: string|HTMLElement|null, options?: import('./components/back-to-top.js').BackToTopOptions) => import('./components/back-to-top.js').BackToTopInstance} backToTop
+ *   Create a BackToTop button: a button / link selector is used as the button, anything else adds one
+ * @property {{
+ *   (selector: string|HTMLElement, options?: ButtonGroupOptions): ButtonGroupInstance,
+ *   all(selector: string|HTMLElement, options?: ButtonGroupOptions): ButtonGroup[]
+ * }} buttonGroup
+ *   A button group on every match; returns the first (with `all()` for the rest). `E.buttonGroup.all()`
+ *   returns them as an array. (A selector that matches nothing returns an empty array.)
+ * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/loader.js').LoaderOptions) => import('./components/loader.js').LoaderInstance|null} loader
+ *   Create a Loader on an element (null when nothing matches)
+ * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/loader.js').LoaderOptions) => import('./components/loader.js').LoaderInstance|null} showLoader
+ *   Show the element's loader, creating it if needed
+ * @property {(selector: import('./components/shared.js').ComponentTarget) => import('./components/loader.js').LoaderInstance|undefined} hideLoader
+ *   Hide the element's loader
+ * @property {(text?: string, options?: {type?: string, size?: string, color?: string}) => import('./components/loader.js').LoaderInstance} fullscreenLoader
+ *   A full-screen loader (`#dm-loader-fullscreen`), reused on later calls
+ * @property {(selector: string|HTMLElement, options?: BreadcrumbsOptions) => BreadcrumbsInstance} breadcrumbs - Render breadcrumbs into an element
+ * @property {(selector: string|HTMLElement, options?: NavbarOptions) => NavbarInstance} navbar - Render a navbar into an element
+ * @property {(selector: string|HTMLElement, options?: SidebarOptions) => SidebarInstance} sidebar - Render a sidebar into an element
+ * @property {(selector: string|HTMLElement, options?: FooterOptions) => FooterInstance} footer - Render a footer into an element
+ * @property {(options?: DesktopNotificationOptions) => DesktopNotification} notification - A desktop notification (call show())
+ * @property {(title: string|DesktopNotificationOptions, options?: DesktopNotificationOptions) => DesktopNotification} notify
+ *   Show a desktop notification now: notify(title, options) or notify({title, ...})
+ * @property {(selector?: string|HTMLElement|null, options?: TimerOptions) => TimerInstance} timer
+ *   A countdown timer; with no selector it is headless
+ * @property {(options?: AlarmOptions) => AlarmInstance} alarm - The page's alarm manager (a singleton)
+ * @property {(selector: string|HTMLElement, options?: AutocompleteOptions) => AutocompleteInstance} autocomplete - Suggestions under a text input
+ * @property {(selector: string|HTMLElement, options?: PillboxOptions) => PillboxInstance} pillbox - Multi-value pill input
+ * @property {(selector: string|HTMLElement, options?: DatePickerOptions) => DatePickerInstance} datePicker
+ *   A themed calendar attached to an input, writing ISO `YYYY-MM-DD`
+ * @property {(selector: string|HTMLElement, options: ChooserOptions) => ChooserInstance} chooser
+ *   Visual option-picker - card or chip variants, single or multi-select, with rich per-option metadata
+ *   (icon, description, tooltip, badge, recommended, disabled)
+ * @property {{
+ *   (selector: string|HTMLElement, options?: import('./context-menu.js').ContextMenuOptions): import('./context-menu.js').ContextMenuInstance,
+ *   closeAll(): void,
+ *   active(): import('./context-menu.js').ContextMenuInstance|null,
+ *   registry(forElement?: HTMLElement|null): import('./context-menu.js').ContextMenuInstance[]
+ * }} contextMenu
+ *   Bind a right-click menu to a container and, by delegation, its children. Menus nest: an inner menu
+ *   shadows its parent for the region it covers, and by default appends the parent's items beneath its own.
+ *   `closeAll()` closes the open one, `active()` returns it, `registry(el?)` lists bound menus (for an
+ *   element, its resolution chain, innermost first).
+ * @property {(selector: string|HTMLElement, options?: import('./sortable.js').SortableOptions) => import('./sortable.js').SortableInstance} sortable
+ *   Drag-to-reorder for a container's children, by pointer, touch and keyboard
+ * @property {import('./skeleton.js').SkeletonStatic} skeleton
+ *   Shimmering placeholders shaped like the content on its way; `.while(target, promise, opts)`, `.get`,
+ *   `.remove`, `.scan`, `.markup`
+ * @property {import('./avatar.js').AvatarStatic} avatar - A picture, initials or icon; `.scan()` for data-avatar
+ * @property {import('./avatar.js').AvatarGroupStatic} avatarGroup - Overlapping avatars with "+N"
+ * @property {(selector: string|HTMLElement, options?: import('./input-group.js').InputGroupOptions) => import('./input-group.js').InputGroupInstance} inputGroup
+ *   Join an icon or short text (and reveal / clear / stepper / counter extras) to an input already on the page
+ * @property {{
+ *   (trigger: string|HTMLElement|ArrayLike<HTMLElement>, options?: import('./popover.js').PopoverOptions): import('./popover.js').PopoverInstance,
+ *   scan(root?: string|Element|Document): import('./popover.js').PopoverInstance[],
+ *   closeAll(group?: string|null): void,
+ *   getInstance(trigger: string|HTMLElement): import('./popover.js').PopoverInstance|null,
+ *   open(): import('./popover.js').PopoverInstance[]
+ * }} popover
+ *   Anchor a rich panel (title, text/DOM content, close button) to a trigger, opened by click, hover, focus
+ *   or code. `scan(root)` reads `data-popover` markup, `closeAll(group?)`, `getInstance(trigger)`, `open()`
+ *   lists the open ones.
+ * @property {(selector: string|HTMLElement, options?: import('./treeview.js').TreeViewOptions) => import('./treeview.js').TreeViewInstance} treeView
+ *   A tree of expandable nodes
+ * @property {{
+ *   (options: SlideoverCreateOptions): SlideoverInstance,
+ *   (selector: string|HTMLElement, options?: SlideoverOptions): SlideoverInstance
+ * }} slideover
+ *   A panel sliding in from an edge: on an element, or - given only an options object - a new one
+ *   (`Slideover.create()`)
+ * @property {(selector: string|HTMLElement, options?: ProgressionOptions) => ProgressionInstance} progression
+ *   A timeline or roadmap
+ * @property {{
+ *   (selector: string|HTMLElement, options?: ListGroupOptions): ListGroupInstance,
+ *   all(selector: string|HTMLElement, options?: ListGroupOptions): ListGroup[]
+ * }} listGroup
+ *   A list group on every match; returns the first (with `all()` for the rest). `E.listGroup.all()`
+ *   returns them as an array. (A selector that matches nothing returns an empty array.)
+ * @property {(selector: string|HTMLElement, options?: ProgressionOptions) => ProgressionInstance} timeline
+ *   Deprecated: `progression(selector, {mode: 'timeline', ...})`
+ * @property {import('./components/toast.js').ToastStatic} toast
+ *   Toast notifications: `E.toast(message, options)` plus `.show/.success/.error/.warning/.info/.closeAll`
+ * @property {{
+ *   alert(message: string|DialogOptions, options?: DialogOptions): Promise<undefined|false>,
+ *   confirm(message: string|DialogOptions, options?: DialogOptions): Promise<boolean>,
+ *   prompt(message: string|DialogOptions, options?: DialogOptions): Promise<string|null>
+ * }} dialog
+ *   Promise-based alert, confirm and prompt dialogs
+ * @property {(message: string|DialogOptions, options?: DialogOptions) => Promise<undefined|false>} alert
+ *   An alert dialog; resolves undefined on OK, false when dismissed
+ * @property {(message: string|DialogOptions, options?: DialogOptions) => Promise<boolean>} confirm
+ *   A confirm dialog; true if confirmed
+ * @property {(message: string|DialogOptions, options?: DialogOptions) => Promise<string|null>} prompt
+ *   A prompt dialog; the input value, or null if cancelled
+ * @property {(options?: import('./components/modal.js').ModalOptions) => import('./components/modal.js').ModalInstance} createModal
+ *   A new modal in the shared dialog container
+ * @property {(options?: import('./components/modal.js').ModalOptions) => Promise<string|null>} showModal
+ *   Open a new modal and resolve with the button pressed (null when dismissed)
+ * @property {(selector: string|HTMLElement, options?: SignatureOptions) => SignatureInstance} signature - Create a Signature capture pad
+ * @property {import('./components/focus-trap.js').FocusTrapFactory} focusTrap
+ *   Keep Tab and focus inside containers while active (null when nothing matched); `.tabbables()`, `.top()`
+ * @property {import('./components/command-palette.js').CommandPaletteFactory} commandPalette
+ *   A Cmd/Ctrl+K command palette (builds its own overlay); `.formatShortcut`, `.fuzzyMatch`, `.claims`
+ * @property {(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/split-pane.js').SplitPaneOptions) => import('./components/split-pane.js').SplitPaneInstance|null} splitPane
+ *   Resizable panes from a container's children; null when nothing matches
+ * @property {<T = any>(selector: import('./components/shared.js').ComponentTarget, options?: import('./components/virtual-list.js').VirtualListOptions<T>) => import('./components/virtual-list.js').VirtualListInstance<T>|null} virtualList
+ *   A scrolling list that renders only the visible rows; null when nothing matches
+ * @property {(target: import('./components/shared.js').ComponentTarget, options?: import('./components/dropzone.js').DropzoneOptions) => import('./components/dropzone.js').DropzoneInstance|null} dropzone
+ *   A file drop / browse / paste area over a real file input; null when the target matches nothing
+ * @property {(target: import('./components/shared.js').ComponentTarget, options?: import('./components/range-slider.js').RangeSliderOptions) => import('./components/range-slider.js').RangeSliderInstance|null} rangeSlider
+ *   A one- or two-thumb slider over real range inputs; null when the target matches nothing
+ * @property {(target: import('./components/shared.js').ComponentTarget, options?: import('./components/range-slider.js').RangeSliderOptions) => import('./components/range-slider.js').RangeSliderInstance|null} slider
+ *   Alias of rangeSlider()
+ * @property {<T = import('./component.js').ComponentInstance>(selector: string|Element|null|undefined, name?: string) => T|undefined} get
+ *   The component on an element - including ones made by a factory (`E.slideover({...})`) or another
+ *   component. `name` is the componentName ('slideover', 'popover', ...) when an element hosts several.
+ * @property {(selector: string|Element|null|undefined, name?: string) => void} destroy - Destroy the component on an element
+ * @property {() => void} destroyAll - Destroy every component made through this object
+ * @property {(name: string, ComponentClass: new (selector: any, options?: any) => any) => void} register
+ *   Register a custom component class for create()
+ * @property {(name: string, selector: string|HTMLElement, options?: Record<string, any>) => import('./component.js').ComponentInstance} create
+ *   Create a registered custom component (throws for an unknown name)
+ */
+
+/** @type {Elements} */
 export const elements = {
     _instances: new Map(),
 

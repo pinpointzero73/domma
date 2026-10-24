@@ -7,9 +7,146 @@ import Component from './component.js';
 import {escapeHtml} from './escape.js';
 
 // ============================================
+// Types
+// ============================================
+
+/**
+ * A field type in the Field Library (a key of the field type registry).
+ * @typedef {'string'|'number'|'boolean'|'email'|'password'|'url'|'tel'|'color'|'range'|'hidden'|'date'|'datetime'|'time'|'select'|'multiselect'|'radio'|'checkbox-group'|'textarea'|'file'|'array'|'object'} FieldType
+ */
+
+/**
+ * Export format passed to `onExport`.
+ * @typedef {'js'|'json'|'typescript'} ExportFormat
+ */
+
+/**
+ * Live preview form layout. `grid-N` renders a grid form with N columns.
+ * @typedef {'stacked'|'inline'|'grid-2'|'grid-3'|'grid-4'|'grid-6'|'grid-12'} PreviewLayout
+ */
+
+/**
+ * A choice for select / radio / checkbox-group / multiselect fields.
+ * @typedef {object} FieldOption
+ * @property {string|number} value
+ * @property {string} label
+ */
+
+/**
+ * An addon for `formConfig.prefix` / `formConfig.suffix`: `{icon}`, `{text}`, `{html}` (raw, the caller's
+ * responsibility) or a string (shorthand for `{text}`).
+ * @typedef {import('./forms.js').FormAddon} FormAddon
+ */
+
+/**
+ * Accessible names for the input extras' buttons.
+ * @typedef {object} InputExtrasLabels
+ * @property {string} [reveal] - Default 'Show password'
+ * @property {string} [clear] - Default 'Clear'
+ * @property {string} [decrease] - Default 'Decrease'
+ * @property {string} [increase] - Default 'Increase'
+ */
+
+/**
+ * How a field is presented (`field.formConfig`). The preview hands the blueprint to `F.create`, so every
+ * form field option applies; `columns` is the column span the builder's Properties panel edits (1-12).
+ * @typedef {Omit<import('./forms.js').FormFieldConfig, 'labels'> & {
+ *   columns?: number,
+ *   labels?: InputExtrasLabels | import('./forms.js').FormFieldConfig['labels']
+ * }} FormConfig
+ */
+
+/**
+ * One field as the builder holds it. `getFields()` entries carry `name`; in a blueprint the name is the key.
+ * @typedef {object} FieldDefinition
+ * @property {FieldType|'datetime-local'|(string & {})} type - Field data type (date fields store 'string', datetime 'datetime-local')
+ * @property {string} [name] - Field name (getFields() / templates; not present in blueprints)
+ * @property {boolean} [required] - Is field required?
+ * @property {any} [default] - Default value
+ * @property {number|null} [minLength] - Minimum string length
+ * @property {number|null} [maxLength] - Maximum string length
+ * @property {RegExp|string} [pattern] - Regex pattern for validation
+ * @property {number|null} [min] - Minimum numeric value
+ * @property {number|null} [max] - Maximum numeric value
+ * @property {number} [step] - Step increment for number / range inputs
+ * @property {FieldOption[]|string[]} [options] - Options for select, multiselect, radio, checkbox-group
+ * @property {(value: any) => boolean|string} [validate] - Custom validation: true passes, a string is the error
+ * @property {string} [accept] - file: accepted types
+ * @property {boolean} [multiple] - file: allow several files
+ * @property {string} [label] - Display label
+ * @property {string} [placeholder] - Input placeholder
+ * @property {string} [help] - Help text displayed below the field
+ * @property {boolean} [disabled] - Disable the field
+ * @property {FormConfig} [formConfig] - Form configuration
+ */
+
+/**
+ * A blueprint: field name -> definition.
+ * @typedef {{[fieldName: string]: FieldDefinition}} Blueprint
+ */
+
+/**
+ * An entry of the field type registry (the Field Library).
+ * @typedef {object} FieldTypeInfo
+ * @property {string} name - Display name
+ * @property {string} icon - Icon name
+ * @property {string} category - Category (basic, inputs, selection, datetime, advanced)
+ * @property {string} description - Field description
+ * @property {FieldDefinition} defaults - Default field definition
+ */
+
+/**
+ * A saved template (localStorage, `domma:schema-builder-templates`).
+ * @typedef {object} SchemaTemplate
+ * @property {string} name
+ * @property {FieldDefinition[]} fields
+ * @property {number} updatedAt - Date.now() of the last save
+ */
+
+/**
+ * Schema Builder options.
+ * @typedef {object} SchemaBuilderOptions
+ * @property {'light'|'dark'} [theme] - Theme variant (default 'light')
+ * @property {boolean} [autoSave] - Auto-save the active schema to localStorage (default true)
+ * @property {number} [autoSaveInterval] - Auto-save interval in milliseconds (default 30000)
+ * @property {boolean} [showPreview] - Show the live preview panel on start (default true)
+ * @property {PreviewLayout} [previewLayout] - Preview form layout (default 'stacked')
+ * @property {((fields: FieldDefinition[]) => void)|null} [onChange] - Called when the schema changes
+ * @property {((name: string, schema: {name: string, fields: FieldDefinition[]}) => void)|null} [onSave] - Called when a template is saved
+ * @property {((format: ExportFormat, data: string) => void)|null} [onExport] - Called on every export
+ */
+
+/**
+ * Options for `exportJS()`. None are read at present.
+ * @typedef {Record<string, unknown>} ExportJSOptions
+ */
+
+/**
+ * Options for `exportJSON()`. None are read at present.
+ * @typedef {Record<string, unknown>} ExportJSONOptions
+ */
+
+/**
+ * Options for `exportTypeScript()`.
+ * @typedef {object} ExportTypeScriptOptions
+ * @property {string} [interfaceName] - TypeScript interface name (default 'FormData')
+ */
+
+/**
+ * Create a Schema Builder instance (`E.schemaBuilder`).
+ * @callback SchemaBuilderFactory
+ * @param {string|HTMLElement} selector - CSS selector or HTMLElement
+ * @param {SchemaBuilderOptions} [options] - Configuration options
+ * @returns {SchemaBuilderInstance}
+ */
+
+/** @typedef {SchemaBuilder} SchemaBuilderInstance */
+
+// ============================================
 // Field Type Registry
 // ============================================
 
+/** @type {Record<FieldType, FieldTypeInfo>} */
 const FIELD_TYPE_REGISTRY = {
     string: {
         name: 'Text',
@@ -182,10 +319,20 @@ const FIELD_TYPE_REGISTRY = {
 // Template Manager
 // ============================================
 
-class SchemaTemplateManager {
+/**
+ * Saved templates and the auto-saved active schema, in localStorage. Every method swallows storage
+ * errors (a failed read gives an empty list / null, a failed write gives false).
+ */
+export class SchemaTemplateManager {
+    /** @type {string} */
     static STORAGE_KEY = 'domma:schema-builder-templates';
+    /** @type {string} */
     static ACTIVE_KEY = 'domma:schema-builder-active';
 
+    /**
+     * List all saved template names.
+     * @returns {string[]}
+     */
     static list() {
         try {
             const stored = localStorage.getItem(this.STORAGE_KEY);
@@ -195,6 +342,11 @@ class SchemaTemplateManager {
         }
     }
 
+    /**
+     * Load a template by name.
+     * @param {string} name
+     * @returns {SchemaTemplate|null}
+     */
     static load(name) {
         try {
             const stored = localStorage.getItem(this.STORAGE_KEY);
@@ -206,6 +358,12 @@ class SchemaTemplateManager {
         }
     }
 
+    /**
+     * Save a template (stamps `updatedAt`).
+     * @param {string} name
+     * @param {{name: string, fields: FieldDefinition[]}} schema
+     * @returns {boolean} false when storage failed
+     */
     static save(name, schema) {
         try {
             const stored = localStorage.getItem(this.STORAGE_KEY);
@@ -218,6 +376,11 @@ class SchemaTemplateManager {
         }
     }
 
+    /**
+     * Delete a template.
+     * @param {string} name
+     * @returns {boolean} false when there was nothing stored or storage failed
+     */
     static delete(name) {
         try {
             const stored = localStorage.getItem(this.STORAGE_KEY);
@@ -231,6 +394,11 @@ class SchemaTemplateManager {
         }
     }
 
+    /**
+     * Save the active schema (auto-save).
+     * @param {FieldDefinition[]} fields
+     * @returns {boolean} false when storage failed
+     */
     static saveActive(fields) {
         try {
             localStorage.setItem(this.ACTIVE_KEY, JSON.stringify(fields));
@@ -240,6 +408,10 @@ class SchemaTemplateManager {
         }
     }
 
+    /**
+     * Load the active (auto-saved) schema.
+     * @returns {FieldDefinition[]|null}
+     */
     static loadActive() {
         try {
             const stored = localStorage.getItem(this.ACTIVE_KEY);
@@ -259,9 +431,13 @@ if (typeof window !== 'undefined') {
 // Schema Builder Class
 // ============================================
 
+/**
+ * Visual drag-and-drop blueprint designer.
+ */
 class SchemaBuilder extends Component {
     static componentName = 'schema-builder';
 
+    /** @type {Required<SchemaBuilderOptions>} */
     static defaults = {
         theme: 'light',
         autoSave: true,
@@ -273,10 +449,16 @@ class SchemaBuilder extends Component {
         onExport: null
     };
 
+    /**
+     * @param {string|HTMLElement} selector - CSS selector or HTMLElement
+     * @param {SchemaBuilderOptions} [options] - Configuration options
+     */
     constructor(selector, options = {}) {
         super(selector, options);
+        /** @type {Required<SchemaBuilderOptions>} */
         this.options = { ...SchemaBuilder.defaults, ...options };
 
+        /** @type {FieldDefinition[]} */
         this._fields = [];
         this._selectedIndex = -1;
         this._schemaName = '';
@@ -954,6 +1136,12 @@ class SchemaBuilder extends Component {
     }
 
     // Public API
+    /**
+     * Add a field to the schema and select it. An unknown type does nothing.
+     * @param {FieldType} type - Field type
+     * @param {number} position - Position to insert (0-based index)
+     * @returns {this}
+     */
     addField(type, position) {
         const typeInfo = FIELD_TYPE_REGISTRY[type];
         if (!typeInfo) return this;
@@ -973,6 +1161,11 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Remove a field from the schema.
+     * @param {number} index - Field index to remove
+     * @returns {this}
+     */
     removeField(index) {
         if (index < 0 || index >= this._fields.length) return this;
 
@@ -989,6 +1182,11 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Duplicate a field (the copy's name gets `_copy`) and select the copy.
+     * @param {number} index - Field index to duplicate
+     * @returns {this}
+     */
     duplicateField(index) {
         if (index < 0 || index >= this._fields.length) return this;
 
@@ -1004,6 +1202,12 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Update field properties (shallow merge).
+     * @param {number} index - Field index to update
+     * @param {Partial<FieldDefinition>} updates - Property updates
+     * @returns {this}
+     */
     updateField(index, updates) {
         if (index < 0 || index >= this._fields.length) return this;
 
@@ -1017,14 +1221,27 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Get all fields (a deep copy).
+     * @returns {FieldDefinition[]}
+     */
     getFields() {
         return JSON.parse(JSON.stringify(this._fields));
     }
 
+    /**
+     * Get the blueprint object (field names as keys; unnamed fields are left out).
+     * @returns {Blueprint}
+     */
     getBlueprint() {
         return this._toBlueprint();
     }
 
+    /**
+     * Export to a JavaScript object literal (`const blueprint = {...};`). Calls `onExport('js', output)`.
+     * @param {ExportJSOptions} [options] - Not read at present
+     * @returns {string}
+     */
     exportJS(options = {}) {
         const blueprint = this._toBlueprint();
         let output = 'const blueprint = ';
@@ -1038,6 +1255,11 @@ class SchemaBuilder extends Component {
         return output;
     }
 
+    /**
+     * Export to JSON. Calls `onExport('json', output)`.
+     * @param {ExportJSONOptions} [options] - Not read at present
+     * @returns {string}
+     */
     exportJSON(options = {}) {
         const blueprint = this._toBlueprint();
         const output = JSON.stringify(blueprint, null, 2);
@@ -1049,6 +1271,11 @@ class SchemaBuilder extends Component {
         return output;
     }
 
+    /**
+     * Export to a TypeScript interface. Calls `onExport('typescript', output)`.
+     * @param {ExportTypeScriptOptions} [options] - Export options
+     * @returns {string}
+     */
     exportTypeScript(options = {}) {
         const { interfaceName = 'FormData' } = options;
         const blueprint = this._toBlueprint();
@@ -1068,6 +1295,12 @@ class SchemaBuilder extends Component {
         return output;
     }
 
+    /**
+     * Import an existing blueprint, replacing the current fields.
+     * @param {Blueprint} blueprint - Blueprint object to import
+     * @param {string} [name] - Optional name for the schema
+     * @returns {this}
+     */
     importBlueprint(blueprint, name) {
         const fields = [];
         for (const [fieldName, fieldDef] of Object.entries(blueprint)) {
@@ -1089,6 +1322,11 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Save the current schema as a template. Calls `onSave(name, schema)`.
+     * @param {string} name - Template name
+     * @returns {this}
+     */
     saveTemplate(name) {
         const schema = { name: this._schemaName, fields: this.getFields() };
         SchemaTemplateManager.save(name, schema);
@@ -1101,6 +1339,11 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Load a saved template. An unknown name does nothing.
+     * @param {string} name - Template name
+     * @returns {this}
+     */
     loadTemplate(name) {
         const schema = SchemaTemplateManager.load(name);
         if (!schema) return this;
@@ -1120,6 +1363,11 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Create a new schema (clear all fields).
+     * @param {string} [name] - Optional schema name
+     * @returns {this}
+     */
     newSchema(name = '') {
         this._fields = [];
         this._schemaName = name;
@@ -1136,6 +1384,11 @@ class SchemaBuilder extends Component {
         return this;
     }
 
+    /**
+     * Set the preview layout.
+     * @param {PreviewLayout} layout - Layout mode
+     * @returns {this}
+     */
     setPreviewLayout(layout) {
         this.options.previewLayout = layout;
 
@@ -1327,6 +1580,10 @@ class SchemaBuilder extends Component {
         return escapeHtml(str);
     }
 
+    /**
+     * Destroy the component and clean up (stops auto-save, destroys the preview form).
+     * @returns {void}
+     */
     destroy() {
         if (this._autoSaveTimer) clearInterval(this._autoSaveTimer);
         if (this._previewForm && this._previewForm.destroy) this._previewForm.destroy();

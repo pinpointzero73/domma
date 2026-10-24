@@ -3,6 +3,7 @@
  * Icons for social interactions and sharing
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const social = {
     'share': {
         viewBox: '0 0 24 24',

@@ -3,6 +3,7 @@
  * Electronic devices and hardware
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const devices = {
     // Phones
     'smartphone': {

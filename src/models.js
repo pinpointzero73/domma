@@ -39,14 +39,202 @@ import {
 const isEqual = (a, b) => utils.isEqual(a, b);
 
 /**
+ * A type check for a field's value (`M.types.*`).
+ * @callback TypeValidator
+ * @param {any} value
+ * @returns {boolean}
+ */
+
+/**
+ * One field of a blueprint. Forms (`F.create`) read further keys from the same object
+ * (`label`, `options`, `formConfig`, ...), so any other key is allowed.
+ * @typedef {object} FieldDefinition
+ * @property {'string'|'number'|'boolean'|'array'|'object'|'date'|'any'|(string & {})} [type] Checked with
+ *   `M.types[type]` when the value is not empty; a type with no validator (e.g. a form's `email`) is not checked
+ * @property {any} [default] Initial value when the data gives none (otherwise `null`)
+ * @property {boolean} [required] `null`, `undefined` and `''` fail
+ * @property {number} [min] Minimum, for a number value
+ * @property {number} [max] Maximum, for a number value
+ * @property {number} [minLength] Minimum length, for a string value
+ * @property {number} [maxLength] Maximum length, for a string value
+ * @property {RegExp} [pattern] Pattern a string value must match
+ * @property {(value: any) => boolean|string|void} [validate] Custom check: `false` fails, a string fails with
+ *   that message, anything else passes
+ */
+
+/**
+ * A blueprint: field name -> definition.
+ * @typedef {{[field: string]: FieldDefinition & {[key: string]: any}}} Schema
+ */
+
+/**
+ * @typedef {object} ValidationResult
+ * @property {boolean} valid
+ * @property {Array<{field: string, error: string}>} errors
+ */
+
+/**
+ * @typedef {object} ModelOptions
+ * @property {string} [persist] localStorage key (stored as `model:<persist>`); loaded on creation and saved on change
+ * @property {boolean} [autoSave=true] Save on every change when `persist` is set
+ */
+
+/**
+ * @typedef {object} ChangeEvent
+ * @property {string} field
+ * @property {any} newValue
+ * @property {any} oldValue
+ * @property {Model} model
+ */
+
+/**
+ * @callback ChangeCallback
+ * @param {ChangeEvent} event
+ * @returns {void}
+ */
+
+/**
+ * @callback FieldChangeCallback
+ * @param {any} newValue
+ * @param {any} oldValue
+ * @param {Model} model
+ * @returns {void}
+ */
+
+/** @typedef {() => void} UnsubscribeFn */
+
+/**
+ * Options for `M.bind()`.
+ * @typedef {object} BindingOptions
+ * @property {(value: any) => any} [format] Model value -> what the element shows
+ * @property {(value: any) => any} [parse] Element value -> what the model stores (two-way only)
+ * @property {boolean} [twoWay=false] Write the element's input back to the model
+ */
+
+/**
+ * A single reactive value (`M.observable()`), from domma-reactive.
+ * @template [T=any]
+ * @typedef {import('domma-reactive').Observable<T>} Observable
+ */
+
+/**
+ * A reactive array (`M.observableArray()`), from domma-reactive.
+ * @template [T=any]
+ * @typedef {import('domma-reactive').ObservableArray<T>} ObservableArray
+ */
+
+/**
+ * @template [T=any]
+ * @typedef {import('domma-reactive').ObservableOptions<T>} ObservableOptions
+ */
+
+/**
+ * A lazily-evaluated, dependency-tracked derived value (`M.computed()`).
+ * @template [T=any]
+ * @typedef {object} ComputedRef
+ * @property {T} value The same read as `get()`, spelled as a property - the only one a template expression can
+ *   use. Assigning hands the value to the derivation's `write` (warns and changes nothing without one).
+ * @property {() => T} get Current value, recomputing only if a dependency changed
+ * @property {(next: T) => void} set Imperative alias for assigning `.value`
+ * @property {() => T} peek Current value without registering a dependency on the caller
+ * @property {() => void} dispose Unlink from the dependency graph
+ */
+
+/**
+ * @template [T=any]
+ * @typedef {object} ComputedOptions
+ * @property {string} [label] Debug label used in warnings
+ * @property {(value: T, computation: import('domma-reactive').Computation<T>) => void} [onChange] Called with the
+ *   new value whenever it changes
+ */
+
+/**
+ * A writable computed: where a write should land.
+ * @template T
+ * @typedef {object} WritableComputedDefinition
+ * @property {() => T} read
+ * @property {(next: T) => void} write
+ */
+
+/**
+ * @typedef {object} EffectOptions
+ * @property {string} [label] Debug label used in warnings
+ */
+
+/**
+ * Options for `M.applyBindings()`.
+ * @typedef {object} ApplyBindingsOptions
+ * @property {Record<string, (...args: any[]) => any>} [methods] Handlers for `data-on-*`. Looked up only when the
+ *   data has no such key.
+ * @property {import('domma-reactive').RenderFn} [render] Template renderer for `data-each` item bodies.
+ *   Defaults to `utils.render`.
+ * @property {string} [template] A name for this subtree, used in warnings
+ */
+
+/**
+ * One activated binding record, from domma-reactive. `deps` are the names its expression reads.
+ * @typedef {import('domma-reactive').Binding} ActiveBinding
+ */
+
+/**
+ * What `M.applyBindings()` returns; call `dispose()` when the markup is done with.
+ * @typedef {import('domma-reactive').BindingsHandle} BindingHandle
+ */
+
+/**
+ * A binding kind for `M.registerBinding()`. Only `update` is required.
+ * @typedef {import('domma-reactive').BindingHandler} BindingHandler
+ */
+
+/**
+ * A named store (`M.store()`).
+ * @typedef {object} Store
+ * @property {Record<string, any>} state The current state (replaced, never mutated, by setState)
+ * @property {Set<(state: Record<string, any>, oldState: Record<string, any>) => void>} listeners
+ * @property {() => Record<string, any>} getState Get a copy of the current state
+ * @property {(updates: Record<string, any>) => void} setState Merge partial updates and notify
+ * @property {(listener: (state: Record<string, any>, oldState: Record<string, any>) => void) => () => boolean} subscribe
+ *   Subscribe to state changes; returns the unsubscribe function
+ * @property {(newState?: Record<string, any>) => void} reset Reset to the initial state, or to `newState`
+ *   (listeners receive `{}` as the old state)
+ */
+
+/**
+ * @typedef {object} TypeValidators
+ * @property {TypeValidator} string
+ * @property {TypeValidator} number Not NaN
+ * @property {TypeValidator} boolean
+ * @property {TypeValidator} array
+ * @property {TypeValidator} object A non-null, non-array object
+ * @property {TypeValidator} date A valid `Date`, or ISO-8601 date / date-time text
+ * @property {TypeValidator} any
+ */
+
+/**
  * Reactive Model Class
  */
-class Model {
+export class Model {
+    /**
+     * @param {Schema} schema Field definitions
+     * @param {Record<string, any>} [data={}] Initial data values
+     * @param {ModelOptions} [options={}]
+     */
     constructor(schema, data = {}, options = {}) {
+        /** @private */
         this._schema = schema;
+        /** @private */
         this._initialData = {};
+        /** @private */
         this._bindings = new Map();
+        /**
+         * @type {Set<ChangeCallback>}
+         * @private
+         */
         this._changeCallbacks = new Set();
+        /**
+         * @type {Map<string, Set<FieldChangeCallback>>}
+         * @private
+         */
         this._fieldCallbacks = new Map();
 
         // One observable per field, created up front from the schema and on
@@ -56,12 +244,24 @@ class Model {
         // utils.isEqual is passed as the equality gate so change detection stays
         // byte-identical to the previous DepMap implementation, which compared
         // with utils.isEqual before notifying.
-        /** @type {Map<string, {value: *, peek: Function, set: Function}>} */
+        /**
+         * @type {Map<string, Observable<any>>}
+         * @private
+         */
         this._fields = new Map();
+        /**
+         * @type {Record<string, any>|null}
+         * @private
+         */
         this._trackedView = null;
 
         // Persistence configuration
+        /**
+         * @type {string|null}
+         * @private
+         */
         this._persistKey = options.persist || null;
+        /** @private */
         this._autoSave = options.autoSave !== false; // Default true when persist is set
 
         // Initialise with defaults and provided data
@@ -87,8 +287,17 @@ class Model {
      * field currently present - the conservative choice, since the reader could
      * touch any of them.
      *
+     * @overload
+     * @returns {Record<string, any>} Every field
+     */
+    /**
+     * @overload
+     * @param {string} field
+     * @returns {any} The field's value (`undefined` for an unknown field)
+     */
+    /**
      * @param {string} [field]
-     * @returns {*}
+     * @returns {any}
      */
     get(field) {
         if (field) {
@@ -109,7 +318,7 @@ class Model {
      * the previous behaviour where _data accepted any key.
      *
      * @param {string} name
-     * @returns {{value: *, peek: Function, set: Function}}
+     * @returns {Observable<any>}
      * @private
      */
     _field(name) {
@@ -127,7 +336,7 @@ class Model {
      * Used by toJSON(), persistence and validation - render-time and
      * serialisation reads must not register dependencies.
      *
-     * @returns {Object}
+     * @returns {Record<string, any>}
      * @private
      */
     _snapshot() {
@@ -146,7 +355,7 @@ class Model {
      *   M.effect(() => console.log(state.count));   // re-runs when count changes
      *   state.count = 5;                            // validated + notified
      *
-     * @returns {Proxy}
+     * @returns {Record<string, any>}
      */
     tracked() {
         if (!this._trackedView) {
@@ -187,6 +396,24 @@ class Model {
         return this._trackedView;
     }
 
+    /**
+     * @overload
+     * @param {string} field
+     * @param {any} value
+     * @returns {this}
+     */
+    /**
+     * @overload
+     * @param {Record<string, any>} data Several fields at once
+     * @returns {this}
+     */
+    /**
+     * Set a field, or several from an object. Validates against the schema (throws on failure)
+     * and notifies only on a real change.
+     * @param {string|Record<string, any>} field
+     * @param {any} [value]
+     * @returns {this}
+     */
     set(field, value) {
         if (typeof field === 'object') {
             // Batch set
@@ -199,6 +426,11 @@ class Model {
         return this;
     }
 
+    /**
+     * @param {string} field
+     * @param {any} value
+     * @private
+     */
     _setField(field, value) {
         const obs = this._field(field);
         // Captured before the write: the observable holds only the new value
@@ -235,6 +467,12 @@ class Model {
         }
     }
 
+    /**
+     * @param {string} field
+     * @param {any} value
+     * @returns {{valid: boolean, error?: string}}
+     * @private
+     */
     _validateField(field, value) {
         const def = this._schema[field];
 
@@ -289,6 +527,10 @@ class Model {
         return {valid: true};
     }
 
+    /**
+     * Validate all fields
+     * @returns {ValidationResult}
+     */
     validate() {
         const errors = [];
         const data = this._snapshot();
@@ -306,6 +548,10 @@ class Model {
         };
     }
 
+    /**
+     * Get model data as a plain object (untracked)
+     * @returns {Record<string, any>}
+     */
     toJSON() {
         // Serialisation is not a dependency: untracked so a computation that
         // happens to call toJSON() is not linked to every field.
@@ -320,9 +566,20 @@ class Model {
      *
      * For positional arguments (newValue, oldValue, model), use onFieldChange().
      *
-     * @param {string|Function} fieldOrCallback
-     * @param {Function} [maybeCallback]
-     * @returns {Function} Unsubscribe function
+     * @overload
+     * @param {ChangeCallback} callback
+     * @returns {UnsubscribeFn}
+     */
+    /**
+     * @overload
+     * @param {string} field
+     * @param {ChangeCallback} callback
+     * @returns {UnsubscribeFn}
+     */
+    /**
+     * @param {string|ChangeCallback} fieldOrCallback
+     * @param {ChangeCallback} [maybeCallback]
+     * @returns {UnsubscribeFn} Unsubscribe function
      */
     onChange(fieldOrCallback, maybeCallback) {
         // Field-scoped overload
@@ -352,6 +609,12 @@ class Model {
         return () => this._changeCallbacks.delete(fieldOrCallback);
     }
 
+    /**
+     * Subscribe to one field's changes, with positional arguments (newValue, oldValue, model)
+     * @param {string} field
+     * @param {FieldChangeCallback} callback
+     * @returns {UnsubscribeFn} Unsubscribe function
+     */
     onFieldChange(field, callback) {
         if (!this._fieldCallbacks.has(field)) {
             this._fieldCallbacks.set(field, new Set());
@@ -363,6 +626,9 @@ class Model {
         return () => this._fieldCallbacks.get(field)?.delete(callback);
     }
 
+    /**
+     * @private
+     */
     _notifyChange(field, newValue, oldValue) {
         // Notify general callbacks
         for (const cb of this._changeCallbacks) {
@@ -377,6 +643,9 @@ class Model {
         }
     }
 
+    /**
+     * @private
+     */
     _updateBindings(field, value) {
         if (this._bindings.has(field)) {
             for (const binding of this._bindings.get(field)) {
@@ -385,6 +654,11 @@ class Model {
         }
     }
 
+    /**
+     * @param {string} field
+     * @param {Binding} binding
+     * @private
+     */
     _addBinding(field, binding) {
         if (!this._bindings.has(field)) {
             this._bindings.set(field, new Set());
@@ -392,12 +666,22 @@ class Model {
         this._bindings.get(field).add(binding);
     }
 
+    /**
+     * @param {string} field
+     * @param {Binding} binding
+     * @private
+     */
     _removeBinding(field, binding) {
         if (this._bindings.has(field)) {
             this._bindings.get(field).delete(binding);
         }
     }
 
+    /**
+     * Reset every field to its initial value
+     * @param {boolean} [clearStorage=false] Also clear the persisted copy
+     * @returns {this}
+     */
     reset(clearStorage = false) {
         for (const field in this._initialData) {
             this.set(field, utils.cloneDeep(this._initialData[field]));
@@ -410,6 +694,11 @@ class Model {
         return this;
     }
 
+    /**
+     * Destroy model and clean up: drops every listener, binding and observable
+     * @param {boolean} [clearStorage=false] Also clear the persisted copy
+     * @returns {void}
+     */
     destroy(clearStorage = false) {
         if (clearStorage && this._persistKey) {
             this.clearStorage();
@@ -517,6 +806,12 @@ class Model {
  * Binding class for DOM elements
  */
 class Binding {
+    /**
+     * @param {Model} model
+     * @param {string} field
+     * @param {HTMLElement} element
+     * @param {BindingOptions} [options]
+     */
     constructor(model, field, element, options = {}) {
         this.model = model;
         this.field = field;
@@ -536,6 +831,7 @@ class Binding {
         }
     }
 
+    /** @param {any} value */
     update(value) {
         const formatted = this.format(value);
         const el = this.element;
@@ -687,6 +983,11 @@ function isDateValue(val) {
 }
 
 /**
+ * The models module (`M`): pub/sub, reactive models, dependency-tracked reactivity, DOM bindings and stores.
+ * @typedef {typeof models} Models
+ */
+
+/**
  * Models module
  */
 export const models = {
@@ -694,8 +995,18 @@ export const models = {
     // Pub/Sub Event System
     // ============================================
 
+    /**
+     * @type {Map<string, Set<(data: any) => void>>}
+     * @private
+     */
     _events: new Map(),
 
+    /**
+     * Subscribe to an event
+     * @param {string} event
+     * @param {(data: any) => void} callback
+     * @returns {UnsubscribeFn}
+     */
     subscribe(event, callback) {
         if (!this._events.has(event)) {
             this._events.set(event, new Set());
@@ -706,20 +1017,44 @@ export const models = {
         return () => this.unsubscribe(event, callback);
     },
 
+    /**
+     * Alias for subscribe
+     * @param {string} event
+     * @param {(data: any) => void} callback
+     * @returns {UnsubscribeFn}
+     */
     on(event, callback) {
         return this.subscribe(event, callback);
     },
 
+    /**
+     * Unsubscribe from an event
+     * @param {string} event
+     * @param {(data: any) => void} callback
+     * @returns {void}
+     */
     unsubscribe(event, callback) {
         if (this._events.has(event)) {
             this._events.get(event).delete(callback);
         }
     },
 
+    /**
+     * Alias for unsubscribe
+     * @param {string} event
+     * @param {(data: any) => void} callback
+     * @returns {void}
+     */
     off(event, callback) {
         this.unsubscribe(event, callback);
     },
 
+    /**
+     * Publish an event
+     * @param {string} event
+     * @param {any} [data]
+     * @returns {void}
+     */
     publish(event, data) {
         if (this._events.has(event)) {
             for (const callback of this._events.get(event)) {
@@ -728,10 +1063,22 @@ export const models = {
         }
     },
 
+    /**
+     * Alias for publish
+     * @param {string} event
+     * @param {any} [data]
+     * @returns {void}
+     */
     emit(event, data) {
         this.publish(event, data);
     },
 
+    /**
+     * Subscribe to an event once
+     * @param {string} event
+     * @param {(data: any) => void} callback
+     * @returns {UnsubscribeFn}
+     */
     once(event, callback) {
         const wrapper = (data) => {
             this.unsubscribe(event, wrapper);
@@ -740,6 +1087,11 @@ export const models = {
         return this.subscribe(event, wrapper);
     },
 
+    /**
+     * Clear one event's listeners, or every event's
+     * @param {string} [event]
+     * @returns {void}
+     */
     clear(event) {
         if (event) {
             this._events.delete(event);
@@ -754,9 +1106,9 @@ export const models = {
 
     /**
      * Create a new reactive model
-     * @param {Object} schema - Field definitions
-     * @param {Object} [initialData={}] - Initial data values
-     * @param {Object} [options={}] - Options (persist, autoSave)
+     * @param {Schema} schema - Field definitions
+     * @param {Record<string, any>} [initialData={}] - Initial data values
+     * @param {ModelOptions} [options={}] - Options (persist, autoSave)
      * @returns {Model}
      */
     create(schema, initialData = {}, options = {}) {
@@ -765,8 +1117,8 @@ export const models = {
 
     /**
      * Extend a blueprint with additional fields
-     * @param {...Object} blueprints - Blueprints to merge (left-to-right)
-     * @returns {Object} - A new merged blueprint
+     * @param {...Schema} blueprints - Blueprints to merge (left-to-right)
+     * @returns {Schema} - A new merged blueprint
      */
     extend(...blueprints) {
         const result = {};
@@ -792,9 +1144,11 @@ export const models = {
 
     /**
      * Pick specific fields from a blueprint
-     * @param {Object} blueprint - Source blueprint
-     * @param {string[]} fields - Array of field names to pick
-     * @returns {Object} - New blueprint with only specified fields
+     * @template {Schema} S
+     * @template {keyof S & string} K
+     * @param {S} blueprint - Source blueprint
+     * @param {K[]} fields - Array of field names to pick
+     * @returns {Pick<S, K>} - New blueprint with only specified fields
      */
     pick(blueprint, fields) {
         const result = {};
@@ -810,9 +1164,11 @@ export const models = {
 
     /**
      * Omit specific fields from a blueprint
-     * @param {Object} blueprint - Source blueprint
-     * @param {string[]} fields - Array of field names to omit
-     * @returns {Object} - New blueprint without specified fields
+     * @template {Schema} S
+     * @template {keyof S & string} K
+     * @param {S} blueprint - Source blueprint
+     * @param {K[]} fields - Array of field names to omit
+     * @returns {Omit<S, K>} - New blueprint without specified fields
      */
     omit(blueprint, fields) {
         const result = utils.cloneDeep(blueprint);
@@ -896,12 +1252,24 @@ export const models = {
      * with no `write` warns and changes nothing, rather than storing into the
      * read cache where the next recompute would silently drop it.
      *
-     * @param {Function|Object} fn          Derivation, or {read, write}.
-     * @param {Object}   [options]
-     * @param {string}   [options.label]    Debug label used in warnings.
-     * @param {Function} [options.onChange] Called with the new value when it changes.
-     * @returns {{value: *, get: Function, set: Function, peek: Function,
-     *            dispose: Function}}
+     * @template [T=any]
+     * @overload
+     * @param {() => T} fn Derivation (read-only).
+     * @param {ComputedOptions<T>} [options]
+     * @returns {ComputedRef<T>}
+     */
+    /**
+     * @template [T=any]
+     * @overload
+     * @param {WritableComputedDefinition<T>} fn {read, write}: a writable computed.
+     * @param {ComputedOptions<T>} [options]
+     * @returns {ComputedRef<T>}
+     */
+    /**
+     * @template [T=any]
+     * @param {(() => T)|WritableComputedDefinition<T>} fn Derivation, or {read, write}.
+     * @param {ComputedOptions<T>} [options]
+     * @returns {ComputedRef<T>}
      */
     computed(fn, options = {}) {
         const comp = createComputed(fn, {
@@ -963,10 +1331,9 @@ export const models = {
      * Re-runs are batched: a burst of writes in the same tick produces a single
      * run on the next microtask, not one per write.
      *
-     * @param {Function} fn                Synchronous body.
-     * @param {Object}   [options]
-     * @param {string}   [options.label]   Debug label used in warnings.
-     * @returns {Function} Call to stop the effect.
+     * @param {() => unknown} fn          Synchronous body.
+     * @param {EffectOptions} [options]
+     * @returns {UnsubscribeFn} Call to stop the effect.
      */
     effect(fn, options = {}) {
         const comp = createEffect(fn, {label: options.label});
@@ -977,8 +1344,9 @@ export const models = {
      * Read values without registering them as dependencies of the enclosing
      * computed or effect.
      *
-     * @param {Function} fn
-     * @returns {*}
+     * @template T
+     * @param {() => T} fn
+     * @returns {T}
      */
     untracked(fn) {
         return runUntracked(fn);
@@ -988,6 +1356,7 @@ export const models = {
      * Settle all pending reactive work immediately rather than waiting for the
      * microtask flush. Mainly useful in tests and when code must observe a
      * derived value synchronously after a write.
+     * @returns {void}
      */
     flush() {
         flushReactive();
@@ -997,6 +1366,7 @@ export const models = {
     // Type Validators
     // ============================================
 
+    /** @type {TypeValidators} */
     types: {
         string: (val) => typeof val === 'string',
         number: (val) => typeof val === 'number' && !Number.isNaN(val),
@@ -1011,6 +1381,14 @@ export const models = {
     // DOM Binding
     // ============================================
 
+    /**
+     * Bind a model field to DOM element(s): the element shows the field, and with `twoWay` writes back to it
+     * @param {Model} model
+     * @param {string} field
+     * @param {string|HTMLElement} selector Selector (every match is bound) or element
+     * @param {BindingOptions} [options]
+     * @returns {UnsubscribeFn} Unbind function
+     */
     bind(model, field, selector, options = {}) {
         const elements = typeof selector === 'string'
             ? document.querySelectorAll(selector)
@@ -1069,16 +1447,17 @@ export const models = {
      * Applying twice over the same region is safe: elements already bound are
      * skipped, with one warning naming the root.
      *
-     * @param {Object}               data      A Model, or a plain object.
-     * @param {string|Element|Object} root     Selector, element or collection.
-     * @param {Object}   [options]
-     * @param {Object}   [options.methods]     Handlers for `data-on-*`.
-     * @param {Function} [options.render]      Template renderer for list items.
-     *                                         Defaults to `utils.render`, so
-     *                                         `{{ }}` inside a `data-each`
-     *                                         behaves as it does everywhere
-     *                                         else in Domma.
-     * @returns {{bindings: Array, context: Function, update: Function, dispose: Function}}
+     * @param {Model|Record<string, any>} data A Model, or a plain object.
+     * @param {string|Element|import('./dom.js').DommaCollection|ArrayLike<Element>} root Selector, element or
+     *                                         collection (its first element).
+     * @param {ApplyBindingsOptions} [options] `methods` (handlers for `data-on-*`),
+     *                                         `render` (template renderer for list
+     *                                         items - defaults to `utils.render`, so
+     *                                         `{{ }}` inside a `data-each` behaves as
+     *                                         it does everywhere else in Domma) and
+     *                                         `template` (a name used in warnings).
+     * @returns {BindingHandle}
+     * @throws {TypeError} When no element is found for `root`.
      */
     applyBindings(data, root, options = {}) {
         const element = resolveRoot(root);
@@ -1123,10 +1502,12 @@ export const models = {
      * so a handler that re-renders a region does so once however many regions
      * it owns.
      *
+     * @template {BindingHandler} H
      * @param {string} name    The binding kind, which becomes `binding.kind`.
-     * @param {Object} handler `{attribute|attributePrefix, expression, tracks,
+     * @param {H} handler `{attribute|attributePrefix, expression, tracks,
      *                         region, capturesBody, primes, update, attach,
      *                         detach}` - see docs/Bindings.md.
+     * @returns {H} The handler
      */
     registerBinding(name, handler) {
         return addBindingKind(name, handler);
@@ -1136,6 +1517,7 @@ export const models = {
      * Remove a binding kind added with registerBinding().
      *
      * @param {string} name
+     * @returns {boolean} whether anything was removed
      */
     unregisterBinding(name) {
         return removeBindingKind(name);
@@ -1163,8 +1545,10 @@ export const models = {
      * guarantee that a write always lands immediately - even under a rate
      * limit, where only the notification waits.
      *
+     * @template {import('domma-reactive').Extender} F
      * @param {string}   name
-     * @param {Function} fn `(control, value) => void`
+     * @param {F} fn `(control, value) => void`
+     * @returns {F} The extender
      */
     registerExtender(name, fn) {
         return addExtender(name, fn);
@@ -1194,8 +1578,10 @@ export const models = {
      *
      * Helpers are shared by every binding and every component template.
      *
+     * @template {(...args: any[]) => unknown} F
      * @param {string}   name
-     * @param {Function} fn   Pure, synchronous.
+     * @param {F} fn   Pure, synchronous.
+     * @returns {F} The helper
      */
     registerHelper(name, fn) {
         return addExpressionHelper(name, fn);
@@ -1205,6 +1591,7 @@ export const models = {
      * Remove a helper added with registerHelper().
      *
      * @param {string} name
+     * @returns {boolean} whether anything was removed
      */
     unregisterHelper(name) {
         return removeExpressionHelper(name);
@@ -1214,8 +1601,18 @@ export const models = {
     // Store (Simple State Management)
     // ============================================
 
+    /**
+     * @type {Map<string, Store>}
+     * @private
+     */
     _stores: new Map(),
 
+    /**
+     * Get or create a named store (`initialState` is used only when it is created)
+     * @param {string} name
+     * @param {Record<string, any>} [initialState={}]
+     * @returns {Store}
+     */
     store(name, initialState = {}) {
         if (!this._stores.has(name)) {
             const store = {
@@ -1251,10 +1648,20 @@ export const models = {
         return this._stores.get(name);
     },
 
+    /**
+     * Get an existing store
+     * @param {string} name
+     * @returns {Store|undefined}
+     */
     getStore(name) {
         return this._stores.get(name);
     },
 
+    /**
+     * Remove a store
+     * @param {string} name
+     * @returns {void}
+     */
     removeStore(name) {
         this._stores.delete(name);
     }

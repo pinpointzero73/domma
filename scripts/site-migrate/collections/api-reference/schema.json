@@ -1,7 +1,7 @@
 {
   "slug": "api-reference",
   "title": "API reference",
-  "description": "Every public Domma call: generated from the IDE declarations (public/assets/ide/phpstorm) by scripts/site-migrate/api-reference.mjs, examples from docs/API.md. Shown on /showcase/reference.",
+  "description": "Every public Domma call: generated from the TypeScript declarations (assets/types, from the JSDoc in src) by scripts/site-migrate/api-reference.mjs, examples from docs/API.md. Shown on /showcase/reference.",
   "fields": [
     {
       "name": "name",

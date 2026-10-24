@@ -248,7 +248,7 @@ All showcase files should use relative paths in this order:
 
 When updating showcases, verify code intelligence works:
 
-- Check `public/assets/ide/phpstorm/` type definitions
+- Check the type definitions in `assets/types/` (generated from the JSDoc in `src/`)
 - Update `.d.ts` files if adding new APIs
 - Test autocomplete in IDE
 

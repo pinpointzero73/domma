@@ -26,7 +26,7 @@ There is no separate lint script. Do not start a development server: one is norm
 
 - Prefer Domma APIs in framework-owned browser code and showcase material: `$()` for DOM/events, `_` for utilities, `D()` for dates, `S` for storage, `H` for HTTP, `M`/blueprints for reactive data and forms, `E` for UI components, and `I` for icons. The convention validator flags direct `document.querySelector`, `addEventListener`, `new Date()`, `fetch()`, and `localStorage` in applicable pages.
 - Use external `templateUrl` files for non-trivial router/component views; keep inline templates to very small snippets. Pair reusable sections with router `partials`.
-- When adding or changing a public API, update its documentation, showcase example, and PHPStorm code-intelligence definitions under `public/assets/ide/phpstorm/`. Add new public pages to `public/sitemap.xml`.
+- When adding or changing a public API, update its documentation, showcase example and JSDoc (the TypeScript declarations in `assets/types/` are generated from it: `npm run build:types`, see docs/Types.md). Add new public pages to `public/sitemap.xml`.
 - Build CSS before class/theme validators because they inspect `public/dist/*.css`. Validator baselines are intentional technical-debt records; lower them only when a finding is fixed.
 - Use British English in new code comments and documentation.
 - Consult the closest distributed `CLAUDE.md` before changing `src/`, a showcase subtree, bundles, or Kickstart templates; those files contain area-specific contracts.
