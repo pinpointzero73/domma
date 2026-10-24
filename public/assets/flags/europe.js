@@ -6,6 +6,7 @@
  * override any flag with FL.register(code, def) for a precise rendering.
  */
 
+/** @type {Record<string, import('../../../src/flags.js').FlagDefinition>} */
 export const europe = {
     gb: {
         name: 'United Kingdom',

@@ -3,6 +3,7 @@
  * Icons for navigation, links, and directional elements
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const navigation = {
     'chevron-up': {
         viewBox: '0 0 24 24',

@@ -7,21 +7,61 @@ import {categories, icons as defaultIcons} from '../public/assets/icons/index.js
 
 const NAMESPACE = 'http://www.w3.org/2000/svg';
 
+/**
+ * Built-in icon categories (keys of `listCategories()`); `custom` appears once an icon is registered.
+ * @typedef {'ui'|'communication'|'media'|'files'|'social'|'commerce'|'status'|'navigation'|'seasonal'|'weather'|'devices'|'finance'|'health'|'sport'|'buildings'|'emojis'|'transport'|'code'|'forms'|'custom'} IconCategory
+ */
+
+/**
+ * A category entry as returned by `listCategories()`.
+ * @typedef {object} IconCategoryInfo
+ * @property {string} name Display name
+ * @property {string} description
+ * @property {string[]} icons Icon names in the category
+ */
+
+/**
+ * An icon: SVG path data plus the attributes put on the `<svg>`.
+ * @typedef {object} IconDefinition
+ * @property {string} [viewBox] SVG viewBox (default '0 0 24 24')
+ * @property {string} [path] Single path data
+ * @property {string[]} [paths] Multiple path data
+ * @property {string} [stroke] Stroke colour (usually 'currentColor')
+ * @property {string} [fill] Fill colour ('none', or 'currentColor' for filled icons)
+ * @property {number|string} [strokeWidth] Stroke width
+ * @property {string} [strokeLinecap]
+ * @property {string} [strokeLinejoin]
+ */
+
+/**
+ * Options for `render()`, `html()` and `use()` (`use()` reads only `size` and `class`).
+ * @typedef {object} RenderOptions
+ * @property {number|string} [size=24] Icon size in pixels
+ * @property {string} [class] Additional CSS classes
+ * @property {string} [colour] Icon colour (overrides currentColor)
+ * @property {string} [color] Alias for colour
+ * @property {Record<string, string>} [attrs] Additional attributes
+ */
+
+/**
+ * Options for `inject()`: render options plus where the icon goes.
+ * @typedef {RenderOptions & {position?: 'prepend'|'append'|'replace'}} IconInjectOptions
+ */
+
+/** @typedef {IconRegistry} Icons */
+
 class IconRegistry {
     constructor() {
+        /** @type {Record<string, IconDefinition>} @private */
         this._icons = {...defaultIcons};
+        /** @type {Partial<Record<IconCategory, IconCategoryInfo>>} @private */
         this._categories = {...categories};
     }
 
     /**
      * Render an icon as an SVG element
      * @param {string} name - Icon name
-     * @param {Object} options - Render options
-     * @param {number} [options.size=24] - Icon size in pixels
-     * @param {string} [options.class] - Additional CSS classes
-     * @param {string} [options.colour] - Icon colour (overrides currentColor)
-     * @param {string} [options.color] - Alias for colour
-     * @param {Object} [options.attrs] - Additional attributes
+     * @param {RenderOptions} [options] - Render options
      * @returns {SVGElement|null}
      */
     render(name, options = {}) {
@@ -105,7 +145,7 @@ class IconRegistry {
     /**
      * Get icon as HTML string
      * @param {string} name - Icon name
-     * @param {Object} options - Render options (same as render())
+     * @param {RenderOptions} [options] - Render options (same as render())
      * @returns {string}
      */
     html(name, options = {}) {
@@ -123,8 +163,7 @@ class IconRegistry {
      * Inject icon into an element
      * @param {string|HTMLElement} target - Target element or selector
      * @param {string} name - Icon name
-     * @param {Object} options - Render options (same as render())
-     * @param {string} [options.position='prepend'] - 'prepend', 'append', or 'replace'
+     * @param {IconInjectOptions} [options] - Render options (same as render()), plus `position`: 'prepend' (default), 'append', or 'replace'
      * @returns {SVGElement|null}
      */
     inject(target, name, options = {}) {
@@ -163,7 +202,7 @@ class IconRegistry {
 
     /**
      * Scan document for [data-icon] elements and replace with SVGs
-     * @param {HTMLElement|string} [container=document] - Container to scan
+     * @param {Element|Document|DocumentFragment|string} [container=document] - Container to scan
      * @returns {number} Number of icons replaced
      */
     scan(container = document) {
@@ -219,14 +258,8 @@ class IconRegistry {
     /**
      * Register a custom icon
      * @param {string} name - Icon name
-     * @param {Object} definition - Icon definition
-     * @param {string} definition.viewBox - SVG viewBox
-     * @param {string} [definition.path] - Single path data
-     * @param {string[]} [definition.paths] - Multiple path data
-     * @param {string} [definition.stroke] - Stroke colour
-     * @param {string} [definition.fill] - Fill colour
-     * @param {number} [definition.strokeWidth] - Stroke width
-     * @returns {IconRegistry}
+     * @param {IconDefinition} definition - Icon definition (needs `path` or `paths`; `viewBox` defaults to '0 0 24 24')
+     * @returns {this}
      */
     register(name, definition) {
         if (!name || !definition) {
@@ -292,7 +325,7 @@ class IconRegistry {
     /**
      * Get icon definition
      * @param {string} name - Icon name
-     * @returns {Object|null}
+     * @returns {IconDefinition|null}
      */
     get(name) {
         return this._icons[name] || null;
@@ -300,7 +333,7 @@ class IconRegistry {
 
     /**
      * List all icon names
-     * @param {string} [category] - Filter by category
+     * @param {IconCategory|null} [category] - Filter by category
      * @returns {string[]}
      */
     list(category = null) {
@@ -312,7 +345,7 @@ class IconRegistry {
 
     /**
      * List all categories
-     * @returns {Object}
+     * @returns {Partial<Record<IconCategory, IconCategoryInfo>>}
      */
     listCategories() {
         return {...this._categories};
@@ -396,7 +429,7 @@ class IconRegistry {
     /**
      * Use an icon from sprite sheet
      * @param {string} name - Icon name
-     * @param {Object} options - Render options
+     * @param {RenderOptions} [options] - Render options (`size` and `class`)
      * @returns {SVGElement|null}
      */
     use(name, options = {}) {

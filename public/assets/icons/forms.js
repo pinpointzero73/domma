@@ -15,6 +15,7 @@ const line = (path) => ({
     strokeLinejoin: 'round'
 });
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const forms = {
     // People
     'email': line('M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9h4'),

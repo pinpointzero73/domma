@@ -36,6 +36,58 @@ const AVAILABLE_THEMES = [
 // Default theme
 const DEFAULT_THEME = 'charcoal-dark';
 
+/**
+ * Light/dark mode - the final segment of a standard theme name.
+ * @typedef {'light'|'dark'} ThemeMode
+ */
+
+/**
+ * Colour base of a theme (the name before the final segment), as listed by `listBases()`
+ * (`core` is the base of `core-light`).
+ * @typedef {'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'core'|'corporate'|'admin-smooth'|'admin-sharp'|'admin-slate'} ThemeVariant
+ */
+
+/**
+ * Standalone Admin family (no light/dark) - finish-accent full names.
+ * @typedef {'admin-smooth-steel'|'admin-smooth-indigo'|'admin-smooth-teal'|'admin-sharp-steel'|'admin-sharp-indigo'|'admin-sharp-teal'|'admin-slate-steel'|'admin-slate-indigo'|'admin-slate-teal'} AdminTheme
+ */
+
+/**
+ * A full theme name, e.g. 'ocean-dark' or 'admin-sharp-steel'.
+ * @typedef {`${'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'corporate'}-${ThemeMode}`|'core-light'|AdminTheme} ThemeName
+ */
+
+/**
+ * What `getConfig()` returns.
+ * @typedef {object} ThemeConfig
+ * @property {ThemeName} theme Current full theme name
+ * @property {ThemeVariant} base Colour base (see `getBase()`)
+ * @property {ThemeMode|'steel'|'indigo'|'teal'} mode Final segment (see `getMode()`)
+ * @property {boolean} autoDetect Whether the system preference is followed
+ * @property {boolean|undefined} persist Whether the choice is saved to localStorage (undefined before init)
+ * @property {boolean} disabled Whether theming is disabled
+ */
+
+/**
+ * Called with the previous and the new theme name when the theme changes.
+ * @callback ThemeChangeCallback
+ * @param {ThemeName} oldTheme
+ * @param {ThemeName} newTheme
+ * @returns {void}
+ */
+
+/**
+ * Options for `init()`.
+ * @typedef {object} ThemeOptions
+ * @property {ThemeName} [theme] Initial theme (e.g., 'ocean-dark', 'forest-light')
+ * @property {boolean} [autoDetect=false] Respect system preference (maps to light/dark variants)
+ * @property {boolean} [persist=true] Save to localStorage
+ * @property {boolean} [disabled=false] Disable theming entirely (no classes applied)
+ * @property {HTMLElement|string} [target=document.body] Target element
+ */
+
+/** @typedef {ThemeEngine} Theme */
+
 class ThemeEngine {
     constructor() {
         this._theme = DEFAULT_THEME; // Now stores full theme name like 'ocean-dark'
@@ -49,13 +101,8 @@ class ThemeEngine {
 
     /**
      * Initialise the theme engine
-     * @param {Object} options - Configuration options
-     * @param {string} [options.theme] - Initial theme (e.g., 'ocean-dark', 'forest-light')
-     * @param {boolean} [options.autoDetect=false] - Respect system preference (maps to light/dark variants)
-     * @param {boolean} [options.persist=true] - Save to localStorage
-     * @param {boolean} [options.disabled=false] - Disable theming entirely (no classes applied)
-     * @param {HTMLElement|string} [options.target=document.body] - Target element
-     * @returns {ThemeEngine}
+     * @param {ThemeOptions} [options] - Configuration options
+     * @returns {this}
      */
     init(options = {}) {
         const {
@@ -122,7 +169,7 @@ class ThemeEngine {
 
     /**
      * Get the current theme (full name, e.g., 'ocean-dark')
-     * @returns {string}
+     * @returns {ThemeName}
      */
     get() {
         return this._theme;
@@ -132,7 +179,7 @@ class ThemeEngine {
      * Get the theme base colour (everything before the final '-' segment).
      * For standard themes this is the colour name (e.g., 'ocean' from 'ocean-dark').
      * For Admin themes the base is the finish (e.g., 'admin-sharp' from 'admin-sharp-steel').
-     * @returns {string}
+     * @returns {ThemeVariant}
      */
     getBase() {
         return this._theme.split('-').slice(0, -1).join('-');
@@ -143,7 +190,7 @@ class ThemeEngine {
      * For standard themes this is the light/dark mode (e.g., 'dark' from 'ocean-dark',
      * 'light' from 'forest-light'). Admin themes have no light/dark mode, so this
      * returns the accent name instead (e.g., 'steel', 'indigo', or 'teal').
-     * @returns {string}
+     * @returns {ThemeMode|'steel'|'indigo'|'teal'}
      */
     getMode() {
         return this._theme.split('-').pop();
@@ -168,8 +215,8 @@ class ThemeEngine {
 
     /**
      * Set the theme (e.g., 'ocean-dark', 'forest-light')
-     * @param {string} theme - Full theme name
-     * @returns {ThemeEngine}
+     * @param {ThemeName} theme - Full theme name
+     * @returns {this}
      */
     set(theme) {
         if (!AVAILABLE_THEMES.includes(theme)) {
@@ -192,6 +239,7 @@ class ThemeEngine {
 
     /**
      * @deprecated Use set() with full theme name instead (e.g., set('ocean-dark'))
+     * @returns {this}
      */
     setVariant() {
         console.warn('[ThemeEngine] setVariant() is deprecated. Use set() with full theme name (e.g., set("ocean-dark"))');
@@ -200,6 +248,7 @@ class ThemeEngine {
 
     /**
      * @deprecated No longer applicable with unified theme system. Use variant selector UI instead.
+     * @returns {this}
      */
     toggle() {
         console.warn('[ThemeEngine] toggle() is deprecated. Use variant selector UI or set() method.');
@@ -208,8 +257,8 @@ class ThemeEngine {
 
     /**
      * Register a callback for theme changes
-     * @param {Function} callback - Callback function(oldTheme, newTheme)
-     * @returns {Function} Unsubscribe function
+     * @param {ThemeChangeCallback} callback - Callback function(oldTheme, newTheme)
+     * @returns {() => void} Unsubscribe function
      */
     onChange(callback) {
         if (typeof callback !== 'function') {
@@ -230,8 +279,8 @@ class ThemeEngine {
 
     /**
      * Preview a theme temporarily without saving
-     * @param {string} theme - Theme to preview (e.g., 'ocean-dark')
-     * @returns {Function} Restore function
+     * @param {ThemeName} theme - Theme to preview (e.g., 'ocean-dark')
+     * @returns {() => void} Restore function
      */
     preview(theme) {
         if (!AVAILABLE_THEMES.includes(theme)) {
@@ -255,7 +304,7 @@ class ThemeEngine {
 
     /**
      * List all available themes
-     * @returns {string[]} Array of all 33 theme names
+     * @returns {ThemeName[]} Array of all 33 theme names
      */
     listThemes() {
         return [...AVAILABLE_THEMES];
@@ -263,7 +312,7 @@ class ThemeEngine {
 
     /**
      * List available colour bases (without mode suffix)
-     * @returns {string[]}
+     * @returns {ThemeVariant[]}
      */
     listBases() {
         return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding', 'corporate', 'admin-smooth', 'admin-sharp', 'admin-slate'];
@@ -271,6 +320,7 @@ class ThemeEngine {
 
     /**
      * @deprecated Use listThemes() instead. Kept for backward compatibility.
+     * @returns {ThemeVariant[]}
      */
     listVariants() {
         console.warn('[ThemeEngine] listVariants() is deprecated. Use listThemes() instead.');
@@ -279,7 +329,7 @@ class ThemeEngine {
 
     /**
      * Get current theme configuration
-     * @returns {Object}
+     * @returns {ThemeConfig}
      */
     getConfig() {
         return {
@@ -322,7 +372,7 @@ class ThemeEngine {
 
     /**
      * Enable theming (if previously disabled)
-     * @returns {ThemeEngine}
+     * @returns {this}
      */
     enable() {
         this._disabled = false;
@@ -338,7 +388,7 @@ class ThemeEngine {
 
     /**
      * Disable theming (remove all theme classes)
-     * @returns {ThemeEngine}
+     * @returns {this}
      */
     disable() {
         this._disabled = true;
@@ -519,6 +569,7 @@ class ThemeEngine {
 
     /**
      * Cleanup and destroy the theme engine
+     * @returns {void}
      */
     destroy() {
         if (this._systemMediaQuery) {

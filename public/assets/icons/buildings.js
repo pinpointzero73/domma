@@ -3,6 +3,7 @@
  * Architecture, structures, and landmarks
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const buildings = {
     // Generic
     'building': {

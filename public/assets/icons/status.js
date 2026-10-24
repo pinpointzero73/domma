@@ -3,6 +3,7 @@
  * Icons for status indicators, alerts, and feedback
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const status = {
     'check': {
         viewBox: '0 0 24 24',

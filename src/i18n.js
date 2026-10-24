@@ -41,6 +41,68 @@ const RTL_LANGUAGES = new Set(['ar', 'arc', 'ckb', 'dv', 'fa', 'he', 'iw', 'ks',
 const RTL_SCRIPTS = new Set(['Arab', 'Hebr', 'Thaa', 'Syrc', 'Nkoo', 'Adlm', 'Rohg', 'Mand', 'Samr']);
 
 // ============================================
+// Types
+// ============================================
+
+/**
+ * A plural message: chosen by `params.count`; `=N` keys match exactly, `zero` matches 0.
+ * `ordinal: true` uses ordinal rules (1st, 2nd, 3rd...).
+ * @typedef {{zero?: string, one?: string, two?: string, few?: string, many?: string, other: string, ordinal?: boolean, [exact: `=${number}`]: string}} I18nPluralForms
+ */
+
+/**
+ * A select message: `select` names the param whose value picks the form; `other` otherwise.
+ * @typedef {{select: string, other: string, [value: string]: string}} I18nSelectForms
+ */
+
+/**
+ * Nested message tree; nesting becomes dot keys.
+ * @typedef {{[key: string]: string | number | boolean | I18nPluralForms | I18nSelectForms | I18nMessages}} I18nMessages
+ */
+
+/**
+ * @typedef {object} I18nTranslateOptions
+ * @property {string} [locale] Translate in this locale instead of the current one
+ * @property {string} [default] Returned (interpolated) when the key is missing, instead of the key
+ * @property {boolean} [ordinal] Choose plural forms by ordinal rules
+ */
+
+/**
+ * @typedef {object} I18nDetectOptions
+ * @property {Array<'storage'|'navigator'|'html'>} [from] Sources in order. Default ['storage', 'navigator', 'html']
+ * @property {string} [storageKey] S key: read in 'storage', and every later locale(code) is saved there
+ * @property {string[]} [supported] Only these locales (or their base language) are accepted
+ * @property {string} [fallback] Used when nothing matches (else the current locale stays)
+ * @property {boolean} [apply] Set the found locale (default true)
+ */
+
+/**
+ * @typedef {object} I18nChangeDetail
+ * @property {string} locale
+ * @property {string} previous
+ */
+
+/**
+ * @typedef {object} I18nMissingDetail
+ * @property {string} key
+ * @property {string} locale
+ */
+
+/**
+ * @typedef {object} I18nLoadedDetail
+ * @property {string} locale
+ * @property {I18nMessages} messages
+ */
+
+/**
+ * Formatter options plus an optional `locale` override.
+ * @template T
+ * @typedef {T & {locale?: string}} WithLocale
+ */
+
+/** @typedef {typeof i18n} I18n */
+
+// ============================================
 // State
 // ============================================
 
@@ -274,8 +336,8 @@ export const i18n = {
      * Add messages for a locale. Nested objects become dot keys; later calls merge (a key
      * already there is replaced, everything else is kept).
      * @param {string} locale
-     * @param {Object} source
-     * @returns {Object} i18n
+     * @param {I18nMessages} source
+     * @returns {I18n} i18n
      */
     add(locale, source) {
         const code = canonical(locale);
@@ -295,9 +357,9 @@ export const i18n = {
      * calling this from three places makes one request. A failed load is not cached.
      * `{locale}` in the URL is replaced with the code.
      * @param {string} locale
-     * @param {string|Function} source - URL, or () => Promise<Object>
+     * @param {string|((locale: string) => Promise<I18nMessages>|I18nMessages)} source - URL, or () => Promise<Object>
      * @param {{reload?: boolean}} [options]
-     * @returns {Promise<Object>} The messages loaded
+     * @returns {Promise<I18nMessages>} The messages loaded
      */
     load(locale, source, options = {}) {
         const code = canonical(locale);
@@ -331,6 +393,17 @@ export const i18n = {
         return promise;
     },
 
+    /**
+     * Get the current locale.
+     * @overload
+     * @returns {string} The current locale
+     */
+    /**
+     * Set the locale: fires change, sets <html lang dir>, re-translates the document.
+     * @overload
+     * @param {string} code
+     * @returns {string} The current locale
+     */
     /**
      * Get the current locale, or set it. Setting fires `change`, sets `<html lang dir>`,
      * re-translates the document and (after `detect({storageKey})`) remembers the choice.
@@ -377,8 +450,8 @@ export const i18n = {
      * text, not HTML); `count` chooses a plural form. A missing key returns `default` (itself
      * interpolated) or the key.
      * @param {string} key
-     * @param {Object} [params]
-     * @param {{locale?: string, default?: string, ordinal?: boolean}} [options]
+     * @param {Record<string, any>|null} [params]
+     * @param {I18nTranslateOptions} [options]
      * @returns {string}
      */
     t(key, params, options = {}) {
@@ -389,8 +462,8 @@ export const i18n = {
      * Translate a key to HTML: the message's own markup is kept and every param is escaped.
      * The message itself is trusted (it is yours); `translate()` sanitises before inserting.
      * @param {string} key
-     * @param {Object} [params]
-     * @param {Object} [options] - As for t()
+     * @param {Record<string, any>|null} [params]
+     * @param {I18nTranslateOptions} [options] - As for t()
      * @returns {string}
      */
     html(key, params, options = {}) {
@@ -400,8 +473,8 @@ export const i18n = {
     /**
      * Register the hook for a missing key: fn(key, locale). A string it returns is used as the
      * translation. Pass null to remove it.
-     * @param {Function|null} fn
-     * @returns {Object} i18n
+     * @param {((key: string, locale: string) => string|void)|null} fn
+     * @returns {I18n} i18n
      */
     onMissing(fn) {
         missingHook = typeof fn === 'function' ? fn : null;
@@ -409,10 +482,28 @@ export const i18n = {
     },
 
     /**
+     * @overload
+     * @param {'change'} event
+     * @param {(detail: I18nChangeDetail) => void} fn
+     * @returns {() => void} Unsubscribe
+     */
+    /**
+     * @overload
+     * @param {'missing'} event
+     * @param {(detail: I18nMissingDetail) => void} fn
+     * @returns {() => void} Unsubscribe
+     */
+    /**
+     * @overload
+     * @param {'loaded'} event
+     * @param {(detail: I18nLoadedDetail) => void} fn
+     * @returns {() => void} Unsubscribe
+     */
+    /**
      * Subscribe to 'change' | 'missing' | 'loaded'. Also dispatched on document as dm:i18n:<event>.
-     * @param {string} event
-     * @param {Function} fn
-     * @returns {Function} Unsubscribe
+     * @param {'change'|'missing'|'loaded'} event
+     * @param {(detail: any) => void} fn
+     * @returns {() => void} Unsubscribe
      */
     on(event, fn) {
         if (typeof fn !== 'function') return () => {};
@@ -423,9 +514,9 @@ export const i18n = {
 
     /**
      * Unsubscribe (with no fn, every listener for that event).
-     * @param {string} event
-     * @param {Function} [fn]
-     * @returns {Object} i18n
+     * @param {'change'|'missing'|'loaded'} event
+     * @param {(...args: any[]) => void} [fn]
+     * @returns {I18n} i18n
      */
     off(event, fn) {
         if (!fn) listeners.delete(event);
@@ -464,7 +555,7 @@ export const i18n = {
      * HTML), `[data-i18n-attr="placeholder:key; title:key2"]`, each taking params from
      * `data-i18n-params` (JSON). What the page first said is kept and shown when a key is
      * missing, so authored text doubles as the default. Call it on content you add later.
-     * @param {Element|Document|string|Object} [root=document] - Element, selector or Domma collection
+     * @param {Element|Document|string|ArrayLike<Element>} [root=document] - Element, selector or Domma collection
      * @returns {number} Elements translated
      */
     translate(root) {
@@ -484,7 +575,7 @@ export const i18n = {
      * Pick a locale from storage, the browser and/or `<html lang>`, in the order given, set
      * it, and return it. With `storageKey`, the choice (and every later `locale(code)`) is
      * kept in S under that key. With `supported`, only those (or their base language) count.
-     * @param {{from?: string[], storageKey?: string, supported?: string[], fallback?: string, apply?: boolean}} [options]
+     * @param {I18nDetectOptions} [options]
      * @returns {string}
      */
     detect(options = {}) {
@@ -533,8 +624,8 @@ export const i18n = {
     // ----- Formatting (Intl, in the current locale; `{locale}` in options overrides) -----
 
     /**
-     * @param {number} n
-     * @param {Intl.NumberFormatOptions & {locale?: string}} [opts]
+     * @param {number|bigint} n
+     * @param {WithLocale<Intl.NumberFormatOptions>} [opts]
      * @returns {string}
      */
     number(n, opts) {
@@ -543,9 +634,9 @@ export const i18n = {
     },
 
     /**
-     * @param {number} n
+     * @param {number|bigint} n
      * @param {string} code - ISO 4217 currency, e.g. 'GBP'
-     * @param {Intl.NumberFormatOptions & {locale?: string}} [opts]
+     * @param {WithLocale<Intl.NumberFormatOptions>} [opts]
      * @returns {string}
      */
     currency(n, code, opts) {
@@ -557,8 +648,8 @@ export const i18n = {
     /**
      * Format a date. Accepts a Date, timestamp, date string or a D() wrapper.
      * An invalid date formats as ''.
-     * @param {Date|number|string|Object} d
-     * @param {Intl.DateTimeFormatOptions & {locale?: string}} [opts]
+     * @param {Date|number|string|{toDate(): Date}} d
+     * @param {WithLocale<Intl.DateTimeFormatOptions>} [opts]
      * @returns {string}
      */
     date(d, opts) {
@@ -571,8 +662,8 @@ export const i18n = {
     /**
      * "in 3 days", "2 hours ago" - Intl.RelativeTimeFormat.
      * @param {number} value - Negative for the past
-     * @param {string} unit - 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year'
-     * @param {Intl.RelativeTimeFormatOptions & {locale?: string}} [opts]
+     * @param {Intl.RelativeTimeFormatUnit} unit - 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year'
+     * @param {WithLocale<Intl.RelativeTimeFormatOptions>} [opts]
      * @returns {string}
      */
     relative(value, unit, opts) {
@@ -583,7 +674,7 @@ export const i18n = {
     /**
      * "a, b and c" - Intl.ListFormat.
      * @param {Iterable<string>} items
-     * @param {Object} [opts] - Intl.ListFormat options plus `locale`
+     * @param {WithLocale<{type?: 'conjunction'|'disjunction'|'unit', style?: 'long'|'short'|'narrow'}>} [opts] - Intl.ListFormat options plus `locale`
      * @returns {string}
      */
     list(items, opts) {
@@ -593,7 +684,7 @@ export const i18n = {
 
     /**
      * Forget every message, load, listener, hook and setting (tests, or a full reload).
-     * @returns {Object} i18n
+     * @returns {I18n} i18n
      */
     reset() {
         messages.clear();

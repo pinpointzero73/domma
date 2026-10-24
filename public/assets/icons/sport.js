@@ -3,6 +3,7 @@
  * Sports, fitness, and athletic icons
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const sport = {
     // Ball Sports
     'football': {

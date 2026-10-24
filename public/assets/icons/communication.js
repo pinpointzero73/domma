@@ -3,6 +3,7 @@
  * Icons for messaging, notifications, and communication
  */
 
+/** @type {Record<string, import('../../../src/icons.js').IconDefinition>} */
 export const communication = {
     'mail': {
         viewBox: '0 0 24 24',
