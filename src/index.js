@@ -13,6 +13,7 @@ import {icons} from './icons.js';
 import {storage} from './storage.js';
 import {auth} from './auth.js';
 import {router} from './router.js';
+import {i18n} from './i18n.js';
 import effects from './effects.js';
 import sanitizeModule from './sanitize.js';
 import {components, createComponent} from './component-factory.js';
@@ -111,6 +112,9 @@ Domma.auth = auth;
 Domma.router = router;
 Domma.sanitize = sanitizeModule;
 Domma.components = components;
+Domma.i18n = i18n;
+// Domma.t('key', params) - the call you write most, so it gets a short name on Domma itself.
+Domma.t = (key, params, options) => i18n.t(key, params, options);
 
 /**
  * Shorthand for Domma.components.define() - register a standalone component.
@@ -162,7 +166,7 @@ Domma.isDomma = isDomma;
 installGlobals(Domma, {$, _, M, D, S, A, F, H, E, I, T, R, B});
 
 export default Domma;
-export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components, smoothCaret};
+export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components, smoothCaret, i18n};
 
 // Reveal page after Domma is ready
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
