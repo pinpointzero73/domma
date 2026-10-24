@@ -61,7 +61,7 @@ $.ready(() => {
         // Event bindings
         '#theme-toggle': {
             events: {
-                click: () => Domma.theme.toggle()
+                click: () => Domma.theme.set(`${Domma.theme.getBase()}-${Domma.theme.isDark() ? 'light' : 'dark'}`)
             }
         }
     });

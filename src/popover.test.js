@@ -375,7 +375,7 @@ describe('Domma.elements.popover', () => {
         it('fires show, shown, hide and hidden on the trigger and calls the callbacks', () => {
             const seen = [];
             ['show', 'shown', 'hide', 'hidden'].forEach((n) =>
-                btn.addEventListener(`popover:${n}`, (e) => seen.push(`event:${n}:${e.detail.popover === p}`)));
+                btn.addEventListener(`dm:popover:${n}`, (e) => seen.push(`event:${n}:${e.detail.instance === p}`)));
             const p = make(btn, {
                 content: 'x',
                 onShow: () => seen.push('cb:show'),
@@ -391,13 +391,13 @@ describe('Domma.elements.popover', () => {
             ]);
         });
 
-        it('onShow returning false, or preventDefault on popover:show, cancels the open', () => {
+        it('onShow returning false, or preventDefault on dm:popover:show, cancels the open', () => {
             const p = make(btn, {content: 'x', onShow: () => false});
             p.show();
             expect(p.isOpen()).toBe(false);
 
             const q = make(other, {content: 'y'});
-            other.addEventListener('popover:show', (e) => e.preventDefault());
+            other.addEventListener('dm:popover:show', (e) => e.preventDefault());
             q.show();
             expect(q.isOpen()).toBe(false);
         });
@@ -407,8 +407,8 @@ describe('Domma.elements.popover', () => {
             const events = [];
             const p = E.popover(btn, {content: 'x', animationDuration: 100});
             made.push(p);
-            btn.addEventListener('popover:shown', () => events.push('shown'));
-            btn.addEventListener('popover:hidden', () => events.push('hidden'));
+            btn.addEventListener('dm:popover:shown', () => events.push('shown'));
+            btn.addEventListener('dm:popover:hidden', () => events.push('hidden'));
             p.show();
             expect(events).toEqual([]);
             vi.advanceTimersByTime(100);
@@ -678,7 +678,7 @@ describe('Domma.elements.popover', () => {
         it('show() on a trigger that has left the document does nothing', () => {
             const events = [];
             const p = make(btn, {content: 'x'});
-            ['show', 'shown', 'hide', 'hidden'].forEach((n) => btn.addEventListener(`popover:${n}`, () => events.push(n)));
+            ['show', 'shown', 'hide', 'hidden'].forEach((n) => btn.addEventListener(`dm:popover:${n}`, () => events.push(n)));
             btn.remove();
             p.show();
             expect(p.isOpen()).toBe(false);

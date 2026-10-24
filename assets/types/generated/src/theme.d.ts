@@ -173,16 +173,6 @@ declare class ThemeEngine {
      */
     set(theme: ThemeName): this;
     /**
-     * @deprecated Use set() with full theme name instead (e.g., set('ocean-dark'))
-     * @returns {this}
-     */
-    setVariant(): this;
-    /**
-     * @deprecated No longer applicable with unified theme system. Use variant selector UI instead.
-     * @returns {this}
-     */
-    toggle(): this;
-    /**
      * Register a callback for theme changes
      * @param {ThemeChangeCallback} callback - Callback function(oldTheme, newTheme)
      * @returns {() => void} Unsubscribe function
@@ -204,11 +194,6 @@ declare class ThemeEngine {
      * @returns {ThemeVariant[]}
      */
     listBases(): ThemeVariant[];
-    /**
-     * @deprecated Use listThemes() instead. Kept for backward compatibility.
-     * @returns {ThemeVariant[]}
-     */
-    listVariants(): ThemeVariant[];
     /**
      * Get current theme configuration
      * @returns {ThemeConfig}

@@ -125,8 +125,6 @@ export class Modal extends Component {
     _later(fn: any, ms: any): void;
     _clearTimers(): void;
     _duration(): number;
-    /** The deprecated unprefixed DOM event, dispatched on the element only (no bubbling). */
-    _legacyEvent(name: any): void;
     /**
      * Open the modal.
      * @returns {this}

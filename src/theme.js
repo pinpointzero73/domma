@@ -238,24 +238,6 @@ class ThemeEngine {
     }
 
     /**
-     * @deprecated Use set() with full theme name instead (e.g., set('ocean-dark'))
-     * @returns {this}
-     */
-    setVariant() {
-        console.warn('[ThemeEngine] setVariant() is deprecated. Use set() with full theme name (e.g., set("ocean-dark"))');
-        return this;
-    }
-
-    /**
-     * @deprecated No longer applicable with unified theme system. Use variant selector UI instead.
-     * @returns {this}
-     */
-    toggle() {
-        console.warn('[ThemeEngine] toggle() is deprecated. Use variant selector UI or set() method.');
-        return this;
-    }
-
-    /**
      * Register a callback for theme changes
      * @param {ThemeChangeCallback} callback - Callback function(oldTheme, newTheme)
      * @returns {() => void} Unsubscribe function
@@ -316,15 +298,6 @@ class ThemeEngine {
      */
     listBases() {
         return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding', 'corporate', 'admin-smooth', 'admin-sharp', 'admin-slate'];
-    }
-
-    /**
-     * @deprecated Use listThemes() instead. Kept for backward compatibility.
-     * @returns {ThemeVariant[]}
-     */
-    listVariants() {
-        console.warn('[ThemeEngine] listVariants() is deprecated. Use listThemes() instead.');
-        return this.listBases();
     }
 
     /**

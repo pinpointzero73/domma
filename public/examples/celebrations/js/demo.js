@@ -298,7 +298,7 @@ $(() => {
   $('#theme-variant-select').on('change', function() {
     const variant = $(this).val();
     if (Domma.theme) {
-      Domma.theme.setVariant(variant);
+      Domma.theme.set(`${Domma.theme.getBase()}-${variant}`);
     }
   });
 

@@ -9,12 +9,12 @@ export function mount(root) {
             list.find('li').filter((i) => i >= 8).remove();
         };
         // ---- One listener for the whole page -------------------------------------
-    $('main').on('popover:shown', (e) => {
-            const trigger = e.detail.popover.trigger;
+    $('main').on('dm:popover:shown', (e) => {
+            const trigger = e.detail.instance.trigger;
             log('Opened: ' + (trigger.getAttribute('aria-label') || trigger.textContent.trim()));
         });
-    $('main').on('popover:hidden', (e) => {
-            const trigger = e.detail.popover.trigger;
+    $('main').on('dm:popover:hidden', (e) => {
+            const trigger = e.detail.instance.trigger;
             log('Closed: ' + (trigger.getAttribute('aria-label') || trigger.textContent.trim()));
         });
 }

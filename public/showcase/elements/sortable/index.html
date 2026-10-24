@@ -372,26 +372,26 @@ E.sortable('#demo-fields', {handle: '.sx-sort-grip'});
         <div class="card-header"><h2 class="text-xl font-semibold m-0">Events</h2></div>
         <div class="card-body">
             <p class="mb-4">
-                Every callback also fires as a bubbling <code>sortable:*</code> event on the container, with the same
-                object as <code>event.detail</code>. This log listens to all four demos above.
+                Every callback also fires as a bubbling <code>dm:sortable:*</code> event on the container, with
+                <code>{instance, args: [detail]}</code> as <code>event.detail</code>. This log listens to all four demos above.
             </p>
             <ul id="demo-log" class="list-none p-0 text-sm text-gray-600 mb-4">
                 <li>Nothing yet - drag something above.</li>
             </ul>
             <div class="code-block language-javascript">
                 <pre><code>
-$('#demo-tasks').on('sortable:sort', (e) =&gt; console.log(e.detail.order));
+$('#demo-tasks').on('dm:sortable:sort', (e) =&gt; console.log(e.detail.args[0].order));
 </code></pre>
             </div>
             <table class="table mb-4">
                 <thead><tr><th>Callback</th><th>Event</th><th>Detail</th></tr></thead>
                 <tbody>
-                    <tr><td><code>onStart</code></td><td><code>sortable:start</code></td><td><code>{item, from}</code></td></tr>
-                    <tr><td><code>onMove</code></td><td><code>sortable:move</code></td><td><code>{item, target, zone, x, y}</code></td></tr>
-                    <tr><td><code>onSort</code></td><td><code>sortable:sort</code></td><td><code>{item, from, to, order, previous}</code> - live mode</td></tr>
-                    <tr><td><code>onDrop</code></td><td><code>sortable:drop</code></td><td><code>{item, target, zone, key, targetKey}</code> - indicator mode</td></tr>
-                    <tr><td><code>onCancel</code></td><td><code>sortable:cancel</code></td><td><code>{item}</code></td></tr>
-                    <tr><td><code>onEnd</code></td><td><code>sortable:end</code></td><td><code>{item, changed}</code></td></tr>
+                    <tr><td><code>onStart</code></td><td><code>dm:sortable:start</code></td><td><code>{item, from}</code></td></tr>
+                    <tr><td><code>onMove</code></td><td><code>dm:sortable:move</code></td><td><code>{item, target, zone, x, y}</code></td></tr>
+                    <tr><td><code>onSort</code></td><td><code>dm:sortable:sort</code></td><td><code>{item, from, to, order, previous}</code> - live mode</td></tr>
+                    <tr><td><code>onDrop</code></td><td><code>dm:sortable:drop</code></td><td><code>{item, target, zone, key, targetKey}</code> - indicator mode</td></tr>
+                    <tr><td><code>onCancel</code></td><td><code>dm:sortable:cancel</code></td><td><code>{item}</code></td></tr>
+                    <tr><td><code>onEnd</code></td><td><code>dm:sortable:end</code></td><td><code>{item, changed}</code></td></tr>
                 </tbody>
             </table>
         </div>
@@ -615,7 +615,7 @@ $('#demo-tasks').on('sortable:sort', (e) =&gt; console.log(e.detail.order));
     });
 
     // ---- One listener for every cancel on the page ------------------------
-    $('main').on('sortable:cancel', () => log('Drag cancelled'));
+    $('main').on('dm:sortable:cancel', () => log('Drag cancelled'));
 </script>
 
 </body>

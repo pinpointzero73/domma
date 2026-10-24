@@ -474,13 +474,13 @@ Domma.theme.init({ theme: 'ocean-dark' });
 Domma.theme.set('forest-light');
 
 // Toggle between light/dark
-Domma.theme.toggle();
+Domma.theme.set(`${Domma.theme.getBase()}-${Domma.theme.isDark() ? 'light' : 'dark'}`);
 
 // Auto-detect system preference
 Domma.theme.init({ autoDetect: true });
 
 // List everything available
-Domma.theme.listThemes();   // also listBases() and listVariants()
+Domma.theme.listThemes();   // also listBases()
 ```
 
 **Light/dark families:**

@@ -9,5 +9,5 @@ export function mount(root) {
             list.find('li').filter((i) => i >= 6).remove();
         };
         // ---- One listener for every cancel on the page ------------------------
-    $('main').on('sortable:cancel', () => log('Drag cancelled'));
+    $('main').on('dm:sortable:cancel', () => log('Drag cancelled'));
 }

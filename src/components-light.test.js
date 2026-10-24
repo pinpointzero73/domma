@@ -304,7 +304,7 @@ describe('review follow-ups', () => {
     it("a modal's onBeforeClose cannot stop destroy()", () => {
         const m = Domma.elements.modal({title: 'Guarded', onBeforeClose: () => false});
         const closed = vi.fn();
-        m.element.addEventListener('close', closed);
+        m.on('close', closed);
         m.open();
         m.close();
         expect(m.isOpen()).toBe(true);
@@ -312,14 +312,13 @@ describe('review follow-ups', () => {
         expect(closed).toHaveBeenCalledTimes(1);
     });
 
-    it('E.tooltip on several matches still answers as an array until 1.0', () => {
+    it('E.tooltip on several matches is the first instance, not an array', () => {
         document.body.innerHTML = '<i data-tooltip="a"></i><i data-tooltip="b"></i>';
-        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
         const t = Domma.elements.tooltip('[data-tooltip]');
         expect(t.all().length).toBe(2);
-        expect(t.length).toBe(2);
-        expect(t[1]).toBe(t.all()[1]);
+        expect(t.length).toBeUndefined();
+        expect(t[1]).toBeUndefined();
         expect(Domma.elements.tooltip('#none')).toBeNull();
-        warn.mockRestore();
+        expect(Domma.elements.tooltip.all('#none')).toEqual([]);
     });
 });

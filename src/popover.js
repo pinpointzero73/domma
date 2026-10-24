@@ -227,9 +227,10 @@ function unbindDoc() {
  */
 
 /**
- * event.detail of popover:show / popover:shown / popover:hide / popover:hidden (fired on the trigger).
+ * event.detail of dm:popover:show / shown / hide / hidden (bubbling, fired on the trigger).
  * @typedef {object} PopoverEventDetail
- * @property {Popover} popover
+ * @property {Popover} instance
+ * @property {Popover[]} args
  */
 
 /** @typedef {Popover} PopoverInstance */
@@ -1206,23 +1207,15 @@ class Popover extends Component {
     // ============================================
 
     /**
-     * Run the callback, the .on() listeners and `dm:popover:<name>`, then the older
-     * `popover:<name>` event (kept until 1.0). For a cancelable phase, returns false
-     * when any of them said no.
+     * Run the callback, then the .on() listeners and `dm:popover:<name>`. For a
+     * cancelable phase, returns false when any of them said no.
      */
     _phase(name, cancelable = false) {
         const cb = this.options[`on${name[0].toUpperCase()}${name.slice(1)}`];
         let ok = true;
         if (isFn(cb) && cb.call(this, this) === false && cancelable) ok = false;
         if (!this._emit(name, this) && cancelable) ok = false;
-        if (!this.element) return ok;
-        const event = new CustomEvent(`popover:${name}`, {
-            detail: {popover: this},
-            bubbles: true,
-            cancelable
-        });
-        const notPrevented = this.element.dispatchEvent(event);
-        return ok && (notPrevented || !cancelable);
+        return ok;
     }
 
     // ============================================

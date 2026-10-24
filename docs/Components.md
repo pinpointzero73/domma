@@ -428,8 +428,8 @@ so.on('close', (instance) => save());
 document.addEventListener('dm:slideover:open', (e) => track(e.detail.instance));
 ```
 
-`.once(event, fn)` and `.off(event, fn?)` work too. Sortable and Popover keep their older
-`sortable:<x>` / `popover:<x>` events beside these until 1.0. `E.alarm`, `E.notification` and the
+`.once(event, fn)` and `.off(event, fn?)` work too. Sortable's and Popover's older unprefixed
+`sortable:<x>` / `popover:<x>` events were removed in 0.58. `E.alarm`, `E.notification` and the
 dialogs (`E.alert` / `confirm` / `prompt`) are not components and have only their options.
 
 ### 2. Overlay verbs

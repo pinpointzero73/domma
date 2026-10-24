@@ -74,7 +74,7 @@
       "number": 11,
       "title": "Theme System",
       "description": "Light/dark modes with 8 colour variants. Auto-detects system preference and persists choices.",
-      "code": "Domma.theme.init({ autoDetect: true });\nDomma.theme.set('dark');\nDomma.theme.setVariant('ocean');",
+      "code": "Domma.theme.init({ autoDetect: true });\nDomma.theme.set('ocean-dark');",
       "language": "javascript"
     },
     {

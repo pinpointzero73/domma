@@ -131,10 +131,11 @@ export type PopoverOptions = {
     onHidden?: ((popover: Popover) => void) | null;
 };
 /**
- * event.detail of popover:show / popover:shown / popover:hide / popover:hidden (fired on the trigger).
+ * event.detail of dm:popover:show / shown / hide / hidden (bubbling, fired on the trigger).
  */
 export type PopoverEventDetail = {
-    popover: Popover;
+    instance: Popover;
+    args: Popover[];
 };
 export type PopoverInstance = Popover;
 /**
@@ -195,9 +196,10 @@ export type PopoverStatic = {
  * @property {((popover: Popover) => void)|null} [onHidden] - After the panel has been removed
  */
 /**
- * event.detail of popover:show / popover:shown / popover:hide / popover:hidden (fired on the trigger).
+ * event.detail of dm:popover:show / shown / hide / hidden (bubbling, fired on the trigger).
  * @typedef {object} PopoverEventDetail
- * @property {Popover} popover
+ * @property {Popover} instance
+ * @property {Popover[]} args
  */
 /** @typedef {Popover} PopoverInstance */
 /**
@@ -402,9 +404,8 @@ declare class Popover extends Component {
     _isAncestorOf(other: any): boolean;
     _position(): void;
     /**
-     * Run the callback, the .on() listeners and `dm:popover:<name>`, then the older
-     * `popover:<name>` event (kept until 1.0). For a cancelable phase, returns false
-     * when any of them said no.
+     * Run the callback, then the .on() listeners and `dm:popover:<name>`. For a
+     * cancelable phase, returns false when any of them said no.
      */
     _phase(name: any, cancelable?: boolean): boolean;
 }
