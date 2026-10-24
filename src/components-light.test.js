@@ -288,3 +288,38 @@ describe('calling E.* twice on one element', () => {
         expect(document.getElementById('m').classList.contains('dm-modal-visible')).toBe(true);
     });
 });
+
+describe('review follow-ups', () => {
+    it('a tooltip whose target leaves the page takes its bubble with it', async () => {
+        document.body.innerHTML = '<div id="row"><button id="tb" title="Delete">x</button></div>';
+        const t = Domma.elements.tooltip('#tb', {content: 'Delete'});
+        t.open();
+        expect(document.querySelectorAll('.dm-tooltip, [role="tooltip"]').length).toBeGreaterThan(0);
+        document.getElementById('row').innerHTML = '<button>new</button>';
+        await Promise.resolve(); // MutationObserver callbacks are microtasks
+        await vi.runAllTimersAsync();
+        expect(t.isVisible()).toBe(false);
+    });
+
+    it("a modal's onBeforeClose cannot stop destroy()", () => {
+        const m = Domma.elements.modal({title: 'Guarded', onBeforeClose: () => false});
+        const closed = vi.fn();
+        m.element.addEventListener('close', closed);
+        m.open();
+        m.close();
+        expect(m.isOpen()).toBe(true);
+        m.destroy();
+        expect(closed).toHaveBeenCalledTimes(1);
+    });
+
+    it('E.tooltip on several matches still answers as an array until 1.0', () => {
+        document.body.innerHTML = '<i data-tooltip="a"></i><i data-tooltip="b"></i>';
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        const t = Domma.elements.tooltip('[data-tooltip]');
+        expect(t.all().length).toBe(2);
+        expect(t.length).toBe(2);
+        expect(t[1]).toBe(t.all()[1]);
+        expect(Domma.elements.tooltip('#none')).toBeNull();
+        warn.mockRestore();
+    });
+});

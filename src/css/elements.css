@@ -6153,10 +6153,13 @@ domma-tooltip {
     --dm-loader-color: var(--dm-primary);
 }
 
+/* Centred over the nearest positioned ancestor, as <domma-loader> always drew it - the
+   container's own content stays where it is and the loader sits on top of it. */
 .dm-loader-js.dm-loader-centered {
-    display: flex;
-    width: 100%;
-    padding: var(--dm-space-4) 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 :where(.dm-loader-host) {

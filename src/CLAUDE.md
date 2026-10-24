@@ -394,7 +394,7 @@ Accessed via `Domma.elements`:
   `close()`, `toggle()`, `openAll()`, `closeAll()`
 - **Tooltip** (`components/tooltip.js`): `elements.tooltip(selector, { content, position|placement, trigger, delay (ms or {show, hide}), hideDelay, offset, html, safe, animation, maxWidth, className, visible, onShow, onHide })` →
   `open()`/`show()`, `close()`/`hide()`, `toggle()`, `isVisible()`, `setContent()`, `setPosition()`, `destroy()`
-    - EVERY match of the selector gets an instance; returns the first with a non-enumerable `all()` (`firstWithAll()` in components/shared.js).
+    - EVERY match of the selector gets an instance; returns the first with a non-enumerable `all()` (`firstOfMatches()` in elements.js: null on no match, the array shape warns until 1.0).
       A second call on the same element updates its instance
     - Nothing wraps the target: a `.domma-tooltip` bubble on body, `position: fixed`, flipped when it does not fit, `aria-describedby` while shown.
       Content falls back to `data-tooltip`, then `title` (removed while active, restored on destroy). Triggers: hover (+ keyboard focus), click,

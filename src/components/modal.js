@@ -504,7 +504,7 @@ export class Modal extends Component {
 
     close() {
         if (!this._isOpen) return this;
-        if (this._fire('beforeClose', this) === false) return this;
+        if (!this._mayClose(this)) return this;
         this._clearTimers();
         this._isOpen = false;
         const host = this._host;
@@ -593,7 +593,7 @@ export class Modal extends Component {
         if (this._destroyed) return;
         this._destroyed = true;
         const wasOpen = this._isOpen;
-        if (wasOpen) this.close();
+        if (wasOpen) this._forcedClose();
         const i = openStack.indexOf(this);
         if (i > -1) openStack.splice(i, 1);
         unbindKeys();

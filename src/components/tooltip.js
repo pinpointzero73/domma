@@ -14,6 +14,31 @@ import {fill, flag, num, uniqueId} from './shared.js';
 
 const OPPOSITE = {top: 'bottom', bottom: 'top', left: 'right', right: 'left'};
 
+// The bubble lives on <body>, so a target taken off the page (a row re-rendered by the
+// click that was hovering it) never gets its mouseleave. One observer, running only while
+// a tooltip is showing, hides the bubbles whose targets have gone.
+const showing = new Set();
+let observer = null;
+
+function watch(tooltip) {
+    showing.add(tooltip);
+    if (observer || typeof MutationObserver === 'undefined' || !document.body) return;
+    observer = new MutationObserver(() => {
+        for (const t of [...showing]) {
+            if (!t.element || !t.element.isConnected) t.close({immediate: true});
+        }
+    });
+    observer.observe(document.body, {childList: true, subtree: true});
+}
+
+function unwatch(tooltip) {
+    showing.delete(tooltip);
+    if (!showing.size && observer) {
+        observer.disconnect();
+        observer = null;
+    }
+}
+
 export class Tooltip extends Component {
     static componentName = 'tooltip';
 
@@ -167,7 +192,9 @@ export class Tooltip extends Component {
     }
 
     _onScroll = () => {
-        if (this._visible) this._place();
+        if (!this._visible) return;
+        if (!this.element.isConnected) this.close({immediate: true});
+        else this._place();
     };
 
     // ---- public API -----------------------------------------------------
@@ -185,6 +212,7 @@ export class Tooltip extends Component {
             this._bubble.classList.add('show');
             window.addEventListener('scroll', this._onScroll, {capture: true, passive: true});
             window.addEventListener('resize', this._onScroll, {passive: true});
+            watch(this);
             this._fire('show', this);
         };
         const ms = num(this.options.delay, 0);
@@ -199,6 +227,7 @@ export class Tooltip extends Component {
         const run = () => {
             this._timers.hide = null;
             this._visible = false;
+            unwatch(this);
             window.removeEventListener('scroll', this._onScroll, {capture: true});
             window.removeEventListener('resize', this._onScroll);
             const bubble = this._bubble;
@@ -267,6 +296,7 @@ export class Tooltip extends Component {
         }
         this._unmake();
         this._visible = false;
+        unwatch(this);
         if (this._title !== undefined && this.element && !this.element.hasAttribute('title')) {
             this.element.setAttribute('title', this._title);
         }

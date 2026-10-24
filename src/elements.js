@@ -25,7 +25,7 @@ import Badge, {NumberBadge} from './components/badge.js';
 import Loader from './components/loader.js';
 import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
-import {firstWithAll, resolveAll, resolveElement, reuse} from './components/shared.js';
+import {resolveAll, resolveElement, reuse} from './components/shared.js';
 import {registerComponents as defineTags} from './web-components/index.js';
 
 let timelineWarned = false;
@@ -9093,7 +9093,8 @@ export const elements = {
         // Every match gets a tooltip; the first is returned, with all() for the rest
         const list = tooltipsFor(resolveAll(selector), options);
         for (const instance of list) this._instances.set(instance.element, instance);
-        return firstWithAll(list);
+        // null on no match and the array shape (with a warning) until 1.0, as before
+        return list.length ? firstOfMatches(list, 'tooltip') : null;
     },
 
     badge(selector, options = {}) {
@@ -9881,6 +9882,10 @@ elements.popover.open = Popover.openPopovers;
 elements.buttonGroup.all = (selector, options = {}) => {
     const result = elements.buttonGroup(selector, options);
     return Array.isArray(result) ? result : result.all();
+};
+elements.tooltip.all = (selector, options = {}) => {
+    const result = elements.tooltip(selector, options);
+    return result ? result.all() : [];
 };
 elements.listGroup.all = (selector, options = {}) => {
     const result = elements.listGroup(selector, options);
