@@ -25,7 +25,7 @@ import Badge, {NumberBadge} from './components/badge.js';
 import Loader from './components/loader.js';
 import BackToTop from './components/back-to-top.js';
 import {toast as toastApi} from './components/toast.js';
-import FocusTrap, {tabbables as tabbablesIn} from './components/focus-trap.js';
+import FocusTrap, {createFocusTrap, tabbables as tabbablesIn} from './components/focus-trap.js';
 import CommandPalette, {claimsHotkey, formatShortcut, fuzzyMatch} from './components/command-palette.js';
 import SplitPane, {splitPaneFor} from './components/split-pane.js';
 import VirtualList, {virtualListFor} from './components/virtual-list.js';
@@ -3616,6 +3616,8 @@ const Dialog = {
         backdropClose: false,
         keyboard: true,
         danger: false,
+        trapFocus: true,        // Tab stays in the dialog
+        returnFocus: true,      // answering puts focus back where it was
         className: ''
     },
 
@@ -3687,12 +3689,27 @@ const Dialog = {
             // Focus management - a destructive confirm starts on Cancel, so a
             // stray Enter or Space never throws anything away.
             const focusTarget = input || (opts.danger && cancelBtn) || confirmBtn;
-            setTimeout(() => focusTarget?.focus(), 50);
+            // Not once answered: focus has gone back to where it was by then.
+            setTimeout(() => { if (!settled) focusTarget?.focus(); }, 50);
 
             // Select input text if present
             if (input) {
                 input.select();
             }
+
+            // Tab stays in the dialog until it is answered. Focus is placed above (after
+            // 50ms, as it always was), so the trap leaves the first focus alone.
+            const trap = opts.trapFocus !== false && opts.trapFocus !== 'false'
+                ? createFocusTrap(dialog, {
+                    initialFocus: false,
+                    returnFocus: true,
+                    escapeDeactivates: false,   // Escape is the dialog's (cancel)
+                    allowOutsideClick: true,
+                    allowOutsideFocus: 'layers',
+                    register: false
+                })
+                : null;
+            trap?.activate();
 
             // Cleanup function - settles once, whichever way the dialog closes
             let settled = false;
@@ -3701,6 +3718,10 @@ const Dialog = {
                 if (settled) return;
                 settled = true;
                 detachKeys();
+                if (trap) {
+                    trap.deactivate({returnFocus: opts.returnFocus !== false && opts.returnFocus !== 'false'});
+                    trap.destroy();
+                }
                 if (opts.animation) {
                     overlay.classList.add('dm-dialog-closing');
                     setTimeout(() => {
@@ -6770,6 +6791,8 @@ class Slideover extends Component {
         bodyClass: '',
         footerClass: '',
         customSizes: {},
+        trapFocus: true,        // Tab stays in the panel; default off when backdrop is false
+        returnFocus: true,      // closing puts focus back where it was
         onBeforeOpen: null,     // return false to keep it closed
         onOpen: null,
         onBeforeClose: null,    // return false to keep it open
@@ -6781,6 +6804,10 @@ class Slideover extends Component {
         super(selector, options);
         this._isOpen = false;
         this._backdrop = null;
+        this._trap = null;
+        // An explicit trapFocus traps even without a backdrop.
+        this._trapAsked = !!options && Object.prototype.hasOwnProperty.call(options, 'trapFocus')
+            && options.trapFocus !== false && options.trapFocus !== 'false';
         this._originalBodyOverflow = null;
         this._keydownHandler = null;
         this._init();
@@ -7033,6 +7060,7 @@ class Slideover extends Component {
         this._isOpen = true;
         Slideover._removeFromStack(this);
         Slideover._stack.push(this);
+        this._startTrap();
 
         // Call onOpen callback after animation
         setTimeout(() => {
@@ -7042,6 +7070,46 @@ class Slideover extends Component {
         }, this.options.animationDuration);
 
         return this;
+    }
+
+    /** Whether this open traps focus: on by default, except beside a page left usable (no backdrop). */
+    _wantsTrap() {
+        const o = this.options;
+        if (o.trapFocus === false || o.trapFocus === 'false') return false;
+        return !!o.backdrop || this._trapAsked === true;
+    }
+
+    /**
+     * Keep Tab inside the panel while it is open. Focus moves to the panel itself (so
+     * the first Tab reaches its first control) unless something inside already has it;
+     * a caller focusing a field after open() is unaffected.
+     */
+    _startTrap() {
+        if (!this._wantsTrap() || typeof document === 'undefined') return;
+        const el = this.element;
+        if (!el.hasAttribute('tabindex')) {
+            el.setAttribute('tabindex', '-1');
+            this._addedTabindex = true;
+        }
+        if (!this._trap) {
+            this._trap = createFocusTrap(el, {
+                initialFocus: () => {
+                    const active = document.activeElement;
+                    return active && active !== document.body && el.contains(active) ? active : el;
+                },
+                returnFocus: true,
+                escapeDeactivates: false,       // Escape stays with the slideover (close() by name)
+                allowOutsideClick: true,        // the backdrop, toasts, popovers
+                allowOutsideFocus: 'layers',
+                register: false
+            });
+        }
+        this._trap.activate();
+    }
+
+    _stopTrap() {
+        if (!this._trap || !this._trap.isActive()) return;
+        this._trap.deactivate({returnFocus: this.options.returnFocus !== false && this.options.returnFocus !== 'false'});
     }
 
     _createForm() {
@@ -7152,6 +7220,7 @@ class Slideover extends Component {
             document.removeEventListener('keydown', this._keydownHandler);
         }
         Slideover._removeFromStack(this);
+        this._stopTrap();
 
         // Clean up form if it exists
         if (this._formaForm) {
@@ -7244,6 +7313,14 @@ class Slideover extends Component {
             document.removeEventListener('keydown', this._keydownHandler);
         }
         Slideover._removeFromStack(this);
+        if (this._trap) {
+            this._trap.destroy();
+            this._trap = null;
+        }
+        if (this._addedTabindex && this.element) {
+            this.element.removeAttribute('tabindex');
+            this._addedTabindex = false;
+        }
 
         super.destroy();
     }
