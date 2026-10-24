@@ -397,6 +397,34 @@ const registry = Domma.components.registry();  // Map<tagName, definition>
 | Reusable instances   | One per route                 | Many per page                 |
 | Best for             | Full-page SPA views           | Reusable UI widgets           |
 
+## Built-in `E.*` components and their `<domma-*>` tags
+
+`Domma.component()` (above) is for your own components. Domma's built-in UI components work differently. `E.card`,
+`E.modal`, `E.tooltip`, `E.badge`, `E.numberBadge`, `E.toast`, `E.loader` and `E.backToTop` each have one
+implementation in `src/components/`, and the `<domma-*>` tags are thin shells over it:
+
+```html
+<domma-badge variant="success" pill>New</domma-badge>
+<domma-tooltip content="Saved 2 minutes ago"><button class="btn">Status</button></domma-tooltip>
+<domma-number-badge count="3"><button class="btn">Inbox</button></domma-number-badge>
+```
+
+```javascript
+E.badge('#status', {variant: 'success', pill: true});      // the same code
+document.querySelector('domma-badge').setVariant('danger'); // the component's methods are on the tag
+E.get(document.querySelector('domma-badge'));              // the instance
+```
+
+- **The element you give is the element.** `E.card('#c')` styles `#c` itself; nothing wraps or replaces it, so
+  references, listeners and `E.get(el)` keep working.
+- **Light DOM, except the modal.** Card, badge, number badge, tooltip (a bubble on `body`), toast, loader and
+  back-to-top are page markup styled by `elements.css`, so page CSS and the `--dm-*` theme tokens reach them. The
+  modal draws its frame in a shadow root on your element, and your element's children fill its body, so
+  `modal.element.appendChild(panel)` works.
+- **Tags register lazily.** They are defined on the first `E.*` call of one of these components, or as soon as the
+  page contains one of the tags. A changed attribute is passed to the component as an option.
+- **Events** follow the shared conventions: `onX` option, `.on('x')`, and a `dm:<component>:x` DOM event.
+
 ## See Also
 
 - [domma-reactive](https://www.npmjs.com/package/domma-reactive) - Binding compiler internals. The compiler moved out
