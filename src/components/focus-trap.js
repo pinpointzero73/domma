@@ -83,6 +83,8 @@ function canTab(el) {
     for (let n = el; n; n = parentOf(n)) {
         if (n.nodeType === 1 && (n.hasAttribute('hidden') || n.hasAttribute('inert'))) return false;
     }
+    // Links and buttons inside an editing area cannot take focus; only the area itself can.
+    if (el.parentElement?.closest?.('[contenteditable]:not([contenteditable="false"])')) return false;
     // display:none / visibility:hidden (a closed panel, a collapsed section). jsdom has no
     // checkVisibility, so everything counts as visible there.
     if (typeof el.checkVisibility === 'function' && !el.checkVisibility({visibilityProperty: true})) return false;
@@ -479,10 +481,26 @@ export class FocusTrap extends Component {
         this._focus(target);
     }
 
-    _focus(el) {
+    _focus(el, scroll = false) {
         if (!el || typeof el.focus !== 'function') return;
-        try { el.focus({preventScroll: !!this.options.preventScroll}); } catch { /* not focusable */ }
+        try { el.focus({preventScroll: scroll ? false : !!this.options.preventScroll}); } catch { /* not focusable */ }
         this._lastFocused = el;
+    }
+
+    /**
+     * A move Tab asked for: scrolls the element into view as native Tab does
+     * (`preventScroll` is for activation and return only). Should the element not take
+     * focus after all, the next candidate in `list` is tried, so Tab never sticks.
+     */
+    _tabTo(el, list, back = false) {
+        this._focus(el, true);
+        if (!list || !el || deepActiveElement() === el) return;
+        const start = list.indexOf(el);
+        for (let k = 1; start > -1 && k < list.length; k++) {
+            const next = list[(start + (back ? -k : k) + list.length * k) % list.length];
+            this._focus(next, true);
+            if (deepActiveElement() === next) return;
+        }
     }
 
     /**
@@ -537,7 +555,7 @@ export class FocusTrap extends Component {
         const list = this.tabbables();
         e.preventDefault();
         if (!list.length) {
-            this._focus(this._fallback());
+            this._tabTo(this._fallback());
             return;
         }
         let i = list.indexOf(active);
@@ -552,7 +570,7 @@ export class FocusTrap extends Component {
         } else {
             next = e.shiftKey ? list[list.length - 1] : list[0];
         }
-        this._focus(next);
+        this._tabTo(next, list, e.shiftKey);
     }
 
     /** The tabbable after (or before) a non-tabbable element inside the containers. */
@@ -581,30 +599,30 @@ export class FocusTrap extends Component {
         if (i > -1) {
             const next = inLayer[e.shiftKey ? i - 1 : i + 1];
             if (next) {
-                next.focus({preventScroll: !!this.options.preventScroll});
+                next.focus({preventScroll: false});
                 return;
             }
         } else if (inLayer.length) {
-            inLayer[e.shiftKey ? inLayer.length - 1 : 0].focus({preventScroll: !!this.options.preventScroll});
+            inLayer[e.shiftKey ? inLayer.length - 1 : 0].focus({preventScroll: false});
             return;
         }
         const list = this.tabbables();
         const anchor = this._lastFocused && this._lastFocused.isConnected && this._contains(this._lastFocused)
             ? this._lastFocused : null;
         if (!list.length) {
-            this._focus(anchor || this._fallback());
+            this._tabTo(anchor || this._fallback());
             return;
         }
         if (!anchor) {
-            this._focus(e.shiftKey ? list[list.length - 1] : list[0]);
+            this._tabTo(e.shiftKey ? list[list.length - 1] : list[0]);
             return;
         }
         if (e.shiftKey) {
-            this._focus(anchor);
+            this._tabTo(anchor);
             return;
         }
         const at = list.indexOf(anchor);
-        this._focus(at > -1 ? list[(at + 1) % list.length] : this._nextFrom(anchor, list, false));
+        this._tabTo(at > -1 ? list[(at + 1) % list.length] : this._nextFrom(anchor, list, false));
     }
 
     _onFocusIn(e) {
@@ -623,7 +641,7 @@ export class FocusTrap extends Component {
         if (pending && pending.fromInside) {
             e.stopImmediatePropagation?.();
             const list = this.tabbables();
-            this._focus(list.length ? (pending.shift ? list[list.length - 1] : list[0]) : this._fallback());
+            this._tabTo(list.length ? (pending.shift ? list[list.length - 1] : list[0]) : this._fallback());
             return;
         }
         // Focus got out (a click elsewhere, a script): bring it back.
@@ -635,7 +653,7 @@ export class FocusTrap extends Component {
         if (last && /^(IFRAME|OBJECT|EMBED)$/.test(last.tagName)) {
             const list = this.tabbables();
             const after = this._containers.some(c => c.compareDocumentPosition(target) & 4);
-            this._focus(list.length ? (after ? list[0] : list[list.length - 1]) : this._fallback());
+            this._tabTo(list.length ? (after ? list[0] : list[list.length - 1]) : this._fallback());
             return;
         }
         this._focus(last || this._firstTarget());

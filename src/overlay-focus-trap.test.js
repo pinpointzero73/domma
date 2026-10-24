@@ -379,3 +379,20 @@ describe('dialog', () => {
         expect(E.focusTrap.top()).toBeNull();
     });
 });
+
+describe('review fixes', () => {
+    it('slideover: focus an onClose handler places stays there', () => {
+        document.body.insertAdjacentHTML('beforeend', '<button id="opener">o</button><input id="search">');
+        document.getElementById('opener').focus();
+        const so = slideover('<button>b</button>', {onClose: () => document.getElementById('search').focus()});
+        so.open();
+        so.close();
+        expect(document.activeElement.id).toBe('search');
+    });
+
+    it('links inside an editing area are not Tab stops', () => {
+        const so = slideover('<div id="ed" contenteditable="true" tabindex="0">text <a href="#x" id="inlink">link</a></div><button id="after-ed">a</button>');
+        so.open();
+        expect(E.focusTrap.tabbables(so.element).map(el => el.id)).toEqual(['so-x', 'ed', 'after-ed']);
+    });
+});

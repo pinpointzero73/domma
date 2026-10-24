@@ -7203,6 +7203,9 @@ class Slideover extends Component {
         if (!el) return this;
         if (!this._mayClose(this)) return this;
 
+        // Let go of focus first, so focus an onClose handler places is not pulled back.
+        this._stopTrap();
+
         // Call onClose callback
         this._fire('close', this);
 
@@ -7222,7 +7225,6 @@ class Slideover extends Component {
             document.removeEventListener('keydown', this._keydownHandler);
         }
         Slideover._removeFromStack(this);
-        this._stopTrap();
 
         // Clean up form if it exists
         if (this._formaForm) {
