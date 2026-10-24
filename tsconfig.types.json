@@ -1,0 +1,25 @@
+{
+    "//": "Generates assets/types/generated/ from the JSDoc in src/ - npm run build:types. Nothing here is type-checked: tsc only reads the JSDoc and writes declarations.",
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": false,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "outDir": "assets/types/generated",
+        "rootDir": ".",
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "types": [],
+        "skipLibCheck": true,
+        "stripInternal": true,
+        "newLine": "lf"
+    },
+    "files": [
+        "scripts/types/build-constants.d.ts",
+        "src/index.js",
+        "src/flags-bundle.js",
+        "src/schema-builder.js"
+    ]
+}

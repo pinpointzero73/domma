@@ -69,8 +69,10 @@
         "serve:3096": "node bin/domma-cli.js serve --port 3096",
         "dev": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run copy:celebrate && npm run generate:themes && npm run build:css && npm run build:miniapps && live-server public --port=3001 --open=/index.html",
         "dev:watch": "NODE_ENV=development npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run copy:celebrate && npm run generate:themes && npm run build:css && npm run build:miniapps && npm run watch:miniapps",
-        "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run copy:celebrate && npm run generate:themes && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart-files && npm run build:miniapps",
+        "build": "npm run generate:bundles && rollup -c && node scripts/build-info.js && npm run build:metadata && npm run copy:themes && npm run copy:celebrate && npm run generate:themes && npm run build:css && npm run build:css-bundles && npm run build:archives && npm run build:kickstart-files && npm run build:miniapps && npm run build:types",
         "build:js": "rollup -c",
+        "build:types": "node scripts/build-types.mjs",
+        "check:types": "node scripts/check-types.mjs",
         "build:css": "node scripts/build-css.js",
         "validate:classes": "node scripts/validate-classes.js",
         "validate:theme": "node scripts/validate-theme-contrast.js",
@@ -123,6 +125,7 @@
         "live-server": "^1.2.0",
         "puppeteer": "^24.34.0",
         "rollup": "^4.28.0",
+        "typescript": "5.6.3",
         "vitest": "^4.0.16"
     },
     "dependencies": {}

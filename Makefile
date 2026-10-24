@@ -3,7 +3,7 @@
 
 .PHONY: help build build-dev build-prod prod core css dev docs miniapps \
         clean kill-ports rebuild-after-core enliven verify-build \
-        test validate check bump release-build preflight release-npm release-gh
+        test validate types check bump release-build preflight release-npm release-gh
 
 VERSION := $(shell node -e "process.stdout.write(require('./package.json').version)")
 
@@ -28,7 +28,8 @@ help:
 	@echo "Checks:"
 	@echo "  make test           - Full suite (includes the 86-page showcase harness)"
 	@echo "  make validate       - Dead classes, theme contrast, Domma conventions"
-	@echo "  make check          - test + validate"
+	@echo "  make types          - Generated TypeScript declarations current + type-check"
+	@echo "  make check          - test + validate + types"
 	@echo ""
 	@echo "Release  - the usual route is the Actions tab:"
 	@echo "  Actions > Cut a release > patch/minor/major   (notes in docs/NEXT_RELEASE.md first)"
@@ -136,7 +137,11 @@ test:
 validate:
 	npm run validate
 
-check: test validate
+# Generated declarations match the JSDoc in src/, and tests/types type-checks against them
+types:
+	npm run check:types
+
+check: test validate types
 
 # ── Release ──────────────────────────────────────────────────────────────────
 #

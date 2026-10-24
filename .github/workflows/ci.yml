@@ -27,6 +27,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Before the build: the build rewrites assets/types/generated/, which would hide a stale commit
+      - name: Check the generated TypeScript declarations
+        run: npm run check:types
+
       - name: Run build
         run: npm run build
 
