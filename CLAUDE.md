@@ -38,6 +38,7 @@ modern UI components.
 | DataTables                        | `T.create(selector, {data})`  | Manual table generation         |
 | Confirm dialogs                   | `await E.confirm('Sure?')`    | `window.confirm()`              |
 | Templates                         | `templateUrl: 'path.html'`    | Large template strings in JS    |
+| Translated text, plurals, locale formats | `Domma.t('key', {count})`, `Domma.i18n.number(n)` | Hand-rolled dictionaries, `toLocaleString()` |
 
 **Template File Convention:**
 - ✅ **DO**: Use `templateUrl: 'path/to/template.html'` for view templates
@@ -224,6 +225,8 @@ consult that folder's CLAUDE.md for detailed information.
   status, "+N" popover, `data-avatar` + `E.avatar.scan()`, the CSS classes
 - [docs/Skeleton.md](./docs/Skeleton.md) - Loading placeholders: CSS shapes, `E.skeleton()` types, `while()`,
   `data-skeleton` and the DataTable's `loadingSkeleton`
+- [docs/I18n.md](./docs/I18n.md) - Translations: messages and fallbacks, object-form plurals, `t()` vs `html()`
+  escaping, Intl formatters, `data-i18n*` + `translate()`, `detect()`
 - [docs/Bindings.md](./docs/Bindings.md) - DOM bindings: `M.applyBindings()`, `data-bind-*`, `data-model`, `data-each`,
   custom bindings and helpers
 - [docs/DommaDocumentation.md](./docs/DommaDocumentation.md) - Comprehensive user documentation

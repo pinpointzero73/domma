@@ -20,6 +20,7 @@ export * from './theme';
 export * from './icons';
 export * from './flags';
 export * from './smooth-caret';
+export * from './i18n';
 
 // Import types for the main Domma object
 import {DommaCollection} from './dom';
@@ -35,6 +36,7 @@ import {Theme, theme} from './theme';
 import {Icons, icons} from './icons';
 import {Flags} from './flags';
 import {SmoothCaret} from './smooth-caret';
+import {I18n, I18nTranslateOptions} from './i18n';
 
 // ============================================
 // Main Domma Interface
@@ -84,6 +86,12 @@ export interface DommaStatic {
 
     /** Icon library */
     icons: Icons;
+
+    /** Translations, plurals and Intl formatting */
+    i18n: I18n;
+
+    /** Shortcut for {@link I18n.t} */
+    t(key: string, params?: Record<string, any> | null, options?: I18nTranslateOptions): string;
 
     /** Nation flags (opt-in module - present when domma-flags is loaded) */
     flags?: Flags;
@@ -224,6 +232,8 @@ export interface DommaLoadOptions {
     purifyWarning?: boolean;
     /** false: no deprecation warnings */
     deprecationWarnings?: boolean;
+    /** false: no console warning for a missing translation */
+    i18nWarnings?: boolean;
 }
 
 declare global {

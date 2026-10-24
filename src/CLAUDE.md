@@ -714,6 +714,17 @@ S.keys();                                          // List all Domma keys
 S.clear();                                         // Clear only Domma keys
 ```
 
+### i18n.js - Translations
+
+Accessed via `Domma.i18n` (and `Domma.t()`; no single-letter alias). Full guide: [docs/I18n.md](../docs/I18n.md).
+
+- Messages are JSON, flattened to dot keys; plurals/select are OBJECTS of forms (no ICU parser) chosen by
+  `Intl.PluralRules` of the locale the message came from. `t()` = plain text, `html()` = markup kept + params
+  escaped; nothing is ever evaluated. `translate()` sanitises `data-i18n-html`.
+- All locale data comes from `Intl` - do not add tables (the RTL list is only a fallback for engines without
+  `Intl.Locale` text info). Formatter instances are cached per locale + options.
+- Node-safe: no DOM at import; `translate()` returns 0 without `document`. `i18n.reset()` for tests.
+
 ### effects.js - Visual effects and animations
 
 Accessed via `Domma.effects`:
@@ -825,6 +836,7 @@ src/
 ├── config.js        # JSON configuration engine
 ├── http.js          # HTTP client
 ├── storage.js       # localStorage wrapper
+├── i18n.js          # Translations, plurals, Intl formatting (Domma.i18n / Domma.t)
 ├── effects.js       # Visual effects (breathe, pulse, scribe, reveal, scramble, counter, ripple, shake)
 ├── theme.js         # Theme management
 ├── icons.js         # SVG icon system

@@ -136,6 +136,19 @@
         "themes"
       ]
     },
+    "i18n": {
+      "name": "i18n",
+      "description": "Translations, plurals and Intl formatting",
+      "size": 6,
+      "dependencies": [
+        "http",
+        "storage"
+      ],
+      "aliases": [],
+      "tier": 2,
+      "cssRequired": [],
+      "cssOptional": []
+    },
     "config": {
       "name": "Config",
       "description": "Declarative configuration engine",
@@ -243,7 +256,8 @@
         "dates",
         "models",
         "tables",
-        "theme"
+        "theme",
+        "i18n"
       ],
       "estimatedSize": 258,
       "useCase": "Applications using all features",
