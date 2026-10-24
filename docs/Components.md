@@ -675,3 +675,80 @@ E.virtualList('#feed', {
   `prepend()`, or heights are re-measured.
 - **Not supported**: horizontal lists and sticky group headers. A browser resets the scroll position of an element
   that is moved in the DOM; call `scrollToIndex()` again after moving the container.
+## Dropzone - `E.dropzone(target, options)`
+
+The element becomes a drop / browse / paste area (`role="button"`; click, Enter or Space opens the picker). It uses
+the `<input type="file">` inside it, next to it, given as `input`, or the target itself (then the area is drawn after
+it); otherwise it adds one. The file list and an `aria-live` region are drawn after the area.
+
+| Option | Default | |
+|---|---|---|
+| `accept` | the input's | `'.pdf,image/*'` or an array |
+| `multiple` | the input's / `true` | without it a new file replaces the old |
+| `maxFiles`, `maxSize`, `minSize` | `null` | sizes in bytes |
+| `previews` | `true` | image thumbnails (object URLs, revoked on remove / destroy) |
+| `name` | the input's | form field name |
+| `list` | `true` | `false`, or an element / selector to draw the list into |
+| `upload` | `null` | `{url, method, field, headers, withCredentials, concurrency, data, xhr}` |
+| `autoUpload`, `retry` | `true`, `0` | |
+| `labels` | | prompt, hint and every message (`{name}`, `{max}`, `{min}`, `{percent}`) |
+
+Methods: `getFiles()`, `getEntries()`, `addFiles(list)`, `removeFile(id | entry | file)`, `clear()`, `browse()`,
+`upload()`, `retry(id?)`, `cancel(id?)`, `enable()`, `disable()`, `isDisabled()`, `destroy()`.
+
+Events: `beforeadd` (cancelable), `add`, `reject(entry, reason)`, `remove`, `change(files)`, `uploadstart`,
+`progress(entry, percent)`, `success(entry, response)`, `error(entry, error)`, `complete(entries)`.
+
+**In a form.** Without `upload` the input's `FileList` is rewritten with a `DataTransfer` after each change, so a
+normal submit and `new FormData(form)` carry exactly the files shown. Where `new DataTransfer()` is unavailable the
+form's `formdata` event adds them instead; code that builds a request any other way should use `getFiles()`. With
+`upload` the input is left empty so the files are not sent twice. Uploads use `XMLHttpRequest`, not `H`: fetch has no
+upload progress.
+
+**Drops outside the area.** While any dropzone exists there is one document `dragenter` listener. A drag carrying
+files arms a document guard that refuses drops (other file inputs keep theirs); it is removed on the drop, when the
+drag leaves the window, or when dragover stops for 1.5 s. Nothing is intercepted between drags.
+
+## Range slider - `E.rangeSlider(target, options)` / `E.slider`
+
+Target an `<input type="range">` (it stays `.element`; min / max / step / value / name are read from it) or a
+container (the inputs are made inside it). The inputs are hidden and carry the value; a drawn track with
+`role="slider"` thumbs sits in front.
+
+| Option | Default | |
+|---|---|---|
+| `min`, `max`, `step` | input's / `0`, `100`, `1` | `step: 'any'` allowed |
+| `value` | input's / middle | `[low, high]` or `"low,high"` with `range` |
+| `range` | `false` | two thumbs, two inputs |
+| `name`, `names` | input's | both inputs share `name`; `names: [a, b]` names them apart |
+| `minDistance` | `0` | the closest two thumbs may come |
+| `orientation` | `'horizontal'` | or `'vertical'` (minimum at the bottom) |
+| `ticks`, `tickLabels` | `false` | `true` every step (at most 100), `n` every n units, or `[values]` |
+| `marks` | `null` | `[{value, label}]`, pressing one jumps to it |
+| `labels` | `null` | `(value, where) => text` for ticks, marks, tooltip and `aria-valuetext` |
+| `tooltip` | `'hover'` | `'always'`, `'never'` (hover also covers focus and dragging) |
+| `rtl` | page direction | |
+
+Methods: `getValue()`, `setValue(v, {silent})`, `setRange(min, max)`, `enable()`, `disable()`, `isDisabled()`,
+`destroy()`. Events: `input(value)` while moving, `change(value)` on commit, `beforechange(next, current)`
+(cancelable). Every move also fires native `input` / `change` on the real input. Setting `input.value` from code
+(as `M.bind` does) moves the slider; a form reset puts it back.
+
+**Why two inputs for a range.** Each stays a number that validates against min / max, and the server needs no
+parsing: the form sends `price=10&price=50` (or `min_price=10&max_price=50` with `names`). `FormData.getAll()` and
+Domma's form data both give the pair.
+
+### In F.create blueprints
+
+```javascript
+F.render('#form', {
+    volume: {type: 'slider', min: 0, max: 10, default: 4},
+    hours: {type: 'slider', min: 0, max: 24, default: [9, 17], formConfig: {range: true, ticks: 6}},
+    files: {type: 'dropzone', required: true, formConfig: {accept: 'image/*', maxFiles: 3}}
+});
+```
+
+`formConfig` passes the component's options. A plain `type: 'range'` stays a native input unless
+`formConfig.slider` is set. Slider values are numbers or `[low, high]`; dropzone values are `File[]` and `required`
+means at least one file.
+

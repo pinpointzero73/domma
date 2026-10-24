@@ -297,6 +297,12 @@
           "section": "dropdown"
         },
         {
+          "text": "Dropzone",
+          "url": "showcase/elements/dropzone/index.html",
+          "section": "dropzone",
+          "badge": "New"
+        },
+        {
           "text": "Editor",
           "url": "showcase/elements/editor/index.html",
           "section": "editor"
@@ -348,6 +354,12 @@
           "text": "Progression",
           "url": "showcase/elements/progression/index.html",
           "section": "progression",
+          "badge": "New"
+        },
+        {
+          "text": "Range Slider",
+          "url": "showcase/elements/range-slider/index.html",
+          "section": "range-slider",
           "badge": "New"
         },
         {

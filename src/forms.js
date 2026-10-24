@@ -360,6 +360,19 @@ class Forma {
       .map(([key, val]) => val === true ? key : `${key}="${val}"`)
       .join(' ');
 
+    // Enhanced controls, hydrated post-render by _initSliderFields / _initDropzoneFields.
+    // A plain `type: 'range'` stays a native input unless formConfig.slider asks.
+    if (type === 'slider' || (type === 'range' && formConfig.slider)) {
+      const val = Array.isArray(value) ? '' : this.utils.escapeHtml(value);
+      return `<input type="range" ${attrString} value="${val}" data-slider-field="${this.utils.escapeHtml(fieldName)}">`;
+    }
+    if (type === 'dropzone') {
+      const accept = formConfig.accept ? ` accept="${this.utils.escapeHtml([].concat(formConfig.accept).join(','))}"` : '';
+      const multiple = formConfig.multiple === false ? '' : ' multiple';
+      return `<div class="domma-dropzone-field" data-dropzone-field="${this.utils.escapeHtml(fieldName)}">`
+        + `<input type="file" id="${id}" name="${this.utils.escapeHtml(fieldName)}"${accept}${multiple}${disabled ? ' disabled' : ''}></div>`;
+    }
+
     // Handle different input types
     switch (type) {
       case 'select':
@@ -427,7 +440,7 @@ class Forma {
    */
   _inputExtras(type, fieldDef) {
     const fc = fieldDef.formConfig || {};
-    if (/^(select|multiselect|radio|checkbox-group|chooser|checkbox|boolean|file|signature|hidden)$/.test(type)) return null;
+    if (/^(select|multiselect|radio|checkbox-group|chooser|checkbox|boolean|file|signature|hidden|slider|range|dropzone)$/.test(type)) return null;
     const inputType = type === 'textarea' ? 'textarea' : (Forma.inputTypes[type] || 'text');
     const out = {};
     if (fc.reveal && inputType === 'password') out.reveal = true;
@@ -651,6 +664,10 @@ class Forma {
 
     formElement.addEventListener('change', (e) => {
       if (e.target.matches('input, select, textarea')) {
+        // Slider and dropzone fields store their own value (a pair, a list of files)
+        // through the component's onChange; the raw input would overwrite it.
+        const name = e.target.name;
+        if (this._sliders?.[name] || this._dropzones?.[name]) return;
         // Update model if it exists
         if (this.model) {
           const value = this._getFieldValue(e.target);
@@ -679,6 +696,98 @@ class Forma {
 
     // Join the interactive input extras (reveal / clear / stepper / counter)
     this._initInputExtras(formElement);
+
+    // E.rangeSlider and E.dropzone fields
+    this._initSliderFields(formElement);
+    this._initDropzoneFields(formElement);
+  }
+
+  /**
+   * The current value of a field from the model, the data, or its default.
+   * @private
+   */
+  _initialValue(fieldName) {
+    const v = this.model ? this.model.get(fieldName) : this.data[fieldName];
+    return v !== undefined && v !== null && v !== '' ? v : this.schema?.[fieldName]?.default;
+  }
+
+  /** Store a value a component reported, as the chooser fields do. @private */
+  _storeFieldValue(fieldName, value) {
+    if (this.model) {
+      try { this.model.set(fieldName, value); }
+      catch (err) { this.setFieldError(fieldName, err.message); }
+    } else {
+      this.data[fieldName] = value;
+    }
+  }
+
+  /**
+   * Turn every `[data-slider-field]` input into an E.rangeSlider. Slider options come from
+   * the field definition (min / max / step) and formConfig (range, ticks, tickLabels,
+   * labels, tooltip, marks, minDistance, orientation, rtl, names). With `range: true` the
+   * value is [low, high].
+   * @param {HTMLElement} formElement
+   * @private
+   */
+  _initSliderFields(formElement) {
+    this._destroyFieldControls('_sliders');
+    formElement.querySelectorAll('[data-slider-field]').forEach((input) => {
+      const fieldName = input.getAttribute('data-slider-field');
+      const def = this.schema?.[fieldName] || {};
+      const fc = def.formConfig || {};
+      const pick = ['range', 'ticks', 'tickLabels', 'labels', 'format', 'tooltip', 'marks', 'minDistance',
+        'orientation', 'rtl', 'names', 'ariaLabels', 'className'];
+      const opts = {};
+      for (const k of pick) if (fc[k] !== undefined) opts[k] = fc[k];
+      if (def.min !== undefined) opts.min = def.min;
+      if (def.max !== undefined) opts.max = def.max;
+      const step = def.step ?? fc.step;
+      if (step !== undefined) opts.step = step;
+      const value = this._initialValue(fieldName);
+      if (value !== undefined && value !== null && value !== '') opts.value = value;
+      if (def.label) opts.ariaLabel = def.label;
+      opts.onChange = (v) => this._storeFieldValue(fieldName, v);
+      const inst = elements.rangeSlider(input, opts);
+      if (inst) {
+        this._sliders[fieldName] = inst;
+        // The model starts with the value the slider settled on (snapped, clamped)
+        if (value === undefined || JSON.stringify(value) !== JSON.stringify(inst.getValue())) {
+          this._storeFieldValue(fieldName, inst.getValue());
+        }
+      }
+    });
+  }
+
+  /**
+   * Turn every `[data-dropzone-field]` placeholder into an E.dropzone over its file input.
+   * formConfig passes accept, multiple, maxFiles, maxSize, minSize, previews, upload,
+   * autoUpload, retry and labels through. The value is the array of File objects.
+   * @param {HTMLElement} formElement
+   * @private
+   */
+  _initDropzoneFields(formElement) {
+    this._destroyFieldControls('_dropzones');
+    formElement.querySelectorAll('[data-dropzone-field]').forEach((zone) => {
+      const fieldName = zone.getAttribute('data-dropzone-field');
+      const def = this.schema?.[fieldName] || {};
+      const fc = def.formConfig || {};
+      const pick = ['accept', 'multiple', 'maxFiles', 'maxSize', 'minSize', 'previews', 'upload', 'autoUpload',
+        'retry', 'labels', 'list', 'className'];
+      const opts = {name: fieldName};
+      for (const k of pick) if (fc[k] !== undefined) opts[k] = fc[k];
+      if (fc.disabled || def.readonly) opts.disabled = true;
+      opts.onChange = (files) => {
+        this._storeFieldValue(fieldName, files);
+        if (files.length) this.clearFieldError(fieldName);
+      };
+      const inst = elements.dropzone(zone, opts);
+      if (inst) this._dropzones[fieldName] = inst;
+    });
+  }
+
+  _destroyFieldControls(key) {
+    Object.values(this[key] || {}).forEach((c) => c.destroy());
+    this[key] = {};
   }
 
   /**
@@ -710,6 +819,8 @@ class Forma {
    */
   destroy() {
     this._destroyInputExtras();
+    this._destroyFieldControls('_sliders');
+    this._destroyFieldControls('_dropzones');
   }
 
   /**
@@ -941,6 +1052,12 @@ class Forma {
     if (this._choosers && this._choosers[fieldName]) {
       return this._choosers[fieldName].getValue();
     }
+    if (this._sliders && this._sliders[fieldName]) {
+      return this._sliders[fieldName].getValue();
+    }
+    if (this._dropzones && this._dropzones[fieldName]) {
+      return this._dropzones[fieldName].getFiles();
+    }
 
     if (this.formElement) {
       const element = this.formElement.querySelector(`[name="${fieldName}"]`);
@@ -958,7 +1075,8 @@ class Forma {
    */
   _validateFieldValue(fieldName, value, fieldDef) {
     // Chooser fields: empty means null/undefined OR an empty array
-    const isChooser = fieldDef.type === 'chooser';
+    // ...and so are dropzone fields, whose value is an array of files
+    const isChooser = fieldDef.type === 'chooser' || fieldDef.type === 'dropzone';
     const isEmpty = isChooser
       ? (value === null || value === undefined || (Array.isArray(value) && value.length === 0) || value === '')
       : (value === null || value === undefined || value === '');
