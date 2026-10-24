@@ -18,6 +18,9 @@
 *   Missing keys return the key (or `default`), fire `missing` and an `onMissing` hook, and warn once;
     `window.DommaOptions = {i18nWarnings: false}` silences them. Events `change`, `missing`, `loaded`
     via `i18n.on()` and as `dm:i18n:*` on document.
+*   `data-i18n-attr` never writes event handlers (`on*`), `style`, `srcdoc` or `formaction`, and URL
+    attributes (`href`, `src`, `action`, ...) only take http(s), `mailto:`, `tel:` or relative values -
+    so neither a message nor a param can add script. Refusals warn once.
 *   Types in `assets/types/i18n.d.ts`; guide in `docs/I18n.md`; showcase page `showcase/i18n/`.
 
 ### Focus trap
@@ -34,6 +37,7 @@ Escape, outside clicks and `inert` on the rest of the page. Also importable on i
 (remembered with `S`), shortcut hints, nested pages (arrays or async), and an async `source` that is debounced and
 abortable with loading, empty and error states. Full keyboard support, the ARIA combobox + listbox pattern, a focus
 trap, theme tokens, reduced motion and a full-width panel on phones.
+
 ### Split Pane
 
 `E.splitPane(container, options)` makes resizable panes out of a container's children, with draggable,
@@ -52,6 +56,7 @@ cached heights and a stable scroll position; `keyField` re-uses rows; `prepend()
 retry). Roving-tabindex keyboard navigation (arrows, Page Up/Down, Home/End, Enter) that never loses the
 focused row. Strings from `render()` are sanitised unless `safe: false`. Events: `render`, `scroll`,
 `loadmore`, `loaded`, `end`, `error`, `itemclick`. Showcase: `showcase/elements/virtual-list/`.
+
 ### Dropzone
 
 `E.dropzone(target, options)` turns an element into a place to drop, browse for or paste files. A real
