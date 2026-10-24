@@ -4,19 +4,29 @@
  */
 // Outside a browser (SSR, Node, tests without a DOM) there is no HTMLElement; an empty base
 // keeps the import from throwing, and registerComponents() has no customElements to define into.
+/** @type {typeof HTMLElement} */
 const ElementBase = typeof HTMLElement === 'undefined' ? class {} : HTMLElement;
 
+/**
+ * Base HTMLElement class that registered Domma components extend.
+ * Provides Shadow DOM initialisation, options from attributes, tracked event listeners,
+ * and programmatic control.
+ */
 export class DommaElement extends ElementBase {
+    /** Default options, merged under the element's attributes. @type {Record<string, any>} */
     static defaults = {};
 
     // Observed attributes - override in subclasses
+    /** @returns {string[]} */
     static get observedAttributes() {
         return [];
     }
 
     constructor() {
         super();
+        /** @protected @type {{element: EventTarget, event: string, handler: EventListenerOrEventListenerObject, options?: boolean|AddEventListenerOptions}[]} */
         this._eventHandlers = [];
+        /** Current options (defaults, attributes, then setOptions()). @protected @type {Record<string, any>} */
         this._options = {};
         this._initialised = false;
 
@@ -52,6 +62,9 @@ export class DommaElement extends ElementBase {
 
     /**
      * Lifecycle: Called when observed attribute changes
+     * @param {string} name
+     * @param {string|null} oldValue
+     * @param {string|null} newValue
      */
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue && this._initialised) {
@@ -80,6 +93,7 @@ export class DommaElement extends ElementBase {
 
     /**
      * Merge attributes with defaults to create options object
+     * @returns {Record<string, any>}
      */
     _mergeOptions() {
         const options = { ...this.constructor.defaults };
@@ -95,6 +109,8 @@ export class DommaElement extends ElementBase {
 
     /**
      * Convert kebab-case attribute to camelCase option
+     * @param {string} attr
+     * @returns {string}
      */
     _attrToOption(attr) {
         return attr.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
@@ -102,6 +118,8 @@ export class DommaElement extends ElementBase {
 
     /**
      * Parse attribute value (handle booleans, numbers, JSON)
+     * @param {string} value
+     * @returns {any}
      */
     _parseAttrValue(value) {
         if (value === '' || value === 'true') return true;
@@ -126,6 +144,7 @@ export class DommaElement extends ElementBase {
 
     /**
      * Get component-specific styles (override in subclass)
+     * @returns {string}
      */
     _getStyles() {
         return this.constructor.styles || '';
@@ -147,6 +166,10 @@ export class DommaElement extends ElementBase {
 
     /**
      * Add event listener with tracking for cleanup
+     * @param {EventTarget} element
+     * @param {string} event
+     * @param {EventListenerOrEventListenerObject} handler
+     * @param {boolean|AddEventListenerOptions} [options]
      */
     _addEventListener(element, event, handler, options) {
         element.addEventListener(event, handler, options);
@@ -164,7 +187,9 @@ export class DommaElement extends ElementBase {
     }
 
     /**
-     * Emit custom event
+     * Emit custom event (bubbles, crosses the shadow boundary)
+     * @param {string} eventName
+     * @param {any} [detail]
      */
     _emit(eventName, detail = {}) {
         this.dispatchEvent(new CustomEvent(eventName, {
@@ -175,7 +200,11 @@ export class DommaElement extends ElementBase {
     }
 
     /**
-     * Set options programmatically (for wrapper compatibility)
+     * Set options programmatically (for wrapper compatibility).
+     * Merges `newOptions` into the existing options and, if the subclass
+     * implements `_applyOptions()`, applies them immediately.
+     * @param {Record<string, any>} newOptions - Partial options to merge
+     * @returns {this}
      */
     setOptions(newOptions) {
         this._options = { ...this._options, ...newOptions };
@@ -186,7 +215,8 @@ export class DommaElement extends ElementBase {
     }
 
     /**
-     * Destroy component
+     * Destroy component: remove tracked event listeners and detach the element from the DOM
+     * @returns {void}
      */
     destroy() {
         this._cleanup();

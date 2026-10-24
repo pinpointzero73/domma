@@ -15,6 +15,28 @@ import {isSafeUrl, safeUrl} from './safe-url.js';
 export {isSafeUrl, safeUrl};
 
 /**
+ * Options for `sanitise()`. Used only when DOMPurify is loaded; without it the input is
+ * HTML-escaped whatever the options say.
+ * @typedef {object} SanitiseOptions
+ * @property {'default'|'strict'|'basic'} [preset='default'] - Allowlist preset ('default', 'strict', 'basic')
+ * @property {string[]} [allowedTags] - Custom allowed tags (overrides preset)
+ * @property {string[]} [allowedAttrs] - Custom allowed attributes (overrides preset)
+ * @property {boolean} [allowDataAttrs] - Allow data-* attributes
+ */
+
+/**
+ * The sanitise module (`Domma.sanitize`).
+ * @typedef {object} Sanitize
+ * @property {typeof sanitise} sanitise - Sanitise HTML (DOMPurify, or HTML escaping without it)
+ * @property {typeof sanitiseBasic} sanitiseBasic - Allow only b, i, em, strong, br
+ * @property {typeof sanitiseUserContent} sanitiseUserContent - Allow only b, i, em, strong, p, br, a, ul, ol, li
+ * @property {typeof escape} escape - Escape HTML completely (no tags allowed)
+ * @property {typeof hasDOMPurify} hasDOMPurify - Whether DOMPurify is loaded
+ * @property {typeof isSafeUrl} isSafeUrl - Whether a URL is safe to put in an href/src
+ * @property {typeof safeUrl} safeUrl - The resolved absolute URL when safe, else null
+ */
+
+/**
  * Check if DOMPurify is available
  * @returns {boolean}
  */
@@ -93,11 +115,7 @@ const PRESETS = {
  * Main sanitisation function
  *
  * @param {string} html - HTML string to sanitise
- * @param {Object} options - Sanitisation options
- * @param {string} options.preset - Preset name ('default', 'strict', 'basic')
- * @param {Array} options.allowedTags - Custom allowed tags (overrides preset)
- * @param {Array} options.allowedAttrs - Custom allowed attributes (overrides preset)
- * @param {boolean} options.allowDataAttrs - Allow data-* attributes
+ * @param {SanitiseOptions} [options] - Sanitisation options (preset, allowedTags, allowedAttrs, allowDataAttrs)
  * @returns {string} - Sanitised HTML
  */
 export function sanitise(html, options = {}) {
@@ -191,6 +209,7 @@ if (typeof window !== 'undefined' && !isDOMPurifyAvailable() && loadOption('puri
 }
 
 // Export default sanitise function
+/** @type {Sanitize} */
 export default {
     sanitise,
     sanitiseBasic,

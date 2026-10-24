@@ -9,23 +9,258 @@ import {drawIllustratedButterfly} from './butterfly-drawing.js';
  */
 
 /**
+ * What an effect is applied to: a CSS selector, an element, a NodeList or an array of elements.
+ * @typedef {string|Element|NodeList|HTMLElement[]} Selector
+ */
+
+/**
+ * The control object every effect returns. Effects without a running state (reveal, ripple)
+ * implement pause/resume as no-ops.
+ * @typedef {object} EffectControl
+ * @property {() => void} pause - Pause the effect
+ * @property {() => void} resume - Resume the effect
+ * @property {() => void} stop - Stop the effect
+ * @property {() => void} restart - Restart the effect from the beginning
+ * @property {() => void} destroy - Destroy the effect and clean up all resources
+ * @property {() => boolean} isRunning - Check if the effect is currently running
+ * @property {() => boolean} isPaused - Check if the effect is paused
+ */
+
+/**
+ * One step of a scribe action queue: render text, wait, or delete what was rendered.
+ * @typedef {object} ScribeAction
+ * @property {string} [render] - Text to type
+ * @property {'none'|'fade'|'bounce'|'glow'} [effect] - Entrance effect for each rendered unit (default: 'none')
+ * @property {string|number} [wait] - Pause: '2s', '500ms' or a number of milliseconds
+ * @property {boolean|number|'all'} [undoRender] - Delete text: true = the last render, a number = that many units, 'all' = everything
+ */
+
+/**
+ * A palette name (see EFFECT_PALETTES; 'theme' reads the active Domma theme's colours) or an
+ * array of CSS colour strings.
+ * @typedef {'theme'|'rainbow'|'festive'|'gold'|'silver'|'pastel'|'mono'|'sunset'|'ocean'|'forest'|'bridal'|'meadow'|'firefly'|'aqua'|'autumn'|string[]} TickerTapePalette
+ */
+
+/**
+ * Options for `Domma.effects.breathe()`.
+ * @typedef {object} BreatheOptions
+ * @property {number} [amplitude] - Vertical movement distance in pixels (default: 6)
+ * @property {number} [duration] - Complete animation cycle time in milliseconds (default: 3000)
+ * @property {string} [easing] - CSS easing function (default: 'ease-in-out')
+ * @property {number} [delay] - Initial delay before animation starts in milliseconds (default: 0)
+ * @property {number} [stagger] - Delay between multiple elements in milliseconds (default: 0)
+ * @property {number|'infinite'} [iterations] - Number of cycles or 'infinite' (default: 'infinite')
+ * @property {boolean} [pauseOnHover] - Pause animation when hovering (default: false)
+ * @property {boolean} [autoStart] - Start animation immediately (default: true)
+ * @property {boolean} [respectMotionPreference] - Honor prefers-reduced-motion (default: true)
+ * @property {() => void} [onStart] - Callback when animation starts
+ * @property {() => void} [onComplete] - Callback when animation completes
+ */
+
+/**
+ * Options for `Domma.effects.pulse()`.
+ * @typedef {object} PulseOptions
+ * @property {number} [scale] - Scale factor (e.g., 1.05 = 5% larger) (default: 1.05)
+ * @property {number} [duration] - Complete animation cycle time in milliseconds (default: 2000)
+ * @property {string} [easing] - CSS easing function (default: 'ease-in-out')
+ * @property {number} [delay] - Initial delay before animation starts (default: 0)
+ * @property {number} [stagger] - Delay between multiple elements (default: 0)
+ * @property {number|'infinite'} [iterations] - Number of cycles or 'infinite' (default: 'infinite')
+ * @property {boolean} [pauseOnHover] - Pause animation when hovering (default: false)
+ * @property {boolean} [respectMotionPreference] - Honor prefers-reduced-motion (default: true)
+ */
+
+/**
+ * Options for `Domma.effects.scribe()`.
+ * @typedef {object} ScribeOptions
+ * @property {'typewriter'|'word'|'sentence'} [mode] - Rendering granularity: 'typewriter' (char-by-char), 'word', or 'sentence' (default: 'typewriter')
+ * @property {number} [speed] - Milliseconds per unit when typing (default: 50)
+ * @property {number} [deleteSpeed] - Milliseconds per unit when deleting (default: 30)
+ * @property {boolean} [cursor] - Show blinking cursor (default: true)
+ * @property {string} [cursorChar] - Cursor character (default: '|')
+ * @property {boolean} [cursorBlink] - Animate cursor blink (default: true)
+ * @property {'caret'|'block'|'underline'} [cursorType] - Cursor style (default: 'caret')
+ * @property {boolean|number} [loop] - Loop count: true = infinite, number = specific count (default: false)
+ * @property {number} [loopDelay] - Delay between loops in milliseconds (default: 1000)
+ * @property {boolean} [pauseOnHover] - Pause animation when hovering (default: false)
+ * @property {boolean} [autoStart] - Start animation immediately (default: true)
+ * @property {boolean} [respectMotionPreference] - Honor prefers-reduced-motion (default: true)
+ * @property {ScribeAction[]} [actions] - Action queue to execute
+ * @property {() => void} [onStart] - Callback when animation starts
+ * @property {() => void} [onComplete] - Callback when animation completes
+ * @property {(unit: string, index: number) => void} [onCharacter] - Callback for each unit rendered (unit, index) - unit can be char/word/sentence depending on mode
+ * @property {(text: string) => void} [onRender] - Callback when render action completes (text)
+ * @property {(deletedText: string) => void} [onUndoRender] - Callback when undoRender action completes (deletedText)
+ * @property {(loopCount: number) => void} [onLoop] - Callback on each loop iteration (loopCount)
+ */
+
+/**
+ * Options for `Domma.effects.reveal()`.
+ * @typedef {object} RevealOptions
+ * @property {'fade'|'slide-up'|'slide-down'|'slide-left'|'slide-right'|'zoom'|'flip'} [animation] - Animation type: 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'zoom', 'flip' (default: 'fade')
+ * @property {number} [duration] - Animation duration in ms (default: 600)
+ * @property {string} [easing] - CSS easing function (default: 'ease-out')
+ * @property {number} [delay] - Delay before animation in ms (default: 0)
+ * @property {number} [stagger] - Delay between multiple elements in ms (default: 0)
+ * @property {number} [threshold] - IntersectionObserver threshold 0-1 (default: 0.1)
+ * @property {string} [rootMargin] - Observer root margin (default: '0px')
+ * @property {boolean} [once] - Only animate once (default: true)
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ * @property {(element: Element) => void} [onReveal] - Callback per element when revealed
+ */
+
+/**
+ * Options for `Domma.effects.scramble()`.
+ * @typedef {object} ScrambleOptions
+ * @property {number} [speed] - Ms per character resolve (default: 50)
+ * @property {number} [scrambleSpeed] - Ms between scramble frame updates (default: 30)
+ * @property {string} [characters] - Character pool for scramble (default: alphanumeric + symbols)
+ * @property {'left-to-right'|'right-to-left'|'random'|'center-out'} [revealOrder] - 'left-to-right', 'right-to-left', 'random', 'center-out' (default: 'left-to-right')
+ * @property {number} [scrambleDuration] - How long each char scrambles before resolving in ms (default: 800)
+ * @property {number} [stagger] - Delay between multiple elements in ms (default: 0)
+ * @property {boolean|number} [loop] - false, true (infinite), or number of loops (default: false)
+ * @property {number} [loopDelay] - Ms between loops (default: 2000)
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ * @property {() => void} [onComplete] - Callback when animation completes
+ * @property {(char: string, index: number) => void} [onCharacter] - Callback per character resolved (char, index)
+ */
+
+/**
+ * Options for `Domma.effects.counter()`.
+ * @typedef {object} CounterOptions
+ * @property {number} [from] - Start value (default: 0)
+ * @property {number|null} [to] - End value (required, or reads from element textContent)
+ * @property {number} [duration] - Total count duration in ms (default: 2000)
+ * @property {'linear'|'ease-out'|'ease-in-out'} [easing] - 'linear', 'ease-out', 'ease-in-out' (default: 'ease-out')
+ * @property {number} [decimals] - Decimal places (default: 0)
+ * @property {string} [separator] - Thousands separator (default: ',')
+ * @property {string} [prefix] - Text before number (default: '')
+ * @property {string} [suffix] - Text after number (default: '')
+ * @property {number} [stagger] - Delay between multiple elements in ms (default: 0)
+ * @property {'immediate'|'scroll'} [trigger] - 'immediate' or 'scroll' (default: 'immediate')
+ * @property {number} [threshold] - Observer threshold when trigger is scroll (default: 0.5)
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ * @property {(currentValue: number) => void} [onUpdate] - Callback on each frame (currentValue)
+ * @property {() => void} [onComplete] - Callback when counting completes
+ */
+
+/**
+ * Options for `Domma.effects.ripple()`.
+ * @typedef {object} RippleOptions
+ * @property {string} [colour] - Ripple colour (default: 'rgba(255, 255, 255, 0.35)')
+ * @property {number} [duration] - Ripple animation duration in ms (default: 600)
+ * @property {number} [opacity] - Starting opacity (default: 0.35)
+ * @property {boolean} [unbounded] - Allow ripple to overflow element (default: false)
+ * @property {boolean} [centered] - Always ripple from centre (default: false)
+ * @property {'click'|'mousedown'|'pointerdown'} [trigger] - 'click', 'mousedown', 'pointerdown' (default: 'pointerdown')
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ */
+
+/**
+ * Options for `Domma.effects.shake()`.
+ * @typedef {object} ShakeOptions
+ * @property {number} [intensity] - Shake distance in px (default: 6)
+ * @property {number} [duration] - Total shake duration in ms (default: 500)
+ * @property {'horizontal'|'vertical'|'both'} [direction] - 'horizontal', 'vertical', 'both' (default: 'horizontal')
+ * @property {string} [easing] - CSS easing function (default: 'ease-in-out')
+ * @property {number} [iterations] - Number of shake cycles (default: 1)
+ * @property {number} [stagger] - Delay between elements in ms (default: 0)
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ * @property {() => void} [onComplete] - Callback when shake completes
+ */
+
+/**
+ * Options for `Domma.effects.twinkle()`.
+ * @typedef {object} TwinkleOptions
+ * @property {number} [count] - Number of stars (default: 100)
+ * @property {number} [minSize] - Minimum star size in pixels (default: 1)
+ * @property {number} [maxSize] - Maximum star size in pixels (default: 3)
+ * @property {number} [twinkleSpeed] - Base oscillation speed (default: 0.003)
+ * @property {string} [colour] - Star colour (default: 'rgba(255, 240, 200, 1)')
+ * @property {number} [zIndex] - Canvas z-index (default: 1)
+ * @property {'star'|'circle'} [shape] - Star shape; 'star' draws a 4-pointed star, 'circle' draws a dot (default: 'star')
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ */
+
+/**
+ * Options for `Domma.effects.tickerTape()`.
+ * @typedef {object} TickerTapeOptions
+ * @property {TickerTapePalette} [palette] - Named theme palette (e.g. 'theme', 'rainbow', 'gold', 'silver', 'festive', 'pastel', 'mono') or a custom array of CSS colour strings (default: 'theme')
+ * @property {number} [density] - Average strips on screen at any moment (default: 50)
+ * @property {number} [speed] - Fall speed multiplier (1 = default) (default: 1)
+ * @property {number} [sway] - Horizontal sway amplitude in pixels (default: 60)
+ * @property {number} [rotationSpeed] - Max rotation degrees per frame (default: 6)
+ * @property {number} [minWidth] - Minimum strip width in pixels (default: 5)
+ * @property {number} [maxWidth] - Maximum strip width in pixels (default: 9)
+ * @property {number} [minHeight] - Minimum strip height in pixels (default: 12)
+ * @property {number} [maxHeight] - Maximum strip height in pixels (default: 22)
+ * @property {number} [fadeStart] - Fraction of fall (0-1) before fade begins (default: 0.55)
+ * @property {boolean} [burst] - If true, drops a single batch and stops respawning (default: false)
+ * @property {number} [burstCount] - Strips emitted in burst mode (default: 150)
+ * @property {number} [zIndex] - Canvas stacking order (default: 1)
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ */
+
+/**
+ * Options for `Domma.effects.butterflies()`.
+ * @typedef {object} ButterfliesOptions
+ * @property {TickerTapePalette} [palette] - Named palette (e.g. 'meadow', 'firefly', 'aqua', 'autumn' or any ticker-tape palette) or a custom array of CSS colour strings (default: 'meadow')
+ * @property {number} [density] - Target butterflies on screen at once (default: 18)
+ * @property {number} [speed] - Global speed multiplier (default: 1)
+ * @property {number} [wander] - Steering erraticness (default: 1)
+ * @property {number} [riseSpeed] - Upward drift bias (default: 0.4)
+ * @property {number} [flapSpeed] - Wingbeat rate multiplier (default: 1)
+ * @property {number} [minSize] - Minimum wingspan in pixels (default: 14)
+ * @property {number} [maxSize] - Maximum wingspan in pixels (default: 26)
+ * @property {boolean} [twoTone] - Use two palette colours per butterfly (default: true)
+ * @property {boolean} [burst] - Release one batch then settle (default: false)
+ * @property {number} [burstCount] - Butterflies released in burst mode (default: 40)
+ * @property {number} [zIndex] - Canvas stacking order (default: 1)
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ */
+
+/**
+ * Options for `Domma.effects.strobe()`.
+ * @typedef {object} StrobeOptions
+ * @property {'club'|'concert'|'police'|'searchlight'|'scanner'|'mood'} [preset] - Named preset (club|concert|police|searchlight|scanner|mood). Individual options override the preset. (default: 'club')
+ * @property {Array<'tl'|'tr'|'bl'|'br'>} [origins] - Corners beams emit from: any of 'tl','tr','bl','br'
+ * @property {'sweep'|'rotate'} [motion] - 'sweep' (fan back and forth) or 'rotate' (full circle)
+ * @property {number} [sweepArc] - Degrees a beam fans across in sweep mode
+ * @property {number} [speed] - Sweep/rotation speed multiplier
+ * @property {number} [beamWidth] - Angular width of each beam cone in degrees
+ * @property {boolean} [flicker] - Blink beams on/off (the strobe character)
+ * @property {number} [hz] - Flicker rate in flashes/sec (warns above 5)
+ * @property {string[]} [colours] - Beam colours, assigned per beam in order
+ * @property {number} [intensity] - Beam brightness 0-1
+ * @property {number|null} [duration] - Auto-stop after N ms (default: null)
+ * @property {number} [zIndex] - Canvas stacking order (default: 9999)
+ * @property {boolean} [respectMotionPreference] - Honour prefers-reduced-motion (default: true)
+ */
+
+/**
+ * The effects module (`Domma.effects`).
+ * @typedef {object} Effects
+ * @property {typeof breathe} breathe - Sinusoidal floating animation
+ * @property {typeof pulse} pulse - Pulsing scale animation
+ * @property {typeof scribe} scribe - Text animation with configurable granularity (characters, words, or sentences) and action queue
+ * @property {typeof reveal} reveal - Scroll-triggered entrance animations using IntersectionObserver
+ * @property {typeof scramble} scramble - Text cipher/decode animation
+ * @property {typeof counter} counter - Animated number counting with easing and formatting
+ * @property {typeof ripple} ripple - Material Design click ripple effect
+ * @property {typeof shake} shake - Attention/error shake animation
+ * @property {typeof twinkle} twinkle - Canvas-based twinkling stars animation
+ * @property {typeof tickerTape} tickerTape - Canvas-based ticker-tape parade - colourful rectangles fall, sway, rotate, and fade
+ * @property {typeof butterflies} butterflies - Canvas-based fluttering butterflies
+ * @property {typeof strobe} strobe - Stage-lighting beams sweeping from the corners
+ */
+
+/**
  * Apply a sinusoidal breathing animation to elements
  * Creates a gentle up-and-down floating motion
  *
- * @param {string|Element|NodeList} selector - Element(s) to animate
- * @param {Object} options - Configuration options
- * @param {number} options.amplitude - Vertical movement distance in pixels (default: 6)
- * @param {number} options.duration - Complete animation cycle time in milliseconds (default: 3000)
- * @param {string} options.easing - CSS easing function (default: 'ease-in-out')
- * @param {number} options.delay - Initial delay before animation starts in milliseconds (default: 0)
- * @param {number} options.stagger - Delay between multiple elements in milliseconds (default: 0)
- * @param {number|string} options.iterations - Number of cycles or 'infinite' (default: 'infinite')
- * @param {boolean} options.pauseOnHover - Pause animation when hovering (default: false)
- * @param {boolean} options.autoStart - Start animation immediately (default: true)
- * @param {boolean} options.respectMotionPreference - Honor prefers-reduced-motion (default: true)
- * @param {Function} options.onStart - Callback when animation starts
- * @param {Function} options.onComplete - Callback when animation completes
- * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
+ * @param {Selector} selector - Element(s) to animate
+ * @param {BreatheOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy() methods
  *
  * @example
  * // Simple usage
@@ -242,17 +477,9 @@ export function breathe(selector, options = {}) {
  * Apply a pulsing scale animation to elements
  * Creates a grow-and-shrink breathing effect
  *
- * @param {string|Element|NodeList} selector - Element(s) to animate
- * @param {Object} options - Configuration options
- * @param {number} options.scale - Scale factor (e.g., 1.05 = 5% larger) (default: 1.05)
- * @param {number} options.duration - Complete animation cycle time in milliseconds (default: 2000)
- * @param {string} options.easing - CSS easing function (default: 'ease-in-out')
- * @param {number} options.delay - Initial delay before animation starts (default: 0)
- * @param {number} options.stagger - Delay between multiple elements (default: 0)
- * @param {number|string} options.iterations - Number of cycles or 'infinite' (default: 'infinite')
- * @param {boolean} options.pauseOnHover - Pause animation when hovering (default: false)
- * @param {boolean} options.respectMotionPreference - Honor prefers-reduced-motion (default: true)
- * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
+ * @param {Selector} selector - Element(s) to animate
+ * @param {PulseOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy() methods
  *
  * @example
  * // Simple usage
@@ -394,30 +621,35 @@ export function pulse(selector, options = {}) {
 }
 
 /**
+ * Parse a wait duration for a scribe action: '2s', '500ms', or a raw number
+ * of milliseconds. Anything unreadable is 0.
+ *
+ * 'ms' MUST be tested before 's', because 'ms' also ends with 's'. Checking
+ * 's' first makes the 'ms' branch unreachable and multiplies every
+ * millisecond value by 1000 - a '300ms' wait became five minutes.
+ *
+ * @param {string|number} value
+ * @returns {number} milliseconds
+ */
+export function parseWait(value) {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    if (typeof value !== 'string') return 0;
+
+    const parsed = parseFloat(value);
+    if (!Number.isFinite(parsed)) return 0;
+
+    if (value.endsWith('ms')) return parsed;
+    if (value.endsWith('s')) return parsed * 1000;
+    return 0;
+}
+
+/**
  * Apply a scribe effect to elements
  * Types text with configurable granularity (characters, words, or sentences) and optional entrance effects
  *
- * @param {string|Element|NodeList} selector - Element(s) to animate
- * @param {Object} options - Configuration options
- * @param {string} options.mode - Rendering granularity: 'typewriter' (char-by-char), 'word', or 'sentence' (default: 'typewriter')
- * @param {number} options.speed - Milliseconds per unit when typing (default: 50)
- * @param {number} options.deleteSpeed - Milliseconds per unit when deleting (default: 30)
- * @param {boolean} options.cursor - Show blinking cursor (default: true)
- * @param {string} options.cursorChar - Cursor character (default: '|')
- * @param {boolean} options.cursorBlink - Animate cursor blink (default: true)
- * @param {boolean|number} options.loop - Loop count: true = infinite, number = specific count (default: false)
- * @param {number} options.loopDelay - Delay between loops in milliseconds (default: 1000)
- * @param {boolean} options.pauseOnHover - Pause animation when hovering (default: false)
- * @param {boolean} options.autoStart - Start animation immediately (default: true)
- * @param {boolean} options.respectMotionPreference - Honor prefers-reduced-motion (default: true)
- * @param {Array<Object>} options.actions - Action queue to execute
- * @param {Function} options.onStart - Callback when animation starts
- * @param {Function} options.onComplete - Callback when animation completes
- * @param {Function} options.onCharacter - Callback for each unit rendered (unit, index) - unit can be char/word/sentence depending on mode
- * @param {Function} options.onRender - Callback when render action completes (text)
- * @param {Function} options.onUndoRender - Callback when undoRender action completes (deletedText)
- * @param {Function} options.onLoop - Callback on each loop iteration (loopCount)
- * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
+ * @param {Selector} selector - Element(s) to animate
+ * @param {ScribeOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy() methods
  *
  * @example
  * // Simple usage (character mode)
@@ -452,29 +684,6 @@ export function pulse(selector, options = {}) {
  *   loop: true
  * });
  */
-/**
- * Parse a wait duration for a scribe action: '2s', '500ms', or a raw number
- * of milliseconds. Anything unreadable is 0.
- *
- * 'ms' MUST be tested before 's', because 'ms' also ends with 's'. Checking
- * 's' first makes the 'ms' branch unreachable and multiplies every
- * millisecond value by 1000 - a '300ms' wait became five minutes.
- *
- * @param {string|number} value
- * @returns {number} milliseconds
- */
-export function parseWait(value) {
-    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
-    if (typeof value !== 'string') return 0;
-
-    const parsed = parseFloat(value);
-    if (!Number.isFinite(parsed)) return 0;
-
-    if (value.endsWith('ms')) return parsed;
-    if (value.endsWith('s')) return parsed * 1000;
-    return 0;
-}
-
 export function scribe(selector, options = {}) {
   // Default options
   const defaults = {
@@ -830,7 +1039,7 @@ function resolveElements(selector, effectName) {
 
 /**
  * Create a no-op control object for when effects are disabled
- * @returns {Object}
+ * @returns {EffectControl}
  */
 function noopControl() {
   return {
@@ -856,19 +1065,9 @@ function prefersReducedMotion() {
  * Scroll-triggered entrance animations using IntersectionObserver
  * Elements animate into view when they enter the viewport.
  *
- * @param {string|Element|NodeList} selector - Element(s) to animate
- * @param {Object} options - Configuration options
- * @param {string} options.animation - Animation type: 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'zoom', 'flip' (default: 'fade')
- * @param {number} options.duration - Animation duration in ms (default: 600)
- * @param {string} options.easing - CSS easing function (default: 'ease-out')
- * @param {number} options.delay - Delay before animation in ms (default: 0)
- * @param {number} options.stagger - Delay between multiple elements in ms (default: 0)
- * @param {number} options.threshold - IntersectionObserver threshold 0-1 (default: 0.1)
- * @param {string} options.rootMargin - Observer root margin (default: '0px')
- * @param {boolean} options.once - Only animate once (default: true)
- * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
- * @param {Function} options.onReveal - Callback per element when revealed
- * @returns {Object} Control object with destroy() method
+ * @param {Selector} selector - Element(s) to animate
+ * @param {RevealOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with destroy() method
  *
  * @example
  * // Simple fade-in on scroll
@@ -976,20 +1175,9 @@ export function reveal(selector, options = {}) {
  * Text cipher/decode animation
  * Characters cycle through random glyphs before settling on the correct character.
  *
- * @param {string|Element|NodeList} selector - Element(s) to animate
- * @param {Object} options - Configuration options
- * @param {number} options.speed - Ms per character resolve (default: 50)
- * @param {number} options.scrambleSpeed - Ms between scramble frame updates (default: 30)
- * @param {string} options.characters - Character pool for scramble (default: alphanumeric + symbols)
- * @param {string} options.revealOrder - 'left-to-right', 'right-to-left', 'random', 'center-out' (default: 'left-to-right')
- * @param {number} options.scrambleDuration - How long each char scrambles before resolving in ms (default: 800)
- * @param {number} options.stagger - Delay between multiple elements in ms (default: 0)
- * @param {boolean|number} options.loop - false, true (infinite), or number of loops (default: false)
- * @param {number} options.loopDelay - Ms between loops (default: 2000)
- * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
- * @param {Function} options.onComplete - Callback when animation completes
- * @param {Function} options.onCharacter - Callback per character resolved (char, index)
- * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
+ * @param {Selector} selector - Element(s) to animate
+ * @param {ScrambleOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy() methods
  *
  * @example
  * Domma.effects.scramble('.hero-title');
@@ -1202,23 +1390,9 @@ export function scramble(selector, options = {}) {
  * Animated number counting effect
  * Smoothly counts from one number to another with easing.
  *
- * @param {string|Element|NodeList} selector - Element(s) to animate
- * @param {Object} options - Configuration options
- * @param {number} options.from - Start value (default: 0)
- * @param {number} options.to - End value (required, or reads from element textContent)
- * @param {number} options.duration - Total count duration in ms (default: 2000)
- * @param {string} options.easing - 'linear', 'ease-out', 'ease-in-out' (default: 'ease-out')
- * @param {number} options.decimals - Decimal places (default: 0)
- * @param {string} options.separator - Thousands separator (default: ',')
- * @param {string} options.prefix - Text before number (default: '')
- * @param {string} options.suffix - Text after number (default: '')
- * @param {number} options.stagger - Delay between multiple elements in ms (default: 0)
- * @param {string} options.trigger - 'immediate' or 'scroll' (default: 'immediate')
- * @param {number} options.threshold - Observer threshold when trigger is scroll (default: 0.5)
- * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
- * @param {Function} options.onUpdate - Callback on each frame (currentValue)
- * @param {Function} options.onComplete - Callback when counting completes
- * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy() methods
+ * @param {Selector} selector - Element(s) to animate
+ * @param {CounterOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy() methods
  *
  * @example
  * // Count from 0 to value in element
@@ -1416,16 +1590,9 @@ export function counter(selector, options = {}) {
  * Material Design click ripple effect
  * Adds a circular wave effect emanating from click/touch point.
  *
- * @param {string|Element|NodeList} selector - Element(s) to add ripple to
- * @param {Object} options - Configuration options
- * @param {string} options.colour - Ripple colour (default: 'rgba(255, 255, 255, 0.35)')
- * @param {number} options.duration - Ripple animation duration in ms (default: 600)
- * @param {number} options.opacity - Starting opacity (default: 0.35)
- * @param {boolean} options.unbounded - Allow ripple to overflow element (default: false)
- * @param {boolean} options.centered - Always ripple from centre (default: false)
- * @param {string} options.trigger - 'click', 'mousedown', 'pointerdown' (default: 'pointerdown')
- * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
- * @returns {Object} Control object with destroy() method
+ * @param {Selector} selector - Element(s) to add ripple to
+ * @param {RippleOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with destroy() method
  *
  * @example
  * // Add ripple to buttons
@@ -1563,17 +1730,9 @@ export function ripple(selector, options = {}) {
  * Attention/error shake animation
  * Quick shake animation for invalid inputs or attention-grabbing.
  *
- * @param {string|Element|NodeList} selector - Element(s) to shake
- * @param {Object} options - Configuration options
- * @param {number} options.intensity - Shake distance in px (default: 6)
- * @param {number} options.duration - Total shake duration in ms (default: 500)
- * @param {string} options.direction - 'horizontal', 'vertical', 'both' (default: 'horizontal')
- * @param {string} options.easing - CSS easing function (default: 'ease-in-out')
- * @param {number} options.iterations - Number of shake cycles (default: 1)
- * @param {number} options.stagger - Delay between elements in ms (default: 0)
- * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
- * @param {Function} options.onComplete - Callback when shake completes
- * @returns {Object} Control object with stop(), restart(), destroy() methods
+ * @param {Selector} selector - Element(s) to shake
+ * @param {ShakeOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with stop(), restart(), destroy() methods
  *
  * @example
  * // Shake an invalid input
@@ -1724,17 +1883,9 @@ export function shake(selector, options = {}) {
  * Canvas-based twinkling stars animation
  * Creates an ambient starfield effect, either as a full-page fixed overlay or scoped to a container element
  *
- * @param {string|Element|null} selector - CSS selector, Element, or null/'body' for full-page mode
- * @param {Object} options - Configuration options
- * @param {number} options.count - Number of stars (default: 100)
- * @param {number} options.minSize - Minimum star size in pixels (default: 1)
- * @param {number} options.maxSize - Maximum star size in pixels (default: 3)
- * @param {number} options.twinkleSpeed - Base oscillation speed (default: 0.003)
- * @param {string} options.colour - Star colour (default: 'rgba(255, 240, 200, 1)')
- * @param {number} options.zIndex - Canvas z-index (default: 1)
- * @param {'star'|'circle'} options.shape - Star shape; 'star' draws a 4-pointed star, 'circle' draws a dot (default: 'star')
- * @param {boolean} options.respectMotionPreference - Honour prefers-reduced-motion (default: true)
- * @returns {Object} Control object with pause(), resume(), stop(), restart(), destroy(), isRunning(), isPaused()
+ * @param {Selector|null} selector - CSS selector, Element, or null/'body' for full-page mode
+ * @param {TwinkleOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy(), isRunning(), isPaused()
  *
  * @example
  * // Full-page overlay (matches splash page behaviour)
@@ -2047,24 +2198,9 @@ export function twinkle(selector, options = {}) {
  * for a full-page fixed overlay, or provide a selector to scope strips
  * inside a specific container.
  *
- * @param {string|Element|NodeList|HTMLElement[]|null} selector
- * @param {Object} options
- * @param {string|string[]} [options.palette] - Named theme palette (e.g.
- *   'theme', 'rainbow', 'gold', 'silver', 'festive', 'pastel', 'mono') or
- *   a custom array of CSS colour strings.
- * @param {number} [options.density] - Average strips on screen at any moment
- * @param {number} [options.speed] - Fall speed multiplier (1 = default)
- * @param {number} [options.sway] - Horizontal sway amplitude in pixels
- * @param {number} [options.rotationSpeed] - Max rotation degrees per frame
- * @param {number} [options.minWidth] - Minimum strip width in pixels
- * @param {number} [options.maxWidth] - Maximum strip width in pixels
- * @param {number} [options.minHeight] - Minimum strip height in pixels
- * @param {number} [options.maxHeight] - Maximum strip height in pixels
- * @param {number} [options.fadeStart] - Fraction of fall (0-1) before fade begins
- * @param {boolean} [options.burst] - If true, drops a single batch and stops respawning
- * @param {number} [options.burstCount] - Strips emitted in burst mode
- * @param {number} [options.zIndex]
- * @param {boolean} [options.respectMotionPreference]
+ * @param {Selector|null} selector
+ * @param {TickerTapeOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy(), isRunning(), isPaused()
  *
  * @example
  * // Full-page overlay using current theme colours
@@ -2325,21 +2461,9 @@ export function tickerTape(selector, options = {}) {
  * flapping wings. Pass `null` (or omit the selector) for a full-page fixed
  * overlay, or a selector to scope them inside a container.
  *
- * @param {string|Element|NodeList|HTMLElement[]|null} selector
- * @param {Object} options
- * @param {string|string[]} [options.palette='meadow']
- * @param {number} [options.density=18] - Target butterflies on screen at once
- * @param {number} [options.speed=1] - Global speed multiplier
- * @param {number} [options.wander=1] - Steering erraticness
- * @param {number} [options.riseSpeed=0.4] - Upward drift bias
- * @param {number} [options.flapSpeed=1] - Wingbeat rate multiplier
- * @param {number} [options.minSize=14] - Minimum wingspan in pixels
- * @param {number} [options.maxSize=26] - Maximum wingspan in pixels
- * @param {boolean} [options.twoTone=true] - Use two palette colours per butterfly
- * @param {boolean} [options.burst=false] - Release one batch then settle
- * @param {number} [options.burstCount=40] - Butterflies released in burst mode
- * @param {number} [options.zIndex=1]
- * @param {boolean} [options.respectMotionPreference=true]
+ * @param {Selector|null} selector
+ * @param {ButterfliesOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy(), isRunning(), isPaused()
  *
  * @example
  * Domma.effects.butterflies(null);                       // full-page meadow
@@ -2605,6 +2729,10 @@ export function butterflies(selector, options = {}) {
 
 // ── Strobe lighting presets ─────────────────────────────────────────────────
 
+/**
+ * Strobe-lighting presets: name -> option bundle.
+ * @type {Record<'club'|'concert'|'police'|'searchlight'|'scanner'|'mood', StrobeOptions>}
+ */
 export const STROBE_PRESETS = {
   club:        { origins: ['tl', 'tr', 'bl', 'br'], motion: 'sweep',  sweepArc: 100, speed: 1,    beamWidth: 16, flicker: true,  hz: 10, colours: ['#ffffff', '#38bdf8', '#f472b6', '#a855f7'], intensity: 0.7 },
   concert:     { origins: ['tl', 'tr'],             motion: 'sweep',  sweepArc: 120, speed: 0.8,  beamWidth: 18, flicker: true,  hz: 6,  colours: ['#f43f5e', '#fb923c', '#facc15', '#22c55e', '#3b82f6'], intensity: 0.75 },
@@ -2618,7 +2746,7 @@ export const STROBE_PRESETS = {
  * Resolve a strobe-lighting preset name to its option bundle.
  * Unknown names warn and fall back to 'club'.
  * @param {string} name
- * @returns {object}
+ * @returns {StrobeOptions}
  */
 export function resolveStrobePreset(name) {
   if (name && STROBE_PRESETS[name]) return STROBE_PRESETS[name];
@@ -2645,21 +2773,9 @@ function hexToRgba(hex, alpha) {
  * (`hz`) is not clamped, but a console warning fires above 5 Hz since rapid
  * flashing can trigger photosensitive seizures.
  *
- * @param {string|Element|NodeList|HTMLElement[]|null} selector
- * @param {Object} options
- * @param {string} [options.preset='club'] - Named preset (club|concert|police|searchlight|scanner|mood). Individual options override the preset.
- * @param {string[]} [options.origins] - Corners beams emit from: any of 'tl','tr','bl','br'
- * @param {string} [options.motion] - 'sweep' (fan back and forth) or 'rotate' (full circle)
- * @param {number} [options.sweepArc] - Degrees a beam fans across in sweep mode
- * @param {number} [options.speed] - Sweep/rotation speed multiplier
- * @param {number} [options.beamWidth] - Angular width of each beam cone in degrees
- * @param {boolean} [options.flicker] - Blink beams on/off (the strobe character)
- * @param {number} [options.hz] - Flicker rate in flashes/sec (warns above 5)
- * @param {string[]} [options.colours] - Beam colours, assigned per beam in order
- * @param {number} [options.intensity] - Beam brightness 0-1
- * @param {number|null} [options.duration=null] - Auto-stop after N ms
- * @param {number} [options.zIndex=9999]
- * @param {boolean} [options.respectMotionPreference=true]
+ * @param {Selector|null} selector
+ * @param {StrobeOptions} [options] - Configuration options
+ * @returns {EffectControl|null} Control object with pause(), resume(), stop(), restart(), destroy(), isRunning(), isPaused()
  *
  * @example
  * Domma.effects.strobe(null);                                  // full-page club lighting
@@ -2939,6 +3055,10 @@ export function strobe(selector, options = {}) {
 
 // ── Ticker tape palette resolution ──────────────────────────────────────────
 
+/**
+ * Named colour palettes for tickerTape and butterflies: name -> CSS colours.
+ * @type {Record<string, string[]>}
+ */
 export const EFFECT_PALETTES = {
   rainbow:  ['#ef4444', '#f97316', '#facc15', '#22c55e', '#0ea5e9', '#6366f1', '#a855f7', '#ec4899'],
   festive:  ['#dc2626', '#16a34a', '#fbbf24', '#3b82f6', '#a855f7', '#ec4899'],
@@ -2990,6 +3110,7 @@ export function resolvePalette(spec) {
 const resolveTickerPalette = resolvePalette;
 
 // Export as default for module usage
+/** @type {Effects} */
 export default {
   breathe,
   pulse,

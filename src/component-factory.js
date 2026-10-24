@@ -42,6 +42,65 @@ import {
     untracked
 } from 'domma-reactive';
 
+/**
+ * Valid primitive type tokens for component props.
+ * @typedef {'string'|'number'|'boolean'|'array'|'object'|'any'} PropType
+ */
+
+/**
+ * A declared prop: an HTML attribute coerced to a type. `number` -> Number (NaN -> null),
+ * `boolean` -> '' / 'true' are true, 'false' false; `array` / `object` -> JSON.parse (the raw
+ * string when it is not JSON); anything else stays a string.
+ * @typedef {object} PropDefinition
+ * @property {PropType|((value: any) => boolean)} [type] - Expected type - a token or an `M.types.*` constant
+ * @property {boolean} [required] - Marks the prop as required (documentation only - not enforced)
+ * @property {any} [default] - Value used when the attribute is absent; a function is called for it
+ */
+
+/**
+ * `this` inside a component's hooks, computed properties and methods. Computed properties are
+ * also on it as getters (`this.fullName`) and methods as bound functions (`this.save()`).
+ * @template {Record<string, any>} [TData=Record<string, any>]
+ * @template {Record<string, any>} [TProps=Record<string, any>]
+ * @typedef {object} ComponentContext
+ * @property {TData} data - Live, read-tracked view of the reactive data; reads inside a computed register a dependency
+ * @property {TProps} props - Resolved prop values after type coercion (a copy)
+ * @property {ShadowRoot} root - The Shadow DOM root of this component
+ * @property {HTMLElement} el - The host Custom Element
+ * @property {(updates: Partial<TData>) => void} set - Batch-update reactive data fields; bound template text updates surgically, then `onUpdated` runs
+ */
+
+/**
+ * A component definition for `Domma.component(tagName, definition)`.
+ * @template {Record<string, any>} [TData=Record<string, any>]
+ * @template {Record<string, any>} [TProps=Record<string, any>]
+ * @typedef {object} ComponentDefinition
+ * @property {string} [template] - Inline Mustache template string. Use `templateUrl` for non-trivial templates
+ * @property {string} [templateUrl] - URL to an external HTML template file, fetched once and cached across all instances
+ * @property {Record<string, PropDefinition>} [props] - Declared HTML attributes (camelCase name, kebab-case attribute) with type coercion and defaults
+ * @property {() => TData} [data] - Factory returning the component's initial reactive state; called once per instance. Declare every field here
+ * @property {Record<string, (this: ComponentContext<TData, TProps>) => any>} [computed] - Derived values, memoised and recalculated when a field they read changes; available in templates and as `this.name`
+ * @property {Record<string, (this: ComponentContext<TData, TProps>, ...args: any[]) => any>} [methods] - Functions bound to the component context; callable as `this.name()` and from `data-on-*` bindings
+ * @property {string} [style] - Scoped CSS injected into the component's Shadow DOM `<style>` block
+ * @property {(this: ComponentContext<TData, TProps>) => void} [onBeforeMount] - Called before the template is rendered. Data and props are available
+ * @property {(this: ComponentContext<TData, TProps>) => void} [onMount] - Called after the template is rendered and bindings are established (again when the element is re-connected)
+ * @property {(this: ComponentContext<TData, TProps>) => void} [onUpdated] - Called once per flush after any data change, and after a prop change re-renders
+ * @property {(this: ComponentContext<TData, TProps>) => void} [onBeforeUnmount] - Called when the element is removed from the DOM, before clean-up
+ * @property {(this: ComponentContext<TData, TProps>) => void} [onUnmount] - Called after the element is removed and cleaned up
+ * @property {(this: ComponentContext<TData, TProps>, name: string, oldValue: string|null, newValue: string|null) => void} [onPropsChanged] - Called when an observed attribute (prop) changes, with the camelCase prop name and the raw attribute values
+ */
+
+/**
+ * Binding controller returned by `TemplateCompiler.compile()` (domma-reactive): surgical updates
+ * for bound fields, full re-renders for structural changes.
+ * @typedef {import('domma-reactive').BindingController} TemplateBindings
+ */
+
+/**
+ * The `components` namespace (`Domma.components`).
+ * @typedef {typeof components} Components
+ */
+
 // ── Template cache (shared across all instances) ──────────────────────────────
 const _templateCache = new Map();
 
@@ -125,9 +184,11 @@ async function _loadTemplate(url) {
 /**
  * Build and register a Custom Element class from a component definition.
  *
- * @param {string} tagName     Custom element tag (must contain a hyphen, or one is added)
- * @param {Object} definition  Component definition object
- * @returns {typeof DommaElement}
+ * @template {Record<string, any>} [TData=Record<string, any>]
+ * @template {Record<string, any>} [TProps=Record<string, any>]
+ * @param {string} tagName     Custom element tag (must contain a hyphen, or `domma-` is prefixed)
+ * @param {ComponentDefinition<TData, TProps>} definition  Component definition object
+ * @returns {typeof DommaElement|undefined} The element class, or undefined when the tag is already registered
  */
 export function createComponent(tagName, definition) {
     if (_componentRegistry.has(tagName)) {
@@ -616,27 +677,37 @@ export const components = {
     /**
      * Define and register a new component.
      *
+     * @template {Record<string, any>} [TData=Record<string, any>]
+     * @template {Record<string, any>} [TProps=Record<string, any>]
      * @param {string} tagName     Custom element tag name
-     * @param {Object} definition  Component definition
-     * @returns {typeof DommaElement}
+     * @param {ComponentDefinition<TData, TProps>} definition  Component definition
+     * @returns {typeof DommaElement|undefined} The element class, or undefined when the tag is already registered
      */
     define(tagName, definition) {
         return createComponent(tagName, definition);
     },
 
-    /** Returns true if a component with this tag name has been registered. */
+    /**
+     * Returns true if a component with this tag name has been registered.
+     * @param {string} tagName
+     * @returns {boolean}
+     */
     has(tagName) {
         return _componentRegistry.has(tagName);
     },
 
-    /** Returns a copy of the component registry (for tooling / inspection). */
+    /**
+     * Returns a copy of the component registry (for tooling / inspection).
+     * @returns {Map<string, ComponentDefinition>}
+     */
     registry() {
         return new Map(_componentRegistry);
     },
 
     /**
      * Expose the shared template cache so the router (and other consumers)
-     * can prime or inspect it.
+     * can prime or inspect it (URL -> HTML string).
+     * @returns {Map<string, string>}
      */
     get templateCache() {
         return _templateCache;
