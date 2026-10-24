@@ -5,6 +5,30 @@
     "main": "public/dist/domma.min.js",
     "module": "public/dist/domma.esm.js",
     "types": "assets/types/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./assets/types/index.d.ts",
+            "import": "./public/dist/domma.esm.js",
+            "default": "./public/dist/domma.esm.js"
+        },
+        "./css": "./public/dist/domma.css",
+        "./elements.css": "./public/dist/elements.css",
+        "./grid.css": "./public/dist/grid.css",
+        "./syntax.css": "./public/dist/syntax.css",
+        "./syntax": "./public/dist/domma-syntax.min.js",
+        "./flags": {
+            "import": "./public/dist/domma-flags.esm.js",
+            "default": "./public/dist/domma-flags.min.js"
+        },
+        "./themes/*": "./public/dist/themes/*",
+        "./bundles/*": "./public/dist/bundles/*",
+        "./types": "./assets/types/index.d.ts",
+        "./package.json": "./package.json",
+        "./public/*": "./public/*",
+        "./assets/*": "./assets/*",
+        "./templates/*": "./templates/*",
+        "./bin/*": "./bin/*"
+    },
     "bin": {
         "domma": "./bin/domma-cli.js"
     },
@@ -15,15 +39,20 @@
         "templates/page-template/",
         "templates/view-template/",
         "public/dist/domma.min.js",
+        "public/dist/domma.min.js.map",
         "public/dist/domma.esm.js",
+        "public/dist/domma.esm.js.map",
         "public/dist/domma.css",
         "public/dist/bundles/",
         "public/dist/elements.css",
         "public/dist/grid.css",
         "public/dist/syntax.css",
         "public/dist/domma-syntax.min.js",
+        "public/dist/domma-syntax.min.js.map",
         "public/dist/domma-flags.min.js",
+        "public/dist/domma-flags.min.js.map",
         "public/dist/domma-flags.esm.js",
+        "public/dist/domma-flags.esm.js.map",
         "public/dist/themes/",
         "assets/types/",
         "LICENSE",
@@ -35,7 +64,6 @@
     },
     "type": "module",
     "scripts": {
-        "postinstall": "node bin/postinstall.js",
         "start": "node bin/domma-cli.js serve",
         "serve": "node bin/domma-cli.js serve",
         "serve:3096": "node bin/domma-cli.js serve --port 3096",
@@ -95,10 +123,7 @@
         "live-server": "^1.2.0",
         "puppeteer": "^24.34.0",
         "rollup": "^4.28.0",
-        "rollup-plugin-obfuscator": "^1.1.0",
         "vitest": "^4.0.16"
     },
-    "dependencies": {
-        "@fastify/cors": "^11.2.0"
-    }
+    "dependencies": {}
 }

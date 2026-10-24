@@ -82,7 +82,6 @@ Domma.reset = (selector) => config.reset(selector);
     // Generate aliases
     const aliases = [];
     const aliasExports = [];
-    const windowExports = [];
     const dommaAliasAttachments = [];
 
     modules.forEach(key => {
@@ -91,7 +90,6 @@ Domma.reset = (selector) => config.reset(selector);
             module.aliases.forEach(alias => {
                 aliases.push(`const ${alias} = ${key};`);
                 aliasExports.push(alias);
-                windowExports.push(`    window.${alias} = ${alias};`);
                 dommaAliasAttachments.push(`Domma.${alias} = ${alias};`);
             });
         }
@@ -107,6 +105,7 @@ Domma.reset = (selector) => config.reset(selector);
  */
 
 ${imports}
+import {installGlobals} from '../globals.js';
 
 const Domma = (selector, context) => ${hasDom ? 'dom(selector, context)' : 'null'};
 
@@ -127,11 +126,8 @@ ${configMethods}
 ${aliases.length > 0 ? '// Short aliases\n' + aliases.join('\n') : ''}
 ${dommaAliasAttachments.length > 0 ? '\n// Attach aliases to Domma\n' + dommaAliasAttachments.join('\n') : ''}
 
-// Expose globally if needed
-if (typeof window !== 'undefined') {
-    window.Domma = Domma;
-${windowExports.join('\n')}
-}
+// Expose globally - see globals.js for \`DommaOptions.globals\` and \`Domma.noConflict()\`
+installGlobals(Domma, {${aliasExports.join(', ')}});
 
 export default Domma;
 export {Domma${aliasExports.length > 0 ? ', ' + aliasExports.join(', ') : ''}};

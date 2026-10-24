@@ -8,20 +8,8 @@
  * - Provides configurable allowlists for different use cases
  */
 
-/**
- * Basic HTML escape function (fallback when DOMPurify not available)
- * Escapes HTML special characters to prevent XSS
- *
- * @param {string} html - HTML string to escape
- * @returns {string} - Escaped HTML safe for insertion
- */
-function escapeHtml(html) {
-    if (html == null) return '';
-
-    const div = document.createElement('div');
-    div.textContent = String(html);
-    return div.innerHTML;
-}
+import {loadOption} from './globals.js';
+import {escapeHtml} from './escape.js';
 
 /**
  * Check if DOMPurify is available
@@ -189,7 +177,7 @@ export function hasDOMPurify() {
 /**
  * Install warning if DOMPurify is not present
  */
-if (typeof window !== 'undefined' && !isDOMPurifyAvailable()) {
+if (typeof window !== 'undefined' && !isDOMPurifyAvailable() && loadOption('purifyWarning', true) !== false) {
     console.warn(
         '%c⚠️ Security Warning: DOMPurify not loaded',
         'color: orange; font-weight: bold; font-size: 14px;',

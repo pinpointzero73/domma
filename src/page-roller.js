@@ -9,6 +9,7 @@
 
 import {storage as S} from './storage.js';
 import {utils} from './utils.js';
+import {escapeHtml} from './escape.js';
 
 // ============================================================================
 // Section Registry - Defines available page sections
@@ -2802,9 +2803,7 @@ ${columnsHtml}
      * @private
      */
     _escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
+        return escapeHtml(str);
     }
 
     /**

@@ -27,6 +27,7 @@ const components = {
  * Safe to call multiple times - skips already registered
  */
 export function registerComponents() {
+    if (typeof customElements === 'undefined') return;
     for (const [name, constructor] of Object.entries(components)) {
         if (!customElements.get(name)) {
             customElements.define(name, constructor);
@@ -38,7 +39,7 @@ export function registerComponents() {
  * Register individual component
  */
 export function registerComponent(name) {
-    if (components[name] && !customElements.get(name)) {
+    if (typeof customElements !== 'undefined' && components[name] && !customElements.get(name)) {
         customElements.define(name, components[name]);
     }
 }

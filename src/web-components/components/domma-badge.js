@@ -168,6 +168,6 @@ export class DommaBadge extends DommaElement {
 }
 
 // Register the component
-if (!customElements.get('domma-badge')) {
+if (typeof customElements !== 'undefined' && !customElements.get('domma-badge')) {
     customElements.define('domma-badge', DommaBadge);
 }

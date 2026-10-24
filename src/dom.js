@@ -1598,3 +1598,10 @@ export const dom = (selector, context) => {
 
     return new DommaCollection(selector, context);
 };
+
+/**
+ * Is this a Domma collection (the result of `$()`)?
+ * @param {*} value
+ * @returns {boolean}
+ */
+export const isDomma = (value) => value instanceof DommaCollection;

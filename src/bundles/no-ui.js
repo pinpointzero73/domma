@@ -12,6 +12,7 @@ import {http} from '../http.js';
 import {dates} from '../dates.js';
 import {models} from '../models.js';
 import {storage} from '../storage.js';
+import {installGlobals} from '../globals.js';
 
 const Domma = (selector, context) => null;
 
@@ -45,14 +46,8 @@ Domma.D = D;
 Domma.M = M;
 Domma.S = S;
 
-// Expose globally if needed
-if (typeof window !== 'undefined') {
-    window.Domma = Domma;
-    window._ = _;
-    window.D = D;
-    window.M = M;
-    window.S = S;
-}
+// Expose globally - see globals.js for `DommaOptions.globals` and `Domma.noConflict()`
+installGlobals(Domma, {_, D, M, S});
 
 export default Domma;
 export {Domma, _, D, M, S};

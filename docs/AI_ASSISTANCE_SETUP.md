@@ -1,10 +1,10 @@
 # Domma AI Assistance Setup
 
-This document explains how the AI assistance files are automatically distributed to users.
+This document explains how the AI assistance files reach users.
 
 ## What Was Implemented
 
-We've added **automatic AI assistance** that deploys when users install Domma. This includes:
+Domma ships **AI assistance files** that a project can copy in. They include:
 
 1. **CLAUDE.md** - Comprehensive framework reference
 2. **.claude/** - Project settings & code snippets
@@ -13,31 +13,14 @@ We've added **automatic AI assistance** that deploys when users install Domma. T
 
 ## Distribution Methods
 
-### 1. Automatic: Post-Install Hook (Recommended)
+### 1. No install hook
 
-When users run `npm install domma-js`, they'll see:
+There used to be an interactive `postinstall` prompt. It was removed in 0.54: npm 7+ hides
+lifecycle-script output, so the question waited on a prompt nobody could see, and install
+scripts are a supply-chain red flag that security scanners report. Installing Domma now runs
+nothing.
 
-```
-╭───────────────────────────────────────────╮
-│  Domma AI Assistance Available             │
-╰───────────────────────────────────────────╯
-
-Domma includes AI assistance files for Claude Code:
-  • CLAUDE.md - Framework reference guide
-  • .claude/ - Settings & code snippets
-  • blueprints/ - Reusable schemas (8 files)
-  • types/ - TypeScript definitions
-
-Copy AI assistance files to your project? (Y/n):
-```
-
-**Implementation:**
-- `bin/postinstall.js` - Interactive postinstall script
-- `package.json` - Includes `"postinstall": "node bin/postinstall.js"`
-- Only runs when appropriate (not in CI, not during development)
-- Silent failure (won't break installation)
-
-### 2. Manual: CLI Command
+### 2. CLI Command (Recommended)
 
 Users can also run manually:
 
@@ -46,7 +29,6 @@ npx domma-js setup-ai
 ```
 
 **Use Cases:**
-- Skipped during postinstall
 - Adding to existing project
 - Updating files to latest version
 
@@ -134,30 +116,12 @@ The `package.json` already includes `"templates/"` in the `files` array, so all 
 - **Manual option** - Can copy files directly if needed
 
 ### For Maintainers
-- **Automatic distribution** - No manual steps needed
 - **Version control** - Files update with package
 - **Safe implementation** - Won't break installations
 
 ## Testing
 
-To test the postinstall hook:
-
-```bash
-# 1. Build Domma
-npm run build
-
-# 2. Create test project
-mkdir test-project && cd test-project
-npm init -y
-
-# 3. Install Domma (will trigger postinstall)
-npm install ../path/to/domma
-
-# 4. Check files were copied
-ls -la CLAUDE.md .claude/ blueprints/ types/
-```
-
-To test the manual command:
+To test the command:
 
 ```bash
 # In any project with Domma installed

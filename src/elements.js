@@ -14,6 +14,8 @@ import skeletonFactory from './skeleton.js';
 import avatarFactory, {avatarGroup as avatarGroupFactory} from './avatar.js';
 import Popover from './popover.js';
 import sanitizeModule from './sanitize.js';
+import {escapeHtml} from './escape.js';
+import {loadOption} from './globals.js';
 
 // Web Component wrappers for Phase 1 & 2 components
 import {
@@ -27,6 +29,8 @@ import {
     ModalFactoryWrapper,
     createCardWrapper
 } from './web-components/wrappers/legacy-wrappers.js';
+
+let timelineWarned = false;
 
 // ============================================
 // Card Component
@@ -96,9 +100,7 @@ class Card extends Component {
         </div>`;
 
         // Use Domma's sanitize function for safe HTML insertion
-        this.element.innerHTML = (Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
-            ? Domma.sanitize.sanitize(cardHtml)
-            : cardHtml;
+        this.element.innerHTML = sanitizeModule.sanitise(cardHtml);
 
         // Update element reference to the inner card div
         this.element = this.element.querySelector('.card');
@@ -282,9 +284,7 @@ class Card extends Component {
     setContent(content) {
         const body = this.element.querySelector('.card-body');
         if (body) {
-            body.innerHTML = (Domma.sanitize && typeof Domma.sanitize.sanitize === 'function')
-                ? Domma.sanitize.sanitize(content)
-                : content;
+            body.innerHTML = sanitizeModule.sanitise(content);
             // Rescan icons after content update
             if (Domma.icons && typeof Domma.icons.scan === 'function') {
                 Domma.icons.scan(body);
@@ -672,7 +672,7 @@ const ModalFactory = {
             html += `<div class="dm-dialog-footer${opts.footerClass ? ' ' + opts.footerClass : ''}" style="display: flex; justify-content: flex-end; gap: 1rem; padding: 1rem 1.5rem; border-top: 1px solid var(--dm-border, #e5e7eb); background: var(--dm-surface-raised, #f9fafb);">`;
             opts.buttons.forEach(btn => {
                 const variant = btn.variant || 'secondary';
-                const safeId = sanitizeModule.sanitise(String(btn.id), {preset: 'basic'});
+                const safeId = escapeHtml(btn.id);
                 const safeText = sanitizeModule.sanitise(String(btn.text), {preset: 'basic'});
                 html += `<button type="button" class="btn btn-${variant}" data-button-id="${safeId}">${safeText}</button>`;
             });
@@ -5379,8 +5379,8 @@ const Dialog = {
             }
 
             if (type === 'prompt') {
-                const safePlaceholder = sanitizeModule.sanitise(String(opts.inputPlaceholder || ''), {preset: 'basic'});
-                const safeValue = sanitizeModule.sanitise(String(opts.inputValue || ''), {preset: 'basic'});
+                const safePlaceholder = escapeHtml(opts.inputPlaceholder || '');
+                const safeValue = escapeHtml(opts.inputValue || '');
                 html += `<input type="${opts.inputType}" class="dm-dialog-input form-input" placeholder="${safePlaceholder}" value="${safeValue}">`;
             }
 
@@ -9493,9 +9493,8 @@ class Timeline extends Component {
     }
 
     _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+
+        return escapeHtml(text);
     }
 
     // Public API methods
@@ -9724,7 +9723,7 @@ class Progression extends Component {
 
         // Priority badge
         if (item.priority) {
-            contentHtml += `<span class="dm-progression-priority dm-progression-priority-${item.priority}">${this._escapeHtml(item.priority)}</span>`;
+            contentHtml += `<span class="dm-progression-priority dm-progression-priority-${this._escapeHtml(item.priority)}">${this._escapeHtml(item.priority)}</span>`;
         }
 
         // Tags
@@ -9807,9 +9806,8 @@ class Progression extends Component {
     }
 
     _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+
+        return escapeHtml(text);
     }
 
     _sanitizeHtml(html) {
@@ -11998,8 +11996,9 @@ export const elements = {
 
     timeline(selector, options = {}) {
         // Backwards compatible alias for progression({ mode: 'timeline' })
-        // Deprecation warning in development mode
-        if (typeof Domma !== 'undefined' && Domma.config?.deprecationWarnings !== false && typeof console !== 'undefined') {
+        // Warn once; `window.DommaOptions = {deprecationWarnings: false}` silences it
+        if (!timelineWarned && loadOption('deprecationWarnings', true) !== false && typeof console !== 'undefined') {
+            timelineWarned = true;
             console.warn('Domma: timeline() is deprecated. Use progression({ mode: "timeline" }) instead.');
         }
 

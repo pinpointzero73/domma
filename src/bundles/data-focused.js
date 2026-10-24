@@ -13,6 +13,7 @@ import {tables} from '../tables.js';
 import {icons} from '../icons.js';
 import {storage} from '../storage.js';
 import {http} from '../http.js';
+import {installGlobals} from '../globals.js';
 
 const Domma = (selector, context) => dom(selector, context);
 
@@ -45,13 +46,8 @@ Domma._ = _;
 Domma.$ = $;
 Domma.S = S;
 
-// Expose globally if needed
-if (typeof window !== 'undefined') {
-    window.Domma = Domma;
-    window._ = _;
-    window.$ = $;
-    window.S = S;
-}
+// Expose globally - see globals.js for `DommaOptions.globals` and `Domma.noConflict()`
+installGlobals(Domma, {_, $, S});
 
 export default Domma;
 export {Domma, _, $, S};

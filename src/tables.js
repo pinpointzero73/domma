@@ -6,6 +6,7 @@
 import {utils} from './utils.js';
 import {icons} from './icons.js';
 import {storage} from './storage.js';
+import {escapeHtml} from './escape.js';
 
 /**
  * Table Instance Class
@@ -1031,9 +1032,8 @@ class TableInstance {
     }
 
     _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+
+        return escapeHtml(text);
     }
 
     // ============================================

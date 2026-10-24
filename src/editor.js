@@ -4,6 +4,7 @@
  */
 
 import Component from './component.js';
+import {escapeHtml} from './escape.js';
 
 class Editor extends Component {
     constructor(selector, options = {}) {
@@ -630,9 +631,8 @@ class Editor extends Component {
     }
 
     _escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+
+        return escapeHtml(text);
     }
 
     _addToHistory(content) {

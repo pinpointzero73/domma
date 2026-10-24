@@ -413,6 +413,6 @@ export class DommaTooltip extends DommaElement {
 }
 
 // Register component
-if (!customElements.get('domma-tooltip')) {
+if (typeof customElements !== 'undefined' && !customElements.get('domma-tooltip')) {
     customElements.define('domma-tooltip', DommaTooltip);
 }

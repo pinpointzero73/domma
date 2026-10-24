@@ -390,6 +390,6 @@ export class DommaLoader extends DommaElement {
 }
 
 // Register component
-if (!customElements.get('domma-loader')) {
+if (typeof customElements !== 'undefined' && !customElements.get('domma-loader')) {
     customElements.define('domma-loader', DommaLoader);
 }

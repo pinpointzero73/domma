@@ -22,11 +22,11 @@ export * from './flags';
 export * from './smooth-caret';
 
 // Import types for the main Domma object
-import {dom, DommaCollection} from './dom';
+import {DommaCollection} from './dom';
 import {Utils, utils} from './utils';
 import {Dates, dates, DommaDate} from './dates';
 import {Model, models, Models} from './models';
-import {configEngine, SelectorConfig, SetupConfig} from './config';
+import {SelectorConfig, SetupConfig} from './config';
 import {Elements, elements} from './elements';
 import {Tables, tables} from './tables';
 import {Storage, storage} from './storage';
@@ -54,9 +54,6 @@ export interface DommaStatic {
      * @param callback - Function to execute when DOM is ready
      */
     (callback: () => void): void;
-
-    /** DOM manipulation module */
-    dom: typeof dom;
 
     /** Utility functions (Lodash-compatible) */
     utils: Utils;
@@ -137,8 +134,12 @@ export interface DommaStatic {
     /** Domma version string */
     version: string;
 
-    /** No-conflict mode - restore previous $ */
-    noConflict(): DommaStatic;
+    /**
+     * Give `$` and `_` back to whatever owned them before Domma loaded (jQuery, Lodash).
+     * With `deep`, give back every short alias and `window.Domma` too.
+     * @returns Domma, so `const dm = Domma.noConflict()` keeps a handle
+     */
+    noConflict(deep?: boolean): DommaStatic;
 }
 
 // ============================================
@@ -190,21 +191,43 @@ declare global {
 declare const Domma: DommaStatic;
 export default Domma;
 
-// Named exports for ES modules
-export {
-    Domma,
-    dom,
-    utils,
-    dates,
-    models,
-    elements,
-    tables,
-    storage,
-    http,
-    theme,
-    icons,
-    configEngine,
-    DommaCollection,
-    DommaDate,
-    Model
-};
+// Named exports for ES modules - exactly what src/index.js exports
+declare const $: DommaStatic;
+declare const _: Utils;
+declare const M: Models;
+declare const D: Dates;
+declare const S: Storage;
+declare const H: Http;
+declare const E: Elements;
+declare const I: Icons;
+declare const T: Tables;
+declare const smoothCaret: SmoothCaret;
+// Not typed yet: auth, forms, router, blueprint helpers, web-component registry
+declare const A: any;
+declare const F: any;
+declare const R: any;
+declare const B: any;
+declare const components: any;
+
+export {Domma, $, _, M, D, S, A, F, H, E, I, T, R, B, components, smoothCaret};
+export type {DommaCollection, DommaDate, Model};
+
+/** Options read from `window.DommaOptions` when Domma loads - set it before the script tag. */
+export interface DommaLoadOptions {
+    /** true (default): every alias; 'safe': only aliases nobody else owns; false: window.Domma only */
+    globals?: boolean | 'safe';
+    /** false: never add the `dm-cloaked` class */
+    cloak?: boolean;
+    /** false: don't initialise the theme engine automatically */
+    theme?: boolean;
+    /** false: no console warning when DOMPurify is missing */
+    purifyWarning?: boolean;
+    /** false: no deprecation warnings */
+    deprecationWarnings?: boolean;
+}
+
+declare global {
+    interface Window {
+        DommaOptions?: DommaLoadOptions;
+    }
+}
