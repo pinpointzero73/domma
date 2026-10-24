@@ -7,6 +7,8 @@
 import Component from './component.js';
 
 class PrintToPDF extends Component {
+    static componentName = 'print-to-pdf';
+
     constructor(selector, options = {}) {
         const defaults = {
             // Page setup

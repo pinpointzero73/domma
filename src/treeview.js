@@ -17,6 +17,8 @@ import Component from './component.js';
 import {escapeHtml} from './escape.js';
 
 class TreeView extends Component {
+  static componentName = 'tree-view';
+
   static defaults = {
     // Data configuration
     data: [],

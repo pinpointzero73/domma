@@ -102,6 +102,8 @@ function numAttr(input, name) {
 }
 
 class InputGroup extends Component {
+    static componentName = 'input-group';
+
     static defaults = {
         prefix: null,
         suffix: null,

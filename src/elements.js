@@ -5,7 +5,7 @@
  * Note: ThemeRoller, QuickRoller, and Editor are in the separate tools bundle (domma-tools.min.js)
  */
 
-import Component from './component.js';
+import Component, {instanceOf} from './component.js';
 import TreeView from './treeview.js';
 import ContextMenu from './context-menu.js';
 import Sortable from './sortable.js';
@@ -37,6 +37,8 @@ let timelineWarned = false;
 // ============================================
 
 class Tabs extends Component {
+    static componentName = 'tabs';
+
     static defaults = {
         active: 0,
         animation: 'fade',
@@ -163,6 +165,8 @@ class Tabs extends Component {
 // ============================================
 
 class Accordion extends Component {
+    static componentName = 'accordion';
+
     static defaults = {
         allowMultiple: false,
         multiExpand: null,  // Alias for allowMultiple
@@ -356,6 +360,8 @@ class Accordion extends Component {
 // ============================================
 
 class ListGroup extends Component {
+    static componentName = 'list-group';
+
     static defaults = {
         selectable: false,
         multiSelect: false,
@@ -835,6 +841,8 @@ class ListGroup extends Component {
 // ============================================
 
 class Dropdown extends Component {
+    static componentName = 'dropdown';
+
     static defaults = {
         trigger: 'click',           // 'click' | 'hover' - click works in both
         position: 'bottom-start',   // bottom|top|left|right + -start|-end
@@ -1643,6 +1651,8 @@ class DesktopNotification {
  * Works in both visual mode (with DOM element) and headless mode (pure logic)
  */
 class Timer extends Component {
+    static componentName = 'timer';
+
     static defaults = {
         duration: 60000,          // 1 minute default (ms)
         autoStart: false,
@@ -2565,6 +2575,8 @@ class Alarm {
 // ============================================
 
 class Carousel extends Component {
+    static componentName = 'carousel';
+
     static defaults = {
         autoplay: false,
         interval: 5000,
@@ -2984,6 +2996,8 @@ class Carousel extends Component {
 // ============================================
 
 class CookieConsent extends Component {
+    static componentName = 'cookie-consent';
+
     static defaults = {
         // Text content
         message: 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.',
@@ -3781,6 +3795,8 @@ const Dialog = {
 // ============================================
 
 class ButtonGroup extends Component {
+    static componentName = 'button-group';
+
     static defaults = {
         mode: 'single',           // 'single' (radio) or 'multiple' (checkbox)
         activeClass: 'active',
@@ -3921,6 +3937,8 @@ class ButtonGroup extends Component {
 // ============================================
 
 class Breadcrumbs extends Component {
+    static componentName = 'breadcrumbs';
+
     static defaults = {
         items: [],
         separator: '/',        // '/', '>', '→', 'chevron', or custom HTML
@@ -4046,6 +4064,8 @@ class Breadcrumbs extends Component {
 // ============================================
 
 class Navbar extends Component {
+    static componentName = 'navbar';
+
     static defaults = {
         brand: null,            // { text, logo, url }
         items: [],              // [{ text, url, active, items (for dropdown) }]
@@ -4464,6 +4484,8 @@ class Navbar extends Component {
 // ============================================
 
 class Sidebar extends Component {
+    static componentName = 'sidebar';
+
     static defaults = {
         position: 'left',           // 'left', 'right'
         fixed: true,                // Fixed or static positioning
@@ -5246,6 +5268,8 @@ class Sidebar extends Component {
 // ============================================
 
 class Footer extends Component {
+    static componentName = 'footer';
+
     static defaults = {
         variant: 'light',           // 'light', 'dark', 'transparent'
         layout: 'simple',           // 'simple', 'columns', 'minimal'
@@ -5490,6 +5514,8 @@ class Footer extends Component {
 // ============================================
 
 class Autocomplete extends Component {
+    static componentName = 'autocomplete';
+
     static defaults = {
         data: [],
         dataSource: null,
@@ -6007,6 +6033,8 @@ class Autocomplete extends Component {
 // ============================================
 
 class Pillbox extends Component {
+    static componentName = 'pillbox';
+
     static defaults = {
         data: [],
         value: [],
@@ -6648,6 +6676,8 @@ class Pillbox extends Component {
 // ============================================
 
 class Slideover extends Component {
+    static componentName = 'slideover';
+
     /**
      * Open slideovers, oldest first. Escape closes only the last one: every
      * open slideover listens on document, so without this one key press
@@ -7238,6 +7268,8 @@ class Slideover extends Component {
  * Backwards compatible with Timeline component
  */
 class Progression extends Component {
+    static componentName = 'progression';
+
     static defaults = {
         // Core options (shared)
         mode: 'timeline',           // 'timeline' | 'roadmap'
@@ -7721,6 +7753,8 @@ class Progression extends Component {
 // ============================================
 
 class Signature extends Component {
+    static componentName = 'signature';
+
     static defaults = {
         width: null,
         height: 180,
@@ -8366,6 +8400,8 @@ function dpSameDay(a, b) {
  * then no longer the value.
  */
 class DatePicker extends Component {
+    static componentName = 'date-picker';
+
     static defaults = {
         value: null,               // ISO string, Date, or null to read the input
         format: 'YYYY-MM-DD',      // what the input SHOWS
@@ -9732,21 +9768,31 @@ export const elements = {
         return instance;
     },
 
-    get(selector) {
+    /**
+     * The component on an element - including ones made by a factory (`E.slideover({...})`)
+     * or another component, which never pass through this object.
+     * @param {string|Element} selector
+     * @param {string} [name] - componentName ('slideover', 'popover', ...) when an element hosts several
+     * @returns {Object|undefined}
+     */
+    get(selector, name) {
         const el = typeof selector === 'string'
             ? document.querySelector(selector)
             : selector;
-        return this._instances.get(el);
+        if (!el) return undefined;
+        const made = this._instances.get(el);
+        if (made && (!name || made.constructor?.componentName === name)) return made;
+        return instanceOf(el, name) || (name ? undefined : made);
     },
 
-    destroy(selector) {
+    destroy(selector, name) {
         const el = typeof selector === 'string'
             ? document.querySelector(selector)
             : selector;
-        const instance = this._instances.get(el);
+        const instance = this.get(el, name);
         if (instance) {
             instance.destroy();
-            this._instances.delete(el);
+            if (this._instances.get(el) === instance) this._instances.delete(el);
         }
     },
 

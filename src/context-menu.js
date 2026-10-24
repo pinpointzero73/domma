@@ -293,6 +293,8 @@ function unbindDocListeners() {
 // ============================================
 
 class ContextMenu extends Component {
+    static componentName = 'context-menu';
+
     static defaults = {
         // Targeting and cascade
         items: [],
