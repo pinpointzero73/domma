@@ -283,4 +283,99 @@ describe('E.focusTrap', () => {
         window.removeEventListener('keydown', claim, true);
         expect(document.activeElement.id).toBe('code');
     });
+
+    it('leaves Tab to a handler on the element itself (a textarea that indents)', () => {
+        const box = page('<textarea id="code"></textarea><button id="b">b</button>');
+        const trap = keep(E.focusTrap(box));
+        trap.activate();
+        const code = document.getElementById('code');
+        code.addEventListener('keydown', (e) => { if (e.key === 'Tab') e.preventDefault(); });
+        code.focus();
+        tab();
+        expect(document.activeElement).toBe(code);
+        document.getElementById('b').focus();
+        tab();
+        expect(document.activeElement).toBe(code);   // the trap still wraps from the button
+    });
+
+    it("allowOutsideFocus: 'layers' keeps focus in marked and newly added layers, not in the page", () => {
+        document.body.innerHTML = '<button id="page">p</button><div id="mark" data-focus-trap-allow><button id="m1">m</button></div><div id="box"><button id="one">1</button><button id="two">2</button></div>';
+        const trap = keep(E.focusTrap('#box', {allowOutsideFocus: 'layers'}));
+        trap.activate();
+        document.getElementById('m1').focus();
+        expect(document.activeElement.id).toBe('m1');
+        document.getElementById('page').focus();
+        expect(document.activeElement.id).toBe('one');
+        const later = document.createElement('div');
+        later.innerHTML = '<button id="l1">l1</button><button id="l2">l2</button>';
+        document.body.appendChild(later);
+        document.getElementById('two').focus();
+        document.getElementById('l1').focus();
+        expect(document.activeElement.id).toBe('l1');
+        // Tab moves through the layer, then comes back after what had focus before it.
+        tab();
+        expect(document.activeElement.id).toBe('l2');
+        tab();
+        expect(document.activeElement.id).toBe('one');
+        document.getElementById('l2').focus();
+        tab(true);
+        expect(document.activeElement.id).toBe('l1');
+        tab(true);
+        expect(document.activeElement.id).toBe('one');
+    });
+
+    it("'layers' never lets focus into a trap beneath", () => {
+        document.body.innerHTML = '<div id="a" data-focus-trap-allow><button id="a1">a</button></div><div id="b"><button id="b1">b</button></div>';
+        const a = keep(E.focusTrap('#a'));
+        const b = keep(E.focusTrap('#b', {allowOutsideFocus: 'layers'}));
+        a.activate();
+        b.activate();
+        document.getElementById('a1').focus();
+        expect(document.activeElement.id).toBe('b1');
+    });
+
+    it('a lower trap that goes first hands its return target to the trap above', () => {
+        document.body.innerHTML = '<button id="page">p</button><div id="a"><button id="a1">a</button></div><div id="b"><button id="b1">b</button></div>';
+        document.getElementById('page').focus();
+        const a = keep(E.focusTrap('#a'));
+        a.activate();
+        const b = keep(E.focusTrap('#b'));
+        b.activate();   // opened from a1
+        a.deactivate();
+        expect(document.activeElement.id).toBe('b1');
+        b.deactivate();
+        expect(document.activeElement.id).toBe('page');
+    });
+
+    it('lets go when its containers leave the page', () => {
+        const box = page('<button id="one">1</button>');
+        const trap = keep(E.focusTrap(box));
+        trap.activate();
+        box.remove();
+        document.getElementById('after').focus();
+        expect(document.activeElement.id).toBe('after');
+        expect(trap.isActive()).toBe(false);
+    });
+
+    it('register: false keeps E.get on the owning component', () => {
+        const box = page('<button>1</button>');
+        const owner = E.focusTrap(box);
+        const inner = keep(E.focusTrap(box, {register: false}));
+        expect(inner).toBeTruthy();
+        expect(E.get(box)).toBe(owner);
+        owner.destroy();
+    });
+
+    it('focus leaving the end of an iframe wraps by where it landed', () => {
+        document.body.innerHTML = '<button id="before">b</button><div id="box"><button id="one">1</button><iframe id="frame"></iframe></div><button id="after">a</button>';
+        const trap = keep(E.focusTrap('#box'));
+        trap.activate();
+        document.getElementById('frame').focus();
+        document.getElementById('after').focus();
+        expect(document.activeElement.id).toBe('one');
+        document.getElementById('frame').focus();
+        document.getElementById('before').focus();
+        expect(document.activeElement.id).toBe('frame');
+    });
 });
+

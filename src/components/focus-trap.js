@@ -14,7 +14,18 @@
  *
  * Traps stack. Activating a second trap pauses the one before it; deactivating it
  * unpauses that one again, so a confirm dialog opened from a palette hands focus back
- * to the palette, not to the page.
+ * to the palette, not to the page. A trap that goes while one above it is still open
+ * hands its return target up, so focus never comes back to a panel that has gone.
+ *
+ * Tab is decided late: the trap's own Tab handling runs as the key bubbles up to
+ * `window`, so anything on the way that used Tab itself (a textarea that indents, a
+ * grid that moves between cells, a popover steering Tab out of its panel) calls
+ * preventDefault() and the trap leaves the key alone.
+ *
+ * Focus outside the containers is brought back unless `allowOutsideFocus` lets it
+ * stay. 'layers' (what Domma's overlays use) lets focus into floating layers - toasts,
+ * popovers, context menus, date pickers - but never into the page behind or into an
+ * overlay beneath this one. See `layerOf()`.
  *
  * Events: activate, deactivate, pause, unpause - as `onX`, `.on('x')` and
  * `dm:focus-trap:x` (dispatched on the first container).
@@ -31,6 +42,9 @@ const TABBABLE = [
 
 /** Active traps, oldest first. Only the last one listens. */
 const stack = [];
+
+/** Marks an element (and what is inside it) as a layer any trap lets focus into. */
+export const ALLOW_ATTR = 'data-focus-trap-allow';
 
 /** The parent across a shadow boundary: a shadow root's parent is its host. */
 function parentOf(node) {
@@ -87,6 +101,45 @@ function collect(node, out, shadow) {
     }
 }
 
+/** Every element in some containers, in the order the browser renders them. */
+function flatten(containers, shadow) {
+    const roots = Array.isArray(containers) ? containers : [containers];
+    const all = [];
+    for (const root of roots) {
+        if (!root) continue;
+        if (shadow && root.shadowRoot) collect(root.shadowRoot, all, shadow);
+        else collect(root, all, shadow);
+    }
+    return all;
+}
+
+/**
+ * The floating layer an outside element belongs to, or null when it is part of the
+ * page. A layer is the nearest of:
+ * - an element carrying `data-focus-trap-allow` (an opt-in for anything else);
+ * - an element with `position: fixed` (toasts, popovers, context menus, palettes,
+ *   another overlay that did not trap focus);
+ * - a direct child of <body> that is absolutely positioned (portalled pickers and
+ *   dropdowns), or that was put there after `since` was taken - something opened
+ *   while the trap was on top.
+ * @param {Element} target
+ * @param {Set<Element>} [since] - the children <body> had when the trap activated
+ * @returns {Element|null}
+ */
+export function layerOf(target, since) {
+    if (typeof document === 'undefined' || !target) return null;
+    const body = document.body;
+    for (let n = target; n && n !== body && n !== document.documentElement; n = parentOf(n)) {
+        if (n.nodeType !== 1) continue;
+        if (n.hasAttribute(ALLOW_ATTR)) return n;
+        let position = '';
+        try { position = getComputedStyle(n).position; } catch { /* not rendered */ }
+        if (position === 'fixed') return n;
+        if (parentOf(n) === body && (position === 'absolute' || (since && !since.has(n)))) return n;
+    }
+    return null;
+}
+
 /**
  * The tabbable elements in some containers, in Tab order: positive tabindex first (in
  * ascending order), then the rest in document order. Of a radio group only the checked
@@ -96,16 +149,7 @@ function collect(node, out, shadow) {
  * @returns {Element[]}
  */
 export function tabbables(containers, opts = {}) {
-    const shadow = opts.shadow !== false;
-    const roots = Array.isArray(containers) ? containers : [containers];
-    const all = [];
-    for (const root of roots) {
-        if (!root) continue;
-        const list = [];
-        if (shadow && root.shadowRoot) collect(root.shadowRoot, list, shadow);
-        else collect(root, list, shadow);
-        all.push(...list.filter(canTab));
-    }
+    const all = flatten(containers, opts.shadow !== false).filter(canTab);
     const radios = new Map();
     const kept = all.filter((el) => {
         if (el.tagName !== 'INPUT' || el.type !== 'radio' || !el.name) return true;
@@ -139,9 +183,11 @@ export class FocusTrap extends Component {
         escapeDeactivates: false,       // boolean | (event) => boolean - the owning overlay usually decides
         clickOutsideDeactivates: false, // boolean | (event) => boolean
         allowOutsideClick: false,       // boolean | (event) => boolean
+        allowOutsideFocus: false,       // boolean | 'layers' | (element, event) => boolean
         inert: false,                   // set `inert` on everything outside the containers while active
         shadow: true,                   // walk open shadow roots
         preventScroll: true,
+        register: true,                 // false: E.get(container) keeps finding the owner, not the trap
         onActivate: null,
         onDeactivate: null,
         onPause: null,
@@ -154,8 +200,17 @@ export class FocusTrap extends Component {
      */
     constructor(containers, options = {}) {
         const list = FocusTrap._resolve(containers);
+        const owner = list[0]?._dommaComponent;
         super(list[0] || null, options);
+        if (this.options.register === false && this.element) {
+            // An overlay's own trap: E.get(el) and el._dommaComponent stay the overlay's.
+            unregister(this.element, this);
+            if (owner) this.element._dommaComponent = owner;
+            else delete this.element._dommaComponent;
+        }
         this._containers = list;
+        this._bodyAtStart = null;
+        this._pendingTab = null;
         this._active = false;
         this._paused = false;
         this._returnTo = null;
@@ -164,6 +219,7 @@ export class FocusTrap extends Component {
         this._inerted = [];
         this._bound = false;
         this._onKeyDown = this._onKeyDown.bind(this);
+        this._onTab = this._onTab.bind(this);
         this._onFocusIn = this._onFocusIn.bind(this);
         this._onPointerDown = this._onPointerDown.bind(this);
         this._onClick = this._onClick.bind(this);
@@ -199,6 +255,8 @@ export class FocusTrap extends Component {
         stack.push(this);
         this._returnTo = deepActiveElement();
         this._lastFocused = null;
+        this._bodyAtStart = typeof document !== 'undefined' && document.body
+            ? new Set(document.body.children) : null;
         this._applyInert();
         this._bind();
         const initial = 'initialFocus' in opts ? opts.initialFocus : this.options.initialFocus;
@@ -222,17 +280,38 @@ export class FocusTrap extends Component {
         const i = stack.indexOf(this);
         if (i > -1) stack.splice(i, 1);
         this._clearFocusable();
+        this._pendingTab = null;
 
         const ret = 'returnFocus' in opts ? opts.returnFocus : this.options.returnFocus;
-        const target = ret === true ? this._returnTo
+        const before = this._returnTo;
+        let target = ret === true ? before
             : (ret && ret !== false ? resolveElement(ret) : null);
         this._returnTo = null;
 
+        if (!wasTop) {
+            // Going from under a newer trap (a slideover closed by the confirm on top of
+            // it). Focus stays with the top one; a trap above that would hand focus back
+            // into these containers hands it to where this one would have, instead.
+            for (const above of stack.slice(Math.max(i, 0))) {
+                if (above._returnTo && this._contains(above._returnTo)) above._returnTo = target || before;
+            }
+            target = null;
+        }
+
         // The trap beneath takes over first, so the focus we hand back is not pulled away.
         const next = FocusTrap.top();
-        if (wasTop && next && next._paused) next.unpause({focus: !target});
+        if (wasTop && next && next._paused) next.unpause({focus: !target, _leaving: this});
         if (target && target.isConnected && typeof target.focus === 'function') {
             try { target.focus({preventScroll: !!this.options.preventScroll}); } catch { /* gone */ }
+        }
+        // The element to return to could not take focus (hidden since): the trap beneath
+        // has it, rather than the panel that is going.
+        if (wasTop && target && next && FocusTrap.top() === next && !next._paused) {
+            const now = deepActiveElement();
+            if (now !== target && !next._contains(now)) {
+                next._focus(next._lastFocused && next._lastFocused.isConnected && canTab(next._lastFocused)
+                    ? next._lastFocused : next._firstTarget());
+            }
         }
         this._fire('deactivate', this);
         return this;
@@ -263,7 +342,12 @@ export class FocusTrap extends Component {
         this._paused = false;
         this._applyInert();
         this._bind();
-        if (opts.focus !== false && !this._contains(deepActiveElement())) {
+        const active = deepActiveElement();
+        // Focus in a floating layer this trap allows (a popover still open over it) stays
+        // there - unless it is in the trap that just went (opts._leaving).
+        const inLayer = active && active !== document.body && !(opts._leaving && opts._leaving._contains(active))
+            && this._mayFocusOutside(active, null);
+        if (opts.focus !== false && !this._contains(active) && !inLayer) {
             this._focus(this._lastFocused && canTab(this._lastFocused) ? this._lastFocused : this._firstTarget());
         }
         this._fire('unpause', this);
@@ -279,9 +363,9 @@ export class FocusTrap extends Component {
         const list = FocusTrap._resolve(containers);
         const first = list[0] || null;
         if (first !== this.element) {
-            if (this.element) unregister(this.element, this);
+            if (this.element && this.options.register !== false) unregister(this.element, this);
             this.element = first;
-            if (first) register(first, this);
+            if (first && this.options.register !== false) register(first, this);
         }
         this._containers = list;
         if (this._active && !this._paused) {
@@ -333,6 +417,8 @@ export class FocusTrap extends Component {
     _bind() {
         if (this._bound || typeof document === 'undefined') return;
         document.addEventListener('keydown', this._onKeyDown, true);
+        // Tab is decided after everything else had the key (see the header).
+        window.addEventListener('keydown', this._onTab);
         document.addEventListener('focusin', this._onFocusIn, true);
         document.addEventListener('pointerdown', this._onPointerDown, true);
         document.addEventListener('mousedown', this._onPointerDown, true);
@@ -343,6 +429,7 @@ export class FocusTrap extends Component {
     _unbind() {
         if (!this._bound) return;
         document.removeEventListener('keydown', this._onKeyDown, true);
+        window.removeEventListener('keydown', this._onTab);
         document.removeEventListener('focusin', this._onFocusIn, true);
         document.removeEventListener('pointerdown', this._onPointerDown, true);
         document.removeEventListener('mousedown', this._onPointerDown, true);
@@ -398,50 +485,160 @@ export class FocusTrap extends Component {
         this._lastFocused = el;
     }
 
+    /**
+     * Containers that left the page (a view removed the overlay without closing it)
+     * leave nothing to trap: the trap lets go rather than hold focus nowhere.
+     * @returns {boolean} true when it let go
+     */
+    _gone() {
+        if (this._containers.some(c => c.isConnected)) return false;
+        this.deactivate({returnFocus: false});
+        return true;
+    }
+
+    /** Whether focus may stay on an element outside the containers. */
+    _mayFocusOutside(target, e) {
+        const allow = this.options.allowOutsideFocus;
+        if (typeof allow === 'function') return !!allow(target, e);
+        if (allow !== 'layers') return !!allow;
+        if (stack.some(t => t !== this && t._contains(target))) return false;
+        return !!layerOf(target, this._bodyAtStart);
+    }
+
+    /** Capture phase: Escape, and a note of the Tab that is on its way. */
     _onKeyDown(e) {
+        if (this._gone()) return;
         if (e.key === 'Escape' && !e.defaultPrevented && decide(this.options.escapeDeactivates, e)) {
             e.preventDefault();
             this.deactivate();
             return;
         }
-        if (e.key !== 'Tab' || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+        if (e.key !== 'Tab' || e.altKey || e.ctrlKey || e.metaKey) return;
+        // Should the key never reach window (a handler stopped it without using it),
+        // the focus it moves natively is caught in _onFocusIn and wrapped from here.
+        const pending = {shift: e.shiftKey, fromInside: this._contains(deepActiveElement())};
+        this._pendingTab = pending;
+        setTimeout(() => { if (this._pendingTab === pending) this._pendingTab = null; }, 0);
+    }
+
+    /** Bubble phase on window: move focus, unless something on the way used the key. */
+    _onTab(e) {
+        if (e.key !== 'Tab' || e.altKey || e.ctrlKey || e.metaKey) return;
+        this._pendingTab = null;
+        if (e.defaultPrevented || this._gone()) return;
+        const active = deepActiveElement();
+        if (active && active !== document.body && !this._contains(active)) {
+            const layer = this._mayFocusOutside(active, e) ? layerOf(active, this._bodyAtStart) : null;
+            if (layer) {
+                this._tabInLayer(e, layer, active);
+                return;
+            }
+        }
         const list = this.tabbables();
         e.preventDefault();
         if (!list.length) {
             this._focus(this._fallback());
             return;
         }
-        const active = deepActiveElement();
         let i = list.indexOf(active);
         let next;
         if (i > -1) {
             next = e.shiftKey ? list[(i - 1 + list.length) % list.length] : list[(i + 1) % list.length];
-        } else if (active && this._contains(active) && typeof active.compareDocumentPosition === 'function') {
+        } else if (active && this._contains(active)) {
             // Focus is on something that is not itself tabbable (the container, a
-            // tabindex="-1" row): carry on from where it is in the document.
-            if (e.shiftKey) {
-                const before = list.filter(el => active.compareDocumentPosition(el) & 2);
-                next = before[before.length - 1] || list[list.length - 1];
-            } else {
-                next = list.find(el => active.compareDocumentPosition(el) & 4) || list[0];
-            }
+            // tabindex="-1" row, a dialog frame in a shadow root): carry on from where it
+            // is in rendering order - document order cannot compare across shadow trees.
+            next = this._nextFrom(active, list, e.shiftKey);
         } else {
             next = e.shiftKey ? list[list.length - 1] : list[0];
         }
         this._focus(next);
     }
 
+    /** The tabbable after (or before) a non-tabbable element inside the containers. */
+    _nextFrom(active, list, back) {
+        const order = flatten(this._containers, this.options.shadow !== false);
+        const at = order.indexOf(active);
+        if (at < 0) return back ? list[list.length - 1] : list[0];
+        const pos = (el) => order.indexOf(el);
+        if (back) {
+            const before = list.filter(el => pos(el) < at);
+            return before[before.length - 1] || list[list.length - 1];
+        }
+        return list.find(el => pos(el) > at) || list[0];
+    }
+
+    /**
+     * Tab inside a floating layer the trap let focus into (a popover opened from the
+     * overlay, a toast's button): it moves through the layer, and off either end it
+     * comes back to the overlay as though the layer sat just after what had focus
+     * before - Shift+Tab to that element, Tab to the one after it.
+     */
+    _tabInLayer(e, layer, active) {
+        const inLayer = tabbables(layer, {shadow: this.options.shadow});
+        const i = inLayer.indexOf(active);
+        e.preventDefault();
+        if (i > -1) {
+            const next = inLayer[e.shiftKey ? i - 1 : i + 1];
+            if (next) {
+                next.focus({preventScroll: !!this.options.preventScroll});
+                return;
+            }
+        } else if (inLayer.length) {
+            inLayer[e.shiftKey ? inLayer.length - 1 : 0].focus({preventScroll: !!this.options.preventScroll});
+            return;
+        }
+        const list = this.tabbables();
+        const anchor = this._lastFocused && this._lastFocused.isConnected && this._contains(this._lastFocused)
+            ? this._lastFocused : null;
+        if (!list.length) {
+            this._focus(anchor || this._fallback());
+            return;
+        }
+        if (!anchor) {
+            this._focus(e.shiftKey ? list[list.length - 1] : list[0]);
+            return;
+        }
+        if (e.shiftKey) {
+            this._focus(anchor);
+            return;
+        }
+        const at = list.indexOf(anchor);
+        this._focus(at > -1 ? list[(at + 1) % list.length] : this._nextFrom(anchor, list, false));
+    }
+
     _onFocusIn(e) {
+        if (this._gone()) return;
         const target = typeof e.composedPath === 'function' ? (e.composedPath()[0] || e.target) : e.target;
         if (this._eventInside(e)) {
             this._lastFocused = target;
             return;
         }
+        const pending = this._pendingTab;
+        this._pendingTab = null;
+        // A floating layer (a popover the overlay opened, a toast) keeps it - even when a
+        // Tab handler put it there on purpose (a popover trigger sending Tab into its panel).
+        if (this._mayFocusOutside(target, e)) return;
+        // A Tab the trap never saw on window moved focus out natively: wrap it.
+        if (pending && pending.fromInside) {
+            e.stopImmediatePropagation?.();
+            const list = this.tabbables();
+            this._focus(list.length ? (pending.shift ? list[list.length - 1] : list[0]) : this._fallback());
+            return;
+        }
         // Focus got out (a click elsewhere, a script): bring it back.
         e.stopImmediatePropagation?.();
-        const back = this._lastFocused && this._lastFocused.isConnected && this._contains(this._lastFocused)
-            ? this._lastFocused : this._firstTarget();
-        this._focus(back);
+        const last = this._lastFocused && this._lastFocused.isConnected && this._contains(this._lastFocused)
+            ? this._lastFocused : null;
+        // Out of the end of an iframe: its keys never reach this document, so which way
+        // it went is told by where focus landed - after the containers wraps to the first.
+        if (last && /^(IFRAME|OBJECT|EMBED)$/.test(last.tagName)) {
+            const list = this.tabbables();
+            const after = this._containers.some(c => c.compareDocumentPosition(target) & 4);
+            this._focus(list.length ? (after ? list[0] : list[list.length - 1]) : this._fallback());
+            return;
+        }
+        this._focus(last || this._firstTarget());
     }
 
     _onPointerDown(e) {

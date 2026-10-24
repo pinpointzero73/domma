@@ -317,7 +317,8 @@ export class CommandPalette extends Component {
         this._trap = new FocusTrap(this.element, {
             initialFocus: () => this._input,
             returnFocus: true,
-            allowOutsideClick: true
+            allowOutsideClick: true,
+            register: false
         });
     }
 

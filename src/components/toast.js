@@ -48,6 +48,8 @@ function containerFor(position) {
         box.className = `domma-toast-container domma-toast-${position}`;
         box.setAttribute('aria-live', 'polite');
         box.setAttribute('aria-atomic', 'true');
+        // A focus trap (a modal, a slideover) lets focus into a toast's buttons.
+        box.setAttribute('data-focus-trap-allow', '');
         document.body.appendChild(box);
         containers[position] = box;
     }
