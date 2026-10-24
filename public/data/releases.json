@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.54.0",
+      "title": "Safer escaping, Node imports, noConflict and a quieter install",
+      "description": "<p>Quote-safe escaping everywhere, sanitised card content, Node-safe imports, <code>Domma.noConflict()</code>, router and HTTP fixes, and an install that runs no scripts.</p>",
+      "date": "2026-10-24"
+    },
+    {
       "year": "v0.53.3",
       "title": "Seasonal illustration redraws",
       "description": "<p>Fresh seasonal artwork: a new St George's castle, 26 illustrated details and Patron Saints' Day particles spread across the scene from the first frame.</p>",
@@ -577,5 +583,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.53.3"
+  "latestVersion": "v0.54.0"
 }
