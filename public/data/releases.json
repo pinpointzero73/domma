@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.55.0",
+      "title": "API conventions, one implementation per component",
+      "description": "<p>One implementation per component behind <code>E.*</code> - theme colours finally reach modal, badge, toast and the rest, and nothing replaces your element - plus one event, verb and lookup convention: <code>.on()</code> and <code>dm:*</code> events for every callback, <code>open</code>/<code>close</code> on every overlay, a cancelable <code>beforeclose</code>, and <code>E.get()</code> for everything.</p>",
+      "date": "2026-10-24"
+    },
+    {
       "year": "v0.54.0",
       "title": "Safer escaping, Node imports, noConflict and a quieter install",
       "description": "<p>Quote-safe escaping everywhere, sanitised card content, Node-safe imports, <code>Domma.noConflict()</code>, router and HTTP fixes, and an install that runs no scripts.</p>",
@@ -583,5 +589,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.54.0"
+  "latestVersion": "v0.55.0"
 }
