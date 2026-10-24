@@ -63,6 +63,12 @@
           "section": "http"
         },
         {
+          "text": "i18n",
+          "url": "showcase/i18n/index.html",
+          "section": "i18n",
+          "badge": "New"
+        },
+        {
           "text": "Router",
           "url": "showcase/router/index.html",
           "section": "router",

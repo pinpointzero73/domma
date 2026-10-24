@@ -56,6 +56,13 @@
     "keywords": ["fetch", "ajax", "request", "api", "get", "post", "put", "delete", "H.get"]
   },
   {
+    "title": "i18n",
+    "description": "Translations, plurals, ordinals and Intl number, currency, date, relative-time and list formatting",
+    "category": "Core",
+    "url": "showcase/i18n/index.html",
+    "keywords": ["translation", "translate", "locale", "language", "plural", "rtl", "intl", "Domma.t", "i18n"]
+  },
+  {
     "title": "Router",
     "description": "Client-side SPA router with hash and history modes, route guards, and lazy loading",
     "category": "Core",

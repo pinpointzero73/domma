@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i18n - Domma Showcase</title>
+    <link rel="canonical" href="https://dommajs.org/showcase/i18n/">
+    <link rel="icon" type="image/svg+xml" href="../../assets/logo/domma-icon.svg">
+    <link rel="stylesheet" href="../../dist/domma.css">
+    <link rel="stylesheet" href="../../dist/elements.css">
+    <link rel="stylesheet" href="../../dist/themes/domma-themes.css">
+    <link rel="stylesheet" href="../../showcase/css/domma-showcase.css">
+    <style>
+        /* Demo-only styling */
+        .sx-i18n-panel {
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius, 0.5rem);
+            padding: 1.25rem;
+            background: var(--dm-surface);
+            color: var(--dm-text);
+        }
+
+        .sx-i18n-out {
+            font-family: var(--dm-font-mono, monospace);
+            color: var(--dm-text);
+        }
+    </style>
+</head>
+<body class="dm-cloaked" data-layout="showcase" data-layout-variant="subpage">
+
+<div class="hero hero-center bg-ambient-float-orbs">
+    <div class="hero-content">
+        <div class="hero-title">i18n</div>
+        <div class="hero-subtitle">Translations, plurals and locale-aware formatting, all from the browser's Intl.</div>
+    </div>
+</div>
+
+<div class="container py-8">
+
+    <!-- Language switcher -->
+    <section class="card mb-6" data-section="Switch language">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Switch language</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                Each button calls <code>i18n.locale(code)</code>. That fires <code>change</code>, sets
+                <code>&lt;html lang dir&gt;</code> (Arabic turns the page right to left) and re-runs
+                <code>translate()</code> over every <code>data-i18n*</code> element below.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <div class="btn-group" role="group" aria-label="Language" id="lang-switch">
+                    <button class="btn btn-outline btn-sm active" type="button" data-lang="en" aria-pressed="true">English</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-lang="fr" aria-pressed="false">Français</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-lang="de" aria-pressed="false">Deutsch</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-lang="ar" aria-pressed="false">العربية</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-lang="pl" aria-pressed="false">Polski</button>
+                </div>
+                <span class="text-sm">Current: <code id="lang-current">en</code>, dir <code id="lang-dir">ltr</code></span>
+            </div>
+
+            <div class="sx-i18n-panel mb-4" id="demo">
+                <h3 class="text-lg font-semibold mb-2" data-i18n="demo.title">Welcome to the shop</h3>
+                <p class="mb-3" data-i18n="demo.intro">Everything on this card comes from data-i18n attributes.</p>
+                <p class="mb-3" id="greet" data-i18n-html="demo.signedIn" data-i18n-params='{"name": "Ann"}'>Signed in as <strong>Ann</strong></p>
+                <div class="form-group">
+                    <label for="demo-search" data-i18n="demo.searchLabel">Search</label>
+                    <input id="demo-search" type="search" class="form-input" placeholder="Search products"
+                           data-i18n-attr="placeholder:demo.searchPlaceholder; title:demo.searchHint">
+                </div>
+                <p class="m-0" id="missing-demo" data-i18n="demo.onlyInEnglish">This line is only written in English - it falls back.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plurals -->
+    <section class="card mb-6" data-section="Plurals">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Plurals and ordinals</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                A plural is an object of forms chosen by <code>params.count</code> through
+                <code>Intl.PluralRules</code>. Polish uses one / few / many, Arabic all six, and
+                <code>=0</code> matches exactly. Ordinals use the same object with <code>ordinal: true</code>.
+            </p>
+            <div class="flex items-center gap-3 flex-wrap mb-4">
+                <label for="count" class="font-semibold">count</label>
+                <input id="count" type="number" class="form-input" value="3" min="0" max="1000">
+            </div>
+            <div class="sx-i18n-panel mb-4">
+                <p class="mb-2"><span class="text-sm">t('cart.items', {count})</span><br><span class="sx-i18n-out" id="out-items"></span></p>
+                <p class="m-0"><span class="text-sm">t('race.place', {count})</span><br><span class="sx-i18n-out" id="out-place"></span></p>
+            </div>
+            <pre class="code-block language-javascript">
+i18n.add('pl', {cart: {items: {
+    '=0': 'Koszyk jest pusty',
+    one: '{count} przedmiot',
+    few: '{count} przedmioty',
+    many: '{count} przedmiotów',
+    other: '{count} przedmiotu'
+}}});
+
+i18n.add('en', {race: {place: {ordinal: true, one: '{count}st', two: '{count}nd', few: '{count}rd', other: '{count}th'}}});
+
+i18n.t('cart.items', {count: 22}, {locale: 'pl'});   // "22 przedmioty"
+i18n.t('race.place', {count: 22});                   // "22nd"
+</pre>
+        </div>
+    </section>
+
+    <!-- Escaping -->
+    <section class="card mb-6" data-section="Escaping">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Placeholders and escaping</h2></div>
+        <div class="card-body">
+            <p class="mb-4">
+                <code>t()</code> is plain text. <code>html()</code> keeps the message's own markup and escapes
+                every param, so a name like <code>&lt;img onerror&gt;</code> arrives as text.
+            </p>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" class="form-input" value="Ann &lt;b&gt;Lee&lt;/b&gt;">
+            </div>
+            <div class="sx-i18n-panel">
+                <p class="mb-2"><span class="text-sm">t('demo.greeting', {name})</span><br><span class="sx-i18n-out" id="out-t"></span></p>
+                <p class="mb-2"><span class="text-sm">html('demo.signedIn', {name})</span><br><span class="sx-i18n-out" id="out-html-src"></span></p>
+                <p class="m-0"><span class="text-sm">rendered (sanitised)</span><br><span id="out-html"></span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formatting -->
+    <section class="card mb-6" data-section="Formatting">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Formatting</h2></div>
+        <div class="card-body">
+            <p class="mb-4">Each helper is a cached Intl formatter in the current locale. Switch language above to see them change.</p>
+            <div id="fmt-table"></div>
+        </div>
+    </section>
+
+    <!-- Code -->
+    <section class="card mb-6" data-section="Usage">
+        <div class="card-header"><h2 class="text-xl font-semibold m-0">Usage</h2></div>
+        <div class="card-body">
+            <pre class="code-block language-javascript">
+const {i18n} = Domma;
+
+// Messages: nested objects become dot keys, later add() calls merge
+i18n.add('en', {demo: {greeting: 'Hello, {name}!'}});
+await i18n.load('fr', '/lang/{locale}.json');   // H.get, cached, concurrent calls shared
+i18n.fallback('en');
+
+// Pick the reader's language, remember it with S
+i18n.detect({storageKey: 'lang', supported: ['en', 'fr', 'de', 'ar', 'pl']});
+
+Domma.t('demo.greeting', {name: 'Ann'});
+i18n.on('change', ({locale, previous}) => console.log(previous, '->', locale));
+i18n.onMissing((key, locale) => `[${key}]`);
+</pre>
+            <pre class="code-block language-html">
+&lt;h1 data-i18n="demo.title"&gt;Welcome&lt;/h1&gt;
+&lt;p data-i18n="cart.items" data-i18n-params='{"count": 3}'&gt;&lt;/p&gt;
+&lt;p data-i18n-html="demo.signedIn" data-i18n-params='{"name": "Ann"}'&gt;&lt;/p&gt;
+&lt;input data-i18n-attr="placeholder:demo.searchPlaceholder; title:demo.searchHint"&gt;
+</pre>
+            <p class="m-0 text-sm">Full guide: <code>docs/I18n.md</code>.</p>
+        </div>
+    </section>
+</div>
+
+<!-- DOMPurify for XSS protection -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+<script src="../../dist/domma.min.js"></script>
+<script src="../../dist/domma-syntax.min.js"></script>
+<script type="module" src="../../layouts/js/layout.js"></script>
+<script>
+    Domma.theme.init({autoDetect: true});
+
+    const i18n = Domma.i18n;
+
+    i18n.add('en', {
+        demo: {
+            title: 'Welcome to the shop',
+            intro: 'Everything on this card comes from data-i18n attributes.',
+            signedIn: 'Signed in as <strong>{name}</strong>',
+            greeting: 'Hello, {name}!',
+            searchLabel: 'Search',
+            searchPlaceholder: 'Search products',
+            searchHint: 'Type a product name',
+            onlyInEnglish: 'This line is only written in English - it falls back.'
+        },
+        cart: {items: {'=0': 'Your cart is empty', one: '{count} item', other: '{count} items'}},
+        race: {place: {ordinal: true, one: '{count}st', two: '{count}nd', few: '{count}rd', other: '{count}th'}}
+    });
+    i18n.add('fr', {
+        demo: {
+            title: 'Bienvenue dans la boutique',
+            intro: 'Tout le contenu de cette carte vient des attributs data-i18n.',
+            signedIn: 'Connecté en tant que <strong>{name}</strong>',
+            greeting: 'Bonjour, {name} !',
+            searchLabel: 'Rechercher',
+            searchPlaceholder: 'Rechercher des produits',
+            searchHint: 'Saisissez un nom de produit'
+        },
+        cart: {items: {'=0': 'Votre panier est vide', one: '{count} article', other: '{count} articles'}},
+        race: {place: {ordinal: true, one: '{count}er', other: '{count}e'}}
+    });
+    i18n.add('de', {
+        demo: {
+            title: 'Willkommen im Shop',
+            intro: 'Alles auf dieser Karte stammt aus data-i18n-Attributen.',
+            signedIn: 'Angemeldet als <strong>{name}</strong>',
+            greeting: 'Hallo, {name}!',
+            searchLabel: 'Suche',
+            searchPlaceholder: 'Produkte suchen',
+            searchHint: 'Produktnamen eingeben'
+        },
+        cart: {items: {'=0': 'Ihr Warenkorb ist leer', one: '{count} Artikel', other: '{count} Artikel'}},
+        race: {place: {ordinal: true, other: '{count}.'}}
+    });
+    i18n.add('ar', {
+        demo: {
+            title: 'مرحبًا بك في المتجر',
+            intro: 'كل ما في هذه البطاقة يأتي من سمات data-i18n.',
+            signedIn: 'تم تسجيل الدخول باسم <strong>{name}</strong>',
+            greeting: 'مرحبًا، {name}!',
+            searchLabel: 'بحث',
+            searchPlaceholder: 'ابحث عن المنتجات',
+            searchHint: 'اكتب اسم المنتج'
+        },
+        cart: {items: {zero: 'لا توجد عناصر', one: 'عنصر واحد', two: 'عنصران', few: '{count} عناصر', many: '{count} عنصرًا', other: '{count} عنصر'}},
+        race: {place: {ordinal: true, other: 'المركز {count}'}}
+    });
+    i18n.fallback('en');
+
+    // Polish arrives through load() with a loader function - the same call takes a URL.
+    const polish = () => Promise.resolve({
+        demo: {
+            title: 'Witamy w sklepie',
+            intro: 'Wszystko na tej karcie pochodzi z atrybutów data-i18n.',
+            signedIn: 'Zalogowano jako <strong>{name}</strong>',
+            greeting: 'Cześć, {name}!',
+            searchLabel: 'Szukaj',
+            searchPlaceholder: 'Szukaj produktów',
+            searchHint: 'Wpisz nazwę produktu'
+        },
+        cart: {items: {'=0': 'Koszyk jest pusty', one: '{count} przedmiot', few: '{count} przedmioty', many: '{count} przedmiotów', other: '{count} przedmiotu'}},
+        race: {place: {ordinal: true, other: '{count}.'}}
+    });
+
+    function renderPlurals() {
+        const count = Math.max(0, parseInt($('#count').val(), 10) || 0);
+        $('#out-items').text(i18n.t('cart.items', {count}));
+        $('#out-place').text(i18n.t('race.place', {count: Math.max(1, count)}));
+    }
+
+    function renderEscaping() {
+        const name = $('#name').val();
+        $('#out-t').text(i18n.t('demo.greeting', {name}));
+        const html = i18n.html('demo.signedIn', {name});
+        $('#out-html-src').text(html);
+        $('#out-html').html(html);
+    }
+
+    function renderFormats() {
+        const when = D().subtract(3, 'day');
+        const rows = [
+            ["i18n.number(1234567.891)", i18n.number(1234567.891)],
+            ["i18n.number(0.256, {style: 'percent'})", i18n.number(0.256, {style: 'percent'})],
+            ["i18n.currency(1499.5, 'EUR')", i18n.currency(1499.5, 'EUR')],
+            ["i18n.date(D(), {dateStyle: 'full'})", i18n.date(D(), {dateStyle: 'full'})],
+            ["i18n.date(when, {dateStyle: 'medium', timeStyle: 'short'})", i18n.date(when, {dateStyle: 'medium', timeStyle: 'short'})],
+            ["i18n.relative(-1, 'day', {numeric: 'auto'})", i18n.relative(-1, 'day', {numeric: 'auto'})],
+            ["i18n.relative(3, 'hour')", i18n.relative(3, 'hour')],
+            ["i18n.list(['Ann', 'Bo', 'Cy'])", i18n.list(['Ann', 'Bo', 'Cy'])]
+        ];
+        // The whole table: the sanitiser behind .html() drops <tr> rows handed over on their own.
+        const body = rows.map(([call, result]) =>
+            `<tr><td><code>${_.escape(call)}</code></td><td>${_.escape(result)}</td></tr>`).join('');
+        $('#fmt-table').html(`<table class="table mb-4"><thead><tr><th>Call</th><th>Result</th></tr></thead><tbody>${body}</tbody></table>`);
+    }
+
+    function renderAll() {
+        $('#lang-current').text(i18n.locale());
+        $('#lang-dir').text(i18n.dir());
+        $('#lang-switch button').each(function () {
+            const on = $(this).data('lang') === i18n.locale();
+            $(this).toggleClass('active', on).attr('aria-pressed', on ? 'true' : 'false');
+        });
+        renderPlurals();
+        renderEscaping();
+        renderFormats();
+    }
+
+    i18n.on('change', renderAll);
+
+    $('#lang-switch button').on('click', async function () {
+        const code = $(this).data('lang');
+        if (code === 'pl') await i18n.load('pl', polish);
+        i18n.locale(code);
+    });
+    $('#count').on('input', renderPlurals);
+    $('#name').on('input', renderEscaping);
+
+    i18n.translate();
+    renderAll();
+</script>
+</body>
+</html>
