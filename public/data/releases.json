@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.56.0",
+      "title": "New components: dropzone, range slider, command palette, focus trap, split pane, virtual list and translations",
+      "description": "<p>Seven new pieces built to the 0.55 conventions: a dropzone with upload progress, a single or two-thumb range slider (both also as form blueprint fields), a Cmd/Ctrl+K command palette, a focus trap, resizable split panes, a virtual list that scrolls 100,000 rows with infinite loading, and <code>Domma.i18n</code> translations with plurals, Intl formatting and right-to-left support.</p>",
+      "date": "2026-10-24"
+    },
+    {
       "year": "v0.55.0",
       "title": "API conventions, one implementation per component",
       "description": "<p>One implementation per component behind <code>E.*</code> - theme colours finally reach modal, badge, toast and the rest, and nothing replaces your element - plus one event, verb and lookup convention: <code>.on()</code> and <code>dm:*</code> events for every callback, <code>open</code>/<code>close</code> on every overlay, a cancelable <code>beforeclose</code>, and <code>E.get()</code> for everything.</p>",
@@ -589,5 +595,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.55.0"
+  "latestVersion": "v0.56.0"
 }
