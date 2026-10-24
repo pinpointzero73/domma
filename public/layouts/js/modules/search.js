@@ -67,8 +67,10 @@ export const SiteSearch = (() => {
             _debouncedSearch = _onInput;
         }
 
-        // Global keyboard shortcut: Ctrl+K / Cmd+K
+        // Global keyboard shortcut: Ctrl+K / Cmd+K - unless the page already claimed it
+        // (an E.commandPalette on the page answers the same keys and prevents the default).
         document.addEventListener('keydown', (e) => {
+            if (e.defaultPrevented) return;
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
                 _isOpen ? close() : open();
