@@ -526,3 +526,81 @@ E.get(document.querySelector('domma-badge'));              // the instance
 - [src/plugins/rollup-plugin-domma.js](../src/plugins/rollup-plugin-domma.js) - SFC build plugin
 - [public/showcase/components/](../public/showcase/components/) - Interactive showcase
 - [docs/API.md](./API.md) - Full API reference
+
+## Split Pane - `E.splitPane(container, options)`
+
+The container's element children become panes; a gutter is inserted between each pair. Layout is flexbox -
+each pane gets a `flex-basis` from its share - so the container keeps the size your CSS gives it and a pane can
+hold anything, another split pane included.
+
+```javascript
+const split = E.splitPane('#editor', {
+    direction: 'horizontal',     // side by side; 'vertical' stacks
+    sizes: [25, 75],             // percentages; equal by default
+    minSize: [160, '30%'],       // px or %, one value or one per pane (maxSize the same)
+    snapOffset: 24,              // snap to the minimum within 24px
+    collapsible: [true, false],  // double-click / Enter / button collapses pane 0
+    collapseButton: true,
+    persistKey: 'editor'         // S.set('split-pane:editor', ...) and restored on init
+});
+split.on('dragend', (sizes) => console.log(sizes));
+split.setSizes([40, 60]);
+split.collapse(0); split.expand(0);
+```
+
+- **Options**: `direction`, `sizes`, `minSize`, `maxSize`, `gutterSize` (8), `snapOffset`, `collapsible`,
+  `collapsedSize` (0), `collapseButton`, `persistKey`, `cursor`, `disabled`, `step` (1%), `largeStep` (10%),
+  `gutterLabel`.
+- **Methods**: `getSizes()`, `setSizes(arr)`, `collapse(i)`, `expand(i)`, `isCollapsed(i)`, `setOptions()`,
+  `destroy()` (removes the gutters, restores the panes' own styles), `panes`.
+- **Events**: `beforedrag(gutterIndex, event)` (cancelable), `dragstart` / `drag` / `dragend` `(sizes, gutterIndex)`,
+  `resize(sizes)` (any size change), `collapse(i)`, `expand(i)` - as options, `.on()` and `dm:split-pane:*`.
+- **Accessibility**: gutters are focusable `role="separator"` with `aria-orientation`, `aria-valuenow` (the pane
+  before, in %), `aria-valuemin` / `aria-valuemax` and `aria-controls`. Arrow keys move them (Shift for 10%),
+  Home / End go to the limits, Enter collapses when a neighbouring pane is collapsible.
+- Panes stop taking pointer events during a drag (`.dm-split-dragging`), so an iframe cannot swallow the moves.
+  Horizontal splits follow `direction: rtl`.
+
+## Virtual List - `E.virtualList(container, options)`
+
+Renders only the rows in view of a long list. The container is the scroller and needs a height from CSS (a
+fixed height, a `max-height`, or a flex child with `min-height: 0`).
+
+```javascript
+const list = E.virtualList('#people', {
+    items: people,               // or count: 1e6, getItem: (i) => ...
+    itemHeight: 40,              // or 'auto' with estimatedItemHeight
+    keyField: 'id',
+    label: 'People',
+    render: (p, i) => `<strong>${_.escape(p.name)}</strong>`,   // string (sanitised) or Element
+    onItemClick: (p, i, event) => open(p)
+});
+list.scrollToIndex(500, {align: 'center'});
+
+// Infinite loading
+E.virtualList('#feed', {
+    itemHeight: 'auto', estimatedItemHeight: 96, keyField: 'id',
+    loadMore: ({count, page}) => H.get('/api/posts?page=' + page),   // items[] or {items, done}
+    endTemplate: 'You are all caught up.'
+});
+```
+
+- **Options**: `items` | `count` + `getItem`, `itemHeight` (40 or `'auto'`), `estimatedItemHeight` (40),
+  `overscan` (4), `render(item, index)`, `safe` (true), `keyField` (property or function; default the index),
+  `label`, `rowClass`, `loadMore`, `threshold` (200px), `loadingTemplate`, `endTemplate`, `errorTemplate`.
+- **Strings are HTML**: what `render()` returns is put in with `sanitise()` (DOMPurify when loaded, escaped
+  otherwise) unless `safe: false`. Return an Element to insert your own nodes untouched. A `[data-vlist-retry]`
+  element in a custom error template retries.
+- **Methods**: `setItems()`, `append()`, `prepend()` (keeps the view still), `update(indexOrKey, item)` (a number is
+  an index), `indexOfKey(key)`, `scrollToIndex(i, {align: 'start'|'center'|'end'|'auto', smooth})`, `focusIndex(i)`,
+  `refresh()`, `getVisibleRange()`, `getRenderedRange()`, `retry()`, `isDone()`, `setCount(n)`, `destroy()`, `count`.
+- **Events**: `render({start, end})`, `scroll({start, end})`, `loadmore({count, page})`, `loaded(items)`, `end`,
+  `error(err)`, `itemclick(item, index, event)` - as options, `.on()` and `dm:virtual-list:*`.
+- **Accessibility**: rows are `role="listitem"` in a `role="list"`, with `aria-posinset` / `aria-setsize` (-1
+  while more can load). One tab stop (roving `tabindex`); arrows, Page Up/Down, Home/End move, Enter fires
+  `itemclick`. The focused row stays rendered when it is scrolled out of view.
+- **Measured rows** (`'auto'`): heights are cached by key; a row above the view that turns out taller or shorter
+  moves the scroll position by the difference, so the content you are reading stays put. Use `keyField` with
+  `prepend()`, or heights are re-measured.
+- **Not supported**: horizontal lists and sticky group headers. A browser resets the scroll position of an element
+  that is moved in the DOM; call `scrollToIndex()` again after moving the container.

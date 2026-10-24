@@ -608,6 +608,22 @@ Accessed via `Domma.elements`:
       `_bindEvents`, beside signature / chooser init) binds them into `form._inputGroups`; a re-render or `form.destroy()` tears down
     - `destroy()` removes the addons and extras (listeners, timers, revealed type, aria-describedby), and the wrapper only if this
       instance created it. See docs/DommaDocumentation.md#input-groups
+- **SplitPane** (`components/split-pane.js`): `elements.splitPane(container, { direction, sizes, minSize, maxSize, gutterSize, snapOffset, collapsible, collapsedSize, collapseButton, persistKey, cursor, disabled, step, largeStep, gutterLabel, onBeforeDrag, onDragStart, onDrag, onDragEnd, onResize, onCollapse, onExpand })` →
+  `getSizes()`, `setSizes(arr)`, `collapse(i)`, `expand(i)`, `isCollapsed(i)`, `setOptions()`, `destroy()`, `panes`; componentName `split-pane`
+    - Element children = panes; `div.dm-split-gutter[role=separator]` inserted between; each pane `flex: 0 0 calc(P% - share-of-gutters px)`
+      (no absolute positioning). Sizes are % of the content box less gutters, always summing to 100; px limits are converted on demand
+    - Pointer events with capture on the gutter; `.dm-split-dragging` on the container sets `pointer-events: none` on panes (iframes).
+      RTL inverts horizontal deltas and arrow keys. A ResizeObserver re-clamps px limits in rAF (flex-basis writes cannot loop it)
+    - `persistKey` → `S.set('split-pane:<key>', {sizes, collapsed, restoreTo})`; destroy restores pane `style`/ids and removes gutters
+- **VirtualList** (`components/virtual-list.js`): `elements.virtualList(container, { items | count + getItem, itemHeight (px | 'auto'), estimatedItemHeight, overscan, render, safe, keyField, label, rowClass, loadMore, threshold, loadingTemplate, endTemplate, errorTemplate, onRender, onScroll, onLoadMore, onLoaded, onEnd, onError, onItemClick })` →
+  `setItems()`, `append()`, `prepend()`, `update(indexOrKey, item)`, `indexOfKey()`, `scrollToIndex(i, {align, smooth})`, `focusIndex()`,
+  `refresh()`, `getVisibleRange()`, `getRenderedRange()`, `retry()`, `isDone()`, `setCount()`, `destroy()`, `count`; componentName `virtual-list`
+    - Container = scroller (needs a CSS height). Inside: `.dm-vlist-spacer` (total height), `.dm-vlist-items[role=list]` with absolutely placed
+      `.dm-vlist-row[role=listitem]` (translateY per row, aria-posinset/setsize; setsize -1 while loadMore may add more), `.dm-vlist-status[role=status]`
+    - 'auto': heights cached by key, prefix sums in a Float64Array rebuilt from the first dirty index; new rows measured in one read per pass;
+      a row above the viewport changing height shifts scrollTop by the difference. A row ResizeObserver catches later changes
+    - Roving tabindex; the focused row stays rendered out of range; render() strings go through `fill()` (sanitised unless `safe: false`)
+    - No horizontal mode and no sticky group headers (deliberately)
 
 ### tables.js - DataTable-like functionality
 
