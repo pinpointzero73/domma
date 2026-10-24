@@ -848,3 +848,13 @@ src/
 - [Main CLAUDE.md](../CLAUDE.md) - Project overview and documentation index
 - [Bundles Guide](./bundles/CLAUDE.md) - Custom bundle creation
 - [Showcase Development](../public/showcase/CLAUDE.md) - Creating showcase examples
+- **Focus trap** (`components/focus-trap.js`, `E.focusTrap(containers, opts)`, componentName `focus-trap`): a
+  module-level stack - activating pauses the trap on top, deactivating unpauses it. Tabbables are looked up per Tab
+  press (`tabbables()` walks open shadow roots in render order, slots by their assigned elements), Tab is always
+  handled by the trap (`preventDefault` then focus), focusin outside pulls focus back. `inert: true` marks siblings
+  up to <body> and removes only what it marked (also on pause). Not yet used by modal/slideover/popover.
+- **Command palette** (`components/command-palette.js`, `E.commandPalette(opts)`, componentName `command-palette`):
+  factory-made overlay on <body>; rows are built with createElement/textContent (highlights are spans), never
+  innerHTML. Uses a FocusTrap (`allowOutsideClick`, returnFocus) for Tab; Escape/arrows/Enter are handled on the
+  overlay's keydown. `source` runs are guarded by a token plus AbortController, so a late answer is dropped.
+  Recents store ids only (S under `recentKey`), resolved against the static tree and commands run this session.

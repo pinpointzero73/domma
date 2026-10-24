@@ -526,3 +526,75 @@ E.get(document.querySelector('domma-badge'));              // the instance
 - [src/plugins/rollup-plugin-domma.js](../src/plugins/rollup-plugin-domma.js) - SFC build plugin
 - [public/showcase/components/](../public/showcase/components/) - Interactive showcase
 - [docs/API.md](./API.md) - Full API reference
+
+## Focus trap - `E.focusTrap(container, options)`
+
+Keeps Tab, Shift+Tab and stray focus inside one or more containers while it is active. Overlays use it so a
+keyboard user cannot reach the page behind them. Source: `src/components/focus-trap.js` (also importable on its
+own: `import FocusTrap, {tabbables} from 'src/components/focus-trap.js'`).
+
+```javascript
+const trap = E.focusTrap('#dialog', {initialFocus: '#name', returnFocus: true});
+trap.activate();      // focus moves in; Tab wraps last -> first
+trap.deactivate();    // focus goes back to what had it before
+```
+
+- **Tabbables are found on every key press**, so controls added later take part. Disabled, `hidden`, `inert`,
+  `tabindex="-1"`, invisible and hidden-input elements are skipped; positive tabindex comes first; a radio group
+  counts once. Open shadow roots are walked in render order (slotted children at their slot), so a trap round a
+  Domma modal reaches its X and footer buttons. `E.focusTrap.tabbables(el)` gives the same list.
+- **Nothing tabbable**: the container itself takes focus (`tabindex="-1"` is added, and removed on deactivate).
+- **Options**: `initialFocus` (selector | element | function | `false`), `fallbackFocus`, `returnFocus` (`true` |
+  `false` | element | selector), `escapeDeactivates` (default `false` - the overlay that owns the trap decides),
+  `clickOutsideDeactivates`, `allowOutsideClick` (clicks outside are blocked by default; each of the three may be a
+  function of the event), `inert` (`inert` on everything outside while active; only what it set is undone),
+  `shadow`, `onActivate` / `onDeactivate` / `onPause` / `onUnpause`.
+- **Methods**: `activate(opts)`, `deactivate({returnFocus})`, `pause()`, `unpause()`, `updateContainers([...])`,
+  `isActive()`, `isPaused()`, `tabbables()`, `destroy()`.
+- **Traps stack.** Activating a trap pauses the one on top; deactivating it unpauses that one.
+  `E.focusTrap.top()` is the one listening.
+- Events `dm:focus-trap:activate|deactivate|pause|unpause` are dispatched on the first container.
+
+## Command palette - `E.commandPalette(options)`
+
+A Cmd/Ctrl+K launcher: a search box over a filtered list of commands. The factory builds its own overlay at the end
+of `<body>`; `palette.element` is that overlay. Source: `src/components/command-palette.js`.
+
+```javascript
+const palette = E.commandPalette({
+    recentKey: 'app-palette',            // recents remembered with S; null (default) = off
+    commands: [
+        {id: 'new', title: 'New page', group: 'Pages', icon: 'plus', shortcut: 'mod+n', action: () => newPage()},
+        {id: 'docs', title: 'Documentation', href: '/docs/', keywords: ['help', 'manual']},
+        {id: 'theme', title: 'Change theme', children: [
+            {id: 'dark', title: 'Dark', action: () => setTheme('dark')},
+            {id: 'light', title: 'Light', action: () => setTheme('light')}
+        ]}
+    ],
+    source: (q, {signal}) => H.get('/api/search?q=' + encodeURIComponent(q), {signal})
+});
+```
+
+- **Commands**: `{id, title, subtitle, group, icon, keywords, shortcut, href, target, action(command, palette,
+  event), disabled, hidden, keepOpen, children, placeholder}`. `children` is an array or an async function (called
+  once on entering) - a nested page. `href` takes http(s), mailto, tel or relative links only; `navigate` replaces
+  the default navigation. Running a command closes the palette unless `keepOpen: true`.
+- **Matching** is fuzzy (letters in order), scored for prefixes, word starts and unbroken runs; title, then
+  keywords, then subtitle. Matched letters are wrapped in `<span class="dm-command-palette-match">`; everything is
+  written with `textContent`, never as HTML. `E.commandPalette.fuzzyMatch(q, text)` is the matcher.
+- **Async `source(query, {signal})`**: debounced (`debounce`, 150 ms), the previous request aborted, a late answer
+  ignored; loading, empty (`emptyText`) and error (`errorText`) states. Its results follow the local ones.
+- **Keyboard**: Up/Down (wrapping, skipping disabled rows), Home/End, Enter runs, Escape goes up a page and then
+  closes, Backspace in the empty box goes up, Tab stays inside (a FocusTrap). `hotkey` (default `'mod+k'`, `mod` =
+  Cmd on a Mac, Ctrl elsewhere; a list, or `false`) toggles it; a bare key such as `'/'` is ignored while typing in
+  a field.
+- **ARIA**: a modal dialog holding the combobox + listbox pattern - `aria-controls`, `aria-expanded`,
+  `aria-activedescendant`, `role="option"` rows in labelled `role="group"`s, `aria-keyshortcuts`, and a polite live
+  region with the result count.
+- **Methods**: `open(query?)`, `close()`, `toggle()`, `isOpen()`, `show()` / `hide()` / `isVisible()` (aliases by
+  name), `setCommands(list)`, `addCommands(list)` (same id replaces), `removeCommand(id)` (top level), `back()`,
+  `query()`, `recent()`, `clearRecent()`, `destroy()`.
+- **Events**: `beforeopen`, `open`, `beforeclose`, `close`, `query(q)`, `beforeselect(command)` (cancelable),
+  `select(command)`, `run(command)` - `onX`, `.on('x')`, `dm:command-palette:x`.
+- **Look**: the modal's tokens (`--dm-modal-bg`, `--dm-modal-border`, `--dm-modal-backdrop`, `--dm-modal-shadow`),
+  the active row `--dm-selected-bg`; full width from the top under 640px; no transition under reduced motion.
