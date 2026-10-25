@@ -398,9 +398,11 @@ describe('E.commandPalette', () => {
 
         const ran = [];
         const resolved = palette({commands, recentKey: 'cp-reload',
-            resolveRecent: (id) => (id === 'act' ? {id: 'act', title: 'Do it', action: () => ran.push(id)} : null)});
+            resolveRecent: (id) => (id === 'act' ? {id: 'act', title: 'Do it', action: () => ran.push(id)}
+                : id === 'bad' ? {id: 'other', title: 'Renamed'} : null)});
         resolved.open();
         expect(titles(resolved).slice(0, 2)).toEqual(['About', 'Do it']);
+        expect(titles(resolved)).not.toContain('Renamed');
         resolved.clearRecent();
         expect(S.get('cp-reload:saved')).toBeNull();
         expect(S.get('cp-reload')).toBeNull();

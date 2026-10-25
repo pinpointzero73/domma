@@ -952,6 +952,8 @@ export class CommandPalette extends Component {
         if (typeof this.options.resolveRecent === 'function') {
             try {
                 command = this.options.resolveRecent(id) || null;
+                // Under another id it would be remembered twice once run.
+                if (command && idOf(command) !== id) command = null;
             } catch (_) {
                 command = null;
             }
