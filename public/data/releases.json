@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.58.2",
+      "title": "Fixes: command palette recents survive a reload",
+      "description": "<p>The command palette now keeps recent commands that came from a nested page or a search source after the page reloads. Link commands come back on their own; commands that run code can be found again through the new <code>resolveRecent(id)</code> option.</p>",
+      "date": "2026-10-25"
+    },
+    {
       "year": "v0.58.1",
       "title": "Fixes: range slider reset and tooltip attribute, wizard Previous, table rows in .html(), focus trap layers",
       "description": "<p>Five fixes: a range slider returns to its starting value on form reset and no longer picks up a stray tooltip, a wizard keeps what was typed when you go back a step, <code>.html()</code> keeps table rows written into a table body, and an overlay's focus trap no longer treats a fixed page header as a floating layer. Kickstart projects now get the generated TypeScript declarations.</p>",
@@ -613,5 +619,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.58.1"
+  "latestVersion": "v0.58.2"
 }

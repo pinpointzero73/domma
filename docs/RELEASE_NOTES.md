@@ -1,3 +1,13 @@
+### v0.58.2 - Fixes: command palette recents survive a reload (2026-10-25)
+
+### Fixed
+
+- **Command palette recents from async pages and sources.** A command that came from an async `children` page or a `source` search was remembered only by id, so after a reload nothing could find it and it vanished from Recent. A link command (an `href`, no `action`) now keeps a copy of what it needs to be shown and followed again, under `<recentKey>:saved`; `clearRecent()` removes both keys.
+
+### Added
+
+- **`resolveRecent(id)`** option on `E.commandPalette`: returns the command for a remembered id the list does not hold (one that runs code, which cannot be saved). A command it returns under a different id is ignored.
+
 ### v0.58.1 - Fixes: range slider reset and tooltip attribute, wizard Previous, table rows in .html(), focus trap layers (2026-10-25)
 
 ### Fixed
