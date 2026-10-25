@@ -1,6 +1,6 @@
 {
-  "version": "0.58.0",
-  "generated": "2026-10-24T22:16:16.218Z",
+  "version": "0.58.1",
+  "generated": "2026-10-25T09:03:00.114Z",
   "spa": [
     {
       "source": "kickstart-files/spa/.claude/memory/MEMORY.md",
@@ -541,11 +541,659 @@
       "label": "Terms"
     },
     {
-      "source": "kickstart-files/mpa/frontend/types/domma.d.ts",
-      "path": "frontend/types/domma.d.ts",
-      "category": "core",
-      "required": true,
-      "group": "core",
+      "source": "kickstart-files/types/generated/public/assets/flags/africa.d.ts",
+      "path": "frontend/types/generated/public/assets/flags/africa.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/flags/americas.d.ts",
+      "path": "frontend/types/generated/public/assets/flags/americas.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/flags/asia.d.ts",
+      "path": "frontend/types/generated/public/assets/flags/asia.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/flags/europe.d.ts",
+      "path": "frontend/types/generated/public/assets/flags/europe.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/flags/index.d.ts",
+      "path": "frontend/types/generated/public/assets/flags/index.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/flags/oceania.d.ts",
+      "path": "frontend/types/generated/public/assets/flags/oceania.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/buildings.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/buildings.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/code.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/code.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/commerce.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/commerce.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/communication.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/communication.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/devices.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/devices.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/emojis.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/emojis.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/files.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/files.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/finance.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/finance.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/forms.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/forms.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/health.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/health.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/index.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/index.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/media.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/media.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/navigation.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/navigation.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/seasonal.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/seasonal.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/social.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/social.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/sport.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/sport.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/status.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/status.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/transport.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/transport.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/ui.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/ui.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/public/assets/icons/weather.d.ts",
+      "path": "frontend/types/generated/public/assets/icons/weather.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/auth.d.ts",
+      "path": "frontend/types/generated/src/auth.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/avatar.d.ts",
+      "path": "frontend/types/generated/src/avatar.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/binding-source.d.ts",
+      "path": "frontend/types/generated/src/binding-source.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/butterfly-drawing.d.ts",
+      "path": "frontend/types/generated/src/butterfly-drawing.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/component-factory.d.ts",
+      "path": "frontend/types/generated/src/component-factory.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/component.d.ts",
+      "path": "frontend/types/generated/src/component.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/back-to-top.d.ts",
+      "path": "frontend/types/generated/src/components/back-to-top.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/badge.d.ts",
+      "path": "frontend/types/generated/src/components/badge.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/card.d.ts",
+      "path": "frontend/types/generated/src/components/card.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/command-palette.d.ts",
+      "path": "frontend/types/generated/src/components/command-palette.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/dropzone.d.ts",
+      "path": "frontend/types/generated/src/components/dropzone.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/focus-trap.d.ts",
+      "path": "frontend/types/generated/src/components/focus-trap.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/loader.d.ts",
+      "path": "frontend/types/generated/src/components/loader.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/modal.d.ts",
+      "path": "frontend/types/generated/src/components/modal.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/range-slider.d.ts",
+      "path": "frontend/types/generated/src/components/range-slider.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/shared.d.ts",
+      "path": "frontend/types/generated/src/components/shared.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/split-pane.d.ts",
+      "path": "frontend/types/generated/src/components/split-pane.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/toast.d.ts",
+      "path": "frontend/types/generated/src/components/toast.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/tooltip.d.ts",
+      "path": "frontend/types/generated/src/components/tooltip.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/components/virtual-list.d.ts",
+      "path": "frontend/types/generated/src/components/virtual-list.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/config.d.ts",
+      "path": "frontend/types/generated/src/config.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/context-cursor.d.ts",
+      "path": "frontend/types/generated/src/context-cursor.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/context-menu.d.ts",
+      "path": "frontend/types/generated/src/context-menu.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/dates.d.ts",
+      "path": "frontend/types/generated/src/dates.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/dom.d.ts",
+      "path": "frontend/types/generated/src/dom.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/effects.d.ts",
+      "path": "frontend/types/generated/src/effects.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/elements.d.ts",
+      "path": "frontend/types/generated/src/elements.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/escape.d.ts",
+      "path": "frontend/types/generated/src/escape.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/flags-bundle.d.ts",
+      "path": "frontend/types/generated/src/flags-bundle.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/flags.d.ts",
+      "path": "frontend/types/generated/src/flags.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/forms.d.ts",
+      "path": "frontend/types/generated/src/forms.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/globals.d.ts",
+      "path": "frontend/types/generated/src/globals.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/http.d.ts",
+      "path": "frontend/types/generated/src/http.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/i18n.d.ts",
+      "path": "frontend/types/generated/src/i18n.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/icons.d.ts",
+      "path": "frontend/types/generated/src/icons.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/index.d.ts",
+      "path": "frontend/types/generated/src/index.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/input-group.d.ts",
+      "path": "frontend/types/generated/src/input-group.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/models.d.ts",
+      "path": "frontend/types/generated/src/models.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/popover.d.ts",
+      "path": "frontend/types/generated/src/popover.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/router.d.ts",
+      "path": "frontend/types/generated/src/router.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/safe-url.d.ts",
+      "path": "frontend/types/generated/src/safe-url.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/sanitize.d.ts",
+      "path": "frontend/types/generated/src/sanitize.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/schema-builder.d.ts",
+      "path": "frontend/types/generated/src/schema-builder.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/skeleton.d.ts",
+      "path": "frontend/types/generated/src/skeleton.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/smooth-caret.d.ts",
+      "path": "frontend/types/generated/src/smooth-caret.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/sortable.d.ts",
+      "path": "frontend/types/generated/src/sortable.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/storage.d.ts",
+      "path": "frontend/types/generated/src/storage.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/tables.d.ts",
+      "path": "frontend/types/generated/src/tables.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/theme.d.ts",
+      "path": "frontend/types/generated/src/theme.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/ticker-tape-drawing.d.ts",
+      "path": "frontend/types/generated/src/ticker-tape-drawing.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/treeview.d.ts",
+      "path": "frontend/types/generated/src/treeview.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/utils.d.ts",
+      "path": "frontend/types/generated/src/utils.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/web-components/base/domma-element.d.ts",
+      "path": "frontend/types/generated/src/web-components/base/domma-element.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/src/web-components/index.d.ts",
+      "path": "frontend/types/generated/src/web-components/index.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/generated/vendor/domma-reactive.d.ts",
+      "path": "frontend/types/generated/vendor/domma-reactive.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
+    },
+    {
+      "source": "kickstart-files/types/index.d.ts",
+      "path": "frontend/types/index.d.ts",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
       "mode": "mpa"
     }
   ],
