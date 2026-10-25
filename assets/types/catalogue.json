@@ -141,6 +141,60 @@
       "options": "TooltipOptions"
     }
   },
+  "elements": {
+    "accordion": "AccordionOptions",
+    "alarm": "AlarmOptions",
+    "alert": "DialogOptions",
+    "autocomplete": "AutocompleteOptions",
+    "avatar": "AvatarOptions",
+    "avatarGroup": "AvatarGroupOptions",
+    "backToTop": "BackToTopOptions",
+    "badge": "BadgeOptions",
+    "breadcrumbs": "BreadcrumbsOptions",
+    "buttonGroup": "ButtonGroupOptions",
+    "card": "CardOptions",
+    "carousel": "CarouselOptions",
+    "chooser": "ChooserOptions",
+    "commandPalette": "CommandPaletteOptions",
+    "confirm": "DialogOptions",
+    "contextMenu": "ContextMenuOptions",
+    "cookieConsent": "CookieConsentOptions",
+    "createModal": "ModalOptions",
+    "datePicker": "DatePickerOptions",
+    "dropdown": "DropdownOptions",
+    "dropzone": "DropzoneOptions",
+    "focusTrap": "FocusTrapOptions",
+    "footer": "FooterOptions",
+    "fullscreenLoader": "FullscreenLoaderOptions",
+    "inputGroup": "InputGroupOptions",
+    "listGroup": "ListGroupOptions",
+    "loader": "LoaderOptions",
+    "modal": "ModalOptions",
+    "navbar": "NavbarOptions",
+    "notification": "DesktopNotificationOptions",
+    "notify": "DesktopNotificationOptions",
+    "numberBadge": "NumberBadgeOptions",
+    "pillbox": "PillboxOptions",
+    "popover": "PopoverOptions",
+    "progression": "ProgressionOptions",
+    "prompt": "DialogOptions",
+    "rangeSlider": "RangeSliderOptions",
+    "showLoader": "LoaderOptions",
+    "showModal": "ModalOptions",
+    "sidebar": "SidebarOptions",
+    "signature": "SignatureOptions",
+    "skeleton": "SkeletonOptions",
+    "slideover": "SlideoverCreateOptions",
+    "slider": "RangeSliderOptions",
+    "sortable": "SortableOptions",
+    "splitPane": "SplitPaneOptions",
+    "tabs": "TabsOptions",
+    "timer": "TimerOptions",
+    "toast": "ToastOptions",
+    "tooltip": "TooltipOptions",
+    "treeView": "TreeViewOptions",
+    "virtualList": "VirtualListOptions"
+  },
   "setup": [
     "SelectorConfig",
     "InitialProperties",
@@ -1000,6 +1054,285 @@
         "doc": "The slide changed"
       }
     },
+    "ChooserBadge": {
+      "text": {
+        "kind": "string"
+      },
+      "type": {
+        "kind": "enum",
+        "values": [
+          "primary",
+          "success",
+          "danger",
+          "warning",
+          "info"
+        ]
+      }
+    },
+    "ChooserOption": {
+      "value": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ]
+      },
+      "label": {
+        "kind": "string"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name"
+      },
+      "description": {
+        "kind": "string",
+        "doc": "Card variant, comfortable density only"
+      },
+      "tooltip": {
+        "kind": "string"
+      },
+      "badge": {
+        "kind": "object",
+        "type": "ChooserBadge"
+      },
+      "recommended": {
+        "kind": "boolean"
+      },
+      "disabled": {
+        "kind": "boolean"
+      }
+    },
+    "ChooserOptions": {
+      "options": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "ChooserOption"
+        },
+        "doc": "The choices"
+      },
+      "variant": {
+        "kind": "enum",
+        "values": [
+          "card",
+          "chip"
+        ]
+      },
+      "multiple": {
+        "kind": "boolean",
+        "doc": "Multi-select"
+      },
+      "density": {
+        "kind": "enum",
+        "values": [
+          "comfortable",
+          "compact"
+        ]
+      },
+      "columns": {
+        "kind": "number",
+        "doc": "Grid columns (card variant)"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "Label rendered above"
+      },
+      "required": {
+        "kind": "boolean",
+        "doc": "Required indicator"
+      },
+      "name": {
+        "kind": "string",
+        "doc": "Hidden-input name for native form submission"
+      },
+      "value": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "array"
+        ],
+        "of": {
+          "kind": "string"
+        },
+        "nullable": true,
+        "doc": "Initial selection"
+      },
+      "accent": {
+        "kind": "string",
+        "doc": "Selected/recommended highlight colour - semantic name or any CSS colour string"
+      },
+      "accentStyle": {
+        "kind": "enum",
+        "values": [
+          "border",
+          "solid",
+          "glow",
+          "overlay",
+          "underline"
+        ],
+        "doc": "Visual style of the selected state"
+      },
+      "glow": {
+        "kind": "boolean",
+        "doc": "Soft outer glow on the selected option"
+      },
+      "glowColour": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Glow colour override - semantic name or any CSS colour string. Defaults to the accent colour."
+      },
+      "shadow": {
+        "kind": "enum",
+        "values": [
+          "sm",
+          "md",
+          "lg",
+          "xl",
+          "none"
+        ],
+        "doc": "Shadow weight applied to every option"
+      },
+      "shadowColour": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Optional shadow tint - any CSS colour string"
+      },
+      "onChange": {
+        "kind": "function",
+        "doc": "Called with the new value (user changes only, not setValue)"
+      }
+    },
+    "CommandPaletteOptions": {
+      "commands": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "PaletteCommand"
+        }
+      },
+      "source": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Search elsewhere: debounced, the previous request aborted through `signal`"
+      },
+      "debounce": {
+        "kind": "number",
+        "doc": "ms (default 150)"
+      },
+      "hotkey": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean",
+          "array"
+        ],
+        "of": {
+          "kind": "string"
+        },
+        "doc": "'mod+k' (default), several, or false"
+      },
+      "placeholder": {
+        "kind": "string"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "Accessible name of the dialog and list (default 'Command palette')"
+      },
+      "maxResults": {
+        "kind": "number"
+      },
+      "recentKey": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Storage (S) key for recent commands; null (default) = off"
+      },
+      "recentLimit": {
+        "kind": "number"
+      },
+      "recentLabel": {
+        "kind": "string"
+      },
+      "resolveRecent": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Finds a remembered command that is not in `commands` (one an async `children` or `source` gave) after a reload. Without it, such a command comes back only if it was a plain link (`href`, no `action`)"
+      },
+      "sourceGroup": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Heading for source results without their own group"
+      },
+      "emptyText": {
+        "kind": "string"
+      },
+      "loadingText": {
+        "kind": "string"
+      },
+      "pageLoadingText": {
+        "kind": "string",
+        "doc": "While a nested page's async children load (default 'Loading…')"
+      },
+      "errorText": {
+        "kind": "string"
+      },
+      "backLabel": {
+        "kind": "string"
+      },
+      "footer": {
+        "kind": "boolean",
+        "doc": "Key hints under the list (default true)"
+      },
+      "resultsText": {
+        "kind": "function"
+      },
+      "navigate": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Replaces the default navigation for href commands"
+      },
+      "animationDuration": {
+        "kind": "number"
+      },
+      "className": {
+        "kind": "string"
+      },
+      "mac": {
+        "kind": "boolean",
+        "doc": "Force Mac (true) or other (false) key names; default detects"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onQuery": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onBeforeSelect": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onSelect": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onRun": {
+        "kind": "function",
+        "nullable": true
+      }
+    },
     "ContextMenuItem": {
       "label": {
         "kind": "string",
@@ -1491,6 +1824,125 @@
         "nullable": true
       }
     },
+    "DatePickerOptions": {
+      "value": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Initial date; null reads the input"
+      },
+      "format": {
+        "kind": "string",
+        "doc": "What the input shows (YYYY YY MMMM MMM MM M DDDD DDD DD D); the value stays ISO"
+      },
+      "min": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Earliest selectable date"
+      },
+      "max": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Latest selectable date"
+      },
+      "firstDay": {
+        "kind": "number",
+        "doc": "First day of the week: 0 Sunday, 1 Monday"
+      },
+      "disabledDates": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "true means unavailable"
+      },
+      "openOnFocus": {
+        "kind": "boolean"
+      },
+      "closeOnSelect": {
+        "kind": "boolean"
+      },
+      "closeOnClickOutside": {
+        "kind": "boolean"
+      },
+      "closeOnEscape": {
+        "kind": "boolean"
+      },
+      "clearable": {
+        "kind": "boolean",
+        "doc": "Clear button"
+      },
+      "todayButton": {
+        "kind": "boolean"
+      },
+      "readonlyInput": {
+        "kind": "boolean",
+        "doc": "Stop typing; only the calendar sets it"
+      },
+      "inline": {
+        "kind": "boolean",
+        "doc": "Render in place instead of as a popup"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "bottom-start",
+          "bottom-end",
+          "top-start",
+          "top-end",
+          "left-start",
+          "left-end",
+          "right-start",
+          "right-end"
+        ],
+        "doc": "Popup position"
+      },
+      "offset": {
+        "kind": "array",
+        "doc": "Popup offset [x, y]"
+      },
+      "weekNumbers": {
+        "kind": "boolean",
+        "doc": "ISO week numbers"
+      },
+      "placeholder": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Default: the format"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "ISO value ('' when cleared)"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it closed"
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it open"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true
+      }
+    },
     "DesktopNotificationOptions": {
       "title": {
         "kind": "string",
@@ -1546,6 +1998,66 @@
         "kind": "function",
         "nullable": true,
         "doc": "Notification shown"
+      }
+    },
+    "DialogOptions": {
+      "title": {
+        "kind": "string",
+        "doc": "Heading (basic HTML, sanitised)"
+      },
+      "message": {
+        "kind": "string",
+        "doc": "Message (basic HTML, sanitised); the first argument wins"
+      },
+      "confirmText": {
+        "kind": "string",
+        "doc": "Confirm button label"
+      },
+      "cancelText": {
+        "kind": "string",
+        "doc": "Cancel button label (confirm and prompt)"
+      },
+      "inputPlaceholder": {
+        "kind": "string",
+        "doc": "Prompt: input placeholder"
+      },
+      "inputValue": {
+        "kind": "string",
+        "doc": "Prompt: initial value"
+      },
+      "inputType": {
+        "kind": "string",
+        "doc": "Prompt: input type"
+      },
+      "animation": {
+        "kind": "boolean"
+      },
+      "backdrop": {
+        "kind": "boolean"
+      },
+      "backdropClose": {
+        "kind": "boolean",
+        "doc": "A backdrop click cancels"
+      },
+      "keyboard": {
+        "kind": "boolean",
+        "doc": "Esc cancels, Enter confirms"
+      },
+      "danger": {
+        "kind": "boolean",
+        "doc": "Danger-styled confirm; focus starts on Cancel"
+      },
+      "trapFocus": {
+        "kind": "boolean",
+        "doc": "Tab stays in the dialog"
+      },
+      "returnFocus": {
+        "kind": "boolean",
+        "doc": "Answering puts focus back where it was"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra class on the dialog"
       }
     },
     "DropdownItem": {
@@ -1701,6 +2213,133 @@
         "doc": "An item was chosen"
       }
     },
+    "DropzoneOptions": {
+      "accept": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "array"
+        ],
+        "of": {
+          "kind": "string"
+        },
+        "nullable": true,
+        "doc": "Like the input's accept: '.pdf,image/*' or ['.pdf', 'image/*']. Default: the input's"
+      },
+      "multiple": {
+        "kind": "boolean",
+        "nullable": true,
+        "doc": "Default: the input's `multiple`, or true when the component makes the input"
+      },
+      "maxFiles": {
+        "kind": "number",
+        "nullable": true
+      },
+      "maxSize": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Bytes"
+      },
+      "minSize": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Bytes"
+      },
+      "previews": {
+        "kind": "boolean",
+        "doc": "Image thumbnails. Default true"
+      },
+      "name": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Form field name. Default: the input's"
+      },
+      "input": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "The file input, when it is not inside or next to the area"
+      },
+      "list": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean",
+          "object"
+        ],
+        "doc": "true = after the area (default), an element/selector to draw into, false = no list"
+      },
+      "upload": {
+        "kind": "object",
+        "type": "DropzoneUploadOptions",
+        "nullable": true
+      },
+      "autoUpload": {
+        "kind": "boolean",
+        "doc": "Default true"
+      },
+      "retry": {
+        "kind": "number",
+        "doc": "Automatic retries per file. Default 0"
+      },
+      "labels": {
+        "kind": "object",
+        "each": {
+          "kind": "string"
+        },
+        "doc": "Text: prompt, hint, remove, retry, cancel, added, removed, type, size, small, count, uploading, done, failed, cancelled, required ({name}, {max}, {min}, {percent})"
+      },
+      "disabled": {
+        "kind": "boolean"
+      },
+      "className": {
+        "kind": "string"
+      },
+      "onBeforeAdd": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to refuse the file"
+      },
+      "onAdd": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onReject": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onRemove": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onUploadStart": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onProgress": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onSuccess": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onError": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onComplete": {
+        "kind": "function",
+        "nullable": true
+      }
+    },
     "DropzoneUploadOptions": {
       "url": {
         "kind": "string",
@@ -1798,6 +2437,108 @@
       "log": {
         "kind": "string",
         "doc": "Written to the console"
+      }
+    },
+    "FocusTrapOptions": {
+      "initialFocus": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean",
+          "object",
+          "function"
+        ],
+        "doc": "Where focus goes on activate: a selector, an element, a function returning one, or false to leave it. Default: focus already inside stays, else the first tabbable, else the container."
+      },
+      "fallbackFocus": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object",
+          "function"
+        ],
+        "doc": "Where focus goes when nothing is tabbable (default: the first container, given tabindex=\"-1\")"
+      },
+      "returnFocus": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean",
+          "object"
+        ],
+        "doc": "true (default): back to what had focus before activate(); or an element / selector; false: nowhere"
+      },
+      "escapeDeactivates": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "function"
+        ],
+        "doc": "Escape deactivates (default false - the owning overlay decides)"
+      },
+      "clickOutsideDeactivates": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "function"
+        ],
+        "doc": "A press outside deactivates (default false)"
+      },
+      "allowOutsideClick": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "function"
+        ],
+        "doc": "Let clicks outside through (default false: they are blocked)"
+      },
+      "allowScriptFocus": {
+        "kind": "boolean",
+        "doc": "Let a click, key or input handler on something inside the trap move focus outside on purpose - e.g. \"Insert\" focusing the editor behind a slideover before closing it (default false; the overlays turn it on)"
+      },
+      "allowOutsideFocus": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "enum",
+          "function"
+        ],
+        "values": [
+          "layers"
+        ],
+        "doc": "Let focus stay outside: true, 'layers' (floating layers such as toasts and popovers, never the page or a trap beneath), or a function (default false)"
+      },
+      "register": {
+        "kind": "boolean",
+        "doc": "false: keep the trap out of E.get(container) (default true)"
+      },
+      "inert": {
+        "kind": "boolean",
+        "doc": "Set `inert` on everything outside the containers while active (default false)"
+      },
+      "shadow": {
+        "kind": "boolean",
+        "doc": "Walk open shadow roots (default true)"
+      },
+      "preventScroll": {
+        "kind": "boolean",
+        "doc": "Focus without scrolling (default true)"
+      },
+      "onActivate": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onDeactivate": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onPause": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onUnpause": {
+        "kind": "function",
+        "nullable": true
       }
     },
     "FooterBrand": {
@@ -2432,6 +3173,38 @@
         "kind": "object"
       }
     },
+    "FullscreenLoaderOptions": {
+      "color": {
+        "kind": "string",
+        "doc": "Theme colour name, 'white', 'dark', or any CSS colour"
+      },
+      "type": {
+        "kind": "enum",
+        "values": [
+          "pulse",
+          "spinner",
+          "dots",
+          "bars"
+        ],
+        "doc": "Animation"
+      },
+      "size": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "sm",
+          "md",
+          "lg",
+          "small",
+          "medium",
+          "large"
+        ],
+        "doc": "Named size or px"
+      }
+    },
     "InitialProperties": {
       "css": {
         "kind": "object",
@@ -3001,6 +3774,73 @@
         "doc": "The count changed"
       }
     },
+    "PaletteCommand": {
+      "id": {
+        "kind": "string"
+      },
+      "title": {
+        "kind": "string"
+      },
+      "subtitle": {
+        "kind": "string"
+      },
+      "group": {
+        "kind": "string",
+        "doc": "Heading the command is listed under"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name"
+      },
+      "keywords": {
+        "kind": "array",
+        "of": {
+          "kind": "string"
+        },
+        "doc": "More words that find it"
+      },
+      "shortcut": {
+        "kind": "string",
+        "doc": "Shown as a hint, e.g. 'mod+s' (mod = Cmd on a Mac, Ctrl elsewhere)"
+      },
+      "href": {
+        "kind": "string",
+        "doc": "Followed when run (http(s), mailto, tel or relative only)"
+      },
+      "target": {
+        "kind": "string",
+        "doc": "'_blank' opens href in a new tab"
+      },
+      "action": {
+        "kind": "function"
+      },
+      "disabled": {
+        "kind": "boolean"
+      },
+      "hidden": {
+        "kind": "boolean"
+      },
+      "keepOpen": {
+        "kind": "boolean",
+        "doc": "Running it leaves the palette open"
+      },
+      "children": {
+        "kind": "array",
+        "kinds": [
+          "array",
+          "function"
+        ],
+        "of": {
+          "kind": "object",
+          "type": "PaletteCommand"
+        },
+        "doc": "A nested page: a list, or a function returning one (called once on entering)"
+      },
+      "placeholder": {
+        "kind": "string",
+        "doc": "Placeholder for the box while this command's page is open"
+      }
+    },
     "PillboxOptions": {
       "data": {
         "kind": "array",
@@ -3328,6 +4168,173 @@
         "doc": "After the panel has been removed"
       }
     },
+    "ProgressionItem": {
+      "id": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "doc": "Lets methods find it by id instead of index"
+      },
+      "title": {
+        "kind": "string"
+      },
+      "description": {
+        "kind": "string",
+        "doc": "Text (HTML when allowHtml, sanitised)"
+      },
+      "date": {
+        "kind": "string"
+      },
+      "year": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "doc": "Timeline marker (default: date)"
+      },
+      "status": {
+        "kind": "string",
+        "doc": "Roadmap status"
+      },
+      "progress": {
+        "kind": "number",
+        "doc": "0-100, shown for 'in-progress'"
+      },
+      "priority": {
+        "kind": "string"
+      },
+      "tags": {
+        "kind": "array",
+        "of": {
+          "kind": "string"
+        }
+      },
+      "assignee": {
+        "kind": "string"
+      }
+    },
+    "ProgressionOptions": {
+      "mode": {
+        "kind": "enum",
+        "values": [
+          "timeline",
+          "roadmap"
+        ],
+        "doc": "'timeline' (dated events) or 'roadmap' (items with a status)"
+      },
+      "items": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "ProgressionItem"
+        }
+      },
+      "layout": {
+        "kind": "enum",
+        "values": [
+          "horizontal",
+          "vertical",
+          "centered"
+        ],
+        "doc": "Items down one side, across, or alternating either side of a centre line"
+      },
+      "animation": {
+        "kind": "boolean",
+        "doc": "Items animate in"
+      },
+      "animationDelay": {
+        "kind": "number",
+        "doc": "ms between items"
+      },
+      "responsive": {
+        "kind": "boolean"
+      },
+      "theme": {
+        "kind": "enum",
+        "values": [
+          "minimal",
+          "default",
+          "corporate",
+          "modern"
+        ],
+        "doc": "Look of the markers, line and cards"
+      },
+      "clickable": {
+        "kind": "boolean"
+      },
+      "onItemClick": {
+        "kind": "function",
+        "nullable": true
+      },
+      "allowHtml": {
+        "kind": "boolean",
+        "doc": "HTML in descriptions (sanitised)"
+      },
+      "yearWidth": {
+        "kind": "string",
+        "doc": "Timeline"
+      },
+      "contentMaxWidth": {
+        "kind": "string",
+        "doc": "Timeline"
+      },
+      "dateFormat": {
+        "kind": "string",
+        "doc": "Timeline"
+      },
+      "showConnector": {
+        "kind": "boolean",
+        "doc": "Timeline"
+      },
+      "showProgress": {
+        "kind": "boolean",
+        "doc": "Roadmap: overall progress bar"
+      },
+      "progressPosition": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "bottom",
+          "top"
+        ],
+        "doc": "Roadmap"
+      },
+      "statusIcons": {
+        "kind": "boolean",
+        "doc": "Roadmap"
+      },
+      "allowStatusChange": {
+        "kind": "boolean",
+        "doc": "Roadmap: status can be changed from the UI"
+      },
+      "onStatusChange": {
+        "kind": "function",
+        "nullable": true
+      },
+      "currentItem": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "nullable": true,
+        "doc": "Roadmap: the current item's id or index"
+      },
+      "completedAnimation": {
+        "kind": "boolean"
+      },
+      "icons": {
+        "kind": "object",
+        "doc": "Domma icon name per status"
+      },
+      "colors": {
+        "kind": "object",
+        "doc": "CSS colour per status"
+      }
+    },
     "PulseOptions": {
       "scale": {
         "kind": "number",
@@ -3375,6 +4382,138 @@
       },
       "label": {
         "kind": "string"
+      }
+    },
+    "RangeSliderOptions": {
+      "min": {
+        "kind": "number",
+        "doc": "Default: the input's min, else 0"
+      },
+      "max": {
+        "kind": "number",
+        "doc": "Default: the input's max, else 100"
+      },
+      "step": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "any"
+        ],
+        "doc": "Default: the input's step, else 1"
+      },
+      "value": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "array"
+        ],
+        "nullable": true,
+        "doc": "A number, or [low, high] / \"low,high\" with range: true"
+      },
+      "range": {
+        "kind": "boolean",
+        "doc": "Two thumbs; two inputs, sharing `name` unless `names` is given"
+      },
+      "orientation": {
+        "kind": "enum",
+        "values": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "ticks": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean",
+          "array"
+        ],
+        "of": {
+          "kind": "number"
+        },
+        "doc": "true = every step, n = every n units, or the values to draw at"
+      },
+      "tickLabels": {
+        "kind": "boolean",
+        "doc": "Label the ticks (always on for an array)"
+      },
+      "labels": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Formats the value for ticks, marks, the tooltip and aria-valuetext"
+      },
+      "format": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Read when `labels` is not set"
+      },
+      "tooltip": {
+        "kind": "enum",
+        "values": [
+          "hover",
+          "always",
+          "never"
+        ],
+        "doc": "Default 'hover' (also shown on focus and while dragging)"
+      },
+      "marks": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "RangeSliderMark"
+        },
+        "nullable": true
+      },
+      "disabled": {
+        "kind": "boolean"
+      },
+      "name": {
+        "kind": "string",
+        "nullable": true
+      },
+      "names": {
+        "kind": "array",
+        "nullable": true,
+        "doc": "[lowName, highName] for range: true"
+      },
+      "minDistance": {
+        "kind": "number",
+        "doc": "range: true - the closest the thumbs may come"
+      },
+      "rtl": {
+        "kind": "boolean",
+        "nullable": true,
+        "doc": "null = follow the page's direction"
+      },
+      "ariaLabel": {
+        "kind": "string",
+        "nullable": true
+      },
+      "ariaLabels": {
+        "kind": "array",
+        "nullable": true
+      },
+      "className": {
+        "kind": "string"
+      },
+      "onInput": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "While dragging, and on each key press"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the value is committed"
+      },
+      "onBeforeChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to refuse a move"
       }
     },
     "ScribeAction": {
@@ -3952,6 +5091,120 @@
         "doc": "Screen-reader status text (default 'Loading...')"
       }
     },
+    "SlideoverCreateOptions": {
+      "position": {
+        "kind": "enum",
+        "values": [
+          "bottom",
+          "top",
+          "left",
+          "right"
+        ],
+        "doc": "Edge it slides from"
+      },
+      "size": {
+        "kind": "string",
+        "doc": "A preset (sm 25%, md 50%, lg 75%, xl 90%, full), a customSizes key, or a CSS length ('400px', '60%', '30rem')"
+      },
+      "backdrop": {
+        "kind": "boolean"
+      },
+      "backdropClose": {
+        "kind": "boolean",
+        "doc": "A backdrop click closes it"
+      },
+      "keyboard": {
+        "kind": "boolean",
+        "doc": "Esc closes it (with closeOnEscape)"
+      },
+      "animation": {
+        "kind": "boolean"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "ms"
+      },
+      "closeOnEscape": {
+        "kind": "boolean"
+      },
+      "title": {
+        "kind": "string",
+        "doc": "Title (create(): the header text)"
+      },
+      "content": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "doc": "Body (create(): HTML or an element)"
+      },
+      "closable": {
+        "kind": "boolean",
+        "doc": "Close button in the header (create())"
+      },
+      "closeIcon": {
+        "kind": "string",
+        "doc": "Domma icon name for it (create())"
+      },
+      "headerClass": {
+        "kind": "string"
+      },
+      "bodyClass": {
+        "kind": "string"
+      },
+      "footerClass": {
+        "kind": "string"
+      },
+      "customSizes": {
+        "kind": "object",
+        "each": {
+          "kind": "string"
+        },
+        "doc": "Named sizes, e.g. {wide: '640px'}"
+      },
+      "trapFocus": {
+        "kind": "boolean",
+        "doc": "Tab stays in the panel; default off when backdrop is false unless given"
+      },
+      "returnFocus": {
+        "kind": "boolean",
+        "doc": "Closing puts focus back where it was"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it closed"
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it open"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Closing (before the animation)"
+      },
+      "onClosed": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After the close animation"
+      },
+      "schema": {
+        "kind": "any"
+      },
+      "data": {
+        "kind": "object"
+      },
+      "onSave": {
+        "kind": "function"
+      }
+    },
     "SortableOptions": {
       "items": {
         "kind": "string",
@@ -4063,6 +5316,152 @@
         "doc": "Every drag, keyboard move and cancel ends here"
       }
     },
+    "SplitPaneOptions": {
+      "direction": {
+        "kind": "enum",
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
+        "doc": "'horizontal' = side by side (default), 'vertical' = stacked"
+      },
+      "sizes": {
+        "kind": "array",
+        "of": {
+          "kind": "number"
+        },
+        "nullable": true,
+        "doc": "Percentages, one per pane (scaled to add up to 100); equal by default"
+      },
+      "minSize": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "array"
+        ],
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number"
+          ]
+        },
+        "doc": "Minimum size, one value or one per pane (default 0)"
+      },
+      "maxSize": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "array"
+        ],
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number"
+          ],
+          "nullable": true
+        },
+        "nullable": true,
+        "doc": "Maximum size, one value or one per pane (default none)"
+      },
+      "gutterSize": {
+        "kind": "number",
+        "doc": "Gutter thickness in px (default 8)"
+      },
+      "snapOffset": {
+        "kind": "number",
+        "doc": "Snap to a limit when dragged within this many px of it (default 0)"
+      },
+      "collapsible": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "array"
+        ],
+        "of": {
+          "kind": "boolean"
+        },
+        "doc": "Which panes the gutter gestures may collapse"
+      },
+      "collapsedSize": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "array"
+        ],
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number"
+          ]
+        },
+        "doc": "What a collapsed pane shrinks to (default 0)"
+      },
+      "collapseButton": {
+        "kind": "boolean",
+        "doc": "A small toggle button in gutters next to a collapsible pane"
+      },
+      "persistKey": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Remember sizes and collapse state with S under 'split-pane:<key>'"
+      },
+      "cursor": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Gutter cursor (default col-resize / row-resize)"
+      },
+      "disabled": {
+        "kind": "boolean"
+      },
+      "step": {
+        "kind": "number",
+        "doc": "Percent per arrow key (default 1)"
+      },
+      "largeStep": {
+        "kind": "number",
+        "doc": "Percent per Shift+arrow (default 10)"
+      },
+      "gutterLabel": {
+        "kind": "string",
+        "doc": "The gutters' aria-label"
+      },
+      "onBeforeDrag": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to refuse a drag"
+      },
+      "onDragStart": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onDrag": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onDragEnd": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onResize": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Any size change: drag, keys, setSizes, collapse"
+      },
+      "onCollapse": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onExpand": {
+        "kind": "function",
+        "nullable": true
+      }
+    },
     "TabsOptions": {
       "active": {
         "kind": "number",
@@ -4161,6 +5560,160 @@
         "kind": "function",
         "nullable": true,
         "doc": "Reset"
+      }
+    },
+    "ToastAction": {
+      "label": {
+        "kind": "string",
+        "doc": "Button label (`text` is accepted too)"
+      },
+      "text": {
+        "kind": "string",
+        "doc": "Alias of `label`"
+      },
+      "onClick": {
+        "kind": "function",
+        "doc": "Click handler"
+      },
+      "closeOnClick": {
+        "kind": "boolean",
+        "doc": "Close toast on click"
+      },
+      "primary": {
+        "kind": "boolean",
+        "doc": "Primary style"
+      }
+    },
+    "ToastOptions": {
+      "message": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "doc": "The message (text unless `html: true`)"
+      },
+      "title": {
+        "kind": "string",
+        "doc": "Toast title"
+      },
+      "type": {
+        "kind": "enum",
+        "values": [
+          "success",
+          "warning",
+          "info",
+          "default",
+          "error"
+        ],
+        "doc": "Toast type"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "bottom-right",
+          "bottom-left",
+          "top-left",
+          "top-right",
+          "top-center",
+          "bottom-center"
+        ],
+        "doc": "Toast position"
+      },
+      "duration": {
+        "kind": "number",
+        "doc": "Auto-dismiss duration in ms (0 = no auto-dismiss)"
+      },
+      "pauseOnHover": {
+        "kind": "boolean",
+        "doc": "Pause countdown on hover"
+      },
+      "showProgress": {
+        "kind": "boolean",
+        "doc": "Show progress bar"
+      },
+      "animation": {
+        "kind": "any",
+        "kinds": [
+          "enum",
+          "any"
+        ],
+        "values": [
+          "slide",
+          "fade"
+        ],
+        "doc": "Animation style"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Animation duration in ms"
+      },
+      "closable": {
+        "kind": "boolean",
+        "doc": "Show close button"
+      },
+      "html": {
+        "kind": "boolean",
+        "doc": "The message is HTML (sanitised unless `safe: false`)"
+      },
+      "safe": {
+        "kind": "boolean",
+        "doc": "Sanitise HTML message / icon"
+      },
+      "icon": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Icon name (data-icon), HTML string or Node; the typed helpers default to the type's icon"
+      },
+      "actions": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "ToastAction"
+        },
+        "doc": "Action buttons"
+      },
+      "action": {
+        "kind": "object",
+        "type": "ToastAction",
+        "doc": "One action button (used when `actions` is empty)"
+      },
+      "maxToasts": {
+        "kind": "number",
+        "doc": "Maximum number of toasts on screen; the oldest closes"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra classes on the toast"
+      },
+      "onShow": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the toast shows"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After the exit animation, just before removal"
+      },
+      "onPause": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The countdown paused (hover)"
+      },
+      "onResume": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The countdown resumed"
+      },
+      "onAction": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "An action button was clicked"
       }
     },
     "TooltipDelay": {
@@ -4270,6 +5823,284 @@
         "kind": "function",
         "nullable": true,
         "doc": "When the tooltip hides"
+      }
+    },
+    "TreeViewAction": {
+      "name": {
+        "kind": "string",
+        "doc": "Passed to onAction; the button's text when there is no icon"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Icon name"
+      },
+      "tooltip": {
+        "kind": "string",
+        "doc": "Title and aria-label (default: the name)"
+      },
+      "visible": {
+        "kind": "function",
+        "doc": "Show the button on this node?"
+      }
+    },
+    "TreeViewOptions": {
+      "data": {
+        "kind": "array",
+        "of": {
+          "kind": "object"
+        },
+        "doc": "Flat (with parentKey) or hierarchical (with childrenKey) rows"
+      },
+      "idKey": {
+        "kind": "string",
+        "doc": "Default 'id'"
+      },
+      "parentKey": {
+        "kind": "string",
+        "doc": "Default 'parent_id'"
+      },
+      "childrenKey": {
+        "kind": "string",
+        "doc": "Default 'children'"
+      },
+      "labelKey": {
+        "kind": "string",
+        "doc": "Default 'name'"
+      },
+      "iconKey": {
+        "kind": "string",
+        "doc": "Default 'icon'"
+      },
+      "colorKey": {
+        "kind": "string",
+        "doc": "Default 'color'"
+      },
+      "expandedByDefault": {
+        "kind": "boolean",
+        "doc": "Default true"
+      },
+      "expandedNodes": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number"
+          ]
+        },
+        "doc": "Ids expanded at the start"
+      },
+      "selectable": {
+        "kind": "boolean",
+        "doc": "Default true"
+      },
+      "multiSelect": {
+        "kind": "boolean",
+        "doc": "Default false"
+      },
+      "selectedNodes": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number"
+          ]
+        },
+        "doc": "Ids selected at the start"
+      },
+      "renderNode": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "HTML for a node's content"
+      },
+      "getBadge": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Badge text (HTML), or null for none"
+      },
+      "getNodeIcon": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Icon name (default: node[iconKey])"
+      },
+      "getNodeClass": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Extra classes on the node"
+      },
+      "actions": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "TreeViewAction"
+        },
+        "doc": "Action buttons on each node"
+      },
+      "indentSize": {
+        "kind": "number",
+        "doc": "rem per level (default 1.5)"
+      },
+      "showIcons": {
+        "kind": "boolean",
+        "doc": "Default true"
+      },
+      "showToggleButtons": {
+        "kind": "boolean",
+        "doc": "Default true"
+      },
+      "toggleIcon": {
+        "kind": "string",
+        "doc": "Default 'chevron-down'"
+      },
+      "onSelect": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onDeselect": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onExpand": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onCollapse": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onAction": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onClick": {
+        "kind": "function",
+        "nullable": true
+      }
+    },
+    "VirtualListOptions": {
+      "items": {
+        "kind": "array",
+        "nullable": true
+      },
+      "count": {
+        "kind": "number",
+        "doc": "With getItem, instead of items"
+      },
+      "getItem": {
+        "kind": "function",
+        "nullable": true
+      },
+      "itemHeight": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "auto"
+        ],
+        "doc": "px, or 'auto' to measure each row (default 40)"
+      },
+      "estimatedItemHeight": {
+        "kind": "number",
+        "doc": "Height assumed for unmeasured rows in 'auto' mode (default 40)"
+      },
+      "overscan": {
+        "kind": "number",
+        "doc": "Rows rendered beyond each edge (default 4)"
+      },
+      "render": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A string is HTML (sanitised unless safe: false); an Element goes in as it is"
+      },
+      "safe": {
+        "kind": "boolean",
+        "doc": "false: render() strings are inserted unsanitised (default true)"
+      },
+      "keyField": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "function"
+        ],
+        "nullable": true,
+        "doc": "Property name or function giving each item a stable key (default: the index)"
+      },
+      "label": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "aria-label for the list"
+      },
+      "rowClass": {
+        "kind": "string",
+        "doc": "Extra class on every row"
+      },
+      "loadMore": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Called near the end; resolves to the next items, or {items, done}"
+      },
+      "threshold": {
+        "kind": "number",
+        "doc": "px from the end at which loadMore is called (default 200)"
+      },
+      "loadingTemplate": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object",
+          "function"
+        ],
+        "nullable": true
+      },
+      "endTemplate": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object",
+          "function"
+        ],
+        "nullable": true
+      },
+      "errorTemplate": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object",
+          "function"
+        ],
+        "nullable": true,
+        "doc": "A [data-vlist-retry] element inside it retries"
+      },
+      "onRender": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onScroll": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onLoadMore": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onLoaded": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onEnd": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onError": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onItemClick": {
+        "kind": "function",
+        "nullable": true
       }
     }
   }

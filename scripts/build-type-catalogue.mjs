@@ -11,6 +11,7 @@
  * "options": {...}}` in a page's config, say. Shape:
  *
  *   {components: {carousel: {factory: 'E.carousel', options: 'CarouselOptions'}, ...},
+ *    elements: {carousel: 'CarouselOptions', progression: 'ProgressionOptions', ...},
  *    types: {CarouselOptions: {interval: {kind: 'number', doc: 'Autoplay interval in ms'}, ...}, ...}}
  *
  * A property's `kind` is boolean | number | string | enum (with `values`) | function | array | object
@@ -178,13 +179,27 @@ export function buildCatalogue() {
     const componentType = exported('componentType');
     const names = (componentType.isUnion() ? componentType.types : [componentType]).map(t => t.value).sort();
     const namespaces = exported('namespaces');
+    /** The name of a factory's options type (described into `types`), or null. Overloads: the first that has one. */
+    function optionsOf(fnType) {
+        for (const sig of fnType.getCallSignatures()) {
+            const param = sig.parameters.find(p => p.name === 'options') || sig.parameters[1];
+            if (!param) continue;
+            const ptype = checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(param, probeFile));
+            const tname = nameOf(ptype);
+            if (tname && ours(ptype) && ptype.getProperties().length) {
+                describe(tname, ptype);
+                return tname;
+            }
+        }
+        return null;
+    }
+
     const components = {};
     for (const name of names) {
         const [ns, member] = SOURCES[name] || ['E', name];
         const nsType = checker.getTypeOfSymbolAtLocation(namespaces.getProperty(ns), probeFile);
         const fn = nsType.getProperty(member);
         if (!fn) throw new Error(`${ns}.${member} (component "${name}") is not in the declarations`);
-        const sig = checker.getTypeOfSymbolAtLocation(fn, probeFile).getCallSignatures()[0];
         const entry = {factory: `${ns}.${member}`};
         if (OPTIONS_TYPES[name]) {
             describe(OPTIONS_TYPES[name], exported(`setup_${OPTIONS_TYPES[name]}`));
@@ -192,21 +207,23 @@ export function buildCatalogue() {
             components[name] = entry;
             continue;
         }
-        const param = sig?.parameters.find(p => p.name === 'options') || sig?.parameters[1];
-        if (param) {
-            const ptype = checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(param, probeFile));
-            const tname = nameOf(ptype);
-            if (tname && ptype.getProperties().length) {
-                describe(tname, ptype);
-                entry.options = tname;
-            }
-        }
+        const options = optionsOf(checker.getTypeOfSymbolAtLocation(fn, probeFile));
+        if (options) entry.options = options;
         components[name] = entry;
     }
     for (const t of SETUP_TYPES) describe(t, exported(`setup_${t}`));
 
+    // Every E.* factory that takes an options object - what shortcodes and other tools build on,
+    // whether or not $.setup() can create it (E.progression, E.wizard, ...).
+    const elements = {};
+    const eType = checker.getTypeOfSymbolAtLocation(namespaces.getProperty('E'), probeFile);
+    for (const sym of [...eType.getProperties()].sort((a, b) => a.name.localeCompare(b.name))) {
+        const options = optionsOf(checker.getTypeOfSymbolAtLocation(sym, probeFile));
+        if (options) elements[sym.name] = options;
+    }
+
     const sorted = Object.fromEntries(Object.keys(types).sort().map(k => [k, types[k]]));
-    return {components, setup: SETUP_TYPES, types: sorted};
+    return {components, elements, setup: SETUP_TYPES, types: sorted};
 }
 
 /** The catalogue as written to disk (stable key order, trailing newline). */

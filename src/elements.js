@@ -8546,14 +8546,19 @@ class Slideover extends Component {
  * @property {string} [assignee]
  */
 /**
+ * The loader settings `E.fullscreenLoader()` passes on (the rest are fixed for a full-screen loader).
+ * @typedef {Pick<import('./components/loader.js').LoaderOptions, 'type' | 'size' | 'color'>} FullscreenLoaderOptions
+ */
+
+/**
  * @typedef {object} ProgressionOptions
- * @property {'timeline'|'roadmap'} [mode='timeline']
+ * @property {'timeline'|'roadmap'} [mode='timeline'] - 'timeline' (dated events) or 'roadmap' (items with a status)
  * @property {ProgressionItem[]} [items=[]]
- * @property {'vertical'|'horizontal'|'centered'} [layout='vertical']
+ * @property {'vertical'|'horizontal'|'centered'} [layout='vertical'] - Items down one side, across, or alternating either side of a centre line
  * @property {boolean} [animation=true] - Items animate in
  * @property {number} [animationDelay=100] - ms between items
  * @property {boolean} [responsive=true]
- * @property {'default'|'minimal'|'corporate'|'modern'} [theme='default']
+ * @property {'default'|'minimal'|'corporate'|'modern'} [theme='default'] - Look of the markers, line and cards
  * @property {boolean} [clickable=false]
  * @property {((item: ProgressionItem, index: number, element: HTMLElement) => void)|null} [onItemClick]
  * @property {boolean} [allowHtml=false] - HTML in descriptions (sanitised)
@@ -10582,7 +10587,7 @@ class DatePicker extends Component {
  *   Show the element's loader, creating it if needed
  * @property {(selector: import('./components/shared.js').ComponentTarget) => import('./components/loader.js').LoaderInstance|undefined} hideLoader
  *   Hide the element's loader
- * @property {(text?: string, options?: {type?: string, size?: string, color?: string}) => import('./components/loader.js').LoaderInstance} fullscreenLoader
+ * @property {(text?: string, options?: FullscreenLoaderOptions) => import('./components/loader.js').LoaderInstance} fullscreenLoader
  *   A full-screen loader (`#dm-loader-fullscreen`), reused on later calls
  * @property {(selector: string|HTMLElement, options?: BreadcrumbsOptions) => BreadcrumbsInstance} breadcrumbs - Render breadcrumbs into an element
  * @property {(selector: string|HTMLElement, options?: NavbarOptions) => NavbarInstance} navbar - Render a navbar into an element
