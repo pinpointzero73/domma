@@ -69,7 +69,8 @@ can create it (`"progression": "ProgressionOptions"`) - what a tool needs to des
 built on `E.progression`, say. A property's `kind` is `boolean`, `number`, `string`, `enum` (with `values`), `function`,
 `array`, `object` or `any`; `kinds` lists them when it takes several, `nullable` says null is allowed, `type`
 names a nested type in `types`, `each` describes one value of a record and `of` one item of an array. A
-generic type (`Observable<T>`) is not named, since it differs per use. `doc` is the JSDoc line. Only
+generic type nested in another (`Observable<T>`) is not named, since it differs per use; a generic options
+type (`VirtualListOptions<T>`) is described by its declared shape. Only options with a named type are listed. `doc` is the JSDoc line. Only
 Domma's own types are described, not the DOM's.
 
 ## The gate
