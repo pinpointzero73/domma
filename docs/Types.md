@@ -56,6 +56,7 @@ generated `.d.ts`, never `src/`):
 ```json
 {
   "components": {"carousel": {"factory": "E.carousel", "options": "CarouselOptions"}},
+  "elements": {"carousel": "CarouselOptions", "progression": "ProgressionOptions"},
   "setup": ["SelectorConfig", "InitialProperties", "EventAction"],
   "types": {"CarouselOptions": {"interval": {"kind": "number", "doc": "Autoplay interval in ms"},
                                 "animation": {"kind": "enum", "values": ["slide", "fade", "crossfade"]}}}
@@ -63,7 +64,9 @@ generated `.d.ts`, never `src/`):
 ```
 
 `components` is every `ComponentType` `$.setup()` can create, with the factory it calls and the name of its
-options type. A property's `kind` is `boolean`, `number`, `string`, `enum` (with `values`), `function`,
+options type. `elements` is every `E.*` factory that takes an options object, by name, whether or not `$.setup()`
+can create it (`"progression": "ProgressionOptions"`) - what a tool needs to describe the options of something
+built on `E.progression`, say. A property's `kind` is `boolean`, `number`, `string`, `enum` (with `values`), `function`,
 `array`, `object` or `any`; `kinds` lists them when it takes several, `nullable` says null is allowed, `type`
 names a nested type in `types`, `each` describes one value of a record and `of` one item of an array. A
 generic type (`Observable<T>`) is not named, since it differs per use. `doc` is the JSDoc line. Only
