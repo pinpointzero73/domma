@@ -16,7 +16,8 @@
  * A property's `kind` is boolean | number | string | enum (with `values`) | function | array | object
  * | any; `kinds` lists them when a property takes more than one, `nullable` when null is allowed.
  * An object property whose type is a named type found here carries `type` (its name in `types`), and a
- * record (`Record<string, X>`) carries `each`, the description of one of its values.
+ * record (`Record<string, X>`) carries `each`, the description of one of its values; an array carries `of`,
+ * the description of one of its items.
  */
 import {createRequire} from 'node:module';
 import fs from 'node:fs';
@@ -35,6 +36,9 @@ const SOURCES = {form: ['F', 'create'], breathe: ['Domma.effects', 'breathe'], p
 /** The `$.setup()` config types, described alongside the component options. */
 const SETUP_TYPES = ['SelectorConfig', 'InitialProperties', 'EventAction'];
 
+/** Components whose `options` are not their factory's options parameter (initComponent unpacks them). */
+const OPTIONS_TYPES = {form: 'FormSetupOptions'};
+
 function loadTypeScript() {
     const require = createRequire(path.join(ROOT, 'package.json'));
     try {
@@ -48,10 +52,10 @@ export function buildCatalogue() {
     const ts = loadTypeScript();
     const probe = [
         `/// <reference path="./index.d.ts" />`,
-        `import type {ComponentType, ${SETUP_TYPES.join(', ')}} from './index.js';`,
+        `import type {ComponentType, ${[...SETUP_TYPES, ...Object.values(OPTIONS_TYPES)].join(', ')}} from './index.js';`,
         `export declare const componentType: ComponentType;`,
         `export const namespaces = {E, F, 'Domma.effects': Domma.effects};`,
-        ...SETUP_TYPES.map(t => `export declare const setup_${t}: ${t};`)
+        ...[...SETUP_TYPES, ...Object.values(OPTIONS_TYPES)].map(t => `export declare const setup_${t}: ${t};`)
     ].join('\n');
     const options = {strict: true, noEmit: true, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext,
         moduleResolution: ts.ModuleResolutionKind.Bundler, lib: ['lib.es2022.d.ts', 'lib.dom.d.ts'], skipLibCheck: true};
@@ -101,7 +105,10 @@ export function buildCatalogue() {
         if (checker.isArrayType(type) || checker.isTupleType(type)) return {kind: 'array'};
         if (flags & ts.TypeFlags.Object) {
             const name = nameOf(type);
-            if (name && ours(type) && type.getProperties().length) {
+            // A generic (Observable<T>) differs per use, so it is not described under one name
+            const generic = type.aliasTypeArguments?.length
+                || (type.objectFlags & ts.ObjectFlags.Reference && checker.getTypeArguments(type).length);
+            if (name && !generic && ours(type) && type.getProperties().length) {
                 describe(name, type);
                 return {kind: 'object', type: name};
             }
@@ -124,6 +131,7 @@ export function buildCatalogue() {
         const values = [];
         let objectType = null;
         let each = null;
+        let of = null;
         for (const part of parts) {
             if (part.flags & ts.TypeFlags.Null) { nullable = true; continue; }
             if (part.flags & ts.TypeFlags.Undefined) continue;
@@ -132,9 +140,7 @@ export function buildCatalogue() {
             if (k.kind === 'enum') values.push(...k.values);
             if (k.type) objectType = k.type;
             if (k.each) each = k.each;
-            if (k.of) {
-                if (k.of.type && !objectType) objectType = k.of.type;
-            }
+            if (k.of) of = k.of;
             if (!kinds.includes(k.kind)) kinds.push(k.kind);
         }
         // `boolean` is the union true | false - one kind
@@ -145,6 +151,7 @@ export function buildCatalogue() {
         if (values.length) out.values = values;
         if (objectType) out.type = objectType;
         if (each) out.each = each;
+        if (of && of.kind !== 'any') out.of = of;
         if (nullable) out.nullable = true;
         return out;
     }
@@ -179,6 +186,12 @@ export function buildCatalogue() {
         if (!fn) throw new Error(`${ns}.${member} (component "${name}") is not in the declarations`);
         const sig = checker.getTypeOfSymbolAtLocation(fn, probeFile).getCallSignatures()[0];
         const entry = {factory: `${ns}.${member}`};
+        if (OPTIONS_TYPES[name]) {
+            describe(OPTIONS_TYPES[name], exported(`setup_${OPTIONS_TYPES[name]}`));
+            entry.options = OPTIONS_TYPES[name];
+            components[name] = entry;
+            continue;
+        }
         const param = sig?.parameters.find(p => p.name === 'options') || sig?.parameters[1];
         if (param) {
             const ptype = checker.getNonNullableType(checker.getTypeOfSymbolAtLocation(param, probeFile));

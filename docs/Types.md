@@ -65,7 +65,8 @@ generated `.d.ts`, never `src/`):
 `components` is every `ComponentType` `$.setup()` can create, with the factory it calls and the name of its
 options type. A property's `kind` is `boolean`, `number`, `string`, `enum` (with `values`), `function`,
 `array`, `object` or `any`; `kinds` lists them when it takes several, `nullable` says null is allowed, `type`
-names a nested type in `types`, and `each` describes one value of a record. `doc` is the JSDoc line. Only
+names a nested type in `types`, `each` describes one value of a record and `of` one item of an array. A
+generic type (`Observable<T>`) is not named, since it differs per use. `doc` is the JSDoc line. Only
 Domma's own types are described, not the DOM's.
 
 ## The gate

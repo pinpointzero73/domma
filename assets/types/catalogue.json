@@ -66,7 +66,7 @@
     },
     "form": {
       "factory": "F.create",
-      "options": "FormOptions"
+      "options": "FormSetupOptions"
     },
     "inputGroup": {
       "factory": "E.inputGroup",
@@ -163,6 +163,9 @@
           "number",
           "array"
         ],
+        "of": {
+          "kind": "number"
+        },
         "nullable": true,
         "doc": "Initially open panel index(es); null keeps the markup's active class"
       },
@@ -219,6 +222,9 @@
           "weekdays",
           "weekends"
         ],
+        "of": {
+          "kind": "string"
+        },
         "nullable": true,
         "doc": "null = once; an array of day names ('monday', ...)"
       },
@@ -257,7 +263,10 @@
     "AlarmOptions": {
       "alarms": {
         "kind": "array",
-        "type": "AlarmItem",
+        "of": {
+          "kind": "object",
+          "type": "AlarmItem"
+        },
         "doc": "Initial alarms, used when storage holds none"
       },
       "timezone": {
@@ -301,6 +310,13 @@
     "AutocompleteOptions": {
       "data": {
         "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
         "doc": "Suggestions to filter"
       },
       "dataSource": {
@@ -404,7 +420,14 @@
     "AvatarGroupOptions": {
       "people": {
         "kind": "array",
-        "type": "AvatarPerson",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ],
+          "type": "AvatarPerson"
+        },
         "doc": "People, or plain names"
       },
       "max": {
@@ -714,7 +737,14 @@
     "BreadcrumbsOptions": {
       "items": {
         "kind": "array",
-        "type": "BreadcrumbItem"
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ],
+          "type": "BreadcrumbItem"
+        }
       },
       "separator": {
         "kind": "string",
@@ -1021,6 +1051,9 @@
           "string",
           "array"
         ],
+        "of": {
+          "kind": "string"
+        },
         "doc": "Extra classes on the item"
       },
       "shortcut": {
@@ -1033,7 +1066,10 @@
           "array",
           "function"
         ],
-        "type": "ContextMenuItem",
+        "of": {
+          "kind": "object",
+          "type": "ContextMenuItem"
+        },
         "doc": "Nested items, to unlimited depth"
       },
       "type": {
@@ -1072,7 +1108,10 @@
           "function",
           "object"
         ],
-        "type": "Observable",
+        "of": {
+          "kind": "object",
+          "type": "ContextMenuItem"
+        },
         "doc": "Items, or a resolver called with the delegated target. Accepts a Domma Reactive observable."
       },
       "match": {
@@ -1608,7 +1647,14 @@
       },
       "items": {
         "kind": "array",
-        "type": "DropdownItem",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ],
+          "type": "DropdownItem"
+        },
         "doc": "Menu items"
       },
       "model": {
@@ -1655,6 +1701,59 @@
         "doc": "An item was chosen"
       }
     },
+    "DropzoneUploadOptions": {
+      "url": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "function"
+        ]
+      },
+      "method": {
+        "kind": "string",
+        "doc": "Default 'POST'"
+      },
+      "field": {
+        "kind": "string",
+        "doc": "FormData field for the file. Default 'file'"
+      },
+      "headers": {
+        "kind": "object",
+        "kinds": [
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "string"
+        }
+      },
+      "withCredentials": {
+        "kind": "boolean"
+      },
+      "concurrency": {
+        "kind": "number",
+        "doc": "Files sent at once. Default 2"
+      },
+      "data": {
+        "kind": "object",
+        "kinds": [
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
+        "doc": "Extra FormData fields"
+      },
+      "xhr": {
+        "kind": "function",
+        "doc": "Make the request object (tests, pages without a server). Default: new XMLHttpRequest()"
+      }
+    },
     "EventAction": {
       "target": {
         "kind": "string",
@@ -1671,10 +1770,21 @@
         }
       },
       "text": {
-        "kind": "string"
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ],
+        "doc": "Converted to text, as textContent does"
       },
       "html": {
-        "kind": "string"
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ]
       },
       "addClass": {
         "kind": "string"
@@ -1711,7 +1821,10 @@
       },
       "links": {
         "kind": "array",
-        "type": "FooterLink"
+        "of": {
+          "kind": "object",
+          "type": "FooterLink"
+        }
       }
     },
     "FooterLink": {
@@ -1745,17 +1858,26 @@
       },
       "columns": {
         "kind": "array",
-        "type": "FooterColumn",
+        "of": {
+          "kind": "object",
+          "type": "FooterColumn"
+        },
         "doc": "For the 'columns' layout"
       },
       "links": {
         "kind": "array",
-        "type": "FooterLink",
+        "of": {
+          "kind": "object",
+          "type": "FooterLink"
+        },
         "doc": "Simple link list"
       },
       "social": {
         "kind": "array",
-        "type": "FooterSocial",
+        "of": {
+          "kind": "object",
+          "type": "FooterSocial"
+        },
         "doc": "Social icons"
       },
       "copyright": {
@@ -1793,7 +1915,384 @@
         "doc": "Accessible name (default: the icon name)"
       }
     },
-    "FormOptions": {
+    "FormFieldConfig": {
+      "placeholder": {
+        "kind": "string"
+      },
+      "hint": {
+        "kind": "string",
+        "doc": "Small text beside the label; also the message when `pattern` fails"
+      },
+      "helperText": {
+        "kind": "string",
+        "doc": "Text under the control (HTML)"
+      },
+      "tooltip": {
+        "kind": "string",
+        "doc": "Tooltip on the label (a slider field also passes it to E.rangeSlider)"
+      },
+      "span": {
+        "kind": "number",
+        "doc": "Columns the field spans in a grid layout"
+      },
+      "disabled": {
+        "kind": "boolean"
+      },
+      "rows": {
+        "kind": "number",
+        "doc": "textarea rows (default 3)"
+      },
+      "step": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "any"
+        ],
+        "doc": "Used when the field definition has no `step`"
+      },
+      "autocomplete": {
+        "kind": "string"
+      },
+      "prefix": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ]
+      },
+      "suffix": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ]
+      },
+      "reveal": {
+        "kind": "boolean",
+        "doc": "password: show / hide toggle"
+      },
+      "clear": {
+        "kind": "boolean",
+        "doc": "text-like inputs and textareas: a clear button"
+      },
+      "stepper": {
+        "kind": "boolean",
+        "doc": "number / integer / float: - and + buttons"
+      },
+      "counter": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean"
+        ],
+        "doc": "text-like inputs and textareas: a character counter; true reads `maxLength`"
+      },
+      "labels": {
+        "kind": "object",
+        "kinds": [
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "string"
+        },
+        "doc": "Text for the input extras or the dropzone; a slider's value formatter"
+      },
+      "accept": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "array"
+        ],
+        "of": {
+          "kind": "string"
+        },
+        "doc": "file / dropzone"
+      },
+      "multiple": {
+        "kind": "boolean",
+        "doc": "file / dropzone (a dropzone allows several unless false)"
+      },
+      "slider": {
+        "kind": "boolean",
+        "doc": "Render a `range` field as E.rangeSlider"
+      },
+      "range": {
+        "kind": "boolean",
+        "doc": "slider: two thumbs, value [low, high]"
+      },
+      "ticks": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean",
+          "array"
+        ],
+        "of": {
+          "kind": "number"
+        }
+      },
+      "tickLabels": {
+        "kind": "boolean"
+      },
+      "format": {
+        "kind": "function",
+        "nullable": true
+      },
+      "marks": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "RangeSliderMark"
+        },
+        "nullable": true
+      },
+      "minDistance": {
+        "kind": "number"
+      },
+      "orientation": {
+        "kind": "enum",
+        "values": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "rtl": {
+        "kind": "boolean",
+        "nullable": true
+      },
+      "names": {
+        "kind": "array",
+        "nullable": true
+      },
+      "ariaLabels": {
+        "kind": "array",
+        "nullable": true
+      },
+      "className": {
+        "kind": "string"
+      },
+      "maxFiles": {
+        "kind": "number",
+        "nullable": true
+      },
+      "maxSize": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Bytes"
+      },
+      "minSize": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Bytes"
+      },
+      "previews": {
+        "kind": "boolean"
+      },
+      "upload": {
+        "kind": "object",
+        "type": "DropzoneUploadOptions",
+        "nullable": true
+      },
+      "autoUpload": {
+        "kind": "boolean"
+      },
+      "retry": {
+        "kind": "number"
+      },
+      "list": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean",
+          "object"
+        ]
+      }
+    },
+    "FormFieldDefinition": {
+      "type": {
+        "kind": "any",
+        "kinds": [
+          "enum",
+          "any"
+        ],
+        "values": [
+          "string",
+          "number",
+          "boolean",
+          "signature",
+          "checkbox",
+          "radio",
+          "email",
+          "password",
+          "integer",
+          "float",
+          "date",
+          "datetime",
+          "time",
+          "url",
+          "tel",
+          "color",
+          "range",
+          "file",
+          "hidden",
+          "select",
+          "multiselect",
+          "textarea",
+          "checkbox-group",
+          "chooser",
+          "slider",
+          "dropzone"
+        ],
+        "doc": "default 'string'"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "default: the capitalised field name"
+      },
+      "default": {
+        "kind": "any"
+      },
+      "required": {
+        "kind": "boolean"
+      },
+      "readonly": {
+        "kind": "boolean",
+        "doc": "Renders the control disabled"
+      },
+      "min": {
+        "kind": "number"
+      },
+      "max": {
+        "kind": "number"
+      },
+      "step": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "any"
+        ]
+      },
+      "minLength": {
+        "kind": "number"
+      },
+      "maxLength": {
+        "kind": "number"
+      },
+      "pattern": {
+        "kind": "object"
+      },
+      "validate": {
+        "kind": "function",
+        "doc": "true passes; a string (or anything else) fails with that message"
+      },
+      "options": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
+        "doc": "Choices for select / radio / checkbox-group / multiselect / chooser"
+      },
+      "formConfig": {
+        "kind": "object",
+        "type": "FormFieldConfig"
+      },
+      "tableRender": {
+        "kind": "function",
+        "doc": "`F.crud` table cell renderer"
+      },
+      "variant": {
+        "kind": "enum",
+        "values": [
+          "card",
+          "chip"
+        ],
+        "doc": "chooser (default 'card')"
+      },
+      "multiple": {
+        "kind": "boolean",
+        "doc": "chooser: several choices (value is an array)"
+      },
+      "density": {
+        "kind": "enum",
+        "values": [
+          "comfortable",
+          "compact"
+        ],
+        "doc": "chooser"
+      },
+      "columns": {
+        "kind": "number",
+        "doc": "chooser (default 3)"
+      },
+      "accent": {
+        "kind": "string",
+        "doc": "chooser: semantic name or CSS colour (default 'primary')"
+      },
+      "accentStyle": {
+        "kind": "enum",
+        "values": [
+          "border",
+          "solid",
+          "glow",
+          "overlay",
+          "underline"
+        ],
+        "doc": "chooser"
+      },
+      "glow": {
+        "kind": "boolean",
+        "doc": "chooser"
+      },
+      "glowColour": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "chooser"
+      },
+      "shadow": {
+        "kind": "string",
+        "doc": "chooser (default 'none')"
+      },
+      "shadowColour": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "chooser"
+      }
+    },
+    "FormSection": {
+      "title": {
+        "kind": "string"
+      },
+      "fields": {
+        "kind": "array",
+        "of": {
+          "kind": "string"
+        },
+        "doc": "Blueprint keys, in order"
+      },
+      "layout": {
+        "kind": "enum",
+        "values": [
+          "stacked",
+          "grid"
+        ]
+      },
+      "columns": {
+        "kind": "number",
+        "doc": "grid columns (default 2)"
+      }
+    },
+    "FormSetupOptions": {
       "layout": {
         "kind": "enum",
         "values": [
@@ -1880,7 +2379,10 @@
       },
       "sections": {
         "kind": "array",
-        "type": "FormSection"
+        "of": {
+          "kind": "object",
+          "type": "FormSection"
+        }
       },
       "showSubmitButton": {
         "kind": "boolean",
@@ -1918,26 +2420,16 @@
       "autoSave": {
         "kind": "boolean",
         "doc": "Passed to the model"
-      }
-    },
-    "FormSection": {
-      "title": {
-        "kind": "string"
       },
-      "fields": {
-        "kind": "array",
-        "doc": "Blueprint keys, in order"
+      "schema": {
+        "kind": "object",
+        "each": {
+          "kind": "object",
+          "type": "FormFieldDefinition"
+        }
       },
-      "layout": {
-        "kind": "enum",
-        "values": [
-          "stacked",
-          "grid"
-        ]
-      },
-      "columns": {
-        "kind": "number",
-        "doc": "grid columns (default 2)"
+      "data": {
+        "kind": "object"
       }
     },
     "InitialProperties": {
@@ -1952,10 +2444,21 @@
         }
       },
       "text": {
-        "kind": "string"
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ],
+        "doc": "Converted to text, as textContent does"
       },
       "html": {
-        "kind": "string"
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ]
       },
       "addClass": {
         "kind": "string"
@@ -1969,9 +2472,14 @@
       "attr": {
         "kind": "object",
         "each": {
-          "kind": "string"
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number",
+            "boolean"
+          ]
         },
-        "doc": "Attribute name -> value"
+        "doc": "Attribute name -> value (converted to text)"
       }
     },
     "InputGroupOptions": {
@@ -2246,7 +2754,10 @@
       },
       "buttons": {
         "kind": "array",
-        "type": "ModalButton",
+        "of": {
+          "kind": "object",
+          "type": "ModalButton"
+        },
         "doc": "Footer buttons (the factory's default is one Close button)"
       },
       "safe": {
@@ -2381,7 +2892,10 @@
       },
       "items": {
         "kind": "array",
-        "type": "NavbarItem",
+        "of": {
+          "kind": "object",
+          "type": "NavbarItem"
+        },
         "doc": "Dropdown entries"
       }
     },
@@ -2393,7 +2907,10 @@
       },
       "items": {
         "kind": "array",
-        "type": "NavbarItem"
+        "of": {
+          "kind": "object",
+          "type": "NavbarItem"
+        }
       },
       "position": {
         "kind": "enum",
@@ -2424,7 +2941,10 @@
       },
       "actions": {
         "kind": "array",
-        "type": "NavbarAction",
+        "of": {
+          "kind": "object",
+          "type": "NavbarAction"
+        },
         "doc": "Right-side buttons"
       },
       "onItemClick": {
@@ -2481,36 +3001,23 @@
         "doc": "The count changed"
       }
     },
-    "Observable": {
-      "value": {
-        "kind": "array",
-        "type": "ContextMenuItem",
-        "doc": "Tracked on read; assigning writes, and notifies if the value changed."
-      },
-      "peek": {
-        "kind": "function",
-        "doc": "Read without registering a dependency."
-      },
-      "set": {
-        "kind": "function",
-        "doc": "Imperative alias for assigning `.value`."
-      },
-      "subscribe": {
-        "kind": "function",
-        "doc": "Called synchronously, at the write, with the new value."
-      },
-      "extend": {
-        "kind": "function",
-        "doc": "Layer behaviour onto this observable."
-      }
-    },
     "PillboxOptions": {
       "data": {
         "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
         "doc": "Options to choose from"
       },
       "value": {
         "kind": "array",
+        "of": {
+          "kind": "string"
+        },
         "doc": "Initial values"
       },
       "placeholder": {
@@ -2862,6 +3369,14 @@
         "doc": "Honor prefers-reduced-motion (default: true)"
       }
     },
+    "RangeSliderMark": {
+      "value": {
+        "kind": "number"
+      },
+      "label": {
+        "kind": "string"
+      }
+    },
     "ScribeAction": {
       "render": {
         "kind": "string",
@@ -2872,8 +3387,8 @@
         "values": [
           "none",
           "fade",
-          "bounce",
-          "glow"
+          "glow",
+          "bounce"
         ],
         "doc": "Entrance effect for each rendered unit (default: 'none')"
       },
@@ -2931,9 +3446,9 @@
       "cursorType": {
         "kind": "enum",
         "values": [
+          "underline",
           "caret",
-          "block",
-          "underline"
+          "block"
         ],
         "doc": "Cursor style (default: 'caret')"
       },
@@ -2963,7 +3478,10 @@
       },
       "actions": {
         "kind": "array",
-        "type": "ScribeAction",
+        "of": {
+          "kind": "object",
+          "type": "ScribeAction"
+        },
         "doc": "Action queue to execute"
       },
       "onStart": {
@@ -3051,7 +3569,15 @@
             "function",
             "array"
           ],
-          "type": "EventAction"
+          "type": "EventAction",
+          "of": {
+            "kind": "object",
+            "kinds": [
+              "object",
+              "function"
+            ],
+            "type": "EventAction"
+          }
         },
         "doc": "Event name -> what it runs"
       },
@@ -3095,7 +3621,10 @@
       },
       "items": {
         "kind": "array",
-        "type": "SidebarItem",
+        "of": {
+          "kind": "object",
+          "type": "SidebarItem"
+        },
         "doc": "Children (an expandable group)"
       }
     },
@@ -3125,7 +3654,10 @@
       },
       "items": {
         "kind": "array",
-        "type": "SidebarItem"
+        "of": {
+          "kind": "object",
+          "type": "SidebarItem"
+        }
       },
       "footer": {
         "kind": "object",
@@ -3155,6 +3687,9 @@
       },
       "expandedSections": {
         "kind": "array",
+        "of": {
+          "kind": "string"
+        },
         "doc": "Initially expanded groups (their paths)"
       },
       "persistExpanded": {
@@ -3286,10 +3821,16 @@
       },
       "colours": {
         "kind": "array",
+        "of": {
+          "kind": "string"
+        },
         "doc": "Colour swatches in the toolbar"
       },
       "widths": {
         "kind": "array",
+        "of": {
+          "kind": "number"
+        },
         "doc": "Pen widths in the toolbar"
       },
       "toolbar": {
