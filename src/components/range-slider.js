@@ -413,7 +413,7 @@ export class RangeSlider extends Component {
         const root = document.createElement('div');
         root.className = `dm-range-slider${o.className ? ' ' + o.className : ''}`;
         root.dataset.orientation = this._vertical ? 'vertical' : 'horizontal';
-        root.dataset.tooltip = ['always', 'never'].includes(o.tooltip) ? o.tooltip : 'hover';
+        root.dataset.tooltipMode = ['always', 'never'].includes(o.tooltip) ? o.tooltip : 'hover';
         if (o.range) root.classList.add('is-range');
         if (this._rtl) root.setAttribute('dir', 'rtl');
 
@@ -440,7 +440,7 @@ export class RangeSlider extends Component {
             if (!name && o.range) name = [base, i === 0 ? 'minimum' : 'maximum'].filter(Boolean).join(' ');
             if (!name) name = base;
             if (name) thumb.setAttribute('aria-label', name);
-            if (root.dataset.tooltip !== 'never') {
+            if (root.dataset.tooltipMode !== 'never') {
                 const tip = document.createElement('span');
                 tip.className = 'dm-range-tooltip';
                 tip.setAttribute('aria-hidden', 'true');

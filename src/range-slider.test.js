@@ -365,6 +365,14 @@ describe('E.rangeSlider - state and forms', () => {
         expect($1('#r').hasAttribute('value')).toBe(false);
     });
 
+    it('keeps its tooltip setting off data-tooltip, which E.tooltip scans for', () => {
+        document.body.innerHTML = '<div id="c"></div>';
+        E.rangeSlider('#c', {tooltip: 'always'});
+        const root = $1('.dm-range-slider');
+        expect(root.hasAttribute('data-tooltip')).toBe(false);
+        expect(root.dataset.tooltipMode).toBe('always');
+    });
+
     it('a model bound to the input moves the slider and hears it', () => {
         document.body.innerHTML = '<input id="r" type="range">';
         const s = E.rangeSlider('#r', {value: 10});
