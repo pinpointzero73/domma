@@ -1,6 +1,6 @@
 {
-  "version": "0.58.2",
-  "generated": "2026-10-25T15:29:27.630Z",
+  "version": "0.59.0",
+  "generated": "2026-10-25T20:00:59.006Z",
   "spa": [
     {
       "source": "kickstart-files/spa/.claude/memory/MEMORY.md",
@@ -539,6 +539,14 @@
       "group": "terms",
       "mode": "mpa",
       "label": "Terms"
+    },
+    {
+      "source": "kickstart-files/types/catalogue.json",
+      "path": "frontend/types/catalogue.json",
+      "category": "ai",
+      "required": false,
+      "group": "ai",
+      "mode": "mpa"
     },
     {
       "source": "kickstart-files/types/generated/public/assets/flags/africa.d.ts",
