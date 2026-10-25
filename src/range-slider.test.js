@@ -351,6 +351,28 @@ describe('E.rangeSlider - state and forms', () => {
         expect(s.getValue()).toBe(30);
     });
 
+    it('a form reset returns made inputs and a value given as an option to the start', async () => {
+        document.body.innerHTML = '<form id="f"><div id="c"></div><input id="r" type="range"></form>';
+        const range = E.rangeSlider('#c', {range: true, min: 0, max: 2000, value: [200, 800]});
+        const single = E.rangeSlider('#r', {min: 0, max: 100, value: 10});
+        range.setValue([500, 1500]);
+        single.setValue(90);
+        $1('#f').reset();
+        await new Promise(r => setTimeout(r, 5));
+        expect(range.getValue()).toEqual([200, 800]);
+        expect(single.getValue()).toBe(10);
+        single.destroy();
+        expect($1('#r').hasAttribute('value')).toBe(false);
+    });
+
+    it('keeps its tooltip setting off data-tooltip, which E.tooltip scans for', () => {
+        document.body.innerHTML = '<div id="c"></div>';
+        E.rangeSlider('#c', {tooltip: 'always'});
+        const root = $1('.dm-range-slider');
+        expect(root.hasAttribute('data-tooltip')).toBe(false);
+        expect(root.dataset.tooltipMode).toBe('always');
+    });
+
     it('a model bound to the input moves the slider and hears it', () => {
         document.body.innerHTML = '<input id="r" type="range">';
         const s = E.rangeSlider('#r', {value: 10});

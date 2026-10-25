@@ -120,15 +120,17 @@ function flatten(containers, shadow) {
  * page. A layer is the nearest of:
  * - an element carrying `data-focus-trap-allow` (an opt-in for anything else);
  * - an element with `position: fixed` (toasts, popovers, context menus, palettes,
- *   another overlay that did not trap focus);
+ *   another overlay that did not trap focus) - unless it was already on the page and
+ *   stacks below the trap (`floor`): a fixed header under a modal is page, not a layer;
  * - a direct child of <body> that is absolutely positioned (portalled pickers and
  *   dropdowns), or that was put there after `since` was taken - something opened
  *   while the trap was on top.
  * @param {Element} target
  * @param {Set<Element>} [since] - the children <body> had when the trap activated
+ * @param {number} [floor] - the trap's own stacking level (see `stackLevel()`); 0 = none
  * @returns {Element|null}
  */
-export function layerOf(target, since) {
+export function layerOf(target, since, floor = 0) {
     if (typeof document === 'undefined' || !target) return null;
     const body = document.body;
     for (let n = target; n && n !== body && n !== document.documentElement; n = parentOf(n)) {
@@ -136,10 +138,34 @@ export function layerOf(target, since) {
         if (n.hasAttribute(ALLOW_ATTR)) return n;
         let position = '';
         try { position = getComputedStyle(n).position; } catch { /* not rendered */ }
-        if (position === 'fixed') return n;
+        if (position === 'fixed' && !(floor > 0 && stackLevel(n) < floor && wasThere(n, since))) return n;
         if (parentOf(n) === body && (position === 'absolute' || (since && !since.has(n)))) return n;
     }
     return null;
+}
+
+/**
+ * The highest z-index on an element or its ancestors - roughly the stacking layer it
+ * is drawn in. 0 when nothing on the way sets one.
+ * @param {Element} el
+ * @returns {number}
+ */
+export function stackLevel(el) {
+    let highest = 0;
+    for (let n = el; n && n.nodeType === 1; n = parentOf(n)) {
+        let z = NaN;
+        try { z = parseInt(getComputedStyle(n).zIndex, 10); } catch { /* not rendered */ }
+        if (!Number.isNaN(z) && z > highest) highest = z;
+    }
+    return highest;
+}
+
+/** Whether an element's top-level <body> child was there when the trap activated. */
+function wasThere(el, since) {
+    if (!since) return true;
+    let n = el;
+    while (n && parentOf(n) && parentOf(n) !== document.body) n = parentOf(n);
+    return !n || since.has(n);
 }
 
 /**
@@ -252,6 +278,7 @@ export class FocusTrap extends Component {
         }
         this._containers = list;
         this._bodyAtStart = null;
+        this._floor = 0;
         this._pendingTab = null;
         this._active = false;
         this._paused = false;
@@ -308,6 +335,7 @@ export class FocusTrap extends Component {
         this._lastFocused = null;
         this._bodyAtStart = typeof document !== 'undefined' && document.body
             ? new Set(document.body.children) : null;
+        this._floor = stackLevel(this._containers[0]);
         this._applyInert();
         this._bind();
         const initial = 'initialFocus' in opts ? opts.initialFocus : this.options.initialFocus;
@@ -575,7 +603,7 @@ export class FocusTrap extends Component {
         if (typeof allow === 'function') return !!allow(target, e);
         if (allow !== 'layers') return !!allow;
         if (stack.some(t => t !== this && t._contains(target))) return false;
-        return !!layerOf(target, this._bodyAtStart);
+        return !!layerOf(target, this._bodyAtStart, this._floor);
     }
 
     /** Capture phase: Escape, and a note of the Tab that is on its way. */
@@ -601,7 +629,7 @@ export class FocusTrap extends Component {
         if (e.defaultPrevented || this._gone()) return;
         const active = deepActiveElement();
         if (active && active !== document.body && !this._contains(active)) {
-            const layer = this._mayFocusOutside(active, e) ? layerOf(active, this._bodyAtStart) : null;
+            const layer = this._mayFocusOutside(active, e) ? layerOf(active, this._bodyAtStart, this._floor) : null;
             if (layer) {
                 this._tabInLayer(e, layer, active);
                 return;

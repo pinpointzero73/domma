@@ -168,6 +168,13 @@ async function handleInit() {
   // Copy all templates with variable substitution
   copyTemplatesRecursive(templatesDir, process.cwd(), vars);
 
+  // The TypeScript declarations, generated from the source at build time (MPA only, as before)
+  const typesSrc = join(__dirname, '..', 'assets', 'types');
+  const typesDest = join(process.cwd(), 'frontend', 'types');
+  if (projectMode !== 'spa' && existsSync(typesSrc) && !existsSync(typesDest)) {
+    cpSync(typesSrc, typesDest, {recursive: true});
+  }
+
   // Copy Domma dist files to frontend/dist/domma
   const frontendDistDir = join(process.cwd(), 'frontend', 'dist', 'domma');
   console.log(`\n  Copying Domma distribution files...\n`);
@@ -763,8 +770,8 @@ This will copy AI assistance files to your project:
       console.log('  ⊘ blueprints/ already exists');
     }
 
-    // Copy types/ directory
-    const typesDir = join(templatesDir, 'frontend', 'types');
+    // Copy types/ directory - the declarations generated from the source
+    const typesDir = join(__dirname, '..', 'assets', 'types');
     const destTypesDir = join(projectRoot, 'types');
     if (existsSync(typesDir) && !existsSync(destTypesDir)) {
       cpSync(typesDir, destTypesDir, { recursive: true });

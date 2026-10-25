@@ -240,6 +240,41 @@ describe('wizard with slider and dropzone fields', () => {
     });
 });
 
+describe('wizard Previous keeps what was typed', () => {
+    const steps = [
+        {title: 'One', fields: {name: {type: T.string, label: 'Name'}}},
+        {title: 'Two', fields: {note: {type: T.string, label: 'Note', required: true}}}
+    ];
+    const type = (name, value) => {
+        const input = host.querySelector(`[name="${name}"]`);
+        input.value = value;
+        input.dispatchEvent(new Event('input', {bubbles: true}));
+    };
+
+    it('the Previous button saves the step being left, even unfinished', () => {
+        const wiz = F.wizard(host, {schema: {steps}});
+        type('name', 'Ann');
+        host.querySelector('.wizard-next').click();
+        type('note', 'half a thought');
+        host.querySelector('.wizard-prev').click();
+        expect(wiz.getCurrentStep()).toBe(0);
+        expect(wiz.getStepData().note).toBe('half a thought');
+        host.querySelector('.wizard-next').click();
+        expect(host.querySelector('[name="note"]').value).toBe('half a thought');
+    });
+
+    it('prevStep() and goToStep() save it too', () => {
+        const wiz = F.wizard(host, {schema: {steps}});
+        wiz.goToStep(1);
+        type('note', 'from code');
+        wiz.prevStep();
+        expect(wiz.getStepData().note).toBe('from code');
+        type('name', 'Bo');
+        wiz.goToStep(1);
+        expect(wiz.getStepData().name).toBe('Bo');
+    });
+});
+
 describe('Forma reset()', () => {
     it('a [data-action="reset"] button puts the fields back to their starting values', () => {
         const f = F.create({

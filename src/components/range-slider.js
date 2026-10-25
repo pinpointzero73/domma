@@ -131,6 +131,7 @@ export class RangeSlider extends Component {
         this._values = this._initialValues();
         this._render();
         this._writeInputs();
+        this._setDefaults();
         this._bindInputs();
     }
 
@@ -282,7 +283,8 @@ export class RangeSlider extends Component {
                 min: el.getAttribute('min'),
                 max: el.getAttribute('max'),
                 step: el.getAttribute('step'),
-                disabled: el.getAttribute('disabled')
+                disabled: el.getAttribute('disabled'),
+                value: el.getAttribute('value')
             };
         }
         const names = Array.isArray(o.names) ? o.names : [];
@@ -343,6 +345,17 @@ export class RangeSlider extends Component {
         }
     }
 
+    /**
+     * A form reset returns each input to its value attribute. Inputs this component made,
+     * and a caller's input without one, would reset to the midpoint - give them the
+     * starting value.
+     */
+    _setDefaults() {
+        this._inputs.forEach((input, i) => {
+            if (!input.hasAttribute('value')) input.setAttribute('value', String(this._values[i]));
+        });
+    }
+
     /** Read the inputs back after something outside changed them. */
     _fromInputs() {
         if (!this._inputs) return;
@@ -400,7 +413,7 @@ export class RangeSlider extends Component {
         const root = document.createElement('div');
         root.className = `dm-range-slider${o.className ? ' ' + o.className : ''}`;
         root.dataset.orientation = this._vertical ? 'vertical' : 'horizontal';
-        root.dataset.tooltip = ['always', 'never'].includes(o.tooltip) ? o.tooltip : 'hover';
+        root.dataset.tooltipMode = ['always', 'never'].includes(o.tooltip) ? o.tooltip : 'hover';
         if (o.range) root.classList.add('is-range');
         if (this._rtl) root.setAttribute('dir', 'rtl');
 
@@ -427,7 +440,7 @@ export class RangeSlider extends Component {
             if (!name && o.range) name = [base, i === 0 ? 'minimum' : 'maximum'].filter(Boolean).join(' ');
             if (!name) name = base;
             if (name) thumb.setAttribute('aria-label', name);
-            if (root.dataset.tooltip !== 'never') {
+            if (root.dataset.tooltipMode !== 'never') {
                 const tip = document.createElement('span');
                 tip.className = 'dm-range-tooltip';
                 tip.setAttribute('aria-hidden', 'true');
@@ -844,7 +857,7 @@ export class RangeSlider extends Component {
             else el.setAttribute('name', this._restore.name);
             if (this._restore.tabindex === null) el.removeAttribute('tabindex');
             else el.setAttribute('tabindex', this._restore.tabindex);
-            for (const attr of ['aria-hidden', 'min', 'max', 'step', 'disabled']) {
+            for (const attr of ['aria-hidden', 'min', 'max', 'step', 'disabled', 'value']) {
                 const value = this._restore[attr === 'aria-hidden' ? 'ariaHidden' : attr];
                 if (value === null) el.removeAttribute(attr);
                 else el.setAttribute(attr, value);

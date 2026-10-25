@@ -3,15 +3,24 @@
  * page. A layer is the nearest of:
  * - an element carrying `data-focus-trap-allow` (an opt-in for anything else);
  * - an element with `position: fixed` (toasts, popovers, context menus, palettes,
- *   another overlay that did not trap focus);
+ *   another overlay that did not trap focus) - unless it was already on the page and
+ *   stacks below the trap (`floor`): a fixed header under a modal is page, not a layer;
  * - a direct child of <body> that is absolutely positioned (portalled pickers and
  *   dropdowns), or that was put there after `since` was taken - something opened
  *   while the trap was on top.
  * @param {Element} target
  * @param {Set<Element>} [since] - the children <body> had when the trap activated
+ * @param {number} [floor] - the trap's own stacking level (see `stackLevel()`); 0 = none
  * @returns {Element|null}
  */
-export function layerOf(target: Element, since?: Set<Element>): Element | null;
+export function layerOf(target: Element, since?: Set<Element>, floor?: number): Element | null;
+/**
+ * The highest z-index on an element or its ancestors - roughly the stacking layer it
+ * is drawn in. 0 when nothing on the way sets one.
+ * @param {Element} el
+ * @returns {number}
+ */
+export function stackLevel(el: Element): number;
 /**
  * The tabbable elements in some containers, in Tab order: positive tabindex first (in
  * ascending order), then the rest in document order. Of a radio group only the checked
@@ -53,6 +62,7 @@ export class FocusTrap extends Component {
     constructor(containers: FocusTarget | Element | Array<FocusTarget | Element>, options?: FocusTrapOptions);
     _containers: HTMLElement[];
     _bodyAtStart: Set<Element>;
+    _floor: number;
     _pendingTab: {
         shift: any;
         fromInside: boolean;

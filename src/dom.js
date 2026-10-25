@@ -1,5 +1,35 @@
 import sanitiseModule from './sanitize.js';
 
+// DOMPurify parses as if into <body>, where a lone <tr> or <td> is dropped. Into one of
+// these elements the markup is sanitised inside the same table context, then unwrapped.
+const TABLE_CONTEXT = {
+    TABLE: ['<table>', '</table>', ''],
+    THEAD: ['<table><thead>', '</thead></table>', ':scope > thead'],
+    TBODY: ['<table><tbody>', '</tbody></table>', ':scope > tbody'],
+    TFOOT: ['<table><tfoot>', '</tfoot></table>', ':scope > tfoot'],
+    TR: ['<table><tbody><tr>', '</tr></tbody></table>', ':scope > tbody > tr'],
+    COLGROUP: ['<table><colgroup>', '</colgroup></table>', ':scope > colgroup']
+};
+
+/**
+ * Sanitise `content` for `el`, keeping table rows and cells meant for a table part.
+ * Anything that is not table markup (text, a <div>) would be moved out in front of the
+ * wrapper by the parser, so then the plain sanitised string is used, as before.
+ */
+function sanitiseFor(el, content, options) {
+    const plain = () => sanitiseModule.sanitise(content, options);
+    const context = TABLE_CONTEXT[el.tagName];
+    if (!context || !sanitiseModule.hasDOMPurify() || content == null || content === '') return plain();
+    const [open, close, path] = context;
+    const template = document.createElement('template');
+    template.innerHTML = sanitiseModule.sanitise(open + String(content) + close, options);
+    const nodes = template.content.childNodes;
+    const table = nodes.length === 1 ? nodes[0] : null;
+    if (!table || table.nodeName !== 'TABLE') return plain();
+    const part = path ? table.querySelector(path) : table;
+    return part ? part.innerHTML : plain();
+}
+
 /**
  * Document coordinates of an element (`offset()`).
  * @typedef {object} Offset
@@ -530,12 +560,14 @@ export class DommaCollection {
             const firstEl = this.elements[0];
             return firstEl ? firstEl.innerHTML : '';
         }
-        const shouldSanitise = options.safe !== false;
-        if (shouldSanitise) {
-            content = sanitiseModule.sanitise(content, options);
+        if (options.safe === false) {
+            return this.each((i, el) => {
+                el.innerHTML = content;
+            });
         }
+        const clean = sanitiseModule.sanitise(content, options);
         return this.each((i, el) => {
-            el.innerHTML = content;
+            el.innerHTML = TABLE_CONTEXT[el.tagName] ? sanitiseFor(el, content, options) : clean;
         });
     }
 

@@ -10754,7 +10754,7 @@ a.avatar-more-person:hover .avatar-more-name {
 }
 
 /* A tooltip that is always shown needs room above the track */
-.dm-range-slider[data-tooltip="always"]:not([data-orientation="vertical"]) {
+.dm-range-slider[data-tooltip-mode="always"]:not([data-orientation="vertical"]) {
     margin-top: 1.75rem;
 }
 
@@ -10878,10 +10878,10 @@ a.avatar-more-person:hover .avatar-more-name {
     transform: translateY(-50%);
 }
 
-.dm-range-slider[data-tooltip="always"] .dm-range-tooltip,
-.dm-range-slider[data-tooltip="hover"] .dm-range-thumb:hover .dm-range-tooltip,
-.dm-range-slider[data-tooltip="hover"] .dm-range-thumb:focus-visible .dm-range-tooltip,
-.dm-range-slider[data-tooltip="hover"] .dm-range-thumb.is-active .dm-range-tooltip {
+.dm-range-slider[data-tooltip-mode="always"] .dm-range-tooltip,
+.dm-range-slider[data-tooltip-mode="hover"] .dm-range-thumb:hover .dm-range-tooltip,
+.dm-range-slider[data-tooltip-mode="hover"] .dm-range-thumb:focus-visible .dm-range-tooltip,
+.dm-range-slider[data-tooltip-mode="hover"] .dm-range-thumb.is-active .dm-range-tooltip {
     opacity: 1;
     visibility: visible;
 }
