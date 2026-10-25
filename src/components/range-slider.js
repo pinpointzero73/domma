@@ -131,6 +131,7 @@ export class RangeSlider extends Component {
         this._values = this._initialValues();
         this._render();
         this._writeInputs();
+        this._setDefaults();
         this._bindInputs();
     }
 
@@ -282,7 +283,8 @@ export class RangeSlider extends Component {
                 min: el.getAttribute('min'),
                 max: el.getAttribute('max'),
                 step: el.getAttribute('step'),
-                disabled: el.getAttribute('disabled')
+                disabled: el.getAttribute('disabled'),
+                value: el.getAttribute('value')
             };
         }
         const names = Array.isArray(o.names) ? o.names : [];
@@ -341,6 +343,17 @@ export class RangeSlider extends Component {
         } finally {
             this._writing = false;
         }
+    }
+
+    /**
+     * A form reset returns each input to its value attribute. Inputs this component made,
+     * and a caller's input without one, would reset to the midpoint - give them the
+     * starting value.
+     */
+    _setDefaults() {
+        this._inputs.forEach((input, i) => {
+            if (!input.hasAttribute('value')) input.setAttribute('value', String(this._values[i]));
+        });
     }
 
     /** Read the inputs back after something outside changed them. */
@@ -844,7 +857,7 @@ export class RangeSlider extends Component {
             else el.setAttribute('name', this._restore.name);
             if (this._restore.tabindex === null) el.removeAttribute('tabindex');
             else el.setAttribute('tabindex', this._restore.tabindex);
-            for (const attr of ['aria-hidden', 'min', 'max', 'step', 'disabled']) {
+            for (const attr of ['aria-hidden', 'min', 'max', 'step', 'disabled', 'value']) {
                 const value = this._restore[attr === 'aria-hidden' ? 'ariaHidden' : attr];
                 if (value === null) el.removeAttribute(attr);
                 else el.setAttribute(attr, value);

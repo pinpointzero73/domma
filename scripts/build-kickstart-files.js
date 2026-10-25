@@ -20,6 +20,7 @@ const root = join(__dirname, '..');
 const SRC_MPA  = join(root, 'templates', 'kickstart');
 const SRC_SPA  = join(root, 'templates', 'kickstart-spa');
 const SRC_DIST = join(root, 'public', 'dist');
+const SRC_TYPES = join(root, 'assets', 'types');
 const OUT_BASE = join(root, 'public', 'download', 'kickstart-files');
 
 const MANIFEST_PATH = join(root, 'public', 'download', 'kickstart-manifest.json');
@@ -191,6 +192,26 @@ function copyDist(outDir) {
   return entries;
 }
 
+/**
+ * The TypeScript declarations generated from the source (npm run build:types), offered with
+ * the MPA's AI-assistance files as frontend/types/ - never a hand-kept copy that drifts.
+ */
+function copyTypes(outDir) {
+  if (!existsSync(SRC_TYPES)) {
+    console.warn('  ⚠ assets/types not found - run npm run build:types');
+    return [];
+  }
+  cpSync(SRC_TYPES, outDir, { recursive: true });
+  return walkDir(SRC_TYPES).map(({ relPath }) => ({
+    source:   `kickstart-files/types/${relPath}`,
+    path:     `frontend/types/${relPath}`,
+    category: 'ai',
+    required: false,
+    group:    'ai',
+    mode:     'mpa',
+  }));
+}
+
 // ─── Main ───────────────────────────────────────────────────────────────────
 
 console.log('\nBuilding kickstart files for browser...\n');
@@ -204,7 +225,10 @@ if (!existsSync(SRC_SPA)) {
   process.exit(1);
 }
 
-const mpaFiles  = processTemplates(SRC_MPA, join(OUT_BASE, 'mpa'), 'mpa', classifyMpa);
+const mpaFiles  = [
+  ...processTemplates(SRC_MPA, join(OUT_BASE, 'mpa'), 'mpa', classifyMpa),
+  ...copyTypes(join(OUT_BASE, 'types')),
+];
 const spaFiles  = processTemplates(SRC_SPA, join(OUT_BASE, 'spa'), 'spa', classifySpa);
 const distFiles = copyDist(join(OUT_BASE, 'dist'));
 

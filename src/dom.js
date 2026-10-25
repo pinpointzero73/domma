@@ -1,5 +1,30 @@
 import sanitiseModule from './sanitize.js';
 
+// DOMPurify parses as if into <body>, where a lone <tr> or <td> is dropped. Into one of
+// these elements the markup is sanitised inside the same table context, then unwrapped.
+const TABLE_CONTEXT = {
+    TABLE: ['<table>', '</table>', 'table'],
+    THEAD: ['<table><thead>', '</thead></table>', 'thead'],
+    TBODY: ['<table><tbody>', '</tbody></table>', 'tbody'],
+    TFOOT: ['<table><tfoot>', '</tfoot></table>', 'tfoot'],
+    TR: ['<table><tbody><tr>', '</tr></tbody></table>', 'tr'],
+    COLGROUP: ['<table><colgroup>', '</colgroup></table>', 'colgroup']
+};
+
+/** Sanitise `content` for `el`, keeping table rows and cells meant for a table part. */
+function sanitiseFor(el, content, options) {
+    const context = TABLE_CONTEXT[el.tagName];
+    if (!context || !sanitiseModule.hasDOMPurify() || content == null || content === '') {
+        return sanitiseModule.sanitise(content, options);
+    }
+    const [open, close, tag] = context;
+    const clean = sanitiseModule.sanitise(open + String(content) + close, options);
+    const template = document.createElement('template');
+    template.innerHTML = clean;
+    const part = template.content.querySelector(tag);
+    return part ? part.innerHTML : clean;
+}
+
 /**
  * Document coordinates of an element (`offset()`).
  * @typedef {object} Offset
@@ -530,12 +555,14 @@ export class DommaCollection {
             const firstEl = this.elements[0];
             return firstEl ? firstEl.innerHTML : '';
         }
-        const shouldSanitise = options.safe !== false;
-        if (shouldSanitise) {
-            content = sanitiseModule.sanitise(content, options);
+        if (options.safe === false) {
+            return this.each((i, el) => {
+                el.innerHTML = content;
+            });
         }
+        const clean = sanitiseModule.sanitise(content, options);
         return this.each((i, el) => {
-            el.innerHTML = content;
+            el.innerHTML = TABLE_CONTEXT[el.tagName] ? sanitiseFor(el, content, options) : clean;
         });
     }
 

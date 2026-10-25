@@ -91,6 +91,7 @@ export class RangeSlider extends Component {
         max: string;
         step: string;
         disabled: string;
+        value: string;
     };
     _syncInputAttrs(): void;
     /**
@@ -102,6 +103,12 @@ export class RangeSlider extends Component {
     /** Push the current values into the real inputs. */
     _writeInputs(): void;
     _writing: boolean;
+    /**
+     * A form reset returns each input to its value attribute. Inputs this component made,
+     * and a caller's input without one, would reset to the midpoint - give them the
+     * starting value.
+     */
+    _setDefaults(): void;
     /** Read the inputs back after something outside changed them. */
     _fromInputs(): void;
     _bindInputs(): void;

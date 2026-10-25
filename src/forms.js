@@ -1624,6 +1624,12 @@ export const forms = {
       return formData;
     }
 
+    // Keep what was typed on the step being left, valid or not, so going back loses nothing
+    function keepStep() {
+      const formElement = wizardElement?.querySelector('form');
+      if (formElement) Object.assign(stepData, collectStep(formElement));
+    }
+
     // Validate the step with the Forma that holds its controls
     function validateStep(formElement) {
       if (!stepForm) return true;
@@ -1659,6 +1665,7 @@ export const forms = {
         prevBtn.addEventListener('click', (e) => {
           e.preventDefault();
           if (currentStep > 0) {
+            keepStep();
             if (wizardOptions.onStepChange) {
               wizardOptions.onStepChange(currentStep - 1, stepData);
             }
@@ -1731,6 +1738,7 @@ export const forms = {
     return {
       nextStep: () => {
         if (currentStep < steps.length - 1) {
+          keepStep();
           if (wizardOptions.onStepChange) {
             wizardOptions.onStepChange(currentStep + 1, stepData);
           }
@@ -1740,6 +1748,7 @@ export const forms = {
       },
       prevStep: () => {
         if (currentStep > 0) {
+          keepStep();
           if (wizardOptions.onStepChange) {
             wizardOptions.onStepChange(currentStep - 1, stepData);
           }
@@ -1749,6 +1758,7 @@ export const forms = {
       },
       goToStep: (stepIndex) => {
         if (stepIndex >= 0 && stepIndex < steps.length) {
+          keepStep();
           if (wizardOptions.onStepChange) {
             wizardOptions.onStepChange(stepIndex, stepData);
           }

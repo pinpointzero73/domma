@@ -324,6 +324,34 @@ describe('E.focusTrap', () => {
         expect(document.activeElement.id).toBe('one');
     });
 
+    it("'layers' treats a fixed header beneath the overlay as page, a fixed layer above it as a layer", () => {
+        document.body.innerHTML = '<header id="hdr" style="position: fixed; z-index: 1030"><button id="h1">h</button></header>'
+            + '<div id="toasts" style="position: fixed; z-index: 1090"><button id="t1">t</button></div>'
+            + '<div id="box" style="position: fixed; z-index: 1050"><button id="one">1</button></div>';
+        const trap = keep(E.focusTrap('#box', {allowOutsideFocus: 'layers'}));
+        trap.activate();
+        document.getElementById('h1').focus();
+        expect(document.activeElement.id).toBe('one');
+        document.getElementById('t1').focus();
+        expect(document.activeElement.id).toBe('t1');
+        // Opened after the trap, a fixed element is a layer whatever its z-index.
+        const later = document.createElement('div');
+        later.style.position = 'fixed';
+        later.innerHTML = '<button id="l1">l</button>';
+        document.body.appendChild(later);
+        document.getElementById('l1').focus();
+        expect(document.activeElement.id).toBe('l1');
+    });
+
+    it("an inline trap (no stacking level of its own) still treats fixed elements as layers", () => {
+        document.body.innerHTML = '<header style="position: fixed; z-index: 1030"><button id="h1">h</button></header>'
+            + '<div id="box"><button id="one">1</button></div>';
+        const trap = keep(E.focusTrap('#box', {allowOutsideFocus: 'layers'}));
+        trap.activate();
+        document.getElementById('h1').focus();
+        expect(document.activeElement.id).toBe('h1');
+    });
+
     it("'layers' never lets focus into a trap beneath", () => {
         document.body.innerHTML = '<div id="a" data-focus-trap-allow><button id="a1">a</button></div><div id="b"><button id="b1">b</button></div>';
         const a = keep(E.focusTrap('#a'));
