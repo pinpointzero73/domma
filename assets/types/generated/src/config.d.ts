@@ -118,15 +118,18 @@ export type ComponentType = "card" | "modal" | "tabs" | "accordion" | "tooltip" 
  */
 export type InitialProperties = {
     css?: Record<string, string | number>;
-    text?: string;
-    html?: string;
+    /**
+     * Converted to text, as textContent does
+     */
+    text?: string | number | boolean;
+    html?: string | number | boolean;
     addClass?: string;
     removeClass?: string;
     toggleClass?: string;
     /**
-     * Attribute name -> value
+     * Attribute name -> value (converted to text)
      */
-    attr?: Record<string, string>;
+    attr?: Record<string, string | number | boolean>;
 };
 /**
  * A declarative event action: applied to `target` (a selector) or else to the element the event fired on.
@@ -137,8 +140,11 @@ export type EventAction = {
      */
     target?: string;
     css?: Record<string, string | number>;
-    text?: string;
-    html?: string;
+    /**
+     * Converted to text, as textContent does
+     */
+    text?: string | number | boolean;
+    html?: string | number | boolean;
     addClass?: string;
     removeClass?: string;
     toggleClass?: string;
@@ -155,6 +161,14 @@ export type ConfigEventHandler = (this: EventTarget, event: Event, $el: import("
  * What an event runs: a handler, an action, or a list of either (run in order).
  */
 export type EventActions = ConfigEventHandler | EventAction | Array<ConfigEventHandler | EventAction>;
+/**
+ * The options of a `form` created by `$.setup()`: the form's own options plus the blueprint and the
+ * starting values, which `initComponent()` hands to `F.create(schema, data, options)`.
+ */
+export type FormSetupOptions = import("./forms.js").FormOptions & {
+    schema: import("./forms.js").FormBlueprint;
+    data?: Record<string, any>;
+};
 /**
  * The configuration for one selector.
  */

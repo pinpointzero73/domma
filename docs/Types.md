@@ -46,6 +46,29 @@ declarations to `generated/vendor/` (it is bundled into Domma, not a dependency 
 version pinned in `devDependencies`; without it in `node_modules`, the script runs it through `npx`.
 Commit the result with the JSDoc change.
 
+## The catalogue
+
+`assets/types/catalogue.json` (`import 'domma-js/types/catalogue.json'`) is the same information for tools
+that cannot run TypeScript - a page editor checking `{"component": "carousel", "options": {...}}`, say.
+`npm run build:types` writes it after the declarations (`scripts/build-type-catalogue.mjs`, which reads the
+generated `.d.ts`, never `src/`):
+
+```json
+{
+  "components": {"carousel": {"factory": "E.carousel", "options": "CarouselOptions"}},
+  "setup": ["SelectorConfig", "InitialProperties", "EventAction"],
+  "types": {"CarouselOptions": {"interval": {"kind": "number", "doc": "Autoplay interval in ms"},
+                                "animation": {"kind": "enum", "values": ["slide", "fade", "crossfade"]}}}
+}
+```
+
+`components` is every `ComponentType` `$.setup()` can create, with the factory it calls and the name of its
+options type. A property's `kind` is `boolean`, `number`, `string`, `enum` (with `values`), `function`,
+`array`, `object` or `any`; `kinds` lists them when it takes several, `nullable` says null is allowed, `type`
+names a nested type in `types`, `each` describes one value of a record and `of` one item of an array. A
+generic type (`Observable<T>`) is not named, since it differs per use. `doc` is the JSDoc line. Only
+Domma's own types are described, not the DOM's.
+
 ## The gate
 
 ```bash
@@ -58,3 +81,4 @@ npm run check:types        # part of make check, so of every release
    `'domma-js'` through `package.json` `exports` as a user's project does. `consumer.ts` is a module using
    the public API; `globals.ts` is a classic script using the globals. Each `@ts-expect-error` there proves a
    type is not `any` - add a line when a new public call matters.
+3. Rebuilds the catalogue from the committed declarations and fails if `assets/types/catalogue.json` differs.

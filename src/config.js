@@ -17,12 +17,12 @@ import effects from './effects.js';
  * Properties applied to the matched elements once (`initial`) - each is the collection method of the same name.
  * @typedef {object} InitialProperties
  * @property {Record<string, string | number>} [css]
- * @property {string} [text]
- * @property {string} [html]
+ * @property {string | number | boolean} [text] Converted to text, as textContent does
+ * @property {string | number | boolean} [html]
  * @property {string} [addClass]
  * @property {string} [removeClass]
  * @property {string} [toggleClass]
- * @property {Record<string, string>} [attr] Attribute name -> value
+ * @property {Record<string, string | number | boolean>} [attr] Attribute name -> value (converted to text)
  */
 
 /**
@@ -30,8 +30,8 @@ import effects from './effects.js';
  * @typedef {object} EventAction
  * @property {string} [target] Selector of the elements to change (default: the event target)
  * @property {Record<string, string | number>} [css]
- * @property {string} [text]
- * @property {string} [html]
+ * @property {string | number | boolean} [text] Converted to text, as textContent does
+ * @property {string | number | boolean} [html]
  * @property {string} [addClass]
  * @property {string} [removeClass]
  * @property {string} [toggleClass]
@@ -53,6 +53,12 @@ import effects from './effects.js';
  */
 
 /**
+ * The options of a `form` created by `$.setup()`: the form's own options plus the blueprint and the
+ * starting values, which `initComponent()` hands to `F.create(schema, data, options)`.
+ * @typedef {import('./forms.js').FormOptions & {schema: import('./forms.js').FormBlueprint, data?: Record<string, any>}} FormSetupOptions
+ */
+
+/**
  * The configuration for one selector.
  * @typedef {object} SelectorConfig
  * @property {ComponentType} [component] Component to create on the selector
@@ -67,6 +73,9 @@ import effects from './effects.js';
  * Configuration keyed by selector.
  * @typedef {{[selector: string]: SelectorConfig}} SetupConfig
  */
+
+/** Components whose factory takes `(options)` - no element (see initComponent). */
+const OPTIONS_ONLY = new Set(['cookieConsent', 'notification', 'alarm']);
 
 /**
  * The declarative configuration engine behind `$.setup()`, `$.update()`, `$.config()`, `$.getComponent()` and
@@ -333,6 +342,8 @@ export const configEngine = {
                 formInstance.renderTo(selector);
                 return formInstance;
             }
+            // These three are page-wide, not made on an element: they take their options alone
+            if (OPTIONS_ONLY.has(componentType)) return factory.call(elements, options);
             return factory.call(elements, selector, options);
         } else {
             console.warn(`Unknown component type: ${componentType}`);

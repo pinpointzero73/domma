@@ -1,0 +1,4276 @@
+{
+  "components": {
+    "accordion": {
+      "factory": "E.accordion",
+      "options": "AccordionOptions"
+    },
+    "alarm": {
+      "factory": "E.alarm",
+      "options": "AlarmOptions"
+    },
+    "autocomplete": {
+      "factory": "E.autocomplete",
+      "options": "AutocompleteOptions"
+    },
+    "avatar": {
+      "factory": "E.avatar",
+      "options": "AvatarOptions"
+    },
+    "avatarGroup": {
+      "factory": "E.avatarGroup",
+      "options": "AvatarGroupOptions"
+    },
+    "backToTop": {
+      "factory": "E.backToTop",
+      "options": "BackToTopOptions"
+    },
+    "badge": {
+      "factory": "E.badge",
+      "options": "BadgeOptions"
+    },
+    "breadcrumbs": {
+      "factory": "E.breadcrumbs",
+      "options": "BreadcrumbsOptions"
+    },
+    "breathe": {
+      "factory": "Domma.effects.breathe",
+      "options": "BreatheOptions"
+    },
+    "buttonGroup": {
+      "factory": "E.buttonGroup",
+      "options": "ButtonGroupOptions"
+    },
+    "card": {
+      "factory": "E.card",
+      "options": "CardOptions"
+    },
+    "carousel": {
+      "factory": "E.carousel",
+      "options": "CarouselOptions"
+    },
+    "contextMenu": {
+      "factory": "E.contextMenu",
+      "options": "ContextMenuOptions"
+    },
+    "cookieConsent": {
+      "factory": "E.cookieConsent",
+      "options": "CookieConsentOptions"
+    },
+    "dropdown": {
+      "factory": "E.dropdown",
+      "options": "DropdownOptions"
+    },
+    "footer": {
+      "factory": "E.footer",
+      "options": "FooterOptions"
+    },
+    "form": {
+      "factory": "F.create",
+      "options": "FormSetupOptions"
+    },
+    "inputGroup": {
+      "factory": "E.inputGroup",
+      "options": "InputGroupOptions"
+    },
+    "listGroup": {
+      "factory": "E.listGroup",
+      "options": "ListGroupOptions"
+    },
+    "loader": {
+      "factory": "E.loader",
+      "options": "LoaderOptions"
+    },
+    "modal": {
+      "factory": "E.modal",
+      "options": "ModalOptions"
+    },
+    "navbar": {
+      "factory": "E.navbar",
+      "options": "NavbarOptions"
+    },
+    "notification": {
+      "factory": "E.notification",
+      "options": "DesktopNotificationOptions"
+    },
+    "numberBadge": {
+      "factory": "E.numberBadge",
+      "options": "NumberBadgeOptions"
+    },
+    "pillbox": {
+      "factory": "E.pillbox",
+      "options": "PillboxOptions"
+    },
+    "popover": {
+      "factory": "E.popover",
+      "options": "PopoverOptions"
+    },
+    "pulse": {
+      "factory": "Domma.effects.pulse",
+      "options": "PulseOptions"
+    },
+    "scribe": {
+      "factory": "Domma.effects.scribe",
+      "options": "ScribeOptions"
+    },
+    "sidebar": {
+      "factory": "E.sidebar",
+      "options": "SidebarOptions"
+    },
+    "signature": {
+      "factory": "E.signature",
+      "options": "SignatureOptions"
+    },
+    "skeleton": {
+      "factory": "E.skeleton",
+      "options": "SkeletonOptions"
+    },
+    "sortable": {
+      "factory": "E.sortable",
+      "options": "SortableOptions"
+    },
+    "tabs": {
+      "factory": "E.tabs",
+      "options": "TabsOptions"
+    },
+    "timer": {
+      "factory": "E.timer",
+      "options": "TimerOptions"
+    },
+    "tooltip": {
+      "factory": "E.tooltip",
+      "options": "TooltipOptions"
+    }
+  },
+  "setup": [
+    "SelectorConfig",
+    "InitialProperties",
+    "EventAction"
+  ],
+  "types": {
+    "AccordionOptions": {
+      "allowMultiple": {
+        "kind": "boolean",
+        "doc": "Allow several panels open at once"
+      },
+      "multiExpand": {
+        "kind": "boolean",
+        "nullable": true,
+        "doc": "Alias of allowMultiple (wins when set)"
+      },
+      "activeIndex": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "array"
+        ],
+        "of": {
+          "kind": "number"
+        },
+        "nullable": true,
+        "doc": "Initially open panel index(es); null keeps the markup's active class"
+      },
+      "animation": {
+        "kind": "boolean",
+        "doc": "Animate the height"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Animation duration in ms"
+      },
+      "headerSelector": {
+        "kind": "string",
+        "doc": "Selector for headers"
+      },
+      "contentSelector": {
+        "kind": "string",
+        "doc": "Selector for panels (outermost matches only)"
+      },
+      "activeClass": {
+        "kind": "string",
+        "doc": "Class put on the open item (the header's parent)"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Called when toggle() opens or closes a panel"
+      }
+    },
+    "AlarmItem": {
+      "id": {
+        "kind": "string",
+        "doc": "Assigned by add() ('alarm-<n>')"
+      },
+      "time": {
+        "kind": "string",
+        "doc": "Time of day, 'HH:MM'"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "Shown in the notification"
+      },
+      "enabled": {
+        "kind": "boolean"
+      },
+      "repeat": {
+        "kind": "enum",
+        "kinds": [
+          "enum",
+          "array"
+        ],
+        "values": [
+          "daily",
+          "weekdays",
+          "weekends"
+        ],
+        "of": {
+          "kind": "string"
+        },
+        "nullable": true,
+        "doc": "null = once; an array of day names ('monday', ...)"
+      },
+      "notification": {
+        "kind": "boolean",
+        "doc": "Desktop notification when it goes off"
+      },
+      "notificationOptions": {
+        "kind": "object",
+        "type": "DesktopNotificationOptions",
+        "doc": "Options for that notification"
+      },
+      "sound": {
+        "kind": "boolean",
+        "doc": "Play soundUrl"
+      },
+      "soundUrl": {
+        "kind": "string",
+        "nullable": true
+      },
+      "lastTriggered": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Timestamp (ms) it last went off"
+      },
+      "snoozedUntil": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Timestamp (ms) a snooze ends"
+      },
+      "nextTrigger": {
+        "kind": "object",
+        "doc": "Set on the copy getNextAlarm() returns"
+      }
+    },
+    "AlarmOptions": {
+      "alarms": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "AlarmItem"
+        },
+        "doc": "Initial alarms, used when storage holds none"
+      },
+      "timezone": {
+        "kind": "string",
+        "doc": "Not read: times are local"
+      },
+      "checkInterval": {
+        "kind": "number",
+        "doc": "How often alarms are checked, in ms"
+      },
+      "storageKey": {
+        "kind": "string",
+        "doc": "localStorage key"
+      },
+      "onTrigger": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "An alarm went off"
+      },
+      "onSnooze": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "An alarm was snoozed"
+      },
+      "onDismiss": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Not called by the current code"
+      },
+      "onAlarmAdd": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "add() added one"
+      },
+      "onAlarmRemove": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "removeAlarm() removed one"
+      }
+    },
+    "AutocompleteOptions": {
+      "data": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
+        "doc": "Suggestions to filter"
+      },
+      "dataSource": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Fetch suggestions instead of filtering data"
+      },
+      "minChars": {
+        "kind": "number",
+        "doc": "Characters typed before suggesting"
+      },
+      "maxResults": {
+        "kind": "number"
+      },
+      "debounce": {
+        "kind": "number",
+        "doc": "ms"
+      },
+      "filterFn": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Replaces the default contains-match"
+      },
+      "renderItem": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Suggestion HTML or a node"
+      },
+      "highlightMatches": {
+        "kind": "boolean"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "auto",
+          "above",
+          "below"
+        ],
+        "doc": "Where the list opens; 'auto' picks the side with room"
+      },
+      "placeholder": {
+        "kind": "string"
+      },
+      "emptyMessage": {
+        "kind": "string"
+      },
+      "loadingMessage": {
+        "kind": "string"
+      },
+      "caseSensitive": {
+        "kind": "boolean"
+      },
+      "selectOnEnter": {
+        "kind": "boolean"
+      },
+      "clearOnSelect": {
+        "kind": "boolean",
+        "doc": "Empty the input after a choice"
+      },
+      "model": {
+        "kind": "any",
+        "doc": "A Domma Model the typed value is written to (with modelKey)"
+      },
+      "modelKey": {
+        "kind": "string"
+      },
+      "onSelect": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A suggestion was chosen"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The input's value changed"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it closed"
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it open"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onFilter": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "May return a replacement result list"
+      }
+    },
+    "AvatarGroupOptions": {
+      "people": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ],
+          "type": "AvatarPerson"
+        },
+        "doc": "People, or plain names"
+      },
+      "max": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Show this many, then \"+N\"; null = everyone"
+      },
+      "size": {
+        "kind": "enum",
+        "values": [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl"
+        ],
+        "doc": "Size (default 'md')"
+      },
+      "shape": {
+        "kind": "enum",
+        "values": [
+          "circle",
+          "rounded",
+          "square"
+        ],
+        "doc": "Shape (default 'circle')"
+      },
+      "overlap": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "nullable": true,
+        "doc": "'none' | 'sm' | 'md' | 'lg', pixels, or any CSS length; null = the stylesheet's 25%"
+      },
+      "label": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Accessible name for the list"
+      },
+      "statusLabels": {
+        "kind": "object",
+        "nullable": true
+      },
+      "onMore": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Called when \"+N\" is pressed, instead of the popover"
+      },
+      "popover": {
+        "kind": "boolean",
+        "doc": "false: no popover, the hidden names go in the button's title (default true)"
+      },
+      "moreLabel": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The \"+N\" button's accessible name (default '3 more: A, B and C')"
+      }
+    },
+    "AvatarOptions": {
+      "name": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "The person: initials, tone and accessible name come from it"
+      },
+      "src": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Picture URL; falls back to the initials (or icon) if it fails to load"
+      },
+      "alt": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Accessible name when it should differ from name"
+      },
+      "size": {
+        "kind": "enum",
+        "values": [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl"
+        ],
+        "doc": "Size (default 'md')"
+      },
+      "shape": {
+        "kind": "enum",
+        "values": [
+          "circle",
+          "rounded",
+          "square"
+        ],
+        "doc": "Shape (default 'circle')"
+      },
+      "status": {
+        "kind": "enum",
+        "values": [
+          "online",
+          "away",
+          "busy",
+          "offline"
+        ],
+        "nullable": true,
+        "doc": "Status dot; the word goes into the accessible name"
+      },
+      "statusLabels": {
+        "kind": "object",
+        "nullable": true,
+        "doc": "Words for the statuses in the accessible name, e.g. {busy: 'in a meeting'}"
+      },
+      "icon": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Icon name shown instead of initials ('user' when there is no name)"
+      },
+      "title": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean"
+        ],
+        "nullable": true,
+        "doc": "Hover text; true = the accessible name"
+      },
+      "ring": {
+        "kind": "boolean",
+        "doc": "A primary-coloured ring (default false)"
+      },
+      "tone": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "0-7 to choose the tint; default is a hash of the name"
+      },
+      "decorative": {
+        "kind": "boolean",
+        "doc": "aria-hidden: the name is written next to it (default false)"
+      }
+    },
+    "AvatarPerson": {
+      "name": {
+        "kind": "string"
+      },
+      "src": {
+        "kind": "string"
+      },
+      "status": {
+        "kind": "enum",
+        "values": [
+          "online",
+          "away",
+          "busy",
+          "offline"
+        ]
+      },
+      "href": {
+        "kind": "string",
+        "doc": "Makes the avatar a link"
+      },
+      "alt": {
+        "kind": "string"
+      },
+      "icon": {
+        "kind": "string"
+      },
+      "tone": {
+        "kind": "number"
+      },
+      "title": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean"
+        ],
+        "doc": "Hover text (default: the accessible name)"
+      }
+    },
+    "BackToTopOptions": {
+      "showAfter": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Px scrolled before it shows (null: one viewport / container height)"
+      },
+      "duration": {
+        "kind": "number",
+        "doc": "Scroll animation duration in ms (0 under reduced motion)"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "bottom-right",
+          "bottom-left"
+        ],
+        "doc": "Button position"
+      },
+      "offset": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Px from the edges (null: the stylesheet's)"
+      },
+      "target": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Scroll container to watch (null: the window)"
+      },
+      "zIndex": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "z-index for the button"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "aria-label when the button has none"
+      },
+      "onShow": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the button shows"
+      },
+      "onHide": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the button hides"
+      },
+      "onScroll": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When a scroll to the top starts"
+      }
+    },
+    "BadgeOptions": {
+      "variant": {
+        "kind": "enum",
+        "values": [
+          "primary",
+          "secondary",
+          "success",
+          "danger",
+          "warning",
+          "info",
+          "light",
+          "dark"
+        ],
+        "doc": "Badge variant/colour"
+      },
+      "size": {
+        "kind": "enum",
+        "values": [
+          "sm",
+          "lg",
+          "small",
+          "medium",
+          "large"
+        ],
+        "doc": "Badge size"
+      },
+      "pill": {
+        "kind": "boolean",
+        "doc": "Use pill/rounded style"
+      },
+      "outline": {
+        "kind": "boolean",
+        "doc": "Use outline style"
+      },
+      "removable": {
+        "kind": "boolean",
+        "doc": "Show remove button"
+      },
+      "pulse": {
+        "kind": "boolean",
+        "doc": "Pulse animation"
+      },
+      "onClick": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Callback on click (not the remove button)"
+      },
+      "onRemove": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Callback on remove; return false to keep the badge"
+      }
+    },
+    "BreadcrumbItem": {
+      "text": {
+        "kind": "string",
+        "doc": "Label (HTML)"
+      },
+      "url": {
+        "kind": "string",
+        "doc": "Link (default '#'); the last item is never a link"
+      },
+      "active": {
+        "kind": "boolean",
+        "doc": "Render as the current page"
+      }
+    },
+    "BreadcrumbsOptions": {
+      "items": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ],
+          "type": "BreadcrumbItem"
+        }
+      },
+      "separator": {
+        "kind": "string",
+        "doc": "A preset, or custom HTML"
+      },
+      "homeIcon": {
+        "kind": "boolean",
+        "doc": "Home icon on the first item"
+      },
+      "responsive": {
+        "kind": "boolean",
+        "doc": "Collapse on small screens"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A crumb link was clicked (setting it prevents navigation)"
+      }
+    },
+    "BreatheOptions": {
+      "amplitude": {
+        "kind": "number",
+        "doc": "Vertical movement distance in pixels (default: 6)"
+      },
+      "duration": {
+        "kind": "number",
+        "doc": "Complete animation cycle time in milliseconds (default: 3000)"
+      },
+      "easing": {
+        "kind": "string",
+        "doc": "CSS easing function (default: 'ease-in-out')"
+      },
+      "delay": {
+        "kind": "number",
+        "doc": "Initial delay before animation starts in milliseconds (default: 0)"
+      },
+      "stagger": {
+        "kind": "number",
+        "doc": "Delay between multiple elements in milliseconds (default: 0)"
+      },
+      "iterations": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "infinite"
+        ],
+        "doc": "Number of cycles or 'infinite' (default: 'infinite')"
+      },
+      "pauseOnHover": {
+        "kind": "boolean",
+        "doc": "Pause animation when hovering (default: false)"
+      },
+      "autoStart": {
+        "kind": "boolean",
+        "doc": "Start animation immediately (default: true)"
+      },
+      "respectMotionPreference": {
+        "kind": "boolean",
+        "doc": "Honor prefers-reduced-motion (default: true)"
+      },
+      "onStart": {
+        "kind": "function",
+        "doc": "Callback when animation starts"
+      },
+      "onComplete": {
+        "kind": "function",
+        "doc": "Callback when animation completes"
+      }
+    },
+    "ButtonGroupOptions": {
+      "mode": {
+        "kind": "enum",
+        "values": [
+          "single",
+          "multiple"
+        ],
+        "doc": "'single' behaves like radios, 'multiple' like checkboxes"
+      },
+      "activeClass": {
+        "kind": "string",
+        "doc": "Class on active buttons"
+      },
+      "allowEmpty": {
+        "kind": "boolean",
+        "doc": "Single mode: clicking the active button deselects it"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Selection changed (index -1 from selectAll/deselectAll)"
+      }
+    },
+    "CardOptions": {
+      "hoverable": {
+        "kind": "boolean",
+        "doc": "Enable hover effects (`hover` is accepted as an alias)"
+      },
+      "hover": {
+        "kind": "boolean",
+        "doc": "Alias of `hoverable`"
+      },
+      "shadow": {
+        "kind": "enum",
+        "values": [
+          "sm",
+          "lg",
+          "none",
+          "small",
+          "medium",
+          "large"
+        ],
+        "doc": "Shadow size"
+      },
+      "rounded": {
+        "kind": "boolean",
+        "doc": "Apply border radius (false gives square corners)"
+      },
+      "animation": {
+        "kind": "boolean",
+        "doc": "Enable animations"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Animation duration in ms"
+      },
+      "collapsible": {
+        "kind": "boolean",
+        "doc": "Clicking the header collapses/expands the body"
+      },
+      "collapsed": {
+        "kind": "boolean",
+        "doc": "Start collapsed (a saved state wins)"
+      },
+      "persistKey": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Storage key for the collapsed state (default `domma-card-<id>` when the card has an id)"
+      },
+      "title": {
+        "kind": "string",
+        "doc": "Adds a `.card-header` with this title when the card has none"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Icon name shown before the title"
+      },
+      "content": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "doc": "Body content: HTML (sanitised unless `safe: false`) or a Node"
+      },
+      "safe": {
+        "kind": "boolean",
+        "doc": "Sanitise string content"
+      },
+      "clickable": {
+        "kind": "boolean",
+        "doc": "Clickable style (also on when `onClick` is given)"
+      },
+      "color": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Colour variant, e.g. 'primary' adds `.card-primary`"
+      },
+      "onCollapse": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After the body collapses"
+      },
+      "onExpand": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After the body expands"
+      },
+      "onClick": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Click on the card (not a collapsing header click)"
+      }
+    },
+    "CarouselOptions": {
+      "autoplay": {
+        "kind": "boolean",
+        "doc": "Advance on a timer"
+      },
+      "interval": {
+        "kind": "number",
+        "doc": "Autoplay interval in ms"
+      },
+      "pauseOnHover": {
+        "kind": "boolean",
+        "doc": "Pause autoplay on hover"
+      },
+      "loop": {
+        "kind": "boolean",
+        "doc": "Wrap from the last slide to the first"
+      },
+      "animation": {
+        "kind": "enum",
+        "values": [
+          "slide",
+          "fade",
+          "crossfade"
+        ],
+        "doc": "'slide' (track translate), 'fade' (clean swap), or 'crossfade' (overlapping opacity)"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Animation duration in ms"
+      },
+      "animationEasing": {
+        "kind": "string",
+        "doc": "Any CSS timing function ('ease', 'linear', 'ease-in-out', 'cubic-bezier(...)' etc.)"
+      },
+      "heightMode": {
+        "kind": "enum",
+        "values": [
+          "crop",
+          "average"
+        ],
+        "doc": "Image carousels: 'crop' = the shortest image, 'average' = halfway between shortest and tallest"
+      },
+      "height": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Fixed viewport height in px"
+      },
+      "showArrows": {
+        "kind": "boolean",
+        "doc": "Previous / next arrows"
+      },
+      "showIndicators": {
+        "kind": "boolean",
+        "doc": "Indicator dots"
+      },
+      "slideSelector": {
+        "kind": "string",
+        "doc": "Selector for slides"
+      },
+      "activeClass": {
+        "kind": "string",
+        "doc": "Class on the active slide"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The slide changed"
+      }
+    },
+    "ContextMenuItem": {
+      "label": {
+        "kind": "string",
+        "doc": "Item text"
+      },
+      "text": {
+        "kind": "string",
+        "doc": "Item text, when there is no label"
+      },
+      "name": {
+        "kind": "string",
+        "doc": "Item text, when there is no label or text"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name, rendered through data-icon"
+      },
+      "value": {
+        "kind": "any",
+        "doc": "Arbitrary value carried to onSelect (with the item)"
+      },
+      "action": {
+        "kind": "function",
+        "doc": "Invoked with the delegated target and the open context"
+      },
+      "disabled": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "function"
+        ],
+        "doc": "Greyed but still shown; a function is resolved per target"
+      },
+      "visible": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "function"
+        ],
+        "doc": "Omitted entirely when false; a function is resolved per target"
+      },
+      "danger": {
+        "kind": "boolean",
+        "doc": "Destructive styling"
+      },
+      "className": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "array"
+        ],
+        "of": {
+          "kind": "string"
+        },
+        "doc": "Extra classes on the item"
+      },
+      "shortcut": {
+        "kind": "string",
+        "doc": "Right-aligned hint text - display only, no key is bound"
+      },
+      "submenu": {
+        "kind": "array",
+        "kinds": [
+          "array",
+          "function"
+        ],
+        "of": {
+          "kind": "object",
+          "type": "ContextMenuItem"
+        },
+        "doc": "Nested items, to unlimited depth"
+      },
+      "type": {
+        "kind": "enum",
+        "values": [
+          "item",
+          "divider",
+          "header",
+          "checkbox",
+          "radio"
+        ],
+        "doc": "Item kind (default 'item')"
+      },
+      "checked": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "function"
+        ],
+        "doc": "Checked state for checkbox/radio types"
+      },
+      "divider": {
+        "kind": "boolean",
+        "doc": "Shorthand for type: 'divider'"
+      },
+      "header": {
+        "kind": "string",
+        "doc": "Shorthand for type: 'header'"
+      }
+    },
+    "ContextMenuOptions": {
+      "items": {
+        "kind": "array",
+        "kinds": [
+          "array",
+          "function",
+          "object"
+        ],
+        "of": {
+          "kind": "object",
+          "type": "ContextMenuItem"
+        },
+        "doc": "Items, or a resolver called with the delegated target. Accepts a Domma Reactive observable."
+      },
+      "match": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Delegation selector - the menu claims only descendants matching it (default: the whole container)"
+      },
+      "exclude": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Regions inside the container that decline and fall through outward"
+      },
+      "enabled": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "function"
+        ],
+        "doc": "False declines the gesture and falls through to the next menu outward"
+      },
+      "inherit": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "enum"
+        ],
+        "values": [
+          "append",
+          "prepend"
+        ],
+        "doc": "Merge ancestor menus' items rather than replacing them (default 'append')"
+      },
+      "priority": {
+        "kind": "number",
+        "doc": "Tie-break only when two menus bind the SAME element; depth wins otherwise"
+      },
+      "exclusive": {
+        "kind": "boolean",
+        "doc": "This menu owns its region: once it encloses the click and accepts it, nothing bound deeper is offered the gesture. Not a veto - an exclusive menu that declines steps aside."
+      },
+      "nativeOnShift": {
+        "kind": "boolean",
+        "doc": "Shift+right-click passes through to the browser's own menu (default true)"
+      },
+      "closeOnSelect": {
+        "kind": "boolean",
+        "doc": "Close after an item is chosen (default true)"
+      },
+      "closeOnEscape": {
+        "kind": "boolean",
+        "doc": "Close on Esc (default true)"
+      },
+      "closeOnClickOutside": {
+        "kind": "boolean",
+        "doc": "Close on outside mousedown (default true)"
+      },
+      "closeOnScroll": {
+        "kind": "boolean",
+        "doc": "Close on scroll - the anchoring point has moved (default true)"
+      },
+      "longPress": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean"
+        ],
+        "doc": "Long-press duration in ms for touch, or false to disable (default 500)"
+      },
+      "cursor": {
+        "kind": "any",
+        "kinds": [
+          "boolean",
+          "enum",
+          "any"
+        ],
+        "values": [
+          "auto",
+          "glyph"
+        ],
+        "doc": "Pointer over a claimed region: 'auto' (the CSS `context-menu` keyword, default), 'glyph' (a generated themed cursor), false (leave it alone) or any CSS cursor value"
+      },
+      "cursorSize": {
+        "kind": "number",
+        "doc": "Glyph cursor size in px, clamped to 32 - browsers ignore anything larger (default 26)"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra class on the menu root"
+      },
+      "minWidth": {
+        "kind": "string",
+        "doc": "Minimum menu width (default '200px')"
+      },
+      "maxWidth": {
+        "kind": "string",
+        "doc": "Maximum menu width (default '320px')"
+      },
+      "maxHeight": {
+        "kind": "string",
+        "doc": "Maximum menu height before it scrolls (default '60vh')"
+      },
+      "offset": {
+        "kind": "array",
+        "doc": "Offset [x, y] from the cursor point (default [2, 2])"
+      },
+      "flip": {
+        "kind": "boolean",
+        "doc": "Flip across the cursor and clamp to the viewport (default true)"
+      },
+      "animation": {
+        "kind": "boolean",
+        "doc": "Whether to transition on open and close (default true)"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Transition duration in ms (default 120)"
+      },
+      "transition": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "slide",
+          "fade",
+          "scale"
+        ],
+        "doc": "How the panel enters (default 'scale')"
+      },
+      "easing": {
+        "kind": "string",
+        "doc": "Any CSS easing (default cubic-bezier(0.16, 1, 0.3, 1))"
+      },
+      "accent": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Preset key ('primary'|'success'|'danger'|'warning'|'info') or any CSS colour"
+      },
+      "surface": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Overrides the panel background"
+      },
+      "radius": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "'none'|'sm'|'md'|'lg'|'xl', or any CSS length"
+      },
+      "shadow": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "'none'|'sm'|'md'|'lg'|'xl'"
+      },
+      "opacity": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "20-100; translucent panel with a blurred backdrop. Clamped."
+      },
+      "density": {
+        "kind": "enum",
+        "values": [
+          "comfortable",
+          "compact"
+        ],
+        "doc": "Row height and font size (default 'comfortable')"
+      },
+      "itemTemplate": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Custom item renderer returning HTML"
+      },
+      "submenuDelay": {
+        "kind": "number",
+        "doc": "Hover grace before a submenu opens, in ms (default 150)"
+      },
+      "render": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Render your own panel instead of an item list. Called only once this menu has claimed the gesture. Return an element for Domma to position and dismiss, or nothing to manage it yourself."
+      },
+      "keyboardTrigger": {
+        "kind": "boolean",
+        "doc": "Open on Shift+F10 and the Menu key against the focused element (default true)"
+      },
+      "typeahead": {
+        "kind": "boolean",
+        "doc": "Jump to an item by typing (default true)"
+      },
+      "ariaLabel": {
+        "kind": "string",
+        "doc": "aria-label for the menu"
+      },
+      "model": {
+        "kind": "object",
+        "nullable": true,
+        "doc": "Bind items to a Domma Model"
+      },
+      "modelKey": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Model key holding the items array"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to decline and fall through to the next menu outward"
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Fired once the menu is on screen"
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it open"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Fired after the menu is dismissed"
+      },
+      "onSelect": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Fired before the item's own action"
+      }
+    },
+    "CookieCategory": {
+      "label": {
+        "kind": "string"
+      },
+      "description": {
+        "kind": "string"
+      },
+      "required": {
+        "kind": "boolean",
+        "doc": "Always on; cannot be switched off"
+      }
+    },
+    "CookieConsentOptions": {
+      "message": {
+        "kind": "string",
+        "doc": "Banner text"
+      },
+      "acceptAllText": {
+        "kind": "string"
+      },
+      "rejectAllText": {
+        "kind": "string"
+      },
+      "customizeText": {
+        "kind": "string"
+      },
+      "savePreferencesText": {
+        "kind": "string"
+      },
+      "privacyPolicyText": {
+        "kind": "string"
+      },
+      "privacyPolicyUrl": {
+        "kind": "string",
+        "nullable": true
+      },
+      "cookiePolicyText": {
+        "kind": "string"
+      },
+      "cookiePolicyUrl": {
+        "kind": "string",
+        "nullable": true
+      },
+      "categories": {
+        "kind": "object",
+        "each": {
+          "kind": "object",
+          "type": "CookieCategory"
+        },
+        "doc": "Default: necessary, functional, analytics, marketing"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "bottom-right",
+          "bottom-left",
+          "bottom",
+          "top",
+          "center-modal"
+        ]
+      },
+      "theme": {
+        "kind": "enum",
+        "values": [
+          "auto",
+          "light",
+          "dark"
+        ],
+        "doc": "'auto' follows the system"
+      },
+      "layout": {
+        "kind": "enum",
+        "values": [
+          "modal",
+          "bar",
+          "box"
+        ]
+      },
+      "animation": {
+        "kind": "boolean"
+      },
+      "backdrop": {
+        "kind": "boolean",
+        "doc": "Backdrop behind the modal layout"
+      },
+      "autoShow": {
+        "kind": "boolean",
+        "doc": "Show on a first visit"
+      },
+      "hideAfterAction": {
+        "kind": "boolean",
+        "doc": "Hide once a choice is made"
+      },
+      "reopenSelector": {
+        "kind": "string",
+        "doc": "Elements that reopen the banner"
+      },
+      "storageKey": {
+        "kind": "string"
+      },
+      "storageDuration": {
+        "kind": "number",
+        "doc": "Days the choice is remembered"
+      },
+      "defaultState": {
+        "kind": "enum",
+        "values": [
+          "accepted",
+          "rejected",
+          "customized",
+          "undecided"
+        ]
+      },
+      "requireExplicitConsent": {
+        "kind": "boolean",
+        "doc": "GDPR mode: optional categories start off"
+      },
+      "consentVersion": {
+        "kind": "string",
+        "doc": "Bump when the policy changes to ask again"
+      },
+      "onVersionMismatch": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The stored choice was for another version"
+      },
+      "onAccept": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Accept all, or saved custom preferences"
+      },
+      "onReject": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onCustomize": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The customise panel opened"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onShow": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onHide": {
+        "kind": "function",
+        "nullable": true
+      }
+    },
+    "DesktopNotificationOptions": {
+      "title": {
+        "kind": "string",
+        "doc": "Notification title"
+      },
+      "body": {
+        "kind": "string",
+        "doc": "Body text"
+      },
+      "icon": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Icon URL"
+      },
+      "badge": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Badge URL"
+      },
+      "tag": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Tag: a new notification with the same tag replaces the old one"
+      },
+      "requireInteraction": {
+        "kind": "boolean",
+        "doc": "Stay until the user dismisses it"
+      },
+      "silent": {
+        "kind": "boolean",
+        "doc": "No sound or vibration"
+      },
+      "data": {
+        "kind": "any",
+        "doc": "Data kept on the native notification"
+      },
+      "onClick": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Notification clicked"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Notification closed"
+      },
+      "onError": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Unsupported, permission denied, or the native notification failed"
+      },
+      "onShow": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Notification shown"
+      }
+    },
+    "DropdownItem": {
+      "label": {
+        "kind": "string",
+        "doc": "Display text"
+      },
+      "text": {
+        "kind": "string",
+        "doc": "Alternative to label"
+      },
+      "name": {
+        "kind": "string",
+        "doc": "Alternative to label"
+      },
+      "value": {
+        "kind": "any",
+        "doc": "Value when selected (default: the item's index)"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Icon HTML"
+      },
+      "disabled": {
+        "kind": "boolean",
+        "doc": "Shown greyed, not selectable"
+      },
+      "divider": {
+        "kind": "boolean",
+        "doc": "Render as a divider"
+      },
+      "header": {
+        "kind": "string",
+        "doc": "Render as a header with this text"
+      }
+    },
+    "DropdownOptions": {
+      "trigger": {
+        "kind": "enum",
+        "values": [
+          "click",
+          "hover"
+        ],
+        "doc": "'hover' also opens on click (touch has no hover)"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "bottom-start",
+          "bottom-end",
+          "top-start",
+          "top-end",
+          "left-start",
+          "left-end",
+          "right-start",
+          "right-end"
+        ],
+        "doc": "Preferred menu position - flipped or clamped if it would open off screen"
+      },
+      "offset": {
+        "kind": "array",
+        "doc": "Position offset [x, y]"
+      },
+      "flip": {
+        "kind": "boolean",
+        "doc": "Flip to the opposite side and clamp to the viewport rather than open off screen"
+      },
+      "animation": {
+        "kind": "boolean",
+        "doc": "Fade the menu"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Animation duration in ms"
+      },
+      "hoverOpenDelay": {
+        "kind": "number",
+        "doc": "ms before a hover opens the menu"
+      },
+      "hoverCloseDelay": {
+        "kind": "number",
+        "doc": "ms of grace before a hover menu closes once the pointer has left trigger, menu and the gap between"
+      },
+      "closeOnSelect": {
+        "kind": "boolean",
+        "doc": "Close after an item is chosen"
+      },
+      "closeOnClickOutside": {
+        "kind": "boolean",
+        "doc": "Close on a click outside"
+      },
+      "closeOnEscape": {
+        "kind": "boolean",
+        "doc": "Close on Esc and restore focus to the trigger"
+      },
+      "closeOthers": {
+        "kind": "boolean",
+        "doc": "Opening this dropdown closes any other open one"
+      },
+      "items": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ],
+          "type": "DropdownItem"
+        },
+        "doc": "Menu items"
+      },
+      "model": {
+        "kind": "any",
+        "doc": "A Domma Model holding the items array (with modelKey)"
+      },
+      "modelKey": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Model key for the items array"
+      },
+      "selectedKey": {
+        "kind": "string",
+        "doc": "Model key the selected value is written to (default `<modelKey>_selected`)"
+      },
+      "itemTemplate": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Item HTML for object items"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it closed"
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Menu opened"
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it open"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Menu closed"
+      },
+      "onSelect": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "An item was chosen"
+      }
+    },
+    "DropzoneUploadOptions": {
+      "url": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "function"
+        ]
+      },
+      "method": {
+        "kind": "string",
+        "doc": "Default 'POST'"
+      },
+      "field": {
+        "kind": "string",
+        "doc": "FormData field for the file. Default 'file'"
+      },
+      "headers": {
+        "kind": "object",
+        "kinds": [
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "string"
+        }
+      },
+      "withCredentials": {
+        "kind": "boolean"
+      },
+      "concurrency": {
+        "kind": "number",
+        "doc": "Files sent at once. Default 2"
+      },
+      "data": {
+        "kind": "object",
+        "kinds": [
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
+        "doc": "Extra FormData fields"
+      },
+      "xhr": {
+        "kind": "function",
+        "doc": "Make the request object (tests, pages without a server). Default: new XMLHttpRequest()"
+      }
+    },
+    "EventAction": {
+      "target": {
+        "kind": "string",
+        "doc": "Selector of the elements to change (default: the event target)"
+      },
+      "css": {
+        "kind": "object",
+        "each": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number"
+          ]
+        }
+      },
+      "text": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ],
+        "doc": "Converted to text, as textContent does"
+      },
+      "html": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ]
+      },
+      "addClass": {
+        "kind": "string"
+      },
+      "removeClass": {
+        "kind": "string"
+      },
+      "toggleClass": {
+        "kind": "string"
+      },
+      "log": {
+        "kind": "string",
+        "doc": "Written to the console"
+      }
+    },
+    "FooterBrand": {
+      "text": {
+        "kind": "string"
+      },
+      "logo": {
+        "kind": "string",
+        "doc": "Logo image URL"
+      },
+      "url": {
+        "kind": "string"
+      },
+      "description": {
+        "kind": "string"
+      }
+    },
+    "FooterColumn": {
+      "title": {
+        "kind": "string"
+      },
+      "links": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "FooterLink"
+        }
+      }
+    },
+    "FooterLink": {
+      "text": {
+        "kind": "string"
+      },
+      "url": {
+        "kind": "string"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name"
+      }
+    },
+    "FooterOptions": {
+      "variant": {
+        "kind": "string"
+      },
+      "layout": {
+        "kind": "enum",
+        "values": [
+          "simple",
+          "columns",
+          "minimal"
+        ]
+      },
+      "brand": {
+        "kind": "object",
+        "type": "FooterBrand",
+        "nullable": true
+      },
+      "columns": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "FooterColumn"
+        },
+        "doc": "For the 'columns' layout"
+      },
+      "links": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "FooterLink"
+        },
+        "doc": "Simple link list"
+      },
+      "social": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "FooterSocial"
+        },
+        "doc": "Social icons"
+      },
+      "copyright": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Text, or the year for '© <year> All rights reserved'"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra classes"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "static",
+          "fixed",
+          "sticky"
+        ]
+      }
+    },
+    "FooterSocial": {
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name"
+      },
+      "url": {
+        "kind": "string"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "Accessible name (default: the icon name)"
+      }
+    },
+    "FormFieldConfig": {
+      "placeholder": {
+        "kind": "string"
+      },
+      "hint": {
+        "kind": "string",
+        "doc": "Small text beside the label; also the message when `pattern` fails"
+      },
+      "helperText": {
+        "kind": "string",
+        "doc": "Text under the control (HTML)"
+      },
+      "tooltip": {
+        "kind": "string",
+        "doc": "Tooltip on the label (a slider field also passes it to E.rangeSlider)"
+      },
+      "span": {
+        "kind": "number",
+        "doc": "Columns the field spans in a grid layout"
+      },
+      "disabled": {
+        "kind": "boolean"
+      },
+      "rows": {
+        "kind": "number",
+        "doc": "textarea rows (default 3)"
+      },
+      "step": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "any"
+        ],
+        "doc": "Used when the field definition has no `step`"
+      },
+      "autocomplete": {
+        "kind": "string"
+      },
+      "prefix": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ]
+      },
+      "suffix": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ]
+      },
+      "reveal": {
+        "kind": "boolean",
+        "doc": "password: show / hide toggle"
+      },
+      "clear": {
+        "kind": "boolean",
+        "doc": "text-like inputs and textareas: a clear button"
+      },
+      "stepper": {
+        "kind": "boolean",
+        "doc": "number / integer / float: - and + buttons"
+      },
+      "counter": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean"
+        ],
+        "doc": "text-like inputs and textareas: a character counter; true reads `maxLength`"
+      },
+      "labels": {
+        "kind": "object",
+        "kinds": [
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "string"
+        },
+        "doc": "Text for the input extras or the dropzone; a slider's value formatter"
+      },
+      "accept": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "array"
+        ],
+        "of": {
+          "kind": "string"
+        },
+        "doc": "file / dropzone"
+      },
+      "multiple": {
+        "kind": "boolean",
+        "doc": "file / dropzone (a dropzone allows several unless false)"
+      },
+      "slider": {
+        "kind": "boolean",
+        "doc": "Render a `range` field as E.rangeSlider"
+      },
+      "range": {
+        "kind": "boolean",
+        "doc": "slider: two thumbs, value [low, high]"
+      },
+      "ticks": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean",
+          "array"
+        ],
+        "of": {
+          "kind": "number"
+        }
+      },
+      "tickLabels": {
+        "kind": "boolean"
+      },
+      "format": {
+        "kind": "function",
+        "nullable": true
+      },
+      "marks": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "RangeSliderMark"
+        },
+        "nullable": true
+      },
+      "minDistance": {
+        "kind": "number"
+      },
+      "orientation": {
+        "kind": "enum",
+        "values": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "rtl": {
+        "kind": "boolean",
+        "nullable": true
+      },
+      "names": {
+        "kind": "array",
+        "nullable": true
+      },
+      "ariaLabels": {
+        "kind": "array",
+        "nullable": true
+      },
+      "className": {
+        "kind": "string"
+      },
+      "maxFiles": {
+        "kind": "number",
+        "nullable": true
+      },
+      "maxSize": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Bytes"
+      },
+      "minSize": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Bytes"
+      },
+      "previews": {
+        "kind": "boolean"
+      },
+      "upload": {
+        "kind": "object",
+        "type": "DropzoneUploadOptions",
+        "nullable": true
+      },
+      "autoUpload": {
+        "kind": "boolean"
+      },
+      "retry": {
+        "kind": "number"
+      },
+      "list": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean",
+          "object"
+        ]
+      }
+    },
+    "FormFieldDefinition": {
+      "type": {
+        "kind": "any",
+        "kinds": [
+          "enum",
+          "any"
+        ],
+        "values": [
+          "string",
+          "number",
+          "boolean",
+          "signature",
+          "checkbox",
+          "radio",
+          "email",
+          "password",
+          "integer",
+          "float",
+          "date",
+          "datetime",
+          "time",
+          "url",
+          "tel",
+          "color",
+          "range",
+          "file",
+          "hidden",
+          "select",
+          "multiselect",
+          "textarea",
+          "checkbox-group",
+          "chooser",
+          "slider",
+          "dropzone"
+        ],
+        "doc": "default 'string'"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "default: the capitalised field name"
+      },
+      "default": {
+        "kind": "any"
+      },
+      "required": {
+        "kind": "boolean"
+      },
+      "readonly": {
+        "kind": "boolean",
+        "doc": "Renders the control disabled"
+      },
+      "min": {
+        "kind": "number"
+      },
+      "max": {
+        "kind": "number"
+      },
+      "step": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "any"
+        ]
+      },
+      "minLength": {
+        "kind": "number"
+      },
+      "maxLength": {
+        "kind": "number"
+      },
+      "pattern": {
+        "kind": "object"
+      },
+      "validate": {
+        "kind": "function",
+        "doc": "true passes; a string (or anything else) fails with that message"
+      },
+      "options": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
+        "doc": "Choices for select / radio / checkbox-group / multiselect / chooser"
+      },
+      "formConfig": {
+        "kind": "object",
+        "type": "FormFieldConfig"
+      },
+      "tableRender": {
+        "kind": "function",
+        "doc": "`F.crud` table cell renderer"
+      },
+      "variant": {
+        "kind": "enum",
+        "values": [
+          "card",
+          "chip"
+        ],
+        "doc": "chooser (default 'card')"
+      },
+      "multiple": {
+        "kind": "boolean",
+        "doc": "chooser: several choices (value is an array)"
+      },
+      "density": {
+        "kind": "enum",
+        "values": [
+          "comfortable",
+          "compact"
+        ],
+        "doc": "chooser"
+      },
+      "columns": {
+        "kind": "number",
+        "doc": "chooser (default 3)"
+      },
+      "accent": {
+        "kind": "string",
+        "doc": "chooser: semantic name or CSS colour (default 'primary')"
+      },
+      "accentStyle": {
+        "kind": "enum",
+        "values": [
+          "border",
+          "solid",
+          "glow",
+          "overlay",
+          "underline"
+        ],
+        "doc": "chooser"
+      },
+      "glow": {
+        "kind": "boolean",
+        "doc": "chooser"
+      },
+      "glowColour": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "chooser"
+      },
+      "shadow": {
+        "kind": "string",
+        "doc": "chooser (default 'none')"
+      },
+      "shadowColour": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "chooser"
+      }
+    },
+    "FormSection": {
+      "title": {
+        "kind": "string"
+      },
+      "fields": {
+        "kind": "array",
+        "of": {
+          "kind": "string"
+        },
+        "doc": "Blueprint keys, in order"
+      },
+      "layout": {
+        "kind": "enum",
+        "values": [
+          "stacked",
+          "grid"
+        ]
+      },
+      "columns": {
+        "kind": "number",
+        "doc": "grid columns (default 2)"
+      }
+    },
+    "FormSetupOptions": {
+      "layout": {
+        "kind": "enum",
+        "values": [
+          "stacked",
+          "grid",
+          "inline"
+        ],
+        "doc": "default 'stacked'"
+      },
+      "columns": {
+        "kind": "number",
+        "doc": "grid layout columns (2 or 3, default 2)"
+      },
+      "labelPosition": {
+        "kind": "enum",
+        "values": [
+          "top",
+          "left",
+          "floating"
+        ],
+        "doc": "default 'top'"
+      },
+      "showLabels": {
+        "kind": "boolean",
+        "doc": "default true"
+      },
+      "showHelperText": {
+        "kind": "boolean",
+        "doc": "default true"
+      },
+      "showHints": {
+        "kind": "boolean",
+        "doc": "default true"
+      },
+      "validationMode": {
+        "kind": "enum",
+        "values": [
+          "blur",
+          "change",
+          "submit"
+        ],
+        "doc": "default 'blur'"
+      },
+      "cssFramework": {
+        "kind": "enum",
+        "values": [
+          "domma",
+          "bootstrap",
+          "tailwind"
+        ],
+        "doc": "default 'domma'"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "default 'domma-form'"
+      },
+      "fieldClassName": {
+        "kind": "string",
+        "doc": "default 'domma-form-field'"
+      },
+      "labelClassName": {
+        "kind": "string",
+        "doc": "default 'form-label'"
+      },
+      "inputClassName": {
+        "kind": "string",
+        "doc": "default 'form-input'"
+      },
+      "errorClassName": {
+        "kind": "string",
+        "doc": "default 'form-error'"
+      },
+      "helperClassName": {
+        "kind": "string",
+        "doc": "default 'form-helper-text'"
+      },
+      "hintClassName": {
+        "kind": "string",
+        "doc": "default 'form-hint'"
+      },
+      "cardWrapper": {
+        "kind": "boolean",
+        "doc": "Wrap the form in a card (default false)"
+      },
+      "sections": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "FormSection"
+        }
+      },
+      "showSubmitButton": {
+        "kind": "boolean",
+        "doc": "default true"
+      },
+      "submitText": {
+        "kind": "string",
+        "doc": "default 'Submit'"
+      },
+      "resetText": {
+        "kind": "string",
+        "doc": "Adds a reset button with this text"
+      },
+      "buttonAlignment": {
+        "kind": "enum",
+        "values": [
+          "left",
+          "center",
+          "right"
+        ],
+        "doc": "default 'right'"
+      },
+      "onSubmit": {
+        "kind": "function",
+        "doc": "A valid submit"
+      },
+      "onValidationError": {
+        "kind": "function",
+        "doc": "An invalid submit"
+      },
+      "persist": {
+        "kind": "string",
+        "doc": "Passed to the model: a storage key to keep the values under"
+      },
+      "autoSave": {
+        "kind": "boolean",
+        "doc": "Passed to the model"
+      },
+      "schema": {
+        "kind": "object",
+        "each": {
+          "kind": "object",
+          "type": "FormFieldDefinition"
+        }
+      },
+      "data": {
+        "kind": "object"
+      }
+    },
+    "InitialProperties": {
+      "css": {
+        "kind": "object",
+        "each": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number"
+          ]
+        }
+      },
+      "text": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ],
+        "doc": "Converted to text, as textContent does"
+      },
+      "html": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean"
+        ]
+      },
+      "addClass": {
+        "kind": "string"
+      },
+      "removeClass": {
+        "kind": "string"
+      },
+      "toggleClass": {
+        "kind": "string"
+      },
+      "attr": {
+        "kind": "object",
+        "each": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "doc": "Attribute name -> value (converted to text)"
+      }
+    },
+    "InputGroupOptions": {
+      "prefix": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Addon joined to the start of the input"
+      },
+      "suffix": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number",
+          "boolean",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Addon joined to the end of the input"
+      },
+      "reveal": {
+        "kind": "boolean",
+        "doc": "Password inputs: show / hide toggle button (aria-pressed, eye / eye-off)"
+      },
+      "clear": {
+        "kind": "boolean",
+        "doc": "Text-like inputs and textareas: clear button shown while there is a\nvalue; clearing fires input + change and refocuses the input"
+      },
+      "stepper": {
+        "kind": "boolean",
+        "doc": "Number inputs: - and + buttons honouring min / max / step, disabled at\nthe limits, input + change per step, hold to repeat"
+      },
+      "counter": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean"
+        ],
+        "doc": "Text-like inputs and textareas: live \"12 / 200\" counter after the group\n(aria-live polite, added to aria-describedby). `true` reads maxLength;\na number is the limit. `.is-warning` from 90%, `.is-over` past it"
+      },
+      "labels": {
+        "kind": "object",
+        "doc": "Accessible names for the buttons"
+      }
+    },
+    "ListGroupOptions": {
+      "selectable": {
+        "kind": "boolean",
+        "doc": "Items can be selected (role=\"listbox\")"
+      },
+      "multiSelect": {
+        "kind": "boolean",
+        "doc": "Allow several selected items at once"
+      },
+      "activeClass": {
+        "kind": "string",
+        "doc": "Class on selected items"
+      },
+      "disabledClass": {
+        "kind": "string",
+        "doc": "Class marking disabled items"
+      },
+      "itemSelector": {
+        "kind": "string",
+        "doc": "Selector for the items"
+      },
+      "keyboard": {
+        "kind": "boolean",
+        "doc": "Arrow keys, Home/End, Enter/Space"
+      },
+      "loop": {
+        "kind": "boolean",
+        "doc": "Keyboard navigation wraps from last to first"
+      },
+      "focusOnInit": {
+        "kind": "boolean",
+        "doc": "Focus the first enabled item on init"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Selection changed; the selected items"
+      },
+      "onSelect": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "An item was selected"
+      },
+      "onDeselect": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "An item was deselected"
+      }
+    },
+    "LoaderOptions": {
+      "type": {
+        "kind": "enum",
+        "values": [
+          "pulse",
+          "spinner",
+          "dots",
+          "bars"
+        ],
+        "doc": "Animation"
+      },
+      "size": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "sm",
+          "md",
+          "lg",
+          "small",
+          "medium",
+          "large"
+        ],
+        "doc": "Named size or px"
+      },
+      "color": {
+        "kind": "string",
+        "doc": "Theme colour name, 'white', 'dark', or any CSS colour"
+      },
+      "overlay": {
+        "kind": "boolean",
+        "doc": "Cover the container with a backdrop"
+      },
+      "text": {
+        "kind": "string",
+        "doc": "Text under the indicator (also its accessible name)"
+      },
+      "centered": {
+        "kind": "boolean",
+        "doc": "Centre in the container"
+      },
+      "visible": {
+        "kind": "boolean",
+        "doc": "Show at once"
+      },
+      "fullscreen": {
+        "kind": "boolean",
+        "doc": "(fullscreenLoader) the container is shown and hidden with it"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "Accessible name when there is no text"
+      },
+      "onShow": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the loader shows"
+      },
+      "onHide": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the loader hides"
+      }
+    },
+    "ModalButton": {
+      "id": {
+        "kind": "string",
+        "doc": "Passed to onButtonClick (default `btn-<index>`)"
+      },
+      "text": {
+        "kind": "string",
+        "doc": "Label"
+      },
+      "variant": {
+        "kind": "string",
+        "doc": "Adds `btn-<variant>`"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra classes"
+      },
+      "close": {
+        "kind": "boolean",
+        "doc": "false keeps the modal open after the click"
+      },
+      "onClick": {
+        "kind": "function"
+      }
+    },
+    "ModalOptions": {
+      "backdrop": {
+        "kind": "boolean",
+        "doc": "Show backdrop overlay"
+      },
+      "backdropClose": {
+        "kind": "boolean",
+        "doc": "Close modal when clicking backdrop"
+      },
+      "keyboard": {
+        "kind": "boolean",
+        "doc": "Close modal on Escape key"
+      },
+      "closeOnEscape": {
+        "kind": "boolean",
+        "doc": "Same as `keyboard`; either false keeps Escape from closing"
+      },
+      "animation": {
+        "kind": "boolean",
+        "kinds": [
+          "boolean",
+          "enum"
+        ],
+        "values": [
+          "none",
+          "slide",
+          "fade",
+          "zoom"
+        ],
+        "doc": "Animation type"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Animation duration in ms"
+      },
+      "closeButton": {
+        "kind": "boolean",
+        "doc": "Show close button"
+      },
+      "size": {
+        "kind": "any",
+        "kinds": [
+          "enum",
+          "any"
+        ],
+        "values": [
+          "sm",
+          "md",
+          "lg",
+          "xl",
+          "small",
+          "medium",
+          "large",
+          "xlarge",
+          "full"
+        ],
+        "doc": "A named size or any CSS width (the factory's default is 'large')"
+      },
+      "centered": {
+        "kind": "boolean",
+        "doc": "Centre vertically (false: near the top)"
+      },
+      "scrollable": {
+        "kind": "boolean",
+        "doc": "Scroll the body inside a capped height"
+      },
+      "title": {
+        "kind": "string",
+        "doc": "Title text"
+      },
+      "content": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "doc": "Body content (factory mode): HTML (sanitised unless `safe: false`) or a Node"
+      },
+      "footer": {
+        "kind": "string",
+        "doc": "Footer text"
+      },
+      "buttons": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "ModalButton"
+        },
+        "doc": "Footer buttons (the factory's default is one Close button)"
+      },
+      "safe": {
+        "kind": "boolean",
+        "doc": "false: content is trusted HTML (not sanitised)"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra classes on the dialog"
+      },
+      "headerClass": {
+        "kind": "string",
+        "doc": "Extra classes on the header"
+      },
+      "bodyClass": {
+        "kind": "string",
+        "doc": "Extra classes on the body"
+      },
+      "footerClass": {
+        "kind": "string",
+        "doc": "Extra classes on the footer"
+      },
+      "focus": {
+        "kind": "boolean",
+        "doc": "Focus the dialog on open"
+      },
+      "trapFocus": {
+        "kind": "boolean",
+        "doc": "Keep Tab inside while open (default true; false without a backdrop unless given)"
+      },
+      "returnFocus": {
+        "kind": "boolean",
+        "doc": "Put focus back where it was on close"
+      },
+      "visible": {
+        "kind": "boolean",
+        "doc": "Open at once"
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When opening starts"
+      },
+      "onOpened": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After open animation completes"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When closing starts"
+      },
+      "onClosed": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After close animation completes"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to refuse the open"
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to refuse the close"
+      },
+      "onButtonClick": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A footer button was clicked"
+      }
+    },
+    "NavbarAction": {
+      "text": {
+        "kind": "string"
+      },
+      "url": {
+        "kind": "string"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name"
+      },
+      "variant": {
+        "kind": "string",
+        "doc": "Button variant ('primary', 'outline', ...)"
+      }
+    },
+    "NavbarBrand": {
+      "text": {
+        "kind": "string"
+      },
+      "logo": {
+        "kind": "string",
+        "doc": "Logo image URL"
+      },
+      "url": {
+        "kind": "string",
+        "doc": "Brand link"
+      },
+      "html": {
+        "kind": "string",
+        "doc": "Brand markup instead of text/logo"
+      }
+    },
+    "NavbarItem": {
+      "text": {
+        "kind": "string",
+        "doc": "Label"
+      },
+      "url": {
+        "kind": "string",
+        "doc": "Link"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name"
+      },
+      "active": {
+        "kind": "boolean",
+        "doc": "Highlighted as the current page"
+      },
+      "external": {
+        "kind": "boolean",
+        "doc": "Opens in a new tab"
+      },
+      "divider": {
+        "kind": "boolean",
+        "doc": "Inside a dropdown: a divider"
+      },
+      "items": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "NavbarItem"
+        },
+        "doc": "Dropdown entries"
+      }
+    },
+    "NavbarOptions": {
+      "brand": {
+        "kind": "object",
+        "type": "NavbarBrand",
+        "nullable": true
+      },
+      "items": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "NavbarItem"
+        }
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "static",
+          "fixed",
+          "sticky"
+        ]
+      },
+      "variant": {
+        "kind": "string"
+      },
+      "collapsible": {
+        "kind": "boolean",
+        "doc": "Hamburger menu on small screens"
+      },
+      "collapseAt": {
+        "kind": "number",
+        "doc": "Below this width (px) the bar is collapsed"
+      },
+      "appearOnHover": {
+        "kind": "boolean",
+        "doc": "Desktop: open dropdowns/flyouts on hover (click still works)"
+      },
+      "hoverCloseDelay": {
+        "kind": "number",
+        "doc": "ms of grace when the pointer leaves the bar"
+      },
+      "actions": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "NavbarAction"
+        },
+        "doc": "Right-side buttons"
+      },
+      "onItemClick": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A link was clicked (sub-items also get the parent)"
+      }
+    },
+    "NumberBadgeOptions": {
+      "count": {
+        "kind": "number",
+        "doc": "Initial count to display (0 hides the counter unless `dot`)"
+      },
+      "max": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Cap, e.g. 99 shows \"99+\""
+      },
+      "variant": {
+        "kind": "enum",
+        "values": [
+          "primary",
+          "secondary",
+          "success",
+          "danger",
+          "warning",
+          "info",
+          "light",
+          "dark"
+        ],
+        "doc": "Colour variant"
+      },
+      "dot": {
+        "kind": "boolean",
+        "doc": "Show as dot indicator instead of number"
+      },
+      "pulse": {
+        "kind": "boolean",
+        "doc": "Enable pulse animation"
+      },
+      "borderColor": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Custom border ring colour"
+      },
+      "label": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Accessible name (default: the count, or \"New\" for a dot)"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The count changed"
+      }
+    },
+    "PillboxOptions": {
+      "data": {
+        "kind": "array",
+        "of": {
+          "kind": "string",
+          "kinds": [
+            "string",
+            "object"
+          ]
+        },
+        "doc": "Options to choose from"
+      },
+      "value": {
+        "kind": "array",
+        "of": {
+          "kind": "string"
+        },
+        "doc": "Initial values"
+      },
+      "placeholder": {
+        "kind": "string"
+      },
+      "searchable": {
+        "kind": "boolean",
+        "doc": "Filter the options while typing"
+      },
+      "creatable": {
+        "kind": "boolean",
+        "doc": "Enter adds typed text that is not an option"
+      },
+      "maxItems": {
+        "kind": "number",
+        "nullable": true
+      },
+      "duplicates": {
+        "kind": "boolean"
+      },
+      "clearable": {
+        "kind": "boolean",
+        "doc": "Clear-all button"
+      },
+      "size": {
+        "kind": "string"
+      },
+      "renderPill": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Pill HTML or a node"
+      },
+      "renderOption": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Option HTML or a node"
+      },
+      "pillTemplate": {
+        "kind": "string",
+        "doc": "Pill HTML when there is no renderPill"
+      },
+      "validatePill": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "true/undefined accepts; a string is the error message"
+      },
+      "maxItemsMessage": {
+        "kind": "string"
+      },
+      "duplicateMessage": {
+        "kind": "string"
+      },
+      "noResultsMessage": {
+        "kind": "string"
+      },
+      "model": {
+        "kind": "any",
+        "doc": "A Domma Model the values are kept in (with modelKey)"
+      },
+      "modelKey": {
+        "kind": "string"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it closed"
+      },
+      "onOpen": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it open"
+      },
+      "onClose": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onAdd": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onRemove": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onCreate": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Typed text was added (creatable)"
+      },
+      "onMaxReached": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onValidationError": {
+        "kind": "function",
+        "nullable": true
+      }
+    },
+    "PopoverOptions": {
+      "content": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "object"
+        },
+        "nullable": true,
+        "doc": "Text (default), a Node, or a function returning either; see `html`"
+      },
+      "title": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object",
+          "function"
+        ],
+        "each": {
+          "kind": "object"
+        },
+        "nullable": true,
+        "doc": "Heading; empty for none"
+      },
+      "html": {
+        "kind": "boolean",
+        "doc": "Treat string content/title as HTML, passed through Domma's sanitiser (default: false)"
+      },
+      "trigger": {
+        "kind": "any",
+        "kinds": [
+          "any",
+          "enum"
+        ],
+        "values": [
+          "click",
+          "hover",
+          "focus",
+          "manual"
+        ],
+        "doc": "'click' (default), 'hover', 'focus', 'manual', or several separated by spaces"
+      },
+      "placement": {
+        "kind": "enum",
+        "values": [
+          "auto",
+          "bottom",
+          "top",
+          "bottom-start",
+          "bottom-end",
+          "top-start",
+          "top-end",
+          "left-start",
+          "left-end",
+          "right-start",
+          "right-end",
+          "left",
+          "right",
+          "auto-start",
+          "auto-end"
+        ],
+        "doc": "Preferred side and alignment (default: 'bottom')"
+      },
+      "flip": {
+        "kind": "boolean",
+        "doc": "Try the other sides when the preferred one has no room (default: true)"
+      },
+      "offset": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "array"
+        ],
+        "doc": "Gap in px, or [crossAxis, mainAxis] (default: 10)"
+      },
+      "arrow": {
+        "kind": "boolean",
+        "doc": "Show the arrow (default: true)"
+      },
+      "dismissible": {
+        "kind": "boolean",
+        "doc": "Show a close (x) button (default: false)"
+      },
+      "closeOnOutside": {
+        "kind": "boolean",
+        "doc": "Close on a pointer press or focus outside (default: true)"
+      },
+      "closeOnEscape": {
+        "kind": "boolean",
+        "doc": "Close on Escape (default: true)"
+      },
+      "group": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "One open at a time per group; null = independent (default: 'default')"
+      },
+      "width": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "nullable": true,
+        "doc": "Any CSS width; numbers are px"
+      },
+      "maxWidth": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "nullable": true,
+        "doc": "Any CSS width; the stylesheet default is 20rem"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra classes on the panel"
+      },
+      "id": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Panel id (generated when omitted)"
+      },
+      "role": {
+        "kind": "any",
+        "kinds": [
+          "enum",
+          "any"
+        ],
+        "values": [
+          "tooltip",
+          "dialog"
+        ],
+        "nullable": true,
+        "doc": "'dialog', or 'tooltip' for hover/focus-only triggers (default: auto)"
+      },
+      "ariaLabel": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Accessible name when there is no title"
+      },
+      "autoFocus": {
+        "kind": "boolean",
+        "nullable": true,
+        "doc": "Move focus into the panel on open; null = for click popovers"
+      },
+      "trapFocus": {
+        "kind": "boolean",
+        "doc": "Tab cycles inside the panel instead of leaving it, with a focus trap while focus is in it (default: false)"
+      },
+      "delay": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "object"
+        ],
+        "doc": "Hover delays in ms (default: {show: 80, hide: 120})"
+      },
+      "animation": {
+        "kind": "boolean",
+        "doc": "Fade and scale (default: true; skipped under reduced motion)"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "ms (default: 150)"
+      },
+      "container": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object"
+        ],
+        "nullable": true,
+        "doc": "Where the panel is placed (default: document.body)"
+      },
+      "zIndex": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Override the stylesheet's z-index (10045)"
+      },
+      "onShow": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Before opening; return false to cancel"
+      },
+      "onShown": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After the open transition"
+      },
+      "onHide": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Before closing; return false to cancel"
+      },
+      "onHidden": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "After the panel has been removed"
+      }
+    },
+    "PulseOptions": {
+      "scale": {
+        "kind": "number",
+        "doc": "Scale factor (e.g., 1.05 = 5% larger) (default: 1.05)"
+      },
+      "duration": {
+        "kind": "number",
+        "doc": "Complete animation cycle time in milliseconds (default: 2000)"
+      },
+      "easing": {
+        "kind": "string",
+        "doc": "CSS easing function (default: 'ease-in-out')"
+      },
+      "delay": {
+        "kind": "number",
+        "doc": "Initial delay before animation starts (default: 0)"
+      },
+      "stagger": {
+        "kind": "number",
+        "doc": "Delay between multiple elements (default: 0)"
+      },
+      "iterations": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "enum"
+        ],
+        "values": [
+          "infinite"
+        ],
+        "doc": "Number of cycles or 'infinite' (default: 'infinite')"
+      },
+      "pauseOnHover": {
+        "kind": "boolean",
+        "doc": "Pause animation when hovering (default: false)"
+      },
+      "respectMotionPreference": {
+        "kind": "boolean",
+        "doc": "Honor prefers-reduced-motion (default: true)"
+      }
+    },
+    "RangeSliderMark": {
+      "value": {
+        "kind": "number"
+      },
+      "label": {
+        "kind": "string"
+      }
+    },
+    "ScribeAction": {
+      "render": {
+        "kind": "string",
+        "doc": "Text to type"
+      },
+      "effect": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "fade",
+          "glow",
+          "bounce"
+        ],
+        "doc": "Entrance effect for each rendered unit (default: 'none')"
+      },
+      "wait": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "doc": "Pause: '2s', '500ms' or a number of milliseconds"
+      },
+      "undoRender": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean",
+          "enum"
+        ],
+        "values": [
+          "all"
+        ],
+        "doc": "Delete text: true = the last render, a number = that many units, 'all' = everything"
+      }
+    },
+    "ScribeOptions": {
+      "mode": {
+        "kind": "enum",
+        "values": [
+          "typewriter",
+          "word",
+          "sentence"
+        ],
+        "doc": "Rendering granularity: 'typewriter' (char-by-char), 'word', or 'sentence' (default: 'typewriter')"
+      },
+      "speed": {
+        "kind": "number",
+        "doc": "Milliseconds per unit when typing (default: 50)"
+      },
+      "deleteSpeed": {
+        "kind": "number",
+        "doc": "Milliseconds per unit when deleting (default: 30)"
+      },
+      "cursor": {
+        "kind": "boolean",
+        "doc": "Show blinking cursor (default: true)"
+      },
+      "cursorChar": {
+        "kind": "string",
+        "doc": "Cursor character (default: '|')"
+      },
+      "cursorBlink": {
+        "kind": "boolean",
+        "doc": "Animate cursor blink (default: true)"
+      },
+      "cursorType": {
+        "kind": "enum",
+        "values": [
+          "underline",
+          "caret",
+          "block"
+        ],
+        "doc": "Cursor style (default: 'caret')"
+      },
+      "loop": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "boolean"
+        ],
+        "doc": "Loop count: true = infinite, number = specific count (default: false)"
+      },
+      "loopDelay": {
+        "kind": "number",
+        "doc": "Delay between loops in milliseconds (default: 1000)"
+      },
+      "pauseOnHover": {
+        "kind": "boolean",
+        "doc": "Pause animation when hovering (default: false)"
+      },
+      "autoStart": {
+        "kind": "boolean",
+        "doc": "Start animation immediately (default: true)"
+      },
+      "respectMotionPreference": {
+        "kind": "boolean",
+        "doc": "Honor prefers-reduced-motion (default: true)"
+      },
+      "actions": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "ScribeAction"
+        },
+        "doc": "Action queue to execute"
+      },
+      "onStart": {
+        "kind": "function",
+        "doc": "Callback when animation starts"
+      },
+      "onComplete": {
+        "kind": "function",
+        "doc": "Callback when animation completes"
+      },
+      "onCharacter": {
+        "kind": "function",
+        "doc": "Callback for each unit rendered (unit, index) - unit can be char/word/sentence depending on mode"
+      },
+      "onRender": {
+        "kind": "function",
+        "doc": "Callback when render action completes (text)"
+      },
+      "onUndoRender": {
+        "kind": "function",
+        "doc": "Callback when undoRender action completes (deletedText)"
+      },
+      "onLoop": {
+        "kind": "function",
+        "doc": "Callback on each loop iteration (loopCount)"
+      }
+    },
+    "SelectorConfig": {
+      "component": {
+        "kind": "enum",
+        "values": [
+          "card",
+          "modal",
+          "tabs",
+          "accordion",
+          "tooltip",
+          "carousel",
+          "dropdown",
+          "contextMenu",
+          "sortable",
+          "skeleton",
+          "avatar",
+          "avatarGroup",
+          "inputGroup",
+          "popover",
+          "badge",
+          "numberBadge",
+          "listGroup",
+          "cookieConsent",
+          "backToTop",
+          "buttonGroup",
+          "loader",
+          "breadcrumbs",
+          "navbar",
+          "sidebar",
+          "footer",
+          "notification",
+          "timer",
+          "alarm",
+          "autocomplete",
+          "pillbox",
+          "signature",
+          "form",
+          "breathe",
+          "pulse",
+          "scribe"
+        ],
+        "doc": "Component to create on the selector"
+      },
+      "options": {
+        "kind": "object",
+        "doc": "Options for that component (`schema` and `data` for `form`)"
+      },
+      "initial": {
+        "kind": "object",
+        "type": "InitialProperties",
+        "doc": "Applied to the matched elements once"
+      },
+      "events": {
+        "kind": "object",
+        "each": {
+          "kind": "object",
+          "kinds": [
+            "object",
+            "function",
+            "array"
+          ],
+          "type": "EventAction",
+          "of": {
+            "kind": "object",
+            "kinds": [
+              "object",
+              "function"
+            ],
+            "type": "EventAction"
+          }
+        },
+        "doc": "Event name -> what it runs"
+      },
+      "init": {
+        "kind": "function",
+        "doc": "Called first with the matched elements"
+      }
+    },
+    "SidebarItem": {
+      "text": {
+        "kind": "string",
+        "doc": "Label (HTML)"
+      },
+      "url": {
+        "kind": "string",
+        "doc": "Link"
+      },
+      "icon": {
+        "kind": "string",
+        "doc": "Domma icon name"
+      },
+      "section": {
+        "kind": "string",
+        "doc": "Section key; setActive(section) highlights it, and clicking it makes it active"
+      },
+      "badge": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "doc": "Badge text"
+      },
+      "heading": {
+        "kind": "string",
+        "doc": "Render as a heading with this text"
+      },
+      "divider": {
+        "kind": "boolean",
+        "doc": "Render as a divider"
+      },
+      "items": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "SidebarItem"
+        },
+        "doc": "Children (an expandable group)"
+      }
+    },
+    "SidebarOptions": {
+      "position": {
+        "kind": "enum",
+        "values": [
+          "left",
+          "right"
+        ]
+      },
+      "fixed": {
+        "kind": "boolean",
+        "doc": "Fixed rather than static positioning"
+      },
+      "width": {
+        "kind": "string"
+      },
+      "top": {
+        "kind": "string",
+        "doc": "Top offset, e.g. '60px' under a navbar"
+      },
+      "header": {
+        "kind": "object",
+        "nullable": true,
+        "doc": "Header; `toggle: false` hides its close button"
+      },
+      "items": {
+        "kind": "array",
+        "of": {
+          "kind": "object",
+          "type": "SidebarItem"
+        }
+      },
+      "footer": {
+        "kind": "object",
+        "nullable": true
+      },
+      "variant": {
+        "kind": "enum",
+        "values": [
+          "light",
+          "dark",
+          "theme"
+        ],
+        "doc": "'theme' follows the active theme"
+      },
+      "collapsible": {
+        "kind": "boolean",
+        "doc": "Toggle on small screens"
+      },
+      "collapseAt": {
+        "kind": "number",
+        "doc": "Breakpoint in px"
+      },
+      "activeSection": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Initially active section"
+      },
+      "expandedSections": {
+        "kind": "array",
+        "of": {
+          "kind": "string"
+        },
+        "doc": "Initially expanded groups (their paths)"
+      },
+      "persistExpanded": {
+        "kind": "boolean",
+        "doc": "Remember expanded groups in localStorage"
+      },
+      "persistKey": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Storage key for that"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "ms"
+      },
+      "push": {
+        "kind": "boolean",
+        "doc": "Push the content aside rather than overlay it"
+      },
+      "contentSelector": {
+        "kind": "string",
+        "doc": "The content pushed aside"
+      },
+      "scrollSpy": {
+        "kind": "boolean",
+        "doc": "Track the active section while scrolling"
+      },
+      "scrollSpyOffset": {
+        "kind": "string",
+        "doc": "IntersectionObserver rootMargin"
+      },
+      "scrollSpyThreshold": {
+        "kind": "number",
+        "doc": "IntersectionObserver threshold"
+      },
+      "floating": {
+        "kind": "boolean",
+        "doc": "Floating toggle at the bottom left"
+      },
+      "customContent": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "HTML to show instead of items"
+      },
+      "collapsibleDesktop": {
+        "kind": "boolean",
+        "doc": "Desktop collapse to icons only"
+      },
+      "collapsedWidth": {
+        "kind": "string",
+        "doc": "Width when collapsed"
+      },
+      "persistCollapsed": {
+        "kind": "boolean",
+        "doc": "Remember the collapsed state"
+      },
+      "persistCollapseKey": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Storage key for that"
+      },
+      "onItemClick": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A link was clicked; path is its index path ('2.0')"
+      },
+      "onBeforeOpen": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it closed"
+      },
+      "onBeforeClose": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Return false to keep it open"
+      },
+      "onToggle": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Opened or closed"
+      },
+      "onExpand": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A group expanded (no arguments: the desktop sidebar expanded)"
+      },
+      "onCollapse": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A group collapsed (no arguments: the desktop sidebar collapsed)"
+      }
+    },
+    "SignatureOptions": {
+      "width": {
+        "kind": "number",
+        "nullable": true,
+        "doc": "Not read: the pad fills its container"
+      },
+      "height": {
+        "kind": "number",
+        "doc": "Canvas height in px"
+      },
+      "penColour": {
+        "kind": "string",
+        "doc": "Default pen colour"
+      },
+      "penWidth": {
+        "kind": "number",
+        "doc": "Default pen width in px"
+      },
+      "format": {
+        "kind": "enum",
+        "values": [
+          "png",
+          "svg"
+        ],
+        "doc": "Export format"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "Toolbar label text"
+      },
+      "guideLine": {
+        "kind": "boolean",
+        "doc": "Dashed guide line"
+      },
+      "placeholder": {
+        "kind": "string"
+      },
+      "colours": {
+        "kind": "array",
+        "of": {
+          "kind": "string"
+        },
+        "doc": "Colour swatches in the toolbar"
+      },
+      "widths": {
+        "kind": "array",
+        "of": {
+          "kind": "number"
+        },
+        "doc": "Pen widths in the toolbar"
+      },
+      "toolbar": {
+        "kind": "boolean",
+        "doc": "Show the toolbar"
+      },
+      "name": {
+        "kind": "string",
+        "doc": "Name of the hidden input"
+      },
+      "disabled": {
+        "kind": "boolean"
+      },
+      "typeFallback": {
+        "kind": "boolean",
+        "doc": "Draw / Type toggle"
+      },
+      "minStrokeLength": {
+        "kind": "number",
+        "doc": "Points needed to keep a stroke"
+      },
+      "respectMotionPreference": {
+        "kind": "boolean",
+        "doc": "Honour prefers-reduced-motion"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "The signature changed - receives the data URL ('' when empty)"
+      },
+      "onClear": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onBegin": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A stroke began"
+      },
+      "onEnd": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "A stroke ended"
+      }
+    },
+    "SkeletonOptions": {
+      "type": {
+        "kind": "enum",
+        "values": [
+          "card",
+          "text",
+          "list",
+          "table",
+          "custom"
+        ],
+        "doc": "Shape to draw (default 'text')"
+      },
+      "lines": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "nullable": true,
+        "doc": "Lines per paragraph, card or list item (default 3; list 2)"
+      },
+      "count": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "nullable": true,
+        "doc": "Paragraphs, cards or list items (default 1; list 3)"
+      },
+      "rows": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "doc": "Table rows (default 5)"
+      },
+      "columns": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "doc": "Table columns (default 4)"
+      },
+      "header": {
+        "kind": "boolean",
+        "doc": "Table header row (default true)"
+      },
+      "avatar": {
+        "kind": "boolean",
+        "doc": "A circle at the start of each list item (default true)"
+      },
+      "image": {
+        "kind": "boolean",
+        "doc": "An image block at the top of each card (default true)"
+      },
+      "animate": {
+        "kind": "boolean",
+        "doc": "false = still tint, no sweep (default true)"
+      },
+      "template": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "function"
+        ],
+        "nullable": true,
+        "doc": "Markup for type 'custom', or a function returning it"
+      },
+      "label": {
+        "kind": "string",
+        "doc": "Screen-reader status text (default 'Loading...')"
+      }
+    },
+    "SortableOptions": {
+      "items": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Selector for the sortable items; null = the container's direct children"
+      },
+      "handle": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Selector inside an item that starts a drag; null = the whole item"
+      },
+      "nest": {
+        "kind": "boolean",
+        "doc": "Adds an \"into\" drop zone and switches to indicator mode (for trees)"
+      },
+      "live": {
+        "kind": "boolean",
+        "nullable": true,
+        "doc": "null = !nest. true = siblings slide aside while you drag; false = indicator mode"
+      },
+      "axis": {
+        "kind": "enum",
+        "values": [
+          "x",
+          "y"
+        ],
+        "doc": "'y' for a column, 'x' for a row"
+      },
+      "key": {
+        "kind": "string",
+        "doc": "Attribute that identifies an item across re-renders (default 'data-id')"
+      },
+      "animation": {
+        "kind": "number",
+        "doc": "Animation duration in ms; 0 turns it off. Reduced motion always does"
+      },
+      "easing": {
+        "kind": "string",
+        "doc": "CSS easing for every glide"
+      },
+      "threshold": {
+        "kind": "number",
+        "doc": "Pixels the pointer must travel before a press becomes a drag (default 4)"
+      },
+      "touchDelay": {
+        "kind": "number",
+        "doc": "Ms a finger must rest on an item with no handle before it drags (default 220)"
+      },
+      "nestZone": {
+        "kind": "number",
+        "doc": "Share of an item's height, centred, that means \"into\" (default 0.5)"
+      },
+      "accepts": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Veto a drop. Live mode passes 'before' or 'after'"
+      },
+      "disabled": {
+        "kind": "boolean",
+        "doc": "Start disabled"
+      },
+      "keyboard": {
+        "kind": "boolean",
+        "doc": "Alt+Arrow moves the focused item (live mode). Default true"
+      },
+      "persist": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "boolean"
+        ],
+        "doc": "Storage key (or true = the container's id): remember the order. Live mode"
+      },
+      "autoScroll": {
+        "kind": "boolean",
+        "doc": "Scroll the nearest scrolling ancestor (or the page) near its edges. Default true"
+      },
+      "ghostParent": {
+        "kind": "object",
+        "nullable": true,
+        "doc": "Where the dragged copy is appended; null = the container"
+      },
+      "onStart": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onMove": {
+        "kind": "function",
+        "nullable": true
+      },
+      "onSort": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Live mode: the order changed"
+      },
+      "onDrop": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Indicator mode: update your data and re-render here. Return false (or a promise that rejects) to refuse; a returned promise is awaited before animating."
+      },
+      "onCancel": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Esc, a refused drop, or a drop over nothing"
+      },
+      "onEnd": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Every drag, keyboard move and cancel ends here"
+      }
+    },
+    "TabsOptions": {
+      "active": {
+        "kind": "number",
+        "doc": "Initially active tab index"
+      },
+      "animation": {
+        "kind": "enum",
+        "values": [
+          "none",
+          "fade"
+        ],
+        "doc": "Panel animation"
+      },
+      "animationDuration": {
+        "kind": "number",
+        "doc": "Animation duration in ms"
+      },
+      "tabSelector": {
+        "kind": "string",
+        "doc": "Selector for tab items"
+      },
+      "panelSelector": {
+        "kind": "string",
+        "doc": "Selector for tab panels"
+      },
+      "activeClass": {
+        "kind": "string",
+        "doc": "CSS class for the active tab"
+      },
+      "onChange": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Called when the active tab changes"
+      }
+    },
+    "TimerOptions": {
+      "duration": {
+        "kind": "number",
+        "doc": "Countdown length in ms"
+      },
+      "autoStart": {
+        "kind": "boolean",
+        "doc": "Start at once"
+      },
+      "format": {
+        "kind": "string",
+        "doc": "Display format (case-insensitive)"
+      },
+      "showControls": {
+        "kind": "boolean",
+        "doc": "Show start/pause/reset buttons"
+      },
+      "updateInterval": {
+        "kind": "number",
+        "doc": "Tick interval in ms"
+      },
+      "notification": {
+        "kind": "boolean",
+        "doc": "Desktop notification on completion"
+      },
+      "notificationOptions": {
+        "kind": "object",
+        "type": "DesktopNotificationOptions",
+        "doc": "Options for that notification"
+      },
+      "sound": {
+        "kind": "boolean",
+        "doc": "Play soundUrl on completion"
+      },
+      "soundUrl": {
+        "kind": "string",
+        "nullable": true,
+        "doc": "Sound to play"
+      },
+      "onTick": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Every tick, with the ms remaining"
+      },
+      "onComplete": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Reached zero"
+      },
+      "onStart": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Started"
+      },
+      "onPause": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Paused"
+      },
+      "onReset": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "Reset"
+      }
+    },
+    "TooltipDelay": {
+      "show": {
+        "kind": "number"
+      },
+      "hide": {
+        "kind": "number"
+      }
+    },
+    "TooltipOptions": {
+      "content": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "object",
+          "function"
+        ],
+        "doc": "Tooltip content (falls back to data-tooltip, then title)"
+      },
+      "position": {
+        "kind": "enum",
+        "values": [
+          "bottom",
+          "top",
+          "left",
+          "right"
+        ],
+        "doc": "Position relative to element (flips when there is no room)"
+      },
+      "placement": {
+        "kind": "enum",
+        "values": [
+          "bottom",
+          "top",
+          "left",
+          "right"
+        ],
+        "doc": "Alias of `position`"
+      },
+      "trigger": {
+        "kind": "any",
+        "kinds": [
+          "any",
+          "enum"
+        ],
+        "values": [
+          "click",
+          "hover",
+          "focus",
+          "manual"
+        ],
+        "doc": "How to trigger; several separated by spaces ('hover focus')"
+      },
+      "delay": {
+        "kind": "number",
+        "kinds": [
+          "number",
+          "object"
+        ],
+        "type": "TooltipDelay",
+        "doc": "Show delay in ms, or {show, hide}"
+      },
+      "hideDelay": {
+        "kind": "number",
+        "doc": "Hide delay in ms"
+      },
+      "animation": {
+        "kind": "boolean",
+        "doc": "Fade in and out"
+      },
+      "offset": {
+        "kind": "number",
+        "doc": "Gap in px between target and bubble"
+      },
+      "html": {
+        "kind": "boolean",
+        "doc": "String content is HTML (sanitised unless `safe: false`), not text"
+      },
+      "safe": {
+        "kind": "boolean",
+        "doc": "Sanitise HTML content"
+      },
+      "visible": {
+        "kind": "boolean",
+        "doc": "Show at once"
+      },
+      "className": {
+        "kind": "string",
+        "doc": "Extra classes on the bubble"
+      },
+      "maxWidth": {
+        "kind": "string",
+        "kinds": [
+          "string",
+          "number"
+        ],
+        "nullable": true,
+        "doc": "Any CSS width; numbers are px"
+      },
+      "onShow": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the tooltip shows"
+      },
+      "onHide": {
+        "kind": "function",
+        "nullable": true,
+        "doc": "When the tooltip hides"
+      }
+    }
+  }
+}
