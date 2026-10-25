@@ -1,0 +1,40 @@
+/* Domma Showcase - demo styles from public/showcase/elements/focus-trap, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/focus-trap/"] .sx-trap-panel {
+            padding: 1rem;
+            border: 2px dashed var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-background-alt);
+            color: var(--dm-text);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/focus-trap/"] .sx-trap-panel.is-trapping {
+            border-style: solid;
+            border-color: var(--dm-primary);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/focus-trap/"] .sx-trap-panel:focus-visible {
+            outline: 2px solid var(--dm-border-focus);
+            outline-offset: 2px;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/focus-trap/"] .sx-trap-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/focus-trap/"] .sx-trap-state {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+            color: var(--dm-text-muted);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/focus-trap/"] .sx-trap-log {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            max-height: 12rem;
+            overflow: auto;
+        }

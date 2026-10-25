@@ -1,0 +1,47 @@
+/* Domma Showcase - demo styles from public/showcase/elements/split-pane, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split {
+            height: 16rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            overflow: hidden;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split-tall {
+            height: 24rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split-pane {
+            padding: var(--dm-space-4);
+            background: var(--dm-surface);
+            color: var(--dm-text);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split-alt {
+            background: var(--dm-background-alt);
+            color: var(--dm-text);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split-code {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.85rem;
+            white-space: pre;
+            margin: 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split-frame {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            background: var(--dm-surface);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split-nopad {
+            padding: 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/split-pane/"] .sx-split-output {
+            font-family: var(--dm-font-mono, monospace);
+        }

@@ -522,4 +522,112 @@
             <code>E.popover('#help', { title, content })</code>
         </div>
     </a>
+
+    <!-- Command Palette -->
+    <a href="/showcase/elements/command-palette" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="search"></div>
+            <h3 class="card-title">Command Palette</h3>
+            <p class="card-text">A Cmd/Ctrl+K launcher - search every action and page from the keyboard.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Fuzzy search with highlights</li>
+                <li>Nested pages and async search</li>
+                <li>Recent commands</li>
+                <li>Shortcut hints</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.commandPalette({ commands })</code>
+        </div>
+    </a>
+
+    <!-- Dropzone -->
+    <a href="/showcase/elements/dropzone" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="upload"></div>
+            <h3 class="card-title">Dropzone</h3>
+            <p class="card-text">Drop, browse or paste files - checked, previewed, submitted or uploaded.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Accept, size and count rules</li>
+                <li>Image previews</li>
+                <li>Submits with the form</li>
+                <li>Uploads with progress</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.dropzone('#files', { accept, maxSize })</code>
+        </div>
+    </a>
+
+    <!-- Focus Trap -->
+    <a href="/showcase/elements/focus-trap" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="lock"></div>
+            <h3 class="card-title">Focus Trap</h3>
+            <p class="card-text">Keep Tab and focus inside a panel while it is open.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Live tabbable lookup</li>
+                <li>Stacks with other traps</li>
+                <li>Return focus on close</li>
+                <li>Optional inert page</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.focusTrap('#panel').activate()</code>
+        </div>
+    </a>
+
+    <!-- Range Slider -->
+    <a href="/showcase/elements/range-slider" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="sliders"></div>
+            <h3 class="card-title">Range Slider</h3>
+            <p class="card-text">One value or two thumbs, with ticks, marks and a tooltip.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Dual-thumb ranges</li>
+                <li>Full keyboard and ARIA</li>
+                <li>Vertical and right-to-left</li>
+                <li>Real range inputs for forms</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.rangeSlider('#price', { range: true })</code>
+        </div>
+    </a>
+
+    <!-- Split Pane -->
+    <a href="/showcase/elements/split-pane" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="columns"></div>
+            <h3 class="card-title">Split Pane</h3>
+            <p class="card-text">Resizable panes with draggable, keyboard-operable gutters.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>Side by side or stacked, nested</li>
+                <li>Min / max in px or %, snapping</li>
+                <li>Collapsible and remembered</li>
+                <li>Separators with arrow keys</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.splitPane('#editor', { sizes: [30, 70] })</code>
+        </div>
+    </a>
+
+    <!-- Virtual List -->
+    <a href="/showcase/elements/virtual-list" class="card card-hover h-full flex flex-col no-underline text-inherit">
+        <div class="card-body flex-1">
+            <div class="mb-4 text-primary" data-icon="list"></div>
+            <h3 class="card-title">Virtual List</h3>
+            <p class="card-text">Huge lists that render only the rows in view, with infinite loading.</p>
+            <ul class="list-none p-0 mt-4 feature-list-item-bullet">
+                <li>100,000 rows, a handful in the DOM</li>
+                <li>Fixed or measured heights</li>
+                <li>loadMore with retry</li>
+                <li>Keyboard navigation</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <code>E.virtualList('#list', { items, render })</code>
+        </div>
+    </a>
 </div>

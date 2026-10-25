@@ -1,0 +1,37 @@
+/* Domma Showcase - demo styles from public/showcase/elements/range-slider, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/range-slider/"] .sx-rs-value {
+            min-width: 8rem;
+            font-family: var(--dm-font-mono, monospace);
+            color: var(--dm-text);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/range-slider/"] .sx-rs-output {
+            margin: 0;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-background-alt);
+            color: var(--dm-text);
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/range-slider/"] .sx-rs-verticals {
+            display: flex;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/range-slider/"] .sx-rs-log {
+            margin: 0;
+            padding-left: 1.25rem;
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.875rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/range-slider/"] .sx-rs-field {
+            max-width: 32rem;
+        }

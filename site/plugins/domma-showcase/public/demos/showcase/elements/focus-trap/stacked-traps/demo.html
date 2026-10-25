@@ -1,0 +1,19 @@
+<div class="sx-trap-row mb-4">
+    <button id="outer-on" class="btn btn-primary" type="button">Activate outer</button>
+    <span id="stack-state" class="sx-trap-state">outer: inactive · inner: inactive</span>
+</div>
+<div id="outer-panel" class="sx-trap-panel mb-4">
+    <p class="mb-3">Outer panel</p>
+    <div class="sx-trap-row mb-4">
+        <button id="inner-on" class="btn btn-outline btn-sm" type="button">Activate inner</button>
+        <button id="outer-off" class="btn btn-sm btn-ghost" type="button">Close outer</button>
+    </div>
+    <div id="inner-panel" class="sx-trap-panel">
+        <p class="mb-3">Inner panel</p>
+        <div class="sx-trap-row">
+            <button class="btn btn-outline btn-sm" type="button">One</button>
+            <button class="btn btn-outline btn-sm" type="button">Two</button>
+            <button id="inner-off" class="btn btn-sm btn-ghost" type="button">Close inner</button>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import {pages, methods} from './reference-catalogue.js?v=14f48b3d70ef';
+import {pages, methods} from './reference-catalogue.js?v=0999b603e1f7';
 
 const METHOD = /^\.?[A-Za-z_$][\w.$]*(?:\([^\n]*\))?$/;
 const nameOf = text => text.replace(/^\./, '').split('(')[0].split('.').at(-1);

@@ -2239,5 +2239,131 @@
     "file": "",
     "title": "",
     "note": "My Garage - lives on as a Domma CMS Tool"
+  },
+  {
+    "old": "/showcase/elements/command-palette/",
+    "new": "/showcase/elements/command-palette",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/command-palette/index.html",
+    "title": "Command Palette - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/command-palette/index.html",
+    "new": "/showcase/elements/command-palette",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/command-palette/index.html",
+    "title": "Command Palette - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/dropzone/",
+    "new": "/showcase/elements/dropzone",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/dropzone/index.html",
+    "title": "Dropzone - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/dropzone/index.html",
+    "new": "/showcase/elements/dropzone",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/dropzone/index.html",
+    "title": "Dropzone - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/focus-trap/",
+    "new": "/showcase/elements/focus-trap",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/focus-trap/index.html",
+    "title": "Focus Trap - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/focus-trap/index.html",
+    "new": "/showcase/elements/focus-trap",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/focus-trap/index.html",
+    "title": "Focus Trap - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/range-slider/",
+    "new": "/showcase/elements/range-slider",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/range-slider/index.html",
+    "title": "Range Slider - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/range-slider/index.html",
+    "new": "/showcase/elements/range-slider",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/range-slider/index.html",
+    "title": "Range Slider - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/split-pane/",
+    "new": "/showcase/elements/split-pane",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/split-pane/index.html",
+    "title": "Split Pane - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/split-pane/index.html",
+    "new": "/showcase/elements/split-pane",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/split-pane/index.html",
+    "title": "Split Pane - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/elements/virtual-list/",
+    "new": "/showcase/elements/virtual-list",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/elements/virtual-list/index.html",
+    "title": "Virtual List - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/elements/virtual-list/index.html",
+    "new": "/showcase/elements/virtual-list",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/elements/virtual-list/index.html",
+    "title": "Virtual List - Elements - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
+  },
+  {
+    "old": "/showcase/i18n/",
+    "new": "/showcase/i18n",
+    "status": 200,
+    "action": "keep",
+    "file": "showcase/i18n/index.html",
+    "title": "i18n - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo] (served as is)"
+  },
+  {
+    "old": "/showcase/i18n/index.html",
+    "new": "/showcase/i18n",
+    "status": 301,
+    "action": "keep",
+    "file": "showcase/i18n/index.html",
+    "title": "i18n - Domma Showcase",
+    "note": "Showcase: prose + [showcase-demo]"
   }
 ]

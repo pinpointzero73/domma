@@ -1,0 +1,7 @@
+/* Domma Showcase - demo styles from public/showcase/i18n, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/i18n/"] .sx-i18n-out {
+            font-family: var(--dm-font-mono, monospace);
+            color: var(--dm-text);
+        }

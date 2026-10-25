@@ -1,0 +1,14 @@
+<p class="text-sm mb-2">locale <code id="fmt-locale">en</code></p>
+<table class="table mb-4">
+    <thead><tr><th>Call</th><th>Result</th></tr></thead>
+    <tbody>
+        <tr><td><code>i18n.number(1234567.891)</code></td><td data-fmt="number"></td></tr>
+        <tr><td><code>i18n.number(0.256, {style: 'percent'})</code></td><td data-fmt="percent"></td></tr>
+        <tr><td><code>i18n.currency(1499.5, 'EUR')</code></td><td data-fmt="currency"></td></tr>
+        <tr><td><code>i18n.date(D(), {dateStyle: 'full'})</code></td><td data-fmt="date"></td></tr>
+        <tr><td><code>i18n.date(D().subtract(3, 'day'), {dateStyle: 'medium', timeStyle: 'short'})</code></td><td data-fmt="dateTime"></td></tr>
+        <tr><td><code>i18n.relative(-1, 'day', {numeric: 'auto'})</code></td><td data-fmt="yesterday"></td></tr>
+        <tr><td><code>i18n.relative(3, 'hour')</code></td><td data-fmt="inHours"></td></tr>
+        <tr><td><code>i18n.list(['Ann', 'Bo', 'Cy'])</code></td><td data-fmt="list"></td></tr>
+    </tbody>
+</table>

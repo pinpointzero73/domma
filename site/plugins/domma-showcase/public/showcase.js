@@ -7,7 +7,7 @@
  * on its own: one that fails logs a warning and says so, and the rest of the
  * page carries on. Right-click a demo for copy, reset and open-on-its-own.
  */
-import {presentPage, enhanceCode, codeText} from './presentation.js?v=910e437e72d3';
+import {presentPage, enhanceCode, codeText} from './presentation.js?v=f22c36496ea3';
 
 const figures = [...document.querySelectorAll('figure.showcase-demo[data-demo]')];
 
