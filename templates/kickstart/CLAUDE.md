@@ -748,8 +748,9 @@ F.render('#form', blueprint, {}, { submitText: 'Save' });
 │   │   └── app.js          # Application logic
 │   ├── css/
 │   │   └── custom.css      # Custom styles
-│   └── types/
-│       └── domma.d.ts      # TypeScript definitions
+│   └── types/              # TypeScript definitions, generated from Domma's source
+│       ├── index.d.ts
+│       └── generated/
 ├── backend/                 # Optional backend
 ├── blueprints/              # Reusable data schemas
 │   ├── common/

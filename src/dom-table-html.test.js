@@ -31,6 +31,26 @@ describe('.html() into table parts keeps rows and cells', () => {
         expect(document.querySelector('#t tbody td').textContent).toBe('Ann');
     });
 
+    it('text and non-table markup in a table part are kept, as before', () => {
+        document.body.innerHTML = '<table><tbody id="b"></tbody><tbody><tr id="r"></tr></tbody></table>';
+        $('#b').html('No results');
+        expect(document.querySelector('#b').textContent).toBe('No results');
+        $('#b').html('<div class="spinner">Loading</div>');
+        expect(document.querySelector('#b .spinner')).not.toBeNull();
+        $('#b').html(5);
+        expect(document.querySelector('#b').textContent).toBe('5');
+        $('#r').html('x');
+        expect(document.querySelector('#r').textContent).toBe('x');
+    });
+
+    it('a nested table cannot stand in for the rows', () => {
+        document.body.innerHTML = '<table><tbody id="b"></tbody></table>';
+        $('#b').html('<tr><td><table><tbody><tr><td>inner</td></tr></tbody></table></td></tr><tr><td>real</td></tr>');
+        const rows = document.querySelectorAll('#b > tr');
+        expect(rows.length).toBe(2);
+        expect(rows[1].textContent).toBe('real');
+    });
+
     it('other elements are unchanged', () => {
         document.body.innerHTML = '<div id="d"></div>';
         $('#d').html('<p>Hi <img src=x onerror="alert(1)"></p>');
