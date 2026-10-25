@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.58.1",
+      "title": "Fixes: range slider reset and tooltip attribute, wizard Previous, table rows in .html(), focus trap layers",
+      "description": "<p>Five fixes: a range slider returns to its starting value on form reset and no longer picks up a stray tooltip, a wizard keeps what was typed when you go back a step, <code>.html()</code> keeps table rows written into a table body, and an overlay's focus trap no longer treats a fixed page header as a floating layer. Kickstart projects now get the generated TypeScript declarations.</p>",
+      "date": "2026-10-25"
+    },
+    {
       "year": "v0.58.0",
       "title": "Deprecated APIs removed",
       "description": "<p>The APIs deprecated in 0.55 are removed: the modal's, popover's and sortable's old unprefixed events, the array shape of <code>E.tooltip</code>, <code>E.buttonGroup</code> and <code>E.listGroup</code>, <code>E.timeline()</code> and the old theme variant methods. Each has a direct replacement listed in the release notes.</p>",
@@ -607,5 +613,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.58.0"
+  "latestVersion": "v0.58.1"
 }
