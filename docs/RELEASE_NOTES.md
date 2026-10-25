@@ -1,3 +1,14 @@
+### v0.59.0 - Added: a type catalogue for editors and tools (2026-10-25)
+
+### Added
+
+- **A type catalogue for tools that cannot run TypeScript.** `assets/types/catalogue.json` (`domma-js/types/catalogue.json`) lists every component `$.setup()` can create, its factory and its options: each option's kind (boolean, number, string, the values of an enum, ...) and its doc line, read from the generated declarations. `npm run build:types` writes it and `npm run check:types` fails when it is stale. Domma CMS's page editor uses it to check a page's config.
+
+### Fixed
+
+- **`$.setup()` gives `cookieConsent`, `notification` and `alarm` their options.** They were called with the selector in place of the options, so a config's options for them were dropped.
+- **Setup config types say what works.** `initial` and event `text` / `html` / `attr` values take numbers and booleans (they are converted to text), and a `form` component's options are typed as `FormSetupOptions` - its own options plus `schema` and `data`.
+
 ### v0.58.2 - Fixes: command palette recents survive a reload (2026-10-25)
 
 ### Fixed

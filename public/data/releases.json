@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.59.0",
+      "title": "Added: a type catalogue for editors and tools",
+      "description": "<p>This release ships a JSON catalogue of every component's options, made from the generated types, so editors and other tools can check a configuration without running TypeScript.</p>",
+      "date": "2026-10-25"
+    },
+    {
       "year": "v0.58.2",
       "title": "Fixes: command palette recents survive a reload",
       "description": "<p>The command palette now keeps recent commands that came from a nested page or a search source after the page reloads. Link commands come back on their own; commands that run code can be found again through the new <code>resolveRecent(id)</code> option.</p>",
@@ -619,5 +625,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.58.2"
+  "latestVersion": "v0.59.0"
 }
