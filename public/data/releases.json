@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v0.60.0",
+      "title": "Added: every component's options in the type catalogue",
+      "description": "<p>The type catalogue now lists the options of every Domma component, so editors can describe and check settings for components built on any of them.</p>",
+      "date": "2026-10-25"
+    },
+    {
       "year": "v0.59.0",
       "title": "Added: a type catalogue for editors and tools",
       "description": "<p>This release ships a JSON catalogue of every component's options, made from the generated types, so editors and other tools can check a configuration without running TypeScript.</p>",
@@ -625,5 +631,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.59.0"
+  "latestVersion": "v0.60.0"
 }

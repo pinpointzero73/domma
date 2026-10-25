@@ -1,3 +1,9 @@
+### v0.60.0 - Added: every component's options in the type catalogue (2026-10-25)
+
+### Added
+
+- **The type catalogue lists every `E.*` component's options.** `elements` in `domma-js/types/catalogue.json` maps each factory that takes an options object to its options type - `progression`, `rangeSlider`, `datePicker` and the rest, not only the components `$.setup()` can create. Domma CMS uses it to describe its shortcodes' settings.
+
 ### v0.59.0 - Added: a type catalogue for editors and tools (2026-10-25)
 
 ### Added
