@@ -1,0 +1,18 @@
+/* rowClass adds .sx-vl-msg to every row. */
+.sx-vl .dm-vlist-row {
+    display: flex;
+    align-items: center;
+    gap: var(--dm-space-3);
+    padding: 0 var(--dm-space-4);
+    border-bottom: 1px solid var(--dm-border);
+    cursor: pointer;
+}
+
+.sx-vl .dm-vlist-row:hover {
+    background: var(--dm-hover-bg);
+}
+
+.sx-vl-msg.dm-vlist-row {
+    display: block;
+    padding: var(--dm-space-3) var(--dm-space-4);
+}

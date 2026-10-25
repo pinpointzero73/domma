@@ -1,0 +1,5 @@
+<label for="escape-name">Name</label>
+<input id="escape-name" type="text" class="form-input mb-3" value="Ann &lt;img src=x onerror=alert(1)&gt;">
+<p class="mb-2"><span class="text-sm">t('greet.hello', {name})</span><br><span class="sx-i18n-out" id="out-t"></span></p>
+<p class="mb-2"><span class="text-sm">html('greet.signedIn', {name})</span><br><span class="sx-i18n-out" id="out-html-src"></span></p>
+<p class="m-0"><span class="text-sm">rendered</span><br><span id="out-html"></span></p>

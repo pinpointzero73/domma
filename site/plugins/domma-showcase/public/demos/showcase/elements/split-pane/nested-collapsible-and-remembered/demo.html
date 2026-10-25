@@ -1,0 +1,25 @@
+<div id="demo-ide" class="sx-split sx-split-tall mb-4">
+    <div class="sx-split-pane sx-split-alt">
+        <strong>Files</strong>
+        <ul class="mt-2 mb-0">
+            <li>index.html</li>
+            <li>site.css</li>
+            <li>app.js</li>
+        </ul>
+    </div>
+    <div id="demo-ide-middle">
+        <div class="sx-split-pane"><pre class="sx-split-code">const split = E.splitPane('#ide', {
+    sizes: [20, 50, 30],
+    collapsible: [true, false, false]
+});</pre></div>
+        <div class="sx-split-pane sx-split-alt"><pre class="sx-split-code">$ npm run build
+built in 1.4s</pre></div>
+    </div>
+    <div class="sx-split-pane sx-split-nopad">
+        <iframe class="sx-split-frame" title="Preview" srcdoc="<p style='font-family: sans-serif; padding: 1rem'>A preview in an iframe.</p>"></iframe>
+    </div>
+</div>
+<div class="flex gap-3 flex-wrap mb-4">
+    <button id="demo-ide-toggle" class="btn btn-sm btn-outline" type="button">Collapse files</button>
+    <button id="demo-ide-reset" class="btn btn-sm btn-outline" type="button">Reset sizes</button>
+</div>

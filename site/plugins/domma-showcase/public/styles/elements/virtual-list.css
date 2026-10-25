@@ -1,0 +1,66 @@
+/* Domma Showcase - demo styles from public/showcase/elements/virtual-list, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl {
+            height: 22rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-num {
+            min-width: 4.5rem;
+            color: var(--dm-text-muted);
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.85rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-grow {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-amount {
+            font-family: var(--dm-font-mono, monospace);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-who {
+            font-weight: 600;
+            margin-right: var(--dm-space-2);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-when {
+            color: var(--dm-text-muted);
+            font-size: 0.8rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-text {
+            margin: var(--dm-space-1) 0 0;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-post-title {
+            font-weight: 600;
+            margin: 0 0 var(--dm-space-1);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-post-body {
+            margin: 0;
+            color: var(--dm-text-secondary);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--dm-space-3);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-bar .form-input {
+            width: 8rem;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/virtual-list/"] .sx-vl-output {
+            font-family: var(--dm-font-mono, monospace);
+        }

@@ -147,7 +147,7 @@ export default async function dommaShowcase(fastify, options) {
         if (!demo) return reply.code(404).type('text/plain').send('No such demo.');
         let theme = 'charcoal-dark';
         try { theme = JSON.parse(fs.readFileSync(path.resolve('config/theme.json'), 'utf8')).theme || theme; } catch { /* default */ }
-        reply.type('text/html; charset=utf-8').send(`<!DOCTYPE html>
+        return reply.type('text/html; charset=utf-8').send(`<!DOCTYPE html>
 <html lang="en-GB">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
@@ -158,6 +158,7 @@ export default async function dommaShowcase(fastify, options) {
 ${demoStyles(id)}</head>
 <body class="dm-theme-${esc(theme)}">
 <main class="container py-5">${renderDemo(id)}</main>
+<script src="/public/js/vendor/dompurify/purify.min.js"></script>
 <script src="/dist/domma/domma.min.js"></script>
 <script type="module" src="/plugins/domma-showcase/public/showcase.js?v=${esc(VERSION)}"></script>
 </body>

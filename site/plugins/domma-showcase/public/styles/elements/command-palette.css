@@ -1,0 +1,43 @@
+/* Domma Showcase - demo styles from public/showcase/elements/command-palette, by scripts/site-migrate/demo-styles.mjs:
+ * only rules for classes the demos use. Do not edit - re-run the script, or move a rule
+ * into a demo's own demo.css. */
+.showcase-demo[data-demo^="showcase/elements/command-palette/"] .sx-cp-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 18rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--dm-border);
+            border-radius: var(--dm-radius-md);
+            background: var(--dm-surface);
+            color: var(--dm-text-muted);
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/command-palette/"] .sx-cp-launch:hover {
+            background: var(--dm-hover-bg);
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/command-palette/"] .sx-cp-launch:focus-visible {
+            outline: 2px solid var(--dm-border-focus);
+            outline-offset: 2px;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/command-palette/"] .sx-cp-launch kbd {
+            margin-left: auto;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/command-palette/"] .sx-cp-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .showcase-demo[data-demo^="showcase/elements/command-palette/"] .sx-cp-log {
+            font-family: var(--dm-font-mono, monospace);
+            font-size: 0.8125rem;
+            max-height: 12rem;
+            overflow: auto;
+        }
