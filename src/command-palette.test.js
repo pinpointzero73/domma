@@ -363,6 +363,51 @@ describe('E.commandPalette', () => {
         expect(S.get('cp-test')).toBeNull();
     });
 
+    it('recents: a link from an async page comes back after a reload; an action needs resolveRecent', async () => {
+        const kids = async () => [
+            {id: 'page:/about', title: 'About', group: 'Pages', href: '#/pages/edit/about', keywords: ['us']},
+            {id: 'act', title: 'Do it', action: () => {}},
+            {id: 'bad', title: 'Bad', href: 'javascript:alert(1)'}
+        ];
+        const commands = [{id: 'pages', title: 'Pages', children: kids}];
+        const first = palette({commands, recentKey: 'cp-reload', navigate: () => {}});
+        const pick = async (title) => {
+            first.open('pages');
+            key(input(first), 'Enter');
+            await new Promise(r => setTimeout(r, 0));
+            type(first, title);
+            key(input(first), 'Enter');
+        };
+        await pick('Do it');
+        await pick('Bad');
+        await pick('About');
+        expect(first.recent()).toEqual(['page:/about', 'bad', 'act']);
+        expect(Object.keys(S.get('cp-reload:saved'))).toEqual(['page:/about']);
+        first.destroy();
+
+        // a new page load: nothing has opened the async page yet
+        const seen = [];
+        const again = palette({commands, recentKey: 'cp-reload', navigate: (href) => seen.push(href)});
+        again.open();
+        expect(titles(again).slice(0, 1)).toEqual(['About']);
+        expect(titles(again)).not.toContain('Do it');
+        key(input(again), 'Enter');
+        expect(seen).toHaveLength(1);
+        expect(seen[0]).toMatch(/#\/pages\/edit\/about$/);
+        again.destroy();
+
+        const ran = [];
+        const resolved = palette({commands, recentKey: 'cp-reload',
+            resolveRecent: (id) => (id === 'act' ? {id: 'act', title: 'Do it', action: () => ran.push(id)}
+                : id === 'bad' ? {id: 'other', title: 'Renamed'} : null)});
+        resolved.open();
+        expect(titles(resolved).slice(0, 2)).toEqual(['About', 'Do it']);
+        expect(titles(resolved)).not.toContain('Renamed');
+        resolved.clearRecent();
+        expect(S.get('cp-reload:saved')).toBeNull();
+        expect(S.get('cp-reload')).toBeNull();
+    });
+
     it('recents off by default', () => {
         const p = palette({commands: COMMANDS});
         p.open('save');

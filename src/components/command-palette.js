@@ -252,6 +252,20 @@ export function claimsHotkey(e) {
 /** Only links a browser can follow safely: http(s), mailto, tel, or relative. */
 const safeHref = safeUrl;
 
+const savedKey = (key) => `${key}:saved`;
+
+/** What a link command needs to be shown and followed again; null for anything else. */
+function linkCopy(command) {
+    if (!command || typeof command !== 'object' || typeof command.action === 'function' || command.children) return null;
+    if (typeof command.href !== 'string' || !safeHref(command.href)) return null;
+    const copy = {id: idOf(command), href: command.href};
+    for (const k of ['title', 'subtitle', 'group', 'icon', 'target']) {
+        if (typeof command[k] === 'string') copy[k] = command[k];
+    }
+    if (Array.isArray(command.keywords)) copy.keywords = command.keywords.filter(k => typeof k === 'string');
+    return copy.id && copy.title ? copy : null;
+}
+
 /**
  * The context a `source` or async `children` function gets.
  * @typedef {{signal?: AbortSignal, palette: CommandPaletteInstance}} PaletteSourceContext
@@ -289,6 +303,7 @@ const safeHref = safeUrl;
  * @property {string|null} [recentKey] Storage (S) key for recent commands; null (default) = off
  * @property {number} [recentLimit]
  * @property {string} [recentLabel]
+ * @property {((id: string) => PaletteCommand|null)|null} [resolveRecent] Finds a remembered command that is not in `commands` (one an async `children` or `source` gave) after a reload. Without it, such a command comes back only if it was a plain link (`href`, no `action`)
  * @property {string|null} [sourceGroup] Heading for source results without their own group
  * @property {string} [emptyText]
  * @property {string} [loadingText]
@@ -343,6 +358,7 @@ export class CommandPalette extends Component {
         recentKey: null,            // storage key (S) for recent commands; null = off
         recentLimit: 5,
         recentLabel: 'Recent',
+        resolveRecent: null,        // (id) => command | null - recents from async children/sources
         sourceGroup: null,          // heading for source results without their own group
         emptyText: 'No results',
         loadingText: 'Searching…',
@@ -793,7 +809,10 @@ export class CommandPalette extends Component {
      * @returns {this}
      */
     clearRecent() {
-        if (this.options.recentKey) storage.remove(this.options.recentKey);
+        if (this.options.recentKey) {
+            storage.remove(this.options.recentKey);
+            storage.remove(savedKey(this.options.recentKey));
+        }
         this._refresh();
         return this;
     }
@@ -910,6 +929,41 @@ export class CommandPalette extends Component {
         const id = idOf(command);
         const ids = [id, ...this.recent().filter(x => x !== id)].slice(0, Math.max(1, num(this.options.recentLimit, 5)));
         storage.set(key, ids);
+        // A command an async page or a source gave is gone after a reload, so a plain link
+        // keeps a copy of what it needs to be shown and followed again.
+        const saved = this._saved();
+        const kept = {};
+        for (const x of ids) if (saved[x]) kept[x] = saved[x];
+        const copy = this._findById(id) ? null : linkCopy(command);
+        if (copy) kept[id] = copy;
+        else delete kept[id];
+        if (Object.keys(kept).length) storage.set(savedKey(key), kept);
+        else storage.remove(savedKey(key));
+    }
+
+    _saved() {
+        const saved = this.options.recentKey ? storage.get(savedKey(this.options.recentKey), null) : null;
+        return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+    }
+
+    /** A remembered command that is not in the list: asked of resolveRecent, else the saved link. */
+    _restore(id) {
+        let command = null;
+        if (typeof this.options.resolveRecent === 'function') {
+            try {
+                command = this.options.resolveRecent(id) || null;
+                // Under another id it would be remembered twice once run.
+                if (command && idOf(command) !== id) command = null;
+            } catch (_) {
+                command = null;
+            }
+        }
+        if (!command) {
+            const copy = linkCopy(this._saved()[id]);
+            if (copy && idOf(copy) === id) command = copy;
+        }
+        if (command) this._known.set(id, command);
+        return command;
     }
 
     /** Group and order what is shown now. */
@@ -931,7 +985,7 @@ export class CommandPalette extends Component {
         const shown = new Set();
         if (!q && !page && o.recentKey) {
             for (const id of this.recent()) {
-                const command = this._findById(id) || this._known.get(id);
+                const command = this._findById(id) || this._known.get(id) || this._restore(id);
                 if (command && !command.hidden) {
                     add(o.recentLabel, command, null);
                     shown.add(command);

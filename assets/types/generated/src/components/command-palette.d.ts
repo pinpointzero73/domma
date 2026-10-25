@@ -198,6 +198,9 @@ export class CommandPalette extends Component {
     /** Every command reachable without a request: the top level and array children. */
     _findById(id: any, list?: any[], depth?: number): any;
     _remember(command: any): void;
+    _saved(): any;
+    /** A remembered command that is not in the list: asked of resolveRecent, else the saved link. */
+    _restore(id: any): any;
     /** Group and order what is shown now. */
     _compute(): {
         name: any;
@@ -297,6 +300,10 @@ export type CommandPaletteOptions = {
     recentKey?: string | null;
     recentLimit?: number;
     recentLabel?: string;
+    /**
+     * Finds a remembered command that is not in `commands` (one an async `children` or `source` gave) after a reload. Without it, such a command comes back only if it was a plain link (`href`, no `action`)
+     */
+    resolveRecent?: ((id: string) => PaletteCommand | null) | null;
     /**
      * Heading for source results without their own group
      */
