@@ -19,7 +19,7 @@
  * @property {boolean} [cloak] false: never add the `dm-cloaked` class
  * @property {boolean} [theme] false: don't initialise the theme engine automatically
  * @property {boolean} [purifyWarning] false: no console warning when DOMPurify is missing
- * @property {boolean} [deprecationWarnings] false: no deprecation warnings
+ * @property {boolean} [deprecationWarnings] false: no deprecation warnings (none are pending in 1.0)
  * @property {boolean} [i18nWarnings] false: no console warning for a missing translation
  */
 

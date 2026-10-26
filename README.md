@@ -199,7 +199,7 @@ For quick prototyping without npm:
 <script src="https://cdn.jsdelivr.net/npm/domma-js@latest/public/dist/domma.min.js"></script>
 ```
 
-> **Tip:** Replace `@latest` with a specific version (e.g., `@0.43.0`) for production to ensure stability.
+> **Tip:** Replace `@latest` with a specific version (e.g., `@1.0.0`) for production to ensure stability.
 
 ## Live Demo
 
@@ -838,7 +838,7 @@ const confirmed = await E.confirm('Delete this item?');
 if (confirmed) deleteItem();
 ```
 
-> `timeline()` still works but is deprecated - use `progression({ mode: 'timeline' })`.
+> `timeline()` was removed in 0.58 - use `progression({ mode: 'timeline' })`.
 
 ### Effects (`Domma.effects`)
 
