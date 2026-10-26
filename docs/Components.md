@@ -467,10 +467,8 @@ Popover's cancelable phases are `show` and `hide` (`onShow` / `onHide` returning
 A factory returns one instance. `E.buttonGroup(sel)` and `E.listGroup(sel)` used to return an
 array when the selector matched several elements; they now set up every match as before and return
 the first, with a non-enumerable `all()` for the list (`E.buttonGroup.all(sel, opts)` and
-`E.listGroup.all(sel, opts)` return the array directly). Until 1.0 the array shape still answers -
-`[i]`, `length`, `forEach`, `map` and iteration - with a one-time warning each
-(`window.DommaOptions = {deprecationWarnings: false}` silences it). A selector that matches nothing
-still returns `[]` until then. `E.chooser()` with a missing host returns an inert chooser (every
+`E.listGroup.all(sel, opts)` return the array directly). The old array shape was removed in 0.58,
+and a selector that matches nothing returns `null` (`all()` gives `[]`). `E.chooser()` with a missing host returns an inert chooser (every
 method a no-op, `element` null) rather than `null`. `E.notify({title, ...})` is the same as
 `E.notify(title, {...})`.
 

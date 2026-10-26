@@ -35,7 +35,7 @@ export type DommaLoadOptions = {
      */
     purifyWarning?: boolean;
     /**
-     * false: no deprecation warnings
+     * false: no deprecation warnings (none are pending in 1.0)
      */
     deprecationWarnings?: boolean;
     /**
