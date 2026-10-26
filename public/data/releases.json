@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v1.0.0",
+      "title": "Domma 1.0",
+      "description": "<p>Domma 1.0 is the stable release. The API was settled in 0.54 to 0.60: one set of conventions across every component, web components that wrap the same code, seven new components, type declarations generated from the source and a type catalogue for tools. From now on, a breaking change needs a new major version. There are no code changes from 0.60.0.</p>",
+      "date": "2026-10-26"
+    },
+    {
       "year": "v0.60.0",
       "title": "Added: every component's options in the type catalogue",
       "description": "<p>The type catalogue now lists the options of every Domma component, so editors can describe and check settings for components built on any of them.</p>",
@@ -631,5 +637,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v0.60.0"
+  "latestVersion": "v1.0.0"
 }
