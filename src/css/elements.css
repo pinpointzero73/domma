@@ -8746,6 +8746,9 @@ domma-back-to-top {
     gap: 1px;
     padding: 4px;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    max-height: calc(100dvh - 16px);
+    box-sizing: border-box;
     background: var(--dm-ctx-surface, var(--dm-surface));
     color: var(--dm-text);
     border: 1px solid var(--dm-ctx-accent, var(--dm-border));

@@ -348,6 +348,20 @@ describe('Domma.elements.contextMenu', () => {
             expect(openMenu()).toBeNull();
         });
 
+        it('keeps root and submenu scrolling open, but closes on page scrolling', () => {
+            make('#page', {items: [{label: 'Folders', submenu: [{label: 'Inbox'}]}], animation: false});
+            rightClick(document.getElementById('para'));
+            openMenu().dispatchEvent(new window.Event('scroll'));
+            expect(openMenu()).not.toBeNull();
+            document.querySelector('.has-submenu').click();
+            const sub = document.querySelector('.dm-context-menu-sub');
+            expect(sub).not.toBeNull();
+            sub.dispatchEvent(new window.Event('scroll'));
+            expect(openMenu()).not.toBeNull();
+            document.getElementById('page').dispatchEvent(new window.Event('scroll'));
+            expect(openMenu()).toBeNull();
+        });
+
         it('closes after a selection', () => {
             make('#page', {items: [{label: 'Page', action() {}}], animation: false});
             rightClick(document.getElementById('para'));
