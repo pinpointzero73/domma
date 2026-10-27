@@ -1237,7 +1237,11 @@ class ContextMenu extends Component {
         // scroll: the point it was opened against has moved and no longer
         // means anything, so it closes.
         if (opts.closeOnScroll) {
-            this._scrollHandler = () => this.close();
+            this._scrollHandler = (event) => {
+                if (this._menu?.contains(event.target)) return;
+                if (this._submenus.some(sub => sub?.contains(event.target))) return;
+                this.close();
+            };
             window.addEventListener('scroll', this._scrollHandler, true);
         }
 

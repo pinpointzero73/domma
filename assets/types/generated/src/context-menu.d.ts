@@ -555,7 +555,7 @@ declare class ContextMenu extends Component {
     _outsideHandler: (e: any) => void;
     _contextHandler: (e: any) => void;
     _keyHandler: (e: any) => void;
-    _scrollHandler: () => this;
+    _scrollHandler: (event: any) => void;
     _resizeHandler: () => this;
     _unbindOpenListeners(): void;
     _focusableItems(): any[];
