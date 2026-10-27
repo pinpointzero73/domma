@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v1.0.1",
+      "title": "Context menus stay open while scrolling",
+      "description": "<p>Long context menus now stay open while you scroll through their actions, including folder submenus on smaller screens.</p>",
+      "date": "2026-10-27"
+    },
+    {
       "year": "v1.0.0",
       "title": "Domma 1.0",
       "description": "<p>Domma 1.0 is the stable release. The API was settled in 0.54 to 0.60: one set of conventions across every component, web components that wrap the same code, seven new components, type declarations generated from the source and a type catalogue for tools. From now on, a breaking change needs a new major version. There are no code changes from 0.60.0.</p>",
@@ -637,5 +643,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v1.0.0"
+  "latestVersion": "v1.0.1"
 }

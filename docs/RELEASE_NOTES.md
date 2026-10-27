@@ -1,3 +1,10 @@
+### v1.0.1 - Context menus stay open while scrolling (2026-10-27)
+
+### Fixed
+
+- Scrolling a long context menu or one of its submenus keeps it open. Scrolling the surrounding page still closes the menu.
+- Context menus contain scroll gestures and remain within the viewport on smaller screens.
+
 ### v1.0.0 - Domma 1.0 (2026-10-26)
 
 ### Changed
