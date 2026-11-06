@@ -668,6 +668,8 @@ class ThemeRoller {
                                 <option value="unicorn-dark" ${currentTheme === 'unicorn-dark' ? 'selected' : ''}>Unicorn Dark 🌙</option>
                             </optgroup>
                             <optgroup label="Dreamy">
+                                <option value="admin-atelier-light" ${currentTheme === 'admin-atelier-light' ? 'selected' : ''}>Admin Atelier Light</option>
+                                <option value="admin-atelier-dark" ${currentTheme === 'admin-atelier-dark' ? 'selected' : ''}>Admin Atelier Dark</option>
                                 <option value="dreamy-light" ${currentTheme === 'dreamy-light' ? 'selected' : ''}>Dreamy Light ☀️</option>
                                 <option value="dreamy-dark" ${currentTheme === 'dreamy-dark' ? 'selected' : ''}>Dreamy Dark 🌙</option>
                             </optgroup>

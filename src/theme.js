@@ -26,6 +26,7 @@ const AVAILABLE_THEMES = [
     'mint-light', 'mint-dark',
     'wedding-light', 'wedding-dark',
     'core-light',
+    'admin-atelier-light', 'admin-atelier-dark',
     'corporate-light', 'corporate-dark',
     // Admin family - standalone (no light/dark), finish × accent
     'admin-smooth-steel', 'admin-smooth-indigo', 'admin-smooth-teal',
@@ -44,7 +45,7 @@ const DEFAULT_THEME = 'charcoal-dark';
 /**
  * Colour base of a theme (the name before the final segment), as listed by `listBases()`
  * (`core` is the base of `core-light`).
- * @typedef {'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'core'|'corporate'|'admin-smooth'|'admin-sharp'|'admin-slate'} ThemeVariant
+ * @typedef {'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'core'|'corporate'|'admin-smooth'|'admin-sharp'|'admin-slate'|'admin-atelier'} ThemeVariant
  */
 
 /**
@@ -54,7 +55,7 @@ const DEFAULT_THEME = 'charcoal-dark';
 
 /**
  * A full theme name, e.g. 'ocean-dark' or 'admin-sharp-steel'.
- * @typedef {`${'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'corporate'}-${ThemeMode}`|'core-light'|AdminTheme} ThemeName
+ * @typedef {`${'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'corporate'|'admin-atelier'}-${ThemeMode}`|'core-light'|AdminTheme} ThemeName
  */
 
 /**
@@ -297,7 +298,7 @@ class ThemeEngine {
      * @returns {ThemeVariant[]}
      */
     listBases() {
-        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding', 'corporate', 'admin-smooth', 'admin-sharp', 'admin-slate'];
+        return ['ocean', 'forest', 'sunset', 'royal', 'lemon', 'silver', 'charcoal', 'christmas', 'unicorn', 'dreamy', 'grayve', 'mint', 'wedding', 'corporate', 'admin-smooth', 'admin-sharp', 'admin-slate', 'admin-atelier'];
     }
 
     /**

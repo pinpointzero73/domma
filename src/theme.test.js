@@ -32,7 +32,7 @@ describe('Domma.theme - Theme Module (Refactored)', () => {
   it('listThemes() should return an array of all available themes', () => {
     const themes = Domma.theme.listThemes();
     expect(Array.isArray(themes)).toBe(true);
-    expect(themes.length).toBe(38);
+    expect(themes.length).toBe(40);
     expect(themes).toContain('forest-dark');
     expect(themes).toContain('corporate-light');
     expect(themes).toContain('corporate-dark');
@@ -98,5 +98,17 @@ describe('Domma.theme - Theme Module (Refactored)', () => {
     unsubscribe();
     Domma.theme.set('royal-light'); // This should not trigger the spy
     expect(onChangeSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('Admin Atelier light/dark pair', () => {
+  it('switches modes and preserves the full base name', () => {
+    for (const mode of ['light', 'dark']) {
+      Domma.theme.set(`admin-atelier-${mode}`);
+      expect(Domma.theme.getBase()).toBe('admin-atelier');
+      expect(Domma.theme.getMode()).toBe(mode);
+      expect(Domma.theme.isDark()).toBe(mode === 'dark');
+    }
+    Domma.theme.set('charcoal-dark');
   });
 });
