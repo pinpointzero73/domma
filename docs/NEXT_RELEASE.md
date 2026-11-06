@@ -5,5 +5,10 @@
 - Update the development server watcher to Chokidar 3, removing its older vulnerable watcher dependencies.
 - Adapt DOM test setup and iframe focus fixtures to the current jsdom environment, with iframe behavior verified in Chromium.
 
+🔁 **domma-reactive 1.3.2**
+
+*   Domma is now built against domma-reactive 1.3.2 - see [its release notes](https://github.com/pinpointzero73/domma-reactive/blob/v1.3.2/CHANGELOG.md).
+
 <!-- website -->
+
 <p>Updated dependencies and build tooling, verified declaration compatibility, and refreshed the development server watcher.</p>
