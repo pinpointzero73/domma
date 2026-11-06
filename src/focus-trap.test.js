@@ -398,10 +398,16 @@ describe('E.focusTrap', () => {
         document.body.innerHTML = '<button id="before">b</button><div id="box"><button id="one">1</button><iframe id="frame"></iframe></div><button id="after">a</button>';
         const trap = keep(E.focusTrap('#box'));
         trap.activate();
-        document.getElementById('frame').focus();
+        const focusFrame = () => {
+            const frame = document.getElementById('frame');
+            frame.focus();
+            // jsdom 31 omits the iframe focusin event Chromium sends.
+            frame.dispatchEvent(new FocusEvent('focusin', {bubbles: true}));
+        };
+        focusFrame();
         document.getElementById('after').focus();
         expect(document.activeElement.id).toBe('one');
-        document.getElementById('frame').focus();
+        focusFrame();
         document.getElementById('before').focus();
         expect(document.activeElement.id).toBe('frame');
     });

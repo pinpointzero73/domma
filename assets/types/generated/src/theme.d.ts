@@ -57,23 +57,23 @@ export type ThemeOptions = {
     /**
      * Initial theme (e.g., 'ocean-dark', 'forest-light')
      */
-    theme?: ThemeName;
+    theme?: ThemeName | undefined;
     /**
      * Respect system preference (maps to light/dark variants)
      */
-    autoDetect?: boolean;
+    autoDetect?: boolean | undefined;
     /**
      * Save to localStorage
      */
-    persist?: boolean;
+    persist?: boolean | undefined;
     /**
      * Disable theming entirely (no classes applied)
      */
-    disabled?: boolean;
+    disabled?: boolean | undefined;
     /**
      * Target element
      */
-    target?: HTMLElement | string;
+    target?: string | HTMLElement | undefined;
 };
 export type Theme = ThemeEngine;
 declare const themeEngine: ThemeEngine;
@@ -124,9 +124,9 @@ declare const themeEngine: ThemeEngine;
 declare class ThemeEngine {
     _theme: string;
     _listeners: any[];
-    _target: HTMLElement | Element;
+    _target: HTMLElement | Element | null;
     _initialised: boolean;
-    _systemMediaQuery: MediaQueryList;
+    _systemMediaQuery: MediaQueryList | null;
     _autoDetect: boolean;
     _disabled: boolean;
     /**
@@ -135,7 +135,7 @@ declare class ThemeEngine {
      * @returns {this}
      */
     init(options?: ThemeOptions): this;
-    _persist: boolean;
+    _persist: boolean | undefined;
     /**
      * Get the current theme (full name, e.g., 'ocean-dark')
      * @returns {ThemeName}

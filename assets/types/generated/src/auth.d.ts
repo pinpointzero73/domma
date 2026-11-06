@@ -107,9 +107,9 @@ export class LoginForm extends Component {
         passwordPlaceholder: string;
         buttonText: string;
         showLabels: boolean;
-        onSubmit: any;
-        onSuccess: any;
-        onError: any;
+        onSubmit: null;
+        onSuccess: null;
+        onError: null;
     };
     /**
      * @param {string|HTMLElement} selector - Container element or selector
@@ -131,9 +131,9 @@ export class RegisterForm extends Component {
         buttonText: string;
         minPasswordLength: number;
         showLabels: boolean;
-        onSubmit: any;
-        onSuccess: any;
-        onError: any;
+        onSubmit: null;
+        onSuccess: null;
+        onError: null;
     };
     /**
      * @param {string|HTMLElement} selector - Container element or selector
@@ -152,7 +152,7 @@ export class AuthTabs extends Component {
         activeTab: string;
         loginText: string;
         registerText: string;
-        onChange: any;
+        onChange: null;
     };
     /**
      * @param {string|HTMLElement} selector - Container element or selector
@@ -174,15 +174,15 @@ export class UserInfo extends Component {
         showIcon: boolean;
         showRole: boolean;
         logoutText: string;
-        onLogout: any;
+        onLogout: null;
     };
     /**
      * @param {string|HTMLElement} selector
      * @param {Object} [options]
      */
-    constructor(selector: string | HTMLElement, options?: any);
+    constructor(selector: string | HTMLElement, options?: Object);
     _init(): void;
-    _onAuthChange: () => void;
+    _onAuthChange: (() => void) | undefined;
     render(): void;
     handleLogout(): void;
 }
@@ -193,19 +193,19 @@ export type AuthOptions = {
     /**
      * - Backend API URL (default: `http://<host>:3000/api` on localhost, else `<origin>/api`)
      */
-    apiUrl?: string;
+    apiUrl?: string | undefined;
     /**
      * - Storage key for the token
      */
-    storageKey?: string;
+    storageKey?: string | undefined;
     /**
      * - Storage key for the user object
      */
-    userStorageKey?: string;
+    userStorageKey?: string | undefined;
     /**
      * - Verify a stored token with `GET <apiUrl>/auth/me` on init
      */
-    autoCheck?: boolean;
+    autoCheck?: boolean | undefined;
 };
 /**
  * The signed-in user, as the backend returned it (`response.user` from login, register or
@@ -357,68 +357,68 @@ export type Auth = {
  * Options for `A.createLoginForm()` / `new A.LoginForm()`.
  */
 export type LoginFormOptions = {
-    emailPlaceholder?: string;
-    passwordPlaceholder?: string;
-    buttonText?: string;
-    showLabels?: boolean;
+    emailPlaceholder?: string | undefined;
+    passwordPlaceholder?: string | undefined;
+    buttonText?: string | undefined;
+    showLabels?: boolean | undefined;
     /**
      * - Called before the login request
      */
-    onSubmit?: ((email: string, password: string) => void) | null;
+    onSubmit?: ((email: string, password: string) => void) | null | undefined;
     /**
      * - Called after a successful login
      */
-    onSuccess?: ((user: AuthUser | null) => void) | null;
+    onSuccess?: ((user: AuthUser | null) => void) | null | undefined;
     /**
      * - Called when the login fails
      */
-    onError?: ((error: Error) => void) | null;
+    onError?: ((error: Error) => void) | null | undefined;
 };
 /**
  * Options for `A.createRegisterForm()` / `new A.RegisterForm()`.
  */
 export type RegisterFormOptions = {
-    namePlaceholder?: string;
-    emailPlaceholder?: string;
-    passwordPlaceholder?: string;
-    buttonText?: string;
-    minPasswordLength?: number;
-    showLabels?: boolean;
+    namePlaceholder?: string | undefined;
+    emailPlaceholder?: string | undefined;
+    passwordPlaceholder?: string | undefined;
+    buttonText?: string | undefined;
+    minPasswordLength?: number | undefined;
+    showLabels?: boolean | undefined;
     /**
      * - Called before the register request
      */
-    onSubmit?: ((email: string, password: string, name: string) => void) | null;
+    onSubmit?: ((email: string, password: string, name: string) => void) | null | undefined;
     /**
      * - Called after a successful registration
      */
-    onSuccess?: ((user: AuthUser | null) => void) | null;
+    onSuccess?: ((user: AuthUser | null) => void) | null | undefined;
     /**
      * - Called when registration fails (also for mismatched passwords)
      */
-    onError?: ((error: Error) => void) | null;
+    onError?: ((error: Error) => void) | null | undefined;
 };
 /**
  * Options for `A.createAuthTabs()` / `new A.AuthTabs()`.
  */
 export type AuthTabsOptions = {
-    activeTab?: "login" | "register";
-    loginText?: string;
-    registerText?: string;
+    activeTab?: "register" | "login" | undefined;
+    loginText?: string | undefined;
+    registerText?: string | undefined;
     /**
      * - Called with the tab switched to
      */
-    onChange?: ((tab: string) => void) | null;
+    onChange?: ((tab: string) => void) | null | undefined;
 };
 /**
  * Options for `A.createUserInfo()` / `new A.UserInfo()`.
  */
 export type UserInfoOptions = {
-    showIcon?: boolean;
-    showRole?: boolean;
-    logoutText?: string;
+    showIcon?: boolean | undefined;
+    showRole?: boolean | undefined;
+    logoutText?: string | undefined;
     /**
      * - Called after the logout button logs out
      */
-    onLogout?: (() => void) | null;
+    onLogout?: (() => void) | null | undefined;
 };
 import Component from './component.js';

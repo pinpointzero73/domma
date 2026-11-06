@@ -556,7 +556,20 @@ export const STROBE_PRESETS: Record<"club" | "concert" | "police" | "searchlight
  * @type {Record<string, string[]>}
  */
 export const EFFECT_PALETTES: Record<string, string[]>;
-declare const _default: Effects;
+declare const _default: {
+    breathe: typeof breathe;
+    pulse: typeof pulse;
+    scribe: typeof scribe;
+    reveal: typeof reveal;
+    scramble: typeof scramble;
+    counter: typeof counter;
+    ripple: typeof ripple;
+    shake: typeof shake;
+    twinkle: typeof twinkle;
+    tickerTape: typeof tickerTape;
+    butterflies: typeof butterflies;
+    strobe: typeof strobe;
+};
 export default _default;
 /**
  * What an effect is applied to: a CSS selector, an element, a NodeList or an array of elements.
@@ -603,19 +616,19 @@ export type ScribeAction = {
     /**
      * - Text to type
      */
-    render?: string;
+    render?: string | undefined;
     /**
      * - Entrance effect for each rendered unit (default: 'none')
      */
-    effect?: "none" | "fade" | "bounce" | "glow";
+    effect?: "fade" | "none" | "glow" | "bounce" | undefined;
     /**
      * - Pause: '2s', '500ms' or a number of milliseconds
      */
-    wait?: string | number;
+    wait?: string | number | undefined;
     /**
      * - Delete text: true = the last render, a number = that many units, 'all' = everything
      */
-    undoRender?: boolean | number | "all";
+    undoRender?: number | boolean | "all" | undefined;
 };
 /**
  * A palette name (see EFFECT_PALETTES; 'theme' reads the active Domma theme's colours) or an
@@ -629,47 +642,47 @@ export type BreatheOptions = {
     /**
      * - Vertical movement distance in pixels (default: 6)
      */
-    amplitude?: number;
+    amplitude?: number | undefined;
     /**
      * - Complete animation cycle time in milliseconds (default: 3000)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - CSS easing function (default: 'ease-in-out')
      */
-    easing?: string;
+    easing?: string | undefined;
     /**
      * - Initial delay before animation starts in milliseconds (default: 0)
      */
-    delay?: number;
+    delay?: number | undefined;
     /**
      * - Delay between multiple elements in milliseconds (default: 0)
      */
-    stagger?: number;
+    stagger?: number | undefined;
     /**
      * - Number of cycles or 'infinite' (default: 'infinite')
      */
-    iterations?: number | "infinite";
+    iterations?: number | "infinite" | undefined;
     /**
      * - Pause animation when hovering (default: false)
      */
-    pauseOnHover?: boolean;
+    pauseOnHover?: boolean | undefined;
     /**
      * - Start animation immediately (default: true)
      */
-    autoStart?: boolean;
+    autoStart?: boolean | undefined;
     /**
      * - Honor prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
     /**
      * - Callback when animation starts
      */
-    onStart?: () => void;
+    onStart?: (() => void) | undefined;
     /**
      * - Callback when animation completes
      */
-    onComplete?: () => void;
+    onComplete?: (() => void) | undefined;
 };
 /**
  * Options for `Domma.effects.pulse()`.
@@ -678,35 +691,35 @@ export type PulseOptions = {
     /**
      * - Scale factor (e.g., 1.05 = 5% larger) (default: 1.05)
      */
-    scale?: number;
+    scale?: number | undefined;
     /**
      * - Complete animation cycle time in milliseconds (default: 2000)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - CSS easing function (default: 'ease-in-out')
      */
-    easing?: string;
+    easing?: string | undefined;
     /**
      * - Initial delay before animation starts (default: 0)
      */
-    delay?: number;
+    delay?: number | undefined;
     /**
      * - Delay between multiple elements (default: 0)
      */
-    stagger?: number;
+    stagger?: number | undefined;
     /**
      * - Number of cycles or 'infinite' (default: 'infinite')
      */
-    iterations?: number | "infinite";
+    iterations?: number | "infinite" | undefined;
     /**
      * - Pause animation when hovering (default: false)
      */
-    pauseOnHover?: boolean;
+    pauseOnHover?: boolean | undefined;
     /**
      * - Honor prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
 };
 /**
  * Options for `Domma.effects.scribe()`.
@@ -715,79 +728,79 @@ export type ScribeOptions = {
     /**
      * - Rendering granularity: 'typewriter' (char-by-char), 'word', or 'sentence' (default: 'typewriter')
      */
-    mode?: "typewriter" | "word" | "sentence";
+    mode?: "typewriter" | "word" | "sentence" | undefined;
     /**
      * - Milliseconds per unit when typing (default: 50)
      */
-    speed?: number;
+    speed?: number | undefined;
     /**
      * - Milliseconds per unit when deleting (default: 30)
      */
-    deleteSpeed?: number;
+    deleteSpeed?: number | undefined;
     /**
      * - Show blinking cursor (default: true)
      */
-    cursor?: boolean;
+    cursor?: boolean | undefined;
     /**
      * - Cursor character (default: '|')
      */
-    cursorChar?: string;
+    cursorChar?: string | undefined;
     /**
      * - Animate cursor blink (default: true)
      */
-    cursorBlink?: boolean;
+    cursorBlink?: boolean | undefined;
     /**
      * - Cursor style (default: 'caret')
      */
-    cursorType?: "caret" | "block" | "underline";
+    cursorType?: "underline" | "caret" | "block" | undefined;
     /**
      * - Loop count: true = infinite, number = specific count (default: false)
      */
-    loop?: boolean | number;
+    loop?: number | boolean | undefined;
     /**
      * - Delay between loops in milliseconds (default: 1000)
      */
-    loopDelay?: number;
+    loopDelay?: number | undefined;
     /**
      * - Pause animation when hovering (default: false)
      */
-    pauseOnHover?: boolean;
+    pauseOnHover?: boolean | undefined;
     /**
      * - Start animation immediately (default: true)
      */
-    autoStart?: boolean;
+    autoStart?: boolean | undefined;
     /**
      * - Honor prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
     /**
      * - Action queue to execute
      */
-    actions?: ScribeAction[];
+    actions?: ScribeAction[] | undefined;
     /**
      * - Callback when animation starts
      */
-    onStart?: () => void;
+    onStart?: (() => void) | undefined;
     /**
      * - Callback when animation completes
      */
-    onComplete?: () => void;
+    onComplete?: (() => void) | undefined;
     /**
      * - Callback for each unit rendered (unit, index) - unit can be char/word/sentence depending on mode
      */
-    onCharacter?: (unit: string, index: number) => void;
+    onCharacter?: ((unit: string, index: number) => void) | undefined;
     /**
      * - Callback when render action completes (text)
      */
-    onRender?: (text: string) => void;
+    onRender?: ((text: string) => void) | undefined;
     /**
      * - Callback when undoRender action completes (deletedText)
      */
-    onUndoRender?: (deletedText: string) => void;
+    onUndoRender?: ((deletedText: string) => void) | undefined;
     /**
      * - Callback on each loop iteration (loopCount)
      */
-    onLoop?: (loopCount: number) => void;
+    onLoop?: ((loopCount: number) => void) | undefined;
 };
 /**
  * Options for `Domma.effects.reveal()`.
@@ -796,43 +809,43 @@ export type RevealOptions = {
     /**
      * - Animation type: 'fade', 'slide-up', 'slide-down', 'slide-left', 'slide-right', 'zoom', 'flip' (default: 'fade')
      */
-    animation?: "fade" | "slide-up" | "slide-down" | "slide-left" | "slide-right" | "zoom" | "flip";
+    animation?: "fade" | "zoom" | "slide-up" | "slide-down" | "slide-left" | "slide-right" | "flip" | undefined;
     /**
      * - Animation duration in ms (default: 600)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - CSS easing function (default: 'ease-out')
      */
-    easing?: string;
+    easing?: string | undefined;
     /**
      * - Delay before animation in ms (default: 0)
      */
-    delay?: number;
+    delay?: number | undefined;
     /**
      * - Delay between multiple elements in ms (default: 0)
      */
-    stagger?: number;
+    stagger?: number | undefined;
     /**
      * - IntersectionObserver threshold 0-1 (default: 0.1)
      */
-    threshold?: number;
+    threshold?: number | undefined;
     /**
      * - Observer root margin (default: '0px')
      */
-    rootMargin?: string;
+    rootMargin?: string | undefined;
     /**
      * - Only animate once (default: true)
      */
-    once?: boolean;
+    once?: boolean | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
     /**
      * - Callback per element when revealed
      */
-    onReveal?: (element: Element) => void;
+    onReveal?: ((element: Element) => void) | undefined;
 };
 /**
  * Options for `Domma.effects.scramble()`.
@@ -841,47 +854,47 @@ export type ScrambleOptions = {
     /**
      * - Ms per character resolve (default: 50)
      */
-    speed?: number;
+    speed?: number | undefined;
     /**
      * - Ms between scramble frame updates (default: 30)
      */
-    scrambleSpeed?: number;
+    scrambleSpeed?: number | undefined;
     /**
      * - Character pool for scramble (default: alphanumeric + symbols)
      */
-    characters?: string;
+    characters?: string | undefined;
     /**
      * - 'left-to-right', 'right-to-left', 'random', 'center-out' (default: 'left-to-right')
      */
-    revealOrder?: "left-to-right" | "right-to-left" | "random" | "center-out";
+    revealOrder?: "left-to-right" | "right-to-left" | "random" | "center-out" | undefined;
     /**
      * - How long each char scrambles before resolving in ms (default: 800)
      */
-    scrambleDuration?: number;
+    scrambleDuration?: number | undefined;
     /**
      * - Delay between multiple elements in ms (default: 0)
      */
-    stagger?: number;
+    stagger?: number | undefined;
     /**
      * - false, true (infinite), or number of loops (default: false)
      */
-    loop?: boolean | number;
+    loop?: number | boolean | undefined;
     /**
      * - Ms between loops (default: 2000)
      */
-    loopDelay?: number;
+    loopDelay?: number | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
     /**
      * - Callback when animation completes
      */
-    onComplete?: () => void;
+    onComplete?: (() => void) | undefined;
     /**
      * - Callback per character resolved (char, index)
      */
-    onCharacter?: (char: string, index: number) => void;
+    onCharacter?: ((char: string, index: number) => void) | undefined;
 };
 /**
  * Options for `Domma.effects.counter()`.
@@ -890,59 +903,59 @@ export type CounterOptions = {
     /**
      * - Start value (default: 0)
      */
-    from?: number;
+    from?: number | undefined;
     /**
      * - End value (required, or reads from element textContent)
      */
-    to?: number | null;
+    to?: number | null | undefined;
     /**
      * - Total count duration in ms (default: 2000)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - 'linear', 'ease-out', 'ease-in-out' (default: 'ease-out')
      */
-    easing?: "linear" | "ease-out" | "ease-in-out";
+    easing?: "linear" | "ease-out" | "ease-in-out" | undefined;
     /**
      * - Decimal places (default: 0)
      */
-    decimals?: number;
+    decimals?: number | undefined;
     /**
      * - Thousands separator (default: ',')
      */
-    separator?: string;
+    separator?: string | undefined;
     /**
      * - Text before number (default: '')
      */
-    prefix?: string;
+    prefix?: string | undefined;
     /**
      * - Text after number (default: '')
      */
-    suffix?: string;
+    suffix?: string | undefined;
     /**
      * - Delay between multiple elements in ms (default: 0)
      */
-    stagger?: number;
+    stagger?: number | undefined;
     /**
      * - 'immediate' or 'scroll' (default: 'immediate')
      */
-    trigger?: "immediate" | "scroll";
+    trigger?: "scroll" | "immediate" | undefined;
     /**
      * - Observer threshold when trigger is scroll (default: 0.5)
      */
-    threshold?: number;
+    threshold?: number | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
     /**
      * - Callback on each frame (currentValue)
      */
-    onUpdate?: (currentValue: number) => void;
+    onUpdate?: ((currentValue: number) => void) | undefined;
     /**
      * - Callback when counting completes
      */
-    onComplete?: () => void;
+    onComplete?: (() => void) | undefined;
 };
 /**
  * Options for `Domma.effects.ripple()`.
@@ -951,31 +964,31 @@ export type RippleOptions = {
     /**
      * - Ripple colour (default: 'rgba(255, 255, 255, 0.35)')
      */
-    colour?: string;
+    colour?: string | undefined;
     /**
      * - Ripple animation duration in ms (default: 600)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - Starting opacity (default: 0.35)
      */
-    opacity?: number;
+    opacity?: number | undefined;
     /**
      * - Allow ripple to overflow element (default: false)
      */
-    unbounded?: boolean;
+    unbounded?: boolean | undefined;
     /**
      * - Always ripple from centre (default: false)
      */
-    centered?: boolean;
+    centered?: boolean | undefined;
     /**
      * - 'click', 'mousedown', 'pointerdown' (default: 'pointerdown')
      */
-    trigger?: "click" | "mousedown" | "pointerdown";
+    trigger?: "click" | "mousedown" | "pointerdown" | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
 };
 /**
  * Options for `Domma.effects.shake()`.
@@ -984,35 +997,35 @@ export type ShakeOptions = {
     /**
      * - Shake distance in px (default: 6)
      */
-    intensity?: number;
+    intensity?: number | undefined;
     /**
      * - Total shake duration in ms (default: 500)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - 'horizontal', 'vertical', 'both' (default: 'horizontal')
      */
-    direction?: "horizontal" | "vertical" | "both";
+    direction?: "vertical" | "horizontal" | "both" | undefined;
     /**
      * - CSS easing function (default: 'ease-in-out')
      */
-    easing?: string;
+    easing?: string | undefined;
     /**
      * - Number of shake cycles (default: 1)
      */
-    iterations?: number;
+    iterations?: number | undefined;
     /**
      * - Delay between elements in ms (default: 0)
      */
-    stagger?: number;
+    stagger?: number | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
     /**
      * - Callback when shake completes
      */
-    onComplete?: () => void;
+    onComplete?: (() => void) | undefined;
 };
 /**
  * Options for `Domma.effects.twinkle()`.
@@ -1021,35 +1034,35 @@ export type TwinkleOptions = {
     /**
      * - Number of stars (default: 100)
      */
-    count?: number;
+    count?: number | undefined;
     /**
      * - Minimum star size in pixels (default: 1)
      */
-    minSize?: number;
+    minSize?: number | undefined;
     /**
      * - Maximum star size in pixels (default: 3)
      */
-    maxSize?: number;
+    maxSize?: number | undefined;
     /**
      * - Base oscillation speed (default: 0.003)
      */
-    twinkleSpeed?: number;
+    twinkleSpeed?: number | undefined;
     /**
      * - Star colour (default: 'rgba(255, 240, 200, 1)')
      */
-    colour?: string;
+    colour?: string | undefined;
     /**
      * - Canvas z-index (default: 1)
      */
-    zIndex?: number;
+    zIndex?: number | undefined;
     /**
      * - Star shape; 'star' draws a 4-pointed star, 'circle' draws a dot (default: 'star')
      */
-    shape?: "star" | "circle";
+    shape?: "circle" | "star" | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
 };
 /**
  * Options for `Domma.effects.tickerTape()`.
@@ -1058,59 +1071,59 @@ export type TickerTapeOptions = {
     /**
      * - Named theme palette (e.g. 'theme', 'rainbow', 'gold', 'silver', 'festive', 'pastel', 'mono') or a custom array of CSS colour strings (default: 'theme')
      */
-    palette?: TickerTapePalette;
+    palette?: TickerTapePalette | undefined;
     /**
      * - Average strips on screen at any moment (default: 50)
      */
-    density?: number;
+    density?: number | undefined;
     /**
      * - Fall speed multiplier (1 = default) (default: 1)
      */
-    speed?: number;
+    speed?: number | undefined;
     /**
      * - Horizontal sway amplitude in pixels (default: 60)
      */
-    sway?: number;
+    sway?: number | undefined;
     /**
      * - Max rotation degrees per frame (default: 6)
      */
-    rotationSpeed?: number;
+    rotationSpeed?: number | undefined;
     /**
      * - Minimum strip width in pixels (default: 5)
      */
-    minWidth?: number;
+    minWidth?: number | undefined;
     /**
      * - Maximum strip width in pixels (default: 9)
      */
-    maxWidth?: number;
+    maxWidth?: number | undefined;
     /**
      * - Minimum strip height in pixels (default: 12)
      */
-    minHeight?: number;
+    minHeight?: number | undefined;
     /**
      * - Maximum strip height in pixels (default: 22)
      */
-    maxHeight?: number;
+    maxHeight?: number | undefined;
     /**
      * - Fraction of fall (0-1) before fade begins (default: 0.55)
      */
-    fadeStart?: number;
+    fadeStart?: number | undefined;
     /**
      * - If true, drops a single batch and stops respawning (default: false)
      */
-    burst?: boolean;
+    burst?: boolean | undefined;
     /**
      * - Strips emitted in burst mode (default: 150)
      */
-    burstCount?: number;
+    burstCount?: number | undefined;
     /**
      * - Canvas stacking order (default: 1)
      */
-    zIndex?: number;
+    zIndex?: number | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
 };
 /**
  * Options for `Domma.effects.butterflies()`.
@@ -1119,55 +1132,55 @@ export type ButterfliesOptions = {
     /**
      * - Named palette (e.g. 'meadow', 'firefly', 'aqua', 'autumn' or any ticker-tape palette) or a custom array of CSS colour strings (default: 'meadow')
      */
-    palette?: TickerTapePalette;
+    palette?: TickerTapePalette | undefined;
     /**
      * - Target butterflies on screen at once (default: 18)
      */
-    density?: number;
+    density?: number | undefined;
     /**
      * - Global speed multiplier (default: 1)
      */
-    speed?: number;
+    speed?: number | undefined;
     /**
      * - Steering erraticness (default: 1)
      */
-    wander?: number;
+    wander?: number | undefined;
     /**
      * - Upward drift bias (default: 0.4)
      */
-    riseSpeed?: number;
+    riseSpeed?: number | undefined;
     /**
      * - Wingbeat rate multiplier (default: 1)
      */
-    flapSpeed?: number;
+    flapSpeed?: number | undefined;
     /**
      * - Minimum wingspan in pixels (default: 14)
      */
-    minSize?: number;
+    minSize?: number | undefined;
     /**
      * - Maximum wingspan in pixels (default: 26)
      */
-    maxSize?: number;
+    maxSize?: number | undefined;
     /**
      * - Use two palette colours per butterfly (default: true)
      */
-    twoTone?: boolean;
+    twoTone?: boolean | undefined;
     /**
      * - Release one batch then settle (default: false)
      */
-    burst?: boolean;
+    burst?: boolean | undefined;
     /**
      * - Butterflies released in burst mode (default: 40)
      */
-    burstCount?: number;
+    burstCount?: number | undefined;
     /**
      * - Canvas stacking order (default: 1)
      */
-    zIndex?: number;
+    zIndex?: number | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
 };
 /**
  * Options for `Domma.effects.strobe()`.
@@ -1176,55 +1189,55 @@ export type StrobeOptions = {
     /**
      * - Named preset (club|concert|police|searchlight|scanner|mood). Individual options override the preset. (default: 'club')
      */
-    preset?: "club" | "concert" | "police" | "searchlight" | "scanner" | "mood";
+    preset?: "club" | "concert" | "police" | "searchlight" | "scanner" | "mood" | undefined;
     /**
      * - Corners beams emit from: any of 'tl','tr','bl','br'
      */
-    origins?: Array<"tl" | "tr" | "bl" | "br">;
+    origins?: ("br" | "tr" | "tl" | "bl")[] | undefined;
     /**
      * - 'sweep' (fan back and forth) or 'rotate' (full circle)
      */
-    motion?: "sweep" | "rotate";
+    motion?: "sweep" | "rotate" | undefined;
     /**
      * - Degrees a beam fans across in sweep mode
      */
-    sweepArc?: number;
+    sweepArc?: number | undefined;
     /**
      * - Sweep/rotation speed multiplier
      */
-    speed?: number;
+    speed?: number | undefined;
     /**
      * - Angular width of each beam cone in degrees
      */
-    beamWidth?: number;
+    beamWidth?: number | undefined;
     /**
      * - Blink beams on/off (the strobe character)
      */
-    flicker?: boolean;
+    flicker?: boolean | undefined;
     /**
      * - Flicker rate in flashes/sec (warns above 5)
      */
-    hz?: number;
+    hz?: number | undefined;
     /**
      * - Beam colours, assigned per beam in order
      */
-    colours?: string[];
+    colours?: string[] | undefined;
     /**
      * - Beam brightness 0-1
      */
-    intensity?: number;
+    intensity?: number | undefined;
     /**
      * - Auto-stop after N ms (default: null)
      */
-    duration?: number | null;
+    duration?: number | null | undefined;
     /**
      * - Canvas stacking order (default: 9999)
      */
-    zIndex?: number;
+    zIndex?: number | undefined;
     /**
      * - Honour prefers-reduced-motion (default: true)
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
 };
 /**
  * The effects module (`Domma.effects`).

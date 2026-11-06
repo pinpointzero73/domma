@@ -53,21 +53,21 @@ export class RangeSlider extends Component {
      * @param {RangeSliderOptions} [options]
      */
     constructor(element: string | Element | null, options?: RangeSliderOptions);
-    _isInput: boolean;
-    _made: any[];
-    _hooked: any[];
-    _dispatching: boolean;
+    _isInput: boolean | undefined;
+    _made: any[] | undefined;
+    _hooked: any[] | undefined;
+    _dispatching: boolean | undefined;
     _drag: {
         index: number;
         pointerId: any;
         start: number[];
-    };
-    _timers: any[];
-    _values: number[];
+    } | null;
+    _timers: any[] | undefined;
+    _values: number[] | undefined;
     get _min(): number;
     get _max(): number;
     /** The step used to snap values; null for step 'any'. */
-    get _step(): number;
+    get _step(): number | null;
     /** The step the arrow keys move by. */
     get _keyStep(): number;
     /** Snap to the step grid (counted from min, as a native range input does) and clamp. */
@@ -81,18 +81,18 @@ export class RangeSlider extends Component {
     get _vertical(): boolean;
     get _rtl(): boolean;
     _setupInputs(): void;
-    _inputs: HTMLElement[];
+    _inputs: (HTMLElement | null)[] | null | undefined;
     _restore: {
-        name: string;
-        hidden: boolean;
-        tabindex: string;
-        ariaHidden: string;
-        min: string;
-        max: string;
-        step: string;
-        disabled: string;
-        value: string;
-    };
+        name: string | null;
+        hidden: boolean | "until-found";
+        tabindex: string | null;
+        ariaHidden: string | null;
+        min: string | null;
+        max: string | null;
+        step: string | null;
+        disabled: string | null;
+        value: string | null;
+    } | undefined;
     _syncInputAttrs(): void;
     /**
      * Code (or M.bind, which writes `input.value`) setting a value programmatically fires
@@ -102,7 +102,7 @@ export class RangeSlider extends Component {
     _hookValues(): void;
     /** Push the current values into the real inputs. */
     _writeInputs(): void;
-    _writing: boolean;
+    _writing: boolean | undefined;
     /**
      * A form reset returns each input to its value attribute. Inputs this component made,
      * and a caller's input without one, would reset to the midpoint - give them the
@@ -112,25 +112,25 @@ export class RangeSlider extends Component {
     /** Read the inputs back after something outside changed them. */
     _fromInputs(): void;
     _bindInputs(): void;
-    _labels: any[];
+    _labels: any[] | undefined;
     _labelText(): any;
     _render(): void;
-    _ticksEl: HTMLDivElement;
-    _marksEl: HTMLDivElement;
-    _thumbs: any[] | HTMLDivElement[];
-    _fillEl: HTMLDivElement;
-    _track: HTMLDivElement;
-    _root: HTMLDivElement;
+    _ticksEl: HTMLDivElement | null | undefined;
+    _marksEl: HTMLDivElement | null | undefined;
+    _thumbs: any[] | HTMLDivElement[] | undefined;
+    _fillEl: HTMLDivElement | undefined;
+    _track: HTMLDivElement | undefined;
+    _root: HTMLDivElement | null | undefined;
     /** Values a tick is drawn at. */
     _tickValues(): number[];
     _place(el: any, pct: any): void;
-    _renderTicks(root: any): HTMLDivElement;
-    _renderMarks(root: any): HTMLDivElement;
+    _renderTicks(root: any): HTMLDivElement | null;
+    _renderMarks(root: any): HTMLDivElement | null;
     /** Move the thumbs and fill to the current values and update the ARIA. */
     _paint(): void;
     _applyDisabled(): void;
     _bindRoot(): void;
-    _rootHandlers: any[] | (string | HTMLDivElement | ((e: any) => void))[][];
+    _rootHandlers: any[] | (string | HTMLDivElement | ((e: any) => void) | null | undefined)[][] | undefined;
     _unbindRoot(): void;
     /** The value under a pointer. */
     _valueAt(e: any): number;
@@ -195,80 +195,80 @@ export default RangeSlider;
 export type RangeSliderValue = number | [number, number];
 export type RangeSliderMark = {
     value: number;
-    label?: string;
+    label?: string | undefined;
 };
 export type RangeSliderOptions = {
     /**
      * Default: the input's min, else 0
      */
-    min?: number;
+    min?: number | undefined;
     /**
      * Default: the input's max, else 100
      */
-    max?: number;
+    max?: number | undefined;
     /**
      * Default: the input's step, else 1
      */
-    step?: number | "any";
+    step?: number | "any" | undefined;
     /**
      * A number, or [low, high] / "low,high" with range: true
      */
-    value?: RangeSliderValue | string | null;
+    value?: string | RangeSliderValue | null | undefined;
     /**
      * Two thumbs; two inputs, sharing `name` unless `names` is given
      */
-    range?: boolean;
-    orientation?: "horizontal" | "vertical";
+    range?: boolean | undefined;
+    orientation?: "vertical" | "horizontal" | undefined;
     /**
      * true = every step, n = every n units, or the values to draw at
      */
-    ticks?: boolean | number | number[];
+    ticks?: number | boolean | number[] | undefined;
     /**
      * Label the ticks (always on for an array)
      */
-    tickLabels?: boolean;
+    tickLabels?: boolean | undefined;
     /**
      * Formats the value for ticks, marks, the tooltip and aria-valuetext
      */
-    labels?: ((value: number, where: "tick" | "mark" | "tooltip" | "aria") => string) | null;
+    labels?: ((value: number, where: "tick" | "mark" | "tooltip" | "aria") => string) | null | undefined;
     /**
      * Read when `labels` is not set
      */
-    format?: ((value: number, where: "tick" | "mark" | "tooltip" | "aria") => string) | null;
+    format?: ((value: number, where: "tick" | "mark" | "tooltip" | "aria") => string) | null | undefined;
     /**
      * Default 'hover' (also shown on focus and while dragging)
      */
-    tooltip?: "always" | "hover" | "never";
-    marks?: RangeSliderMark[] | null;
-    disabled?: boolean;
-    name?: string | null;
+    tooltip?: "hover" | "always" | "never" | undefined;
+    marks?: RangeSliderMark[] | null | undefined;
+    disabled?: boolean | undefined;
+    name?: string | null | undefined;
     /**
      * [lowName, highName] for range: true
      */
-    names?: [string, string] | null;
+    names?: [string, string] | null | undefined;
     /**
      * range: true - the closest the thumbs may come
      */
-    minDistance?: number;
+    minDistance?: number | undefined;
     /**
      * null = follow the page's direction
      */
-    rtl?: boolean | null;
-    ariaLabel?: string | null;
-    ariaLabels?: [string, string] | null;
-    className?: string;
+    rtl?: boolean | null | undefined;
+    ariaLabel?: string | null | undefined;
+    ariaLabels?: [string, string] | null | undefined;
+    className?: string | undefined;
     /**
      * While dragging, and on each key press
      */
-    onInput?: ((value: RangeSliderValue) => void) | null;
+    onInput?: ((value: RangeSliderValue) => void) | null | undefined;
     /**
      * When the value is committed
      */
-    onChange?: ((value: RangeSliderValue) => void) | null;
+    onChange?: ((value: RangeSliderValue) => void) | null | undefined;
     /**
      * Return false to refuse a move
      */
-    onBeforeChange?: ((next: RangeSliderValue, current: RangeSliderValue) => boolean | void) | null;
+    onBeforeChange?: ((next: RangeSliderValue, current: RangeSliderValue) => boolean | void) | null | undefined;
 };
 export type RangeSliderInstance = RangeSlider;
 import Component from '../component.js';

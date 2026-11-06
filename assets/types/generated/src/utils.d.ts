@@ -350,7 +350,7 @@ export namespace utils {
      * @param {number} [step]
      * @returns {number[]}
      */
-    function range(start: number, end: number, step?: number): number[];
+    function range(start: number, end: number, step?: number | undefined): number[];
     function uniqueId(prefix?: string): string;
     /**
      * Creates an object composed of keys generated from the results of running each element through iteratee.
@@ -1311,7 +1311,7 @@ export namespace utils {
      * @param {boolean} [floating]
      * @returns {number}
      */
-    function random(floating?: boolean): number;
+    function random(floating?: boolean | undefined): number;
     /**
      * Between 0 and `upper` when `floating` is given; `random(n)` alone is between `n` and 1 (the bounds are swapped).
      * @overload
@@ -1328,7 +1328,7 @@ export namespace utils {
      * @param {boolean} [floating]
      * @returns {number}
      */
-    function random(lower: number, upper?: number, floating?: boolean): number;
+    function random(lower: number, upper?: number | undefined, floating?: boolean | undefined): number;
     /**
      * Converts string to camel case.
      * @param {string} string
@@ -1593,49 +1593,49 @@ export type DebounceOptions = {
     /**
      * - Invoke on the leading edge of the timeout
      */
-    leading?: boolean;
+    leading?: boolean | undefined;
     /**
      * - Invoke on the trailing edge of the timeout
      */
-    trailing?: boolean;
+    trailing?: boolean | undefined;
     /**
      * - Longest time func may be delayed before it is invoked
      */
-    maxWait?: number;
+    maxWait?: number | undefined;
 };
 export type ThrottleOptions = {
     /**
      * - Invoke on the leading edge of the timeout
      */
-    leading?: boolean;
+    leading?: boolean | undefined;
     /**
      * - Invoke on the trailing edge of the timeout
      */
-    trailing?: boolean;
+    trailing?: boolean | undefined;
 };
 export type TruncateOptions = {
     /**
      * - Maximum string length, omission included
      */
-    length?: number;
+    length?: number | undefined;
     /**
      * - Appended to a truncated string
      */
-    omission?: string;
+    omission?: string | undefined;
     /**
      * - Truncate back to the last match of this
      */
-    separator?: string | RegExp;
+    separator?: string | RegExp | undefined;
 };
 export type TemplateOptions = {
     /**
      * - Named partial templates, for `{{> name}}`
      */
-    partials?: Record<string, string>;
+    partials?: Record<string, string> | undefined;
     /**
      * - Helper functions, for `{{helperName arg ...}}`
      */
-    helpers?: Record<string, (...args: any[]) => any>;
+    helpers?: Record<string, (...args: any[]) => any> | undefined;
 };
 /**
  * A debounced (or throttled) function. Until func has run once a call returns undefined;

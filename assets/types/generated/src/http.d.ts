@@ -82,30 +82,30 @@ export type RequestOwnOptions = {
      * Request headers (plain object, `Headers` or entry pairs); copied, never mutated.
      * `Content-Type: application/json` is added for a JSON body unless one is given.
      */
-    headers?: HeadersInit;
+    headers?: HeadersInit | undefined;
     /**
      * Do not log a failure to the console (useful for expected errors such as a 401 check).
      */
-    silent?: boolean;
+    silent?: boolean | undefined;
     /**
      * Abort after this many milliseconds (rejects with a `TimeoutError`).
      */
-    timeout?: number;
+    timeout?: number | undefined;
     /**
      * Defaults to `'same-origin'`; pass `'include'` to send cookies cross-origin.
      */
-    credentials?: RequestCredentials;
+    credentials?: RequestCredentials | undefined;
     /**
      * Abort signal, composed with `timeout` (whichever fires first aborts).
      */
-    signal?: AbortSignal;
-    mode?: RequestMode;
-    cache?: RequestCache;
-    redirect?: RequestRedirect;
-    referrer?: string;
-    referrerPolicy?: ReferrerPolicy;
-    integrity?: string;
-    keepalive?: boolean;
+    signal?: AbortSignal | undefined;
+    mode?: RequestMode | undefined;
+    cache?: RequestCache | undefined;
+    redirect?: RequestRedirect | undefined;
+    referrer?: string | undefined;
+    referrerPolicy?: ReferrerPolicy | undefined;
+    integrity?: string | undefined;
+    keepalive?: boolean | undefined;
 };
 /**
  * Options for `http.delete()`: a body is sent only when given as `data`.

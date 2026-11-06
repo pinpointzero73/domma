@@ -23,13 +23,17 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_OUT = path.join(ROOT, 'assets', 'types', 'generated');
 
 /** The command that runs tsc: [command, ...leading args]. */
-export function tscCommand() {
+export function tscCommand(packageName = 'typescript') {
     const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
-    const version = pkg.devDependencies?.typescript;
+    const version = packageName === 'typescript'
+        ? pkg.devDependencies?.typescript
+        : pkg.devDependencies?.[packageName]?.split('@').at(-1);
     try {
         const require = createRequire(path.join(ROOT, 'package.json'));
-        const tsc = require.resolve('typescript/bin/tsc');
-        const installed = require('typescript/package.json').version;
+        const packageFile = require.resolve(`${packageName}/package.json`);
+        const installedPackage = require(packageFile);
+        const tsc = path.resolve(path.dirname(packageFile), installedPackage.bin.tsc);
+        const installed = installedPackage.version;
         if (!version || installed === version) return [process.execPath, tsc];
     } catch {
         // not installed - fall through to npx
@@ -39,8 +43,8 @@ export function tscCommand() {
 }
 
 /** Run tsc with the given arguments from the repo root; true when it succeeded. */
-export function runTsc(args) {
-    const [cmd, ...lead] = tscCommand();
+export function runTsc(args, packageName = 'typescript') {
+    const [cmd, ...lead] = tscCommand(packageName);
     const res = spawnSync(cmd, [...lead, ...args], {cwd: ROOT, stdio: 'inherit'});
     return res.status === 0;
 }
@@ -87,7 +91,9 @@ function vendor(out) {
 /** Write fresh declarations into `out` (emptied first). */
 export function buildTypes(out = DEFAULT_OUT) {
     fs.rmSync(out, {recursive: true, force: true});
-    if (!runTsc(['-p', 'tsconfig.types.json', '--outDir', out])) throw new Error('tsc failed to generate the declarations');
+    // TypeScript 7 still changes JSDoc declaration output, including callback
+    // syntax. Emit with the compiler API package; validate consumers with 7.
+    if (!runTsc(['-p', 'tsconfig.types.json', '--outDir', out], 'typescript-compiler-api')) throw new Error('tsc failed to generate the declarations');
     vendor(out);
 }
 

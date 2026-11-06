@@ -96,21 +96,21 @@ export class Dropzone extends Component {
      * @param {DropzoneOptions} [options]
      */
     constructor(element: string | Element | null, options?: DropzoneOptions);
-    _entries: any[];
-    _queue: any[];
-    _active: number;
-    _batch: boolean;
-    _added: any[];
-    _canSync: boolean;
+    _entries: any[] | undefined;
+    _queue: any[] | undefined;
+    _active: number | undefined;
+    _batch: boolean | undefined;
+    _added: any[] | undefined;
+    _canSync: boolean | undefined;
     _labels: any;
-    _guarded: boolean;
+    _guarded: boolean | undefined;
     _setupZone(): void;
     /** The drop area (the element, or the one drawn after a file input given as the target). @type {HTMLElement} */
-    zone: HTMLElement;
-    _givenInput: HTMLElement;
-    _restoreZone: {};
-    _zoneClasses: string[];
-    _isLabel: boolean;
+    zone: HTMLElement | undefined;
+    _givenInput: HTMLElement | null | undefined;
+    _restoreZone: {} | undefined;
+    _zoneClasses: string[] | undefined;
+    _isLabel: boolean | undefined;
     _findInput(): any;
     _setupInput(): void;
     _restoreInput: {
@@ -120,13 +120,13 @@ export class Dropzone extends Component {
         disabled: any;
         tabindex: any;
         accept: any;
-    };
+    } | undefined;
     /** The real file input. @type {HTMLInputElement} */
-    input: HTMLInputElement;
+    input: HTMLInputElement | undefined;
     _setupList(): void;
-    _hintId: string;
-    _live: HTMLDivElement;
-    _list: HTMLUListElement;
+    _hintId: string | undefined;
+    _live: HTMLDivElement | undefined;
+    _list: HTMLUListElement | undefined;
     _hint(): string;
     _bind(): void;
     _timers: any;
@@ -140,12 +140,12 @@ export class Dropzone extends Component {
         type: string;
         status: string;
         progress: number;
-        response: any;
-        error: any;
+        response: null;
+        error: null;
         attempts: number;
-        preview: any;
+        preview: null;
     };
-    _rejectReason(entry: any, countSoFar: any): "size" | "type" | "count";
+    _rejectReason(entry: any, countSoFar: any): "size" | "type" | "count" | null;
     _rejectMessage(entry: any, reason: any): string;
     /**
      * Add files (a FileList, an array of File, or one File). Each passes the accept / size /
@@ -172,7 +172,7 @@ export class Dropzone extends Component {
     browse(): this;
     /** Keep the real input's FileList in step with the list (no upload), or empty (upload). */
     _syncInput(): void;
-    _settingFiles: boolean;
+    _settingFiles: boolean | undefined;
     _announce(message: any): void;
     _preview(entry: any): void;
     _renderEntry(entry: any): void;
@@ -255,88 +255,88 @@ export type DropzoneUploadOptions = {
     /**
      * Default 'POST'
      */
-    method?: string;
+    method?: string | undefined;
     /**
      * FormData field for the file. Default 'file'
      */
-    field?: string;
-    headers?: Record<string, string> | ((entry: DropzoneEntry) => Record<string, string>);
-    withCredentials?: boolean;
+    field?: string | undefined;
+    headers?: Record<string, string> | ((entry: DropzoneEntry) => Record<string, string>) | undefined;
+    withCredentials?: boolean | undefined;
     /**
      * Files sent at once. Default 2
      */
-    concurrency?: number;
+    concurrency?: number | undefined;
     /**
      * Extra FormData fields
      */
-    data?: Record<string, string | Blob> | ((entry: DropzoneEntry) => Record<string, string | Blob>);
+    data?: Record<string, string | Blob> | ((entry: DropzoneEntry) => Record<string, string | Blob>) | undefined;
     /**
      * Make the request object (tests, pages without a server). Default: new XMLHttpRequest()
      */
-    xhr?: (entry: DropzoneEntry) => XMLHttpRequest;
+    xhr?: ((entry: DropzoneEntry) => XMLHttpRequest) | undefined;
 };
 export type DropzoneOptions = {
     /**
      * Like the input's accept: '.pdf,image/*' or ['.pdf', 'image/*']. Default: the input's
      */
-    accept?: string | string[] | null;
+    accept?: string | string[] | null | undefined;
     /**
      * Default: the input's `multiple`, or true when the component makes the input
      */
-    multiple?: boolean | null;
-    maxFiles?: number | null;
+    multiple?: boolean | null | undefined;
+    maxFiles?: number | null | undefined;
     /**
      * Bytes
      */
-    maxSize?: number | null;
+    maxSize?: number | null | undefined;
     /**
      * Bytes
      */
-    minSize?: number | null;
+    minSize?: number | null | undefined;
     /**
      * Image thumbnails. Default true
      */
-    previews?: boolean;
+    previews?: boolean | undefined;
     /**
      * Form field name. Default: the input's
      */
-    name?: string | null;
+    name?: string | null | undefined;
     /**
      * The file input, when it is not inside or next to the area
      */
-    input?: string | HTMLInputElement | null;
+    input?: string | HTMLInputElement | null | undefined;
     /**
      * true = after the area (default), an element/selector to draw into, false = no list
      */
-    list?: boolean | string | HTMLElement;
-    upload?: DropzoneUploadOptions | null;
+    list?: string | boolean | HTMLElement | undefined;
+    upload?: DropzoneUploadOptions | null | undefined;
     /**
      * Default true
      */
-    autoUpload?: boolean;
+    autoUpload?: boolean | undefined;
     /**
      * Automatic retries per file. Default 0
      */
-    retry?: number;
+    retry?: number | undefined;
     /**
      * Text: prompt, hint, remove, retry, cancel, added, removed, type, size, small, count, uploading, done, failed, cancelled, required ({name}, {max}, {min}, {percent})
      */
-    labels?: Record<string, string>;
-    disabled?: boolean;
-    className?: string;
+    labels?: Record<string, string> | undefined;
+    disabled?: boolean | undefined;
+    className?: string | undefined;
     /**
      * Return false to refuse the file
      */
-    onBeforeAdd?: ((entry: DropzoneEntry) => boolean | void) | null;
-    onAdd?: ((entry: DropzoneEntry) => void) | null;
-    onReject?: ((entry: DropzoneEntry, reason: DropzoneRejectReason) => void) | null;
-    onRemove?: ((entry: DropzoneEntry) => void) | null;
-    onChange?: ((files: File[]) => void) | null;
-    onUploadStart?: ((entry: DropzoneEntry) => void) | null;
-    onProgress?: ((entry: DropzoneEntry, percent: number) => void) | null;
-    onSuccess?: ((entry: DropzoneEntry, response: any) => void) | null;
-    onError?: ((entry: DropzoneEntry, error: DropzoneUploadError) => void) | null;
-    onComplete?: ((entries: DropzoneEntry[]) => void) | null;
+    onBeforeAdd?: ((entry: DropzoneEntry) => boolean | void) | null | undefined;
+    onAdd?: ((entry: DropzoneEntry) => void) | null | undefined;
+    onReject?: ((entry: DropzoneEntry, reason: DropzoneRejectReason) => void) | null | undefined;
+    onRemove?: ((entry: DropzoneEntry) => void) | null | undefined;
+    onChange?: ((files: File[]) => void) | null | undefined;
+    onUploadStart?: ((entry: DropzoneEntry) => void) | null | undefined;
+    onProgress?: ((entry: DropzoneEntry, percent: number) => void) | null | undefined;
+    onSuccess?: ((entry: DropzoneEntry, response: any) => void) | null | undefined;
+    onError?: ((entry: DropzoneEntry, error: DropzoneUploadError) => void) | null | undefined;
+    onComplete?: ((entries: DropzoneEntry[]) => void) | null | undefined;
 };
 export type DropzoneInstance = Dropzone;
 import Component from '../component.js';

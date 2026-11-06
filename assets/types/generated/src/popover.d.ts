@@ -13,122 +13,122 @@ export type PopoverOptions = {
     /**
      * - Text (default), a Node, or a function returning either; see `html`
      */
-    content?: PopoverContent;
+    content?: PopoverContent | undefined;
     /**
      * - Heading; empty for none
      */
-    title?: PopoverContent;
+    title?: PopoverContent | undefined;
     /**
      * - Treat string content/title as HTML, passed through Domma's sanitiser (default: false)
      */
-    html?: boolean;
+    html?: boolean | undefined;
     /**
      * - 'click' (default), 'hover', 'focus', 'manual', or several separated by spaces
      */
-    trigger?: PopoverTrigger;
+    trigger?: PopoverTrigger | undefined;
     /**
      * - Preferred side and alignment (default: 'bottom')
      */
-    placement?: PopoverPlacement;
+    placement?: PopoverPlacement | undefined;
     /**
      * - Try the other sides when the preferred one has no room (default: true)
      */
-    flip?: boolean;
+    flip?: boolean | undefined;
     /**
      * - Gap in px, or [crossAxis, mainAxis] (default: 10)
      */
-    offset?: number | [number, number];
+    offset?: number | [number, number] | undefined;
     /**
      * - Show the arrow (default: true)
      */
-    arrow?: boolean;
+    arrow?: boolean | undefined;
     /**
      * - Show a close (x) button (default: false)
      */
-    dismissible?: boolean;
+    dismissible?: boolean | undefined;
     /**
      * - Close on a pointer press or focus outside (default: true)
      */
-    closeOnOutside?: boolean;
+    closeOnOutside?: boolean | undefined;
     /**
      * - Close on Escape (default: true)
      */
-    closeOnEscape?: boolean;
+    closeOnEscape?: boolean | undefined;
     /**
      * - One open at a time per group; null = independent (default: 'default')
      */
-    group?: string | null;
+    group?: string | null | undefined;
     /**
      * - Any CSS width; numbers are px
      */
-    width?: string | number | null;
+    width?: string | number | null | undefined;
     /**
      * - Any CSS width; the stylesheet default is 20rem
      */
-    maxWidth?: string | number | null;
+    maxWidth?: string | number | null | undefined;
     /**
      * - Extra classes on the panel
      */
-    className?: string;
+    className?: string | undefined;
     /**
      * - Panel id (generated when omitted)
      */
-    id?: string | null;
+    id?: string | null | undefined;
     /**
      * - 'dialog', or 'tooltip' for hover/focus-only triggers (default: auto)
      */
-    role?: "dialog" | "tooltip" | (string & {}) | null;
+    role?: (string & {}) | "dialog" | "tooltip" | null | undefined;
     /**
      * - Accessible name when there is no title
      */
-    ariaLabel?: string | null;
+    ariaLabel?: string | null | undefined;
     /**
      * - Move focus into the panel on open; null = for click popovers
      */
-    autoFocus?: boolean | null;
+    autoFocus?: boolean | null | undefined;
     /**
      * - Tab cycles inside the panel instead of leaving it, with a focus trap while focus is in it (default: false)
      */
-    trapFocus?: boolean;
+    trapFocus?: boolean | undefined;
     /**
      * - Hover delays in ms (default: {show: 80, hide: 120})
      */
     delay?: number | {
         show?: number;
         hide?: number;
-    };
+    } | undefined;
     /**
      * - Fade and scale (default: true; skipped under reduced motion)
      */
-    animation?: boolean;
+    animation?: boolean | undefined;
     /**
      * - ms (default: 150)
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - Where the panel is placed (default: document.body)
      */
-    container?: string | HTMLElement | null;
+    container?: string | HTMLElement | null | undefined;
     /**
      * - Override the stylesheet's z-index (10045)
      */
-    zIndex?: number | null;
+    zIndex?: number | null | undefined;
     /**
      * - Before opening; return false to cancel
      */
-    onShow?: ((popover: Popover) => boolean | void) | null;
+    onShow?: ((popover: Popover) => boolean | void) | null | undefined;
     /**
      * - After the open transition
      */
-    onShown?: ((popover: Popover) => void) | null;
+    onShown?: ((popover: Popover) => void) | null | undefined;
     /**
      * - Before closing; return false to cancel
      */
-    onHide?: ((popover: Popover) => boolean | void) | null;
+    onHide?: ((popover: Popover) => boolean | void) | null | undefined;
     /**
      * - After the panel has been removed
      */
-    onHidden?: ((popover: Popover) => void) | null;
+    onHidden?: ((popover: Popover) => void) | null | undefined;
 };
 /**
  * event.detail of dm:popover:show / shown / hide / hidden (bubbling, fired on the trigger).
@@ -257,19 +257,19 @@ declare class Popover extends Component {
      */
     constructor(trigger: string | HTMLElement | ArrayLike<HTMLElement> | null, options?: PopoverOptions);
     _open: boolean;
-    _panel: HTMLDivElement;
+    _panel: HTMLDivElement | null;
     _parent: any;
     _timers: {
-        show: any;
-        hide: any;
-        remove: any;
-        shown: any;
+        show: null;
+        hide: null;
+        remove: null;
+        shown: null;
     };
     _triggerHandlers: any[];
     _openHandlers: any[];
-    _savedAttrs: {};
+    _savedAttrs: {} | null;
     _frame: any;
-    _resizeObserver: ResizeObserver;
+    _resizeObserver: ResizeObserver | null;
     _destroyed: boolean;
     /** Panel id. @type {string} */
     id: string;
@@ -277,12 +277,12 @@ declare class Popover extends Component {
      * The panel element (created on first show).
      * @returns {HTMLElement|null}
      */
-    get panel(): HTMLElement;
+    get panel(): HTMLElement | null;
     /**
      * The trigger element.
      * @returns {HTMLElement|null}
      */
-    get trigger(): HTMLElement;
+    get trigger(): HTMLElement | null;
     /** @returns {boolean} */
     isOpen(): boolean;
     /**
@@ -302,7 +302,7 @@ declare class Popover extends Component {
     hide(opts?: {
         returnFocus?: boolean;
     }): this;
-    _returningFocus: boolean;
+    _returningFocus: boolean | undefined;
     /**
      * @param {{focus?: boolean, returnFocus?: boolean}} [opts]
      * @returns {this}
@@ -349,13 +349,13 @@ declare class Popover extends Component {
      * @returns {this}
      */
     update(): this;
-    _trap: FocusTrap;
+    _trap: FocusTrap | null | undefined;
     /**
      * @param {PopoverOptions} [newOptions]
      * @returns {this}
      */
     setOptions(newOptions?: PopoverOptions): this;
-    _changedKeys: string[];
+    _changedKeys: string[] | null | undefined;
     _applyOptions(): void;
     _triggers(): string[];
     _role(): any;
@@ -365,7 +365,7 @@ declare class Popover extends Component {
     _unbindTrigger(): void;
     _scheduleShow(ms: any): void;
     /** `reason` is what asked: a popover a click opened (or claimed) ignores hover and focus leaving. */
-    _scheduleHide(ms: any, reason?: any): void;
+    _scheduleHide(ms: any, reason?: null): void;
     _saveAttrs(): void;
     _restoreAttrs(): void;
     _applyTriggerAria(): void;
@@ -377,7 +377,7 @@ declare class Popover extends Component {
         title: HTMLDivElement;
         body: HTMLDivElement;
         close: HTMLButtonElement;
-    };
+    } | undefined;
     _styleNode(): void;
     _render(): void;
     _renderTitle(): void;
@@ -396,9 +396,9 @@ declare class Popover extends Component {
     /** First tabbable in the content; the panel itself when there is none. */
     _focusInside(): void;
     _onPanelKeyDown(e: any): void;
-    _nextTabbableAfterTrigger(): HTMLElement;
+    _nextTabbableAfterTrigger(): HTMLElement | null;
     _bindOpen(): void;
-    _frameIsTimeout: boolean;
+    _frameIsTimeout: boolean | undefined;
     _unbindOpen(): void;
     _contains(node: any): boolean;
     _isAncestorOf(other: any): boolean;

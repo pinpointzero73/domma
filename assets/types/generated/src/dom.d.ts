@@ -244,7 +244,7 @@ export class DommaCollection {
      * @param {DommaHtmlOptions} [options] - Sanitisation options
      * @returns {this}
      */
-    html(content: string, options?: DommaHtmlOptions): this;
+    html(content: string, options?: DommaHtmlOptions | undefined): this;
     /**
      * Get the combined text content of every element.
      * @overload
@@ -600,7 +600,7 @@ export class DommaCollection {
      * @param {EventHandler<any>} [handler]
      * @returns {this}
      */
-    off(event?: string, handler?: EventHandler<any>): this;
+    off(event?: string | undefined, handler?: EventHandler<any> | undefined): this;
     /**
      * Remove delegated handlers bound with this selector (all of them when no handler is given).
      * @overload
@@ -609,7 +609,7 @@ export class DommaCollection {
      * @param {EventHandler<any>} [handler]
      * @returns {this}
      */
-    off(event: string, selector: string, handler?: EventHandler<any>): this;
+    off(event: string, selector: string, handler?: EventHandler<any> | undefined): this;
     /**
      * Attach a handler that runs once.
      * @template {keyof HTMLElementEventMap} K
@@ -993,7 +993,7 @@ export class DommaCollection {
      * @param {(this: HTMLElement) => void} [callback]
      * @returns {this}
      */
-    animate(properties: AnimationProperties, callback?: (this: HTMLElement) => void): this;
+    animate(properties: AnimationProperties, callback?: ((this: HTMLElement) => void) | undefined): this;
     /**
      * Animate CSS properties (numbers are pixels).
      * @overload
@@ -1002,7 +1002,7 @@ export class DommaCollection {
      * @param {(this: HTMLElement) => void} [callback]
      * @returns {this}
      */
-    animate(properties: AnimationProperties, duration: Duration, callback?: (this: HTMLElement) => void): this;
+    animate(properties: AnimationProperties, duration: Duration, callback?: ((this: HTMLElement) => void) | undefined): this;
     /**
      * Animate CSS properties (numbers are pixels) with a CSS easing.
      * @overload
@@ -1012,7 +1012,7 @@ export class DommaCollection {
      * @param {(this: HTMLElement) => void} [callback]
      * @returns {this}
      */
-    animate(properties: AnimationProperties, duration: Duration, easing: string, callback?: (this: HTMLElement) => void): this;
+    animate(properties: AnimationProperties, duration: Duration, easing: string, callback?: ((this: HTMLElement) => void) | undefined): this;
     /**
      * Stop animations.
      * @returns {this}
@@ -1135,7 +1135,7 @@ export class DommaCollection {
  * @param {Document | Element | DocumentFragment} [context] - Where to look for a CSS selector (default: document)
  * @returns {DommaCollection}
  */
-export function dom(selector: DommaSelector, context?: Document | Element | DocumentFragment): DommaCollection;
+export function dom(selector: DommaSelector, context?: Element | Document | DocumentFragment | undefined): DommaCollection;
 /**
  * Run a function when the DOM is ready (straight away if it already is).
  * @overload
@@ -1201,21 +1201,21 @@ export type DommaHtmlOptions = {
     /**
      * - Sanitise content (true = safe, false = raw - TRUSTED content only)
      */
-    safe?: boolean;
+    safe?: boolean | undefined;
     /**
      * - Sanitiser preset
      */
-    preset?: "default" | "strict" | "basic";
+    preset?: "default" | "strict" | "basic" | undefined;
     /**
      * - Custom allowed HTML tags (overrides the preset)
      */
-    allowedTags?: string[];
+    allowedTags?: string[] | undefined;
     /**
      * - Custom allowed attributes (overrides the preset)
      */
-    allowedAttrs?: string[];
+    allowedAttrs?: string[] | undefined;
     /**
      * - Allow data-* attributes
      */
-    allowDataAttrs?: boolean;
+    allowDataAttrs?: boolean | undefined;
 };

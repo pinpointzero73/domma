@@ -1,15 +1,15 @@
 export namespace router {
-    let _routes: any[];
+    let _routes: never[];
     let _views: {};
-    let _currentRoute: any;
-    let _container: any;
+    let _currentRoute: null;
+    let _container: null;
     let _defaultRoute: string;
-    let _notFoundView: any;
-    let _middleware: any[];
+    let _notFoundView: null;
+    let _middleware: never[];
     let _transitioning: boolean;
     let _routing: boolean;
     let _missedChange: boolean;
-    let _shownPath: any;
+    let _shownPath: null;
     let _transitions: {};
     let _initialised: boolean;
     let _templateCache: {};
@@ -142,12 +142,12 @@ export namespace router {
     };
     function _decode(segment: any): any;
     function _matchRoute(path: any): {
-        route: any;
+        route: null;
         params: {};
     };
-    function _extractParams(pattern: any, path: any): {};
+    function _extractParams(pattern: any, path: any): {} | null;
     function _runMiddleware(to: any, from: any): Promise<boolean | {
-        redirect: any;
+        redirect: never;
     }>;
     function _renderView(viewName: any, params: any): Promise<void>;
     function _showContainer(): void;
@@ -180,19 +180,19 @@ export type RouteDefinition = {
     /**
      * - Sets `document.title` when the route is entered
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - Runs before the view renders (may be async). Returning (or resolving to) `false` cancels the change and puts the address back
      */
-    onEnter?: (params: RouteParams, to: Route) => unknown;
+    onEnter?: ((params: RouteParams, to: Route) => unknown) | undefined;
     /**
      * - Runs when leaving this route (may be async). Returning (or resolving to) `false` cancels the change
      */
-    onLeave?: () => unknown;
+    onLeave?: (() => unknown) | undefined;
     /**
      * - Custom metadata, e.g. `{requiresAuth: true}` for a middleware to read
      */
-    meta?: Record<string, any>;
+    meta?: Record<string, any> | undefined;
 };
 /**
  * The route being entered or currently shown (`R.current()`, a middleware's `to`/`from`):
@@ -215,19 +215,19 @@ export type ViewDefinition = {
     /**
      * - Inline template, or a function returning the HTML
      */
-    template?: string | ViewRenderFunction;
+    template?: string | ViewRenderFunction | undefined;
     /**
      * - URL of a template file, fetched once and cached (used when `template` is not set)
      */
-    templateUrl?: string;
+    templateUrl?: string | undefined;
     /**
      * - Partial name -> template URL, each fetched and cached
      */
-    partials?: Record<string, string>;
+    partials?: Record<string, string> | undefined;
     /**
      * - Called after the view's HTML is in the container
      */
-    onMount?: ($container: import("./dom.js").DommaCollection) => void;
+    onMount?: (($container: import("./dom.js").DommaCollection) => void) | undefined;
 };
 /**
  * A view that renders a standalone component (`Domma.component()`): the container is emptied and
@@ -242,11 +242,11 @@ export type ComponentViewDefinition = {
     /**
      * - Props, or a function of the route params returning them
      */
-    props?: Record<string, any> | ((params: RouteParams) => Record<string, any>);
+    props?: Record<string, any> | ((params: RouteParams) => Record<string, any>) | undefined;
     /**
      * - Called after the element is appended
      */
-    onMount?: ($container: import("./dom.js").DommaCollection) => void;
+    onMount?: (($container: import("./dom.js").DommaCollection) => void) | undefined;
 };
 /**
  * Anything `R.view()` / `R.init({views})` accepts: a template string, a render function, a view
@@ -260,15 +260,15 @@ export type RouterTransitions = {
     /**
      * - Enter animation
      */
-    enter?: string;
+    enter?: string | undefined;
     /**
      * - Leave animation
      */
-    leave?: string;
+    leave?: string | undefined;
     /**
      * - Animation duration in ms
      */
-    duration?: number;
+    duration?: number | undefined;
 };
 /**
  * Options for `R.init()`.
@@ -281,23 +281,23 @@ export type RouterOptions = {
     /**
      * - Route definitions
      */
-    routes?: RouteDefinition[];
+    routes?: RouteDefinition[] | undefined;
     /**
      * - View registry `{name: view}`
      */
-    views?: Record<string, RouterView>;
+    views?: Record<string, RouterView> | undefined;
     /**
      * - Route used when the address has no hash
      */
-    default?: string;
+    default?: string | undefined;
     /**
      * - Name of the view rendered for an address no route matches
      */
-    notFound?: string;
+    notFound?: string | undefined;
     /**
      * - Transition animation options (replaces the defaults as a whole)
      */
-    transitions?: RouterTransitions;
+    transitions?: RouterTransitions | undefined;
 };
 /**
  * Options for `R.navigate()`.
@@ -306,13 +306,13 @@ export type NavigateOptions = {
     /**
      * - Replace the current history entry instead of adding one
      */
-    replace?: boolean;
+    replace?: boolean | undefined;
 };
 /**
  * A middleware's `next`: call it to let the change go ahead, or with a path to go there instead
  * (replacing the refused entry). Not calling it refuses the change.
  */
-export type RouterNext = (redirect?: string) => void;
+export type RouterNext = (redirect?: string | undefined) => void;
 /**
  * A middleware, run in order before every route change (may be async).
  */
@@ -336,7 +336,7 @@ export type RouterErrorEvent = {
     /**
      * - The view being rendered, when the failure was in a render
      */
-    view?: string;
+    view?: string | undefined;
 };
 /**
  * The router (`R`, `Domma.router`).

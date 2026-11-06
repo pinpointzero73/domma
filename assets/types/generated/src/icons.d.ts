@@ -24,29 +24,29 @@ export type IconDefinition = {
     /**
      * SVG viewBox (default '0 0 24 24')
      */
-    viewBox?: string;
+    viewBox?: string | undefined;
     /**
      * Single path data
      */
-    path?: string;
+    path?: string | undefined;
     /**
      * Multiple path data
      */
-    paths?: string[];
+    paths?: string[] | undefined;
     /**
      * Stroke colour (usually 'currentColor')
      */
-    stroke?: string;
+    stroke?: string | undefined;
     /**
      * Fill colour ('none', or 'currentColor' for filled icons)
      */
-    fill?: string;
+    fill?: string | undefined;
     /**
      * Stroke width
      */
-    strokeWidth?: number | string;
-    strokeLinecap?: string;
-    strokeLinejoin?: string;
+    strokeWidth?: string | number | undefined;
+    strokeLinecap?: string | undefined;
+    strokeLinejoin?: string | undefined;
 };
 /**
  * Options for `render()`, `html()` and `use()` (`use()` reads only `size` and `class`).
@@ -55,23 +55,23 @@ export type RenderOptions = {
     /**
      * Icon size in pixels
      */
-    size?: number | string;
+    size?: string | number | undefined;
     /**
      * Additional CSS classes
      */
-    class?: string;
+    class?: string | undefined;
     /**
      * Icon colour (overrides currentColor)
      */
-    colour?: string;
+    colour?: string | undefined;
     /**
      * Alias for colour
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * Additional attributes
      */
-    attrs?: Record<string, string>;
+    attrs?: Record<string, string> | undefined;
 };
 /**
  * Options for `inject()`: render options plus where the icon goes.

@@ -1218,6 +1218,12 @@ Domma uses distributed CLAUDE.md files for focused, context-specific guidance:
 
 ## Development
 
+The native TypeScript 7 CLI checks consumer types. Declaration generation and the
+type catalogue use `typescript-compiler-api`, an alias for TypeScript 6.0.3, which
+retains the JavaScript compiler API and compatible JSDoc declaration output.
+The `live-server` watcher is overridden to Chokidar 3 to avoid its older vulnerable
+watcher dependencies while keeping the development server API.
+
 ```bash
 # Install dependencies
 npm install

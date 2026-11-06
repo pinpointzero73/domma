@@ -208,37 +208,37 @@ export type I18nTranslateOptions = {
     /**
      * Translate in this locale instead of the current one
      */
-    locale?: string;
+    locale?: string | undefined;
     /**
      * Returned (interpolated) when the key is missing, instead of the key
      */
-    default?: string;
+    default?: string | undefined;
     /**
      * Choose plural forms by ordinal rules
      */
-    ordinal?: boolean;
+    ordinal?: boolean | undefined;
 };
 export type I18nDetectOptions = {
     /**
      * Sources in order. Default ['storage', 'navigator', 'html']
      */
-    from?: Array<"storage" | "navigator" | "html">;
+    from?: ("html" | "storage" | "navigator")[] | undefined;
     /**
      * S key: read in 'storage', and every later locale(code) is saved there
      */
-    storageKey?: string;
+    storageKey?: string | undefined;
     /**
      * Only these locales (or their base language) are accepted
      */
-    supported?: string[];
+    supported?: string[] | undefined;
     /**
      * Used when nothing matches (else the current locale stays)
      */
-    fallback?: string;
+    fallback?: string | undefined;
     /**
      * Set the found locale (default true)
      */
-    apply?: boolean;
+    apply?: boolean | undefined;
 };
 export type I18nChangeDetail = {
     locale: string;

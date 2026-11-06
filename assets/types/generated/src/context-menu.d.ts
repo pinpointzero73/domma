@@ -36,19 +36,19 @@ export type ContextMenuItem = {
     /**
      * - Item text
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - Item text, when there is no label
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * - Item text, when there is no label or text
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * - Domma icon name, rendered through data-icon
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Arbitrary value carried to onSelect (with the item)
      */
@@ -56,227 +56,227 @@ export type ContextMenuItem = {
     /**
      * - Invoked with the delegated target and the open context
      */
-    action?: (target: HTMLElement | null, ctx: ContextMenuContext) => void | Promise<void>;
+    action?: ((target: HTMLElement | null, ctx: ContextMenuContext) => void | Promise<void>) | undefined;
     /**
      * - Greyed but still shown; a function is resolved per target
      */
-    disabled?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    disabled?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean) | undefined;
     /**
      * - Omitted entirely when false; a function is resolved per target
      */
-    visible?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    visible?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean) | undefined;
     /**
      * - Destructive styling
      */
-    danger?: boolean;
+    danger?: boolean | undefined;
     /**
      * - Extra classes on the item
      */
-    className?: string | string[];
+    className?: string | string[] | undefined;
     /**
      * - Right-aligned hint text - display only, no key is bound
      */
-    shortcut?: string;
+    shortcut?: string | undefined;
     /**
      * - Nested items, to unlimited depth
      */
-    submenu?: ContextMenuItem[] | ((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[]);
+    submenu?: ContextMenuItem[] | ((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[]) | undefined;
     /**
      * - Item kind (default 'item')
      */
-    type?: "item" | "divider" | "header" | "checkbox" | "radio";
+    type?: "header" | "item" | "divider" | "checkbox" | "radio" | undefined;
     /**
      * - Checked state for checkbox/radio types
      */
-    checked?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    checked?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean) | undefined;
     /**
      * - Shorthand for type: 'divider'
      */
-    divider?: boolean;
+    divider?: boolean | undefined;
     /**
      * - Shorthand for type: 'header'
      */
-    header?: string;
+    header?: string | undefined;
 };
 export type ContextMenuOptions = {
     /**
      * - Items, or a resolver called with the delegated target. Accepts a Domma Reactive observable.
      */
-    items?: ContextMenuItem[] | ((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[]) | import("../vendor/domma-reactive.js").Observable<ContextMenuItem[]>;
+    items?: ContextMenuItem[] | ((target: HTMLElement, ctx: ContextMenuContext) => ContextMenuItem[]) | import("../vendor/domma-reactive.js").Observable<ContextMenuItem[]> | undefined;
     /**
      * - Delegation selector - the menu claims only descendants matching it (default: the whole container)
      */
-    match?: string | null;
+    match?: string | null | undefined;
     /**
      * - Regions inside the container that decline and fall through outward
      */
-    exclude?: string | null;
+    exclude?: string | null | undefined;
     /**
      * - False declines the gesture and falls through to the next menu outward
      */
-    enabled?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean);
+    enabled?: boolean | ((target: HTMLElement, ctx: ContextMenuContext) => boolean) | undefined;
     /**
      * - Merge ancestor menus' items rather than replacing them (default 'append')
      */
-    inherit?: "append" | "prepend" | false;
+    inherit?: false | "append" | "prepend" | undefined;
     /**
      * - Tie-break only when two menus bind the SAME element; depth wins otherwise
      */
-    priority?: number;
+    priority?: number | undefined;
     /**
      * - This menu owns its region: once it encloses the click and accepts it, nothing bound deeper is offered the gesture. Not a veto - an exclusive menu that declines steps aside.
      */
-    exclusive?: boolean;
+    exclusive?: boolean | undefined;
     /**
      * - Shift+right-click passes through to the browser's own menu (default true)
      */
-    nativeOnShift?: boolean;
+    nativeOnShift?: boolean | undefined;
     /**
      * - Close after an item is chosen (default true)
      */
-    closeOnSelect?: boolean;
+    closeOnSelect?: boolean | undefined;
     /**
      * - Close on Esc (default true)
      */
-    closeOnEscape?: boolean;
+    closeOnEscape?: boolean | undefined;
     /**
      * - Close on outside mousedown (default true)
      */
-    closeOnClickOutside?: boolean;
+    closeOnClickOutside?: boolean | undefined;
     /**
      * - Close on scroll - the anchoring point has moved (default true)
      */
-    closeOnScroll?: boolean;
+    closeOnScroll?: boolean | undefined;
     /**
      * - Long-press duration in ms for touch, or false to disable (default 500)
      */
-    longPress?: number | false;
+    longPress?: number | false | undefined;
     /**
      * - Pointer over a claimed region: 'auto' (the CSS `context-menu` keyword, default), 'glyph' (a generated themed cursor), false (leave it alone) or any CSS cursor value
      */
-    cursor?: "auto" | "glyph" | false | (string & {});
+    cursor?: false | (string & {}) | "auto" | "glyph" | undefined;
     /**
      * - Glyph cursor size in px, clamped to 32 - browsers ignore anything larger (default 26)
      */
-    cursorSize?: number;
+    cursorSize?: number | undefined;
     /**
      * - Extra class on the menu root
      */
-    className?: string;
+    className?: string | undefined;
     /**
      * - Minimum menu width (default '200px')
      */
-    minWidth?: string;
+    minWidth?: string | undefined;
     /**
      * - Maximum menu width (default '320px')
      */
-    maxWidth?: string;
+    maxWidth?: string | undefined;
     /**
      * - Maximum menu height before it scrolls (default '60vh')
      */
-    maxHeight?: string;
+    maxHeight?: string | undefined;
     /**
      * - Offset [x, y] from the cursor point (default [2, 2])
      */
-    offset?: [number, number];
+    offset?: [number, number] | undefined;
     /**
      * - Flip across the cursor and clamp to the viewport (default true)
      */
-    flip?: boolean;
+    flip?: boolean | undefined;
     /**
      * - Whether to transition on open and close (default true)
      */
-    animation?: boolean;
+    animation?: boolean | undefined;
     /**
      * - Transition duration in ms (default 120)
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - How the panel enters (default 'scale')
      */
-    transition?: "scale" | "fade" | "slide" | "none";
+    transition?: "scale" | "fade" | "slide" | "none" | undefined;
     /**
      * - Any CSS easing (default cubic-bezier(0.16, 1, 0.3, 1))
      */
-    easing?: string;
+    easing?: string | undefined;
     /**
      * - Preset key ('primary'|'success'|'danger'|'warning'|'info') or any CSS colour
      */
-    accent?: string | null;
+    accent?: string | null | undefined;
     /**
      * - Overrides the panel background
      */
-    surface?: string | null;
+    surface?: string | null | undefined;
     /**
      * - 'none'|'sm'|'md'|'lg'|'xl', or any CSS length
      */
-    radius?: string | null;
+    radius?: string | null | undefined;
     /**
      * - 'none'|'sm'|'md'|'lg'|'xl'
      */
-    shadow?: string | null;
+    shadow?: string | null | undefined;
     /**
      * - 20-100; translucent panel with a blurred backdrop. Clamped.
      */
-    opacity?: number | null;
+    opacity?: number | null | undefined;
     /**
      * - Row height and font size (default 'comfortable')
      */
-    density?: "comfortable" | "compact";
+    density?: "comfortable" | "compact" | undefined;
     /**
      * - Custom item renderer returning HTML
      */
-    itemTemplate?: ((item: ContextMenuItem, index: number) => string) | null;
+    itemTemplate?: ((item: ContextMenuItem, index: number) => string) | null | undefined;
     /**
      * - Hover grace before a submenu opens, in ms (default 150)
      */
-    submenuDelay?: number;
+    submenuDelay?: number | undefined;
     /**
      * - Render your own panel instead of an item list. Called only once this menu has claimed the gesture. Return an element for Domma to position and dismiss, or nothing to manage it yourself.
      */
-    render?: ((ctx: ContextMenuContext) => HTMLElement | void) | null;
+    render?: ((ctx: ContextMenuContext) => HTMLElement | void) | null | undefined;
     /**
      * - Open on Shift+F10 and the Menu key against the focused element (default true)
      */
-    keyboardTrigger?: boolean;
+    keyboardTrigger?: boolean | undefined;
     /**
      * - Jump to an item by typing (default true)
      */
-    typeahead?: boolean;
+    typeahead?: boolean | undefined;
     /**
      * - aria-label for the menu
      */
-    ariaLabel?: string;
+    ariaLabel?: string | undefined;
     /**
      * - Bind items to a Domma Model
      */
     model?: {
         get(key: string): any;
-    } | null;
+    } | null | undefined;
     /**
      * - Model key holding the items array
      */
-    modelKey?: string | null;
+    modelKey?: string | null | undefined;
     /**
      * - Return false to decline and fall through to the next menu outward
      */
-    onBeforeOpen?: ((ctx: ContextMenuContext) => boolean | void) | null;
+    onBeforeOpen?: ((ctx: ContextMenuContext) => boolean | void) | null | undefined;
     /**
      * - Fired once the menu is on screen
      */
-    onOpen?: ((ctx: ContextMenuContext) => void) | null;
+    onOpen?: ((ctx: ContextMenuContext) => void) | null | undefined;
     /**
      * - Return false to keep it open
      */
-    onBeforeClose?: ((ctx: ContextMenuContext | null) => boolean | void) | null;
+    onBeforeClose?: ((ctx: ContextMenuContext | null) => boolean | void) | null | undefined;
     /**
      * - Fired after the menu is dismissed
      */
-    onClose?: ((ctx: ContextMenuContext | null) => void) | null;
+    onClose?: ((ctx: ContextMenuContext | null) => void) | null | undefined;
     /**
      * - Fired before the item's own action
      */
-    onSelect?: ((item: ContextMenuItem, ctx: ContextMenuContext) => void) | null;
+    onSelect?: ((item: ContextMenuItem, ctx: ContextMenuContext) => void) | null | undefined;
 };
 /**
  * One accepted candidate for a gesture.
@@ -404,8 +404,8 @@ declare class ContextMenu extends Component {
      * @param {ContextMenuOptions} [options]
      */
     constructor(selector: string | HTMLElement, options?: ContextMenuOptions);
-    selector: string;
-    _node: HTMLElement;
+    selector: string | null;
+    _node: HTMLElement | null;
     _menu: any;
     _submenus: any[];
     _isOpen: boolean;
@@ -414,11 +414,11 @@ declare class ContextMenu extends Component {
     _renderedItems: any[];
     _ctx: any;
     _typeaheadBuffer: string;
-    _typeaheadTimer: number;
-    _submenuTimer: number;
+    _typeaheadTimer: number | null;
+    _submenuTimer: number | null;
     _observableDispose: any;
-    _restoreFocusTo: Element;
-    _chain: any;
+    _restoreFocusTo: Element | null;
+    _chain: any[] | null;
     _cursorId: number;
     /**
      * Put this menu's cursor into the shared stylesheet.
@@ -476,7 +476,7 @@ declare class ContextMenu extends Component {
      * @returns {this}
      */
     open(x: number, y: number, target?: HTMLElement): this;
-    _openResolved(x: any, y: any, hit: any, items: any, event: any, fromKeyboard?: boolean, chain?: any): void;
+    _openResolved(x: any, y: any, hit: any, items: any, event: any, fromKeyboard?: boolean, chain?: null): void;
     /**
      * Close the menu.
      * @returns {this}
@@ -550,13 +550,13 @@ declare class ContextMenu extends Component {
      * side OF THE CURSOR rather than to the other side of an element, which is
      * the part that differs from Dropdown._positionMenu().
      */
-    _positionAt(menu: any, x: any, y: any, anchorRect?: any): void;
+    _positionAt(menu: any, x: any, y: any, anchorRect?: null): void;
     _bindOpenListeners(): void;
-    _outsideHandler: (e: any) => void;
-    _contextHandler: (e: any) => void;
-    _keyHandler: (e: any) => void;
-    _scrollHandler: (event: any) => void;
-    _resizeHandler: () => this;
+    _outsideHandler: ((e: any) => void) | null | undefined;
+    _contextHandler: ((e: any) => void) | null | undefined;
+    _keyHandler: ((e: any) => void) | null | undefined;
+    _scrollHandler: ((event: any) => void) | null | undefined;
+    _resizeHandler: (() => this) | null | undefined;
     _unbindOpenListeners(): void;
     _focusableItems(): any[];
     _moveFocus(delta: any): void;

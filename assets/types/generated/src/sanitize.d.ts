@@ -35,7 +35,15 @@ export function escape(text: string): string;
  * @returns {boolean}
  */
 export function hasDOMPurify(): boolean;
-declare const _default: Sanitize;
+declare const _default: {
+    sanitise: typeof sanitise;
+    sanitiseBasic: typeof sanitiseBasic;
+    sanitiseUserContent: typeof sanitiseUserContent;
+    escape: typeof escape;
+    hasDOMPurify: typeof hasDOMPurify;
+    isSafeUrl: typeof isSafeUrl;
+    safeUrl: typeof safeUrl;
+};
 export default _default;
 /**
  * Options for `sanitise()`. Used only when DOMPurify is loaded; without it the input is
@@ -45,19 +53,19 @@ export type SanitiseOptions = {
     /**
      * - Allowlist preset ('default', 'strict', 'basic')
      */
-    preset?: "default" | "strict" | "basic";
+    preset?: "default" | "strict" | "basic" | undefined;
     /**
      * - Custom allowed tags (overrides preset)
      */
-    allowedTags?: string[];
+    allowedTags?: string[] | undefined;
     /**
      * - Custom allowed attributes (overrides preset)
      */
-    allowedAttrs?: string[];
+    allowedAttrs?: string[] | undefined;
     /**
      * - Allow data-* attributes
      */
-    allowDataAttrs?: boolean;
+    allowDataAttrs?: boolean | undefined;
 };
 /**
  * The sanitise module (`Domma.sanitize`).

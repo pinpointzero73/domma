@@ -58,47 +58,47 @@ export type SkeletonOptions = {
     /**
      * - Shape to draw (default 'text')
      */
-    type?: SkeletonType;
+    type?: SkeletonType | undefined;
     /**
      * - Lines per paragraph, card or list item (default 3; list 2)
      */
-    lines?: number | string | null;
+    lines?: string | number | null | undefined;
     /**
      * - Paragraphs, cards or list items (default 1; list 3)
      */
-    count?: number | string | null;
+    count?: string | number | null | undefined;
     /**
      * - Table rows (default 5)
      */
-    rows?: number | string;
+    rows?: string | number | undefined;
     /**
      * - Table columns (default 4)
      */
-    columns?: number | string;
+    columns?: string | number | undefined;
     /**
      * - Table header row (default true)
      */
-    header?: boolean;
+    header?: boolean | undefined;
     /**
      * - A circle at the start of each list item (default true)
      */
-    avatar?: boolean;
+    avatar?: boolean | undefined;
     /**
      * - An image block at the top of each card (default true)
      */
-    image?: boolean;
+    image?: boolean | undefined;
     /**
      * - false = still tint, no sweep (default true)
      */
-    animate?: boolean;
+    animate?: boolean | undefined;
     /**
      * - Markup for type 'custom', or a function returning it
      */
-    template?: string | ((options: SkeletonOptions) => string) | null;
+    template?: string | ((options: SkeletonOptions) => string) | null | undefined;
     /**
      * - Screen-reader status text (default 'Loading...')
      */
-    label?: string;
+    label?: string | undefined;
 };
 /**
  * The handle E.skeleton() returns.

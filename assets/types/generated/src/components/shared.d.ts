@@ -59,7 +59,7 @@ export function uniqueId(prefix: string): string;
  * @param {T[]} list
  * @returns {(T & {all(): T[]})|null}
  */
-export function firstWithAll<T extends unknown>(list: T[]): (T & {
+export function firstWithAll<T extends object>(list: T[]): (T & {
     all(): T[];
 }) | null;
 /**

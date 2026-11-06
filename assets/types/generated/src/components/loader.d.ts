@@ -25,8 +25,8 @@ export class Loader extends Component {
         visible: boolean;
         fullscreen: boolean;
         label: string;
-        onShow: any;
-        onHide: any;
+        onShow: null;
+        onHide: null;
     };
     /**
      * @param {import('./shared.js').ComponentTarget} selector - The container
@@ -35,9 +35,9 @@ export class Loader extends Component {
     constructor(selector: import("./shared.js").ComponentTarget, options?: LoaderOptions);
     /** The `.dm-loader` element. @type {HTMLDivElement} */
     indicator: HTMLDivElement;
-    _visible: boolean;
+    _visible: boolean | undefined;
     _render(): void;
-    _textEl: HTMLSpanElement;
+    _textEl: HTMLSpanElement | null | undefined;
     _setShown(shown: any): void;
     /** @returns {this} */
     show(): this;
@@ -87,47 +87,47 @@ export type LoaderOptions = {
     /**
      * - Animation
      */
-    type?: LoaderType;
+    type?: LoaderType | undefined;
     /**
      * - Named size or px
      */
-    size?: "small" | "sm" | "medium" | "md" | "large" | "lg" | number;
+    size?: number | "small" | "sm" | "md" | "lg" | "medium" | "large" | undefined;
     /**
      * - Theme colour name, 'white', 'dark', or any CSS colour
      */
-    color?: string;
+    color?: string | undefined;
     /**
      * - Cover the container with a backdrop
      */
-    overlay?: boolean;
+    overlay?: boolean | undefined;
     /**
      * - Text under the indicator (also its accessible name)
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * - Centre in the container
      */
-    centered?: boolean;
+    centered?: boolean | undefined;
     /**
      * - Show at once
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * - (fullscreenLoader) the container is shown and hidden with it
      */
-    fullscreen?: boolean;
+    fullscreen?: boolean | undefined;
     /**
      * - Accessible name when there is no text
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - When the loader shows
      */
-    onShow?: ((loader: LoaderInstance) => void) | null;
+    onShow?: ((loader: LoaderInstance) => void) | null | undefined;
     /**
      * - When the loader hides
      */
-    onHide?: ((loader: LoaderInstance) => void) | null;
+    onHide?: ((loader: LoaderInstance) => void) | null | undefined;
 };
 export type LoaderInstance = Loader;
 import Component from '../component.js';

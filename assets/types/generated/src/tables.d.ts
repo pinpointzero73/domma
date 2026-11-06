@@ -191,11 +191,11 @@ export class TableInstance {
     element: HTMLElement | null;
     /** @type {TableOptions} */
     options: TableOptions;
-    _originalData: TableRow[];
-    _data: TableRow[];
-    _filteredData: TableRow[];
+    _originalData: any[];
+    _data: any[];
+    _filteredData: any[];
     _currentPage: number;
-    _pageSize: number;
+    _pageSize: number | undefined;
     _sorts: any[];
     _filters: any[];
     _searchQuery: string;
@@ -203,7 +203,7 @@ export class TableInstance {
     _editingCell: {
         rowIndex: number;
         column: string;
-    };
+    } | null;
     _eventListeners: Map<any, any>;
     _columnDropdownOpen: boolean;
     _searchIsRegex: boolean;
@@ -325,7 +325,7 @@ export class TableInstance {
      * @returns {this}
      */
     filterBy(filterFn: (row: TableRow, index: number, rows: TableRow[]) => boolean): this;
-    _customFilter: (row: TableRow, index: number, rows: TableRow[]) => boolean;
+    _customFilter: ((row: TableRow, index: number, rows: TableRow[]) => boolean) | null | undefined;
     /**
      * Clear the column filters, the search and the custom filter.
      * @returns {this}
@@ -624,35 +624,35 @@ export type ColumnDefinition = {
     /**
      * - Header text (defaults to the key)
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - false turns sorting off for this column (also off when `options.sortable` is false)
      */
-    sortable?: boolean;
+    sortable?: boolean | undefined;
     /**
      * - false marks the column as not filterable
      */
-    filterable?: boolean;
+    filterable?: boolean | undefined;
     /**
      * - Double-click to edit the cell (needs `options.editable`)
      */
-    editable?: boolean;
+    editable?: boolean | undefined;
     /**
      * - Column width; a number is pixels
      */
-    width?: string | number;
+    width?: string | number | undefined;
     /**
      * - Cell HTML (set as innerHTML)
      */
-    render?: (value: any, row: TableRow, index: number) => string;
+    render?: ((value: any, row: TableRow, index: number) => string) | undefined;
     /**
      * - Stored on the column for custom filter UIs
      */
-    filterOptions?: any[];
+    filterOptions?: any[] | undefined;
     /**
      * - false starts the column hidden
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
 };
 /**
  * A column after normalisation, as `getColumns()` returns it.
@@ -675,7 +675,7 @@ export type SortState = {
 export type FilterState = {
     column: string;
     value: any;
-    operator?: FilterOperator;
+    operator?: FilterOperator | undefined;
 };
 export type PageInfo = {
     /**
@@ -701,8 +701,8 @@ export type PageInfo = {
  * Payload of `onSort`: `sort()` sends column + direction + sorts, `sortMultiple()` sends sorts only.
  */
 export type TableSortEvent = {
-    column?: string;
-    direction?: SortDirection;
+    column?: string | undefined;
+    direction?: SortDirection | undefined;
     sorts: SortState[];
 };
 /**
@@ -710,11 +710,11 @@ export type TableSortEvent = {
  */
 export type TableFilterEvent = {
     type: "search" | "column";
-    query?: string;
-    isRegex?: boolean;
-    column?: string;
+    query?: string | undefined;
+    isRegex?: boolean | undefined;
+    column?: string | undefined;
     value?: any;
-    operator?: FilterOperator;
+    operator?: FilterOperator | undefined;
 };
 /**
  * Payload of `onEdit`.
@@ -730,9 +730,9 @@ export type TableEditEvent = {
  */
 export type TableExportEvent = {
     format: ExportFormat | "clipboard";
-    filename?: string;
+    filename?: string | undefined;
     rowCount: number;
-    selectedOnly?: boolean;
+    selectedOnly?: boolean | undefined;
 };
 /**
  * What an event callback receives: sort -> TableSortEvent, filter -> TableFilterEvent,
@@ -744,158 +744,158 @@ export type TableEventCallback = (data: TableEventData) => void;
  * CSS class names the table renders with.
  */
 export type TableClasses = {
-    wrapper?: string;
-    table?: string;
-    header?: string;
-    body?: string;
-    row?: string;
-    cell?: string;
-    selected?: string;
-    sorted?: string;
-    sortAsc?: string;
-    sortDesc?: string;
-    pagination?: string;
-    search?: string;
+    wrapper?: string | undefined;
+    table?: string | undefined;
+    header?: string | undefined;
+    body?: string | undefined;
+    row?: string | undefined;
+    cell?: string | undefined;
+    selected?: string | undefined;
+    sorted?: string | undefined;
+    sortAsc?: string | undefined;
+    sortDesc?: string | undefined;
+    pagination?: string | undefined;
+    search?: string | undefined;
 };
 export type TableOptions = {
     /**
      * - Initial data
      */
-    data?: TableRow[];
+    data?: TableRow[] | undefined;
     /**
      * - Column definitions
      */
-    columns?: Array<ColumnDefinition | string>;
+    columns?: (string | ColumnDefinition)[] | undefined;
     /**
      * - Row identity field for select / update / remove (default 'id')
      */
-    rowKey?: string;
+    rowKey?: string | undefined;
     /**
      * - Enable sorting (default true)
      */
-    sortable?: boolean;
+    sortable?: boolean | undefined;
     /**
      * - Allow sorting by several columns (default false)
      */
-    multiSort?: boolean;
+    multiSort?: boolean | undefined;
     /**
      * - Sort applied on first render
      */
-    defaultSort?: SortState | null;
+    defaultSort?: SortState | null | undefined;
     /**
      * - Enable filtering (default true)
      */
-    filterable?: boolean;
+    filterable?: boolean | undefined;
     /**
      * - Show the search box (default true)
      */
-    searchable?: boolean;
+    searchable?: boolean | undefined;
     /**
      * - Search box placeholder (default 'Search...')
      */
-    searchPlaceholder?: string;
+    searchPlaceholder?: string | undefined;
     /**
      * - Enable pagination (default true)
      */
-    pagination?: boolean;
+    pagination?: boolean | undefined;
     /**
      * - Rows per page (default 10)
      */
-    pageSize?: number;
+    pageSize?: number | undefined;
     /**
      * - Page size choices (default [10, 25, 50, 100])
      */
-    pageSizeOptions?: number[];
+    pageSizeOptions?: number[] | undefined;
     /**
      * - Enable row selection (default false)
      */
-    selectable?: boolean;
+    selectable?: boolean | undefined;
     /**
      * - default 'single'
      */
-    selectionMode?: SelectionMode;
+    selectionMode?: SelectionMode | undefined;
     /**
      * - Enable cell editing on editable columns (default false)
      */
-    editable?: boolean;
+    editable?: boolean | undefined;
     /**
      * - default 'cell'
      */
-    editMode?: string;
+    editMode?: string | undefined;
     /**
      * - default true
      */
-    resizable?: boolean;
+    resizable?: boolean | undefined;
     /**
      * - Skeleton rows until the first setData()/addRow(): true = min(pageSize, 5), or a row count
      */
-    loadingSkeleton?: boolean | number;
+    loadingSkeleton?: number | boolean | undefined;
     /**
      * - Screen-reader status while loading (default 'Loading...')
      */
-    loadingLabel?: string;
+    loadingLabel?: string | undefined;
     /**
      * - Striped rows (default true)
      */
-    striped?: boolean;
+    striped?: boolean | undefined;
     /**
      * - Row hover colour (default true)
      */
-    hover?: boolean;
+    hover?: boolean | undefined;
     /**
      * - default true
      */
-    bordered?: boolean;
+    bordered?: boolean | undefined;
     /**
      * - default true
      */
-    responsive?: boolean;
+    responsive?: boolean | undefined;
     /**
      * - Named variant (see TableInstance.stripeColors), hex/rgb/hsl or var()
      */
-    evenRowColor?: string | null;
+    evenRowColor?: string | null | undefined;
     /**
      * - Named variant or colour
      */
-    oddRowColor?: string | null;
+    oddRowColor?: string | null | undefined;
     /**
      * - Named variant (see TableInstance.hoverColors) or colour
      */
-    hoverColor?: string | null;
+    hoverColor?: string | null | undefined;
     /**
      * - CSS class names
      */
-    classes?: TableClasses;
+    classes?: TableClasses | undefined;
     /**
      * - Show the export panel (default false)
      */
-    exportPanel?: boolean;
+    exportPanel?: boolean | undefined;
     /**
      * - Export panel buttons (default ['copy', 'csv', 'excel', 'json'])
      */
-    exportOptions?: TableExportOption[];
+    exportOptions?: TableExportOption[] | undefined;
     /**
      * - Show the column visibility menu (default false)
      */
-    columnToggle?: boolean;
+    columnToggle?: boolean | undefined;
     /**
      * - Show the regex search toggle (default false)
      */
-    regexSearch?: boolean;
+    regexSearch?: boolean | undefined;
     /**
      * - Remember column visibility/width, sorting and page size (default false)
      */
-    persistSettings?: boolean;
+    persistSettings?: boolean | undefined;
     /**
      * - Storage key (defaults to `domma-table-<element id>`)
      */
-    storageKey?: string | null;
-    onSort?: ((event: TableSortEvent) => void) | null;
-    onFilter?: ((event: TableFilterEvent) => void) | null;
-    onPageChange?: ((info: PageInfo) => void) | null;
-    onSelect?: ((selected: TableRow[]) => void) | null;
-    onEdit?: ((event: TableEditEvent) => void) | null;
-    onRender?: ((table: TableInstance) => void) | null;
-    onExport?: ((event: TableExportEvent) => void) | null;
+    storageKey?: string | null | undefined;
+    onSort?: ((event: TableSortEvent) => void) | null | undefined;
+    onFilter?: ((event: TableFilterEvent) => void) | null | undefined;
+    onPageChange?: ((info: PageInfo) => void) | null | undefined;
+    onSelect?: ((selected: TableRow[]) => void) | null | undefined;
+    onEdit?: ((event: TableEditEvent) => void) | null | undefined;
+    onRender?: ((table: TableInstance) => void) | null | undefined;
+    onExport?: ((event: TableExportEvent) => void) | null | undefined;
 };
 export type Tables = typeof tables;

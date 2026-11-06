@@ -10,7 +10,7 @@ export function instancesOf(element: Element): Component[];
  * @param {Object} instance
  * @returns {string|undefined}
  */
-export function componentNameOf(instance: any): string | undefined;
+export function componentNameOf(instance: Object): string | undefined;
 /**
  * The newest instance on an element, optionally of one component kind.
  * @param {Element} element
@@ -24,12 +24,12 @@ export function instanceOf(element: Element, name?: string): Component | null;
  * @param {Element} element
  * @param {Object} instance
  */
-export function register(element: Element, instance: any): void;
+export function register(element: Element, instance: Object): void;
 /**
  * @param {Element} element
  * @param {Object} instance
  */
-export function unregister(element: Element, instance: any): void;
+export function unregister(element: Element, instance: Object): void;
 export default Component;
 /**
  * A component event handler: gets the same arguments as the matching `onX` option.
@@ -131,7 +131,7 @@ declare class Component {
      * @protected
      */
     protected _forcedClose(...args: any[]): any;
-    _forceClose: boolean;
+    _forceClose: boolean | undefined;
     /**
      * The cancelable `beforeclose` an overlay's close() asks first. Skipped (true) while
      * `_forcedClose()` runs.

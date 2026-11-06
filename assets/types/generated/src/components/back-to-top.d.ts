@@ -14,16 +14,16 @@
 /** @typedef {BackToTop} BackToTopInstance */
 export class BackToTop extends Component {
     static defaults: {
-        showAfter: any;
+        showAfter: null;
         duration: number;
         position: string;
-        offset: any;
-        target: any;
-        zIndex: any;
+        offset: null;
+        target: null;
+        zIndex: null;
         label: string;
-        onShow: any;
-        onHide: any;
-        onScroll: any;
+        onShow: null;
+        onHide: null;
+        onScroll: null;
     };
     /**
      * @param {import('./shared.js').ComponentTarget} selector - A button / link / `.dm-back-to-top` to use; anything else adds a button to the body
@@ -40,7 +40,7 @@ export class BackToTop extends Component {
     _watch(): void;
     _box: any;
     _scrollTarget: any;
-    _onScroll: () => void;
+    _onScroll: (() => void) | undefined;
     _check(): void;
     /**
      * Scroll to the top; `duration` overrides the option for this call.
@@ -104,15 +104,15 @@ export type BackToTopOptions = {
     /**
      * - Px scrolled before it shows (null: one viewport / container height)
      */
-    showAfter?: number | null;
+    showAfter?: number | null | undefined;
     /**
      * - Scroll animation duration in ms (0 under reduced motion)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - Button position
      */
-    position?: import("../elements.js").BackToTopPosition;
+    position?: import("../elements.js").BackToTopPosition | undefined;
     /**
      * - Px from the edges (null: the stylesheet's)
      */
@@ -120,31 +120,31 @@ export type BackToTopOptions = {
         bottom?: number;
         right?: number;
         left?: number;
-    } | null;
+    } | null | undefined;
     /**
      * - Scroll container to watch (null: the window)
      */
-    target?: string | HTMLElement | null;
+    target?: string | HTMLElement | null | undefined;
     /**
      * - z-index for the button
      */
-    zIndex?: number | null;
+    zIndex?: number | null | undefined;
     /**
      * - aria-label when the button has none
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - When the button shows
      */
-    onShow?: ((backToTop: BackToTopInstance) => void) | null;
+    onShow?: ((backToTop: BackToTopInstance) => void) | null | undefined;
     /**
      * - When the button hides
      */
-    onHide?: ((backToTop: BackToTopInstance) => void) | null;
+    onHide?: ((backToTop: BackToTopInstance) => void) | null | undefined;
     /**
      * - When a scroll to the top starts
      */
-    onScroll?: ((backToTop: BackToTopInstance) => void) | null;
+    onScroll?: ((backToTop: BackToTopInstance) => void) | null | undefined;
 };
 export type BackToTopInstance = BackToTop;
 import Component from '../component.js';
