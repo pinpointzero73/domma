@@ -14,9 +14,9 @@ describe('Theme Contrast & ARIA Compatibility Suite', () => {
   });
 
   describe('Theme Inventory & Structure', () => {
-    it('should have all 38 themes available in the theme registry', () => {
+    it('should have all 40 themes available in the theme registry', () => {
       const themes = Domma.theme.listThemes();
-      expect(themes.length).toBe(38);
+      expect(themes.length).toBe(40);
     });
 
     it('should include all standard paired themes', () => {
@@ -53,7 +53,7 @@ describe('Theme Contrast & ARIA Compatibility Suite', () => {
   describe('WCAG 2.1 Contrast Sweep', () => {
     const sweep = runSweep();
 
-    it('all 38 themes must satisfy WCAG AA (>= 4.5:1) for body text on background', () => {
+    it('all 40 themes must satisfy WCAG AA (>= 4.5:1) for body text on background', () => {
       for (const [themeName, data] of Object.entries(sweep.themeResults)) {
         const textOnBg = data.tokens.find(t => t.id === 'text-on-bg');
         expect(textOnBg).toBeDefined();
@@ -64,7 +64,7 @@ describe('Theme Contrast & ARIA Compatibility Suite', () => {
       }
     });
 
-    it('all 38 themes must satisfy WCAG AA (>= 4.5:1) for body text on surface/cards', () => {
+    it('all 40 themes must satisfy WCAG AA (>= 4.5:1) for body text on surface/cards', () => {
       for (const [themeName, data] of Object.entries(sweep.themeResults)) {
         const textOnSurface = data.tokens.find(t => t.id === 'text-on-surface');
         expect(textOnSurface).toBeDefined();
@@ -75,7 +75,7 @@ describe('Theme Contrast & ARIA Compatibility Suite', () => {
       }
     });
 
-    it('all 38 themes must satisfy WCAG AA (>= 4.5:1) for body text on raised surfaces', () => {
+    it('all 40 themes must satisfy WCAG AA (>= 4.5:1) for body text on raised surfaces', () => {
       for (const [themeName, data] of Object.entries(sweep.themeResults)) {
         const textOnRaised = data.tokens.find(t => t.id === 'text-on-raised');
         expect(textOnRaised).toBeDefined();

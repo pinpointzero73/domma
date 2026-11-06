@@ -8,7 +8,7 @@ export type ThemeMode = "light" | "dark";
  * Colour base of a theme (the name before the final segment), as listed by `listBases()`
  * (`core` is the base of `core-light`).
  */
-export type ThemeVariant = "ocean" | "forest" | "sunset" | "royal" | "lemon" | "silver" | "charcoal" | "christmas" | "unicorn" | "dreamy" | "grayve" | "mint" | "wedding" | "core" | "corporate" | "admin-smooth" | "admin-sharp" | "admin-slate";
+export type ThemeVariant = "ocean" | "forest" | "sunset" | "royal" | "lemon" | "silver" | "charcoal" | "christmas" | "unicorn" | "dreamy" | "grayve" | "mint" | "wedding" | "core" | "corporate" | "admin-smooth" | "admin-sharp" | "admin-slate" | "admin-atelier";
 /**
  * Standalone Admin family (no light/dark) - finish-accent full names.
  */
@@ -16,7 +16,7 @@ export type AdminTheme = "admin-smooth-steel" | "admin-smooth-indigo" | "admin-s
 /**
  * A full theme name, e.g. 'ocean-dark' or 'admin-sharp-steel'.
  */
-export type ThemeName = `${"ocean" | "forest" | "sunset" | "royal" | "lemon" | "silver" | "charcoal" | "christmas" | "unicorn" | "dreamy" | "grayve" | "mint" | "wedding" | "corporate"}-${ThemeMode}` | "core-light" | AdminTheme;
+export type ThemeName = `${"ocean" | "forest" | "sunset" | "royal" | "lemon" | "silver" | "charcoal" | "christmas" | "unicorn" | "dreamy" | "grayve" | "mint" | "wedding" | "corporate" | "admin-atelier"}-${ThemeMode}` | "core-light" | AdminTheme;
 /**
  * What `getConfig()` returns.
  */
@@ -84,7 +84,7 @@ declare const themeEngine: ThemeEngine;
 /**
  * Colour base of a theme (the name before the final segment), as listed by `listBases()`
  * (`core` is the base of `core-light`).
- * @typedef {'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'core'|'corporate'|'admin-smooth'|'admin-sharp'|'admin-slate'} ThemeVariant
+ * @typedef {'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'core'|'corporate'|'admin-smooth'|'admin-sharp'|'admin-slate'|'admin-atelier'} ThemeVariant
  */
 /**
  * Standalone Admin family (no light/dark) - finish-accent full names.
@@ -92,7 +92,7 @@ declare const themeEngine: ThemeEngine;
  */
 /**
  * A full theme name, e.g. 'ocean-dark' or 'admin-sharp-steel'.
- * @typedef {`${'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'corporate'}-${ThemeMode}`|'core-light'|AdminTheme} ThemeName
+ * @typedef {`${'ocean'|'forest'|'sunset'|'royal'|'lemon'|'silver'|'charcoal'|'christmas'|'unicorn'|'dreamy'|'grayve'|'mint'|'wedding'|'corporate'|'admin-atelier'}-${ThemeMode}`|'core-light'|AdminTheme} ThemeName
  */
 /**
  * What `getConfig()` returns.

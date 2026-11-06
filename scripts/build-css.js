@@ -68,6 +68,8 @@ const themeFiles = [
   // Corporate themes
   'public/assets/themes/corporate-light.css',
   'public/assets/themes/corporate-dark.css',
+  'public/assets/themes/admin-atelier-light.css',
+  'public/assets/themes/admin-atelier-dark.css',
   // Admin family (generated)
   'public/assets/themes/admin-smooth-steel.css',
   'public/assets/themes/admin-smooth-indigo.css',
