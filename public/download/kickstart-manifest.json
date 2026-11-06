@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
-  "generated": "2026-11-06T20:29:46.958Z",
+  "version": "1.1.1",
+  "generated": "2026-11-06T22:47:12.250Z",
   "spa": [
     {
       "source": "kickstart-files/spa/.claude/memory/MEMORY.md",
@@ -1265,14 +1265,6 @@
     {
       "source": "kickstart-files/dist/themes/domma-themes.css",
       "path": "frontend/dist/domma/themes/domma-themes.css",
-      "category": "dist",
-      "required": true,
-      "group": "dist",
-      "mode": "both"
-    },
-    {
-      "source": "kickstart-files/dist/themes/grayve.css",
-      "path": "frontend/dist/domma/themes/grayve.css",
       "category": "dist",
       "required": true,
       "group": "dist",
