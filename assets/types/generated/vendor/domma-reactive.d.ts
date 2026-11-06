@@ -1,5 +1,5 @@
-// domma-reactive@1.3.1 declarations, copied by scripts/build-types.mjs - bundled into Domma.
-/*! domma-reactive v1.3.1 | MIT | https://github.com/pinpointzero73/domma-reactive */
+// domma-reactive@1.3.2 declarations, copied by scripts/build-types.mjs - bundled into Domma.
+/*! domma-reactive v1.3.2 | MIT | https://github.com/pinpointzero73/domma-reactive */
 /**
  * Type declarations for domma-reactive.
  *
