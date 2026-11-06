@@ -13,31 +13,31 @@ export type InputGroupOptions = {
     /**
      * - Addon joined to the start of the input
      */
-    prefix?: InputGroupSlot;
+    prefix?: InputGroupSlot | undefined;
     /**
      * - Addon joined to the end of the input
      */
-    suffix?: InputGroupSlot;
+    suffix?: InputGroupSlot | undefined;
     /**
      * - Password inputs: show / hide toggle button (aria-pressed, eye / eye-off)
      */
-    reveal?: boolean;
+    reveal?: boolean | undefined;
     /**
      * - Text-like inputs and textareas: clear button shown while there is a
      * value; clearing fires input + change and refocuses the input
      */
-    clear?: boolean;
+    clear?: boolean | undefined;
     /**
      * - Number inputs: - and + buttons honouring min / max / step, disabled at
      * the limits, input + change per step, hold to repeat
      */
-    stepper?: boolean;
+    stepper?: boolean | undefined;
     /**
      * - Text-like inputs and textareas: live "12 / 200" counter after the group
      * (aria-live polite, added to aria-describedby). `true` reads maxLength;
      * a number is the limit. `.is-warning` from 90%, `.is-over` past it
      */
-    counter?: boolean | number;
+    counter?: number | boolean | undefined;
     /**
      * - Accessible names for the buttons
      */
@@ -46,23 +46,23 @@ export type InputGroupOptions = {
         clear?: string;
         decrease?: string;
         increase?: string;
-    };
+    } | undefined;
 };
 /**
  * The extras' elements, present only for the extras in use.
  */
 export type InputGroupExtras = {
-    reveal?: HTMLButtonElement;
-    clear?: HTMLButtonElement;
-    decrease?: HTMLButtonElement;
-    increase?: HTMLButtonElement;
-    counter?: HTMLElement;
+    reveal?: HTMLButtonElement | undefined;
+    clear?: HTMLButtonElement | undefined;
+    decrease?: HTMLButtonElement | undefined;
+    increase?: HTMLButtonElement | undefined;
+    counter?: HTMLElement | undefined;
 };
 export type InputGroupInstance = InputGroup;
 declare class InputGroup extends Component {
     static defaults: {
-        prefix: any;
-        suffix: any;
+        prefix: null;
+        suffix: null;
         reveal: boolean;
         clear: boolean;
         stepper: boolean;
@@ -85,10 +85,10 @@ declare class InputGroup extends Component {
     _timers: {};
     /** The extras' elements (reveal, clear, decrease, increase, counter). @type {InputGroupExtras} */
     extras: InputGroupExtras;
-    _ownsWrapper: boolean;
+    _ownsWrapper: boolean | undefined;
     /** The `.input-group-icon` wrapper; null after destroy(). @type {HTMLElement|null} */
     wrapper: HTMLElement | null;
-    _manageAddons: boolean;
+    _manageAddons: boolean | undefined;
     /**
      * Change the addons or the extras; `null` removes an addon, `false` an
      * extra; a key left out is kept. Returns the instance.
@@ -111,13 +111,13 @@ declare class InputGroup extends Component {
     _syncEdges(): void;
     _listen(el: any, event: any, handler: any, opts: any): void;
     _limits(): {
-        min: number;
-        max: number;
-        step: number;
+        min: number | null;
+        max: number | null;
+        step: number | null;
     };
     _counterLimit(): any;
     _buildExtras(): void;
-    _describedBy: string;
+    _describedBy: string | null | undefined;
     _setRevealed(on: any): void;
     /** Dispatch input and change so Forma's model and any listener see it. */
     _fireInput(): void;
@@ -128,7 +128,7 @@ declare class InputGroup extends Component {
      */
     step(dir: 1 | -1 | number): this;
     _bindStep(btn: any, dir: any): void;
-    _pointerStepped: boolean;
+    _pointerStepped: boolean | undefined;
     _stopRepeat(): void;
     _teardownExtras(): void;
 }

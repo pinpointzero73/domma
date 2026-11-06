@@ -14,7 +14,7 @@
  * apply-site.mjs installs it on a site that has none yet (or with --reseed).
  *
  * Usage: node scripts/site-migrate/api-reference.mjs [--out FILE]
- * (needs typescript from devDependencies: npm ci)
+ * (needs typescript-compiler-api from devDependencies: npm ci)
  */
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -28,7 +28,7 @@ const API_MD = path.join(ROOT, 'docs', 'API.md');
 const outAt = process.argv.indexOf('--out');
 const OUT = outAt > 0 ? path.resolve(process.argv[outAt + 1])
     : path.join(ROOT, 'scripts', 'site-migrate', 'collections', 'api-reference', 'data.json');
-const ts = createRequire(import.meta.url)('typescript');
+const ts = createRequire(import.meta.url)('typescript-compiler-api');
 
 /** type -> [module, how it is called, showcase page]. Anything else is a type, not a call. */
 const OWNERS = {

@@ -1,9 +1,8 @@
 // tests/setup-vitest.js
-import {JSDOM} from 'jsdom';
 import createDOMPurify from 'dompurify';
 import {readFileSync} from 'fs';
 import {execSync} from 'child_process';
-import {afterEach, beforeAll, beforeEach} from 'vitest';
+import {afterEach, beforeAll, beforeEach, vi} from 'vitest';
 
 // Read version from package.json
 const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
@@ -62,17 +61,8 @@ const FIXTURE_HTML = `
 const setupJSDOM = () => {
   domInstance = globalThis.window;
 
-  // Expose window internals as bare globals, as the suite expects.
-  global.window = globalThis.window;
-  global.document = globalThis.window.document;
-  global.HTMLElement = globalThis.window.HTMLElement;
-  global.NodeList = globalThis.window.NodeList;
-  global.HTMLCollection = globalThis.window.HTMLCollection;
-  global.Event = globalThis.window.Event;
-  global.CustomEvent = globalThis.window.CustomEvent;
-  global.MouseEvent = globalThis.window.MouseEvent;
-  global.KeyboardEvent = globalThis.window.KeyboardEvent; // Added for keyboard tests
-  global.customElements = globalThis.window.customElements;
+  // Vitest supplies the window globals. Reassigning them also writes to the
+  // jsdom window in Vitest 5, where properties such as document are read-only.
 
   // Domma's sanitiser ESCAPES THE ENTIRE STRING when DOMPurify is absent
   // (see sanitize.js). Without it, .html() and every other sanitised write
@@ -86,7 +76,7 @@ const setupJSDOM = () => {
   const fixture = document.createRange().createContextualFragment(FIXTURE_HTML);
   document.body.appendChild(fixture);
 
-  global.localStorage = createLocalStorageMock();
+  vi.stubGlobal('localStorage', createLocalStorageMock());
 };
 
 const createLocalStorageMock = () => {

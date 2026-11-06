@@ -12,31 +12,31 @@ export type DommaSetupOptions = {
     /**
      * false: reveal the page now and stop cloaking it
      */
-    cloak?: boolean;
+    cloak?: boolean | undefined;
     /**
      * true: switch Domma's theming off (bring your own styles)
      */
-    noStyles?: boolean;
+    noStyles?: boolean | undefined;
     /**
      * Theme to start, e.g. 'ocean-dark'
      */
-    theme?: string;
+    theme?: string | undefined;
     /**
      * Follow the system light/dark preference
      */
-    autoDetectTheme?: boolean;
+    autoDetectTheme?: boolean | undefined;
     /**
      * false: do not remember the theme (default true)
      */
-    persistTheme?: boolean;
+    persistTheme?: boolean | undefined;
     /**
      * true: run `I.scan()` over the page
      */
-    scanIcons?: boolean;
+    scanIcons?: boolean | undefined;
     /**
      * Runs once, before the selectors
      */
-    $init?: () => void;
+    $init?: (() => void) | undefined;
 };
 /**
  * The Domma function and everything on it. `$` is the same function.
@@ -56,11 +56,11 @@ export type DommaExtras = {
     /**
      * Nation flags - present when domma-flags is loaded
      */
-    flags?: import("./flags.js").Flags;
+    flags?: import("./flags.js").FlagRegistry | undefined;
     /**
      * Alias for `flags` (opt-in module)
      */
-    FL?: import("./flags.js").Flags;
+    FL?: import("./flags.js").FlagRegistry | undefined;
 };
 /**
  * Wrap elements in a {@link DommaCollection}: a CSS selector, an HTML string (`'<li>One</li>'`), an element,
@@ -70,7 +70,7 @@ export type DommaExtras = {
  * @param {Document | Element | DocumentFragment} [context] - Where to look for a CSS selector (default: document)
  * @returns {import('./dom.js').DommaCollection}
  */
-export function Domma(selector: import("./dom.js").DommaSelector, context?: Document | Element | DocumentFragment): import("./dom.js").DommaCollection;
+export function Domma(selector: import("./dom.js").DommaSelector, context?: Element | Document | DocumentFragment | undefined): import("./dom.js").DommaCollection;
 /**
  * Run a function when the DOM is ready (straight away if it already is).
  * @overload

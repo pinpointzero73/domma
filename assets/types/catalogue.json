@@ -266,10 +266,10 @@
         "kind": "boolean"
       },
       "repeat": {
-        "kind": "enum",
+        "kind": "array",
         "kinds": [
-          "enum",
-          "array"
+          "array",
+          "enum"
         ],
         "values": [
           "daily",
@@ -875,8 +875,8 @@
       "mode": {
         "kind": "enum",
         "values": [
-          "single",
-          "multiple"
+          "multiple",
+          "single"
         ],
         "doc": "'single' behaves like radios, 'multiple' like checkboxes"
       },
@@ -908,10 +908,10 @@
         "values": [
           "sm",
           "lg",
-          "none",
           "small",
           "medium",
-          "large"
+          "large",
+          "none"
         ],
         "doc": "Shadow size"
       },
@@ -1005,8 +1005,8 @@
       "animation": {
         "kind": "enum",
         "values": [
-          "slide",
           "fade",
+          "slide",
           "crossfade"
         ],
         "doc": "'slide' (track translate), 'fade' (clean swap), or 'crossfade' (overlapping opacity)"
@@ -1408,9 +1408,9 @@
       "type": {
         "kind": "enum",
         "values": [
+          "header",
           "item",
           "divider",
-          "header",
           "checkbox",
           "radio"
         ],
@@ -1566,8 +1566,8 @@
         "kind": "enum",
         "values": [
           "none",
-          "slide",
           "fade",
+          "slide",
           "scale"
         ],
         "doc": "How the panel enters (default 'scale')"
@@ -1727,8 +1727,8 @@
         "values": [
           "bottom-right",
           "bottom-left",
-          "bottom",
           "top",
+          "bottom",
           "center-modal"
         ]
       },
@@ -2797,8 +2797,8 @@
       "orientation": {
         "kind": "enum",
         "values": [
-          "horizontal",
-          "vertical"
+          "vertical",
+          "horizontal"
         ]
       },
       "rtl": {
@@ -3468,8 +3468,8 @@
         ],
         "values": [
           "none",
-          "slide",
           "fade",
+          "slide",
           "zoom"
         ],
         "doc": "Animation type"
@@ -4013,8 +4013,8 @@
         "kind": "enum",
         "values": [
           "auto",
-          "bottom",
           "top",
+          "bottom",
           "bottom-start",
           "bottom-end",
           "top-start",
@@ -4235,8 +4235,8 @@
       "layout": {
         "kind": "enum",
         "values": [
-          "horizontal",
           "vertical",
+          "horizontal",
           "centered"
         ],
         "doc": "Items down one side, across, or alternating either side of a centre line"
@@ -4297,8 +4297,8 @@
         "kind": "enum",
         "values": [
           "none",
-          "bottom",
-          "top"
+          "top",
+          "bottom"
         ],
         "doc": "Roadmap"
       },
@@ -4421,8 +4421,8 @@
       "orientation": {
         "kind": "enum",
         "values": [
-          "horizontal",
-          "vertical"
+          "vertical",
+          "horizontal"
         ]
       },
       "ticks": {
@@ -4942,8 +4942,8 @@
       "format": {
         "kind": "enum",
         "values": [
-          "png",
-          "svg"
+          "svg",
+          "png"
         ],
         "doc": "Export format"
       },
@@ -5095,8 +5095,8 @@
       "position": {
         "kind": "enum",
         "values": [
-          "bottom",
           "top",
+          "bottom",
           "left",
           "right"
         ],
@@ -5320,8 +5320,8 @@
       "direction": {
         "kind": "enum",
         "values": [
-          "horizontal",
-          "vertical"
+          "vertical",
+          "horizontal"
         ],
         "doc": "'horizontal' = side by side (default), 'vertical' = stacked"
       },
@@ -5639,8 +5639,8 @@
           "any"
         ],
         "values": [
-          "slide",
-          "fade"
+          "fade",
+          "slide"
         ],
         "doc": "Animation style"
       },
@@ -5737,8 +5737,8 @@
       "position": {
         "kind": "enum",
         "values": [
-          "bottom",
           "top",
+          "bottom",
           "left",
           "right"
         ],
@@ -5747,8 +5747,8 @@
       "placement": {
         "kind": "enum",
         "values": [
-          "bottom",
           "top",
+          "bottom",
           "left",
           "right"
         ],

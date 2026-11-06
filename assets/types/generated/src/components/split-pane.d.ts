@@ -38,34 +38,34 @@ export function splitPaneFor(el: Element, options?: SplitPaneOptions): SplitPane
 export class SplitPane extends Component {
     static defaults: {
         direction: string;
-        sizes: any;
+        sizes: null;
         minSize: number;
-        maxSize: any;
+        maxSize: null;
         gutterSize: number;
         snapOffset: number;
         collapsible: boolean;
         collapsedSize: number;
         collapseButton: boolean;
-        persistKey: any;
-        cursor: any;
+        persistKey: null;
+        cursor: null;
         disabled: boolean;
         step: number;
         largeStep: number;
         gutterLabel: string;
-        onBeforeDrag: any;
-        onDragStart: any;
-        onDrag: any;
-        onDragEnd: any;
-        onResize: any;
-        onCollapse: any;
-        onExpand: any;
+        onBeforeDrag: null;
+        onDragStart: null;
+        onDrag: null;
+        onDragEnd: null;
+        onResize: null;
+        onCollapse: null;
+        onExpand: null;
     };
     /**
      * @param {string|HTMLElement} element - The container; its element children are the panes
      * @param {SplitPaneOptions} [options]
      */
     constructor(element: string | HTMLElement, options?: SplitPaneOptions);
-    _gutters: any[];
+    _gutters: any[] | undefined;
     _drag: {
         index: any;
         pointerId: any;
@@ -73,20 +73,20 @@ export class SplitPane extends Component {
         startSize: any;
         available: number;
         sign: number;
-        gutter: any;
-    };
-    _collapsed: any[];
-    _restoreTo: any[];
-    _addedIds: any[];
-    _frame: number;
-    _containerStyle: string;
+        gutter: undefined;
+    } | null;
+    _collapsed: any[] | undefined;
+    _restoreTo: any[] | undefined;
+    _addedIds: any[] | undefined;
+    _frame: number | undefined;
+    _containerStyle: string | null | undefined;
     /** The pane elements. @type {HTMLElement[]} */
     panes: HTMLElement[];
-    _paneStyles: string[];
+    _paneStyles: (string | null)[] | undefined;
     get horizontal(): boolean;
     _build(): void;
     _sizes: any;
-    _observer: ResizeObserver;
+    _observer: ResizeObserver | null | undefined;
     _makeGutter(i: any): HTMLDivElement;
     /** Settings that can change after set-up: disabled, gutter size, cursor, label, buttons. */
     _applyOptions(): void;
@@ -112,7 +112,7 @@ export class SplitPane extends Component {
      * within both panes' limits.
      */
     _moveBoundary(i: any, want: any, { snap }?: {
-        snap?: boolean;
+        snap?: boolean | undefined;
     }): boolean;
     _onPointerDown(e: any, i: any): void;
     _onPointerMove: (e: any) => void;
@@ -155,7 +155,7 @@ export class SplitPane extends Component {
         sizes: any[];
         collapsed: any;
         restoreTo: any;
-    };
+    } | null;
     _save(): void;
 }
 export default SplitPane;
@@ -167,73 +167,73 @@ export type SplitPaneOptions = {
     /**
      * - 'horizontal' = side by side (default), 'vertical' = stacked
      */
-    direction?: "horizontal" | "vertical";
+    direction?: "vertical" | "horizontal" | undefined;
     /**
      * - Percentages, one per pane (scaled to add up to 100); equal by default
      */
-    sizes?: number[] | null;
+    sizes?: number[] | null | undefined;
     /**
      * - Minimum size, one value or one per pane (default 0)
      */
-    minSize?: SplitPaneSize | SplitPaneSize[];
+    minSize?: SplitPaneSize | SplitPaneSize[] | undefined;
     /**
      * - Maximum size, one value or one per pane (default none)
      */
-    maxSize?: SplitPaneSize | null | Array<SplitPaneSize | null>;
+    maxSize?: SplitPaneSize | (SplitPaneSize | null)[] | null | undefined;
     /**
      * - Gutter thickness in px (default 8)
      */
-    gutterSize?: number;
+    gutterSize?: number | undefined;
     /**
      * - Snap to a limit when dragged within this many px of it (default 0)
      */
-    snapOffset?: number;
+    snapOffset?: number | undefined;
     /**
      * - Which panes the gutter gestures may collapse
      */
-    collapsible?: boolean | boolean[];
+    collapsible?: boolean | boolean[] | undefined;
     /**
      * - What a collapsed pane shrinks to (default 0)
      */
-    collapsedSize?: SplitPaneSize | SplitPaneSize[];
+    collapsedSize?: SplitPaneSize | SplitPaneSize[] | undefined;
     /**
      * - A small toggle button in gutters next to a collapsible pane
      */
-    collapseButton?: boolean;
+    collapseButton?: boolean | undefined;
     /**
      * - Remember sizes and collapse state with S under 'split-pane:<key>'
      */
-    persistKey?: string | null;
+    persistKey?: string | null | undefined;
     /**
      * - Gutter cursor (default col-resize / row-resize)
      */
-    cursor?: string | null;
-    disabled?: boolean;
+    cursor?: string | null | undefined;
+    disabled?: boolean | undefined;
     /**
      * - Percent per arrow key (default 1)
      */
-    step?: number;
+    step?: number | undefined;
     /**
      * - Percent per Shift+arrow (default 10)
      */
-    largeStep?: number;
+    largeStep?: number | undefined;
     /**
      * - The gutters' aria-label
      */
-    gutterLabel?: string;
+    gutterLabel?: string | undefined;
     /**
      * - Return false to refuse a drag
      */
-    onBeforeDrag?: ((gutterIndex: number, event: PointerEvent) => boolean | void) | null;
-    onDragStart?: ((sizes: number[], gutterIndex: number) => void) | null;
-    onDrag?: ((sizes: number[], gutterIndex: number) => void) | null;
-    onDragEnd?: ((sizes: number[], gutterIndex: number) => void) | null;
+    onBeforeDrag?: ((gutterIndex: number, event: PointerEvent) => boolean | void) | null | undefined;
+    onDragStart?: ((sizes: number[], gutterIndex: number) => void) | null | undefined;
+    onDrag?: ((sizes: number[], gutterIndex: number) => void) | null | undefined;
+    onDragEnd?: ((sizes: number[], gutterIndex: number) => void) | null | undefined;
     /**
      * - Any size change: drag, keys, setSizes, collapse
      */
-    onResize?: ((sizes: number[]) => void) | null;
-    onCollapse?: ((paneIndex: number) => void) | null;
-    onExpand?: ((paneIndex: number) => void) | null;
+    onResize?: ((sizes: number[]) => void) | null | undefined;
+    onCollapse?: ((paneIndex: number) => void) | null | undefined;
+    onExpand?: ((paneIndex: number) => void) | null | undefined;
 };
 export type SplitPaneInstance = SplitPane;
 import Component from '../component.js';

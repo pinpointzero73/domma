@@ -51,62 +51,62 @@ export function virtualListFor(el: Element, options?: VirtualListOptions): Virtu
  */
 export class VirtualList<T = any> extends Component {
     static defaults: {
-        items: any;
+        items: null;
         count: number;
-        getItem: any;
+        getItem: null;
         itemHeight: number;
         estimatedItemHeight: number;
         overscan: number;
-        render: any;
+        render: null;
         safe: boolean;
-        keyField: any;
-        label: any;
-        loadMore: any;
+        keyField: null;
+        label: null;
+        loadMore: null;
         threshold: number;
-        loadingTemplate: any;
-        endTemplate: any;
-        errorTemplate: any;
+        loadingTemplate: null;
+        endTemplate: null;
+        errorTemplate: null;
         rowClass: string;
-        onRender: any;
-        onScroll: any;
-        onLoadMore: any;
-        onLoaded: any;
-        onEnd: any;
-        onError: any;
-        onItemClick: any;
+        onRender: null;
+        onScroll: null;
+        onLoadMore: null;
+        onLoaded: null;
+        onEnd: null;
+        onError: null;
+        onItemClick: null;
     };
     /**
      * @param {string|HTMLElement} element - The scrolling container
      * @param {VirtualListOptions<T>} [options]
      */
     constructor(element: string | HTMLElement, options?: VirtualListOptions<T>);
-    _id: string;
-    _rows: Map<any, any>;
-    _rowByEl: WeakMap<object, any>;
-    _heights: Map<any, any>;
-    _offsets: Float64Array;
-    _dirtyFrom: number;
-    _active: number;
-    _focusWithin: boolean;
-    _frame: number;
+    _id: string | undefined;
+    _rows: Map<any, any> | undefined;
+    _rowByEl: WeakMap<object, any> | undefined;
+    _heights: Map<any, any> | undefined;
+    _offsets: Float64Array<ArrayBuffer> | null;
+    _dirtyFrom: number | undefined;
+    _active: number | undefined;
+    _focusWithin: boolean | undefined;
+    _frame: number | undefined;
     _range: {
         start: number;
         end: number;
-    };
+    } | undefined;
     _load: {
         busy: boolean;
         done: boolean;
-        error: any;
+        error: null;
         page: number;
         gen: number;
-    };
-    _statusHeight: number;
+    } | undefined;
+    _statusHeight: number | undefined;
     _setData(items: any, count: any, getItem: any): void;
-    _items: any[];
-    _count: number;
+    _items: any[] | null | undefined;
+    _count: number | null | undefined;
     _getItem: any;
     /** How many rows there are. */
-    get count(): number;
+    get count(): number | null | undefined;
     _itemAt(i: any): any;
     _keyOf(item: any, i: any): any;
     get _fixed(): boolean;
@@ -127,12 +127,12 @@ export class VirtualList<T = any> extends Component {
      */
     getVisibleRange(): VirtualListRange;
     _build(): void;
-    _original: DocumentFragment;
-    _spacer: HTMLDivElement;
-    _list: HTMLDivElement;
-    _status: HTMLDivElement;
-    _hostObserver: ResizeObserver;
-    _rowObserver: ResizeObserver;
+    _original: DocumentFragment | null | undefined;
+    _spacer: HTMLDivElement | undefined;
+    _list: HTMLDivElement | null | undefined;
+    _status: HTMLDivElement | undefined;
+    _hostObserver: ResizeObserver | null | undefined;
+    _rowObserver: ResizeObserver | null | undefined;
     _schedule(): void;
     _onScroll: () => void;
     _makeRow(): HTMLDivElement;
@@ -267,44 +267,44 @@ export type VirtualListRange = {
  */
 export type VirtualListTemplate = string | Node | ((error?: unknown) => string | Node | null) | null;
 export type VirtualListOptions<T = any> = {
-    items?: T[] | null;
+    items?: T[] | null | undefined;
     /**
      * - With getItem, instead of items
      */
-    count?: number;
-    getItem?: ((index: number) => T) | null;
+    count?: number | undefined;
+    getItem?: ((index: number) => T) | null | undefined;
     /**
      * - px, or 'auto' to measure each row (default 40)
      */
-    itemHeight?: number | "auto";
+    itemHeight?: number | "auto" | undefined;
     /**
      * - Height assumed for unmeasured rows in 'auto' mode (default 40)
      */
-    estimatedItemHeight?: number;
+    estimatedItemHeight?: number | undefined;
     /**
      * - Rows rendered beyond each edge (default 4)
      */
-    overscan?: number;
+    overscan?: number | undefined;
     /**
      * - A string is HTML (sanitised unless safe: false); an Element goes in as it is
      */
-    render?: ((item: T, index: number) => string | Node) | null;
+    render?: ((item: T, index: number) => string | Node) | null | undefined;
     /**
      * - false: render() strings are inserted unsanitised (default true)
      */
-    safe?: boolean;
+    safe?: boolean | undefined;
     /**
      * - Property name or function giving each item a stable key (default: the index)
      */
-    keyField?: string | ((item: T, index: number) => unknown) | null;
+    keyField?: string | ((item: T, index: number) => unknown) | null | undefined;
     /**
      * - aria-label for the list
      */
-    label?: string | null;
+    label?: string | null | undefined;
     /**
      * - Extra class on every row
      */
-    rowClass?: string;
+    rowClass?: string | undefined;
     /**
      * - Called near the end; resolves to the next items, or {items, done}
      */
@@ -314,27 +314,27 @@ export type VirtualListOptions<T = any> = {
     }) => Promise<T[] | {
         items: T[];
         done?: boolean;
-    }>) | null;
+    }>) | null | undefined;
     /**
      * - px from the end at which loadMore is called (default 200)
      */
-    threshold?: number;
-    loadingTemplate?: VirtualListTemplate;
-    endTemplate?: VirtualListTemplate;
+    threshold?: number | undefined;
+    loadingTemplate?: VirtualListTemplate | undefined;
+    endTemplate?: VirtualListTemplate | undefined;
     /**
      * - A [data-vlist-retry] element inside it retries
      */
-    errorTemplate?: VirtualListTemplate;
-    onRender?: ((range: VirtualListRange) => void) | null;
-    onScroll?: ((visible: VirtualListRange) => void) | null;
+    errorTemplate?: VirtualListTemplate | undefined;
+    onRender?: ((range: VirtualListRange) => void) | null | undefined;
+    onScroll?: ((visible: VirtualListRange) => void) | null | undefined;
     onLoadMore?: ((info: {
         count: number;
         page: number;
-    }) => void) | null;
-    onLoaded?: ((items: T[]) => void) | null;
-    onEnd?: (() => void) | null;
-    onError?: ((error: unknown) => void) | null;
-    onItemClick?: ((item: T, index: number, event: MouseEvent | KeyboardEvent) => void) | null;
+    }) => void) | null | undefined;
+    onLoaded?: ((items: T[]) => void) | null | undefined;
+    onEnd?: (() => void) | null | undefined;
+    onError?: ((error: unknown) => void) | null | undefined;
+    onItemClick?: ((item: T, index: number, event: MouseEvent | KeyboardEvent) => void) | null | undefined;
 };
 export type VirtualListInstance<T = any> = VirtualList<T>;
 import Component from '../component.js';

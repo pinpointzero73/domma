@@ -29,36 +29,36 @@ export class Card extends Component {
         animationDuration: number;
         collapsible: boolean;
         collapsed: boolean;
-        persistKey: any;
+        persistKey: null;
         title: string;
         icon: string;
         content: string;
         safe: boolean;
         clickable: boolean;
-        color: any;
-        onCollapse: any;
-        onExpand: any;
-        onClick: any;
+        color: null;
+        onCollapse: null;
+        onExpand: null;
+        onClick: null;
     };
     /**
      * @param {import('./shared.js').ComponentTarget} selector
      * @param {CardOptions} [options]
      */
     constructor(selector: import("./shared.js").ComponentTarget, options?: CardOptions);
-    _added: any[];
-    _made: any[];
+    _added: any[] | undefined;
+    _made: any[] | undefined;
     _addClass(...names: any[]): void;
     _apply(): void;
-    _colorClass: string;
-    _headerTabindex: boolean;
-    _header(): Element;
-    _body(): Element;
+    _colorClass: string | null | undefined;
+    _headerTabindex: boolean | undefined;
+    _header(): Element | null;
+    _body(): Element | null;
     _bind(): void;
     _storageKey(): any;
     _restoreState(): void;
     _saveState(): void;
     _setCollapsed(collapsed: any, save?: boolean, animate?: boolean): void;
-    _heightTimer: number;
+    _heightTimer: number | undefined;
     /**
      * Collapse the body.
      * @returns {this}
@@ -115,75 +115,75 @@ export type CardOptions = {
     /**
      * - Enable hover effects (`hover` is accepted as an alias)
      */
-    hoverable?: boolean;
+    hoverable?: boolean | undefined;
     /**
      * - Alias of `hoverable`
      */
-    hover?: boolean;
+    hover?: boolean | undefined;
     /**
      * - Shadow size
      */
-    shadow?: import("../elements.js").ShadowSize | "sm" | "lg";
+    shadow?: "sm" | "lg" | import("../elements.js").ShadowSize | undefined;
     /**
      * - Apply border radius (false gives square corners)
      */
-    rounded?: boolean;
+    rounded?: boolean | undefined;
     /**
      * - Enable animations
      */
-    animation?: boolean;
+    animation?: boolean | undefined;
     /**
      * - Animation duration in ms
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - Clicking the header collapses/expands the body
      */
-    collapsible?: boolean;
+    collapsible?: boolean | undefined;
     /**
      * - Start collapsed (a saved state wins)
      */
-    collapsed?: boolean;
+    collapsed?: boolean | undefined;
     /**
      * - Storage key for the collapsed state (default `domma-card-<id>` when the card has an id)
      */
-    persistKey?: string | null;
+    persistKey?: string | null | undefined;
     /**
      * - Adds a `.card-header` with this title when the card has none
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - Icon name shown before the title
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Body content: HTML (sanitised unless `safe: false`) or a Node
      */
-    content?: string | Node;
+    content?: string | Node | undefined;
     /**
      * - Sanitise string content
      */
-    safe?: boolean;
+    safe?: boolean | undefined;
     /**
      * - Clickable style (also on when `onClick` is given)
      */
-    clickable?: boolean;
+    clickable?: boolean | undefined;
     /**
      * - Colour variant, e.g. 'primary' adds `.card-primary`
      */
-    color?: string | null;
+    color?: string | null | undefined;
     /**
      * - After the body collapses
      */
-    onCollapse?: ((card: CardInstance) => void) | null;
+    onCollapse?: ((card: CardInstance) => void) | null | undefined;
     /**
      * - After the body expands
      */
-    onExpand?: ((card: CardInstance) => void) | null;
+    onExpand?: ((card: CardInstance) => void) | null | undefined;
     /**
      * - Click on the card (not a collapsing header click)
      */
-    onClick?: ((card: CardInstance, event: MouseEvent) => void) | null;
+    onClick?: ((card: CardInstance, event: MouseEvent) => void) | null | undefined;
 };
 export type CardInstance = Card;
 import Component from '../component.js';

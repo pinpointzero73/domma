@@ -500,7 +500,7 @@ export namespace models {
      * @param {ComputedOptions<T>} [options]
      * @returns {ComputedRef<T>}
      */
-    export function computed<T = any>(fn: () => T, options?: ComputedOptions<T>): ComputedRef<T>;
+    export function computed<T = any>(fn: () => T, options?: ComputedOptions<T> | undefined): ComputedRef<T>;
     /**
      * @template [T=any]
      * @overload
@@ -508,7 +508,7 @@ export namespace models {
      * @param {ComputedOptions<T>} [options]
      * @returns {ComputedRef<T>}
      */
-    export function computed<T = any>(fn: WritableComputedDefinition<T>, options?: ComputedOptions<T>): ComputedRef<T>;
+    export function computed<T = any>(fn: WritableComputedDefinition<T>, options?: ComputedOptions<T> | undefined): ComputedRef<T>;
     /**
      * Run a function now, and again whenever any field it read changes.
      *
@@ -739,7 +739,7 @@ export type FieldDefinition = {
      * Checked with
      * `M.types[type]` when the value is not empty; a type with no validator (e.g. a form's `email`) is not checked
      */
-    type?: "string" | "number" | "boolean" | "array" | "object" | "date" | "any" | (string & {});
+    type?: "string" | "number" | "boolean" | "object" | (string & {}) | "any" | "array" | "date" | undefined;
     /**
      * Initial value when the data gives none (otherwise `null`)
      */
@@ -747,32 +747,32 @@ export type FieldDefinition = {
     /**
      * `null`, `undefined` and `''` fail
      */
-    required?: boolean;
+    required?: boolean | undefined;
     /**
      * Minimum, for a number value
      */
-    min?: number;
+    min?: number | undefined;
     /**
      * Maximum, for a number value
      */
-    max?: number;
+    max?: number | undefined;
     /**
      * Minimum length, for a string value
      */
-    minLength?: number;
+    minLength?: number | undefined;
     /**
      * Maximum length, for a string value
      */
-    maxLength?: number;
+    maxLength?: number | undefined;
     /**
      * Pattern a string value must match
      */
-    pattern?: RegExp;
+    pattern?: RegExp | undefined;
     /**
      * Custom check: `false` fails, a string fails with
      * that message, anything else passes
      */
-    validate?: (value: any) => boolean | string | void;
+    validate?: ((value: any) => boolean | string | void) | undefined;
 };
 /**
  * A blueprint: field name -> definition.
@@ -793,11 +793,11 @@ export type ModelOptions = {
     /**
      * localStorage key (stored as `model:<persist>`); loaded on creation and saved on change
      */
-    persist?: string;
+    persist?: string | undefined;
     /**
      * Save on every change when `persist` is set
      */
-    autoSave?: boolean;
+    autoSave?: boolean | undefined;
 };
 export type ChangeEvent = {
     field: string;
@@ -815,15 +815,15 @@ export type BindingOptions = {
     /**
      * Model value -> what the element shows
      */
-    format?: (value: any) => any;
+    format?: ((value: any) => any) | undefined;
     /**
      * Element value -> what the model stores (two-way only)
      */
-    parse?: (value: any) => any;
+    parse?: ((value: any) => any) | undefined;
     /**
      * Write the element's input back to the model
      */
-    twoWay?: boolean;
+    twoWay?: boolean | undefined;
 };
 /**
  * A single reactive value (`M.observable()`), from domma-reactive.
@@ -864,12 +864,12 @@ export type ComputedOptions<T = any> = {
     /**
      * Debug label used in warnings
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * Called with the
      * new value whenever it changes
      */
-    onChange?: (value: T, computation: import("../vendor/domma-reactive.js").Computation<T>) => void;
+    onChange?: ((value: T, computation: import("../vendor/domma-reactive.js").Computation<T>) => void) | undefined;
 };
 /**
  * A writable computed: where a write should land.
@@ -882,7 +882,7 @@ export type EffectOptions = {
     /**
      * Debug label used in warnings
      */
-    label?: string;
+    label?: string | undefined;
 };
 /**
  * Options for `M.applyBindings()`.
@@ -892,16 +892,16 @@ export type ApplyBindingsOptions = {
      * Handlers for `data-on-*`. Looked up only when the
      * data has no such key.
      */
-    methods?: Record<string, (...args: any[]) => any>;
+    methods?: Record<string, (...args: any[]) => any> | undefined;
     /**
      * Template renderer for `data-each` item bodies.
      * Defaults to `utils.render`.
      */
-    render?: import("../vendor/domma-reactive.js").RenderFn;
+    render?: import("../vendor/domma-reactive.js").RenderFn | undefined;
     /**
      * A name for this subtree, used in warnings
      */
-    template?: string;
+    template?: string | undefined;
 };
 /**
  * One activated binding record, from domma-reactive. `deps` are the names its expression reads.

@@ -66,91 +66,91 @@ export type SortableOptions = {
     /**
      * - Selector for the sortable items; null = the container's direct children
      */
-    items?: string | null;
+    items?: string | null | undefined;
     /**
      * - Selector inside an item that starts a drag; null = the whole item
      */
-    handle?: string | null;
+    handle?: string | null | undefined;
     /**
      * - Adds an "into" drop zone and switches to indicator mode (for trees)
      */
-    nest?: boolean;
+    nest?: boolean | undefined;
     /**
      * - null = !nest. true = siblings slide aside while you drag; false = indicator mode
      */
-    live?: boolean | null;
+    live?: boolean | null | undefined;
     /**
      * - 'y' for a column, 'x' for a row
      */
-    axis?: "x" | "y";
+    axis?: "x" | "y" | undefined;
     /**
      * - Attribute that identifies an item across re-renders (default 'data-id')
      */
-    key?: string;
+    key?: string | undefined;
     /**
      * - Animation duration in ms; 0 turns it off. Reduced motion always does
      */
-    animation?: number;
+    animation?: number | undefined;
     /**
      * - CSS easing for every glide
      */
-    easing?: string;
+    easing?: string | undefined;
     /**
      * - Pixels the pointer must travel before a press becomes a drag (default 4)
      */
-    threshold?: number;
+    threshold?: number | undefined;
     /**
      * - Ms a finger must rest on an item with no handle before it drags (default 220)
      */
-    touchDelay?: number;
+    touchDelay?: number | undefined;
     /**
      * - Share of an item's height, centred, that means "into" (default 0.5)
      */
-    nestZone?: number;
+    nestZone?: number | undefined;
     /**
      * - Veto a drop. Live mode passes 'before' or 'after'
      */
-    accepts?: ((item: HTMLElement, target: HTMLElement, zone: SortableZone) => boolean) | null;
+    accepts?: ((item: HTMLElement, target: HTMLElement, zone: SortableZone) => boolean) | null | undefined;
     /**
      * - Start disabled
      */
-    disabled?: boolean;
+    disabled?: boolean | undefined;
     /**
      * - Alt+Arrow moves the focused item (live mode). Default true
      */
-    keyboard?: boolean;
+    keyboard?: boolean | undefined;
     /**
      * - Storage key (or true = the container's id): remember the order. Live mode
      */
-    persist?: string | boolean;
+    persist?: string | boolean | undefined;
     /**
      * - Scroll the nearest scrolling ancestor (or the page) near its edges. Default true
      */
-    autoScroll?: boolean;
+    autoScroll?: boolean | undefined;
     /**
      * - Where the dragged copy is appended; null = the container
      */
-    ghostParent?: HTMLElement | null;
-    onStart?: ((detail: SortableStartDetail) => void) | null;
-    onMove?: ((detail: SortableMoveDetail) => void) | null;
+    ghostParent?: HTMLElement | null | undefined;
+    onStart?: ((detail: SortableStartDetail) => void) | null | undefined;
+    onMove?: ((detail: SortableMoveDetail) => void) | null | undefined;
     /**
      * - Live mode: the order changed
      */
-    onSort?: ((detail: SortableSortDetail) => void) | null;
+    onSort?: ((detail: SortableSortDetail) => void) | null | undefined;
     /**
      * - Indicator mode: update your data and re-render here. Return false (or a promise that rejects) to refuse; a returned promise is awaited before animating.
      */
-    onDrop?: ((detail: SortableDropDetail) => boolean | void | Promise<any>) | null;
+    onDrop?: ((detail: SortableDropDetail) => boolean | void | Promise<any>) | null | undefined;
     /**
      * - Esc, a refused drop, or a drop over nothing
      */
     onCancel?: ((detail: {
         item: HTMLElement;
-    }) => void) | null;
+    }) => void) | null | undefined;
     /**
      * - Every drag, keyboard move and cancel ends here
      */
-    onEnd?: ((detail: SortableEndDetail) => void) | null;
+    onEnd?: ((detail: SortableEndDetail) => void) | null | undefined;
 };
 export type SortableInstance = Sortable;
 /**
@@ -227,38 +227,38 @@ declare class Sortable extends Component {
      */
     constructor(selector: string | HTMLElement, options?: SortableOptions);
     _drag: {
-        item: Element;
+        item: any;
         pointerId: any;
-        ghost: Node;
-        rect: DOMRect;
+        ghost: any;
+        rect: any;
         offsetX: number;
         offsetY: number;
         x: any;
         y: any;
         from: number;
-        previous: string[];
+        previous: (string | null)[];
         origin: {
-            parent: ParentNode;
-            next: ChildNode;
+            parent: any;
+            next: any;
         };
-        key: string;
-        target: any;
-        zone: any;
-        indicator: any;
-        scrollRaf: any;
-    };
+        key: string | null;
+        target: null;
+        zone: null;
+        indicator: null;
+        scrollRaf: null;
+    } | null;
     _pending: {
         item: Element;
         pointerId: any;
         startX: any;
         startY: any;
         ready: boolean;
-        timer: any;
-    };
-    _animating: WeakSet<object>;
-    _flips: WeakMap<object, any>;
-    _docHandlers: any[];
-    _observer: MutationObserver;
+        timer: null;
+    } | null;
+    _animating: WeakSet<object> | undefined;
+    _flips: WeakMap<object, any> | undefined;
+    _docHandlers: any[] | undefined;
+    _observer: MutationObserver | undefined;
     /**
      * The keys of the items, in their current order.
      * @returns {(string|null)[]}
@@ -312,11 +312,11 @@ declare class Sortable extends Component {
     _items(): any[];
     /** The sortable container an element belongs to - a nested sortable claims its own. */
     _ownerOf(el: any): any;
-    _itemFrom(node: any): Element;
-    _keyOf(el: any): string;
+    _itemFrom(node: any): Element | null;
+    _keyOf(el: any): string | null;
     _byKey(key: any): any;
     _markHandles(): void;
-    _storageKey(): string;
+    _storageKey(): string | null;
     _duration(): number;
     _onPointerDown(e: any): void;
     _onPointerMove(e: any): void;
@@ -352,10 +352,10 @@ declare class Sortable extends Component {
     _onKeyDown(e: any): void;
     /** Tell screen readers where the item now sits. */
     _announce(item: any): void;
-    _liveRegion: HTMLDivElement;
+    _liveRegion: HTMLDivElement | undefined;
     /** Where every item is now, by element and by key. */
     _snapshot({ withDragged }?: {
-        withDragged?: boolean;
+        withDragged?: boolean | undefined;
     }): Map<any, any>;
     /** Animate each item from its rect in `before` to where it is now. */
     _playFlip(before: any): void;

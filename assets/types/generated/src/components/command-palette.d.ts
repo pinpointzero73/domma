@@ -73,40 +73,40 @@ export class CommandPalette extends Component {
     _error: any;
     _timers: Set<any>;
     _known: Map<any, any>;
-    _abort: AbortController;
+    _abort: AbortController | null;
     _sourceToken: number;
     _trap: FocusTrap;
     get _mac(): boolean;
     _build(): void;
-    _idBase: string;
-    _backdrop: HTMLDivElement;
-    _panel: HTMLDivElement;
-    _crumbs: HTMLDivElement;
-    _back: HTMLButtonElement;
-    _trail: HTMLOListElement;
-    _input: HTMLInputElement;
-    _spinner: HTMLSpanElement;
-    _list: HTMLDivElement;
-    _status: HTMLDivElement;
-    _live: HTMLDivElement;
+    _idBase: string | undefined;
+    _backdrop: HTMLDivElement | undefined;
+    _panel: HTMLDivElement | undefined;
+    _crumbs: HTMLDivElement | undefined;
+    _back: HTMLButtonElement | undefined;
+    _trail: HTMLOListElement | undefined;
+    _input: HTMLInputElement | undefined;
+    _spinner: HTMLSpanElement | undefined;
+    _list: HTMLDivElement | undefined;
+    _status: HTMLDivElement | undefined;
+    _live: HTMLDivElement | undefined;
     _bind(): void;
-    _downOnBackdrop: boolean;
-    _hotkeyList: {
+    _downOnBackdrop: boolean | undefined;
+    _hotkeyList: ({
         key: string;
         mod: boolean;
         ctrl: boolean;
         meta: boolean;
         alt: boolean;
         shift: boolean;
-    }[];
-    _hotkeys(): {
+    } | null)[] | undefined;
+    _hotkeys(): ({
         key: string;
         mod: boolean;
         ctrl: boolean;
         meta: boolean;
         alt: boolean;
         shift: boolean;
-    }[];
+    } | null)[];
     _later(fn: any, ms: any): number;
     _clearTimer(t: any): void;
     _duration(): number;
@@ -118,13 +118,13 @@ export class CommandPalette extends Component {
     open(query?: string): this;
     /** @returns {this} */
     close(): this;
-    _hideTimer: number;
+    _hideTimer: number | null | undefined;
     /**
      * @overload
      * @param {string} [query]
      * @returns {this}
      */
-    toggle(query?: string): this;
+    toggle(query?: string | undefined): this;
     /** @returns {boolean} */
     isOpen(): boolean;
     /**
@@ -133,7 +133,7 @@ export class CommandPalette extends Component {
      * @param {string} [query]
      * @returns {this}
      */
-    show(query?: string): this;
+    show(query?: string | undefined): this;
     /**
      * Permanent alias of close(), looked up by name.
      * @overload
@@ -186,19 +186,19 @@ export class CommandPalette extends Component {
      * @returns {this}
      */
     clearRecent(): this;
-    _destroyed: boolean;
+    _destroyed: boolean | undefined;
     _applyOptions(): void;
     _refresh(): void;
     _currentPage(): any;
     _usesSource(): boolean;
     _setQuery(value: any, opts?: {}): void;
-    _debounceTimer: number;
+    _debounceTimer: number | null | undefined;
     _cancelSource(): void;
     _runSource(query: any): void;
     /** Every command reachable without a request: the top level and array children. */
     _findById(id: any, list?: any[], depth?: number): any;
     _remember(command: any): void;
-    _saved(): any;
+    _saved(): {};
     /** A remembered command that is not in the list: asked of resolveRecent, else the saved link. */
     _restore(id: any): any;
     /** Group and order what is shown now. */
@@ -213,7 +213,7 @@ export class CommandPalette extends Component {
     _renderItem(command: any, match: any, index: any, mac: any): HTMLDivElement;
     _renderCrumbs(): void;
     _renderStatus(): void;
-    _liveTimer: number;
+    _liveTimer: number | undefined;
     _onKeyDown(e: any): void;
     _choose(command: any, event: any): void;
     _enter(command: any): void;
@@ -231,117 +231,117 @@ export type PaletteSourceContext = {
  * One command in the palette.
  */
 export type PaletteCommand = {
-    id?: string;
+    id?: string | undefined;
     title: string;
-    subtitle?: string;
+    subtitle?: string | undefined;
     /**
      * Heading the command is listed under
      */
-    group?: string;
+    group?: string | undefined;
     /**
      * Domma icon name
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * More words that find it
      */
-    keywords?: string[];
+    keywords?: string[] | undefined;
     /**
      * Shown as a hint, e.g. 'mod+s' (mod = Cmd on a Mac, Ctrl elsewhere)
      */
-    shortcut?: string;
+    shortcut?: string | undefined;
     /**
      * Followed when run (http(s), mailto, tel or relative only)
      */
-    href?: string;
+    href?: string | undefined;
     /**
      * '_blank' opens href in a new tab
      */
-    target?: string;
-    action?: (command: PaletteCommand, palette: CommandPaletteInstance, event?: Event) => void;
-    disabled?: boolean;
-    hidden?: boolean;
+    target?: string | undefined;
+    action?: ((command: PaletteCommand, palette: CommandPaletteInstance, event?: Event) => void) | undefined;
+    disabled?: boolean | undefined;
+    hidden?: boolean | undefined;
     /**
      * Running it leaves the palette open
      */
-    keepOpen?: boolean;
+    keepOpen?: boolean | undefined;
     /**
      * A nested page: a list, or a function returning one (called once on entering)
      */
-    children?: PaletteCommand[] | ((command: PaletteCommand, ctx: PaletteSourceContext) => Promise<PaletteCommand[]> | PaletteCommand[]);
+    children?: PaletteCommand[] | ((command: PaletteCommand, ctx: PaletteSourceContext) => Promise<PaletteCommand[]> | PaletteCommand[]) | undefined;
     /**
      * Placeholder for the box while this command's page is open
      */
-    placeholder?: string;
+    placeholder?: string | undefined;
 };
 export type CommandPaletteOptions = {
-    commands?: PaletteCommand[];
+    commands?: PaletteCommand[] | undefined;
     /**
      * Search elsewhere: debounced, the previous request aborted through `signal`
      */
-    source?: ((query: string, ctx: PaletteSourceContext) => Promise<PaletteCommand[]> | PaletteCommand[]) | null;
+    source?: ((query: string, ctx: PaletteSourceContext) => Promise<PaletteCommand[]> | PaletteCommand[]) | null | undefined;
     /**
      * ms (default 150)
      */
-    debounce?: number;
+    debounce?: number | undefined;
     /**
      * 'mod+k' (default), several, or false
      */
-    hotkey?: string | string[] | false;
-    placeholder?: string;
+    hotkey?: string | false | string[] | undefined;
+    placeholder?: string | undefined;
     /**
      * Accessible name of the dialog and list (default 'Command palette')
      */
-    label?: string;
-    maxResults?: number;
+    label?: string | undefined;
+    maxResults?: number | undefined;
     /**
      * Storage (S) key for recent commands; null (default) = off
      */
-    recentKey?: string | null;
-    recentLimit?: number;
-    recentLabel?: string;
+    recentKey?: string | null | undefined;
+    recentLimit?: number | undefined;
+    recentLabel?: string | undefined;
     /**
      * Finds a remembered command that is not in `commands` (one an async `children` or `source` gave) after a reload. Without it, such a command comes back only if it was a plain link (`href`, no `action`)
      */
-    resolveRecent?: ((id: string) => PaletteCommand | null) | null;
+    resolveRecent?: ((id: string) => PaletteCommand | null) | null | undefined;
     /**
      * Heading for source results without their own group
      */
-    sourceGroup?: string | null;
-    emptyText?: string;
-    loadingText?: string;
+    sourceGroup?: string | null | undefined;
+    emptyText?: string | undefined;
+    loadingText?: string | undefined;
     /**
      * While a nested page's async children load (default 'Loading…')
      */
-    pageLoadingText?: string;
-    errorText?: string;
-    backLabel?: string;
+    pageLoadingText?: string | undefined;
+    errorText?: string | undefined;
+    backLabel?: string | undefined;
     /**
      * Key hints under the list (default true)
      */
-    footer?: boolean;
-    resultsText?: (count: number) => string;
+    footer?: boolean | undefined;
+    resultsText?: ((count: number) => string) | undefined;
     /**
      * Replaces the default navigation for href commands
      */
     navigate?: ((href: string, ctx: {
         newTab: boolean;
         command: PaletteCommand;
-    }) => void) | null;
-    animationDuration?: number;
-    className?: string;
+    }) => void) | null | undefined;
+    animationDuration?: number | undefined;
+    className?: string | undefined;
     /**
      * Force Mac (true) or other (false) key names; default detects
      */
-    mac?: boolean;
-    onBeforeOpen?: ((palette: CommandPaletteInstance) => boolean | void) | null;
-    onOpen?: ((palette: CommandPaletteInstance) => void) | null;
-    onBeforeClose?: ((palette: CommandPaletteInstance) => boolean | void) | null;
-    onClose?: ((palette: CommandPaletteInstance) => void) | null;
-    onQuery?: ((query: string, palette: CommandPaletteInstance) => void) | null;
-    onBeforeSelect?: ((command: PaletteCommand, palette: CommandPaletteInstance) => boolean | void) | null;
-    onSelect?: ((command: PaletteCommand, palette: CommandPaletteInstance) => void) | null;
-    onRun?: ((command: PaletteCommand, palette: CommandPaletteInstance) => void) | null;
+    mac?: boolean | undefined;
+    onBeforeOpen?: ((palette: CommandPaletteInstance) => boolean | void) | null | undefined;
+    onOpen?: ((palette: CommandPaletteInstance) => void) | null | undefined;
+    onBeforeClose?: ((palette: CommandPaletteInstance) => boolean | void) | null | undefined;
+    onClose?: ((palette: CommandPaletteInstance) => void) | null | undefined;
+    onQuery?: ((query: string, palette: CommandPaletteInstance) => void) | null | undefined;
+    onBeforeSelect?: ((command: PaletteCommand, palette: CommandPaletteInstance) => boolean | void) | null | undefined;
+    onSelect?: ((command: PaletteCommand, palette: CommandPaletteInstance) => void) | null | undefined;
+    onRun?: ((command: PaletteCommand, palette: CommandPaletteInstance) => void) | null | undefined;
 };
 export type CommandPaletteInstance = CommandPalette;
 /**

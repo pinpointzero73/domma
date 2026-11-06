@@ -52,7 +52,7 @@
  * @returns {T} `primary` itself when there is nothing to layer, otherwise a
  *                   Proxy over it.
  */
-export function createBindingSource<T extends unknown>(primary: T, { fallback, onWrite }?: {
-    fallback?: Record<string, any>;
-    onWrite?: (key: string, value: any) => void;
+export function createBindingSource<T extends object>(primary: T, { fallback, onWrite }?: {
+    fallback?: Record<string, any> | undefined;
+    onWrite?: ((key: string, value: any) => void) | undefined;
 }): T;

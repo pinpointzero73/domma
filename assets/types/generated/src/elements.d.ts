@@ -229,31 +229,31 @@ export type TabsOptions = {
     /**
      * - Initially active tab index
      */
-    active?: number;
+    active?: number | undefined;
     /**
      * - Panel animation
      */
-    animation?: "fade" | "none";
+    animation?: "fade" | "none" | undefined;
     /**
      * - Animation duration in ms
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - Selector for tab items
      */
-    tabSelector?: string;
+    tabSelector?: string | undefined;
     /**
      * - Selector for tab panels
      */
-    panelSelector?: string;
+    panelSelector?: string | undefined;
     /**
      * - CSS class for the active tab
      */
-    activeClass?: string;
+    activeClass?: string | undefined;
     /**
      * - Called when the active tab changes
      */
-    onChange?: ((event: TabChangeEvent) => void) | null;
+    onChange?: ((event: TabChangeEvent) => void) | null | undefined;
 };
 /**
  * Tabs: tab items paired by index with panels, with ARIA roles set up.
@@ -275,39 +275,39 @@ export type AccordionOptions = {
     /**
      * - Allow several panels open at once
      */
-    allowMultiple?: boolean;
+    allowMultiple?: boolean | undefined;
     /**
      * - Alias of allowMultiple (wins when set)
      */
-    multiExpand?: boolean | null;
+    multiExpand?: boolean | null | undefined;
     /**
      * - Initially open panel index(es); null keeps the markup's active class
      */
-    activeIndex?: number | number[] | null;
+    activeIndex?: number | number[] | null | undefined;
     /**
      * - Animate the height
      */
-    animation?: boolean;
+    animation?: boolean | undefined;
     /**
      * - Animation duration in ms
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - Selector for headers
      */
-    headerSelector?: string;
+    headerSelector?: string | undefined;
     /**
      * - Selector for panels (outermost matches only)
      */
-    contentSelector?: string;
+    contentSelector?: string | undefined;
     /**
      * - Class put on the open item (the header's parent)
      */
-    activeClass?: string;
+    activeClass?: string | undefined;
     /**
      * - Called when toggle() opens or closes a panel
      */
-    onChange?: ((event: AccordionChangeEvent) => void) | null;
+    onChange?: ((event: AccordionChangeEvent) => void) | null | undefined;
 };
 export type AccordionInstance = Accordion;
 export type ListGroupVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
@@ -315,47 +315,47 @@ export type ListGroupOptions = {
     /**
      * - Items can be selected (role="listbox")
      */
-    selectable?: boolean;
+    selectable?: boolean | undefined;
     /**
      * - Allow several selected items at once
      */
-    multiSelect?: boolean;
+    multiSelect?: boolean | undefined;
     /**
      * - Class on selected items
      */
-    activeClass?: string;
+    activeClass?: string | undefined;
     /**
      * - Class marking disabled items
      */
-    disabledClass?: string;
+    disabledClass?: string | undefined;
     /**
      * - Selector for the items
      */
-    itemSelector?: string;
+    itemSelector?: string | undefined;
     /**
      * - Arrow keys, Home/End, Enter/Space
      */
-    keyboard?: boolean;
+    keyboard?: boolean | undefined;
     /**
      * - Keyboard navigation wraps from last to first
      */
-    loop?: boolean;
+    loop?: boolean | undefined;
     /**
      * - Focus the first enabled item on init
      */
-    focusOnInit?: boolean;
+    focusOnInit?: boolean | undefined;
     /**
      * - Selection changed; the selected items
      */
-    onChange?: ((selected: HTMLElement[], event: Event | null) => void) | null;
+    onChange?: ((selected: HTMLElement[], event: Event | null) => void) | null | undefined;
     /**
      * - An item was selected
      */
-    onSelect?: ((item: HTMLElement, index: number, event: Event | null) => void) | null;
+    onSelect?: ((item: HTMLElement, index: number, event: Event | null) => void) | null | undefined;
     /**
      * - An item was deselected
      */
-    onDeselect?: ((item: HTMLElement, index: number, event: Event | null) => void) | null;
+    onDeselect?: ((item: HTMLElement, index: number, event: Event | null) => void) | null | undefined;
 };
 /**
  * A list group. `E.listGroup()` returns the first instance; `all()` (non-enumerable) lists every
@@ -371,15 +371,15 @@ export type DropdownItem = {
     /**
      * - Display text
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - Alternative to label
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * - Alternative to label
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * - Value when selected (default: the item's index)
      */
@@ -387,19 +387,19 @@ export type DropdownItem = {
     /**
      * - Icon HTML
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Shown greyed, not selectable
      */
-    disabled?: boolean;
+    disabled?: boolean | undefined;
     /**
      * - Render as a divider
      */
-    divider?: boolean;
+    divider?: boolean | undefined;
     /**
      * - Render as a header with this text
      */
-    header?: string;
+    header?: string | undefined;
 };
 /**
  * Passed to onSelect / `.on('select')`.
@@ -413,55 +413,55 @@ export type DropdownOptions = {
     /**
      * - 'hover' also opens on click (touch has no hover)
      */
-    trigger?: "click" | "hover";
+    trigger?: "click" | "hover" | undefined;
     /**
      * - Preferred menu position - flipped or clamped if it would open off screen
      */
-    position?: DropdownPosition;
+    position?: DropdownPosition | undefined;
     /**
      * - Position offset [x, y]
      */
-    offset?: [number, number];
+    offset?: [number, number] | undefined;
     /**
      * - Flip to the opposite side and clamp to the viewport rather than open off screen
      */
-    flip?: boolean;
+    flip?: boolean | undefined;
     /**
      * - Fade the menu
      */
-    animation?: boolean;
+    animation?: boolean | undefined;
     /**
      * - Animation duration in ms
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - ms before a hover opens the menu
      */
-    hoverOpenDelay?: number;
+    hoverOpenDelay?: number | undefined;
     /**
      * - ms of grace before a hover menu closes once the pointer has left trigger, menu and the gap between
      */
-    hoverCloseDelay?: number;
+    hoverCloseDelay?: number | undefined;
     /**
      * - Close after an item is chosen
      */
-    closeOnSelect?: boolean;
+    closeOnSelect?: boolean | undefined;
     /**
      * - Close on a click outside
      */
-    closeOnClickOutside?: boolean;
+    closeOnClickOutside?: boolean | undefined;
     /**
      * - Close on Esc and restore focus to the trigger
      */
-    closeOnEscape?: boolean;
+    closeOnEscape?: boolean | undefined;
     /**
      * - Opening this dropdown closes any other open one
      */
-    closeOthers?: boolean;
+    closeOthers?: boolean | undefined;
     /**
      * - Menu items
      */
-    items?: (DropdownItem | string)[];
+    items?: (string | DropdownItem)[] | undefined;
     /**
      * - A Domma Model holding the items array (with modelKey)
      */
@@ -469,66 +469,66 @@ export type DropdownOptions = {
     /**
      * - Model key for the items array
      */
-    modelKey?: string | null;
+    modelKey?: string | null | undefined;
     /**
      * - Model key the selected value is written to (default `<modelKey>_selected`)
      */
-    selectedKey?: string;
+    selectedKey?: string | undefined;
     /**
      * - Item HTML for object items
      */
-    itemTemplate?: ((item: DropdownItem, index: number) => string) | null;
+    itemTemplate?: ((item: DropdownItem, index: number) => string) | null | undefined;
     /**
      * - Return false to keep it closed
      */
-    onBeforeOpen?: ((dropdown: DropdownInstance) => boolean | void) | null;
+    onBeforeOpen?: ((dropdown: DropdownInstance) => boolean | void) | null | undefined;
     /**
      * - Menu opened
      */
-    onOpen?: ((dropdown: DropdownInstance) => void) | null;
+    onOpen?: ((dropdown: DropdownInstance) => void) | null | undefined;
     /**
      * - Return false to keep it open
      */
-    onBeforeClose?: ((dropdown: DropdownInstance) => boolean | void) | null;
+    onBeforeClose?: ((dropdown: DropdownInstance) => boolean | void) | null | undefined;
     /**
      * - Menu closed
      */
-    onClose?: ((dropdown: DropdownInstance) => void) | null;
+    onClose?: ((dropdown: DropdownInstance) => void) | null | undefined;
     /**
      * - An item was chosen
      */
-    onSelect?: ((event: DropdownSelectEvent, dropdown: DropdownInstance) => void) | null;
+    onSelect?: ((event: DropdownSelectEvent, dropdown: DropdownInstance) => void) | null | undefined;
 };
 export type DropdownInstance = Dropdown;
 export type DesktopNotificationOptions = {
     /**
      * - Notification title
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - Body text
      */
-    body?: string;
+    body?: string | undefined;
     /**
      * - Icon URL
      */
-    icon?: string | null;
+    icon?: string | null | undefined;
     /**
      * - Badge URL
      */
-    badge?: string | null;
+    badge?: string | null | undefined;
     /**
      * - Tag: a new notification with the same tag replaces the old one
      */
-    tag?: string | null;
+    tag?: string | null | undefined;
     /**
      * - Stay until the user dismisses it
      */
-    requireInteraction?: boolean;
+    requireInteraction?: boolean | undefined;
     /**
      * - No sound or vibration
      */
-    silent?: boolean;
+    silent?: boolean | undefined;
     /**
      * - Data kept on the native notification
      */
@@ -536,77 +536,77 @@ export type DesktopNotificationOptions = {
     /**
      * - Notification clicked
      */
-    onClick?: ((event: Event, notification: DesktopNotification) => void) | null;
+    onClick?: ((event: Event, notification: DesktopNotification) => void) | null | undefined;
     /**
      * - Notification closed
      */
-    onClose?: ((event: Event, notification: DesktopNotification) => void) | null;
+    onClose?: ((event: Event, notification: DesktopNotification) => void) | null | undefined;
     /**
      * - Unsupported, permission denied, or the native notification failed
      */
-    onError?: ((error: Error | Event, notification?: DesktopNotification) => void) | null;
+    onError?: ((error: Error | Event, notification?: DesktopNotification) => void) | null | undefined;
     /**
      * - Notification shown
      */
-    onShow?: ((event: Event, notification: DesktopNotification) => void) | null;
+    onShow?: ((event: Event, notification: DesktopNotification) => void) | null | undefined;
 };
 export type TimerOptions = {
     /**
      * - Countdown length in ms
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - Start at once
      */
-    autoStart?: boolean;
+    autoStart?: boolean | undefined;
     /**
      * - Display format (case-insensitive)
      */
-    format?: "hh:mm:ss" | "mm:ss" | "ss" | string;
+    format?: string | undefined;
     /**
      * - Show start/pause/reset buttons
      */
-    showControls?: boolean;
+    showControls?: boolean | undefined;
     /**
      * - Tick interval in ms
      */
-    updateInterval?: number;
+    updateInterval?: number | undefined;
     /**
      * - Desktop notification on completion
      */
-    notification?: boolean;
+    notification?: boolean | undefined;
     /**
      * - Options for that notification
      */
-    notificationOptions?: DesktopNotificationOptions;
+    notificationOptions?: DesktopNotificationOptions | undefined;
     /**
      * - Play soundUrl on completion
      */
-    sound?: boolean;
+    sound?: boolean | undefined;
     /**
      * - Sound to play
      */
-    soundUrl?: string | null;
+    soundUrl?: string | null | undefined;
     /**
      * - Every tick, with the ms remaining
      */
-    onTick?: ((remaining: number) => void) | null;
+    onTick?: ((remaining: number) => void) | null | undefined;
     /**
      * - Reached zero
      */
-    onComplete?: (() => void) | null;
+    onComplete?: (() => void) | null | undefined;
     /**
      * - Started
      */
-    onStart?: (() => void) | null;
+    onStart?: (() => void) | null | undefined;
     /**
      * - Paused
      */
-    onPause?: (() => void) | null;
+    onPause?: (() => void) | null | undefined;
     /**
      * - Reset
      */
-    onReset?: (() => void) | null;
+    onReset?: (() => void) | null | undefined;
 };
 export type TimerInstance = Timer;
 /**
@@ -616,7 +616,7 @@ export type AlarmItem = {
     /**
      * - Assigned by add() ('alarm-<n>')
      */
-    id?: string;
+    id?: string | undefined;
     /**
      * - Time of day, 'HH:MM'
      */
@@ -624,75 +624,75 @@ export type AlarmItem = {
     /**
      * - Shown in the notification
      */
-    label?: string;
-    enabled?: boolean;
+    label?: string | undefined;
+    enabled?: boolean | undefined;
     /**
      * - null = once; an array of day names ('monday', ...)
      */
-    repeat?: null | "daily" | "weekdays" | "weekends" | string[];
+    repeat?: string[] | "daily" | "weekdays" | "weekends" | null | undefined;
     /**
      * - Desktop notification when it goes off
      */
-    notification?: boolean;
+    notification?: boolean | undefined;
     /**
      * - Options for that notification
      */
-    notificationOptions?: DesktopNotificationOptions;
+    notificationOptions?: DesktopNotificationOptions | undefined;
     /**
      * - Play soundUrl
      */
-    sound?: boolean;
-    soundUrl?: string | null;
+    sound?: boolean | undefined;
+    soundUrl?: string | null | undefined;
     /**
      * - Timestamp (ms) it last went off
      */
-    lastTriggered?: number | null;
+    lastTriggered?: number | null | undefined;
     /**
      * - Timestamp (ms) a snooze ends
      */
-    snoozedUntil?: number | null;
+    snoozedUntil?: number | null | undefined;
     /**
      * - Set on the copy getNextAlarm() returns
      */
-    nextTrigger?: Date;
+    nextTrigger?: Date | undefined;
 };
 export type AlarmOptions = {
     /**
      * - Initial alarms, used when storage holds none
      */
-    alarms?: AlarmItem[];
+    alarms?: AlarmItem[] | undefined;
     /**
      * - Not read: times are local
      */
-    timezone?: string;
+    timezone?: string | undefined;
     /**
      * - How often alarms are checked, in ms
      */
-    checkInterval?: number;
+    checkInterval?: number | undefined;
     /**
      * - localStorage key
      */
-    storageKey?: string;
+    storageKey?: string | undefined;
     /**
      * - An alarm went off
      */
-    onTrigger?: ((alarm: AlarmItem) => void) | null;
+    onTrigger?: ((alarm: AlarmItem) => void) | null | undefined;
     /**
      * - An alarm was snoozed
      */
-    onSnooze?: ((alarm: AlarmItem, duration: number) => void) | null;
+    onSnooze?: ((alarm: AlarmItem, duration: number) => void) | null | undefined;
     /**
      * - Not called by the current code
      */
-    onDismiss?: (() => void) | null;
+    onDismiss?: (() => void) | null | undefined;
     /**
      * - add() added one
      */
-    onAlarmAdd?: ((alarm: AlarmItem) => void) | null;
+    onAlarmAdd?: ((alarm: AlarmItem) => void) | null | undefined;
     /**
      * - removeAlarm() removed one
      */
-    onAlarmRemove?: ((alarm: AlarmItem) => void) | null;
+    onAlarmRemove?: ((alarm: AlarmItem) => void) | null | undefined;
 };
 export type AlarmInstance = Alarm;
 /**
@@ -707,59 +707,59 @@ export type CarouselOptions = {
     /**
      * - Advance on a timer
      */
-    autoplay?: boolean;
+    autoplay?: boolean | undefined;
     /**
      * - Autoplay interval in ms
      */
-    interval?: number;
+    interval?: number | undefined;
     /**
      * - Pause autoplay on hover
      */
-    pauseOnHover?: boolean;
+    pauseOnHover?: boolean | undefined;
     /**
      * - Wrap from the last slide to the first
      */
-    loop?: boolean;
+    loop?: boolean | undefined;
     /**
      * - 'slide' (track translate), 'fade' (clean swap), or 'crossfade' (overlapping opacity)
      */
-    animation?: "slide" | "fade" | "crossfade";
+    animation?: "fade" | "slide" | "crossfade" | undefined;
     /**
      * - Animation duration in ms
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - Any CSS timing function ('ease', 'linear', 'ease-in-out', 'cubic-bezier(...)' etc.)
      */
-    animationEasing?: string;
+    animationEasing?: string | undefined;
     /**
      * - Image carousels: 'crop' = the shortest image, 'average' = halfway between shortest and tallest
      */
-    heightMode?: "crop" | "average";
+    heightMode?: "crop" | "average" | undefined;
     /**
      * - Fixed viewport height in px
      */
-    height?: number | null;
+    height?: number | null | undefined;
     /**
      * - Previous / next arrows
      */
-    showArrows?: boolean;
+    showArrows?: boolean | undefined;
     /**
      * - Indicator dots
      */
-    showIndicators?: boolean;
+    showIndicators?: boolean | undefined;
     /**
      * - Selector for slides
      */
-    slideSelector?: string;
+    slideSelector?: string | undefined;
     /**
      * - Class on the active slide
      */
-    activeClass?: string;
+    activeClass?: string | undefined;
     /**
      * - The slide changed
      */
-    onChange?: ((event: CarouselChangeEvent) => void) | null;
+    onChange?: ((event: CarouselChangeEvent) => void) | null | undefined;
 };
 export type CarouselInstance = Carousel;
 /**
@@ -767,83 +767,83 @@ export type CarouselInstance = Carousel;
  */
 export type CookieCategory = {
     label: string;
-    description?: string;
+    description?: string | undefined;
     /**
      * - Always on; cannot be switched off
      */
-    required?: boolean;
+    required?: boolean | undefined;
 };
 export type CookieConsentState = "accepted" | "rejected" | "customized" | "undecided";
 export type CookieConsentOptions = {
     /**
      * - Banner text
      */
-    message?: string;
-    acceptAllText?: string;
-    rejectAllText?: string;
-    customizeText?: string;
-    savePreferencesText?: string;
-    privacyPolicyText?: string;
-    privacyPolicyUrl?: string | null;
-    cookiePolicyText?: string;
-    cookiePolicyUrl?: string | null;
+    message?: string | undefined;
+    acceptAllText?: string | undefined;
+    rejectAllText?: string | undefined;
+    customizeText?: string | undefined;
+    savePreferencesText?: string | undefined;
+    privacyPolicyText?: string | undefined;
+    privacyPolicyUrl?: string | null | undefined;
+    cookiePolicyText?: string | undefined;
+    cookiePolicyUrl?: string | null | undefined;
     /**
      * - Default: necessary, functional, analytics, marketing
      */
-    categories?: Record<string, CookieCategory>;
-    position?: "bottom" | "top" | "bottom-left" | "bottom-right" | "center-modal";
+    categories?: Record<string, CookieCategory> | undefined;
+    position?: "top" | "bottom" | "bottom-right" | "bottom-left" | "center-modal" | undefined;
     /**
      * - 'auto' follows the system
      */
-    theme?: "light" | "dark" | "auto";
-    layout?: "bar" | "box" | "modal";
-    animation?: boolean;
+    theme?: "auto" | "light" | "dark" | undefined;
+    layout?: "modal" | "bar" | "box" | undefined;
+    animation?: boolean | undefined;
     /**
      * - Backdrop behind the modal layout
      */
-    backdrop?: boolean;
+    backdrop?: boolean | undefined;
     /**
      * - Show on a first visit
      */
-    autoShow?: boolean;
+    autoShow?: boolean | undefined;
     /**
      * - Hide once a choice is made
      */
-    hideAfterAction?: boolean;
+    hideAfterAction?: boolean | undefined;
     /**
      * - Elements that reopen the banner
      */
-    reopenSelector?: string;
-    storageKey?: string;
+    reopenSelector?: string | undefined;
+    storageKey?: string | undefined;
     /**
      * - Days the choice is remembered
      */
-    storageDuration?: number;
-    defaultState?: CookieConsentState;
+    storageDuration?: number | undefined;
+    defaultState?: CookieConsentState | undefined;
     /**
      * - GDPR mode: optional categories start off
      */
-    requireExplicitConsent?: boolean;
+    requireExplicitConsent?: boolean | undefined;
     /**
      * - Bump when the policy changes to ask again
      */
-    consentVersion?: string;
+    consentVersion?: string | undefined;
     /**
      * - The stored choice was for another version
      */
-    onVersionMismatch?: ((oldVersion: string, newVersion: string) => void) | null;
+    onVersionMismatch?: ((oldVersion: string, newVersion: string) => void) | null | undefined;
     /**
      * - Accept all, or saved custom preferences
      */
-    onAccept?: ((preferences: Record<string, boolean>) => void) | null;
-    onReject?: (() => void) | null;
+    onAccept?: ((preferences: Record<string, boolean>) => void) | null | undefined;
+    onReject?: (() => void) | null | undefined;
     /**
      * - The customise panel opened
      */
-    onCustomize?: ((preferences: Record<string, boolean>) => void) | null;
-    onChange?: ((state: CookieConsentState, preferences: Record<string, boolean>) => void) | null;
-    onShow?: (() => void) | null;
-    onHide?: (() => void) | null;
+    onCustomize?: ((preferences: Record<string, boolean>) => void) | null | undefined;
+    onChange?: ((state: CookieConsentState, preferences: Record<string, boolean>) => void) | null | undefined;
+    onShow?: (() => void) | null | undefined;
+    onHide?: (() => void) | null | undefined;
 };
 export type CookieConsentInstance = CookieConsent;
 /**
@@ -853,75 +853,75 @@ export type DialogOptions = {
     /**
      * - Heading (basic HTML, sanitised)
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - Message (basic HTML, sanitised); the first argument wins
      */
-    message?: string;
+    message?: string | undefined;
     /**
      * - Confirm button label
      */
-    confirmText?: string;
+    confirmText?: string | undefined;
     /**
      * - Cancel button label (confirm and prompt)
      */
-    cancelText?: string;
+    cancelText?: string | undefined;
     /**
      * - Prompt: input placeholder
      */
-    inputPlaceholder?: string;
+    inputPlaceholder?: string | undefined;
     /**
      * - Prompt: initial value
      */
-    inputValue?: string;
+    inputValue?: string | undefined;
     /**
      * - Prompt: input type
      */
-    inputType?: string;
-    animation?: boolean;
-    backdrop?: boolean;
+    inputType?: string | undefined;
+    animation?: boolean | undefined;
+    backdrop?: boolean | undefined;
     /**
      * - A backdrop click cancels
      */
-    backdropClose?: boolean;
+    backdropClose?: boolean | undefined;
     /**
      * - Esc cancels, Enter confirms
      */
-    keyboard?: boolean;
+    keyboard?: boolean | undefined;
     /**
      * - Danger-styled confirm; focus starts on Cancel
      */
-    danger?: boolean;
+    danger?: boolean | undefined;
     /**
      * - Tab stays in the dialog
      */
-    trapFocus?: boolean;
+    trapFocus?: boolean | undefined;
     /**
      * - Answering puts focus back where it was
      */
-    returnFocus?: boolean;
+    returnFocus?: boolean | undefined;
     /**
      * - Extra class on the dialog
      */
-    className?: string;
+    className?: string | undefined;
 };
 export type ButtonGroupOptions = {
     /**
      * - 'single' behaves like radios, 'multiple' like checkboxes
      */
-    mode?: "single" | "multiple";
+    mode?: "multiple" | "single" | undefined;
     /**
      * - Class on active buttons
      */
-    activeClass?: string;
+    activeClass?: string | undefined;
     /**
      * - Single mode: clicking the active button deselects it
      */
-    allowEmpty?: boolean;
+    allowEmpty?: boolean | undefined;
     /**
      * - Selection changed (index -1 from selectAll/deselectAll)
      */
-    onChange?: ((value: number | number[] | null, index: number, button: HTMLElement | null) => void) | null;
+    onChange?: ((value: number | number[] | null, index: number, button: HTMLElement | null) => void) | null | undefined;
 };
 /**
  * A button group. `E.buttonGroup()` returns the first instance; `all()` (non-enumerable) lists every
@@ -941,30 +941,30 @@ export type BreadcrumbItem = {
     /**
      * - Link (default '#'); the last item is never a link
      */
-    url?: string;
+    url?: string | undefined;
     /**
      * - Render as the current page
      */
-    active?: boolean;
+    active?: boolean | undefined;
 };
 export type BreadcrumbsOptions = {
-    items?: (BreadcrumbItem | string)[];
+    items?: (string | BreadcrumbItem)[] | undefined;
     /**
      * - A preset, or custom HTML
      */
-    separator?: "/" | ">" | "\u2192" | "chevron" | string;
+    separator?: string | undefined;
     /**
      * - Home icon on the first item
      */
-    homeIcon?: boolean;
+    homeIcon?: boolean | undefined;
     /**
      * - Collapse on small screens
      */
-    responsive?: boolean;
+    responsive?: boolean | undefined;
     /**
      * - A crumb link was clicked (setting it prevents navigation)
      */
-    onChange?: ((item: BreadcrumbItem | string, index: number, event: MouseEvent) => void) | null;
+    onChange?: ((item: BreadcrumbItem | string, index: number, event: MouseEvent) => void) | null | undefined;
 };
 export type BreadcrumbsInstance = Breadcrumbs;
 /**
@@ -974,88 +974,88 @@ export type NavbarItem = {
     /**
      * - Label
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * - Link
      */
-    url?: string;
+    url?: string | undefined;
     /**
      * - Domma icon name
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Highlighted as the current page
      */
-    active?: boolean;
+    active?: boolean | undefined;
     /**
      * - Opens in a new tab
      */
-    external?: boolean;
+    external?: boolean | undefined;
     /**
      * - Inside a dropdown: a divider
      */
-    divider?: boolean;
+    divider?: boolean | undefined;
     /**
      * - Dropdown entries
      */
-    items?: NavbarItem[];
+    items?: NavbarItem[] | undefined;
 };
 export type NavbarBrand = {
-    text?: string;
+    text?: string | undefined;
     /**
      * - Logo image URL
      */
-    logo?: string;
+    logo?: string | undefined;
     /**
      * - Brand link
      */
-    url?: string;
+    url?: string | undefined;
     /**
      * - Brand markup instead of text/logo
      */
-    html?: string;
+    html?: string | undefined;
 };
 export type NavbarAction = {
-    text?: string;
-    url?: string;
+    text?: string | undefined;
+    url?: string | undefined;
     /**
      * - Domma icon name
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Button variant ('primary', 'outline', ...)
      */
-    variant?: string;
+    variant?: string | undefined;
 };
 export type NavbarOptions = {
-    brand?: NavbarBrand | null;
-    items?: NavbarItem[];
-    position?: "static" | "fixed" | "sticky";
-    variant?: "light" | "dark" | "transparent" | string;
+    brand?: NavbarBrand | null | undefined;
+    items?: NavbarItem[] | undefined;
+    position?: "static" | "fixed" | "sticky" | undefined;
+    variant?: string | undefined;
     /**
      * - Hamburger menu on small screens
      */
-    collapsible?: boolean;
+    collapsible?: boolean | undefined;
     /**
      * - Below this width (px) the bar is collapsed
      */
-    collapseAt?: number;
+    collapseAt?: number | undefined;
     /**
      * - Desktop: open dropdowns/flyouts on hover (click still works)
      */
-    appearOnHover?: boolean;
+    appearOnHover?: boolean | undefined;
     /**
      * - ms of grace when the pointer leaves the bar
      */
-    hoverCloseDelay?: number;
+    hoverCloseDelay?: number | undefined;
     /**
      * - Right-side buttons
      */
-    actions?: NavbarAction[];
+    actions?: NavbarAction[] | undefined;
     /**
      * - A link was clicked (sub-items also get the parent)
      */
-    onItemClick?: ((item: NavbarItem, index: number, event: MouseEvent, parent?: NavbarItem) => void) | null;
+    onItemClick?: ((item: NavbarItem, index: number, event: MouseEvent, parent?: NavbarItem) => void) | null | undefined;
 };
 export type NavbarInstance = Navbar;
 /**
@@ -1065,47 +1065,47 @@ export type SidebarItem = {
     /**
      * - Label (HTML)
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * - Link
      */
-    url?: string;
+    url?: string | undefined;
     /**
      * - Domma icon name
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Section key; setActive(section) highlights it, and clicking it makes it active
      */
-    section?: string;
+    section?: string | undefined;
     /**
      * - Badge text
      */
-    badge?: string | number;
+    badge?: string | number | undefined;
     /**
      * - Render as a heading with this text
      */
-    heading?: string;
+    heading?: string | undefined;
     /**
      * - Render as a divider
      */
-    divider?: boolean;
+    divider?: boolean | undefined;
     /**
      * - Children (an expandable group)
      */
-    items?: SidebarItem[];
+    items?: SidebarItem[] | undefined;
 };
 export type SidebarOptions = {
-    position?: "left" | "right";
+    position?: "left" | "right" | undefined;
     /**
      * - Fixed rather than static positioning
      */
-    fixed?: boolean;
-    width?: string;
+    fixed?: boolean | undefined;
+    width?: string | undefined;
     /**
      * - Top offset, e.g. '60px' under a navbar
      */
-    top?: string;
+    top?: string | undefined;
     /**
      * - Header; `toggle: false` hides its close button
      */
@@ -1113,174 +1113,174 @@ export type SidebarOptions = {
         title?: string;
         toggle?: boolean;
         icon?: string;
-    } | null;
-    items?: SidebarItem[];
+    } | null | undefined;
+    items?: SidebarItem[] | undefined;
     footer?: {
         text?: string;
         html?: string;
-    } | null;
+    } | null | undefined;
     /**
      * - 'theme' follows the active theme
      */
-    variant?: "light" | "dark" | "theme";
+    variant?: "theme" | "light" | "dark" | undefined;
     /**
      * - Toggle on small screens
      */
-    collapsible?: boolean;
+    collapsible?: boolean | undefined;
     /**
      * - Breakpoint in px
      */
-    collapseAt?: number;
+    collapseAt?: number | undefined;
     /**
      * - Initially active section
      */
-    activeSection?: string | null;
+    activeSection?: string | null | undefined;
     /**
      * - Initially expanded groups (their paths)
      */
-    expandedSections?: string[];
+    expandedSections?: string[] | undefined;
     /**
      * - Remember expanded groups in localStorage
      */
-    persistExpanded?: boolean;
+    persistExpanded?: boolean | undefined;
     /**
      * - Storage key for that
      */
-    persistKey?: string | null;
+    persistKey?: string | null | undefined;
     /**
      * - ms
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - Push the content aside rather than overlay it
      */
-    push?: boolean;
+    push?: boolean | undefined;
     /**
      * - The content pushed aside
      */
-    contentSelector?: string;
+    contentSelector?: string | undefined;
     /**
      * - Track the active section while scrolling
      */
-    scrollSpy?: boolean;
+    scrollSpy?: boolean | undefined;
     /**
      * - IntersectionObserver rootMargin
      */
-    scrollSpyOffset?: string;
+    scrollSpyOffset?: string | undefined;
     /**
      * - IntersectionObserver threshold
      */
-    scrollSpyThreshold?: number;
+    scrollSpyThreshold?: number | undefined;
     /**
      * - Floating toggle at the bottom left
      */
-    floating?: boolean;
+    floating?: boolean | undefined;
     /**
      * - HTML to show instead of items
      */
-    customContent?: string | null;
+    customContent?: string | null | undefined;
     /**
      * - Desktop collapse to icons only
      */
-    collapsibleDesktop?: boolean;
+    collapsibleDesktop?: boolean | undefined;
     /**
      * - Width when collapsed
      */
-    collapsedWidth?: string;
+    collapsedWidth?: string | undefined;
     /**
      * - Remember the collapsed state
      */
-    persistCollapsed?: boolean;
+    persistCollapsed?: boolean | undefined;
     /**
      * - Storage key for that
      */
-    persistCollapseKey?: string | null;
+    persistCollapseKey?: string | null | undefined;
     /**
      * - A link was clicked; path is its index path ('2.0')
      */
-    onItemClick?: ((item: SidebarItem | null, path: string, event: MouseEvent) => void) | null;
+    onItemClick?: ((item: SidebarItem | null, path: string, event: MouseEvent) => void) | null | undefined;
     /**
      * - Return false to keep it closed
      */
-    onBeforeOpen?: (() => boolean | void) | null;
+    onBeforeOpen?: (() => boolean | void) | null | undefined;
     /**
      * - Return false to keep it open
      */
-    onBeforeClose?: (() => boolean | void) | null;
+    onBeforeClose?: (() => boolean | void) | null | undefined;
     /**
      * - Opened or closed
      */
-    onToggle?: ((isOpen: boolean) => void) | null;
+    onToggle?: ((isOpen: boolean) => void) | null | undefined;
     /**
      * - A group expanded (no arguments: the desktop sidebar expanded)
      */
-    onExpand?: ((item?: SidebarItem, depth?: number) => void) | null;
+    onExpand?: ((item?: SidebarItem, depth?: number) => void) | null | undefined;
     /**
      * - A group collapsed (no arguments: the desktop sidebar collapsed)
      */
-    onCollapse?: ((item?: SidebarItem, depth?: number) => void) | null;
+    onCollapse?: ((item?: SidebarItem, depth?: number) => void) | null | undefined;
 };
 export type SidebarInstance = Sidebar;
 export type FooterLink = {
-    text?: string;
-    url?: string;
+    text?: string | undefined;
+    url?: string | undefined;
     /**
      * - Domma icon name
      */
-    icon?: string;
+    icon?: string | undefined;
 };
 export type FooterBrand = {
-    text?: string;
+    text?: string | undefined;
     /**
      * - Logo image URL
      */
-    logo?: string;
-    url?: string;
-    description?: string;
+    logo?: string | undefined;
+    url?: string | undefined;
+    description?: string | undefined;
 };
 export type FooterColumn = {
-    title?: string;
-    links?: FooterLink[];
+    title?: string | undefined;
+    links?: FooterLink[] | undefined;
 };
 export type FooterSocial = {
     /**
      * - Domma icon name
      */
     icon: string;
-    url?: string;
+    url?: string | undefined;
     /**
      * - Accessible name (default: the icon name)
      */
-    label?: string;
+    label?: string | undefined;
 };
 export type FooterOptions = {
-    variant?: "light" | "dark" | "transparent" | string;
-    layout?: "simple" | "columns" | "minimal";
-    brand?: FooterBrand | null;
+    variant?: string | undefined;
+    layout?: "simple" | "columns" | "minimal" | undefined;
+    brand?: FooterBrand | null | undefined;
     /**
      * - For the 'columns' layout
      */
-    columns?: FooterColumn[];
+    columns?: FooterColumn[] | undefined;
     /**
      * - Simple link list
      */
-    links?: FooterLink[];
+    links?: FooterLink[] | undefined;
     /**
      * - Social icons
      */
-    social?: FooterSocial[];
+    social?: FooterSocial[] | undefined;
     /**
      * - Text, or the year for '© <year> All rights reserved'
      */
     copyright?: string | {
         text?: string;
         year?: number;
-    } | null;
+    } | null | undefined;
     /**
      * - Extra classes
      */
-    className?: string;
-    position?: "static" | "fixed" | "sticky";
+    className?: string | undefined;
+    position?: "static" | "fixed" | "sticky" | undefined;
 };
 export type FooterInstance = Footer;
 /**
@@ -1295,71 +1295,71 @@ export type AutocompleteOptions = {
     /**
      * - Suggestions to filter
      */
-    data?: AutocompleteItem[];
+    data?: AutocompleteItem[] | undefined;
     /**
      * - Fetch suggestions instead of filtering data
      */
-    dataSource?: ((query: string) => AutocompleteItem[] | Promise<AutocompleteItem[]>) | null;
+    dataSource?: ((query: string) => AutocompleteItem[] | Promise<AutocompleteItem[]>) | null | undefined;
     /**
      * - Characters typed before suggesting
      */
-    minChars?: number;
-    maxResults?: number;
+    minChars?: number | undefined;
+    maxResults?: number | undefined;
     /**
      * - ms
      */
-    debounce?: number;
+    debounce?: number | undefined;
     /**
      * - Replaces the default contains-match
      */
-    filterFn?: ((item: AutocompleteItem, query: string) => boolean) | null;
+    filterFn?: ((item: AutocompleteItem, query: string) => boolean) | null | undefined;
     /**
      * - Suggestion HTML or a node
      */
-    renderItem?: ((item: AutocompleteItem, query: string) => string | Node) | null;
-    highlightMatches?: boolean;
+    renderItem?: ((item: AutocompleteItem, query: string) => string | Node) | null | undefined;
+    highlightMatches?: boolean | undefined;
     /**
      * - Where the list opens; 'auto' picks the side with room
      */
-    position?: "auto" | "above" | "below";
-    placeholder?: string;
-    emptyMessage?: string;
-    loadingMessage?: string;
-    caseSensitive?: boolean;
-    selectOnEnter?: boolean;
+    position?: "auto" | "above" | "below" | undefined;
+    placeholder?: string | undefined;
+    emptyMessage?: string | undefined;
+    loadingMessage?: string | undefined;
+    caseSensitive?: boolean | undefined;
+    selectOnEnter?: boolean | undefined;
     /**
      * - Empty the input after a choice
      */
-    clearOnSelect?: boolean;
+    clearOnSelect?: boolean | undefined;
     /**
      * - A Domma Model the typed value is written to (with modelKey)
      */
     model?: any;
-    modelKey?: string;
+    modelKey?: string | undefined;
     /**
      * - A suggestion was chosen
      */
     onSelect?: ((item: AutocompleteItem, event: {
         target: HTMLElement;
-    }) => void) | null;
+    }) => void) | null | undefined;
     /**
      * - The input's value changed
      */
-    onChange?: ((value: string, event: Event) => void) | null;
+    onChange?: ((value: string, event: Event) => void) | null | undefined;
     /**
      * - Return false to keep it closed
      */
-    onBeforeOpen?: (() => boolean | void) | null;
-    onOpen?: (() => void) | null;
+    onBeforeOpen?: (() => boolean | void) | null | undefined;
+    onOpen?: (() => void) | null | undefined;
     /**
      * - Return false to keep it open
      */
-    onBeforeClose?: (() => boolean | void) | null;
-    onClose?: (() => void) | null;
+    onBeforeClose?: (() => boolean | void) | null | undefined;
+    onClose?: (() => void) | null | undefined;
     /**
      * - May return a replacement result list
      */
-    onFilter?: ((results: AutocompleteItem[], query: string) => AutocompleteItem[] | void) | null;
+    onFilter?: ((results: AutocompleteItem[], query: string) => AutocompleteItem[] | void) | null | undefined;
 };
 export type AutocompleteInstance = Autocomplete;
 /**
@@ -1375,73 +1375,73 @@ export type PillboxOptions = {
     /**
      * - Options to choose from
      */
-    data?: PillboxItem[];
+    data?: PillboxItem[] | undefined;
     /**
      * - Initial values
      */
-    value?: string[];
-    placeholder?: string;
+    value?: string[] | undefined;
+    placeholder?: string | undefined;
     /**
      * - Filter the options while typing
      */
-    searchable?: boolean;
+    searchable?: boolean | undefined;
     /**
      * - Enter adds typed text that is not an option
      */
-    creatable?: boolean;
-    maxItems?: number | null;
-    duplicates?: boolean;
+    creatable?: boolean | undefined;
+    maxItems?: number | null | undefined;
+    duplicates?: boolean | undefined;
     /**
      * - Clear-all button
      */
-    clearable?: boolean;
-    size?: "small" | "medium" | "large" | string;
+    clearable?: boolean | undefined;
+    size?: string | undefined;
     /**
      * - Pill HTML or a node
      */
     renderPill?: ((pill: {
         value: string;
         label: string;
-    }) => string | Node) | null;
+    }) => string | Node) | null | undefined;
     /**
      * - Option HTML or a node
      */
-    renderOption?: ((item: PillboxItem) => string | Node) | null;
+    renderOption?: ((item: PillboxItem) => string | Node) | null | undefined;
     /**
      * - Pill HTML when there is no renderPill
      */
-    pillTemplate?: string;
+    pillTemplate?: string | undefined;
     /**
      * - true/undefined accepts; a string is the error message
      */
-    validatePill?: ((value: string) => boolean | string | void) | null;
-    maxItemsMessage?: string;
-    duplicateMessage?: string;
-    noResultsMessage?: string;
+    validatePill?: ((value: string) => boolean | string | void) | null | undefined;
+    maxItemsMessage?: string | undefined;
+    duplicateMessage?: string | undefined;
+    noResultsMessage?: string | undefined;
     /**
      * - A Domma Model the values are kept in (with modelKey)
      */
     model?: any;
-    modelKey?: string;
+    modelKey?: string | undefined;
     /**
      * - Return false to keep it closed
      */
-    onBeforeOpen?: (() => boolean | void) | null;
-    onOpen?: (() => void) | null;
+    onBeforeOpen?: (() => boolean | void) | null | undefined;
+    onOpen?: (() => void) | null | undefined;
     /**
      * - Return false to keep it open
      */
-    onBeforeClose?: (() => boolean | void) | null;
-    onClose?: (() => void) | null;
-    onAdd?: ((value: string, pill: HTMLElement) => void) | null;
-    onRemove?: ((value: string, pill: HTMLElement) => void) | null;
-    onChange?: ((values: string[]) => void) | null;
+    onBeforeClose?: (() => boolean | void) | null | undefined;
+    onClose?: (() => void) | null | undefined;
+    onAdd?: ((value: string, pill: HTMLElement) => void) | null | undefined;
+    onRemove?: ((value: string, pill: HTMLElement) => void) | null | undefined;
+    onChange?: ((values: string[]) => void) | null | undefined;
     /**
      * - Typed text was added (creatable)
      */
-    onCreate?: ((text: string) => void) | null;
-    onMaxReached?: (() => void) | null;
-    onValidationError?: ((error: string, value: string) => void) | null;
+    onCreate?: ((text: string) => void) | null | undefined;
+    onMaxReached?: (() => void) | null | undefined;
+    onValidationError?: ((error: string, value: string) => void) | null | undefined;
 };
 export type PillboxInstance = Pillbox;
 export type SlideoverSize = "sm" | "md" | "lg" | "xl" | "full";
@@ -1449,74 +1449,74 @@ export type SlideoverOptions = {
     /**
      * - Edge it slides from
      */
-    position?: "left" | "right" | "top" | "bottom";
+    position?: "top" | "bottom" | "left" | "right" | undefined;
     /**
      * - A preset (sm 25%, md 50%, lg 75%, xl 90%, full), a customSizes key, or a CSS length ('400px', '60%', '30rem')
      */
-    size?: SlideoverSize | string;
-    backdrop?: boolean;
+    size?: string | undefined;
+    backdrop?: boolean | undefined;
     /**
      * - A backdrop click closes it
      */
-    backdropClose?: boolean;
+    backdropClose?: boolean | undefined;
     /**
      * - Esc closes it (with closeOnEscape)
      */
-    keyboard?: boolean;
-    animation?: boolean;
+    keyboard?: boolean | undefined;
+    animation?: boolean | undefined;
     /**
      * - ms
      */
-    animationDuration?: number;
-    closeOnEscape?: boolean;
+    animationDuration?: number | undefined;
+    closeOnEscape?: boolean | undefined;
     /**
      * - Title (create(): the header text)
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - Body (create(): HTML or an element)
      */
-    content?: string | Element;
+    content?: string | Element | undefined;
     /**
      * - Close button in the header (create())
      */
-    closable?: boolean;
+    closable?: boolean | undefined;
     /**
      * - Domma icon name for it (create())
      */
-    closeIcon?: string;
-    headerClass?: string;
-    bodyClass?: string;
-    footerClass?: string;
+    closeIcon?: string | undefined;
+    headerClass?: string | undefined;
+    bodyClass?: string | undefined;
+    footerClass?: string | undefined;
     /**
      * - Named sizes, e.g. {wide: '640px'}
      */
-    customSizes?: Record<string, string>;
+    customSizes?: Record<string, string> | undefined;
     /**
      * - Tab stays in the panel; default off when backdrop is false unless given
      */
-    trapFocus?: boolean;
+    trapFocus?: boolean | undefined;
     /**
      * - Closing puts focus back where it was
      */
-    returnFocus?: boolean;
+    returnFocus?: boolean | undefined;
     /**
      * - Return false to keep it closed
      */
-    onBeforeOpen?: ((slideover: SlideoverInstance) => boolean | void) | null;
-    onOpen?: ((slideover: SlideoverInstance) => void) | null;
+    onBeforeOpen?: ((slideover: SlideoverInstance) => boolean | void) | null | undefined;
+    onOpen?: ((slideover: SlideoverInstance) => void) | null | undefined;
     /**
      * - Return false to keep it open
      */
-    onBeforeClose?: ((slideover: SlideoverInstance) => boolean | void) | null;
+    onBeforeClose?: ((slideover: SlideoverInstance) => boolean | void) | null | undefined;
     /**
      * - Closing (before the animation)
      */
-    onClose?: ((slideover: SlideoverInstance) => void) | null;
+    onClose?: ((slideover: SlideoverInstance) => void) | null | undefined;
     /**
      * - After the close animation
      */
-    onClosed?: ((slideover: SlideoverInstance) => void) | null;
+    onClosed?: ((slideover: SlideoverInstance) => void) | null | undefined;
 };
 /**
  * Options for `E.slideover({...})` / `Slideover.create()`: a new panel at the end of `<body>`.
@@ -1535,28 +1535,28 @@ export type ProgressionItem = {
     /**
      * - Lets methods find it by id instead of index
      */
-    id?: string | number;
-    title?: string;
+    id?: string | number | undefined;
+    title?: string | undefined;
     /**
      * - Text (HTML when allowHtml, sanitised)
      */
-    description?: string;
-    date?: string;
+    description?: string | undefined;
+    date?: string | undefined;
     /**
      * - Timeline marker (default: date)
      */
-    year?: string | number;
+    year?: string | number | undefined;
     /**
      * - Roadmap status
      */
-    status?: ProgressionStatus | string;
+    status?: string | undefined;
     /**
      * - 0-100, shown for 'in-progress'
      */
-    progress?: number;
-    priority?: string;
-    tags?: string[];
-    assignee?: string;
+    progress?: number | undefined;
+    priority?: string | undefined;
+    tags?: string[] | undefined;
+    assignee?: string | undefined;
 };
 /**
  * The loader settings `E.fullscreenLoader()` passes on (the rest are fixed for a full-screen loader).
@@ -1566,77 +1566,77 @@ export type ProgressionOptions = {
     /**
      * - 'timeline' (dated events) or 'roadmap' (items with a status)
      */
-    mode?: "timeline" | "roadmap";
-    items?: ProgressionItem[];
+    mode?: "timeline" | "roadmap" | undefined;
+    items?: ProgressionItem[] | undefined;
     /**
      * - Items down one side, across, or alternating either side of a centre line
      */
-    layout?: "vertical" | "horizontal" | "centered";
+    layout?: "vertical" | "horizontal" | "centered" | undefined;
     /**
      * - Items animate in
      */
-    animation?: boolean;
+    animation?: boolean | undefined;
     /**
      * - ms between items
      */
-    animationDelay?: number;
-    responsive?: boolean;
+    animationDelay?: number | undefined;
+    responsive?: boolean | undefined;
     /**
      * - Look of the markers, line and cards
      */
-    theme?: "default" | "minimal" | "corporate" | "modern";
-    clickable?: boolean;
-    onItemClick?: ((item: ProgressionItem, index: number, element: HTMLElement) => void) | null;
+    theme?: "default" | "corporate" | "minimal" | "modern" | undefined;
+    clickable?: boolean | undefined;
+    onItemClick?: ((item: ProgressionItem, index: number, element: HTMLElement) => void) | null | undefined;
     /**
      * - HTML in descriptions (sanitised)
      */
-    allowHtml?: boolean;
+    allowHtml?: boolean | undefined;
     /**
      * - Timeline
      */
-    yearWidth?: string;
+    yearWidth?: string | undefined;
     /**
      * - Timeline
      */
-    contentMaxWidth?: string;
+    contentMaxWidth?: string | undefined;
     /**
      * - Timeline
      */
-    dateFormat?: string;
+    dateFormat?: string | undefined;
     /**
      * - Timeline
      */
-    showConnector?: boolean;
+    showConnector?: boolean | undefined;
     /**
      * - Roadmap: overall progress bar
      */
-    showProgress?: boolean;
+    showProgress?: boolean | undefined;
     /**
      * - Roadmap
      */
-    progressPosition?: "top" | "bottom" | "none";
+    progressPosition?: "none" | "top" | "bottom" | undefined;
     /**
      * - Roadmap
      */
-    statusIcons?: boolean;
+    statusIcons?: boolean | undefined;
     /**
      * - Roadmap: status can be changed from the UI
      */
-    allowStatusChange?: boolean;
-    onStatusChange?: ((item: ProgressionItem, oldStatus: string | undefined, status: string) => void) | null;
+    allowStatusChange?: boolean | undefined;
+    onStatusChange?: ((item: ProgressionItem, oldStatus: string | undefined, status: string) => void) | null | undefined;
     /**
      * - Roadmap: the current item's id or index
      */
-    currentItem?: string | number | null;
-    completedAnimation?: boolean;
+    currentItem?: string | number | null | undefined;
+    completedAnimation?: boolean | undefined;
     /**
      * - Domma icon name per status
      */
-    icons?: Partial<Record<ProgressionStatus, string>>;
+    icons?: Partial<Record<ProgressionStatus, string>> | undefined;
     /**
      * - CSS colour per status
      */
-    colors?: Partial<Record<ProgressionStatus, string>>;
+    colors?: Partial<Record<ProgressionStatus, string>> | undefined;
 };
 export type ProgressionInstance = Progression;
 /**
@@ -1655,153 +1655,153 @@ export type SignatureOptions = {
     /**
      * - Not read: the pad fills its container
      */
-    width?: number | null;
+    width?: number | null | undefined;
     /**
      * - Canvas height in px
      */
-    height?: number;
+    height?: number | undefined;
     /**
      * - Default pen colour
      */
-    penColour?: string;
+    penColour?: string | undefined;
     /**
      * - Default pen width in px
      */
-    penWidth?: number;
+    penWidth?: number | undefined;
     /**
      * - Export format
      */
-    format?: "png" | "svg";
+    format?: "svg" | "png" | undefined;
     /**
      * - Toolbar label text
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - Dashed guide line
      */
-    guideLine?: boolean;
-    placeholder?: string;
+    guideLine?: boolean | undefined;
+    placeholder?: string | undefined;
     /**
      * - Colour swatches in the toolbar
      */
-    colours?: string[];
+    colours?: string[] | undefined;
     /**
      * - Pen widths in the toolbar
      */
-    widths?: number[];
+    widths?: number[] | undefined;
     /**
      * - Show the toolbar
      */
-    toolbar?: boolean;
+    toolbar?: boolean | undefined;
     /**
      * - Name of the hidden input
      */
-    name?: string;
-    disabled?: boolean;
+    name?: string | undefined;
+    disabled?: boolean | undefined;
     /**
      * - Draw / Type toggle
      */
-    typeFallback?: boolean;
+    typeFallback?: boolean | undefined;
     /**
      * - Points needed to keep a stroke
      */
-    minStrokeLength?: number;
+    minStrokeLength?: number | undefined;
     /**
      * - Honour prefers-reduced-motion
      */
-    respectMotionPreference?: boolean;
+    respectMotionPreference?: boolean | undefined;
     /**
      * - The signature changed - receives the data URL ('' when empty)
      */
-    onChange?: ((base64: string) => void) | null;
-    onClear?: (() => void) | null;
+    onChange?: ((base64: string) => void) | null | undefined;
+    onClear?: (() => void) | null | undefined;
     /**
      * - A stroke began
      */
-    onBegin?: ((stroke: SignatureStroke) => void) | null;
+    onBegin?: ((stroke: SignatureStroke) => void) | null | undefined;
     /**
      * - A stroke ended
      */
-    onEnd?: ((stroke: SignatureStroke) => void) | null;
+    onEnd?: ((stroke: SignatureStroke) => void) | null | undefined;
 };
 export type SignatureInstance = Signature;
 export type DatePickerOptions = {
     /**
      * - Initial date; null reads the input
      */
-    value?: string | Date | null;
+    value?: string | Date | null | undefined;
     /**
      * - What the input shows (YYYY YY MMMM MMM MM M DDDD DDD DD D); the value stays ISO
      */
-    format?: string;
+    format?: string | undefined;
     /**
      * - Earliest selectable date
      */
-    min?: string | Date | null;
+    min?: string | Date | null | undefined;
     /**
      * - Latest selectable date
      */
-    max?: string | Date | null;
+    max?: string | Date | null | undefined;
     /**
      * - First day of the week: 0 Sunday, 1 Monday
      */
-    firstDay?: number;
+    firstDay?: number | undefined;
     /**
      * - true means unavailable
      */
-    disabledDates?: ((date: Date) => boolean) | null;
-    openOnFocus?: boolean;
-    closeOnSelect?: boolean;
-    closeOnClickOutside?: boolean;
-    closeOnEscape?: boolean;
+    disabledDates?: ((date: Date) => boolean) | null | undefined;
+    openOnFocus?: boolean | undefined;
+    closeOnSelect?: boolean | undefined;
+    closeOnClickOutside?: boolean | undefined;
+    closeOnEscape?: boolean | undefined;
     /**
      * - Clear button
      */
-    clearable?: boolean;
-    todayButton?: boolean;
+    clearable?: boolean | undefined;
+    todayButton?: boolean | undefined;
     /**
      * - Stop typing; only the calendar sets it
      */
-    readonlyInput?: boolean;
+    readonlyInput?: boolean | undefined;
     /**
      * - Render in place instead of as a popup
      */
-    inline?: boolean;
+    inline?: boolean | undefined;
     /**
      * - Popup position
      */
-    position?: DropdownPosition;
+    position?: DropdownPosition | undefined;
     /**
      * - Popup offset [x, y]
      */
-    offset?: [number, number];
+    offset?: [number, number] | undefined;
     /**
      * - ISO week numbers
      */
-    weekNumbers?: boolean;
+    weekNumbers?: boolean | undefined;
     /**
      * - Default: the format
      */
-    placeholder?: string | null;
+    placeholder?: string | null | undefined;
     /**
      * - ISO value ('' when cleared)
      */
-    onChange?: ((value: string, date: Date | null, picker: DatePickerInstance) => void) | null;
+    onChange?: ((value: string, date: Date | null, picker: DatePickerInstance) => void) | null | undefined;
     /**
      * - Return false to keep it closed
      */
-    onBeforeOpen?: ((picker: DatePickerInstance) => boolean | void) | null;
-    onOpen?: ((picker: DatePickerInstance) => void) | null;
+    onBeforeOpen?: ((picker: DatePickerInstance) => boolean | void) | null | undefined;
+    onOpen?: ((picker: DatePickerInstance) => void) | null | undefined;
     /**
      * - Return false to keep it open
      */
-    onBeforeClose?: ((picker: DatePickerInstance) => boolean | void) | null;
-    onClose?: ((picker: DatePickerInstance) => void) | null;
+    onBeforeClose?: ((picker: DatePickerInstance) => boolean | void) | null | undefined;
+    onClose?: ((picker: DatePickerInstance) => void) | null | undefined;
 };
 export type DatePickerInstance = DatePicker;
 export type ChooserBadge = {
     text: string;
-    type?: "success" | "info" | "warning" | "danger" | "primary";
+    type?: "primary" | "success" | "danger" | "warning" | "info" | undefined;
 };
 export type ChooserOption = {
     value: string | number;
@@ -1809,15 +1809,15 @@ export type ChooserOption = {
     /**
      * - Domma icon name
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Card variant, comfortable density only
      */
-    description?: string;
-    tooltip?: string;
-    badge?: ChooserBadge;
-    recommended?: boolean;
-    disabled?: boolean;
+    description?: string | undefined;
+    tooltip?: string | undefined;
+    badge?: ChooserBadge | undefined;
+    recommended?: boolean | undefined;
+    disabled?: boolean | undefined;
 };
 export type ChooserSemanticColour = "primary" | "success" | "info" | "warning" | "danger";
 export type ChooserOptions = {
@@ -1825,60 +1825,60 @@ export type ChooserOptions = {
      * - The choices
      */
     options: ChooserOption[];
-    variant?: "card" | "chip";
+    variant?: "card" | "chip" | undefined;
     /**
      * - Multi-select
      */
-    multiple?: boolean;
-    density?: "comfortable" | "compact";
+    multiple?: boolean | undefined;
+    density?: "comfortable" | "compact" | undefined;
     /**
      * - Grid columns (card variant)
      */
-    columns?: number;
+    columns?: number | undefined;
     /**
      * - Label rendered above
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - Required indicator
      */
-    required?: boolean;
+    required?: boolean | undefined;
     /**
      * - Hidden-input name for native form submission
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * - Initial selection
      */
-    value?: string | string[] | null;
+    value?: string | string[] | null | undefined;
     /**
      * - Selected/recommended highlight colour - semantic name or any CSS colour string
      */
-    accent?: ChooserSemanticColour | string;
+    accent?: string | undefined;
     /**
      * - Visual style of the selected state
      */
-    accentStyle?: "border" | "solid" | "glow" | "overlay" | "underline";
+    accentStyle?: "border" | "solid" | "glow" | "overlay" | "underline" | undefined;
     /**
      * - Soft outer glow on the selected option
      */
-    glow?: boolean;
+    glow?: boolean | undefined;
     /**
      * - Glow colour override - semantic name or any CSS colour string. Defaults to the accent colour.
      */
-    glowColour?: ChooserSemanticColour | string | null;
+    glowColour?: string | null | undefined;
     /**
      * - Shadow weight applied to every option
      */
-    shadow?: "none" | "sm" | "md" | "lg" | "xl";
+    shadow?: "none" | "sm" | "md" | "lg" | "xl" | undefined;
     /**
      * - Optional shadow tint - any CSS colour string
      */
-    shadowColour?: string | null;
+    shadowColour?: string | null | undefined;
     /**
      * - Called with the new value (user changes only, not setValue)
      */
-    onChange?: (value: string | string[] | null) => void;
+    onChange?: ((value: string | string[] | null) => void) | undefined;
 };
 /**
  * What `E.chooser()` returns. A missing host gets an inert one (`element` null, methods do nothing).
@@ -2208,16 +2208,16 @@ export class DesktopNotification {
     static defaults: {
         title: string;
         body: string;
-        icon: any;
-        badge: any;
-        tag: any;
+        icon: null;
+        badge: null;
+        tag: null;
         requireInteraction: boolean;
         silent: boolean;
-        data: any;
-        onClick: any;
-        onClose: any;
-        onError: any;
-        onShow: any;
+        data: null;
+        onClick: null;
+        onClose: null;
+        onError: null;
+        onShow: null;
     };
     /**
      * Request notification permission
@@ -2306,7 +2306,7 @@ declare class Tabs extends Component {
         tabSelector: string;
         panelSelector: string;
         activeClass: string;
-        onChange: any;
+        onChange: null;
     };
     /**
      * @param {string|HTMLElement} selector - The tabs container
@@ -2315,8 +2315,8 @@ declare class Tabs extends Component {
     constructor(selector: string | HTMLElement, options?: TabsOptions);
     _activeIndex: any;
     _init(): void;
-    _tabs: NodeListOf<any>;
-    _panels: NodeListOf<any>;
+    _tabs: NodeListOf<any> | undefined;
+    _panels: NodeListOf<any> | undefined;
     /**
      * Activate a tab by index, or by its `data-tab` / `href` value.
      * @param {number|string} index
@@ -2375,14 +2375,14 @@ declare class Tabs extends Component {
 declare class Accordion extends Component {
     static defaults: {
         allowMultiple: boolean;
-        multiExpand: any;
-        activeIndex: any;
+        multiExpand: null;
+        activeIndex: null;
         animation: boolean;
         animationDuration: number;
         headerSelector: string;
         contentSelector: string;
         activeClass: string;
-        onChange: any;
+        onChange: null;
     };
     /**
      * @param {string|HTMLElement} selector - The accordion container
@@ -2390,8 +2390,8 @@ declare class Accordion extends Component {
      */
     constructor(selector: string | HTMLElement, options?: AccordionOptions);
     _init(): void;
-    _headers: NodeListOf<any>;
-    _contents: any[];
+    _headers: NodeListOf<any> | undefined;
+    _contents: any[] | undefined;
     /**
      * Open or close a panel; closes the others unless allowMultiple.
      * @param {number} index
@@ -2458,9 +2458,9 @@ declare class ListGroup extends Component {
         keyboard: boolean;
         loop: boolean;
         focusOnInit: boolean;
-        onChange: any;
-        onSelect: any;
-        onDeselect: any;
+        onChange: null;
+        onSelect: null;
+        onDeselect: null;
     };
     /**
      * @param {string|HTMLElement} selector - The list-group element
@@ -2610,15 +2610,15 @@ declare class Dropdown extends Component {
         closeOnEscape: boolean;
         closeOthers: boolean;
         flip: boolean;
-        items: any[];
-        model: any;
-        modelKey: any;
-        itemTemplate: any;
-        onBeforeOpen: any;
-        onOpen: any;
-        onBeforeClose: any;
-        onClose: any;
-        onSelect: any;
+        items: never[];
+        model: null;
+        modelKey: null;
+        itemTemplate: null;
+        onBeforeOpen: null;
+        onOpen: null;
+        onBeforeClose: null;
+        onClose: null;
+        onSelect: null;
     };
     static _open: Set<any>;
     /**
@@ -2626,17 +2626,17 @@ declare class Dropdown extends Component {
      * @param {DropdownOptions} [options]
      */
     constructor(selector: string | HTMLElement, options?: DropdownOptions);
-    _menu: HTMLDivElement;
+    _menu: HTMLDivElement | null;
     _isOpen: boolean;
     _items: any[];
     _selectedValue: any;
     _modelUnsubscribe: any;
-    _hoverOpenTimer: number;
+    _hoverOpenTimer: number | null;
     _hoverCloseTimer: any;
     _removeTimer: any;
     _init(): void;
-    _outsideClickHandler: (e: any) => void;
-    _keydownHandler: (e: any) => void;
+    _outsideClickHandler: ((e: any) => void) | null | undefined;
+    _keydownHandler: ((e: any) => void) | null | undefined;
     _bindToModel(model: any, key: any): void;
     /**
      * Open the menu (onBeforeOpen may refuse).
@@ -2675,10 +2675,10 @@ declare class Dropdown extends Component {
      */
     _pointerInSafeZone(x: any, y: any): boolean;
     _bindOpenListeners(): void;
-    _openListenersBound: boolean;
-    _repositionHandler: () => void;
-    _pointerMoveHandler: (e: any) => void;
-    _pointerLeaveHandler: () => void;
+    _openListenersBound: boolean | undefined;
+    _repositionHandler: (() => void) | null | undefined;
+    _pointerMoveHandler: ((e: any) => void) | null | undefined;
+    _pointerLeaveHandler: (() => void) | null | undefined;
     _unbindOpenListeners(): void;
     _createMenu(): void;
     _renderMenu(): void;
@@ -2750,12 +2750,12 @@ declare class Timer extends Component {
         notification: boolean;
         notificationOptions: {};
         sound: boolean;
-        soundUrl: any;
-        onTick: any;
-        onComplete: any;
-        onStart: any;
-        onPause: any;
-        onReset: any;
+        soundUrl: null;
+        onTick: null;
+        onComplete: null;
+        onStart: null;
+        onPause: null;
+        onReset: null;
     };
     /**
      * @param {string|HTMLElement|null} [selector] - Where to draw the display; null for a headless timer
@@ -2764,27 +2764,27 @@ declare class Timer extends Component {
     constructor(selector?: string | HTMLElement | null, options?: TimerOptions);
     _running: boolean;
     _remaining: any;
-    _intervalId: number;
-    _startTime: number;
-    _pausedTime: number;
-    _display: HTMLDivElement;
-    _controls: HTMLDivElement;
-    _audio: HTMLAudioElement;
+    _intervalId: number | null;
+    _startTime: number | null;
+    _pausedTime: number | null;
+    _display: HTMLDivElement | null;
+    _controls: HTMLDivElement | null;
+    _audio: HTMLAudioElement | null;
     _init(): void;
     /**
      * Create visual display
      * @private
      */
     private _createDisplay;
-    _container: HTMLDivElement;
+    _container: HTMLDivElement | null | undefined;
     /**
      * Create control buttons
      * @private
      */
     private _createControls;
-    _startBtn: HTMLButtonElement;
-    _pauseBtn: HTMLButtonElement;
-    _resetBtn: HTMLButtonElement;
+    _startBtn: HTMLButtonElement | undefined;
+    _pauseBtn: HTMLButtonElement | undefined;
+    _resetBtn: HTMLButtonElement | undefined;
     /**
      * Update visual display
      * @private
@@ -2898,18 +2898,18 @@ declare class Timer extends Component {
  */
 declare class Alarm {
     static defaults: {
-        alarms: any[];
+        alarms: never[];
         timezone: string;
         checkInterval: number;
         storageKey: string;
-        onTrigger: any;
-        onSnooze: any;
-        onDismiss: any;
-        onAlarmAdd: any;
-        onAlarmRemove: any;
+        onTrigger: null;
+        onSnooze: null;
+        onDismiss: null;
+        onAlarmAdd: null;
+        onAlarmRemove: null;
     };
-    static _instance: any;
-    static _checkInterval: any;
+    static _instance: null;
+    static _checkInterval: null;
     static _nextAlarmId: number;
     /**
      * Constructor - implements singleton pattern
@@ -2918,7 +2918,7 @@ declare class Alarm {
     constructor(options?: AlarmOptions);
     /** @type {AlarmOptions} */
     options: AlarmOptions;
-    _alarms: any[];
+    _alarms: any[] | undefined;
     /**
      * Initialize alarm system
      * @private
@@ -3103,12 +3103,12 @@ declare class Carousel extends Component {
         animationDuration: number;
         animationEasing: string;
         heightMode: string;
-        height: any;
+        height: null;
         showArrows: boolean;
         showIndicators: boolean;
         slideSelector: string;
         activeClass: string;
-        onChange: any;
+        onChange: null;
     };
     /**
      * @param {string|HTMLElement} selector - The carousel element
@@ -3116,25 +3116,25 @@ declare class Carousel extends Component {
      */
     constructor(selector: string | HTMLElement, options?: CarouselOptions);
     _currentIndex: number;
-    _autoplayTimer: number;
+    _autoplayTimer: number | null;
     _isAnimating: boolean;
     _init(): void;
-    _slides: NodeListOf<any>;
-    _track: Element;
+    _slides: NodeListOf<any> | undefined;
+    _track: Element | null | undefined;
     _initHeight(): void;
-    _images: any[];
-    _originalHeight: string;
-    _originalHeightPriority: string;
-    _wasSized: boolean;
-    _heightObserver: ResizeObserver;
+    _images: any[] | undefined;
+    _originalHeight: string | undefined;
+    _originalHeightPriority: string | undefined;
+    _wasSized: boolean | undefined;
+    _heightObserver: ResizeObserver | undefined;
     _sizeSlides(): void;
     _applyOptions(): void;
     _createArrows(): void;
-    _prevBtn: HTMLButtonElement;
-    _nextBtn: HTMLButtonElement;
+    _prevBtn: HTMLButtonElement | undefined;
+    _nextBtn: HTMLButtonElement | undefined;
     _createIndicators(): void;
-    _indicators: HTMLDivElement;
-    _updateState(oldIndex?: any): void;
+    _indicators: HTMLDivElement | undefined;
+    _updateState(oldIndex?: null): void;
     _applyCrossfade(oldIndex: any, newIndex: any): void;
     _crossfadeSwapTimer: any;
     _startAutoplay(): void;
@@ -3234,7 +3234,7 @@ declare class CookieConsent extends Component {
         privacyPolicyText: string;
         privacyPolicyUrl: string;
         cookiePolicyText: string;
-        cookiePolicyUrl: any;
+        cookiePolicyUrl: null;
         categories: {
             necessary: {
                 label: string;
@@ -3270,13 +3270,13 @@ declare class CookieConsent extends Component {
         defaultState: string;
         requireExplicitConsent: boolean;
         consentVersion: string;
-        onVersionMismatch: any;
-        onAccept: any;
-        onReject: any;
-        onCustomize: any;
-        onChange: any;
-        onShow: any;
-        onHide: any;
+        onVersionMismatch: null;
+        onAccept: null;
+        onReject: null;
+        onCustomize: null;
+        onChange: null;
+        onShow: null;
+        onHide: null;
     };
     /**
      * @param {CookieConsentOptions} [options]
@@ -3284,7 +3284,7 @@ declare class CookieConsent extends Component {
     constructor(options?: CookieConsentOptions);
     _state: any;
     _preferences: {};
-    _customizeModal: HTMLDivElement;
+    _customizeModal: HTMLDivElement | null;
     _isVisible: boolean;
     _init(): void;
     _loadPreferences(): void;
@@ -3395,7 +3395,7 @@ declare class ButtonGroup extends Component {
         mode: string;
         activeClass: string;
         allowEmpty: boolean;
-        onChange: any;
+        onChange: null;
     };
     /**
      * @param {string|HTMLElement} selector - The group container
@@ -3403,7 +3403,7 @@ declare class ButtonGroup extends Component {
      */
     constructor(selector: string | HTMLElement, options?: ButtonGroupOptions);
     _init(): void;
-    buttons: Element[];
+    buttons: Element[] | undefined;
     _handleClick(btn: any, index: any): void;
     /**
      * Get the current value(s)
@@ -3461,11 +3461,11 @@ declare class ButtonGroup extends Component {
  */
 declare class Breadcrumbs extends Component {
     static defaults: {
-        items: any[];
+        items: never[];
         separator: string;
         homeIcon: boolean;
         responsive: boolean;
-        onChange: any;
+        onChange: null;
     };
     static separators: {
         '/': string;
@@ -3550,16 +3550,16 @@ declare class Breadcrumbs extends Component {
  */
 declare class Navbar extends Component {
     static defaults: {
-        brand: any;
-        items: any[];
+        brand: null;
+        items: never[];
         position: string;
         variant: string;
         collapsible: boolean;
         collapseAt: number;
         appearOnHover: boolean;
         hoverCloseDelay: number;
-        actions: any[];
-        onItemClick: any;
+        actions: never[];
+        onItemClick: null;
     };
     /**
      * @param {string|HTMLElement} selector - The element to render into
@@ -3569,11 +3569,11 @@ declare class Navbar extends Component {
     _isCollapsed: boolean;
     _pinned: any;
     _hoverSuppressed: any;
-    _navCloseTimer: number;
+    _navCloseTimer: number | null;
     _init(): void;
     _render(): void;
-    _toggle: Element;
-    _collapse: Element;
+    _toggle: Element | null | undefined;
+    _collapse: Element | null | undefined;
     /**
      * Render a list of nav items as <li> markup, recursing into `items` so
      * dropdowns can nest to arbitrary depth.
@@ -3691,16 +3691,16 @@ declare class Sidebar extends Component {
         fixed: boolean;
         width: string;
         top: string;
-        header: any;
-        items: any[];
-        footer: any;
+        header: null;
+        items: never[];
+        footer: null;
         variant: string;
         collapsible: boolean;
         collapseAt: number;
-        activeSection: any;
-        expandedSections: any[];
+        activeSection: null;
+        expandedSections: never[];
         persistExpanded: boolean;
-        persistKey: any;
+        persistKey: null;
         animationDuration: number;
         push: boolean;
         contentSelector: string;
@@ -3708,17 +3708,17 @@ declare class Sidebar extends Component {
         scrollSpyOffset: string;
         scrollSpyThreshold: number;
         floating: boolean;
-        customContent: any;
+        customContent: null;
         collapsibleDesktop: boolean;
         collapsedWidth: string;
         persistCollapsed: boolean;
-        persistCollapseKey: any;
-        onItemClick: any;
-        onBeforeOpen: any;
-        onBeforeClose: any;
-        onToggle: any;
-        onExpand: any;
-        onCollapse: any;
+        persistCollapseKey: null;
+        onItemClick: null;
+        onBeforeOpen: null;
+        onBeforeClose: null;
+        onToggle: null;
+        onExpand: null;
+        onCollapse: null;
     };
     /**
      * @param {string|HTMLElement} selector - The element to render into
@@ -3733,10 +3733,10 @@ declare class Sidebar extends Component {
     _contentElement: any;
     _handleInitialPushState(): void;
     _render(): void;
-    _toggle: Element;
-    _nav: Element;
-    _overlay: HTMLDivElement;
-    _floatingToggle: HTMLButtonElement;
+    _toggle: Element | null | undefined;
+    _nav: Element | null | undefined;
+    _overlay: HTMLDivElement | null | undefined;
+    _floatingToggle: HTMLButtonElement | null | undefined;
     _renderItems(items: any, depth?: number, parentPath?: string): string;
     _bindEvents(): void;
     _toggleSubmenu(itemElement: any, path: any): void;
@@ -3749,7 +3749,7 @@ declare class Sidebar extends Component {
     _loadCollapsedState(): void;
     _saveCollapsedState(): void;
     _initScrollSpy(): void;
-    _scrollSpyObserver: IntersectionObserver;
+    _scrollSpyObserver: IntersectionObserver | null | undefined;
     _createOverlay(): void;
     _removeOverlay(): void;
     _applyPush(): void;
@@ -3889,11 +3889,11 @@ declare class Footer extends Component {
     static defaults: {
         variant: string;
         layout: string;
-        brand: any;
-        columns: any[];
-        links: any[];
-        social: any[];
-        copyright: any;
+        brand: null;
+        columns: never[];
+        links: never[];
+        social: never[];
+        copyright: null;
         className: string;
         position: string;
     };
@@ -3978,13 +3978,13 @@ declare class Footer extends Component {
  */
 declare class Autocomplete extends Component {
     static defaults: {
-        data: any[];
-        dataSource: any;
+        data: never[];
+        dataSource: null;
         minChars: number;
         maxResults: number;
         debounce: number;
-        filterFn: any;
-        renderItem: any;
+        filterFn: null;
+        renderItem: null;
         highlightMatches: boolean;
         position: string;
         placeholder: string;
@@ -3993,13 +3993,13 @@ declare class Autocomplete extends Component {
         caseSensitive: boolean;
         selectOnEnter: boolean;
         clearOnSelect: boolean;
-        onSelect: any;
-        onChange: any;
-        onBeforeOpen: any;
-        onOpen: any;
-        onBeforeClose: any;
-        onClose: any;
-        onFilter: any;
+        onSelect: null;
+        onChange: null;
+        onBeforeOpen: null;
+        onOpen: null;
+        onBeforeClose: null;
+        onClose: null;
+        onFilter: null;
     };
     /**
      * @param {string|HTMLElement} selector - The input
@@ -4007,16 +4007,16 @@ declare class Autocomplete extends Component {
      */
     constructor(selector: string | HTMLElement, options?: AutocompleteOptions);
     model: any;
-    modelKey: string;
+    modelKey: string | null;
     _isOpen: boolean;
     _activeIndex: number;
     _filteredData: any[];
     _loading: boolean;
-    _debounceTimer: number;
-    _dropdown: HTMLDivElement;
-    _list: HTMLUListElement;
-    _loadingEl: HTMLDivElement;
-    _emptyEl: HTMLDivElement;
+    _debounceTimer: number | null;
+    _dropdown: HTMLDivElement | null;
+    _list: HTMLUListElement | null;
+    _loadingEl: HTMLDivElement | null;
+    _emptyEl: HTMLDivElement | null;
     _modelUnsubscribe: any;
     _init(): void;
     _createDropdown(): void;
@@ -4139,32 +4139,32 @@ declare class Autocomplete extends Component {
  */
 declare class Pillbox extends Component {
     static defaults: {
-        data: any[];
-        value: any[];
+        data: never[];
+        value: never[];
         placeholder: string;
         searchable: boolean;
         creatable: boolean;
-        maxItems: any;
+        maxItems: null;
         duplicates: boolean;
         clearable: boolean;
         size: string;
-        renderPill: any;
-        renderOption: any;
+        renderPill: null;
+        renderOption: null;
         pillTemplate: string;
-        validatePill: any;
+        validatePill: null;
         maxItemsMessage: string;
         duplicateMessage: string;
         noResultsMessage: string;
-        onBeforeOpen: any;
-        onOpen: any;
-        onBeforeClose: any;
-        onClose: any;
-        onAdd: any;
-        onRemove: any;
-        onChange: any;
-        onCreate: any;
-        onMaxReached: any;
-        onValidationError: any;
+        onBeforeOpen: null;
+        onOpen: null;
+        onBeforeClose: null;
+        onClose: null;
+        onAdd: null;
+        onRemove: null;
+        onChange: null;
+        onCreate: null;
+        onMaxReached: null;
+        onValidationError: null;
     };
     /**
      * @param {string|HTMLElement} selector - The input (or select) to enhance
@@ -4172,20 +4172,20 @@ declare class Pillbox extends Component {
      */
     constructor(selector: string | HTMLElement, options?: PillboxOptions);
     model: any;
-    modelKey: string;
+    modelKey: string | null;
     _pills: any[];
     _isOpen: boolean;
     _activeIndex: number;
-    _container: HTMLDivElement;
-    _input: HTMLInputElement;
-    _clearBtn: HTMLButtonElement;
-    _dropdown: HTMLDivElement;
-    _optionsList: HTMLUListElement;
+    _container: HTMLDivElement | null;
+    _input: HTMLInputElement | null;
+    _clearBtn: HTMLButtonElement | null;
+    _dropdown: HTMLDivElement | null;
+    _optionsList: HTMLUListElement | null;
     _filteredData: any[];
     _modelUnsubscribe: any;
     _init(): void;
     _createStructure(): void;
-    _wrapper: HTMLDivElement;
+    _wrapper: HTMLDivElement | undefined;
     _bindEvents(): void;
     _handleInput(e: any): void;
     _handleKeydown(e: any): void;
@@ -4358,11 +4358,11 @@ declare class Slideover extends Component {
         customSizes: {};
         trapFocus: boolean;
         returnFocus: boolean;
-        onBeforeOpen: any;
-        onOpen: any;
-        onBeforeClose: any;
-        onClose: any;
-        onClosed: any;
+        onBeforeOpen: null;
+        onOpen: null;
+        onBeforeClose: null;
+        onClose: null;
+        onClosed: null;
     };
     /**
      * Build a slideover (header, close button, body) at the end of `<body>`. With `schema`, the body
@@ -4377,11 +4377,11 @@ declare class Slideover extends Component {
      */
     constructor(selector: string | HTMLElement, options?: SlideoverOptions);
     _isOpen: boolean;
-    _backdrop: HTMLDivElement;
-    _trap: FocusTrap;
+    _backdrop: HTMLDivElement | null;
+    _trap: FocusTrap | null;
     _trapAsked: boolean;
-    _originalBodyOverflow: string;
-    _keydownHandler: (e: any) => void;
+    _originalBodyOverflow: string | null;
+    _keydownHandler: ((e: any) => void) | null;
     _init(): void;
     _setupElement(): void;
     _applyPosition(): void;
@@ -4403,7 +4403,7 @@ declare class Slideover extends Component {
         bottom: string;
         left?: undefined;
         right?: undefined;
-    };
+    } | undefined;
     /**
      * Open (onBeforeOpen may refuse).
      * @returns {this}
@@ -4417,7 +4417,7 @@ declare class Slideover extends Component {
      * a caller focusing a field after open() is unaffected.
      */
     _startTrap(): void;
-    _addedTabindex: boolean;
+    _addedTabindex: boolean | undefined;
     _stopTrap(): void;
     _createForm(): void;
     _formaForm: any;
@@ -4532,14 +4532,14 @@ declare class Slideover extends Component {
 declare class Progression extends Component {
     static defaults: {
         mode: string;
-        items: any[];
+        items: never[];
         layout: string;
         animation: boolean;
         animationDelay: number;
         responsive: boolean;
         theme: string;
         clickable: boolean;
-        onItemClick: any;
+        onItemClick: null;
         allowHtml: boolean;
         yearWidth: string;
         contentMaxWidth: string;
@@ -4549,8 +4549,8 @@ declare class Progression extends Component {
         progressPosition: string;
         statusIcons: boolean;
         allowStatusChange: boolean;
-        onStatusChange: any;
-        currentItem: any;
+        onStatusChange: null;
+        currentItem: null;
         completedAnimation: boolean;
         icons: {
             planned: string;
@@ -4726,7 +4726,7 @@ declare class Progression extends Component {
  */
 declare class Signature extends Component {
     static defaults: {
-        width: any;
+        width: null;
         height: number;
         penColour: string;
         penWidth: number;
@@ -4742,18 +4742,18 @@ declare class Signature extends Component {
         typeFallback: boolean;
         minStrokeLength: number;
         respectMotionPreference: boolean;
-        onChange: any;
-        onClear: any;
-        onBegin: any;
-        onEnd: any;
+        onChange: null;
+        onClear: null;
+        onBegin: null;
+        onEnd: null;
     };
     /**
      * @param {string|HTMLElement} selector - The container
      * @param {SignatureOptions} [options]
      */
     constructor(selector: string | HTMLElement, options?: SignatureOptions);
-    _strokes: any[];
-    _undoneStrokes: any[];
+    _strokes: any[] | undefined;
+    _undoneStrokes: any[] | undefined;
     _currentStroke: {
         points: {
             x: number;
@@ -4762,24 +4762,24 @@ declare class Signature extends Component {
         }[];
         colour: any;
         width: any;
-    };
-    _mode: string;
-    _isDrawing: boolean;
+    } | null;
+    _mode: string | undefined;
+    _isDrawing: boolean | undefined;
     _currentColour: any;
     _currentWidth: any;
-    _resizeObserver: ResizeObserver;
-    _canvas: Element;
+    _resizeObserver: ResizeObserver | null;
+    _canvas: Element | null;
     _ctx: any;
-    _canvasW: number;
-    _canvasH: number;
-    _dpr: number;
+    _canvasW: number | undefined;
+    _canvasH: number | undefined;
+    _dpr: number | undefined;
     _esc(str: any): string;
     _render(): void;
-    _wrapper: Element;
-    _placeholder: Element;
-    _statusEl: Element;
-    _hiddenInput: Element;
-    _typeInput: Element;
+    _wrapper: Element | null | undefined;
+    _placeholder: Element | null | undefined;
+    _statusEl: Element | null | undefined;
+    _hiddenInput: Element | null | undefined;
+    _typeInput: Element | null | undefined;
     _initCanvas(): void;
     _scaleCanvas(): void;
     _initEvents(): void;
@@ -4888,12 +4888,12 @@ declare class Signature extends Component {
  */
 declare class DatePicker extends Component {
     static defaults: {
-        value: any;
+        value: null;
         format: string;
-        min: any;
-        max: any;
+        min: null;
+        max: null;
         firstDay: number;
-        disabledDates: any;
+        disabledDates: null;
         openOnFocus: boolean;
         closeOnSelect: boolean;
         closeOnClickOutside: boolean;
@@ -4905,22 +4905,22 @@ declare class DatePicker extends Component {
         position: string;
         offset: number[];
         weekNumbers: boolean;
-        placeholder: any;
-        onChange: any;
-        onBeforeOpen: any;
-        onOpen: any;
-        onBeforeClose: any;
-        onClose: any;
+        placeholder: null;
+        onChange: null;
+        onBeforeOpen: null;
+        onOpen: null;
+        onBeforeClose: null;
+        onClose: null;
     };
     /** Only one popup is ever open, exactly as with a dropdown. */
-    static _open: any;
+    static _open: null;
     /**
      * @param {string|HTMLElement} selector - The input to attach to
      * @param {DatePickerOptions} [options]
      */
     constructor(selector: string | HTMLElement, options?: DatePickerOptions);
-    _panel: HTMLDivElement;
-    _isOpen: boolean;
+    _panel: HTMLDivElement | null;
+    _isOpen: boolean | undefined;
     _value: any;
     _view: any;
     _focused: any;
@@ -4944,21 +4944,21 @@ declare class DatePicker extends Component {
         silent?: boolean;
         fromInput?: boolean;
     }): this;
-    _suppress: boolean;
+    _suppress: boolean | undefined;
     /** @returns {this} */
     clear(): this;
     _renderInput(): void;
-    _min(): Date;
-    _max(): Date;
+    _min(): Date | null;
+    _max(): Date | null;
     /** Pull a date inside min/max, or null if there is no date. */
     _clamp(date: any): any;
     /** Is this day off limits? */
     _disabled(date: any): boolean;
     _buildPanel(): void;
-    _grid: HTMLDivElement;
-    _foot: HTMLDivElement;
-    _monthSelect: HTMLSelectElement;
-    _yearSelect: HTMLSelectElement;
+    _grid: HTMLDivElement | undefined;
+    _foot: HTMLDivElement | undefined;
+    _monthSelect: HTMLSelectElement | undefined;
+    _yearSelect: HTMLSelectElement | undefined;
     _shiftMonth(delta: any): void;
     /** Redraw the month on screen. */
     _paint(): void;
@@ -4967,8 +4967,8 @@ declare class DatePicker extends Component {
     _weekNumber(date: any): number;
     /** @returns {this} */
     open(): this;
-    _onOutside: (e: any) => void;
-    _onReposition: () => void;
+    _onOutside: ((e: any) => void) | undefined;
+    _onReposition: (() => void) | undefined;
     /**
      * @param   {{focus?: boolean}} [options] - focus true returns the caret to the input
      * @returns {this}

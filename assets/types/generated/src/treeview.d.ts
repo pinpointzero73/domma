@@ -27,107 +27,107 @@ export type TreeViewAction = {
     /**
      * - Icon name
      */
-    icon?: string;
+    icon?: string | undefined;
     /**
      * - Title and aria-label (default: the name)
      */
-    tooltip?: string;
+    tooltip?: string | undefined;
     /**
      * - Show the button on this node?
      */
-    visible?: (node: TreeViewNode) => boolean;
+    visible?: ((node: TreeViewNode) => boolean) | undefined;
 };
 export type TreeViewOptions = {
     /**
      * - Flat (with parentKey) or hierarchical (with childrenKey) rows
      */
-    data?: TreeViewNode[];
+    data?: TreeViewNode[] | undefined;
     /**
      * - Default 'id'
      */
-    idKey?: string;
+    idKey?: string | undefined;
     /**
      * - Default 'parent_id'
      */
-    parentKey?: string;
+    parentKey?: string | undefined;
     /**
      * - Default 'children'
      */
-    childrenKey?: string;
+    childrenKey?: string | undefined;
     /**
      * - Default 'name'
      */
-    labelKey?: string;
+    labelKey?: string | undefined;
     /**
      * - Default 'icon'
      */
-    iconKey?: string;
+    iconKey?: string | undefined;
     /**
      * - Default 'color'
      */
-    colorKey?: string;
+    colorKey?: string | undefined;
     /**
      * - Default true
      */
-    expandedByDefault?: boolean;
+    expandedByDefault?: boolean | undefined;
     /**
      * - Ids expanded at the start
      */
-    expandedNodes?: TreeViewNodeId[];
+    expandedNodes?: TreeViewNodeId[] | undefined;
     /**
      * - Default true
      */
-    selectable?: boolean;
+    selectable?: boolean | undefined;
     /**
      * - Default false
      */
-    multiSelect?: boolean;
+    multiSelect?: boolean | undefined;
     /**
      * - Ids selected at the start
      */
-    selectedNodes?: TreeViewNodeId[];
+    selectedNodes?: TreeViewNodeId[] | undefined;
     /**
      * - HTML for a node's content
      */
-    renderNode?: ((node: TreeViewNode, depth: number, state: TreeViewNodeState) => string) | null;
+    renderNode?: ((node: TreeViewNode, depth: number, state: TreeViewNodeState) => string) | null | undefined;
     /**
      * - Badge text (HTML), or null for none
      */
-    getBadge?: ((node: TreeViewNode) => string | number | null | undefined) | null;
+    getBadge?: ((node: TreeViewNode) => string | number | null | undefined) | null | undefined;
     /**
      * - Icon name (default: node[iconKey])
      */
-    getNodeIcon?: ((node: TreeViewNode) => string | null | undefined) | null;
+    getNodeIcon?: ((node: TreeViewNode) => string | null | undefined) | null | undefined;
     /**
      * - Extra classes on the node
      */
-    getNodeClass?: ((node: TreeViewNode) => string) | null;
+    getNodeClass?: ((node: TreeViewNode) => string) | null | undefined;
     /**
      * - Action buttons on each node
      */
-    actions?: TreeViewAction[];
+    actions?: TreeViewAction[] | undefined;
     /**
      * - rem per level (default 1.5)
      */
-    indentSize?: number;
+    indentSize?: number | undefined;
     /**
      * - Default true
      */
-    showIcons?: boolean;
+    showIcons?: boolean | undefined;
     /**
      * - Default true
      */
-    showToggleButtons?: boolean;
+    showToggleButtons?: boolean | undefined;
     /**
      * - Default 'chevron-down'
      */
-    toggleIcon?: string;
-    onSelect?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null;
-    onDeselect?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null;
-    onExpand?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null;
-    onCollapse?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null;
-    onAction?: ((action: string, nodeId: TreeViewNodeId, node: TreeViewNode, event: MouseEvent) => void) | null;
-    onClick?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: MouseEvent) => void) | null;
+    toggleIcon?: string | undefined;
+    onSelect?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null | undefined;
+    onDeselect?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null | undefined;
+    onExpand?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null | undefined;
+    onCollapse?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: null) => void) | null | undefined;
+    onAction?: ((action: string, nodeId: TreeViewNodeId, node: TreeViewNode, event: MouseEvent) => void) | null | undefined;
+    onClick?: ((nodeId: TreeViewNodeId, node: TreeViewNode, event: MouseEvent) => void) | null | undefined;
 };
 export type TreeViewInstance = TreeView;
 /**
@@ -187,7 +187,7 @@ export type TreeViewInstance = TreeView;
 /** @typedef {TreeView} TreeViewInstance */
 declare class TreeView extends Component {
     static defaults: {
-        data: any[];
+        data: never[];
         idKey: string;
         parentKey: string;
         childrenKey: string;
@@ -195,35 +195,35 @@ declare class TreeView extends Component {
         iconKey: string;
         colorKey: string;
         expandedByDefault: boolean;
-        expandedNodes: any[];
+        expandedNodes: never[];
         selectable: boolean;
         multiSelect: boolean;
-        selectedNodes: any[];
-        renderNode: any;
-        getBadge: any;
-        getNodeIcon: any;
-        getNodeClass: any;
-        actions: any[];
+        selectedNodes: never[];
+        renderNode: null;
+        getBadge: null;
+        getNodeIcon: null;
+        getNodeClass: null;
+        actions: never[];
         indentSize: number;
         showIcons: boolean;
         showToggleButtons: boolean;
         toggleIcon: string;
-        onSelect: any;
-        onDeselect: any;
-        onExpand: any;
-        onCollapse: any;
-        onAction: any;
-        onClick: any;
+        onSelect: null;
+        onDeselect: null;
+        onExpand: null;
+        onCollapse: null;
+        onAction: null;
+        onClick: null;
     };
     /**
      * @param {string|HTMLElement} selector - Container element or selector
      * @param {TreeViewOptions} [options]
      */
     constructor(selector: string | HTMLElement, options?: TreeViewOptions);
-    _tree: any[];
-    _flatMap: {};
-    _expandedNodes: Set<any>;
-    _selectedNodes: Set<any>;
+    _tree: any[] | undefined;
+    _flatMap: {} | undefined;
+    _expandedNodes: Set<any> | undefined;
+    _selectedNodes: Set<any> | undefined;
     /**
      * Initialise the TreeView component
      * @private

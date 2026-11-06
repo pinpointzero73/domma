@@ -66,14 +66,14 @@ export class Toast extends Component {
         html: boolean;
         safe: boolean;
         icon: string;
-        actions: any[];
+        actions: never[];
         maxToasts: number;
         className: string;
-        onShow: any;
-        onClose: any;
-        onPause: any;
-        onResume: any;
-        onAction: any;
+        onShow: null;
+        onClose: null;
+        onPause: null;
+        onResume: null;
+        onAction: null;
     };
     /**
      * @param {string|Node} [message]
@@ -81,15 +81,15 @@ export class Toast extends Component {
      */
     constructor(message?: string | Node, options?: ToastOptions);
     _visible: boolean;
-    _timer: number;
+    _timer: number | null;
     _remaining: number;
     _started: number;
     _paused: boolean;
     _render(): void;
-    _titleEl: HTMLDivElement;
-    _messageEl: HTMLDivElement;
-    _actionsEl: HTMLDivElement;
-    _bar: HTMLDivElement;
+    _titleEl: HTMLDivElement | undefined;
+    _messageEl: HTMLDivElement | undefined;
+    _actionsEl: HTMLDivElement | undefined;
+    _bar: HTMLDivElement | null | undefined;
     _writeMessage(): void;
     _renderActions(): void;
     _bind(): void;
@@ -158,116 +158,116 @@ export type ToastAction = {
     /**
      * - Button label (`text` is accepted too)
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - Alias of `label`
      */
-    text?: string;
+    text?: string | undefined;
     /**
      * - Click handler
      */
-    onClick?: (event: MouseEvent, toast: ToastInstance) => void;
+    onClick?: ((event: MouseEvent, toast: ToastInstance) => void) | undefined;
     /**
      * - Close toast on click
      */
-    closeOnClick?: boolean;
+    closeOnClick?: boolean | undefined;
     /**
      * - Primary style
      */
-    primary?: boolean;
+    primary?: boolean | undefined;
 };
 export type ToastOptions = {
     /**
      * - The message (text unless `html: true`)
      */
-    message?: string | Node;
+    message?: string | Node | undefined;
     /**
      * - Toast title
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - Toast type
      */
-    type?: import("../elements.js").ToastType;
+    type?: import("../elements.js").ToastType | undefined;
     /**
      * - Toast position
      */
-    position?: import("../elements.js").ToastPosition;
+    position?: import("../elements.js").ToastPosition | undefined;
     /**
      * - Auto-dismiss duration in ms (0 = no auto-dismiss)
      */
-    duration?: number;
+    duration?: number | undefined;
     /**
      * - Pause countdown on hover
      */
-    pauseOnHover?: boolean;
+    pauseOnHover?: boolean | undefined;
     /**
      * - Show progress bar
      */
-    showProgress?: boolean;
+    showProgress?: boolean | undefined;
     /**
      * - Animation style
      */
-    animation?: "slide" | "fade" | (string & {});
+    animation?: (string & {}) | "fade" | "slide" | undefined;
     /**
      * - Animation duration in ms
      */
-    animationDuration?: number;
+    animationDuration?: number | undefined;
     /**
      * - Show close button
      */
-    closable?: boolean;
+    closable?: boolean | undefined;
     /**
      * - The message is HTML (sanitised unless `safe: false`)
      */
-    html?: boolean;
+    html?: boolean | undefined;
     /**
      * - Sanitise HTML message / icon
      */
-    safe?: boolean;
+    safe?: boolean | undefined;
     /**
      * - Icon name (data-icon), HTML string or Node; the typed helpers default to the type's icon
      */
-    icon?: string | Node | null;
+    icon?: string | Node | null | undefined;
     /**
      * - Action buttons
      */
-    actions?: ToastAction[];
+    actions?: ToastAction[] | undefined;
     /**
      * - One action button (used when `actions` is empty)
      */
-    action?: ToastAction;
+    action?: ToastAction | undefined;
     /**
      * - Maximum number of toasts on screen; the oldest closes
      */
-    maxToasts?: number;
+    maxToasts?: number | undefined;
     /**
      * - Extra classes on the toast
      */
-    className?: string;
+    className?: string | undefined;
     /**
      * - When the toast shows
      */
-    onShow?: ((toast: ToastInstance) => void) | null;
+    onShow?: ((toast: ToastInstance) => void) | null | undefined;
     /**
      * - After the exit animation, just before removal
      */
-    onClose?: ((toast: ToastInstance) => void) | null;
+    onClose?: ((toast: ToastInstance) => void) | null | undefined;
     /**
      * - The countdown paused (hover)
      */
-    onPause?: ((toast: ToastInstance) => void) | null;
+    onPause?: ((toast: ToastInstance) => void) | null | undefined;
     /**
      * - The countdown resumed
      */
-    onResume?: ((toast: ToastInstance) => void) | null;
+    onResume?: ((toast: ToastInstance) => void) | null | undefined;
     /**
      * - An action button was clicked
      */
     onAction?: ((detail: {
         action: ToastAction;
         index: number;
-    }, toast: ToastInstance) => void) | null;
+    }, toast: ToastInstance) => void) | null | undefined;
 };
 export type ToastInstance = Toast;
 /**

@@ -298,7 +298,7 @@ export class Forma {
      */
     renderTo(selector: string | HTMLElement): HTMLElement;
     /** @type {HTMLFormElement|null} The rendered <form> */
-    formElement: HTMLFormElement | null;
+    formElement: HTMLFormElement | null | undefined;
     /**
      * Build the complete form structure
      * @private
@@ -452,7 +452,7 @@ export class Forma {
     private _initInputExtras;
     /** @private */
     private _destroyInputExtras;
-    _inputGroups: {};
+    _inputGroups: {} | undefined;
     /**
      * Put every field back to the value the form started with (its data, else the schema
      * default): the model, the native inputs, and the slider / dropzone / chooser controls.
@@ -475,7 +475,7 @@ export class Forma {
      * @private
      */
     private _initChooserFields;
-    _choosers: {};
+    _choosers: {} | undefined;
     /**
      * Initialise any signature fields inside a rendered form.
      * @param {HTMLElement} formElement
@@ -618,95 +618,95 @@ export type FormAddon = string | {
  * accept/multiple/maxFiles/maxSize/minSize/previews/upload/autoUpload/retry/labels/list/className to E.dropzone.
  */
 export type FormFieldConfig = {
-    placeholder?: string;
+    placeholder?: string | undefined;
     /**
      * - Small text beside the label; also the message when `pattern` fails
      */
-    hint?: string;
+    hint?: string | undefined;
     /**
      * - Text under the control (HTML)
      */
-    helperText?: string;
+    helperText?: string | undefined;
     /**
      * - Tooltip on the label (a slider field also passes it to E.rangeSlider)
      */
-    tooltip?: string;
+    tooltip?: string | undefined;
     /**
      * - Columns the field spans in a grid layout
      */
-    span?: number;
-    disabled?: boolean;
+    span?: number | undefined;
+    disabled?: boolean | undefined;
     /**
      * - textarea rows (default 3)
      */
-    rows?: number;
+    rows?: number | undefined;
     /**
      * - Used when the field definition has no `step`
      */
-    step?: number | "any";
-    autocomplete?: string;
-    prefix?: FormAddon;
-    suffix?: FormAddon;
+    step?: number | "any" | undefined;
+    autocomplete?: string | undefined;
+    prefix?: FormAddon | undefined;
+    suffix?: FormAddon | undefined;
     /**
      * - password: show / hide toggle
      */
-    reveal?: boolean;
+    reveal?: boolean | undefined;
     /**
      * - text-like inputs and textareas: a clear button
      */
-    clear?: boolean;
+    clear?: boolean | undefined;
     /**
      * - number / integer / float: - and + buttons
      */
-    stepper?: boolean;
+    stepper?: boolean | undefined;
     /**
      * - text-like inputs and textareas: a character counter; true reads `maxLength`
      */
-    counter?: boolean | number;
+    counter?: number | boolean | undefined;
     /**
      * - Text for the input extras or the dropzone; a slider's value formatter
      */
-    labels?: Record<string, string> | ((value: number, where: "tick" | "mark" | "tooltip" | "aria") => string);
+    labels?: Record<string, string> | ((value: number, where: "tick" | "mark" | "tooltip" | "aria") => string) | undefined;
     /**
      * - file / dropzone
      */
-    accept?: string | string[];
+    accept?: string | string[] | undefined;
     /**
      * - file / dropzone (a dropzone allows several unless false)
      */
-    multiple?: boolean;
+    multiple?: boolean | undefined;
     /**
      * - Render a `range` field as E.rangeSlider
      */
-    slider?: boolean;
+    slider?: boolean | undefined;
     /**
      * - slider: two thumbs, value [low, high]
      */
-    range?: boolean;
+    range?: boolean | undefined;
     ticks?: import("./components/range-slider.js").RangeSliderOptions["ticks"];
-    tickLabels?: boolean;
+    tickLabels?: boolean | undefined;
     format?: import("./components/range-slider.js").RangeSliderOptions["format"];
     marks?: import("./components/range-slider.js").RangeSliderOptions["marks"];
-    minDistance?: number;
-    orientation?: "horizontal" | "vertical";
-    rtl?: boolean | null;
-    names?: [string, string] | null;
-    ariaLabels?: [string, string] | null;
-    className?: string;
-    maxFiles?: number | null;
+    minDistance?: number | undefined;
+    orientation?: "vertical" | "horizontal" | undefined;
+    rtl?: boolean | null | undefined;
+    names?: [string, string] | null | undefined;
+    ariaLabels?: [string, string] | null | undefined;
+    className?: string | undefined;
+    maxFiles?: number | null | undefined;
     /**
      * - Bytes
      */
-    maxSize?: number | null;
+    maxSize?: number | null | undefined;
     /**
      * - Bytes
      */
-    minSize?: number | null;
-    previews?: boolean;
+    minSize?: number | null | undefined;
+    previews?: boolean | undefined;
     upload?: import("./components/dropzone.js").DropzoneOptions["upload"];
-    autoUpload?: boolean;
-    retry?: number;
-    list?: boolean | string | HTMLElement;
+    autoUpload?: boolean | undefined;
+    retry?: number | undefined;
+    list?: string | boolean | HTMLElement | undefined;
 };
 /**
  * One field of a form blueprint. The same object also feeds `M.create` (the form builds its model from the
@@ -716,76 +716,76 @@ export type FormFieldDefinition = {
     /**
      * - default 'string'
      */
-    type?: FormFieldType;
+    type?: FormFieldType | undefined;
     /**
      * - default: the capitalised field name
      */
-    label?: string;
+    label?: string | undefined;
     default?: any;
-    required?: boolean;
+    required?: boolean | undefined;
     /**
      * - Renders the control disabled
      */
-    readonly?: boolean;
-    min?: number;
-    max?: number;
-    step?: number | "any";
-    minLength?: number;
-    maxLength?: number;
-    pattern?: RegExp;
+    readonly?: boolean | undefined;
+    min?: number | undefined;
+    max?: number | undefined;
+    step?: number | "any" | undefined;
+    minLength?: number | undefined;
+    maxLength?: number | undefined;
+    pattern?: RegExp | undefined;
     /**
      * - true passes; a string (or anything else) fails with that message
      */
-    validate?: (value: any, data: Record<string, any>) => boolean | string;
+    validate?: ((value: any, data: Record<string, any>) => boolean | string) | undefined;
     /**
      * - Choices for select / radio / checkbox-group / multiselect / chooser
      */
-    options?: FormOption[];
-    formConfig?: FormFieldConfig;
+    options?: FormOption[] | undefined;
+    formConfig?: FormFieldConfig | undefined;
     /**
      * - `F.crud` table cell renderer
      */
-    tableRender?: (value: any, row: Record<string, any>, index: number) => string;
+    tableRender?: ((value: any, row: Record<string, any>, index: number) => string) | undefined;
     /**
      * - chooser (default 'card')
      */
-    variant?: "card" | "chip";
+    variant?: "card" | "chip" | undefined;
     /**
      * - chooser: several choices (value is an array)
      */
-    multiple?: boolean;
+    multiple?: boolean | undefined;
     /**
      * - chooser
      */
-    density?: "comfortable" | "compact";
+    density?: "comfortable" | "compact" | undefined;
     /**
      * - chooser (default 3)
      */
-    columns?: number;
+    columns?: number | undefined;
     /**
      * - chooser: semantic name or CSS colour (default 'primary')
      */
-    accent?: string;
+    accent?: string | undefined;
     /**
      * - chooser
      */
-    accentStyle?: "border" | "solid" | "glow" | "overlay" | "underline";
+    accentStyle?: "border" | "solid" | "glow" | "overlay" | "underline" | undefined;
     /**
      * - chooser
      */
-    glow?: boolean;
+    glow?: boolean | undefined;
     /**
      * - chooser
      */
-    glowColour?: string | null;
+    glowColour?: string | null | undefined;
     /**
      * - chooser (default 'none')
      */
-    shadow?: string;
+    shadow?: string | undefined;
     /**
      * - chooser
      */
-    shadowColour?: string | null;
+    shadowColour?: string | null | undefined;
 };
 /**
  * A form blueprint: field name -> definition. Fields render in key order unless `options.sections` says otherwise.
@@ -797,115 +797,115 @@ export type FormBlueprint = {
  * A group of fields (`options.sections`); with a title it is a fieldset with a legend.
  */
 export type FormSection = {
-    title?: string;
+    title?: string | undefined;
     /**
      * - Blueprint keys, in order
      */
-    fields?: string[];
-    layout?: "grid" | "stacked";
+    fields?: string[] | undefined;
+    layout?: "stacked" | "grid" | undefined;
     /**
      * - grid columns (default 2)
      */
-    columns?: number;
+    columns?: number | undefined;
 };
 export type FormOptions = {
     /**
      * - default 'stacked'
      */
-    layout?: "stacked" | "grid" | "inline";
+    layout?: "stacked" | "grid" | "inline" | undefined;
     /**
      * - grid layout columns (2 or 3, default 2)
      */
-    columns?: 2 | 3 | number;
+    columns?: number | undefined;
     /**
      * - default 'top'
      */
-    labelPosition?: "top" | "left" | "floating";
+    labelPosition?: "top" | "left" | "floating" | undefined;
     /**
      * - default true
      */
-    showLabels?: boolean;
+    showLabels?: boolean | undefined;
     /**
      * - default true
      */
-    showHelperText?: boolean;
+    showHelperText?: boolean | undefined;
     /**
      * - default true
      */
-    showHints?: boolean;
+    showHints?: boolean | undefined;
     /**
      * - default 'blur'
      */
-    validationMode?: "blur" | "change" | "submit";
+    validationMode?: "blur" | "change" | "submit" | undefined;
     /**
      * - default 'domma'
      */
-    cssFramework?: "domma" | "bootstrap" | "tailwind";
+    cssFramework?: "domma" | "bootstrap" | "tailwind" | undefined;
     /**
      * - default 'domma-form'
      */
-    className?: string;
+    className?: string | undefined;
     /**
      * - default 'domma-form-field'
      */
-    fieldClassName?: string;
+    fieldClassName?: string | undefined;
     /**
      * - default 'form-label'
      */
-    labelClassName?: string;
+    labelClassName?: string | undefined;
     /**
      * - default 'form-input'
      */
-    inputClassName?: string;
+    inputClassName?: string | undefined;
     /**
      * - default 'form-error'
      */
-    errorClassName?: string;
+    errorClassName?: string | undefined;
     /**
      * - default 'form-helper-text'
      */
-    helperClassName?: string;
+    helperClassName?: string | undefined;
     /**
      * - default 'form-hint'
      */
-    hintClassName?: string;
+    hintClassName?: string | undefined;
     /**
      * - Wrap the form in a card (default false)
      */
-    cardWrapper?: boolean;
-    sections?: FormSection[];
+    cardWrapper?: boolean | undefined;
+    sections?: FormSection[] | undefined;
     /**
      * - default true
      */
-    showSubmitButton?: boolean;
+    showSubmitButton?: boolean | undefined;
     /**
      * - default 'Submit'
      */
-    submitText?: string;
+    submitText?: string | undefined;
     /**
      * - Adds a reset button with this text
      */
-    resetText?: string;
+    resetText?: string | undefined;
     /**
      * - default 'right'
      */
-    buttonAlignment?: "left" | "center" | "right";
+    buttonAlignment?: "center" | "left" | "right" | undefined;
     /**
      * - A valid submit
      */
-    onSubmit?: (data: Record<string, any>, form: FormInstance) => void;
+    onSubmit?: ((data: Record<string, any>, form: FormInstance) => void) | undefined;
     /**
      * - An invalid submit
      */
-    onValidationError?: (errors: Record<string, string>, form: FormInstance) => void;
+    onValidationError?: ((errors: Record<string, string>, form: FormInstance) => void) | undefined;
     /**
      * - Passed to the model: a storage key to keep the values under
      */
-    persist?: string;
+    persist?: string | undefined;
     /**
      * - Passed to the model
      */
-    autoSave?: boolean;
+    autoSave?: boolean | undefined;
 };
 /**
  * What `handleSubmit()` returns.
@@ -925,13 +925,13 @@ export type FormWizardStep = {
     /**
      * - default 'Step <n>'
      */
-    title?: string;
-    description?: string;
+    title?: string | undefined;
+    description?: string | undefined;
     /**
      * - The step's blueprint
      */
     fields: FormBlueprint;
-    layout?: "stacked" | "grid" | "inline";
+    layout?: "stacked" | "grid" | "inline" | undefined;
 };
 /**
  * `F.wizard` options; the rest are FormOptions applied to every step.
@@ -1009,22 +1009,22 @@ export type FormCrudConfig = {
     /**
      * - Where the table goes
      */
-    tableSelector?: string | HTMLElement;
+    tableSelector?: string | HTMLElement | undefined;
     /**
      * - default 'Manage Items'
      */
-    title?: string;
+    title?: string | undefined;
     /**
      * - default 'id'
      */
-    primaryKey?: string;
+    primaryKey?: string | undefined;
     /**
      * - default 'name'
      */
-    displayField?: string;
-    headers?: Record<string, string>;
-    onError?: (error: any) => void;
-    onSuccess?: (message: string) => void;
+    displayField?: string | undefined;
+    headers?: Record<string, string> | undefined;
+    onError?: ((error: any) => void) | undefined;
+    onSuccess?: ((message: string) => void) | undefined;
 };
 /**
  * The object `F.crud` returns. Call `init()` to load the data and build the table.

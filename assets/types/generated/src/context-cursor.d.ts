@@ -20,9 +20,9 @@ export function resolveCursorColours(doc?: Document): {
  * @returns {string}
  */
 export function cursorSvg({ size, fill, halo }?: {
-    size?: number;
-    fill?: string;
-    halo?: string;
+    size?: number | undefined;
+    fill?: string | undefined;
+    halo?: string | undefined;
 }): string;
 /**
  * The full CSS `cursor` value, keyword fallback included.
@@ -35,7 +35,7 @@ export function cursorSvg({ size, fill, halo }?: {
  * @param {Object} [options] see cursorSvg
  * @returns {string}
  */
-export function cursorValue(options?: any): string;
+export function cursorValue(options?: Object): string;
 /**
  * Add or replace one menu's cursor rule.
  *
@@ -48,8 +48,8 @@ export function cursorValue(options?: any): string;
  */
 export function setCursorRule(id: string | number, selector: string, spec: {
     kind: "glyph" | "keyword" | "custom";
-    size?: number;
-    value?: string;
+    size?: number | undefined;
+    value?: string | undefined;
 }): void;
 /** Drop one menu's rule. Called from ContextMenu#destroy. */
 export function clearCursorRule(id: any): void;

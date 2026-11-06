@@ -32,7 +32,7 @@ export function avatarTone(key: string): number;
  * @param {AvatarOptions} [options]
  * @returns {AvatarHandle|null}
  */
-export function avatar(target: string | Element | ArrayLike<Element> | null, options?: AvatarOptions): AvatarHandle | null;
+export function avatar(target: string | Element | ArrayLike<Element> | null, options?: AvatarOptions | undefined): AvatarHandle | null;
 /**
  * Render one avatar into a detached <span> for you to insert.
  * @overload
@@ -90,51 +90,51 @@ export type AvatarOptions = {
     /**
      * - The person: initials, tone and accessible name come from it
      */
-    name?: string | null;
+    name?: string | null | undefined;
     /**
      * - Picture URL; falls back to the initials (or icon) if it fails to load
      */
-    src?: string | null;
+    src?: string | null | undefined;
     /**
      * - Accessible name when it should differ from name
      */
-    alt?: string | null;
+    alt?: string | null | undefined;
     /**
      * - Size (default 'md')
      */
-    size?: AvatarSize;
+    size?: AvatarSize | undefined;
     /**
      * - Shape (default 'circle')
      */
-    shape?: AvatarShape;
+    shape?: AvatarShape | undefined;
     /**
      * - Status dot; the word goes into the accessible name
      */
-    status?: AvatarStatus | null;
+    status?: AvatarStatus | null | undefined;
     /**
      * - Words for the statuses in the accessible name, e.g. {busy: 'in a meeting'}
      */
-    statusLabels?: Partial<Record<AvatarStatus, string>> | null;
+    statusLabels?: Partial<Record<AvatarStatus, string>> | null | undefined;
     /**
      * - Icon name shown instead of initials ('user' when there is no name)
      */
-    icon?: string | null;
+    icon?: string | null | undefined;
     /**
      * - Hover text; true = the accessible name
      */
-    title?: string | true | null;
+    title?: string | true | null | undefined;
     /**
      * - A primary-coloured ring (default false)
      */
-    ring?: boolean;
+    ring?: boolean | undefined;
     /**
      * - 0-7 to choose the tint; default is a hash of the name
      */
-    tone?: number | null;
+    tone?: number | null | undefined;
     /**
      * - aria-hidden: the name is written next to it (default false)
      */
-    decorative?: boolean;
+    decorative?: boolean | undefined;
 };
 /**
  * The handle E.avatar() returns. `options`, `initials`, `tone` and `label` are read only.
@@ -177,59 +177,59 @@ export type AvatarStatic = typeof avatar;
  * One person in an avatar group.
  */
 export type AvatarPerson = {
-    name?: string;
-    src?: string;
-    status?: AvatarStatus;
+    name?: string | undefined;
+    src?: string | undefined;
+    status?: AvatarStatus | undefined;
     /**
      * - Makes the avatar a link
      */
-    href?: string;
-    alt?: string;
-    icon?: string;
-    tone?: number;
+    href?: string | undefined;
+    alt?: string | undefined;
+    icon?: string | undefined;
+    tone?: number | undefined;
     /**
      * - Hover text (default: the accessible name)
      */
-    title?: string | true;
+    title?: string | true | undefined;
 };
 export type AvatarGroupOptions = {
     /**
      * - People, or plain names
      */
-    people?: Array<AvatarPerson | string>;
+    people?: (string | AvatarPerson)[] | undefined;
     /**
      * - Show this many, then "+N"; null = everyone
      */
-    max?: number | null;
+    max?: number | null | undefined;
     /**
      * - Size (default 'md')
      */
-    size?: AvatarSize;
+    size?: AvatarSize | undefined;
     /**
      * - Shape (default 'circle')
      */
-    shape?: AvatarShape;
+    shape?: AvatarShape | undefined;
     /**
      * - 'none' | 'sm' | 'md' | 'lg', pixels, or any CSS length; null = the stylesheet's 25%
      */
-    overlap?: "none" | "sm" | "md" | "lg" | number | string | null;
+    overlap?: string | number | null | undefined;
     /**
      * - Accessible name for the list
      */
-    label?: string | null;
-    statusLabels?: Partial<Record<AvatarStatus, string>> | null;
+    label?: string | null | undefined;
+    statusLabels?: Partial<Record<AvatarStatus, string>> | null | undefined;
     /**
      * - Called when "+N" is pressed, instead of the popover
      */
-    onMore?: ((hidden: AvatarPerson[], event: MouseEvent) => void) | null;
+    onMore?: ((hidden: AvatarPerson[], event: MouseEvent) => void) | null | undefined;
     /**
      * - false: no popover, the hidden names go in the button's title (default true)
      */
-    popover?: boolean;
+    popover?: boolean | undefined;
     /**
      * - The "+N" button's accessible name (default '3 more: A, B and C')
      */
-    moreLabel?: ((count: number, names: string[]) => string) | null;
+    moreLabel?: ((count: number, names: string[]) => string) | null | undefined;
 };
 /**
  * The handle E.avatarGroup() returns. Everything but the methods is read only.

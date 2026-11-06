@@ -43,9 +43,9 @@ export class Tooltip extends Component {
         safe: boolean;
         visible: boolean;
         className: string;
-        maxWidth: any;
-        onShow: any;
-        onHide: any;
+        maxWidth: null;
+        onShow: null;
+        onHide: null;
     };
     /**
      * Option aliases the old wrapper accepted.
@@ -58,12 +58,12 @@ export class Tooltip extends Component {
      * @param {TooltipOptions} [options]
      */
     constructor(element: string | Element, options?: TooltipOptions);
-    _visible: boolean;
-    _bubble: HTMLDivElement;
-    _timers: {};
+    _visible: boolean | undefined;
+    _bubble: HTMLDivElement | null;
+    _timers: {} | undefined;
     /** Content falls back to data-tooltip / title; a title is held aside so the browser's own does not show too. */
     _takeTitle(): void;
-    _title: string;
+    _title: string | null | undefined;
     _content(): any;
     _bindTrigger(): void;
     _clear(name: any): void;
@@ -131,70 +131,70 @@ export default Tooltip;
  * Show / hide delays in ms.
  */
 export type TooltipDelay = {
-    show?: number;
-    hide?: number;
+    show?: number | undefined;
+    hide?: number | undefined;
 };
 export type TooltipOptions = {
     /**
      * - Tooltip content (falls back to data-tooltip, then title)
      */
-    content?: string | Node | ((target: HTMLElement) => string | Node);
+    content?: string | Node | ((target: HTMLElement) => string | Node) | undefined;
     /**
      * - Position relative to element (flips when there is no room)
      */
-    position?: import("../elements.js").TooltipPosition;
+    position?: import("../elements.js").TooltipPosition | undefined;
     /**
      * - Alias of `position`
      */
-    placement?: import("../elements.js").TooltipPosition;
+    placement?: import("../elements.js").TooltipPosition | undefined;
     /**
      * - How to trigger; several separated by spaces ('hover focus')
      */
-    trigger?: "hover" | "click" | "focus" | "manual" | (string & {});
+    trigger?: "click" | "focus" | (string & {}) | "manual" | "hover" | undefined;
     /**
      * - Show delay in ms, or {show, hide}
      */
-    delay?: number | TooltipDelay;
+    delay?: number | TooltipDelay | undefined;
     /**
      * - Hide delay in ms
      */
-    hideDelay?: number;
+    hideDelay?: number | undefined;
     /**
      * - Fade in and out
      */
-    animation?: boolean;
+    animation?: boolean | undefined;
     /**
      * - Gap in px between target and bubble
      */
-    offset?: number;
+    offset?: number | undefined;
     /**
      * - String content is HTML (sanitised unless `safe: false`), not text
      */
-    html?: boolean;
+    html?: boolean | undefined;
     /**
      * - Sanitise HTML content
      */
-    safe?: boolean;
+    safe?: boolean | undefined;
     /**
      * - Show at once
      */
-    visible?: boolean;
+    visible?: boolean | undefined;
     /**
      * - Extra classes on the bubble
      */
-    className?: string;
+    className?: string | undefined;
     /**
      * - Any CSS width; numbers are px
      */
-    maxWidth?: number | string | null;
+    maxWidth?: string | number | null | undefined;
     /**
      * - When the tooltip shows
      */
-    onShow?: ((tooltip: TooltipInstance) => void) | null;
+    onShow?: ((tooltip: TooltipInstance) => void) | null | undefined;
     /**
      * - When the tooltip hides
      */
-    onHide?: ((tooltip: TooltipInstance) => void) | null;
+    onHide?: ((tooltip: TooltipInstance) => void) | null | undefined;
 };
 export type TooltipInstance = Tooltip;
 import Component from '../component.js';

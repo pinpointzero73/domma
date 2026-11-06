@@ -103,50 +103,50 @@ export type FlagShape = "rect" | "rounded" | "square" | "circle";
  */
 export type FlagOverlay = {
     type: "rect" | "circle" | "ellipse" | "line" | "path" | "star" | "crescent" | "group";
-    fill?: string;
-    stroke?: string;
-    strokeWidth?: number;
-    x?: number;
-    y?: number;
-    w?: number;
-    h?: number;
-    rx?: number;
-    ry?: number;
-    cx?: number;
-    cy?: number;
-    r?: number;
-    x1?: number;
-    y1?: number;
-    x2?: number;
-    y2?: number;
+    fill?: string | undefined;
+    stroke?: string | undefined;
+    strokeWidth?: number | undefined;
+    x?: number | undefined;
+    y?: number | undefined;
+    w?: number | undefined;
+    h?: number | undefined;
+    rx?: number | undefined;
+    ry?: number | undefined;
+    cx?: number | undefined;
+    cy?: number | undefined;
+    r?: number | undefined;
+    x1?: number | undefined;
+    y1?: number | undefined;
+    x2?: number | undefined;
+    y2?: number | undefined;
     /**
      * Path data
      */
-    d?: string;
+    d?: string | undefined;
     /**
      * Star points (default 5)
      */
-    points?: number;
+    points?: number | undefined;
     /**
      * Star inner radius as a fraction of outer (default 0.382)
      */
-    innerRatio?: number;
+    innerRatio?: number | undefined;
     /**
      * Star rotation in degrees (default -90, pointing up)
      */
-    rotation?: number;
+    rotation?: number | undefined;
     /**
      * Crescent carving-circle offset
      */
-    off?: number;
+    off?: number | undefined;
     /**
      * Group transform
      */
-    transform?: string;
+    transform?: string | undefined;
     /**
      * Group members
      */
-    children?: FlagOverlay[];
+    children?: FlagOverlay[] | undefined;
 };
 /**
  * A flag definition - either raw SVG markup or a compact descriptor.
@@ -159,15 +159,15 @@ export type FlagDefinition = {
     /**
      * Region group (defaults to 'custom' when registered)
      */
-    region?: FlagRegion;
+    region?: FlagRegion | undefined;
     /**
      * Raw inner SVG markup (60x40 canvas)
      */
-    svg?: string;
+    svg?: string | undefined;
     /**
      * Solid background colour
      */
-    bg?: string;
+    bg?: string | undefined;
     /**
      * Stripe descriptor
      */
@@ -175,7 +175,7 @@ export type FlagDefinition = {
         dir?: "h" | "v";
         colors: string[];
         weights?: number[];
-    };
+    } | undefined;
     /**
      * Nordic (offset) cross descriptor
      */
@@ -184,11 +184,11 @@ export type FlagDefinition = {
         colour: string;
         border?: string;
         thickness?: number;
-    };
+    } | undefined;
     /**
      * Overlay primitives drawn on top
      */
-    overlays?: FlagOverlay[];
+    overlays?: FlagOverlay[] | undefined;
 };
 /**
  * Options for rendering a flag.
@@ -197,35 +197,35 @@ export type FlagRenderOptions = {
     /**
      * Height in px (width follows aspect)
      */
-    size?: number;
+    size?: number | undefined;
     /**
      * Explicit width override
      */
-    width?: number;
+    width?: number | undefined;
     /**
      * Explicit height override
      */
-    height?: number;
+    height?: number | undefined;
     /**
      * Output shape
      */
-    shape?: FlagShape;
+    shape?: FlagShape | undefined;
     /**
      * Add a hairline border (or colour)
      */
-    border?: boolean | string;
+    border?: string | boolean | undefined;
     /**
      * Extra CSS classes
      */
-    class?: string;
+    class?: string | undefined;
     /**
      * Accessible title (defaults to country name)
      */
-    title?: string | null;
+    title?: string | null | undefined;
     /**
      * Additional attributes
      */
-    attrs?: Record<string, string>;
+    attrs?: Record<string, string> | undefined;
 };
 /**
  * Options for `inject()`.
@@ -235,7 +235,7 @@ export type FlagInjectOptions = FlagRenderOptions & {
 };
 export type FlagRegionMeta = {
     name: string;
-    description?: string;
+    description?: string | undefined;
     codes: string[];
 };
 /**

@@ -21,25 +21,25 @@ export type DommaLoadOptions = {
     /**
      * true (default): every alias; 'safe': only aliases nobody else owns; false: window.Domma only
      */
-    globals?: boolean | "safe";
+    globals?: boolean | "safe" | undefined;
     /**
      * false: never add the `dm-cloaked` class
      */
-    cloak?: boolean;
+    cloak?: boolean | undefined;
     /**
      * false: don't initialise the theme engine automatically
      */
-    theme?: boolean;
+    theme?: boolean | undefined;
     /**
      * false: no console warning when DOMPurify is missing
      */
-    purifyWarning?: boolean;
+    purifyWarning?: boolean | undefined;
     /**
      * false: no deprecation warnings (none are pending in 1.0)
      */
-    deprecationWarnings?: boolean;
+    deprecationWarnings?: boolean | undefined;
     /**
      * false: no console warning for a missing translation
      */
-    i18nWarnings?: boolean;
+    i18nWarnings?: boolean | undefined;
 };

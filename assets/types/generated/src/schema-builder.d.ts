@@ -77,19 +77,19 @@ export type InputExtrasLabels = {
     /**
      * - Default 'Show password'
      */
-    reveal?: string;
+    reveal?: string | undefined;
     /**
      * - Default 'Clear'
      */
-    clear?: string;
+    clear?: string | undefined;
     /**
      * - Default 'Decrease'
      */
-    decrease?: string;
+    decrease?: string | undefined;
     /**
      * - Default 'Increase'
      */
-    increase?: string;
+    increase?: string | undefined;
 };
 /**
  * How a field is presented (`field.formConfig`). The preview hands the blueprint to `F.create`, so every
@@ -110,11 +110,11 @@ export type FieldDefinition = {
     /**
      * - Field name (getFields() / templates; not present in blueprints)
      */
-    name?: string;
+    name?: string | undefined;
     /**
      * - Is field required?
      */
-    required?: boolean;
+    required?: boolean | undefined;
     /**
      * - Default value
      */
@@ -122,63 +122,63 @@ export type FieldDefinition = {
     /**
      * - Minimum string length
      */
-    minLength?: number | null;
+    minLength?: number | null | undefined;
     /**
      * - Maximum string length
      */
-    maxLength?: number | null;
+    maxLength?: number | null | undefined;
     /**
      * - Regex pattern for validation
      */
-    pattern?: RegExp | string;
+    pattern?: string | RegExp | undefined;
     /**
      * - Minimum numeric value
      */
-    min?: number | null;
+    min?: number | null | undefined;
     /**
      * - Maximum numeric value
      */
-    max?: number | null;
+    max?: number | null | undefined;
     /**
      * - Step increment for number / range inputs
      */
-    step?: number;
+    step?: number | undefined;
     /**
      * - Options for select, multiselect, radio, checkbox-group
      */
-    options?: FieldOption[] | string[];
+    options?: string[] | FieldOption[] | undefined;
     /**
      * - Custom validation: true passes, a string is the error
      */
-    validate?: (value: any) => boolean | string;
+    validate?: ((value: any) => boolean | string) | undefined;
     /**
      * - file: accepted types
      */
-    accept?: string;
+    accept?: string | undefined;
     /**
      * - file: allow several files
      */
-    multiple?: boolean;
+    multiple?: boolean | undefined;
     /**
      * - Display label
      */
-    label?: string;
+    label?: string | undefined;
     /**
      * - Input placeholder
      */
-    placeholder?: string;
+    placeholder?: string | undefined;
     /**
      * - Help text displayed below the field
      */
-    help?: string;
+    help?: string | undefined;
     /**
      * - Disable the field
      */
-    disabled?: boolean;
+    disabled?: boolean | undefined;
     /**
      * - Form configuration
      */
-    formConfig?: FormConfig;
+    formConfig?: FormConfig | undefined;
 };
 /**
  * A blueprint: field name -> definition.
@@ -229,38 +229,38 @@ export type SchemaBuilderOptions = {
     /**
      * - Theme variant (default 'light')
      */
-    theme?: "light" | "dark";
+    theme?: "light" | "dark" | undefined;
     /**
      * - Auto-save the active schema to localStorage (default true)
      */
-    autoSave?: boolean;
+    autoSave?: boolean | undefined;
     /**
      * - Auto-save interval in milliseconds (default 30000)
      */
-    autoSaveInterval?: number;
+    autoSaveInterval?: number | undefined;
     /**
      * - Show the live preview panel on start (default true)
      */
-    showPreview?: boolean;
+    showPreview?: boolean | undefined;
     /**
      * - Preview form layout (default 'stacked')
      */
-    previewLayout?: PreviewLayout;
+    previewLayout?: PreviewLayout | undefined;
     /**
      * - Called when the schema changes
      */
-    onChange?: ((fields: FieldDefinition[]) => void) | null;
+    onChange?: ((fields: FieldDefinition[]) => void) | null | undefined;
     /**
      * - Called when a template is saved
      */
     onSave?: ((name: string, schema: {
         name: string;
         fields: FieldDefinition[];
-    }) => void) | null;
+    }) => void) | null | undefined;
     /**
      * - Called on every export
      */
-    onExport?: ((format: ExportFormat, data: string) => void) | null;
+    onExport?: ((format: ExportFormat, data: string) => void) | null | undefined;
 };
 /**
  * Options for `exportJS()`. None are read at present.
@@ -277,12 +277,12 @@ export type ExportTypeScriptOptions = {
     /**
      * - TypeScript interface name (default 'FormData')
      */
-    interfaceName?: string;
+    interfaceName?: string | undefined;
 };
 /**
  * Create a Schema Builder instance (`E.schemaBuilder`).
  */
-export type SchemaBuilderFactory = (selector: string | HTMLElement, options?: SchemaBuilderOptions) => SchemaBuilderInstance;
+export type SchemaBuilderFactory = (selector: string | HTMLElement, options?: SchemaBuilderOptions | undefined) => SchemaBuilderInstance;
 export type SchemaBuilderInstance = SchemaBuilder;
 /**
  * Visual drag-and-drop blueprint designer.
@@ -300,8 +300,8 @@ export class SchemaBuilder extends Component {
     _selectedIndex: number;
     _schemaName: string;
     _isDirty: boolean;
-    _dragSource: string;
-    _autoSaveTimer: number;
+    _dragSource: string | null;
+    _autoSaveTimer: number | null;
     _previewForm: any;
     _refs: {};
     _init(): void;
@@ -405,7 +405,7 @@ export class SchemaBuilder extends Component {
      * @returns {this}
      */
     setPreviewLayout(layout: PreviewLayout): this;
-    _togglePreview(): this;
+    _togglePreview(): this | undefined;
     _toBlueprint(): {};
     _mapToTSType(type: any): any;
     _showSaveModal(): void;

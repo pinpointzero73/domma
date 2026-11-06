@@ -2,7 +2,7 @@ export namespace configEngine {
     let _configs: Map<any, any>;
     let _components: Map<any, any>;
     let _eventHandlers: Map<any, any>;
-    let _initCallbacks: any[];
+    let _initCallbacks: never[];
     let _domReady: boolean;
     let _autoWrap: boolean;
     /**
@@ -117,19 +117,19 @@ export type ComponentType = "card" | "modal" | "tabs" | "accordion" | "tooltip" 
  * Properties applied to the matched elements once (`initial`) - each is the collection method of the same name.
  */
 export type InitialProperties = {
-    css?: Record<string, string | number>;
+    css?: Record<string, string | number> | undefined;
     /**
      * Converted to text, as textContent does
      */
-    text?: string | number | boolean;
-    html?: string | number | boolean;
-    addClass?: string;
-    removeClass?: string;
-    toggleClass?: string;
+    text?: string | number | boolean | undefined;
+    html?: string | number | boolean | undefined;
+    addClass?: string | undefined;
+    removeClass?: string | undefined;
+    toggleClass?: string | undefined;
     /**
      * Attribute name -> value (converted to text)
      */
-    attr?: Record<string, string | number | boolean>;
+    attr?: Record<string, string | number | boolean> | undefined;
 };
 /**
  * A declarative event action: applied to `target` (a selector) or else to the element the event fired on.
@@ -138,20 +138,20 @@ export type EventAction = {
     /**
      * Selector of the elements to change (default: the event target)
      */
-    target?: string;
-    css?: Record<string, string | number>;
+    target?: string | undefined;
+    css?: Record<string, string | number> | undefined;
     /**
      * Converted to text, as textContent does
      */
-    text?: string | number | boolean;
-    html?: string | number | boolean;
-    addClass?: string;
-    removeClass?: string;
-    toggleClass?: string;
+    text?: string | number | boolean | undefined;
+    html?: string | number | boolean | undefined;
+    addClass?: string | undefined;
+    removeClass?: string | undefined;
+    toggleClass?: string | undefined;
     /**
      * Written to the console
      */
-    log?: string;
+    log?: string | undefined;
 };
 /**
  * An event handler in a setup config. `this` is the event target.
@@ -176,23 +176,23 @@ export type SelectorConfig = {
     /**
      * Component to create on the selector
      */
-    component?: ComponentType;
+    component?: ComponentType | undefined;
     /**
      * Options for that component (`schema` and `data` for `form`)
      */
-    options?: Record<string, any>;
+    options?: Record<string, any> | undefined;
     /**
      * Applied to the matched elements once
      */
-    initial?: InitialProperties;
+    initial?: InitialProperties | undefined;
     /**
      * Event name -> what it runs
      */
-    events?: Record<string, EventActions>;
+    events?: Record<string, EventActions> | undefined;
     /**
      * Called first with the matched elements
      */
-    init?: (this: import("./dom.js").DommaCollection, $el: import("./dom.js").DommaCollection) => void;
+    init?: ((this: import("./dom.js").DommaCollection, $el: import("./dom.js").DommaCollection) => void) | undefined;
 };
 /**
  * Configuration keyed by selector.

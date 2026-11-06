@@ -43,9 +43,11 @@ const OPTIONS_TYPES = {form: 'FormSetupOptions'};
 function loadTypeScript() {
     const require = createRequire(path.join(ROOT, 'package.json'));
     try {
-        return require('typescript');
+        // TypeScript 7 supplies the native CLI; catalogue generation needs the
+        // JavaScript compiler API retained in TypeScript 6.
+        return require('typescript-compiler-api');
     } catch {
-        throw new Error('The type catalogue needs typescript in node_modules - run npm ci first.');
+        throw new Error('The type catalogue needs typescript-compiler-api in node_modules - run npm ci first.');
     }
 }
 

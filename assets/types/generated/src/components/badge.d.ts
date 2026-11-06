@@ -18,17 +18,17 @@ export class Badge extends Component {
         outline: boolean;
         removable: boolean;
         pulse: boolean;
-        onClick: any;
-        onRemove: any;
+        onClick: null;
+        onRemove: null;
     };
     /**
      * @param {import('./shared.js').ComponentTarget} selector
      * @param {BadgeOptions} [options]
      */
     constructor(selector: import("./shared.js").ComponentTarget, options?: BadgeOptions);
-    _had: Set<string>;
+    _had: Set<string> | undefined;
     _apply(): void;
-    _removeBtn: HTMLButtonElement;
+    _removeBtn: HTMLButtonElement | null | undefined;
     _applyOptions(): void;
     /**
      * Set the badge variant.
@@ -70,21 +70,21 @@ export class Badge extends Component {
 export class NumberBadge extends Component {
     static defaults: {
         count: number;
-        max: any;
+        max: null;
         variant: string;
         dot: boolean;
         pulse: boolean;
-        borderColor: any;
-        label: any;
-        onChange: any;
+        borderColor: null;
+        label: null;
+        onChange: null;
     };
     /**
      * @param {import('./shared.js').ComponentTarget} selector - The element the counter sits on
      * @param {NumberBadgeOptions} [options]
      */
     constructor(selector: import("./shared.js").ComponentTarget, options?: NumberBadgeOptions);
-    _holder: HTMLElement;
-    _hostClassAdded: boolean;
+    _holder: HTMLElement | undefined;
+    _hostClassAdded: boolean | undefined;
     /** The `.badge-counter` span. @type {HTMLSpanElement} */
     counter: HTMLSpanElement;
     _paint(): void;
@@ -138,35 +138,35 @@ export type BadgeOptions = {
     /**
      * - Badge variant/colour
      */
-    variant?: import("../elements.js").BadgeVariant;
+    variant?: import("../elements.js").BadgeVariant | undefined;
     /**
      * - Badge size
      */
-    size?: import("../elements.js").BadgeSize | "sm" | "lg";
+    size?: "sm" | "lg" | import("../elements.js").BadgeSize | undefined;
     /**
      * - Use pill/rounded style
      */
-    pill?: boolean;
+    pill?: boolean | undefined;
     /**
      * - Use outline style
      */
-    outline?: boolean;
+    outline?: boolean | undefined;
     /**
      * - Show remove button
      */
-    removable?: boolean;
+    removable?: boolean | undefined;
     /**
      * - Pulse animation
      */
-    pulse?: boolean;
+    pulse?: boolean | undefined;
     /**
      * - Callback on click (not the remove button)
      */
-    onClick?: ((event: MouseEvent, badge: BadgeInstance) => void) | null;
+    onClick?: ((event: MouseEvent, badge: BadgeInstance) => void) | null | undefined;
     /**
      * - Callback on remove; return false to keep the badge
      */
-    onRemove?: ((badge: BadgeInstance, event: MouseEvent) => boolean | void) | null;
+    onRemove?: ((badge: BadgeInstance, event: MouseEvent) => boolean | void) | null | undefined;
 };
 export type BadgeInstance = Badge;
 export type NumberBadgeVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark";
@@ -174,35 +174,35 @@ export type NumberBadgeOptions = {
     /**
      * - Initial count to display (0 hides the counter unless `dot`)
      */
-    count?: number;
+    count?: number | undefined;
     /**
      * - Cap, e.g. 99 shows "99+"
      */
-    max?: number | null;
+    max?: number | null | undefined;
     /**
      * - Colour variant
      */
-    variant?: NumberBadgeVariant;
+    variant?: NumberBadgeVariant | undefined;
     /**
      * - Show as dot indicator instead of number
      */
-    dot?: boolean;
+    dot?: boolean | undefined;
     /**
      * - Enable pulse animation
      */
-    pulse?: boolean;
+    pulse?: boolean | undefined;
     /**
      * - Custom border ring colour
      */
-    borderColor?: string | null;
+    borderColor?: string | null | undefined;
     /**
      * - Accessible name (default: the count, or "New" for a dot)
      */
-    label?: string | null;
+    label?: string | null | undefined;
     /**
      * - The count changed
      */
-    onChange?: ((count: number, previous: number, badge: NumberBadgeInstance) => void) | null;
+    onChange?: ((count: number, previous: number, badge: NumberBadgeInstance) => void) | null | undefined;
 };
 export type NumberBadgeInstance = NumberBadge;
 import Component from '../component.js';

@@ -45,11 +45,11 @@ export type PropDefinition = {
     /**
      * - Expected type - a token or an `M.types.*` constant
      */
-    type?: PropType | ((value: any) => boolean);
+    type?: PropType | ((value: any) => boolean) | undefined;
     /**
      * - Marks the prop as required (documentation only - not enforced)
      */
-    required?: boolean;
+    required?: boolean | undefined;
     /**
      * - Value used when the attribute is absent; a function is called for it
      */
@@ -88,55 +88,55 @@ export type ComponentDefinition<TData extends Record<string, any> = Record<strin
     /**
      * - Inline Mustache template string. Use `templateUrl` for non-trivial templates
      */
-    template?: string;
+    template?: string | undefined;
     /**
      * - URL to an external HTML template file, fetched once and cached across all instances
      */
-    templateUrl?: string;
+    templateUrl?: string | undefined;
     /**
      * - Declared HTML attributes (camelCase name, kebab-case attribute) with type coercion and defaults
      */
-    props?: Record<string, PropDefinition>;
+    props?: Record<string, PropDefinition> | undefined;
     /**
      * - Factory returning the component's initial reactive state; called once per instance. Declare every field here
      */
-    data?: () => TData;
+    data?: (() => TData) | undefined;
     /**
      * - Derived values, memoised and recalculated when a field they read changes; available in templates and as `this.name`
      */
-    computed?: Record<string, (this: ComponentContext<TData, TProps>) => any>;
+    computed?: Record<string, (this: ComponentContext<TData, TProps>) => any> | undefined;
     /**
      * - Functions bound to the component context; callable as `this.name()` and from `data-on-*` bindings
      */
-    methods?: Record<string, (this: ComponentContext<TData, TProps>, ...args: any[]) => any>;
+    methods?: Record<string, (this: ComponentContext<TData, TProps>, ...args: any[]) => any> | undefined;
     /**
      * - Scoped CSS injected into the component's Shadow DOM `<style>` block
      */
-    style?: string;
+    style?: string | undefined;
     /**
      * - Called before the template is rendered. Data and props are available
      */
-    onBeforeMount?: (this: ComponentContext<TData, TProps>) => void;
+    onBeforeMount?: ((this: ComponentContext<TData, TProps>) => void) | undefined;
     /**
      * - Called after the template is rendered and bindings are established (again when the element is re-connected)
      */
-    onMount?: (this: ComponentContext<TData, TProps>) => void;
+    onMount?: ((this: ComponentContext<TData, TProps>) => void) | undefined;
     /**
      * - Called once per flush after any data change, and after a prop change re-renders
      */
-    onUpdated?: (this: ComponentContext<TData, TProps>) => void;
+    onUpdated?: ((this: ComponentContext<TData, TProps>) => void) | undefined;
     /**
      * - Called when the element is removed from the DOM, before clean-up
      */
-    onBeforeUnmount?: (this: ComponentContext<TData, TProps>) => void;
+    onBeforeUnmount?: ((this: ComponentContext<TData, TProps>) => void) | undefined;
     /**
      * - Called after the element is removed and cleaned up
      */
-    onUnmount?: (this: ComponentContext<TData, TProps>) => void;
+    onUnmount?: ((this: ComponentContext<TData, TProps>) => void) | undefined;
     /**
      * - Called when an observed attribute (prop) changes, with the camelCase prop name and the raw attribute values
      */
-    onPropsChanged?: (this: ComponentContext<TData, TProps>, name: string, oldValue: string | null, newValue: string | null) => void;
+    onPropsChanged?: ((this: ComponentContext<TData, TProps>, name: string, oldValue: string | null, newValue: string | null) => void) | undefined;
 };
 /**
  * Binding controller returned by `TemplateCompiler.compile()` (domma-reactive): surgical updates

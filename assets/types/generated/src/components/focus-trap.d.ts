@@ -61,15 +61,15 @@ export class FocusTrap extends Component {
      */
     constructor(containers: FocusTarget | Element | Array<FocusTarget | Element>, options?: FocusTrapOptions);
     _containers: HTMLElement[];
-    _bodyAtStart: Set<Element>;
+    _bodyAtStart: Set<Element> | null;
     _floor: number;
     _pendingTab: {
         shift: any;
         fromInside: boolean;
-    };
+    } | null;
     _active: boolean;
     _paused: boolean;
-    _returnTo: Element;
+    _returnTo: Element | null;
     _lastFocused: any;
     _madeFocusable: any[];
     _inerted: any[];
@@ -133,7 +133,7 @@ export class FocusTrap extends Component {
      * @returns {HTMLElement[]}
      */
     tabbables(): HTMLElement[];
-    _destroyed: boolean;
+    _destroyed: boolean | undefined;
     _contains(node: any): boolean;
     _eventInside(e: any): boolean;
     _bind(): void;
@@ -141,7 +141,7 @@ export class FocusTrap extends Component {
     /** A container that can hold focus itself, for when there is nothing tabbable. */
     _fallback(): any;
     _clearFocusable(): void;
-    _firstTarget(): any;
+    _firstTarget(): HTMLElement;
     _focusInitial(initial: any): void;
     _focus(el: any, scroll?: boolean): void;
     /**
@@ -167,7 +167,7 @@ export class FocusTrap extends Component {
      * before - Shift+Tab to that element, Tab to the one after it.
      */
     _tabInLayer(e: any, layer: any, active: any): void;
-    _scriptTurn: {};
+    _scriptTurn: {} | null | undefined;
     /**
      * `inert` on every sibling of the containers and of their ancestors, up to <body>, so
      * the rest of the page cannot be reached by anything - pointer, Tab or a screen
@@ -185,55 +185,55 @@ export type FocusTrapOptions = {
     /**
      * Where focus goes on activate: a selector, an element, a function returning one, or false to leave it. Default: focus already inside stays, else the first tabbable, else the container.
      */
-    initialFocus?: FocusTarget | (() => HTMLElement | null) | false;
+    initialFocus?: false | FocusTarget | (() => HTMLElement | null) | undefined;
     /**
      * Where focus goes when nothing is tabbable (default: the first container, given tabindex="-1")
      */
-    fallbackFocus?: FocusTarget | (() => HTMLElement | null);
+    fallbackFocus?: FocusTarget | (() => HTMLElement | null) | undefined;
     /**
      * true (default): back to what had focus before activate(); or an element / selector; false: nowhere
      */
-    returnFocus?: boolean | FocusTarget;
+    returnFocus?: boolean | FocusTarget | undefined;
     /**
      * Escape deactivates (default false - the owning overlay decides)
      */
-    escapeDeactivates?: boolean | ((e: KeyboardEvent) => boolean);
+    escapeDeactivates?: boolean | ((e: KeyboardEvent) => boolean) | undefined;
     /**
      * A press outside deactivates (default false)
      */
-    clickOutsideDeactivates?: boolean | ((e: MouseEvent) => boolean);
+    clickOutsideDeactivates?: boolean | ((e: MouseEvent) => boolean) | undefined;
     /**
      * Let clicks outside through (default false: they are blocked)
      */
-    allowOutsideClick?: boolean | ((e: MouseEvent) => boolean);
+    allowOutsideClick?: boolean | ((e: MouseEvent) => boolean) | undefined;
     /**
      * Let a click, key or input handler on something inside the trap move focus outside on purpose - e.g. "Insert" focusing the editor behind a slideover before closing it (default false; the overlays turn it on)
      */
-    allowScriptFocus?: boolean;
+    allowScriptFocus?: boolean | undefined;
     /**
      * Let focus stay outside: true, 'layers' (floating layers such as toasts and popovers, never the page or a trap beneath), or a function (default false)
      */
-    allowOutsideFocus?: boolean | "layers" | ((el: Element, e: Event | null) => boolean);
+    allowOutsideFocus?: boolean | "layers" | ((el: Element, e: Event | null) => boolean) | undefined;
     /**
      * false: keep the trap out of E.get(container) (default true)
      */
-    register?: boolean;
+    register?: boolean | undefined;
     /**
      * Set `inert` on everything outside the containers while active (default false)
      */
-    inert?: boolean;
+    inert?: boolean | undefined;
     /**
      * Walk open shadow roots (default true)
      */
-    shadow?: boolean;
+    shadow?: boolean | undefined;
     /**
      * Focus without scrolling (default true)
      */
-    preventScroll?: boolean;
-    onActivate?: ((trap: FocusTrapInstance) => void) | null;
-    onDeactivate?: ((trap: FocusTrapInstance) => void) | null;
-    onPause?: ((trap: FocusTrapInstance) => void) | null;
-    onUnpause?: ((trap: FocusTrapInstance) => void) | null;
+    preventScroll?: boolean | undefined;
+    onActivate?: ((trap: FocusTrapInstance) => void) | null | undefined;
+    onDeactivate?: ((trap: FocusTrapInstance) => void) | null | undefined;
+    onPause?: ((trap: FocusTrapInstance) => void) | null | undefined;
+    onUnpause?: ((trap: FocusTrapInstance) => void) | null | undefined;
 };
 export type FocusTrapInstance = FocusTrap;
 /**
