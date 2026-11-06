@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v1.1.0",
+      "title": "Admin Atelier",
+      "description": "<p>Meet Admin Atelier: warm ivory or graphite surfaces, ink-blue actions and restrained bronze accents, with light and dark modes built for business interfaces.</p>",
+      "date": "2026-11-06"
+    },
+    {
       "year": "v1.0.1",
       "title": "Context menus stay open while scrolling",
       "description": "<p>Long context menus now stay open while you scroll through their actions, including folder submenus on smaller screens.</p>",
@@ -643,5 +649,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v1.0.1"
+  "latestVersion": "v1.1.0"
 }
