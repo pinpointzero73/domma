@@ -119,7 +119,7 @@
         "@vitest/coverage-v8": "^5.1.0",
         "cypress": "^16.2.1",
         "domma-celebrate": "1.5.0",
-        "domma-reactive": "1.3.1",
+        "domma-reactive": "1.3.2",
         "dompurify": "^3.4.17",
         "dotenv": "^18.0.9",
         "jsdom": "^31.0.0",
