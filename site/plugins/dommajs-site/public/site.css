@@ -340,17 +340,31 @@ html.dm-reduced-motion .djs-feature:hover { animation: none; }
 }
 .djs-celebrate-levels button.active { background: var(--dm-primary); border-color: var(--dm-primary); color: var(--dm-text-inverse); }
 
-/* ---- The Domma version (site.js): under the brand, and in the footer ---- */
-#site-navbar .navbar-brand { flex-wrap: wrap; }
+/* ---- The current Domma version beside the brand, and in the footer ---- */
+#site-navbar .navbar-brand { flex-wrap: nowrap; gap: .5rem; }
 #site-navbar .navbar-brand .djs-version {
-    flex-basis: 100%;
-    margin: 0.1rem 0 0 2.1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--dm-text-muted);
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: .2rem .55rem;
+    border: 1px solid color-mix(in srgb, var(--dm-primary) 30%, var(--dm-border));
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--dm-primary) 10%, var(--dm-surface));
+    color: var(--dm-primary);
+    font-size: .75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
     text-decoration: none;
 }
-#site-navbar .navbar-brand .djs-version:hover { color: var(--dm-primary); }
+#site-navbar .navbar-brand .djs-version:hover {
+    background: color-mix(in srgb, var(--dm-primary) 18%, var(--dm-surface));
+}
+#site-navbar .navbar-brand .djs-version:focus-visible {
+    outline: 2px solid var(--dm-primary);
+    outline-offset: 2px;
+}
 body.dm-vnav-collapsed #site-navbar .navbar-brand .djs-version { display: none; }
 .djs-version-footer { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--dm-text-muted); }
 .cms-footer-bottom .djs-version-footer { margin: 0; }
