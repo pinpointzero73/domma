@@ -39,7 +39,7 @@
         fx.twinkle(null, {count: 150, minSize: 1, maxSize: 3, twinkleSpeed: 0.003, colour: 'rgba(255, 240, 200, 1)', zIndex: 1});
     }
 
-    // ---- The current Domma version: under the brand in the menu, and in the footer -----
+    // ---- The current Domma version: beside the brand in the menu, and in the footer -----
     // From the downloads plugin, which follows the Domma releases itself. The navbar and
     // footer are drawn by the CMS's site.js (a module, so after this script) - hence
     // DOMContentLoaded, by which time both exist.
@@ -47,8 +47,9 @@
         fetch('/api/plugins/domma-downloads/version').then(r => (r.ok ? r.json() : null)).then(v => {
             if (!v?.version) return;
             const link = (cls) => Object.assign(document.createElement('a'), {
-                className: cls, href: v.notes, textContent: `v${v.version}`, target: '_blank', rel: 'noopener',
-                title: `Domma ${v.version} - what is new`
+                className: cls, href: '/changelog', textContent: `v${v.version}`,
+                title: `Domma ${v.version} - what is new`,
+                ariaLabel: `Domma ${v.version} release history`
             });
             const brand = document.querySelector('#site-navbar .navbar-brand');
             if (brand && !brand.querySelector('.djs-version')) brand.appendChild(link('djs-version'));
