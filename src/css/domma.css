@@ -1153,7 +1153,7 @@ ul.list-dash > li::marker,
 li.list-check::marker,
 li.list-chevron::marker,
 li.list-dash::marker {
-    color: var(--dm-list-marker-color, var(--dm-primary));
+    color: var(--dm-list-marker-color, var(--dm-link, color-mix(in oklab, var(--dm-primary, #0070d6), var(--dm-text, #1a1a1a) 55%)));
     font-weight: 600;
 }
 
