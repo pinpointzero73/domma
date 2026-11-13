@@ -3110,6 +3110,51 @@ All translucency values are CSS variables, making them easy to override per-them
 
 ---
 
+## CSS Utilities - List markers
+
+Choose an alternative to default bullet dots on an unordered list:
+
+```html
+<ul class="list-check">
+    <li>Fast setup</li>
+    <li>Colours follow your theme</li>
+</ul>
+
+<ul class="list-chevron">
+    <li>Explore the features</li>
+    <li>Read the documentation</li>
+</ul>
+
+<ul class="list-dash">
+    <li>A quieter list marker</li>
+    <li>Wrapped lines align with the text</li>
+</ul>
+```
+
+| Class | Marker |
+|---|---|
+| `list-check` | Tick |
+| `list-chevron` | Chevron, reversed for right-to-left text |
+| `list-dash` | Dash |
+
+Add the class to `<ul>` for all its direct items, or to a particular `<li>` for a single item.
+Nested lists keep their own markers unless you style them too. Normal lists and numbered lists are
+unchanged. These are static CSS markers, with native list semantics and no JavaScript initialisation.
+A tick is a visual marker; it does not turn the item into a checkbox.
+
+Markers use the active theme's primary colour. To choose another theme colour without changing the text:
+
+```html
+<ul class="list-check" style="--dm-list-marker-color: var(--dm-success)">
+    <li>Ready to go</li>
+</ul>
+```
+
+These classes also work on native HTML lists in Domma CMS content. Existing Markdown bullet lists
+continue to use their normal dots; no CMS setting is changed automatically.
+
+---
+
 ## CSS Utilities - Accessibility &amp; Text
 
 Tailwind's names, like the rest of Domma's utilities, with Bootstrap's spellings as aliases where they differ.

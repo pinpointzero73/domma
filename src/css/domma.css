@@ -1138,6 +1138,45 @@ code, pre {
     padding-left: 0;
 }
 
+/* Opt-in list markers. Keep native list semantics and hanging indentation.
+   Only direct items change, so nested lists keep their own marker choice. */
+ul.list-check,
+ul.list-chevron,
+ul.list-dash {
+    padding-inline-start: 1.75em;
+    list-style-position: outside;
+}
+
+ul.list-check > li::marker,
+ul.list-chevron > li::marker,
+ul.list-dash > li::marker,
+li.list-check::marker,
+li.list-chevron::marker,
+li.list-dash::marker {
+    color: var(--dm-list-marker-color, var(--dm-primary));
+    font-weight: 600;
+}
+
+ul.list-check > li::marker,
+li.list-check::marker {
+    content: "\2713  ";
+}
+
+ul.list-chevron > li::marker,
+li.list-chevron::marker {
+    content: "\203a  ";
+}
+
+ul.list-chevron:dir(rtl) > li::marker,
+li.list-chevron:dir(rtl)::marker {
+    content: "\2039  ";
+}
+
+ul.list-dash > li::marker,
+li.list-dash::marker {
+    content: "-  ";
+}
+
 .no-underline {
     text-decoration: none;
 }
