@@ -3142,7 +3142,7 @@ Nested lists keep their own markers unless you style them too. Normal lists and 
 unchanged. These are static CSS markers, with native list semantics and no JavaScript initialisation.
 A tick is a visual marker; it does not turn the item into a checkbox.
 
-Markers use the active theme's primary colour. To choose another theme colour without changing the text:
+Markers use the active theme's link colour, its primary colour made readable on the page. To choose another theme colour without changing the text:
 
 ```html
 <ul class="list-check" style="--dm-list-marker-color: var(--dm-success)">

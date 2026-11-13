@@ -39,7 +39,7 @@ describe('themed native list markers', () => {
                 await page.evaluate(theme => { document.body.className=`dm-theme-${theme}`; }, theme);
                 const shown = await marker('#check > li');
                 const primary = await page.evaluate(() => {
-                    const probe=document.createElement('span');probe.style.color='var(--dm-primary)';document.body.appendChild(probe);
+                    const probe=document.createElement('span');probe.style.color='var(--dm-link, color-mix(in oklab, var(--dm-primary, #0070d6), var(--dm-text, #1a1a1a) 55%))';document.body.appendChild(probe);
                     const colour=getComputedStyle(probe).color;probe.remove();return colour;
                 });
                 expect(shown.color).toBe(primary);colours.add(shown.color);
