@@ -1,7 +1,3 @@
-### Unreleased
-
-- Add themed `list-check`, `list-chevron` and `list-dash` marker styles for native unordered lists and individual list items. Marker colours follow the active theme, nested lists retain their own styles, and chevrons follow right-to-left text direction.
-
 ### v1.1.1 - Dependency refresh and build compatibility (2026-11-06)
 
 - Refresh build, test and browser tooling, including Vitest 5, jsdom 31 and the TypeScript 7 CLI.
