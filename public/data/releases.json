@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v1.2.0",
+      "title": "Themed list markers",
+      "description": "Themed tick, chevron and dash markers for lists.",
+      "date": "2026-11-13"
+    },
+    {
       "year": "v1.1.1",
       "title": "Dependency refresh and build compatibility",
       "description": "<p>Updated dependencies and build tooling, verified declaration compatibility, and refreshed the development server watcher.</p>",
@@ -655,5 +661,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v1.1.1"
+  "latestVersion": "v1.2.0"
 }
