@@ -7,6 +7,8 @@ import {utils} from './utils.js';
 import {models} from './models.js';
 import {elements} from './elements.js';
 import InputGroup from './input-group.js';
+import {escapeHtml} from './escape.js';
+import {cleanInline} from './inline-html.js';
 
 /**
  * Utility function to extract data from form element
@@ -421,7 +423,7 @@ export class Forma {
       html += '<div class="card"><div class="card-body">';
     }
 
-    html += `<form class="${formClass}" novalidate>`;
+    html += `<form class="${this.utils.escapeHtml(formClass)}" novalidate>`;
 
     // Process sections if defined
     if (this.options.sections && Array.isArray(this.options.sections)) {
@@ -537,7 +539,7 @@ export class Forma {
       }
     }
 
-    let html = `<div class="${fieldClassName}${spanClass}" data-field="${this.utils.escapeHtml(fieldName)}">`;
+    let html = `<div class="${this.utils.escapeHtml(fieldClassName)}${spanClass}" data-field="${this.utils.escapeHtml(fieldName)}">`;
 
     // Label (skip for boolean types as they have inline labels)
     if (showLabels && label && type !== 'hidden' && type !== 'boolean' && type !== 'checkbox') {
@@ -546,7 +548,7 @@ export class Forma {
       const tooltipAttr = tooltip ? ` data-tooltip="${this.utils.escapeHtml(tooltip)}"` : '';
       const tooltipClass = tooltip ? ' has-tooltip' : '';
 
-      html += `<label for="field-${this.utils.escapeHtml(fieldName)}" class="${labelClass}${tooltipClass}"${tooltipAttr}>`;
+      html += `<label for="field-${this.utils.escapeHtml(fieldName)}" class="${this.utils.escapeHtml(labelClass)}${tooltipClass}"${tooltipAttr}>`;
       html += `${this.utils.escapeHtml(label)}${requiredMark}`;
 
       // Tooltip icon
@@ -556,7 +558,7 @@ export class Forma {
 
       // Hint next to label
       if (showHints && hint) {
-        html += ` <small class="${this.options.hintClassName}">${this.utils.escapeHtml(hint)}</small>`;
+        html += ` <small class="${this.utils.escapeHtml(this.options.hintClassName)}">${this.utils.escapeHtml(hint)}</small>`;
       }
 
       html += '</label>';
@@ -573,11 +575,11 @@ export class Forma {
 
     // Helper text
     if (showHelperText && helperText) {
-      html += `<small class="${this.options.helperClassName}">${helperText}</small>`;
+      html += `<small class="${this.utils.escapeHtml(this.options.helperClassName)}">${cleanInline(helperText)}</small>`;
     }
 
     // Error container
-    html += `<div class="${this.options.errorClassName}" data-error-for="${this.utils.escapeHtml(fieldName)}" style="display: none;"></div>`;
+    html += `<div class="${this.utils.escapeHtml(this.options.errorClassName)}" data-error-for="${this.utils.escapeHtml(fieldName)}" style="display: none;"></div>`;
 
     html += '</div>';
     return html;
@@ -634,7 +636,7 @@ export class Forma {
       const accept = formConfig.accept ? ` accept="${this.utils.escapeHtml([].concat(formConfig.accept).join(','))}"` : '';
       const multiple = formConfig.multiple === false ? '' : ' multiple';
       return `<div class="domma-dropzone-field" data-dropzone-field="${this.utils.escapeHtml(fieldName)}">`
-        + `<input type="file" id="${id}" name="${this.utils.escapeHtml(fieldName)}"${accept}${multiple}${disabled ? ' disabled' : ''}></div>`;
+        + `<input type="file" id="${this.utils.escapeHtml(id)}" name="${this.utils.escapeHtml(fieldName)}"${accept}${multiple}${disabled ? ' disabled' : ''}></div>`;
     }
 
     // Handle different input types
@@ -648,7 +650,7 @@ export class Forma {
 
       case 'textarea':
         const rows = formConfig.rows || 3;
-        return this._wrapAddons(`<textarea ${attrString} rows="${rows}">${this.utils.escapeHtml(value)}</textarea>`, formConfig);
+        return this._wrapAddons(`<textarea ${attrString} rows="${this.utils.escapeHtml(rows)}">${this.utils.escapeHtml(value)}</textarea>`, formConfig);
 
       case 'radio':
         return this._buildRadioGroup(fieldName, fieldDef, attrs, value);
@@ -662,9 +664,10 @@ export class Forma {
       case 'checkbox': // alias for boolean
       case 'boolean':
         const checked = value ? 'checked' : '';
-        const labelText = fieldDef.label || this.utils.capitalize(fieldName);
+        // The author's own wording: a few inline tags (a link to the terms), nothing else
+        const labelText = cleanInline(fieldDef.label || this.utils.capitalize(fieldName));
         const requiredMark = fieldDef.required ? ' <span class="text-danger">*</span>' : '';
-        const hintText = formConfig.hint ? ` <small class="form-text text-muted">${formConfig.hint}</small>` : '';
+        const hintText = formConfig.hint ? ` <small class="form-text text-muted">${cleanInline(formConfig.hint)}</small>` : '';
         return `<div class="form-check">
                     <input type="checkbox" class="form-check-input" ${attrString} ${checked}>
                     <label class="form-check-label" for="${this.utils.escapeHtml(attrs.id)}">${labelText}${requiredMark}</label>
@@ -1590,8 +1593,8 @@ export const forms = {
                                 <div class="wizard-progress-bar" style="width: ${((stepIndex + 1) / steps.length) * 100}%"></div>
                             </div>
                             <div class="wizard-step-info">
-                                <h5 class="wizard-step-title card-title mb-2">${step.title}</h5>
-                                ${step.description ? `<p class="wizard-step-description card-subtitle text-muted mb-2">${step.description}</p>` : ''}
+                                <h5 class="wizard-step-title card-title mb-2">${cleanInline(step.title)}</h5>
+                                ${step.description ? `<p class="wizard-step-description card-subtitle text-muted mb-2">${cleanInline(step.description)}</p>` : ''}
                                 <small class="text-muted">Step ${stepIndex + 1} of ${steps.length}</small>
                             </div>
                         </div>
@@ -1600,10 +1603,10 @@ export const forms = {
                         </div>
                         <div class="card-footer wizard-nav d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary wizard-prev" ${isFirstStep ? 'style="visibility: hidden;"' : ''}>
-                                ${wizardOptions.prevText || 'Previous'}
+                                ${cleanInline(wizardOptions.prevText || 'Previous')}
                             </button>
                             <button type="button" class="btn btn-primary wizard-${isLastStep ? 'submit' : 'next'}">
-                                ${isLastStep ? (wizardOptions.finishText || 'Finish') : (wizardOptions.nextText || 'Next')}
+                                ${cleanInline(isLastStep ? (wizardOptions.finishText || 'Finish') : (wizardOptions.nextText || 'Next'))}
                             </button>
                         </div>
                     </div>
@@ -1830,7 +1833,7 @@ export const forms = {
     const modalHTML = `
             <div class="modal" id="modal-${formId}" style="display: none;">
                 <div class="modal-header">
-                    <h3 class="modal-title">${options.title || 'Form'}</h3>
+                    <h3 class="modal-title">${cleanInline(options.title || 'Form')}</h3>
                     <button type="button" class="modal-close" data-action="close">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -1838,7 +1841,7 @@ export const forms = {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-action="close">Cancel</button>
-                    <button type="button" class="btn btn-primary" data-action="save">${options.saveText || 'Save'}</button>
+                    <button type="button" class="btn btn-primary" data-action="save">${cleanInline(options.saveText || 'Save')}</button>
                 </div>
             </div>
         `;
@@ -2004,11 +2007,11 @@ export const forms = {
             });
             return `
                         <div class="btn-group btn-group-sm">
-                            <button class="btn btn-primary crud-edit-btn" data-id="${row[primaryKey]}">
+                            <button class="btn btn-primary crud-edit-btn" data-id="${escapeHtml(row[primaryKey])}">
                                 ${editIcon}
                                 Edit
                             </button>
-                            <button class="btn btn-danger crud-delete-btn" data-id="${row[primaryKey]}">
+                            <button class="btn btn-danger crud-delete-btn" data-id="${escapeHtml(row[primaryKey])}">
                                 ${trashIcon}
                                 Delete
                             </button>
@@ -2131,7 +2134,7 @@ export const forms = {
         }
 
         const modal = forms.modal(schema, item, {
-          title: `Edit ${item[displayField] || 'Item'}`,
+          title: `Edit ${escapeHtml(item[displayField] || 'Item')}`, // record data: text
           size: 'xl',
           saveText: 'Update',
           showSubmitButton: false, // Modal has its own buttons
