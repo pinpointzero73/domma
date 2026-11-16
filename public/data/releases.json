@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v1.2.2",
+      "title": "Form wording keeps only simple inline formatting",
+      "description": "Form helper text and labels keep links and simple formatting, and nothing else.",
+      "date": "2026-11-16"
+    },
+    {
       "year": "v1.2.1",
       "title": "Table and form text is shown as text",
       "description": "Table column titles and form option labels are shown as plain text.",
@@ -667,5 +673,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v1.2.1"
+  "latestVersion": "v1.2.2"
 }

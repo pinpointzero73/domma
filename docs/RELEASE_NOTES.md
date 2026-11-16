@@ -1,3 +1,8 @@
+### v1.2.2 - Form wording keeps only simple inline formatting (2026-11-16)
+
+- Form wording that may hold markup (helper text, checkbox labels and hints, wizard step titles, descriptions and button texts, and form modal titles) is now cleaned to a short list of inline tags: links, bold, italic, code, line breaks and similar. Anything else is reduced to its text, and links keep only safe addresses.
+- Also escaped: the dropzone input id, textarea rows, class-name options, section grid columns, the F.crud row id, edit title and delete prompt.
+
 ### v1.2.1 - Table and form text is shown as text (2026-11-16)
 
 - Sortable table column titles, and the values and labels of select, multiselect, radio and checkbox-group options, are now written as text, so markup in them can no longer run or change the page. Form attribute values (placeholder, pattern, min, max, step, autocomplete, id, name, file accept) are escaped once. CSV export doubles quotes in headers.
