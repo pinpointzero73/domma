@@ -80,6 +80,17 @@ describe('cleanInline', () => {
         expect(out).not.toContain('<');
         expect(out).toContain('&lt;img');
         expect(cleanInline(Object.create(null))).toBe('');
+        // Misnested formatting tags multiply in the parser: past the tag limit, shown as typed
+        let chain = '<p>';
+        for (let i = 0; i < 2000; i++) chain += `<b ${i.toString(36)}>`;
+        const bomb = chain + '<p>a'.repeat(1000);
+        expect(cleanInline(bomb)).toBe(bomb.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+        // ...and the worst that fits inside the limit is still quick
+        let small = '<p>';
+        for (let i = 0; i < 149; i++) small += `<b ${i.toString(36)}>`;
+        const t = Date.now();
+        cleanInline(small + '<p>a'.repeat(150));
+        expect(Date.now() - t).toBeLessThan(3000);
     });
 
     it('does not bring back dropped content past the depth limit', () => {

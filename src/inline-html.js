@@ -36,8 +36,15 @@ function followable(href) {
 
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
 const MAX_DEPTH = 32;
-/** Wording is never this long; past it the input is shown as typed, not parsed. */
+/**
+ * Wording is never this long or this tangled; past any of these the input is
+ * shown as typed, not parsed. Misnested formatting tags multiply in the parser
+ * (n open tags times m paragraphs), so it is the number of tags that is held
+ * down before parsing, and the number of nodes after.
+ */
 const MAX_LENGTH = 20000;
+const MAX_TAGS = 300;
+const MAX_NODES = 30000;
 
 /**
  * A form control named "childNodes" or "localName" replaces that property on
@@ -75,9 +82,12 @@ function attrsOf(el, tag) {
     return out;
 }
 
-function write(node, depth) {
+function write(node, depth, budget) {
     let out = '';
-    for (const child of Array.from(read.childNodes(node))) {
+    const children = read.childNodes(node);
+    for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        if (++budget.seen > MAX_NODES) throw new Error('too many nodes');
         const type = read.nodeType(child);
         if (type === 3) {
             out += escapeHtml(read.nodeValue(child));
@@ -87,7 +97,7 @@ function write(node, depth) {
         const tag = read.localName(child);
         if (typeof tag !== 'string' || read.namespaceURI(child) !== HTML_NS || DROPPED.has(tag)) continue;
         // Past the depth limit the wording is kept and the tags are not
-        const inner = write(child, depth + 1);
+        const inner = write(child, depth + 1, budget);
         if (!KEPT.has(tag) || depth >= MAX_DEPTH) {
             out += inner;
         } else if (tag === 'br') {
@@ -114,13 +124,14 @@ export function cleanInline(html) {
     // Nothing a parser would read as markup or an entity: plain text, as typed
     if (!/[<&]/.test(text)) return escapeHtml(text);
     if (typeof document === 'undefined' || text.length > MAX_LENGTH) return escapeHtml(text);
+    if (text.split('<').length - 1 > MAX_TAGS) return escapeHtml(text);
     try {
         readers();
         const template = document.createElement('template');
         template.innerHTML = text;
-        return write(template.content, 0);
+        return write(template.content, 0, {seen: 0});
     } catch {
-        // Nested past what the walk can follow, or a parser that failed: show it as typed
+        // More than the walk will follow, or a parser that failed: show it as typed
         return escapeHtml(text);
     }
 }
