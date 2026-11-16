@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v1.2.3",
+      "title": "Field names with quotes validate",
+      "description": "Form fields with quotes in their names validate, and the CRUD delete prompt shows names as typed.",
+      "date": "2026-11-16"
+    },
+    {
       "year": "v1.2.2",
       "title": "Form wording keeps only simple inline formatting",
       "description": "Form helper text and labels keep links and simple formatting, and nothing else.",
@@ -673,5 +679,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v1.2.2"
+  "latestVersion": "v1.2.3"
 }

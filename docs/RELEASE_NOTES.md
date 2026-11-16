@@ -1,3 +1,8 @@
+### v1.2.3 - Field names with quotes validate (2026-11-16)
+
+- A form field whose name holds a quote, backslash or line break now validates; its error and value selectors are quoted properly.
+- The CRUD delete prompt shows a record's name as typed again (1.2.2 showed `&lt;` and `&amp;` literally when DOMPurify was not loaded).
+
 ### v1.2.2 - Form wording keeps only simple inline formatting (2026-11-16)
 
 - Form wording that may hold markup (helper text, checkbox labels and hints, wizard step titles, descriptions and button texts, and form modal titles) is now cleaned to a short list of inline tags: links, bold, italic, code, line breaks and similar. Anything else is reduced to its text, and links keep only safe addresses.
