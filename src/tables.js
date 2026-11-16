@@ -1205,7 +1205,7 @@ export class TableInstance {
         const data = this._getExportData();
 
         if (includeHeaders) {
-            rows.push(columns.map(c => `"${c.title}"`).join(','));
+            rows.push(columns.map(c => `"${String(c.title ?? '').replace(/"/g, '""')}"`).join(','));
         }
 
         for (const row of data) {
@@ -1768,7 +1768,13 @@ export class TableInstance {
                 th.style.cursor = 'pointer';
                 th.tabIndex = 0;
                 th.setAttribute('aria-sort', sort ? (sort.direction === 'asc' ? 'ascending' : 'descending') : 'none');
-                th.innerHTML = `${col.title} <span style="opacity: 0.5" aria-hidden="true">${sort ? (sort.direction === 'asc' ? '▲' : '▼') : '⇅'}</span>`;
+                // The title is text, as it is on a column that does not sort
+                th.textContent = `${col.title} `;
+                const arrow = document.createElement('span');
+                arrow.style.opacity = '0.5';
+                arrow.setAttribute('aria-hidden', 'true');
+                arrow.textContent = sort ? (sort.direction === 'asc' ? '▲' : '▼') : '⇅';
+                th.appendChild(arrow);
                 const toggleSort = () => {
                     const currentSort = this._sorts.find(s => s.column === col.key);
                     const newDirection = currentSort?.direction === 'asc' ? 'desc' : 'asc';

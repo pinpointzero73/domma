@@ -537,7 +537,7 @@ export class Forma {
       }
     }
 
-    let html = `<div class="${fieldClassName}${spanClass}" data-field="${fieldName}">`;
+    let html = `<div class="${fieldClassName}${spanClass}" data-field="${this.utils.escapeHtml(fieldName)}">`;
 
     // Label (skip for boolean types as they have inline labels)
     if (showLabels && label && type !== 'hidden' && type !== 'boolean' && type !== 'checkbox') {
@@ -577,7 +577,7 @@ export class Forma {
     }
 
     // Error container
-    html += `<div class="${this.options.errorClassName}" data-error-for="${fieldName}" style="display: none;"></div>`;
+    html += `<div class="${this.options.errorClassName}" data-error-for="${this.utils.escapeHtml(fieldName)}" style="display: none;"></div>`;
 
     html += '</div>';
     return html;
@@ -617,10 +617,11 @@ export class Forma {
     // Interactive extras (reveal / clear / stepper / counter) are joined
     // post-render by _initInputExtras(); the control only carries the recipe.
     const extras = this._inputExtras(type, fieldDef);
-    if (extras) attrs['data-input-extras'] = this.utils.escapeHtml(JSON.stringify(extras));
+    if (extras) attrs['data-input-extras'] = JSON.stringify(extras);
 
+    // Every value is escaped here, once: a placeholder or pattern is text
     const attrString = Object.entries(attrs)
-      .map(([key, val]) => val === true ? key : `${key}="${val}"`)
+      .map(([key, val]) => val === true ? key : `${key}="${this.utils.escapeHtml(val)}"`)
       .join(' ');
 
     // Enhanced controls, hydrated post-render by _initSliderFields / _initDropzoneFields.
@@ -666,19 +667,19 @@ export class Forma {
         const hintText = formConfig.hint ? ` <small class="form-text text-muted">${formConfig.hint}</small>` : '';
         return `<div class="form-check">
                     <input type="checkbox" class="form-check-input" ${attrString} ${checked}>
-                    <label class="form-check-label" for="${attrs.id}">${labelText}${requiredMark}</label>
+                    <label class="form-check-label" for="${this.utils.escapeHtml(attrs.id)}">${labelText}${requiredMark}</label>
                     ${hintText}
                 </div>`;
 
       case 'file':
-        const accept = formConfig.accept || '';
+        const accept = this.utils.escapeHtml(formConfig.accept || '');
         const multiple = formConfig.multiple ? 'multiple' : '';
         return `<input type="file" ${attrString} accept="${accept}" ${multiple}>`;
 
       case 'signature':
         // Container div initialised post-render by _initSignatureFields()
         // The Signature component renders its own hidden input internally
-        return `<div class="domma-signature-field" id="${id}" data-signature-field="${fieldName}"></div>`;
+        return `<div class="domma-signature-field" id="${this.utils.escapeHtml(id)}" data-signature-field="${this.utils.escapeHtml(fieldName)}"></div>`;
 
       default:
         const inputType = Forma.inputTypes[type] || 'text';
@@ -784,7 +785,7 @@ export class Forma {
    */
   _buildSelect(fieldName, fieldDef, attrs, currentValue) {
     const attrString = Object.entries(attrs)
-      .map(([key, val]) => val === true ? key : `${key}="${val}"`)
+      .map(([key, val]) => val === true ? key : `${key}="${this.utils.escapeHtml(val)}"`)
       .join(' ');
 
     let html = `<select ${attrString}>`;
@@ -801,15 +802,17 @@ export class Forma {
     }
 
     const options = fieldDef.options || [];
+    // Option values and labels are text: they often come from stored data
+    const esc = (v) => this.utils.escapeHtml(v);
     const selectedValues = Array.isArray(currentValue) ? currentValue : [currentValue];
 
     for (const option of options) {
       if (typeof option === 'string') {
         const selected = selectedValues.includes(option) ? 'selected' : '';
-        html += `<option value="${option}" ${selected}>${this.utils.capitalize(option)}</option>`;
-      } else if (typeof option === 'object') {
+        html += `<option value="${esc(option)}" ${selected}>${esc(this.utils.capitalize(option))}</option>`;
+      } else if (option && typeof option === 'object') {
         const selected = selectedValues.includes(option.value) ? 'selected' : '';
-        html += `<option value="${option.value}" ${selected}>${option.label}</option>`;
+        html += `<option value="${esc(option.value)}" ${selected}>${esc(option.label ?? option.value)}</option>`;
       }
     }
 
@@ -829,11 +832,14 @@ export class Forma {
    */
   _buildRadioGroup(fieldName, fieldDef, attrs, currentValue) {
     const options = fieldDef.options || [];
+    const esc = (v) => this.utils.escapeHtml(v);
     let html = `<div class="domma-radio-group" role="radiogroup">`;
 
     for (const option of options) {
-      const value = typeof option === 'string' ? option : option.value;
-      const label = typeof option === 'string' ? this.utils.capitalize(option) : option.label;
+      if (option == null) continue;
+      const value = typeof option === 'object' ? option.value : option;
+      const label = typeof option === 'string' ? this.utils.capitalize(option)
+        : typeof option === 'object' ? (option.label ?? option.value) : option;
       const id = `${attrs.id}-${value}`;
       const checked = value === currentValue ? 'checked' : '';
 
@@ -841,9 +847,9 @@ export class Forma {
       // than a 16px native control. `form-check-input` is Domma's own custom
       // control styling - without it these were bare browser defaults.
       html += `
-                <label class="domma-radio-option" for="${id}">
-                    <input type="radio" class="form-check-input" id="${id}" name="${fieldName}" value="${value}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
-                    <span class="form-check-label">${label}</span>
+                <label class="domma-radio-option" for="${esc(id)}">
+                    <input type="radio" class="form-check-input" id="${esc(id)}" name="${esc(fieldName)}" value="${esc(value)}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
+                    <span class="form-check-label">${esc(label)}</span>
                 </label>
             `;
     }
@@ -859,18 +865,21 @@ export class Forma {
   _buildCheckboxGroup(fieldName, fieldDef, attrs, currentValue) {
     const options = fieldDef.options || [];
     const values = Array.isArray(currentValue) ? currentValue : [];
+    const esc = (v) => this.utils.escapeHtml(v);
     let html = '<div class="domma-checkbox-group">';
 
     for (const option of options) {
-      const value = typeof option === 'string' ? option : option.value;
-      const label = typeof option === 'string' ? this.utils.capitalize(option) : option.label;
+      if (option == null) continue;
+      const value = typeof option === 'object' ? option.value : option;
+      const label = typeof option === 'string' ? this.utils.capitalize(option)
+        : typeof option === 'object' ? (option.label ?? option.value) : option;
       const id = `${attrs.id}-${value}`;
       const checked = values.includes(value) ? 'checked' : '';
 
       html += `
-                <label class="domma-checkbox-option" for="${id}">
-                    <input type="checkbox" class="form-check-input" id="${id}" name="${fieldName}[]" value="${value}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
-                    <span class="form-check-label">${label}</span>
+                <label class="domma-checkbox-option" for="${esc(id)}">
+                    <input type="checkbox" class="form-check-input" id="${esc(id)}" name="${esc(fieldName)}[]" value="${esc(value)}" ${checked} ${attrs.disabled ? 'disabled' : ''}>
+                    <span class="form-check-label">${esc(label)}</span>
                 </label>
             `;
     }
@@ -910,8 +919,8 @@ export class Forma {
       name: fieldName,
       required: !!fieldDef.required
     };
-    const cfgJson = JSON.stringify(cfg).replace(/"/g, '&quot;');
-    return `<div class="domma-chooser-field" id="${attrs.id}" data-chooser-field="${fieldName}" data-chooser-config="${cfgJson}"></div>`;
+    const cfgJson = this.utils.escapeHtml(JSON.stringify(cfg));
+    return `<div class="domma-chooser-field" id="${this.utils.escapeHtml(attrs.id)}" data-chooser-field="${this.utils.escapeHtml(fieldName)}" data-chooser-config="${cfgJson}"></div>`;
   }
 
   /**
@@ -1142,7 +1151,7 @@ export class Forma {
     if (!chooserFn) return;
 
     fields.forEach((node) => {
-      const cfg = JSON.parse((node.getAttribute('data-chooser-config') || '{}').replace(/&quot;/g, '"'));
+      const cfg = JSON.parse(node.getAttribute('data-chooser-config') || '{}');
       const fieldName = node.getAttribute('data-chooser-field');
       const inst = chooserFn(node, {
         ...cfg,
