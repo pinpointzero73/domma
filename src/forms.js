@@ -7,7 +7,7 @@ import {utils} from './utils.js';
 import {models} from './models.js';
 import {elements} from './elements.js';
 import InputGroup from './input-group.js';
-import {escapeHtml} from './escape.js';
+import {cssString, escapeHtml} from './escape.js';
 import {cleanInline} from './inline-html.js';
 
 /**
@@ -1300,7 +1300,7 @@ export class Forma {
    */
   setFieldError(fieldName, message) {
     this.errors[fieldName] = message;
-    const errorEl = document.querySelector(`[data-error-for="${fieldName}"]`);
+    const errorEl = document.querySelector(`[data-error-for="${cssString(fieldName)}"]`);
     if (errorEl) {
       errorEl.textContent = message;
       errorEl.style.display = 'block';
@@ -1315,7 +1315,7 @@ export class Forma {
    */
   clearFieldError(fieldName) {
     delete this.errors[fieldName];
-    const errorEl = document.querySelector(`[data-error-for="${fieldName}"]`);
+    const errorEl = document.querySelector(`[data-error-for="${cssString(fieldName)}"]`);
     if (errorEl) {
       errorEl.textContent = '';
       errorEl.style.display = 'none';
@@ -1350,14 +1350,14 @@ export class Forma {
     if (type === 'checkbox') {
       // Handle checkbox groups
       if (name.endsWith('[]')) {
-        const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+        const checkboxes = document.querySelectorAll(`input[name="${cssString(name)}"]:checked`);
         return Array.from(checkboxes).map(cb => cb.value);
       }
       return element.checked;
     }
 
     if (type === 'radio') {
-      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      const checked = document.querySelector(`input[name="${cssString(name)}"]:checked`);
       return checked ? checked.value : null;
     }
 
@@ -1387,7 +1387,7 @@ export class Forma {
     }
 
     if (this.formElement) {
-      const element = this.formElement.querySelector(`[name="${fieldName}"]`);
+      const element = this.formElement.querySelector(`[name="${cssString(fieldName)}"]`);
       if (element) {
         return this._getFieldValue(element);
       }
@@ -2172,8 +2172,10 @@ export const forms = {
           return;
         }
 
+        // Not escaped here: E.confirm cleans its message itself (to b/i/em/strong/br
+        // with DOMPurify, to plain text without), so escaping first showed "&lt;".
         const confirmed = await window.Domma.elements.confirm(
-          `Are you sure you want to delete "${escapeHtml(item[displayField] || 'this item')}"?\n\nThis action cannot be undone.`,
+          `Are you sure you want to delete "${item[displayField] || 'this item'}"?\n\nThis action cannot be undone.`,
           {
             title: 'Confirm Delete',
             confirmText: 'Delete',

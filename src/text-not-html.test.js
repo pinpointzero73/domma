@@ -121,3 +121,27 @@ describe('CSV header', () => {
         expect(table.toCSV().split('\n')[0]).toBe('"He said ""hi"", ok"');
     });
 });
+
+describe('a field name with a quote, backslash or line break in it', () => {
+    for (const name of ['say "hi"', 'back\\slash', 'two\nlines', 'a"] , [x="']) {
+        it(`${JSON.stringify(name)}: reads, validates and shows its error`, () => {
+            const form = F.create({
+                [name]: {type: 'string', label: 'Text', required: true},
+                [name + ' r']: {type: 'radio', label: 'R', options: ['a', 'b']},
+                [name + ' c']: {type: 'checkbox-group', label: 'C', options: ['a', 'b']}
+            }, {}, {});
+            form.renderTo(host);
+            host.querySelectorAll('input[type="radio"], input[type="checkbox"]')[1].checked = true;
+            host.querySelectorAll('input[type="checkbox"]')[0].checked = true;
+            expect(() => form.validate()).not.toThrow();
+            expect(() => form.setFieldError(name, 'Needed')).not.toThrow();
+            const error = [...host.querySelectorAll('[data-error-for]')].find(e => e.getAttribute('data-error-for') === name);
+            expect(error.textContent).toBe('Needed');
+            form.clearFieldError(name);
+            expect(error.textContent).toBe('');
+            const radio = host.querySelector('input[type="radio"]');
+            expect(form._getFieldValue(radio)).toBe('b');
+            expect(form._getFieldValue(host.querySelector('input[type="checkbox"]'))).toEqual(['a']);
+        });
+    }
+});
