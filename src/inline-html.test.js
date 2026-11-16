@@ -69,7 +69,17 @@ describe('cleanInline', () => {
     it('drops a form whole, so a control cannot stand in for the form\'s own properties', () => {
         for (const name of ['childNodes', 'nodeType', 'localName', 'namespaceURI']) {
             expect(cleanInline(`a<form><input name=${name}><input name=${name}><img name=${name}>x</form>b`)).toBe('ab');
+            expect(cleanInline(`a<form><input name=${name}>x<b>y</b><script>S</script></form>b`), name).toBe('ab');
+            expect(cleanInline(`a<form><object name=${name}></object><output name=${name}></output><fieldset name=${name}>F</fieldset>T</form>b`), name).toBe('ab');
         }
+    });
+
+    it('shows very long input as typed rather than parsing it, and survives an odd value', () => {
+        const long = '<div>'.repeat(5000) + '<img src=x onerror=1>T';
+        const out = cleanInline(long);
+        expect(out).not.toContain('<');
+        expect(out).toContain('&lt;img');
+        expect(cleanInline(Object.create(null))).toBe('');
     });
 
     it('does not bring back dropped content past the depth limit', () => {
@@ -91,7 +101,7 @@ describe('remaining attributes', () => {
         F.render(host, {
             [BRK]: {type: 'dropzone'},
             t: {type: 'textarea', formConfig: {rows: '3"></textarea><img src=x onerror=1><textarea x="', helperText: 'h', hint: 'i'}}
-        }, {}, {helperClassName: BRK, hintClassName: BRK, fieldClassName: BRK, labelClassName: BRK, errorClassName: BRK, className: BRK});
+        }, {}, {sections: [{title: 'S', layout: 'grid', columns: '2"><img src=x onerror=1>', fields: ['t']}], helperClassName: BRK, hintClassName: BRK, fieldClassName: BRK, labelClassName: BRK, errorClassName: BRK, className: BRK});
         expect(host.querySelector('img, [onerror]')).toBeNull();
         expect(host.querySelectorAll('textarea').length).toBe(1);
     });

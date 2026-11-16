@@ -480,7 +480,7 @@ export class Forma {
 
     // Handle section layout
     const sectionClass = section.layout === 'grid'
-      ? `grid grid-cols-${section.columns || 2}`
+      ? `grid grid-cols-${Number.parseInt(section.columns, 10) || 2}`
       : 'domma-form-section-content';
 
     html += `<div class="${sectionClass}">`;
@@ -2173,7 +2173,7 @@ export const forms = {
         }
 
         const confirmed = await window.Domma.elements.confirm(
-          `Are you sure you want to delete "${item[displayField] || 'this item'}"?\n\nThis action cannot be undone.`,
+          `Are you sure you want to delete "${escapeHtml(item[displayField] || 'this item')}"?\n\nThis action cannot be undone.`,
           {
             title: 'Confirm Delete',
             confirmText: 'Delete',

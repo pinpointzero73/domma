@@ -36,16 +36,40 @@ function followable(href) {
 
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
 const MAX_DEPTH = 32;
+/** Wording is never this long; past it the input is shown as typed, not parsed. */
+const MAX_LENGTH = 20000;
+
+/**
+ * A form control named "childNodes" or "localName" replaces that property on
+ * its form, so the walk reads through the prototypes' own getters and never
+ * through a property of the node.
+ */
+const getter = (proto, name) => {
+    const found = Object.getOwnPropertyDescriptor(proto, name)?.get;
+    if (!found) throw new Error(`no ${name} getter`);
+    return node => found.call(node);
+};
+let read = null;
+function readers() {
+    return read || (read = {
+        childNodes: getter(Node.prototype, 'childNodes'),
+        nodeType: getter(Node.prototype, 'nodeType'),
+        nodeValue: getter(Node.prototype, 'nodeValue'),
+        localName: getter(Element.prototype, 'localName'),
+        namespaceURI: getter(Element.prototype, 'namespaceURI'),
+        attr: (el, name) => Element.prototype.getAttribute.call(el, name)
+    });
+}
 
 function attrsOf(el, tag) {
     let out = '';
     if (tag === 'a') {
-        const href = el.getAttribute('href');
+        const href = read.attr(el, 'href');
         if (href && followable(href)) out += ` href="${escapeHtml(href)}"`;
-        if ((el.getAttribute('target') || '').toLowerCase() === '_blank') out += ' target="_blank" rel="noopener noreferrer"';
+        if ((read.attr(el, 'target') || '').toLowerCase() === '_blank') out += ' target="_blank" rel="noopener noreferrer"';
     }
     if (tag === 'a' || tag === 'abbr') {
-        const title = el.getAttribute('title');
+        const title = read.attr(el, 'title');
         if (title) out += ` title="${escapeHtml(title)}"`;
     }
     return out;
@@ -53,14 +77,15 @@ function attrsOf(el, tag) {
 
 function write(node, depth) {
     let out = '';
-    for (const child of node.childNodes) {
-        if (child.nodeType === 3) {
-            out += escapeHtml(child.nodeValue);
+    for (const child of Array.from(read.childNodes(node))) {
+        const type = read.nodeType(child);
+        if (type === 3) {
+            out += escapeHtml(read.nodeValue(child));
             continue;
         }
-        if (child.nodeType !== 1) continue; // comments, processing instructions
-        const tag = child.localName;
-        if (child.namespaceURI !== HTML_NS || DROPPED.has(tag)) continue;
+        if (type !== 1) continue; // comments, processing instructions
+        const tag = read.localName(child);
+        if (typeof tag !== 'string' || read.namespaceURI(child) !== HTML_NS || DROPPED.has(tag)) continue;
         // Past the depth limit the wording is kept and the tags are not
         const inner = write(child, depth + 1);
         if (!KEPT.has(tag) || depth >= MAX_DEPTH) {
@@ -80,11 +105,17 @@ function write(node, depth) {
  */
 export function cleanInline(html) {
     if (html == null || html === '') return '';
-    const text = String(html);
+    let text;
+    try {
+        text = String(html);
+    } catch {
+        return '';
+    }
     // Nothing a parser would read as markup or an entity: plain text, as typed
     if (!/[<&]/.test(text)) return escapeHtml(text);
-    if (typeof document === 'undefined') return escapeHtml(text);
+    if (typeof document === 'undefined' || text.length > MAX_LENGTH) return escapeHtml(text);
     try {
+        readers();
         const template = document.createElement('template');
         template.innerHTML = text;
         return write(template.content, 0);
