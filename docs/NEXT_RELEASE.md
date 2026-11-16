@@ -1,8 +1,8 @@
-# Table and form text is shown as text
+# Form wording keeps only simple inline formatting
 
-- Sortable table column titles, and the values and labels of select, multiselect, radio and checkbox-group options, are now written as text, so markup in them can no longer run or change the page. Form attribute values (placeholder, pattern, min, max, step, autocomplete, id, name, file accept) are escaped once. CSV export doubles quotes in headers.
-- A column title or option label that contains markup or entities now shows them literally. An option with a null value renders `value=""` instead of `"null"`, a missing option label shows its value, and null options are skipped.
+- Form wording that may hold markup (helper text, checkbox labels and hints, wizard step titles, descriptions and button texts, and form modal titles) is now cleaned to a short list of inline tags: links, bold, italic, code, line breaks and similar. Anything else is reduced to its text, and links keep only safe addresses.
+- Also escaped: the dropzone input id, textarea rows, class-name options, section grid columns, the F.crud row id, edit title and delete prompt.
 
 <!-- website -->
 
-Table column titles and form option labels are shown as plain text.
+Form helper text and labels keep links and simple formatting, and nothing else.
