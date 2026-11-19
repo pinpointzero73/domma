@@ -1,3 +1,7 @@
+### v1.2.4 - Toasts show above panels (2026-11-19)
+
+- Toasts now sit above dialogs, slideovers and popovers (toast container z-index 10060), so a message such as "Details saved" is never hidden behind an open panel.
+
 ### v1.2.3 - Field names with quotes validate (2026-11-16)
 
 - A form field whose name holds a quote, backslash or line break now validates; its error and value selectors are quoted properly.
