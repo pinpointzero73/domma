@@ -114,3 +114,12 @@ describe('E.toast', () => {
         expect(t.element.classList.contains('domma-toast-info')).toBe(true);
     });
 });
+
+describe('toast stacking', () => {
+    it('the container sits above dialogs, slideovers, popovers and context menus', async () => {
+        const {readFileSync} = await import('node:fs');
+        const css = readFileSync('src/css/elements.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+        const rule = /\.domma-toast-container\s*\{([^}]*)\}/.exec(css)?.[1] ?? '';
+        expect(Number(/z-index:\s*(\d+)/.exec(rule)?.[1])).toBeGreaterThan(10050);
+    });
+});

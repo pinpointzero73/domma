@@ -5858,7 +5858,10 @@ domma-tooltip {
 
 .domma-toast-container {
     position: fixed;
-    z-index: 9999;
+    /* Above dialogs and slideovers (10000), popovers (10045) and context menus (10050). The container is
+       made once, by the first toast, so a panel opened later comes after it in the page: at 9999 every
+       toast after the first was drawn under the open panel. */
+    z-index: 10060;
     pointer-events: none;
     display: flex;
     flex-direction: column;
