@@ -209,5 +209,157 @@ export const seasonal = {
         strokeWidth: 1.5,
         strokeLinecap: 'round',
         strokeLinejoin: 'round'
+    },
+
+    // Christmas quiz - a bauble with a question mark
+    'christmas-quiz': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M12 22a7 7 0 1 0 0-14 7 7 0 0 0 0 14z',
+            'M10 8V6h4v2',
+            'M12 6V4.5',
+            'M10.75 3.5a1.25 1.25 0 1 1 2.5 0',
+            'M10 13a2 2 0 1 1 3 1.73c-.6.35-1 .77-1 1.27v.5',
+            'M12 18.5h.01'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Christmas crossword - a grid with a sprig of holly
+    'christmas-crossword': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M2 9h13v13H2z',
+            'M6.33 9v13M10.67 9v13M2 13.33h13M2 17.67h13',
+            'M3.5 10.5h1.33v1.33H3.5zM12.17 19.17h1.33v1.33h-1.33z',
+            'M17 8c-2.4.4-4.4-.6-5.4-2.8 2.4-.5 4.4.5 5.4 2.8z',
+            'M17 8c.4-2.4 2-3.9 4.5-4.2-.2 2.5-1.8 4-4.5 4.2z',
+            'M18.5 10.5h.01M20.5 9h.01M17 11.5h.01'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Christmas cracker
+    'cracker': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M8 9h8v6H8z',
+            'M8 9L3.5 6.5v11L8 15',
+            'M16 9l4.5-2.5v11L16 15',
+            'M10.5 9l1.5 1.5L13.5 9M10.5 15l1.5-1.5 1.5 1.5'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Christmas stocking
+    'stocking': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M8 2.5h8v4H8z',
+            'M9 6.5v7l-3.6 3.2a2.6 2.6 0 0 0 3.4 3.9l5.6-4.4c.9-.7 1.6-1.8 1.6-3V6.5',
+            'M9 16l2 2'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Santa's hat with its bobble
+    'santa-hat': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M3.5 18h14a1.5 1.5 0 0 1 0 3h-14a1.5 1.5 0 0 1 0-3z',
+            'M5 18c.5-6 3.5-10.5 8.5-11.5 3-.6 5 .8 6 3.8',
+            'M16.5 18c0-2.5-.4-4.6-1-6.3',
+            'M19.5 14.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Christmas pudding with custard and holly
+    'christmas-pudding': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M12 22a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15z',
+            'M5 12c1.2.9 2 .1 2.8 1.2.8 1.1 1.6-.4 2.6-.4s1.6 1.6 2.6.7c.9-.8 1.6-.8 2.6-.2 1 .6 1.6-.2 2.4-.8',
+            'M12 5.5c-1.2-1.4-3-1.6-4.5-.7 1.2 1.4 3 1.6 4.5.7z',
+            'M12 5.5c1.2-1.4 3-1.6 4.5-.7-1.2 1.4-3 1.6-4.5.7z',
+            'M12 7h.01',
+            'M9.5 17h.01M14.5 17.5h.01M12 19.5h.01'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Gingerbread man
+    'gingerbread-man': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M12 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+            'M10 8.5H6.5a1.75 1.75 0 0 0 0 3.5H9v2.5l-2.2 4.6a1.75 1.75 0 0 0 3.2 1.4L12 17l2 3.5a1.75 1.75 0 0 0 3.2-1.4L15 14.5V12h2.5a1.75 1.75 0 0 0 0-3.5H14',
+            'M11 4.5h.01M13 4.5h.01',
+            'M12 11h.01M12 13.5h.01'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Advent calendar with one door open
+    'advent-calendar': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M4 5h16v16H4z',
+            'M8 3v4M16 3v4',
+            'M4 9h16',
+            'M6.5 11.5H10v3.5H6.5zM6.5 17H10v2H6.5zM14 17h3.5v2H14z',
+            'M14 11.5h3.5V15H14z',
+            'M14 11.5l-1.8 1.2v3.5L14 15'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
+    },
+
+    // Candle
+    'candle': {
+        viewBox: '0 0 24 24',
+        paths: [
+            'M9 10h6v10H9z',
+            'M12 3c1.4 1.8 2 2.9 2 3.8a2 2 0 0 1-4 0c0-.9.6-2 2-3.8z',
+            'M12 8.8V10',
+            'M6 21h12',
+            'M9 13.5c1 .6 2 .6 3 0'
+        ],
+        stroke: 'currentColor',
+        fill: 'none',
+        strokeWidth: 1.5,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round'
     }
 };

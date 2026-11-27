@@ -107,3 +107,24 @@ describe('Forms icons', () => {
     for (const name of names) expect(Domma.icons.has(name), name).toBe(true);
   });
 });
+
+describe('Seasonal icons - Christmas additions', () => {
+  const added = ['christmas-quiz', 'christmas-crossword', 'cracker', 'stocking', 'santa-hat',
+    'christmas-pudding', 'gingerbread-man', 'advent-calendar', 'candle'];
+
+  it('every new festive icon is registered and listed under Seasonal', () => {
+    const seasonal = Domma.icons.listCategories().seasonal?.icons || [];
+    for (const name of added) {
+      expect(Domma.icons.has(name), name).toBe(true);
+      expect(seasonal, name).toContain(name);
+    }
+  });
+
+  it('each one renders as an outline SVG on the 24px grid', () => {
+    for (const name of added) {
+      const svg = Domma.icons.render(name);
+      expect(svg.getAttribute('viewBox'), name).toBe('0 0 24 24');
+      expect(svg.querySelectorAll('path').length, name).toBeGreaterThan(0);
+    }
+  });
+});
