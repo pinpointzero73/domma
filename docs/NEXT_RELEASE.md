@@ -17,3 +17,5 @@ crossword and the rest of December: `christmas-quiz` (a bauble with a question m
 
 <!-- website -->
 
+
+<p>Nine new Christmas icons in the Seasonal set: christmas-quiz, christmas-crossword, cracker, stocking, santa-hat, christmas-pudding, gingerbread-man, advent-calendar and candle.</p>
