@@ -1,6 +1,12 @@
 {
   "releases": [
     {
+      "year": "v1.2.5",
+      "title": "Christmas Icons",
+      "description": "<p>Nine new Christmas icons in the Seasonal set: christmas-quiz, christmas-crossword, cracker, stocking, santa-hat, christmas-pudding, gingerbread-man, advent-calendar and candle.</p>",
+      "date": "2026-11-27"
+    },
+    {
       "year": "v1.2.4",
       "title": "Toasts show above panels",
       "description": "Toasts show above open dialogs, slideovers and popovers.",
@@ -685,5 +691,5 @@
       "date": "2025-12"
     }
   ],
-  "latestVersion": "v1.2.4"
+  "latestVersion": "v1.2.5"
 }
